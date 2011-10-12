@@ -1,6 +1,20 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * OpenProdoc
+ * 
+ * See the help doc files distributed with
+ * this work for additional information regarding copyright ownership.
+ * Joaquin Hierro licenses this file to You under:
+ * 
+ * License GNU GPL v3 http://www.gnu.org/licenses/gpl.html
+ * 
+ * you may not use this file except in compliance with the License.  
+ * Unless agreed to in writing, software is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ * author: Joaquin Hierro      2011
+ * 
  */
 
 /*
@@ -337,9 +351,8 @@ if (OS.contains("Win"))
 else
     Name+="sh";
 PrintWriter FScript = new PrintWriter(Name, "UTF-8");
-//FScript.println("java -Dfile.encoding=UTF-8 -classpath .:./lib:"+AditionalCP.getText().trim()+" -jar ProdocSwing.jar $1");
 if (OS.contains("Win"))
-    FScript.println("java -Dfile.encoding=UTF-8 -classpath .;.\\lib;.\\lib\\Prodoc.jar;.\\lib\\log4j-1.2.16.jar;ProdocSwing.jar;"+AditionalCP.getText().trim()+"  prodocswing.forms.MainWin %1");
+    FScript.println("start javaw -Dfile.encoding=UTF-8 -classpath .;.\\lib;.\\lib\\Prodoc.jar;.\\lib\\log4j-1.2.16.jar;ProdocSwing.jar;"+AditionalCP.getText().trim()+"  prodocswing.forms.MainWin %1");
 else
     FScript.println("java -Dfile.encoding=UTF-8 -classpath .:./lib:./lib/Prodoc.jar:ProdocSwing.jar:./lib/log4j-1.2.16.jar:"+AditionalCP.getText().trim()+"  prodocswing.forms.MainWin $1");
 FScript.flush();
