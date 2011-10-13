@@ -1,0 +1,141 @@
+/* CSS Document    Style sheet for the CSS2 specification */
+A:link, A:visited
+{
+color: #000000;
+text-decoration: none;
+}
+A:hover
+{
+TEXT-DECORATION: underline
+}
+
+.FFormularios
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+}
+.FFormInput
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    width: 300px;
+    border: 1px solid black;
+    border-right: 2px solid black;
+    border-bottom: 2px solid black;
+}
+.FFormInputCheck
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    border: 2px solid black;
+}
+.FFormInputCombo
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    width: 200px;
+    border: 1px solid black;
+}
+.FFormInputButton
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    width: 100px;
+    border: 1px solid black;
+    margin: 3px;
+}
+.FFormInputDate
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    width: 80px;
+    border: 1px solid black;
+    border-right: 2px solid black;
+    border-bottom: 2px solid black;
+}
+.FFormInputTS
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    width: 150px;
+    border: 1px solid black;
+    border-right: 2px solid black;
+    border-bottom: 2px solid black;
+}
+
+.FFormulReq
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.UDFrames
+{
+    background-color: #cacaca;
+    height: 10px;
+}
+.FTitle
+{
+    height: 18px;
+    background-color: #cacaca;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+}
+
+table
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 10px;
+    padding: 0;
+    vertical-align: top;
+}
+
+#HeaderRight
+{
+    background-color: #dcdcdc;
+    vertical-align: top;
+    padding: 0;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+}
+
+.ListDocsHead
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 10px;
+    height: 20px;
+    background-color: #c0c0c0;
+    font-weight: bold;
+}
+.ListDocs
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 10px;
+    height: 20px;
+    background-color: #ffffff;
+}
+.ListDocsSel
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 10px;
+    height: 20px;
+    color: white;
+    background-color: royalblue;
+}
+.ListFolds
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 10px;
+    height: 20px;
+
+}
+.ListFoldsSel
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-weight: bold;
+    font-size: 10px;
+    height: 20px;
+}

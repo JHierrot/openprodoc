@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mantenimiento Repositorios</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+<H4>Mantenimiento Repositorios</H4><hr>
+<p>Al seleccionar en el formulario de <a href="ListRepositories.html">Lista Repositorios</a> las opciones de Alta, Baja, Modificación o Copia de Repositorios aparecerá este formulario con diversos campos activados o desactivados.</p>
+<p>Este formulario contiene la información:</p>
+<ul>
+    <li><b>Nombre identificativo</b>: Identificador del Repositorio cuyo valor no puede repetirse ni cambiar una vez asignado. Puede tener una longitud máxima de 32 caracteres. (Ej. "FS_Servidor1")</li>
+    <li><b>Descripción del Repositorio</b>: Descripción que permita interpretar el repositorio. Puede tener una longitud máxima de 128 caracteres. (Ej.: "Sistema de Archivos público 2 Teras en Servidor1")</li>
+    <li><b>Tipo de repositorio</b>: Indica el tipo de repositorio. Es posible implementar nuevos tipos si se necesita. Actualmente los existentes son: 
+        <ul>
+        <li><b>FS</b>: FileSystem. almacenamiento en una carpeta de sistema accesible para los clientes Web o Swing.</li>
+        <li><b>BBDD</b>: Base de Datos. Almacenamiento en una tabla como atributo BLOB. Recomendable para archivos pequeños o tipos documentales con pocos ejemplares.</li>
+        <li><b>FTP</b>: Almacenamiento en un servidor ftp. Recomendable para tipos documentales con poco acceso.</li>
+        </ul>
+    </li>  
+    <li><b>URL o referencia al repositorio</b>:La URI o URL que referencia al repositorio. Para FS será un path accesible al ordenador u ordenadores que lo utilicen, en el caso de base de datos será una url JDBC; en el caso de ftp, un nombre o dirección ip.</li>    
+    <li><b>Parámetros adicionales del repositorio</b>: En el caso de BBDD, el parámetro adicional es:"driver;nombre_tabla". El resto no requieren parámetros.</li>    
+    <li><b>Usuario de conexión al repositorio</b>: Usuario necesario para conectarse al servidor remoto, no en FS.</li>    
+    <li><b>Password de conexión al repositorio</b>: clave de acceso necesaria para conectarse al servidor remoto, no en FS.</li>    
+    <li><b>Indicador de si el repositorio está encriptado</b>: Si esta opción está marcada, los documentos se envriptan al almacenarse y se desencriptan al recuperar. Esto asegura que aunque alguien tenga acceso a los documentos, solo sean accesibles a traves de OPD. Hay que tener en cuenta esto introduce una peequeña sobrecarga y que no se utiliza un sistema de encriptación muy sofisticado, por lo que si hay documentación muy confidencial debe evaluarse el uso de medidas adicionales.</li>    
+</ul>
+<p style="text-align:center;"><img alt="Copia de pantalla MantRepositories" src="img/MantRepositories.jpg"/></p>
+<p>Ver: <a href="ListRepositories.html">Lista Repositorios</a></p>
+<hr>
+<a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>
+    </body>
+</html>
