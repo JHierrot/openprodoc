@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Búsqueda de Documentos OpenProdoc</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+<H4>Búsqueda de Documentos OpenProdoc</H4><hr>
+<p>Este formulario permite buscar documentos por una combinación de diversos criterios. Al elegir el tipo documental aparecerán los metadatos propios de ese tipo documental así como los comunes a todos los tipos</p>
+<p>Además de los atributos propios del tipo documental elegido, siempre se puede buscar por una combinación:</p>
+<ul>
+    <li><b>PDID</b>: Identificador único del documento. Es la forma más rápida de localizar un documento.</li>
+    <li><b>Tipo Documental</b>: Permite localizar todos los documento de un tipo. (Ej. "Informes Financieros")</li>
+    <li><b>Fecha del documento</b>: Permite localizar documento por su fecha.</li>
+    <li><b>Titulo del documento</b>: Permite localizar documento por su Titulo.</li>
+    <li><b>Usuario de bloqueo</b>: Para filtrar todos los documento que un usuario tiene bloqueados actualmente.(Ej. "Ann Smith")</li>
+    <li><b>Fecha de expurgo</b>: Fecha en que se destruirá el documento, eliminándolo de OPD.</li>
+    <li><b>ACL del documento</b>: Localización de documento con una política (ACL) de seguridad dada.(Ej. "Docs Confidenciales")</li>
+    <li><b>Repositorio</b>: Todos los documentos almacenados en un repositorio dado (pueden ser documentos de varios tipos o incluso del mismo si el repositorio cambio).</li>
+    <li><b>Tipo Mime</b>: Búsqueda de acuerdo al formato físico del archivo.(Ej. "application/pdf")</li>
+    <li><b>Nombre Archivo</b>: Permite buscar por el nombre original del archivo (Ej. "Informe 2345.pdf".</li>
+    <li><b>Carpeta</b>: Permite buscar los documentos contenidos en una carpeta por el PDID (identificador único) de la carpeta.</li>
+    <li><b>Versión</b>: Filtra de acuerdo al número/etiqueta de la versión (Ej. "V 0.5 Borrador dirección).</li>
+    <li><b>Autor</b>: Para filtrar todos los documento que un usuario ha creado o modificado.(Ej. "Pedro Perez").</li>
+    <li><b>Fecha</b>: Búsqueda de acuerdo a la fecha/hora de inserción o modificación del documento en el sistema.</li>
+</ul>  
+<p> Adicionalmente a los metadatos, hay tres opciones que puede activarse y cuyo efecto en la búsqueda es el siguiente:</p>
+<ul>
+    <li><b>Subtipos</b>: Por defecto solo se busca documentos del tipo actual. Si se activa se buscará además en todos los subtipos hasta cualquier número de niveles.</li>
+    <li><b>SubCarpetas</b>: Por defecto se buscará documentos independientemente de su ubicación. Si se activa se restringe la búsqueda únicamente a la carpeta actual y todas sus subcarpetas hasta cualquier número de niveles..</li>
+    <li><b>Versiones</b>: Por defecto se buscará solo sobre la versión vigente de los documentos. Si se activa se recuperará cualquier versión de un documento que cumpla las condiciones.</li>
+</ul>  
+<p style="text-align:center;"><img alt="Copia de pantalla SearchDocs" src="img/SearchDocs.jpg"/></p>
+<p style="text-align:center;"><img alt="Copia de pantalla SearchDocs2" src="img/SearchDocs2.jpg"/></p>
+<p>Debe elegirse siempre criterios lo más restrictivos posible para obtener un número reducido de resultados. En otro caso la búsqueda puede tardar mucho tiempo y provocar problemas por exceso de resultados.</p>
+<p>Al pulsar aceptar se iniciará la búsqueda de los documentos que cumplen los criterior especificados y se devolverá una lista. Sobre esa lista, seleccionando un documento, puede realizarse las mismas operaciones que sobre un documento seleccionado al abrir una carpeta.</p>
+<hr>
+<a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>
+    </body>
+</html>
