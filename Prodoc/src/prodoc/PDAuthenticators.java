@@ -247,10 +247,10 @@ if (RepositoriesStruct==null)
     R.addAttr( new Attribute(fNAME, fNAME, "Authentication_system_name", Attribute.tSTRING, true, null, 32, true, false, false));
     R.addAttr( new Attribute(fDESCRIPTION, fDESCRIPTION, "Authentication_system_description", Attribute.tSTRING, true, null, 128, false, false, true));
     R.addAttr( new Attribute(fAUTHTYPE, "Authentication_system_type", "Authentication_system_type", Attribute.tSTRING, true, null, 32, false, false, true));
-    R.addAttr( new Attribute(fURL, "URL", "Authentication_system_reference", Attribute.tSTRING, false, null, 256, false, false, true));
-    R.addAttr( new Attribute(fPARAM, "Additional_parameters", "Additional_parameters_for_the_specific_Authentication_System", Attribute.tSTRING, false, null, 256, false, false, true));
-    R.addAttr( new Attribute(fUSERNAME, "User", "Connection_user_name", Attribute.tSTRING, false, null, 256, false, false, true));
-    R.addAttr( new Attribute(fPASSWORD, "Password", "Connection_Password", Attribute.tSTRING, false, null, 256, false, false, true));
+    R.addAttr( new Attribute(fURL, "URL", "Authentication_system_reference", Attribute.tSTRING, false, null, 255, false, false, true));
+    R.addAttr( new Attribute(fPARAM, "Additional_parameters", "Additional_parameters_for_the_specific_Authentication_System", Attribute.tSTRING, false, null, 255, false, false, true));
+    R.addAttr( new Attribute(fUSERNAME, "User", "Connection_user_name", Attribute.tSTRING, false, null, 255, false, false, true));
+    R.addAttr( new Attribute(fPASSWORD, "Password", "Connection_Password", Attribute.tSTRING, false, null, 255, false, false, true));
     R.addRecord(getRecordStructCommon());
     return(R);
     }
