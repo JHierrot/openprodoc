@@ -208,7 +208,7 @@ if (CustomStruct==null)
     R.addAttr( new Attribute(fDATEFORMAT, "Date_format", "Date_format_used_by_java_formatter", Attribute.tSTRING, true, null, 32, false, false, false));
     R.addAttr( new Attribute(fTIMEFORMAT, "TimeStamp_format", "TimeStamp_format_used_by_java_formatter", Attribute.tSTRING, true, null, 32, false, false, false));
     R.addAttr( new Attribute(fSTYLE, "Path", "Relative_path_in_web_application_of_images_and_elements", Attribute.tSTRING, false, null, 32, false, false, false));
-    R.addAttr( new Attribute(fSWINGSTYLE, "Style", "Thick_client_Style", Attribute.tSTRING, false, null, 256, false, false, false));
+    R.addAttr( new Attribute(fSWINGSTYLE, "Style", "Thick_client_Style", Attribute.tSTRING, false, null, 255, false, false, false));
     R.addRecord(getRecordStructCommon());
     return(R);
     }
