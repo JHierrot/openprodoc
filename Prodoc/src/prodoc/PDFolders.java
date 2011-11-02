@@ -254,7 +254,7 @@ if (FoldersStruct==null)
     {
     Record R=new Record();
     R.addAttr( new Attribute(fPDID, "PDID","Unique_identifier", Attribute.tSTRING, true, null, 32, true, false, false));
-    R.addAttr( new Attribute(fTITLE, "Folder_Title","Folder_Title", Attribute.tSTRING, true, null, 255, false, false, true));
+    R.addAttr( new Attribute(fTITLE, "Folder_Title","Folder_Title", Attribute.tSTRING, true, null, 254, false, false, true));
     R.addAttr( new Attribute(fACL, "Folder_ACL", "Folder_ACL", Attribute.tSTRING, true, null, 32, false, false, true));
     R.addAttr( new Attribute(fFOLDTYPE, "Folder_Type", "Folder_Type", Attribute.tSTRING, true, null, 32, false, false, false));
     R.addAttr( new Attribute(fPARENTID, "Parent_Folder","Parent_Folder", Attribute.tSTRING, true, null, 32, false, false, false));

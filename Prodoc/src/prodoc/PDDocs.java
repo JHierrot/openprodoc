@@ -724,13 +724,13 @@ if (DocsStruct==null)
     R.addAttr( new Attribute(fPDID, fPDID, "Unique_identifier", Attribute.tSTRING, true, null, 32, true, false, false));
     R.addAttr( new Attribute(fDOCTYPE, "Document_Type", "Document_Type", Attribute.tSTRING, true, getTableName(), 32, false, false, false));
     R.addAttr( new Attribute(fDOCDATE, "Document_Date", "Document_Date", Attribute.tDATE, false, null, 0, false, false, true));
-    R.addAttr( new Attribute(fTITLE, "Document_Title", "Document_Title", Attribute.tSTRING, true, null, 255, false, false, true));
+    R.addAttr( new Attribute(fTITLE, "Document_Title", "Document_Title", Attribute.tSTRING, true, null, 254, false, false, true));
     R.addAttr( new Attribute(fLOCKEDBY, "Lock_user", "User_who_locks_the_document_to_Edit", Attribute.tSTRING, false, null, 32, false, false, false));
     R.addAttr( new Attribute(fPURGEDATE, "Purge_date", "Date_to_destroy_the_document", Attribute.tDATE, false, null, 0, false, false, true));
     R.addAttr( new Attribute(fACL, "Document_ACL", "Document_ACL", Attribute.tSTRING, true, null, 32, false, false, true));
     R.addAttr( new Attribute(fREPOSIT, "Repository", "Repository_to_store_documents", Attribute.tSTRING, true, null, 32, false, false, false));
     R.addAttr( new Attribute(fMIMETYPE, "MimeType", "Document_MimeType", Attribute.tSTRING, true, null, 32, false, false, false));
-    R.addAttr( new Attribute(fNAME, "File_name", "File_name", Attribute.tSTRING, true, null, 255, false, false, false));
+    R.addAttr( new Attribute(fNAME, "File_name", "File_name", Attribute.tSTRING, true, null, 254, false, false, false));
     R.addAttr( new Attribute(fPARENTID, "Folder", "Folder", Attribute.tSTRING, true, null, 32, false, false, false));
     R.addAttr( new Attribute(fVERSION, "Version", "Name_or_Identifier_of_version", Attribute.tSTRING, true, null, 32, false, false, false));
     R.addAttr( new Attribute(fSTATUS, "Status", "Internal_Status", Attribute.tSTRING, false, null, 8, false, false, false));
