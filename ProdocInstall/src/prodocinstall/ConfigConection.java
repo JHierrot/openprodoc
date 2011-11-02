@@ -74,6 +74,7 @@ setLocationRelativeTo(null);
         AditionalCP = new javax.swing.JTextField();
         AcceptButton = new javax.swing.JButton();
         CancelButton = new javax.swing.JButton();
+        Msg = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle(TT("Prodoc_Configuration"));
@@ -82,20 +83,26 @@ setLocationRelativeTo(null);
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText(TT("Connection_Config"));
 
+        jLabel2.setFont(new java.awt.Font("Arial", 1, 13));
         jLabel2.setText(TT("DataBase_User"));
 
+        jLabel3.setFont(new java.awt.Font("Arial", 1, 13));
         jLabel3.setText(TT("DataBase_Password"));
 
+        jLabel4.setFont(new java.awt.Font("Arial", 1, 13));
         jLabel4.setText(TT("DataBase_Server_Url"));
 
+        jLabel5.setFont(new java.awt.Font("Arial", 1, 13));
         jLabel5.setText(TT("Connection_Type"));
 
         DBType.setEditable(false);
         DBType.setText("JDBC");
         DBType.setEnabled(false);
 
+        jLabel6.setFont(new java.awt.Font("Arial", 1, 13));
         jLabel6.setText(TT("Connection_Java_Class"));
 
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 13));
         jLabel7.setText(TT("Aditional_Classpath"));
 
         AcceptButton.setText(TT("Ok"));
@@ -111,6 +118,9 @@ setLocationRelativeTo(null);
                 CancelButtonActionPerformed(evt);
             }
         });
+
+        Msg.setEditable(false);
+        Msg.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -149,7 +159,8 @@ setLocationRelativeTo(null);
                             .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(12, 12, 12)
                             .addComponent(AditionalCP, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addContainerGap(39, Short.MAX_VALUE))
+            .addComponent(Msg, javax.swing.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -196,7 +207,8 @@ setLocationRelativeTo(null);
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(AcceptButton)
                     .addComponent(CancelButton))
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addComponent(Msg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -209,6 +221,26 @@ dispose();
 
     private void AcceptButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_AcceptButtonActionPerformed
     {//GEN-HEADEREND:event_AcceptButtonActionPerformed
+if (UserName.getText()==null || UserName.getText().length()==0)
+    {
+    Message("UserName "+TT("Required_field"));
+    return;
+    }
+if (Password.getText()==null || Password.getText().length()==0)
+    {
+    Message("Password "+TT("Required_field"));
+    return;
+    }
+if (Url.getText()==null || Url.getText().length()==0)
+    {
+    Message("Url "+TT("Required_field"));
+    return;
+    }
+if (JDBCClass.getText()==null || JDBCClass.getText().length()==0)
+    {
+    Message("JDBCClass "+TT("Required_field"));
+    return;
+    }
 try {
 generateProps();
 } catch(Exception ex)
@@ -249,6 +281,7 @@ java.awt.EventQueue.invokeLater(new Runnable()
     private javax.swing.JButton CancelButton;
     private javax.swing.JTextField DBType;
     private javax.swing.JTextField JDBCClass;
+    private javax.swing.JTextField Msg;
     private javax.swing.JTextField Password;
     private javax.swing.JTextField Url;
     private javax.swing.JTextField UserName;
@@ -269,7 +302,7 @@ if (Lang.equals("EN"))
     return(Text.replace("_", " "));
 Properties Trans=getProperties(Lang);
 if (Trans==null)
-    return(Text);
+    return(Text.replace("_", " "));
 String Translation=Trans.getProperty(Text);
 if (Translation==null)
     return(Text.replace("_", " "));
@@ -299,7 +332,6 @@ Trans=new Properties();
 Trans.load(f);
 } catch (Exception ex)
     {
-    ex.printStackTrace();
     return(null);
     }
 finally
@@ -308,7 +340,6 @@ finally
         f.close();
     } catch (IOException ex)
         {
-        System.out.println("------------------------------");
         ex.printStackTrace();
         }
     }
@@ -320,7 +351,7 @@ return(Trans);
  * 
  * @param pMessage
  */
-static public void Message(String pMessage)
+public void Message(String pMessage)
 {
 DialogInfo DI=new DialogInfo(null, true);
 DI.SetMessage(pMessage);
