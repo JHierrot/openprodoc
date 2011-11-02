@@ -125,12 +125,12 @@ setLocationRelativeTo(null);
 
         AttrTab.setFont(new java.awt.Font("Arial", 0, 12));
 
-        jLabel2.setFont(new java.awt.Font("Arial", 0, 12));
+        jLabel2.setFont(new java.awt.Font("Arial", 1, 12));
         jLabel2.setText(TT("Administrator_Password"));
 
         LangCode.setFont(new java.awt.Font("Arial", 0, 12));
 
-        jLabel3.setFont(new java.awt.Font("Arial", 0, 12));
+        jLabel3.setFont(new java.awt.Font("Arial", 1, 12));
         jLabel3.setText(TT("Default_Language_Code"));
 
         RootPasswordTF.setFont(new java.awt.Font("Arial", 0, 12));
@@ -138,7 +138,7 @@ setLocationRelativeTo(null);
         jLabel10.setFont(new java.awt.Font("Arial", 0, 12));
         jLabel10.setText(TT("Repository_User"));
 
-        jLabel9.setFont(new java.awt.Font("Arial", 0, 12));
+        jLabel9.setFont(new java.awt.Font("Arial", 1, 12));
         jLabel9.setText(TT("Repository_Url"));
 
         RepUrlTF.setFont(new java.awt.Font("Arial", 0, 12));
@@ -148,12 +148,12 @@ setLocationRelativeTo(null);
 
         RepEncrypCB.setFont(new java.awt.Font("Arial", 0, 12));
 
-        jLabel7.setFont(new java.awt.Font("Arial", 0, 12));
+        jLabel7.setFont(new java.awt.Font("Arial", 1, 12));
         jLabel7.setText(TT("Default_Repository_Name"));
 
         RepNameTF.setFont(new java.awt.Font("Arial", 0, 12));
 
-        jLabel6.setFont(new java.awt.Font("Arial", 0, 12));
+        jLabel6.setFont(new java.awt.Font("Arial", 1, 12));
         jLabel6.setText(TT("Main_Key"));
 
         MainKeyTF.setFont(new java.awt.Font("Arial", 0, 12));
@@ -165,7 +165,7 @@ setLocationRelativeTo(null);
 
         RepPassTF.setFont(new java.awt.Font("Arial", 0, 12));
 
-        jLabel12.setFont(new java.awt.Font("Arial", 0, 12));
+        jLabel12.setFont(new java.awt.Font("Arial", 1, 12));
         jLabel12.setText(TT("Repository_Type"));
 
         RepTypeCB.setFont(new java.awt.Font("Arial", 0, 12));
@@ -178,13 +178,13 @@ setLocationRelativeTo(null);
 
         DateFormat.setFont(new java.awt.Font("Arial", 0, 12));
 
-        jLabel4.setFont(new java.awt.Font("Arial", 0, 12));
+        jLabel4.setFont(new java.awt.Font("Arial", 1, 12));
         jLabel4.setText(TT("TimeStamp_Format"));
 
-        jLabel5.setFont(new java.awt.Font("Arial", 0, 12));
+        jLabel5.setFont(new java.awt.Font("Arial", 1, 12));
         jLabel5.setText(TT("Date_Format"));
 
-        TimeStampFormat.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        TimeStampFormat.setFont(new java.awt.Font("Arial", 0, 12));
 
         javax.swing.GroupLayout AttrTabLayout = new javax.swing.GroupLayout(AttrTab);
         AttrTab.setLayout(AttrTabLayout);
@@ -362,11 +362,46 @@ dispose();
 
     private void AcceptButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_AcceptButtonActionPerformed
     {//GEN-HEADEREND:event_AcceptButtonActionPerformed
+if (RootPasswordTF.getText()==null || RootPasswordTF.getText().length()==0)
+    {
+    Message("RootPassword "+TT("Required_field"));
+    return;
+    }
+if (LangCode.getText()==null || LangCode.getText().length()==0)
+    {
+    Message("LangCode "+TT("Required_field"));
+    return;
+    }
+if (TimeStampFormat.getText()==null || TimeStampFormat.getText().length()==0)
+    {
+    Message("TimeStampFormat "+TT("Required_field"));
+    return;
+    }
+if (DateFormat.getText()==null || DateFormat.getText().length()==0)
+    {
+    Message("DateFormat "+TT("Required_field"));
+    return;
+    }
+if (MainKeyTF.getText()==null || MainKeyTF.getText().length()==0)
+    {
+    Message("MainKey "+TT("Required_field"));
+    return;
+    }
+if (RepNameTF.getText()==null || RepNameTF.getText().length()==0)
+    {
+    Message("Repository Name "+TT("Required_field"));
+    return;
+    }
+if (RepUrlTF.getText()==null || RepUrlTF.getText().length()==0)
+    {
+    Message("Repository URL "+TT("Required_field"));
+    return;
+    }
 try {
 CreateMetadataStructure();
 } catch(Exception ex)
     {
-    ex.printStackTrace();
+    Message(ex.getLocalizedMessage());
     return;
     }
     }//GEN-LAST:event_AcceptButtonActionPerformed
@@ -431,7 +466,7 @@ if (Lang.equals("EN"))
     return(Text.replace("_", " "));
 Properties Trans=getProperties(Lang);
 if (Trans==null)
-    return(Text);
+    return(Text.replace("_", " "));
 String Translation=Trans.getProperty(Text);
 if (Translation==null)
     return(Text.replace("_", " "));
@@ -462,15 +497,12 @@ Trans.load(f);
 f.close();
 } catch (Exception ex)
     {
-    System.out.println(ex.getLocalizedMessage());
-    ex.printStackTrace();
     if (f!=null)
         {
         try {
             f.close();
         } catch (IOException ex1)
             {
-            System.out.println("------------------------------");
             ex1.printStackTrace();
             }
         }
