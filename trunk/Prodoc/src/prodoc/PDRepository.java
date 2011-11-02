@@ -245,10 +245,10 @@ if (RepositoriesStruct==null)
     R.addAttr( new Attribute(fNAME, "Name", "Name", Attribute.tSTRING, true, null, 32, true, false, false));
     R.addAttr( new Attribute(fDESCRIPTION, "Description", "Description", Attribute.tSTRING, true, null, 128, false, false, true));
     R.addAttr( new Attribute(fREPTYPE, "Repository_type", "Repository_type", Attribute.tSTRING, true, null, 32, false, false, true));
-    R.addAttr( new Attribute(fURL, "URL", "URL_URI_Repository_reference", Attribute.tSTRING, true, null, 255, false, false, true));
-    R.addAttr( new Attribute(fPARAM, "Additional_parameters", "Additional_parameters", Attribute.tSTRING, false, null, 255, false, false, true));
-    R.addAttr( new Attribute(fUSERNAME, "User", "Connection_user_name", Attribute.tSTRING, false, null, 255, false, false, true));
-    R.addAttr( new Attribute(fPASSWORD, "Password", "Connection_Password", Attribute.tSTRING, false, null, 255, false, false, true));
+    R.addAttr( new Attribute(fURL, "URL", "URL_URI_Repository_reference", Attribute.tSTRING, true, null, 254, false, false, true));
+    R.addAttr( new Attribute(fPARAM, "Additional_parameters", "Additional_parameters", Attribute.tSTRING, false, null, 254, false, false, true));
+    R.addAttr( new Attribute(fUSERNAME, "User", "Connection_user_name", Attribute.tSTRING, false, null, 254, false, false, true));
+    R.addAttr( new Attribute(fPASSWORD, "Password", "Connection_Password", Attribute.tSTRING, false, null, 254, false, false, true));
     R.addAttr( new Attribute(fENCRYPT, "Encrypted", "When_true_the_Repository_it_is_encrypted", Attribute.tBOOLEAN, false, null, 0, false, false, false));
     R.addRecord(getRecordStructCommon());
     return(R);
