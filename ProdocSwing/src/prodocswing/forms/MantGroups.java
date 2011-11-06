@@ -373,7 +373,7 @@ try {
 PDGroups Grp=new PDGroups((MainWin.getSession()));
 Grp.setName((String)Group.getAttr(PDGroups.fNAME).getValue());
 MantMembers MP = new MantMembers(Fparent, true, true);
-MP.setRecord(GroupsMembers.getElement(GroupsTable.getSelectedRow()));
+MP.setRecord(GroupsMembers.getElement(GroupsTable.convertRowIndexToModel(GroupsTable.getSelectedRow())));
 MP.DelMode();
 MP.setLocationRelativeTo(null);
 MP.setVisible(true);
@@ -417,7 +417,7 @@ try {
 PDGroups Grp=new PDGroups((MainWin.getSession()));
 Grp.setName((String)Group.getAttr(PDGroups.fNAME).getValue());
 MantMembers MP = new MantMembers(Fparent, true, false);
-MP.setRecord(UsersMembers.getElement(UsersTable.getSelectedRow()));
+MP.setRecord(UsersMembers.getElement(UsersTable.convertRowIndexToModel(UsersTable.getSelectedRow())));
 MP.DelMode();
 MP.setLocationRelativeTo(null);
 MP.setVisible(true);

@@ -115,7 +115,7 @@ initComponents();
         Repository1.setText(getServVersion());
 
         Application1.setFont(MainWin.getFontDialog());
-        Application1.setText("0.5");
+        Application1.setText(MainWin.getVersion());
 
         Engine1.setFont(MainWin.getFontDialog());
         Engine1.setText(getEngineVersion());
@@ -161,7 +161,7 @@ initComponents();
                     .addGroup(layout.createSequentialGroup()
                         .addGap(35, 35, 35)
                         .addComponent(Author3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(Title, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)

@@ -143,7 +143,7 @@ DocsTable.setAutoCreateColumnsFromModel(true);
         aboutMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("OpenProDoc 0.1");
+        setTitle("OpenProdoc "+getVersion());
         setIconImage(getIcon());
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -796,7 +796,7 @@ if (DocsTable.getSelectedRow()==-1)
 try {
 PDDocs Doc = new PDDocs(getSession());
 DialogEditDoc MD = new DialogEditDoc(this,true);
-Doc.assignValues(DocsContained.getElement(DocsTable.getSelectedRow()));
+Doc.assignValues(DocsContained.getElement(DocsTable.convertRowIndexToModel(DocsTable.getSelectedRow())));
 Doc.Load(Doc.getPDId());
 MD.setRecord(Doc.getRecSum());
 MD.DelMode();
@@ -846,7 +846,7 @@ if (DocsTable.getSelectedRow()==-1)
 try {
 PDDocs Doc = new PDDocs(getSession());
 DialogEditDoc MD = new DialogEditDoc(this,true);
-Doc.assignValues(DocsContained.getElement(DocsTable.getSelectedRow()));
+Doc.assignValues(DocsContained.getElement(DocsTable.convertRowIndexToModel(DocsTable.getSelectedRow())));
 Doc.LoadFull(Doc.getPDId());
 MD.setRecord(Doc.getRecSum());
 MD.EditMode();
@@ -872,7 +872,7 @@ if (DocsTable.getSelectedRow()==-1)
     return;
 try {
 PDDocs Doc = new PDDocs(getSession());
-Doc.assignValues(DocsContained.getElement(DocsTable.getSelectedRow()));
+Doc.assignValues(DocsContained.getElement(DocsTable.convertRowIndexToModel(DocsTable.getSelectedRow())));
 Doc.Checkout();
 RefreshDocs();
 } catch (Exception ex)
@@ -886,7 +886,7 @@ if (DocsTable.getSelectedRow()==-1)
     return;
 try {
 PDDocs Doc = new PDDocs(getSession());
-Doc.assignValues(DocsContained.getElement(DocsTable.getSelectedRow()));
+Doc.assignValues(DocsContained.getElement(DocsTable.convertRowIndexToModel(DocsTable.getSelectedRow())));
 String VersionLabel=DialogReadString(TT("Creating_a_new_version_of_document"), TT("Version_identifier"),  TT("Type_a_version_name_or_identifier"), "");
 if (VersionLabel==null)
     return;
@@ -910,7 +910,7 @@ try {
 if (!MessageQuestion(TT("Do_you_want_to_cancel_edition_and_lost_changes")))
     return;
 PDDocs Doc = new PDDocs(getSession());
-Doc.assignValues(DocsContained.getElement(DocsTable.getSelectedRow()));
+Doc.assignValues(DocsContained.getElement(DocsTable.convertRowIndexToModel(DocsTable.getSelectedRow())));
 Doc.CancelCheckout();
 RefreshDocs();
 } catch (Exception ex)
@@ -928,7 +928,7 @@ LD.setVisible(true);
     private void ListVersionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ListVersionsActionPerformed
 if (DocsTable.getSelectedRow()==-1)
     return;
-ListVersions LV = new ListVersions(this, true, DocsContained.getElement(DocsTable.getSelectedRow()));
+ListVersions LV = new ListVersions(this, true, DocsContained.getElement(DocsTable.convertRowIndexToModel(DocsTable.getSelectedRow())));
 LV.setLocationRelativeTo(null);
 LV.setVisible(true);
     }//GEN-LAST:event_ListVersionsActionPerformed
@@ -1006,7 +1006,7 @@ if (DocsTable.getSelectedRow()==-1)
     return;
 try {
 PDDocs Doc = new PDDocs(getSession());
-Doc.assignValues(DocsContained.getElement(DocsTable.getSelectedRow()));
+Doc.assignValues(DocsContained.getElement(DocsTable.convertRowIndexToModel(DocsTable.getSelectedRow())));
 String FileName=Doc.getFile(getTmp());
 Execute(FileName);
 } catch (Exception ex)
@@ -1553,6 +1553,15 @@ static public String getTmp()
 {
 String Tmp=System.getProperty("java.io.tmpdir");
 return(Tmp);  
+}
+//---------------------------------------------------------------------
+/**
+ * Used in mainWin.title and About form
+ * @return the actual ProdocSwing Version
+ */
+static public String getVersion()
+{
+return("o.6");  
 }
 //---------------------------------------------------------------------
 }

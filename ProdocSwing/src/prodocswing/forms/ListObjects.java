@@ -259,11 +259,17 @@ AssignLabels();
     private void ButtonFilterActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ButtonFilterActionPerformed
     {//GEN-HEADEREND:event_ButtonFilterActionPerformed
 RefreshTable();
+int Tot=getObjectsTable().getRowCount();
+if (Tot>0)
+    {
+    getObjectsTable().setRowSelectionInterval(0, 0);
+    }
     }//GEN-LAST:event_ButtonFilterActionPerformed
 
     private void AddButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_AddButtonActionPerformed
     {//GEN-HEADEREND:event_AddButtonActionPerformed
 try {
+int Pos=getObjectsTable().getSelectedRow();
 PDObject.Clear();
 MantForm=AddMode();
 MantForm.setLocationRelativeTo(null);
@@ -273,6 +279,12 @@ if (!AddModeOk())
 PDObject.insert();
 PostInsert();
 RefreshTable();
+int Tot=getObjectsTable().getRowCount();
+if (Tot>0)
+    {
+    int Sel=Math.min(Tot-1, Pos);
+    getObjectsTable().setRowSelectionInterval(Sel, Sel);
+    }
 } catch (PDException ex)
     {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
@@ -280,7 +292,8 @@ RefreshTable();
 
     private void DelButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_DelButtonActionPerformed
     {//GEN-HEADEREND:event_DelButtonActionPerformed
-if (    getObjectsTable().getSelectedRow()==-1)
+int Pos=getObjectsTable().getSelectedRow();
+if (Pos==-1)
     return;
 try {
 MantForm=DelMode();
@@ -290,6 +303,12 @@ if (!DelModeOk())
     return;
 PDObject.delete();
 RefreshTable();
+int Tot=getObjectsTable().getRowCount();
+if (Tot>0)
+    {
+    int Sel=Math.min(Tot-1, Pos);
+    getObjectsTable().setRowSelectionInterval(Sel, Sel);
+    }
 } catch (PDException ex)
     {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
@@ -297,7 +316,8 @@ RefreshTable();
 
 private void EditButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_EditButtonActionPerformed
 {//GEN-HEADEREND:event_EditButtonActionPerformed
-if (    getObjectsTable().getSelectedRow()==-1)
+int Pos=getObjectsTable().getSelectedRow();
+if (Pos==-1)
     return;
 try {
 MantForm=EditMode();
@@ -308,6 +328,12 @@ if (!EditModeOk())
 PDObject.update();
 PostEdit();
 RefreshTable();
+int Tot=getObjectsTable().getRowCount();
+if (Tot>0)
+    {
+    int Sel=Math.min(Tot-1, Pos);
+    getObjectsTable().setRowSelectionInterval(Sel, Sel);
+    }
 } catch (PDException ex)
     {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
@@ -319,7 +345,8 @@ private void formWindowClosing(java.awt.event.WindowEvent evt)//GEN-FIRST:event_
 
 private void CopyButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_CopyButtonActionPerformed
 {//GEN-HEADEREND:event_CopyButtonActionPerformed
-if (getObjectsTable().getSelectedRow()==-1)
+int Pos=getObjectsTable().getSelectedRow();
+if (Pos==-1)
     return;
 try {
 MantForm=CopyMode();
@@ -329,6 +356,12 @@ if (!CopyModeOk())
     return;
 PDObject.insert();
 RefreshTable();
+int Tot=getObjectsTable().getRowCount();
+if (Tot>0)
+    {
+    int Sel=Math.min(Tot-1, Pos);
+    getObjectsTable().setRowSelectionInterval(Sel, Sel);
+    }
 } catch (PDException ex)
     {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
@@ -346,7 +379,7 @@ String Name=PDObject.getTabName();
 String FileName=MainWin.SelectDestination(Name+".opd", "opd", true);
 if (FileName.length()==0)
     return;
-Record r=TM.getElement(getObjectsTable().getSelectedRow());
+Record r=TM.getElement(getSelectedRow());
 PW = new PrintWriter(FileName);
 ExportXML(PW, r);
 PW.flush();
@@ -361,6 +394,9 @@ PW.close();
 
 private void ImportButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ImportButtonActionPerformed
 {//GEN-HEADEREND:event_ImportButtonActionPerformed
+int Pos=getObjectsTable().getSelectedRow();
+if (Pos==-1)
+    Pos=0;
 String FileName=MainWin.SelectDestination(null, "opd", false);
 if (FileName.length()==0)
     return;
@@ -372,6 +408,12 @@ MainWin.getSession().ProcessXML(FileImp);
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
 RefreshTable();
+int Tot=getObjectsTable().getRowCount();
+if (Tot>0)
+    {
+    int Sel=Math.min(Tot-1, Pos);
+    getObjectsTable().setRowSelectionInterval(Sel, Sel);
+    }
 }//GEN-LAST:event_ImportButtonActionPerformed
 
 private void ExportAllButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ExportAllButtonActionPerformed
@@ -500,7 +542,7 @@ return ((PDTableModel) getObjectsTable().getModel());
  */
 protected int getSelectedRow()
 {
-return (getObjectsTable().getSelectedRow());
+return (getObjectsTable().convertRowIndexToModel(getObjectsTable().getSelectedRow()));
 }
 //----------------------------------------------------------------
 /**

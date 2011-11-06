@@ -264,7 +264,7 @@ return ((PDTableModel) getObjectsTable().getModel());
  */
 protected int getSelectedRow()
 {
-return (getObjectsTable().getSelectedRow());
+return (getObjectsTable().convertRowIndexToModel(getObjectsTable().getSelectedRow()));
 }
 //----------------------------------------------------------------
 /**
