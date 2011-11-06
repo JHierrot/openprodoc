@@ -150,7 +150,7 @@ if (getObjectsTable().getSelectedRow()==-1)
     return;
 try {
 PDDocs Doc = new PDDocs(MainWin.getSession());
-Doc.assignValues(getPDTableModel().getElement(getObjectsTable().getSelectedRow()));
+Doc.assignValues(getPDTableModel().getElement(getSelectedRow()));
 String FileName=Doc.getFileVer(MainWin.getTmp(), Doc.getVersion());
 MainWin.Execute(FileName);
 } catch (PDException ex)
@@ -209,7 +209,7 @@ return ((PDTableModel) getObjectsTable().getModel());
  */
 protected int getSelectedRow()
 {
-return (getObjectsTable().getSelectedRow());
+return (getObjectsTable().convertRowIndexToModel(getObjectsTable().getSelectedRow()));
 }
 //--------------------------------------------------------------------
 /**

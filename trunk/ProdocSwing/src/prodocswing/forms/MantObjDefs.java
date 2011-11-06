@@ -575,7 +575,7 @@ try {
 PDObjDefs newObjDef=new PDObjDefs((MainWin.getSession()));
 newObjDef.setName((String)ObjDef.getAttr(PDObjDefs.fNAME).getValue());
 MantAttr MP = new MantAttr(Fparent, true, true);
-MP.setRecord(AttrMembers.getElement(AttrTable.getSelectedRow()));
+MP.setRecord(AttrMembers.getElement(AttrTable.convertRowIndexToModel(AttrTable.getSelectedRow())));
 MP.DelMode();
 MP.setLocationRelativeTo(null);
 MP.setVisible(true);
@@ -597,7 +597,7 @@ try {
 PDObjDefs newObjDef=new PDObjDefs((MainWin.getSession()));
 newObjDef.setName((String)ObjDef.getAttr(PDObjDefs.fNAME).getValue());
 MantAttr MP = new MantAttr(Fparent, true, true);
-MP.setRecord(AttrMembers.getElement(AttrTable.getSelectedRow()));
+MP.setRecord(AttrMembers.getElement(AttrTable.convertRowIndexToModel(AttrTable.getSelectedRow())));
 MP.EditMode();
 MP.setLocationRelativeTo(null);
 MP.setVisible(true);

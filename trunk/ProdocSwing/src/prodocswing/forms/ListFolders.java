@@ -149,7 +149,7 @@ private void ModButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
 if (getObjectsTable().getSelectedRow()==-1)
     return;
 try {
-Record r = FolderList.getElement(getObjectsTable().getSelectedRow());
+Record r = FolderList.getElement(getSelectedRow());
 String Id = (String) r.getAttr(PDFolders.fPDID).getValue();
 String FType = (String) r.getAttr(PDFolders.fFOLDTYPE).getValue();
 PDFolders Fold = new PDFolders(MainWin.getSession(), FType);
@@ -175,7 +175,7 @@ private void DelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
 if (getObjectsTable().getSelectedRow()==-1)
     return;
 try {
-Record r = FolderList.getElement(getObjectsTable().getSelectedRow());
+Record r = FolderList.getElement(getSelectedRow());
 String Id = (String) r.getAttr(PDFolders.fPDID).getValue();
 String FType = (String) r.getAttr(PDFolders.fFOLDTYPE).getValue();
 PDFolders Fold = new PDFolders(MainWin.getSession(), FType);
@@ -220,7 +220,7 @@ return ((PDTableModel) getObjectsTable().getModel());
      */
     protected int getSelectedRow()
 {
-return (getObjectsTable().getSelectedRow());
+return (getObjectsTable().convertRowIndexToModel(getObjectsTable().getSelectedRow()));
 }
 //--------------------------------------------------------------------
 /**

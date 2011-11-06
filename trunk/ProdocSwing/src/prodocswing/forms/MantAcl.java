@@ -381,7 +381,7 @@ try {
 PDACL acl=new PDACL((MainWin.getSession()));
 acl.setName((String)ACL.getAttr(PDACL.fNAME).getValue());
 MantPermision MP = new MantPermision(Fparent, true, true);
-MP.setRecord(GroupsMembers.getElement(GroupsTable.getSelectedRow()));
+MP.setRecord(GroupsMembers.getElement(GroupsTable.convertRowIndexToModel(GroupsTable.getSelectedRow())));
 MP.DelMode();
 MP.setLocationRelativeTo(null);
 MP.setVisible(true);
@@ -403,7 +403,7 @@ try {
 PDACL acl=new PDACL((MainWin.getSession()));
 acl.setName((String)ACL.getAttr(PDACL.fNAME).getValue());
 MantPermision MP = new MantPermision(Fparent, true, true);
-MP.setRecord(GroupsMembers.getElement(GroupsTable.getSelectedRow()));
+MP.setRecord(GroupsMembers.getElement(GroupsTable.convertRowIndexToModel(GroupsTable.getSelectedRow())));
 MP.EditMode();
 MP.setLocationRelativeTo(null);
 MP.setVisible(true);
@@ -452,7 +452,7 @@ PDACL acl=new PDACL((MainWin.getSession()));
 acl.setName((String)ACL.getAttr(PDACL.fNAME).getValue());
 //Record r=acl.getRecordAclUsersStruct();
 MantPermision MP = new MantPermision(Fparent, true, false);
-MP.setRecord(UsersMembers.getElement(UsersTable.getSelectedRow()));
+MP.setRecord(UsersMembers.getElement(UsersTable.convertRowIndexToModel(UsersTable.getSelectedRow())));
 MP.DelMode();
 MP.setLocationRelativeTo(null);
 MP.setVisible(true);
@@ -475,7 +475,7 @@ try {
 PDACL acl=new PDACL((MainWin.getSession()));
 acl.setName((String)ACL.getAttr(PDACL.fNAME).getValue());
 MantPermision MP = new MantPermision(Fparent, true, false);
-MP.setRecord(UsersMembers.getElement(UsersTable.getSelectedRow()));
+MP.setRecord(UsersMembers.getElement(UsersTable.convertRowIndexToModel(UsersTable.getSelectedRow())));
 MP.EditMode();
 MP.setLocationRelativeTo(null);
 MP.setVisible(true);

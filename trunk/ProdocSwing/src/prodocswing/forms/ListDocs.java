@@ -188,7 +188,7 @@ private void ModButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
 if (getObjectsTable().getSelectedRow()==-1)
     return;
 try {
-Record r = DocsList.getElement(getObjectsTable().getSelectedRow());
+Record r = DocsList.getElement(getSelectedRow());
 String Id = (String) r.getAttr(PDDocs.fPDID).getValue();
 String FType = (String) r.getAttr(PDDocs.fDOCTYPE).getValue();
 PDDocs Doc = new PDDocs(MainWin.getSession(), FType);
@@ -212,7 +212,7 @@ private void DelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
 if (getObjectsTable().getSelectedRow()==-1)
     return;
 try {
-Record r = DocsList.getElement(getObjectsTable().getSelectedRow());
+Record r = DocsList.getElement(getSelectedRow());
 String Id = (String) r.getAttr(PDDocs.fPDID).getValue();
 String DType = (String) r.getAttr(PDDocs.fDOCTYPE).getValue();
 PDDocs Doc = new PDDocs(MainWin.getSession(), DType);
@@ -235,7 +235,7 @@ private void CheckoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GE
 if (getObjectsTable().getSelectedRow()==-1)
     return;
 try {
-Record r = DocsList.getElement(getObjectsTable().getSelectedRow());
+Record r = DocsList.getElement(getSelectedRow());
 String Id = (String) r.getAttr(PDDocs.fPDID).getValue();
 String DType = (String) r.getAttr(PDDocs.fDOCTYPE).getValue();
 PDDocs Doc = new PDDocs(MainWin.getSession(), DType);
@@ -251,7 +251,7 @@ private void CheckinButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 if (getObjectsTable().getSelectedRow()==-1)
     return;
 try {
-Record r = DocsList.getElement(getObjectsTable().getSelectedRow());
+Record r = DocsList.getElement(getSelectedRow());
 String Id = (String) r.getAttr(PDDocs.fPDID).getValue();
 String DType = (String) r.getAttr(PDDocs.fDOCTYPE).getValue();
 PDDocs Doc = new PDDocs(MainWin.getSession(), DType);
@@ -277,7 +277,7 @@ private void CancelCheckoutButtonActionPerformed(java.awt.event.ActionEvent evt)
 if (getObjectsTable().getSelectedRow()==-1)
     return;
 try {
-Record r = DocsList.getElement(getObjectsTable().getSelectedRow());
+Record r = DocsList.getElement(getSelectedRow());
 String Id = (String) r.getAttr(PDDocs.fPDID).getValue();
 String DType = (String) r.getAttr(PDDocs.fDOCTYPE).getValue();
 PDDocs Doc = new PDDocs(MainWin.getSession(), DType);
@@ -317,7 +317,7 @@ return ((PDTableModel) getObjectsTable().getModel());
      */
     protected int getSelectedRow()
 {
-return (getObjectsTable().getSelectedRow());
+return (getObjectsTable().convertRowIndexToModel(getObjectsTable().getSelectedRow()));
 }
 //--------------------------------------------------------------------
 /**
@@ -357,4 +357,5 @@ FoldType=pFoldType;
 RetrievedFoldsCur=C;
 }
 //----------------------------------------------------------------
+
 }
