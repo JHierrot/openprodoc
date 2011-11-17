@@ -11,7 +11,7 @@
 Los pasos a a seguir son:</p>
 <ol>
 <li><a href="#1">Creación de usuario en Base de datos</a></li>
-<li><a href="#2">Descompresión Prodoc</a></li>
+<li><a href="#2">Descompresión de archivos de OpenProdoc</a></li>
 <li><a href="#3">Instalación Cliente ProdocSwing</a></li>
 <li><a href="#4">Creación estructura de datos</a></li>
 <li><a href="#5">Instalación resto de clientes</a></li>
@@ -32,12 +32,13 @@ Para ello debe elegirse el sistema de base de datos a utilizar y crearse un usua
 <h4 id="3">3 - Instalación Cliente OpenProdoc Swing</h4>
 <p>Este cliente debe instalarse al menos una vez para la administración del sistema y además para todos los usuarios que utilicen esta forma de acceso.
 Para ello debe iniciar el script de sistema <b>Install.sh</b> o <b>Install.bat</b> (según el sistema operativo) y cumplimentar los datos requeridos en pantalla.</p>
+<p>Por defecto se elegirá el idioma del equipo, siempre que esté soportado, en otro caso se utilizará inglés (EN). Si se desea forzar otro idioma puede pasarse como parámetro de dos letras a la aplicación (Ej. Install.sh EN). Ver <a href="Language.html">Soporte Idiomas</a></p>
 <ul> 
-<li><b>Usuario de conexión a BBDD</b>: Identificación del usuario de BBDD creado en el apartado anterior</li>
-<li><b>Clave usuario BBDD</b>: Clave del usuario de BBDD.</li>
-<li><b>Url del servidor de BBDD</b>: Nombre demáquina o dirección IP donde reside el servidor de BBDD (Ej.:<i>"jdbc:mysql://127.0.0.1:3306/Prodoc", "jdbc:derby://localhost:1527/Prodoc"</i>).</li>
-<li><b>Tipo de conexión</b>: Indicar el tipo de conexión a utilizar. (Actualmente solo soportado JDBC)</li>
-<li><b>Clases java a utilizar</b>: Indicar las clases de conexión (JDBC) a utilizar (Ej.:<i>"org.apache.derby.jdbc.ClientDriver", "com.mysql.jdbc.Driver"</i>).</li>
+<li><b>Usuario de conexión a BBDD</b>: Identificación del usuario de BBDD creado en el apartado anterior. (requerido)</li>
+<li><b>Clave usuario BBDD</b>: Clave del usuario de BBDD. (requerido)</li>
+<li><b>Url del servidor de BBDD</b>: Url en formato JDBC del servidor de BBDD (Ej.:<i>"jdbc:mysql://127.0.0.1:3306/Prodoc", "jdbc:derby://localhost:1527/Prodoc"</i>). (requerido)</li>
+<li><b>Tipo de conexión</b>: Indicar el tipo de conexión a utilizar. (Actualmente solo soportado JDBC). (requerido)</li>
+<li><b>Clases java a utilizar</b>: Indicar las clases de conexión (JDBC) a utilizar (Ej.:<i>"org.apache.derby.jdbc.ClientDriver", "com.mysql.jdbc.Driver"</i>). (requerido)</li>
 <li><b>Classpath adicional</b>: Localización de las clases adicionales a las instaladas en la carpeta ".\lib". Debe especificarse el classpath de las clases del driver JDBC.</li>
 </ul> 
 <p>Con los datos suministrados, el programa de instalación creará un fichero de configuración y un script de arranque Prodoc.sh o Prodoc.bat según el sistema operativo.  
@@ -47,18 +48,18 @@ Estos ficheros pueden copiarse y usarse en cualquier equipo siempre que: </p>
 <li>La configuración relativa al classpath sea la misma</li>
 </ul> 
 <p>en otro caso debe utilizase el programa de instalación o modificar manualmente el archivo de configuración.</p>
-
+<p>IMPORTANTE: Tanto para la instalación como para el funcionamiento normal, es importante que el servidor de BBDD (o al menos la sesión "Usuario de conexión a BBDD" con la que se conecta OPD) funcione en modo AutoCommit=off, es decir, hasta que no se confirme o cancele la transacción por parte de OPD no se debe consolidarse información alguna a la BBDD</p>
 
 <h4 id="4">4 - Creación estructura de datos</h4>
-<p>
-Una vez instalado el cliente, debe ejecutarse la aplicación de creación de la estructura de datos <b>Setup.sh</b> o <b>Setup.bat</b>, contestando a las preguntas de la aplicación.</p>
+<p>Una vez instalado el cliente, debe ejecutarse la aplicación de creación de la estructura de datos <b>Setup.sh</b> o <b>Setup.bat</b>, contestando a las preguntas de la aplicación.</p>
+<p>Por defecto se elegirá el idioma del equipo, siempre que esté soportado, en otro caso se utilizará inglés (EN). Si se desea forzar otro idioma puede pasarse como parámetro de dos letras a la aplicación (Ej. Setup.sh EN). Ver <a href="Language.html">Soporte Idiomas</a></p>
 <ul>
 <li><b>Password Administrador</b>: Clave de acceso del usuario administrador "root" creado al instalar. Otros usuarios pueden tener los mismos permisos, "root" se crea por defecto</li>
-<li><b>Código del Lenguaje por defecto</b>: Código ISO del lenguaje por defecto para la arametrización or defecto.</li>
+<li><b>Código del Lenguaje por defecto</b>: Código ISO del lenguaje por defecto para la parametrización por defecto.</li>
 <li><b>Formato Fecha/Hora</b>: Formato de presentación y lectura de los campos fecha-hora según formatter java. (Ej. yyyy-MM-dd HH:mm:ss )</li>
 <li><b>Formato Fecha</b>: Formato de presentación y lectura de los campos fecha según formatter java. (Ej. dd/MM/yyyy )</li>
 <li><b>Clave Principal</b>: Clave principal de encriptación del servidor para los repositorios que no soporten encriptación de forma nativa. Debe mezclar mayúsculas, minúsculas y números con un tamaño razonablemente grande.</li>
-<li><b>Nombre del Repositorio</b>: Nombre identificativo del Repositorio de documentos por defecto. Podrá crearse osteriomente otros adicionales.</li>
+<li><b>Nombre del Repositorio</b>: Nombre identificativo del Repositorio de documentos por defecto. Podrá crearse posteriomente otros adicionales.</li>
 <li><b>Repositorio Encriptado</b>: Indica si el repositorio de archivos estará encriptado</li>
 <li><b>Url Repositorio</b>: IP o localización del repositorio. Debe ser visible e igual para todos los clientes que no se conecten a través del servidor J2EE.</li>
 <li><b>Repository_User</b>: Usuario con permisos de acceso al repositorio de archivos</li>
@@ -74,7 +75,7 @@ Una vez instalado el cliente, debe ejecutarse la aplicación de creación de la 
 Ej.: 
     com.mysql.jdbc.Driver;TablaBlob</li>
 </ul> 
-
+<p>Este proceso creará toda la estructura de tablas y elementos necesaria para OPD. Posteriormente, al definir nuevos tipos de Documento o Carpeta se crearán tablas y elementos auxiliares.</p>
 <h4 id="5">5 - Instalación resto de clientes</h4>
 <p>
 Una vez creada la estructura básica, deberá instalarse los clientes de los usuarios.
