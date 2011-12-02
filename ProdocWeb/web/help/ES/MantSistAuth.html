@@ -10,8 +10,8 @@
 <p>Al seleccionar en el formulario de <a href="ListSistAuth.html">Lista Sistemas de Autenticación</a> las opciones de Alta, Baja, Modificación o Copia de Repositorios aparecerá este formulario con diversos campos activados o desactivados.</p>
 <p>Este formulario contiene la información:</p>
 <ul>
-    <li><b>Nombre identificativo</b>: Identificador del Sistemas de Autenticación cuyo valor no puede repetirse ni cambiar una vez asignado. Puede tener una longitud máxima de 32 caracteres. (Ej. "FS_Servidor1")</li>
-    <li><b>Descripción del Sistemas de Autenticación</b>: Descripción que permita interpretar el Sistemas de Autenticación. Puede tener una longitud máxima de 128 caracteres. (Ej.: "Sistema de Archivos público 2 Teras en Servidor1")</li>
+    <li><b>Nombre identificativo</b>: Identificador del Sistemas de Autenticación cuyo valor no puede repetirse ni cambiar una vez asignado. Puede tener una longitud máxima de 32 caracteres. (Ej. "LDAP_Corporativo")</li>
+    <li><b>Descripción del Sistemas de Autenticación</b>: Descripción que permita interpretar el Sistemas de Autenticación. Puede tener una longitud máxima de 128 caracteres. (Ej.: "LDAP Delegación Brasil")</li>
     <li><b>Tipo de Sistemas de Autenticación</b>: Indica el tipo de Sistemas de Autenticación. Es posible implementar nuevos tipos si se necesita. Actualmente los existentes son: 
         <ul>
         <li><b>OPD</b>: OpenProdoc. En este modo, tanto el usuario como la clave (encriptada) se almacenan junto con el resto de los datos de OPD. Se verifica la clave introducida contra estos datos.</li>
@@ -22,8 +22,8 @@
     </li>  
     <li><b>URL o referencia al Sistemas de Autenticación</b>:La URI o URL que referencia al Sistemas de Autenticación. Es necesario en Ldap y BBDD.</li>    
     <li><b>Parámetros adicionales del Sistemas de Autenticación</b>: En el caso de BBDD es el driver jdbc, en el caso de Ldap es un parámetro que podría utilizarse en: <i>"env.put(Context.SECURITY_PRINCIPAL, "cn="+User+" "+getParam())"</i>.</li>    
-    <li><b>Usuario de conexión al Sistemas de Autenticación</b>: Usuario necesario para conectarse al servidor remoto, no en FS.</li>    
-    <li><b>Password de conexión al Sistemas de Autenticación</b>: clave de acceso necesaria para conectarse al servidor remoto, no en FS.</li>    
+    <li><b>Usuario de conexión al Sistemas de Autenticación</b>: Usuario necesario para conectarse al sistema. No usado actualmente.</li>    
+    <li><b>Password de conexión al Sistemas de Autenticación</b>: clave de acceso necesaria para conectarse al sistema. No usado actualmente.</li>    
 </ul>
 <p style="text-align:center;"><img alt="Copia de pantalla MantSistAuth" src="img/MantSistAuth.jpg"/></p>
 <p>Ver: <a href="ListSistAuth.html">Lista Sistemas de Autenticación</a></p>
