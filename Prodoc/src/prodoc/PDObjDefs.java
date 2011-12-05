@@ -340,7 +340,7 @@ if (DocsDefStruct==null)
     Record R=new Record();
     R.addAttr( new Attribute(fNAME, "Name", "Name_of_class", Attribute.tSTRING, true, null, 32, true, false, false));
     R.addAttr( new Attribute(fCLASSTYPE, "Object_type", "Object_type", Attribute.tSTRING, true, null, 32, false, false, false));
-    R.addAttr( new Attribute(fDESCRIPTION, "Description", "Description", Attribute.tSTRING, false, null, 128, false, false, true));
+    R.addAttr( new Attribute(fDESCRIPTION, "Description", "Description", Attribute.tSTRING, true, null, 128, false, false, true));
     R.addAttr( new Attribute(fACTIVE, "Active", "When_true_it_is_allowed_to_create_elements_of_the_type", Attribute.tBOOLEAN, true, null, 0, false, false, true));
     R.addAttr( new Attribute(fACL, "ACL", "Default_ACL_and_definition_ACL", Attribute.tSTRING, true, null, 32, false, false, true));
     R.addAttr( new Attribute(fPARENT, "Parent_Class", "Parent_Class", Attribute.tSTRING, true, null, 32, false, false, false));
@@ -379,8 +379,8 @@ if (DocsDefAttrsStruct==null)
     Record R=new Record();
     R.addAttr( new Attribute(fTYPNAME, "Name_of_class", "Name_of_class", Attribute.tSTRING, true, null, 32, true, false, false));
     R.addAttr( new Attribute(fATTRNAME, "Name_of_attribute", "Name_of_attribute", Attribute.tSTRING, true, null, 32, true, false, false));
-    R.addAttr( new Attribute(fATTRUSERNAME, "Visible_Name_of_attribute", "Visible_Name_of_attribute", Attribute.tSTRING, false, null, 32, true, false, true));
-    R.addAttr( new Attribute(fATTRDESCRIPTION, "Description", "Description", Attribute.tSTRING, false, null, 128, false, false, true));
+    R.addAttr( new Attribute(fATTRUSERNAME, "Visible_Name_of_attribute", "Visible_Name_of_attribute", Attribute.tSTRING, true, null, 32, true, false, true));
+    R.addAttr( new Attribute(fATTRDESCRIPTION, "Description", "Description", Attribute.tSTRING, true, null, 128, false, false, true));
     R.addAttr( new Attribute(fATTRTYPE, "attribute_type", "attribute_type", Attribute.tINTEGER, true, null, 0, false, false, false));
     R.addAttr( new Attribute(fATTRREQUIRED, "Required", "When_true_the_attribute_MUST_be_informed", Attribute.tBOOLEAN, true, null, 0, false, false, false));
     R.addAttr( new Attribute(fATTRLONG, "Length", "Length_for_string_attributes", Attribute.tINTEGER, false, null, 0, false, false, false));
@@ -629,6 +629,10 @@ if (!getDrv().getUser().getAclList().containsKey(D.getACL()))
     PDExceptionFunc.GenPDException("Object_definition_delete_not_allowed_to_user",getName());
 Integer Perm=(Integer)getDrv().getUser().getAclList().get(D.getACL());
 if (Perm.intValue()<PDACL.pDELETE)
+    PDExceptionFunc.GenPDException("Object_definition_delete_not_allowed_to_user",getName());
+if (this.getName().equalsIgnoreCase(PDFolders.getTableName()))
+    PDExceptionFunc.GenPDException("Object_definition_delete_not_allowed_to_user",getName());
+if (this.getName().equalsIgnoreCase(PDDocs.getTableName()))
     PDExceptionFunc.GenPDException("Object_definition_delete_not_allowed_to_user",getName());
 }
 //-------------------------------------------------------------------------

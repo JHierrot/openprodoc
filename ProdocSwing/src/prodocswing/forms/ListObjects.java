@@ -402,7 +402,7 @@ if (FileName.length()==0)
     return;
 try {
 File FileImp=new File(FileName);  
-MainWin.getSession().ProcessXML(FileImp); 
+MainWin.getSession().ProcessXML(FileImp, null); 
 } catch (Exception ex)
     {
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));

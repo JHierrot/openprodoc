@@ -442,6 +442,7 @@ else if (getType()==Attribute.tBOOLEAN)
 else if (getType()==Attribute.tDATE)
     {
     try {
+    if (Val!=null && Val.length()!=0)
         setValue(formatterDate.parse(Val));
     } catch (ParseException ex)
         {
@@ -451,7 +452,8 @@ else if (getType()==Attribute.tDATE)
 else if (getType()==Attribute.tTIMESTAMP)
     {
     try {
-    setValue(formatterTS.parse(Val));
+    if (Val!=null && Val.length()!=0)
+        setValue(formatterTS.parse(Val));
     } catch (ParseException ex)
         {
         PDException.GenPDException(ex.getLocalizedMessage(), Val);

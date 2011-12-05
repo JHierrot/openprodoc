@@ -27,7 +27,10 @@ package prodocswing.forms;
 
 import java.awt.Font;
 import java.awt.Image;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
@@ -124,7 +127,10 @@ DocsTable.setAutoCreateColumnsFromModel(true);
         CheckIn = new javax.swing.JMenuItem();
         CancelCheckout = new javax.swing.JMenuItem();
         ListVersions = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
         SearchDocs = new javax.swing.JMenuItem();
+        ExportDoc = new javax.swing.JMenuItem();
+        ImportDoc = new javax.swing.JMenuItem();
         OtherMenu = new javax.swing.JMenu();
         PaperBin = new javax.swing.JMenuItem();
         ChangePass = new javax.swing.JMenuItem();
@@ -382,6 +388,7 @@ DocsTable.setAutoCreateColumnsFromModel(true);
             }
         });
         DocMenu.add(ListVersions);
+        DocMenu.add(jSeparator1);
 
         SearchDocs.setFont(getFontMenu());
         SearchDocs.setText(TT("Search_Documents"));
@@ -391,6 +398,24 @@ DocsTable.setAutoCreateColumnsFromModel(true);
             }
         });
         DocMenu.add(SearchDocs);
+
+        ExportDoc.setFont(getFontMenu());
+        ExportDoc.setText(TT("Export_Doc"));
+        ExportDoc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ExportDocActionPerformed(evt);
+            }
+        });
+        DocMenu.add(ExportDoc);
+
+        ImportDoc.setFont(getFontMenu());
+        ImportDoc.setText(TT("Import_Doc"));
+        ImportDoc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ImportDocActionPerformed(evt);
+            }
+        });
+        DocMenu.add(ImportDoc);
 
         menuBar.add(DocMenu);
 
@@ -1016,6 +1041,38 @@ Execute(FileName);
 
     }//GEN-LAST:event_DocsTableMouseClicked
 
+    private void ExportDocActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ExportDocActionPerformed
+    {//GEN-HEADEREND:event_ExportDocActionPerformed
+if (DocsTable.getSelectedRow()==-1)
+    return;
+try {
+String FileName=MainWin.SelectFolderDestination("");
+if (FileName.length()==0)
+    return;
+PDDocs Doc = new PDDocs(getSession());
+Doc.assignValues(DocsContained.getElement(DocsTable.convertRowIndexToModel(DocsTable.getSelectedRow())));
+Doc.ExportXML(FileName, false);
+} catch (Exception ex)
+    {
+     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
+    }//GEN-LAST:event_ExportDocActionPerformed
+
+    private void ImportDocActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ImportDocActionPerformed
+    {//GEN-HEADEREND:event_ImportDocActionPerformed
+String FileName=MainWin.SelectDestination(null, "opd", false);
+if (FileName.length()==0)
+    return;
+try {
+PDDocs Doc = new PDDocs(getSession());
+File FileImp=new File(FileName);  
+getSession().ProcessXML(FileImp, ActFolderId); 
+} catch (Exception ex)
+    {
+    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
+    }//GEN-LAST:event_ImportDocActionPerformed
+
 /**
 * @param args the command line arguments
 */
@@ -1059,8 +1116,10 @@ java.awt.EventQueue.invokeLater(new Runnable()
     private javax.swing.JMenuItem DelFold;
     private javax.swing.JMenu DocMenu;
     private javax.swing.JTable DocsTable;
+    private javax.swing.JMenuItem ExportDoc;
     private javax.swing.JMenu FolderMenu;
     private javax.swing.JMenuItem GroupMenuItem;
+    private javax.swing.JMenuItem ImportDoc;
     private javax.swing.JMenuItem ListVersions;
     private javax.swing.JMenuItem MimeTypeMenuItem;
     private javax.swing.JMenuItem ModDocAdvanced;
@@ -1085,6 +1144,7 @@ java.awt.EventQueue.invokeLater(new Runnable()
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
@@ -1253,6 +1313,23 @@ else
 return(fc.getSelectedFile().getAbsolutePath());
 }
 //---------------------------------------------------------------------
+/**
+ * 
+ * @param RecomFileName
+ * @return
+ */
+static public String SelectFolderDestination(String RecomFileName)
+{
+JFileChooser fc = new JFileChooser();
+if (RecomFileName!=null)
+    fc.setSelectedFile(new File(RecomFileName));
+fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+if (fc.showSaveDialog(null)!=JFileChooser.APPROVE_OPTION)
+    return("");
+return(fc.getSelectedFile().getAbsolutePath());
+}
+//---------------------------------------------------------------------
+
 private TreeModel getTreeModel()
 {
 if (FoldTreeModel==null)
@@ -1367,19 +1444,13 @@ static int Execute(String Doc)
 {
 try {
 String Order="";
+String Orders[]= {"xdg-open", Doc};
 String OS=System.getProperty("os.name");
-//System.out.println("OS:"+OS);
-
-// WINDOWS << explorer "path">>
-// gnome << gnome-open "path">>
-// KDE <<kde-open "path">>
-// X <<xdg-open  "path">>
 if (OS.contains("Win"))
-    Order="explorer ";
-else
-    Order="xdg-open ";
-Process Pr=Runtime.getRuntime().exec(Order+"\""+Doc+"\"", null, null);
-/* 
+    Orders[0]="explorer";
+Runtime.getRuntime().exec(Orders);
+/*
+Process Pr=Runtime.getRuntime().exec(Order, null, null);
 String s = null;
 BufferedReader stdInput = new BufferedReader(new InputStreamReader(Pr.getInputStream()));
 BufferedReader stdError = new BufferedReader(new InputStreamReader(Pr.getErrorStream()));
@@ -1391,7 +1462,7 @@ while ((s = stdError.readLine()) != null)
     {
     System.out.println(s);
     }
- */
+*/
 } catch (Exception ex)
     {
     Message(ex.getLocalizedMessage());

@@ -24,10 +24,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Vector;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  *
@@ -781,6 +785,12 @@ public String getFile(String FolderPath) throws PDException
 {
 PDDocs d=new PDDocs(getDrv());
 d.LoadCurrent(getPDId());
+if (d.getName()==null || d.getName().length()==0)
+    {
+    PDMimeType MT=new PDMimeType(getDrv());
+    MT.Load(d.getMimeType());
+    d.setName(getPDId()+"."+MT.getExtension());    
+    }
 if (FolderPath.charAt(FolderPath.length()-1)!=File.separatorChar)
     FolderPath+=File.separatorChar+getPDId()+d.getVersion()+d.getName();
 else
@@ -1875,4 +1885,93 @@ RFull.delRecord(getRecord());
 return(RFull.toXML()+"</ListAttr>");    
 }
 //-------------------------------------------------------------------------
+/**
+ * Process the object definition inserting a new object
+ * @param OPDObject XML node containing theobject data
+ * @throws PDException if object name/index duplicated or in any error
+ */
+@Override
+public void ProcesXMLNode(Node OPDObject) throws PDException
+{
+throw new UnsupportedOperationException("Not Supported. Use ImportXMLNode");
+}    
+//-------------------------------------------------------------------------
+/**
+ * Builds an XML of the object including the fileto be printed or exported
+ * @param FolderPath Path to store Metadata and Document
+ * @param AbsPath If tru, include fullpath (FolderPath) in the XML, otherwirse, only name
+ * @throws PDException in any error 
+ */
+public void ExportXML(String FolderPath, boolean AbsPath) throws PDException
+{
+PrintWriter FMetadataXML = null;
+if (FolderPath.charAt(FolderPath.length()-1)!=File.separatorChar)
+    FolderPath+=File.separatorChar;
+LoadFull(getPDId());
+String PathContent=getFile(FolderPath);
+try {
+FMetadataXML = new PrintWriter(FolderPath+getPDId()+".opd", "UTF-8");
+String OrigName=getName(); //Name can be empty or relative. A tmp copy is needed.
+if (AbsPath)
+    setName(PathContent);
+else
+    {
+    int StartName=PathContent.lastIndexOf(File.separatorChar);
+    if (StartName==-1)
+        setName(PathContent);
+    else
+        setName(PathContent.substring(StartName+1));
+    }
+FMetadataXML.print(toXML());
+setName(OrigName);
+FMetadataXML.close();
+FMetadataXML=null;
+} catch (Exception e)
+    {
+    if (FMetadataXML!=null)
+        FMetadataXML.close();
+    throw new PDException(e.getLocalizedMessage());
+    }
+}
+//-------------------------------------------------------------------------
+/**
+ * Import a Doc described by an XML with content referenced
+ * @param OPDObject XMLNode to process
+ * @param FolderPath Path where the original xlml file was readed. Use to resolve the absolute file position
+ * @param DestFold OPD destination folder
+ * @param MaintainId When true, the Original Id is maintained, else a new one is assigned
+ * @throws PDException
+ */
+public void ImportXMLNode(Node OPDObject, String FolderPath, String DestFold, boolean MaintainId) throws PDException
+{
+if (FolderPath.charAt(FolderPath.length()-1)!=File.separatorChar)
+    FolderPath+=File.separatorChar; 
+NodeList childNodes = OPDObject.getChildNodes();
+PDDocs NewDoc=null;
+for (int i = 0; i < childNodes.getLength(); i++)
+    {
+    Node item = childNodes.item(i);
+    if (item.getNodeName().equalsIgnoreCase(XML_ListAttr)) 
+        {
+        Record r=Record.FillFromXML(item, getRecord());
+        String DocTypReaded=(String)r.getAttr(PDDocs.fDOCTYPE).getValue();
+        NewDoc=new PDDocs(getDrv(), DocTypReaded); // to be improved to analize the type BEFORE
+        r=Record.FillFromXML(item, NewDoc.getRecSum());
+        NewDoc.assignValues(r);
+         if (!MaintainId)
+            NewDoc.setPDId(null);
+        NewDoc.setParentId(DestFold);
+        Attribute DocName=r.getAttr(fNAME);
+        String Path=(String)DocName.getValue();
+        if (Path.contains(File.separator)) // if absolute reference, maintain
+            NewDoc.setFile(Path);
+        else
+            NewDoc.setFile(FolderPath+Path);
+        NewDoc.setName(null); // calculated by when inserting
+        }
+    }
+NewDoc.insert();
+}    
+//-------------------------------------------------------------------------
+
 }

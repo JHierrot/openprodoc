@@ -800,7 +800,7 @@ abstract public void CloseCursor(Cursor CursorIdent) throws PDException;
  * @param Password
  * @throws PDException
  */
-void Assign(String userName, String Password)  throws PDException
+void Assign(String userName, String Password) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("DriverGeneric.Assign>:"+userName);
@@ -820,6 +820,15 @@ else
     }
 if (PDLog.isDebug())
     PDLog.Debug("DriverGeneric.Assign<:"+userName);
+}
+//-----------------------------------------------------------------------------------
+/**
+ * 
+ * @throws PDException
+ */
+public void RefreshUser() throws PDException
+{
+getUser().LoadAll(getUser().getName());
 }
 //-----------------------------------------------------------------------------------
 /**
@@ -1193,7 +1202,7 @@ if (PDLog.isDebug())
  */
 static public String getVersion()
 {
-return("0.5");
+return("0.6");
 }
 private static final char[] HEX_CHARS = "0123456789abcdef".toCharArray();
 //-----------------------------------------------------------------------------------
@@ -1497,17 +1506,24 @@ if (PDCust==null)
 return PDCust;
 }
 //---------------------------------------------------------------------
-public void ProcessXML(File XMLFile) throws PDException
+public void ProcessXML(File XMLFile, String ParentFolderId) throws PDException
 {
 try {
 DocumentBuilder DB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 Document XMLObjects = DB.parse(XMLFile);
 NodeList OPDObjectList = XMLObjects.getElementsByTagName(ObjPD.XML_OPDObject);
+Node OPDObject = null;
+ObjPD Obj2Build=null;
 for (int i=0; i<OPDObjectList.getLength(); i++)
     {
-    Node OPDObject = OPDObjectList.item(i);
-    ObjPD Obj2Build=BuildObj(OPDObject);
-    Obj2Build.ProcesXMLNode(OPDObject);
+    OPDObject = OPDObjectList.item(i);
+    Obj2Build=BuildObj(OPDObject);
+    if (Obj2Build instanceof PDDocs)
+        ((PDDocs)Obj2Build).ImportXMLNode(OPDObject, XMLFile.getAbsolutePath().substring(0, 
+                                           XMLFile.getAbsolutePath().lastIndexOf(File.separatorChar)),
+                                           ParentFolderId, false);
+    else
+        Obj2Build.ProcesXMLNode(OPDObject);
     }
 }catch(Exception ex)
     {

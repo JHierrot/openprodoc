@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Vector;
+import org.w3c.dom.Node;
 
 /**
  *
@@ -1135,4 +1136,9 @@ RFull.delRecord(getRecord());
 return(RFull.toXML()+"</ListAttr>");    
 }
 //-------------------------------------------------------------------------
+
+    void ImportXMLNode(Node OPDObject, String substring, boolean b)
+    {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
 }
