@@ -500,13 +500,14 @@ A.setDescription("Permiso para carpeta personal de "+getName());
 A.insert();
 A.addUser(getName(), PDACL.pDELETE);
 if (!getName().equalsIgnoreCase("root"))
-    A.addUser("root", PDACL.pDELETE);
+    A.addGroup("Administrators", PDACL.pDELETE);
 PDFolders f=new PDFolders(getDrv());
 f.setPDId(getUserFolder());
 f.setTitle(getName());
 f.setParentId(PDFolders.USERSFOLDER);
 f.setACL(A.getName());
 f.insert();
+getDrv().RefreshUser(); // to be able of delete the created folder IN rge SAM Session reading the ACL
 }
 //-------------------------------------------------------------------------
 /**

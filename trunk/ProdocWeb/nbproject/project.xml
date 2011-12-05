@@ -7,12 +7,12 @@
             <minimum-ant-version>1.6.5</minimum-ant-version>
             <web-module-libraries>
                 <library dirs="200">
-                    <file>${file.reference.Prodoc-Varios}</file>
-                    <path-in-war>WEB-INF/classes</path-in-war>
-                </library>
-                <library dirs="200">
                     <file>${reference.Prodoc.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.OPD-Varios}</file>
+                    <path-in-war>WEB-INF/classes</path-in-war>
                 </library>
                 <library dirs="200">
                     <file>${file.reference.commons-fileupload-1.2.2.jar}</file>
