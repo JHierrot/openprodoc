@@ -27,9 +27,7 @@ package prodocswing.forms;
 
 import java.awt.Font;
 import java.awt.Image;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -65,7 +63,8 @@ private static DefaultFormatterFactory formFacTS = null;
 private static DefaultFormatterFactory formFacDate = null;
 static private String ActFolderId=PDFolders.ROOTFOLDER;
 static private PDTableModel DocsContained;
-
+static private int ExpFolds=0;
+static private int ExpDocs=0;
 private PDFolders FoldAct=null;
 static private String List=PDFolders.fACL+"/"+PDFolders.fFOLDTYPE+"/"+PDFolders.fPARENTID+"/"+PDFolders.fPDID+"/"+PDFolders.fTITLE+"/"+PDFolders.fPDAUTOR+"/"+PDFolders.fPDDATE;
 
@@ -113,6 +112,9 @@ DocsTable.setAutoCreateColumnsFromModel(true);
         ModFoldAdvanced = new javax.swing.JMenuItem();
         RefreshFold = new javax.swing.JMenuItem();
         SearchFold = new javax.swing.JMenuItem();
+        jSeparator6 = new javax.swing.JPopupMenu.Separator();
+        ExportFold = new javax.swing.JMenuItem();
+        ImportFold = new javax.swing.JMenuItem();
         jSeparator5 = new javax.swing.JPopupMenu.Separator();
         exitMenuItem = new javax.swing.JMenuItem();
         DocMenu = new javax.swing.JMenu();
@@ -284,6 +286,25 @@ DocsTable.setAutoCreateColumnsFromModel(true);
             }
         });
         FolderMenu.add(SearchFold);
+        FolderMenu.add(jSeparator6);
+
+        ExportFold.setFont(getFontMenu());
+        ExportFold.setText(TT("Export_Folders"));
+        ExportFold.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ExportFoldActionPerformed(evt);
+            }
+        });
+        FolderMenu.add(ExportFold);
+
+        ImportFold.setFont(getFontMenu());
+        ImportFold.setText(TT("Import_Folders"));
+        ImportFold.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ImportFoldActionPerformed(evt);
+            }
+        });
+        FolderMenu.add(ImportFold);
         FolderMenu.add(jSeparator5);
 
         exitMenuItem.setFont(getFontMenu());
@@ -1073,6 +1094,43 @@ getSession().ProcessXML(FileImp, ActFolderId);
     }
     }//GEN-LAST:event_ImportDocActionPerformed
 
+    private void ExportFoldActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ExportFoldActionPerformed
+    {//GEN-HEADEREND:event_ExportFoldActionPerformed
+try {
+ExpFolds=0;
+ExpDocs=0;    
+DialogExportFolders ExpFold = new DialogExportFolders(this,true);
+ExpFold.setLocationRelativeTo(null);
+ExpFold.setVisible(true);
+if (ExpFold.isCancel())
+    return;
+Export(FoldAct, ExpFold.SelFolder.getAbsolutePath(), ExpFold.IsOneLevel(), ExpFold.IncludeMetadata(), ExpFold.IncludeDocs());
+Message(DrvTT("Exported")+" "+ExpFolds+" "+DrvTT("Folders")+" / "+ExpDocs +" "+DrvTT("Documents"));
+} catch (Exception ex)
+    {
+    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
+    }//GEN-LAST:event_ExportFoldActionPerformed
+
+    private void ImportFoldActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ImportFoldActionPerformed
+    {//GEN-HEADEREND:event_ImportFoldActionPerformed
+try {
+ExpFolds=0;
+ExpDocs=0;    
+DialogImportFolders ImpFold = new DialogImportFolders(this,true);
+ImpFold.setLocationRelativeTo(null);
+ImpFold.setVisible(true);
+if (ImpFold.isCancel())
+    return;
+Import(FoldAct, ImpFold.SelFolder.getAbsolutePath(), ImpFold.IsOneLevel(), ImpFold.IncludeMetadata(), ImpFold.IncludeDocs());
+Message(DrvTT("Imported")+" "+ExpFolds+" "+DrvTT("Folders")+" / "+ExpDocs +" "+DrvTT("Documents"));
+} catch (Exception ex)
+    {
+    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
+
+    }//GEN-LAST:event_ImportFoldActionPerformed
+
 /**
 * @param args the command line arguments
 */
@@ -1117,9 +1175,11 @@ java.awt.EventQueue.invokeLater(new Runnable()
     private javax.swing.JMenu DocMenu;
     private javax.swing.JTable DocsTable;
     private javax.swing.JMenuItem ExportDoc;
+    private javax.swing.JMenuItem ExportFold;
     private javax.swing.JMenu FolderMenu;
     private javax.swing.JMenuItem GroupMenuItem;
     private javax.swing.JMenuItem ImportDoc;
+    private javax.swing.JMenuItem ImportFold;
     private javax.swing.JMenuItem ListVersions;
     private javax.swing.JMenuItem MimeTypeMenuItem;
     private javax.swing.JMenuItem ModDocAdvanced;
@@ -1149,6 +1209,7 @@ java.awt.EventQueue.invokeLater(new Runnable()
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
+    private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JMenuBar menuBar;
@@ -1632,7 +1693,66 @@ return(Tmp);
  */
 static public String getVersion()
 {
-return("o.6");  
+return("0.6");  
+}
+//---------------------------------------------------------------------
+
+/**
+ * 
+ * @param FoldAct OPD Folder to start exporting
+ * @param SelFile Destination Folder to export
+ * @param IsOneLevel When tru, the OPD folder and contained Docs (if IncDocs), are exported 
+ * @param IncMetadata when true, include metadata in the export
+ * @param IncDocs  when true, include docs in the export
+ */
+private void Export(PDFolders FoldAct, String SelFolder, boolean IsOneLevel, boolean IncMetadata, boolean IncDocs) throws Exception
+{
+String Destpath=SelFolder+File.separatorChar;
+File SOFolder=new File(Destpath+FoldAct.getTitle());
+SOFolder.mkdir();
+ExpFolds++;
+if (IncMetadata)
+    {
+    PrintWriter PW = new PrintWriter(Destpath+FoldAct.getPDId()+".opd");
+    PW.print(FoldAct.StartXML());    
+    PW.print(FoldAct.toXML());
+    PW.print(FoldAct.EndXML());    
+    PW.flush();
+    PW.close();
+    }
+if (IncDocs)    
+    {
+    PDDocs Doc = new PDDocs(FoldAct.getDrv());    
+    Cursor ListDocs=Doc.getListContainedDocs(FoldAct.getPDId());
+    Record Res=FoldAct.getDrv().NextRec(ListDocs);
+    PDDocs ExpDoc=new PDDocs(FoldAct.getDrv());
+    while (Res!=null)
+        {
+        ExpDoc.assignValues(Res);    
+        ExpDoc.ExportXML(SOFolder.getAbsolutePath(), false);
+        ExpDocs++;    
+        Res=FoldAct.getDrv().NextRec(ListDocs);
+        }
+    FoldAct.getDrv().CloseCursor(ListDocs);
+    }
+if (!IsOneLevel)    
+    {
+    HashSet ListFolder = FoldAct.getListDirectDescendList(FoldAct.getPDId());
+    PDFolders ChildFold=new PDFolders(FoldAct.getDrv());
+    for (Iterator it = ListFolder.iterator(); it.hasNext();)
+        {
+        String ChildId=(String)it.next();
+        ChildFold.LoadFull(ChildId);
+        Export(ChildFold, SOFolder.getAbsolutePath(), IsOneLevel, IncMetadata, IncDocs);
+        }
+    }    
+}
+//---------------------------------------------------------------------
+
+private void Import(PDFolders FoldAct, String absolutePath, boolean IsOneLevel, boolean IncludeMetadata, boolean IncludeDocs)
+{
+    
+throw new UnsupportedOperationException("Not yet implemented");
 }
 //---------------------------------------------------------------------
 }
