@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Vector;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  *
@@ -1136,9 +1137,23 @@ RFull.delRecord(getRecord());
 return(RFull.toXML()+"</ListAttr>");    
 }
 //-------------------------------------------------------------------------
-
-    void ImportXMLNode(Node OPDObject, String substring, boolean b)
+void ImportXMLNode(Node OPDObject, String ParentFolderId) throws PDException
+{
+NodeList childNodes = OPDObject.getChildNodes();
+PDFolders NewFold=null;
+for (int i = 0; i < childNodes.getLength(); i++)
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+    Node item = childNodes.item(i);
+    if (item.getNodeName().equalsIgnoreCase(XML_ListAttr)) 
+        {
+        Record r=Record.FillFromXML(item, getRecord());
+        String FoldTypReaded=(String)r.getAttr(PDFolders.fFOLDTYPE).getValue();
+        NewFold=new PDFolders(getDrv(), FoldTypReaded); // to be improved to analize the type BEFORE
+        r=Record.FillFromXML(item, NewFold.getRecSum());
+        NewFold.assignValues(r);
+        NewFold.setParentId(ParentFolderId);
+        }
     }
+NewFold.insert();
+}
 }
