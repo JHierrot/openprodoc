@@ -1522,6 +1522,8 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
         ((PDDocs)Obj2Build).ImportXMLNode(OPDObject, XMLFile.getAbsolutePath().substring(0, 
                                            XMLFile.getAbsolutePath().lastIndexOf(File.separatorChar)),
                                            ParentFolderId, false);
+    else if (Obj2Build instanceof PDFolders)
+            ((PDFolders)Obj2Build).ImportXMLNode(OPDObject, ParentFolderId);
     else
         Obj2Build.ProcesXMLNode(OPDObject);
     }
