@@ -30,9 +30,11 @@ import java.awt.Image;
 import java.io.File;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Vector;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -1122,7 +1124,7 @@ ImpFold.setLocationRelativeTo(null);
 ImpFold.setVisible(true);
 if (ImpFold.isCancel())
     return;
-Import(FoldAct, ImpFold.SelFolder.getAbsolutePath(), ImpFold.IsOneLevel(), ImpFold.IncludeMetadata(), ImpFold.IncludeDocs());
+Import(FoldAct, ImpFold.SelFolder.getAbsolutePath(), ImpFold.IsOneLevel(), ImpFold.IncludeMetadata(), ImpFold.IncludeDocs(), ImpFold.FoldType(), ImpFold.DocType());
 Message(DrvTT("Imported")+" "+ExpFolds+" "+DrvTT("Folders")+" / "+ExpDocs +" "+DrvTT("Documents"));
 } catch (Exception ex)
     {
@@ -1713,7 +1715,7 @@ SOFolder.mkdir();
 ExpFolds++;
 if (IncMetadata)
     {
-    PrintWriter PW = new PrintWriter(Destpath+FoldAct.getPDId()+".opd");
+    PrintWriter PW = new PrintWriter(Destpath+FoldAct.getTitle()+".opd");
     PW.print(FoldAct.StartXML());    
     PW.print(FoldAct.toXML());
     PW.print(FoldAct.EndXML());    
@@ -1749,10 +1751,58 @@ if (!IsOneLevel)
 }
 //---------------------------------------------------------------------
 
-private void Import(PDFolders FoldAct, String absolutePath, boolean IsOneLevel, boolean IncludeMetadata, boolean IncludeDocs)
+private void Import(PDFolders FoldAct, String OriginPath, boolean IsOneLevel, boolean IncludeMetadata, boolean IncludeDocs, String FoldType, String DocType) throws PDException
 {
-    
-throw new UnsupportedOperationException("Not yet implemented");
+PDFolders NewFold=new PDFolders(FoldAct.getDrv(), FoldType);    
+if (IncludeMetadata)   
+    {
+    getSession().ProcessXML(new File(OriginPath+".opd"), FoldAct.getPDId()); 
+    }   
+else
+    {
+    String Name=OriginPath.substring(OriginPath.lastIndexOf(File.separatorChar));
+    NewFold.setTitle(Name);
+    NewFold.setParentId(FoldAct.getPDId());   
+    NewFold.insert();
+    }
+File ImpFold=new File(OriginPath);
+File []ListOrigin=ImpFold.listFiles();
+ArrayList DirList=new ArrayList(5);
+for (int i = 0; i < ListOrigin.length; i++)
+    {
+    File ListElement = ListOrigin[i];
+    if (ListElement.isDirectory())
+        {
+        if (!IsOneLevel)   
+            DirList.add(ListElement);
+        continue;
+        }
+    if (IncludeDocs)    
+        {
+        if (ListElement.getName().endsWith(".opd"))
+            {
+            if (IncludeMetadata)
+               getSession().ProcessXML(ListElement, NewFold.getPDId());
+            }
+        else
+            {
+            if (!IncludeMetadata)
+                {
+                PDDocs NewDoc=new PDDocs(FoldAct.getDrv(), DocType);
+                NewDoc.setTitle(ListElement.getName());
+                NewDoc.setFile(ListElement.getAbsolutePath());
+                NewDoc.setDocDate(new Date(ListElement.lastModified()));
+                NewDoc.insert();
+                }
+            }
+        }
+    }
+ListOrigin=null; // to help gc and save memory
+for (int i = 0; i < DirList.size(); i++)
+    {
+    File SubDir = (File) DirList.get(i);
+    Import(NewFold, SubDir.getAbsolutePath(), IsOneLevel, IncludeMetadata, IncludeDocs, FoldType, DocType);    
+    }
 }
 //---------------------------------------------------------------------
 }

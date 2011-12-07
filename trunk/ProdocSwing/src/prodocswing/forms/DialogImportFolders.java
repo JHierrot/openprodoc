@@ -28,6 +28,8 @@ package prodocswing.forms;
 import java.io.File;
 import javax.swing.JFileChooser;
 //import prodoc.PDFolders;
+import prodoc.PDDocs;
+import prodoc.PDFolders;
 import prodoc.Record;
 
 /**
@@ -284,6 +286,26 @@ return(CBIncMetadata.isSelected());
 public boolean IncludeDocs()
 {
 return(CBIncDocs.isSelected());    
+}
+//----------------------------------------------------------------
+/**
+ * Return the Folder type to be used to create the migrated Folders.
+ * In the future, an Array, with different types for different levels
+ * @return String containing the type of Folder to be used in the migration
+ */
+public String FoldType()
+{
+return(PDFolders.getTableName());           
+}
+//----------------------------------------------------------------
+/**
+ * Return the document type to be used to create the migrated documents.
+ * In the future, an Array, with different types for different levels
+ * @return String containing the type of document to be used in the migration
+ */
+public String DocType()
+{
+return(PDDocs.getTableName());    
 }
 //----------------------------------------------------------------
 }
