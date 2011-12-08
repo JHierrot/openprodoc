@@ -1506,7 +1506,13 @@ if (PDCust==null)
 return PDCust;
 }
 //---------------------------------------------------------------------
-public void ProcessXML(File XMLFile, String ParentFolderId) throws PDException
+/**
+ * 
+ * @param XMLFile
+ * @param ParentFolderId
+ * @throws PDException
+ */
+public int ProcessXML(File XMLFile, String ParentFolderId) throws PDException
 {
 try {
 DocumentBuilder DB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -1514,19 +1520,27 @@ Document XMLObjects = DB.parse(XMLFile);
 NodeList OPDObjectList = XMLObjects.getElementsByTagName(ObjPD.XML_OPDObject);
 Node OPDObject = null;
 ObjPD Obj2Build=null;
+int Tot=0;
 for (int i=0; i<OPDObjectList.getLength(); i++)
     {
     OPDObject = OPDObjectList.item(i);
     Obj2Build=BuildObj(OPDObject);
     if (Obj2Build instanceof PDDocs)
+        {
         ((PDDocs)Obj2Build).ImportXMLNode(OPDObject, XMLFile.getAbsolutePath().substring(0, 
                                            XMLFile.getAbsolutePath().lastIndexOf(File.separatorChar)),
                                            ParentFolderId, false);
+        Tot++;
+        }
     else if (Obj2Build instanceof PDFolders)
-            ((PDFolders)Obj2Build).ImportXMLNode(OPDObject, ParentFolderId);
+            ;  // ((PDFolders)Obj2Build).ImportXMLNode(OPDObject, ParentFolderId, false);
     else
+        {
         Obj2Build.ProcesXMLNode(OPDObject);
+        Tot++;
+        }
     }
+return(Tot);
 }catch(Exception ex)
     {
     throw new PDException(ex.getLocalizedMessage());

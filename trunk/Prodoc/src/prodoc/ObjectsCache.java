@@ -97,6 +97,11 @@ if (CleanerThread==null)
     return;
 CleanerThread.End();
 }
+//---------------------------------------------------------------------------
+public Iterator getIter()
+{
+return(CacheValues.keySet().iterator());    
+}
 // **** END of ObjectsCache ***************************************
 private class CacheObject
 {

@@ -1122,13 +1122,19 @@ if (getReposit()==null || getReposit().length()==0 )
 AddLogFields();
 setVersion("1.0");
 if (getName()==null || getName().length()==0)
-if (FilePath!=null)
+    if (FilePath!=null)
+        {
+        File f=new File(FilePath);
+        setName(f.getName());
+        }
+    else
+        setName(getPDId());
+if (getMimeType()==null || getMimeType().length()==0)
     {
-    File f=new File(FilePath);
-    setName(f.getName());
+    PDMimeType MT=new PDMimeType(getDrv());   
+    MT.SolveExt(getName().substring(getName().lastIndexOf('.')+1));
+    setMimeType(MT.getName());
     }
-else
-    setName(getPDId());
 Record Rec=getRecSum();
 insertFragments(Rec);
 InsertVersion(getPDId(), getVersion(), Rec);
@@ -1142,7 +1148,7 @@ Rep.Disconnect();
 FilePath=null;
 FileStream=null;
 getObjCache().put(getKey(), getRecord());
-} catch (PDException Ex)
+} catch (Exception Ex)
     {
     getDrv().AnularTrans();
     PDException.GenPDException("Error_inserting_Document", Ex.getLocalizedMessage());

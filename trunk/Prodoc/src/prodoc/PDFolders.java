@@ -19,10 +19,14 @@
 
 package prodoc;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Vector;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -1137,7 +1141,7 @@ RFull.delRecord(getRecord());
 return(RFull.toXML()+"</ListAttr>");    
 }
 //-------------------------------------------------------------------------
-void ImportXMLNode(Node OPDObject, String ParentFolderId) throws PDException
+public PDFolders ImportXMLNode(Node OPDObject, String ParentFolderId, boolean MaintainId) throws PDException
 {
 NodeList childNodes = OPDObject.getChildNodes();
 PDFolders NewFold=null;
@@ -1151,9 +1155,40 @@ for (int i = 0; i < childNodes.getLength(); i++)
         NewFold=new PDFolders(getDrv(), FoldTypReaded); // to be improved to analize the type BEFORE
         r=Record.FillFromXML(item, NewFold.getRecSum());
         NewFold.assignValues(r);
+        if (!MaintainId)
+            NewFold.setPDId(null);
         NewFold.setParentId(ParentFolderId);
         }
     }
 NewFold.insert();
+return NewFold;
 }
+//---------------------------------------------------------------------
+/**
+ * 
+ * @param XMLFile
+ * @param ParentFolderId
+ * @return 
+ * @throws PDException
+ */
+public PDFolders ProcessXML(File XMLFile, String ParentFolderId) throws PDException
+{
+try {
+DocumentBuilder DB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+Document XMLObjects = DB.parse(XMLFile);
+NodeList OPDObjectList = XMLObjects.getElementsByTagName(ObjPD.XML_OPDObject);
+Node OPDObject = null;
+PDFolders NewFold=null;
+for (int i=0; i<OPDObjectList.getLength(); i++)
+    {
+    OPDObject = OPDObjectList.item(i);
+    NewFold=ImportXMLNode(OPDObject, ParentFolderId, false);
+    }
+return(NewFold); // returned LAST Folder when opd file contains several.
+}catch(Exception ex)
+    {
+    throw new PDException(ex.getLocalizedMessage());
+    }
+}
+//---------------------------------------------------------------------
 }
