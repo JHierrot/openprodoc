@@ -26,10 +26,14 @@
 package prodocswing.forms;
 
 import java.io.File;
+import java.util.Vector;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
-//import prodoc.PDFolders;
-import prodoc.PDDocs;
-import prodoc.PDFolders;
+import prodoc.Attribute;
+import prodoc.Cursor;
+import prodoc.DriverGeneric;
+import prodoc.PDException;
+import prodoc.PDObjDefs;
 import prodoc.Record;
 
 /**
@@ -73,11 +77,15 @@ initComponents();
         CBIncMetadata = new javax.swing.JCheckBox();
         IncDocs = new javax.swing.JLabel();
         CBIncDocs = new javax.swing.JCheckBox();
+        LabelDocType = new javax.swing.JLabel();
+        DocTypeCB = new javax.swing.JComboBox();
         FilePathLabel = new javax.swing.JLabel();
         FilePathTextField = new javax.swing.JTextField();
         ButtonSelFile = new javax.swing.JButton();
         ButtonCancel = new javax.swing.JButton();
         ButtonAcept = new javax.swing.JButton();
+        FoldTypeCB = new javax.swing.JComboBox();
+        LabelFoldType1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(MainWin.TT("Export_Folders"));
@@ -94,7 +102,7 @@ initComponents();
         LabelOperation.setText(MainWin.TT("Export_Folders"));
 
         OneLevel.setFont(MainWin.getFontDialog());
-        OneLevel.setText(MainWin.TT("Export_One_level"));
+        OneLevel.setText(MainWin.TT("Import_One_level"));
 
         IncMetadata.setFont(MainWin.getFontDialog());
         IncMetadata.setText(MainWin.TT("Include_Metadata"));
@@ -102,8 +110,14 @@ initComponents();
         IncDocs.setFont(MainWin.getFontDialog());
         IncDocs.setText(MainWin.TT("Include_Documentos"));
 
+        LabelDocType.setFont(MainWin.getFontDialog());
+        LabelDocType.setText(MainWin.TT("Document_type"));
+
+        DocTypeCB.setFont(MainWin.getFontDialog());
+        DocTypeCB.setModel(getComboModelDoc());
+
         FilePathLabel.setFont(MainWin.getFontDialog());
-        FilePathLabel.setText(MainWin.TT("Destination_Folder"));
+        FilePathLabel.setText(MainWin.TT("Source_Folder"));
 
         FilePathTextField.setFont(MainWin.getFontDialog());
 
@@ -131,50 +145,54 @@ initComponents();
             }
         });
 
+        FoldTypeCB.setFont(MainWin.getFontDialog());
+        FoldTypeCB.setModel(getComboModelFold());
+
+        LabelFoldType1.setFont(MainWin.getFontDialog());
+        LabelFoldType1.setText(MainWin.TT("Folder_Type"));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(OneLevel, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-                .addGap(17, 17, 17)
-                .addComponent(CBOneLevel)
-                .addGap(420, 420, 420))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(17, Short.MAX_VALUE)
                 .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE)
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(IncMetadata, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                    .addComponent(IncDocs)
+                    .addComponent(OneLevel, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                    .addComponent(LabelDocType, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(LabelFoldType1, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(CBOneLevel)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(CBIncMetadata)
+                        .addComponent(CBIncDocs, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(DocTypeCB, 0, 340, Short.MAX_VALUE)
+                    .addComponent(FoldTypeCB, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(20, 20, 20))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(FilePathLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(FilePathTextField)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(ButtonSelFile, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(ButtonAcept)
                         .addGap(18, 18, 18)
-                        .addComponent(ButtonCancel)))
-                .addGap(20, 20, 20))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(ButtonCancel))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(IncMetadata, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
+                        .addComponent(FilePathLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(CBIncMetadata))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(IncDocs, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(CBIncDocs)))
-                .addGap(420, 420, 420))
+                        .addComponent(FilePathTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(ButtonSelFile, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(20, 20, 20))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {FilePathLabel, OneLevel});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {IncDocs, IncMetadata, LabelDocType, LabelFoldType1, OneLevel});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -187,22 +205,30 @@ initComponents();
                     .addComponent(CBOneLevel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(IncMetadata)
-                    .addComponent(CBIncMetadata))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(CBIncMetadata)
+                    .addComponent(IncMetadata))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(IncDocs)
                     .addComponent(CBIncDocs))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(LabelDocType)
+                    .addComponent(DocTypeCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(LabelFoldType1)
+                    .addComponent(FoldTypeCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(FilePathTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(FilePathLabel)
                     .addComponent(ButtonSelFile))
-                .addGap(31, 31, 31)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButtonAcept)
                     .addComponent(ButtonCancel))
-                .addGap(31, 31, 31))
+                .addGap(62, 62, 62))
         );
 
         pack();
@@ -248,10 +274,14 @@ Cancel=true;
     private javax.swing.JCheckBox CBIncDocs;
     private javax.swing.JCheckBox CBIncMetadata;
     private javax.swing.JCheckBox CBOneLevel;
+    private javax.swing.JComboBox DocTypeCB;
     private javax.swing.JLabel FilePathLabel;
     private javax.swing.JTextField FilePathTextField;
+    private javax.swing.JComboBox FoldTypeCB;
     private javax.swing.JLabel IncDocs;
     private javax.swing.JLabel IncMetadata;
+    private javax.swing.JLabel LabelDocType;
+    private javax.swing.JLabel LabelFoldType1;
     private javax.swing.JLabel LabelOperation;
     private javax.swing.JLabel OneLevel;
     // End of variables declaration//GEN-END:variables
@@ -295,7 +325,8 @@ return(CBIncDocs.isSelected());
  */
 public String FoldType()
 {
-return(PDFolders.getTableName());           
+return((String)FoldTypeCB.getSelectedItem());
+//return(PDFolders.getTableName());           
 }
 //----------------------------------------------------------------
 /**
@@ -305,7 +336,59 @@ return(PDFolders.getTableName());
  */
 public String DocType()
 {
-return(PDDocs.getTableName());    
+return((String)DocTypeCB.getSelectedItem());
+//return(PDDocs.getTableName());    
 }
 //----------------------------------------------------------------
+/**
+ * Obtains a list of clases of type Doc allowed to the user
+ * @return a DefaultComboModel with names of classes of Docs
+ */
+private DefaultComboBoxModel getComboModelDoc()
+{
+Vector VObjects=new Vector();
+try {
+DriverGeneric Session=MainWin.getSession();
+PDObjDefs Obj = new PDObjDefs(Session);
+Cursor CursorId = Obj.getListDocs();
+Record Res=Session.NextRec(CursorId);
+while (Res!=null)
+    {
+    Attribute Attr=Res.getAttr(PDObjDefs.fNAME);
+    VObjects.add(Attr.getValue());
+    Res=Session.NextRec(CursorId);
+    }
+} catch (PDException ex)
+    {
+    MainWin.Message(ex.getLocalizedMessage());
+    }
+return(new DefaultComboBoxModel(VObjects));
+}
+//----------------------------------------------------------------
+/**
+ * Obtains a list of clases of type folder allowed to the user
+ * @return a DefaultComboModel with names of classes of folder
+ */
+private DefaultComboBoxModel getComboModelFold()
+{
+Vector VObjects=new Vector();
+try {
+DriverGeneric Session=MainWin.getSession();
+PDObjDefs Obj = new PDObjDefs(Session);
+Cursor CursorId = Obj.getListFold();
+Record Res=Session.NextRec(CursorId);
+while (Res!=null)
+    {
+    Attribute Attr=Res.getAttr(PDObjDefs.fNAME);
+    VObjects.add(Attr.getValue());
+    Res=Session.NextRec(CursorId);
+    }
+} catch (PDException ex)
+    {
+    MainWin.Message("Error"+ex.getLocalizedMessage());
+    }
+return(new DefaultComboBoxModel(VObjects));
+}
+//----------------------------------------------------------------
+
 }

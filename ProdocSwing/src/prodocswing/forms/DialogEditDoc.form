@@ -33,12 +33,12 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
-                      <Component id="LabelOperation" pref="543" max="32767" attributes="0"/>
+                      <Component id="LabelOperation" pref="562" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="LabelFoldType" min="-2" pref="197" max="-2" attributes="0"/>
-                      <EmptySpace pref="32" max="32767" attributes="0"/>
+                      <EmptySpace pref="51" max="32767" attributes="0"/>
                       <Component id="FoldTypeCB" min="-2" pref="323" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -49,7 +49,7 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
-                      <Component id="Attributes" pref="544" max="32767" attributes="0"/>
+                      <Component id="Attributes" pref="563" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -133,18 +133,18 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <Component id="IdLabel" pref="97" max="32767" attributes="1"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="ACLDescripLabel" linkSize="2" alignment="0" pref="122" max="32767" attributes="1"/>
+                                  <Component id="MimeLabel" linkSize="2" alignment="0" pref="122" max="32767" attributes="1"/>
+                                  <Component id="TitleLabel" linkSize="2" alignment="0" pref="122" max="32767" attributes="1"/>
+                                  <Component id="DateLabel" linkSize="2" alignment="0" pref="122" max="32767" attributes="1"/>
+                                  <Component id="NameLabel" linkSize="2" alignment="0" pref="122" max="32767" attributes="1"/>
+                                  <Component id="FilePathLabel" linkSize="2" alignment="0" pref="122" max="32767" attributes="1"/>
+                              </Group>
                               <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="MimeLabel" alignment="0" max="32767" attributes="1"/>
-                                  <Component id="FilePathLabel" alignment="0" max="32767" attributes="1"/>
-                                  <Component id="NameLabel" alignment="0" max="32767" attributes="1"/>
-                                  <Component id="TitleLabel" alignment="0" max="32767" attributes="1"/>
-                                  <Component id="ACLDescripLabel" alignment="0" pref="122" max="32767" attributes="1"/>
-                                  <Component id="DateLabel" alignment="0" max="32767" attributes="1"/>
-                              </Group>
+                              <Component id="IdLabel" linkSize="2" pref="122" max="32767" attributes="1"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -156,7 +156,7 @@
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="ButtonSelFile" min="-2" pref="45" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="MimeTypeCB" alignment="0" pref="386" max="32767" attributes="0"/>
+                          <Component id="MimeTypeCB" alignment="0" pref="380" max="32767" attributes="0"/>
                           <Component id="IdField" linkSize="1" alignment="0" pref="380" max="32767" attributes="1"/>
                           <Component id="ACLComboBox" linkSize="1" alignment="0" pref="380" max="32767" attributes="1"/>
                           <Component id="TitleTextField" linkSize="1" alignment="0" pref="380" max="32767" attributes="1"/>
@@ -168,14 +168,12 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
-                      <Component id="IdLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="260" max="-2" attributes="0"/>
-                  </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace pref="23" max="32767" attributes="0"/>
-                      <Component id="IdField" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="IdField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="IdLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="ACLComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -186,7 +184,7 @@
                           <Component id="TitleTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="TitleLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="DateTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="DateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -202,12 +200,12 @@
                           <Component id="ButtonSelFile" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="FilePathLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="MimeTypeCB" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="MimeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
