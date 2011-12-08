@@ -1756,15 +1756,16 @@ private void Import(PDFolders FoldAct, String OriginPath, boolean IsOneLevel, bo
 PDFolders NewFold=new PDFolders(FoldAct.getDrv(), FoldType);    
 if (IncludeMetadata)   
     {
-    getSession().ProcessXML(new File(OriginPath+".opd"), FoldAct.getPDId()); 
+    NewFold=NewFold.ProcessXML(new File(OriginPath+".opd"), FoldAct.getPDId()); 
     }   
 else
     {
-    String Name=OriginPath.substring(OriginPath.lastIndexOf(File.separatorChar));
+    String Name=OriginPath.substring(OriginPath.lastIndexOf(File.separatorChar)+1);
     NewFold.setTitle(Name);
     NewFold.setParentId(FoldAct.getPDId());   
     NewFold.insert();
     }
+ExpFolds++;
 File ImpFold=new File(OriginPath);
 File []ListOrigin=ImpFold.listFiles();
 ArrayList DirList=new ArrayList(5);
@@ -1782,7 +1783,9 @@ for (int i = 0; i < ListOrigin.length; i++)
         if (ListElement.getName().endsWith(".opd"))
             {
             if (IncludeMetadata)
-               getSession().ProcessXML(ListElement, NewFold.getPDId());
+                {
+                ExpDocs+=getSession().ProcessXML(ListElement, NewFold.getPDId());   
+                }
             }
         else
             {
@@ -1792,12 +1795,14 @@ for (int i = 0; i < ListOrigin.length; i++)
                 NewDoc.setTitle(ListElement.getName());
                 NewDoc.setFile(ListElement.getAbsolutePath());
                 NewDoc.setDocDate(new Date(ListElement.lastModified()));
+                NewDoc.setParentId(NewFold.getPDId());
                 NewDoc.insert();
+                ExpDocs++;    
                 }
             }
         }
     }
-ListOrigin=null; // to help gc and save memory
+ListOrigin=null; // to help gc and save memory during recursivity
 for (int i = 0; i < DirList.size(); i++)
     {
     File SubDir = (File) DirList.get(i);
