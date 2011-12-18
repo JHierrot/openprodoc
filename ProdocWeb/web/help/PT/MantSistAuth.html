@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mantenimiento Sistemas de Autenticación</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+<H4>Mantenimiento Sistemas de Autenticación</H4><hr>
+<p>Al seleccionar en el formulario de <a href="ListSistAuth.html">Lista Sistemas de Autenticación</a> las opciones de Alta, Baja, Modificación o Copia de Repositorios aparecerá este formulario con diversos campos activados o desactivados.</p>
+<p>Este formulario contiene la información:</p>
+<ul>
+    <li><b>Nombre identificativo</b>: Identificador del Sistemas de Autenticación cuyo valor no puede repetirse ni cambiar una vez asignado. Puede tener una longitud máxima de 32 caracteres. (Ej. "LDAP_Corporativo")</li>
+    <li><b>Descripción del Sistemas de Autenticación</b>: Descripción que permita interpretar el Sistemas de Autenticación. Puede tener una longitud máxima de 128 caracteres. (Ej.: "LDAP Delegación Brasil")</li>
+    <li><b>Tipo de Sistemas de Autenticación</b>: Indica el tipo de Sistemas de Autenticación. Es posible implementar nuevos tipos si se necesita. Actualmente los existentes son: 
+        <ul>
+        <li><b>OPD</b>: OpenProdoc. En este modo, tanto el usuario como la clave (encriptada) se almacenan junto con el resto de los datos de OPD. Se verifica la clave introducida contra estos datos.</li>
+        <li><b>BBDD</b>: Base de Datos. Esta forma de autenticación realiza una conexión contra la base de datos definida en url y con el usuario y clave introducidos para conectarse. Si la BBDD acepta la conexión, OPD reconoce como autenticado al usuario.</li>
+        <li><b>LDAP</b>: El usuario se verifica contra el LDAP indicado en la url. Si la autenticación contra LDAP es correcta, OPD reconoce como autenticado al usuario.</li>
+        <li><b>SO</b>: Esta forma debe utilizarse solo para arrancar procesos en servidor o en entornos con ordenadores personales muy controlados. OPD reconoce como válido el usuario si su nombre de acceso coincide con el nombre de usuario actual de sistema operativo, sin comprobar la clave.</li>
+        </ul>
+    </li>  
+    <li><b>URL o referencia al Sistemas de Autenticación</b>:La URI o URL que referencia al Sistemas de Autenticación. Es necesario en Ldap y BBDD.</li>    
+    <li><b>Parámetros adicionales del Sistemas de Autenticación</b>: En el caso de BBDD es el driver jdbc, en el caso de Ldap es un parámetro que podría utilizarse en: <i>"env.put(Context.SECURITY_PRINCIPAL, "cn="+User+" "+getParam())"</i>.</li>    
+    <li><b>Usuario de conexión al Sistemas de Autenticación</b>: Usuario necesario para conectarse al sistema. No usado actualmente.</li>    
+    <li><b>Password de conexión al Sistemas de Autenticación</b>: clave de acceso necesaria para conectarse al sistema. No usado actualmente.</li>    
+</ul>
+<p style="text-align:center;"><img alt="Copia de pantalla MantSistAuth" src="img/MantSistAuth.jpg"/></p>
+<p>Ver: <a href="ListSistAuth.html">Lista Sistemas de Autenticación</a></p>
+<hr>
+<a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>
+    </body>
+</html>
