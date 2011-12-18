@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mantenimiento Grupos</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+<H4>Mantenimiento Grupos</H4><hr>
+<p>Al seleccionar en el formulario de <a href="ListGroups.html">Lista Grupos</a> las opciones de Alta, Baja, Modificación o Copia de Grupo aparecerá este formulario con diversos campos activados o desactivados.</p>
+<p>Este formulario contiene la información:</p>
+<ul>
+    <li><b>Nombre del Grupo</b>: Identificador del Grupo cuyo valor no puede repetirse ni cambiar una vez asignado. Puede tener una longitud máxima de 32 caracteres. (Ej. "Auditores")</li>
+    <li><b>Descripción del Grupo</b>: Descripción del Grupo que permita interpretar y recordar el sentido del Grupo. Puede tener una longitud máxima de 128 caracteres. (Ej.: "Auditores externaos realizando la auditoría de calidad")</li>
+    <li><b>ACL del Grupo</b>: Política de seguridad asociada al grupo que permita restringir el acceso. Esto permite asignar a un usuario role de administración de grupos pero limitarlo a unos grupos concretos. Por ejemplo puede crearse un rol "administrador de delegaciones" y crear distintos grupos por delegación, cada uno de ellos con un ACL</li>
+    <li><b>Lista de grupos</b>: La solapa de grupos contiene una lista de los grupos contenidos en el grupo actual. Se puede añadir o borrar grupos por medio de los botones correspondientes.</li>
+    <li><b>Lista de  usuarios</b>: La solapa de usuarios contiene una lista de los usuarios contenidos en el grupo actual. Se puede añadir o borrar usuarios por medio de los botones correspondientes.</li>
+</ul>
+<p>Durante el alta solo se puede introducir nombre y descripción. Para agregar los usuarios o grupos debe modificarse posteriormente.</p>
+<p>Durante la modificación no podrá alterarse el nombre del grupo, ya que es el elemento que identifica unívocamente el mismo.</p>
+<p>Durante la baja todos los elementos estarán desactivados. Solo se presentan para que pueda verificarse la información antes de su borrado.</p>
+<p style="text-align:center;"><img alt="Copia de pantalla MantGroups" src="img/MantGroups.jpg"/></p>
+<p>Debe tenerse en cuenta que un grupo contiene a otros grupos y así indefinidamente, de forma que puede estructurarse la representación de la organización. Tambien puede incluirse un grupo en diversos grupos, de forma que por ejemplo puede crearse un grupo "Personal de Barcelona" e incluirlo en los grupos "Barcelona" y "Personal". 
+    Similarmente puede crearse un grupo "Dirección Barcelona" que se incluya en "Dirección" y en "Barcelona". Esto permite asignar los permisos y el acceso a los elementos necesarios de forma sencilla y flexible.</p>
+<p>Ver: <a href="ListGroups.html">Lista Grupos</a> y <a href="ListUsers.html">Lista de Usuarios</a> </p>
+<hr>
+<a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>
+    </body>
+</html>
