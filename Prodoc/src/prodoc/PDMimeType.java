@@ -38,7 +38,7 @@ public static final String fDESCRIPTION="Description";
 /**
  *
  */
-public static final String fEXTENSION="Extension";
+public static final String fMIMECODE="MimeCode";
 
 /**
  *
@@ -79,7 +79,7 @@ public void assignValues(Record Rec) throws PDException
 {
 setName((String) Rec.getAttr(fNAME).getValue());
 setDescription((String) Rec.getAttr(fDESCRIPTION).getValue());
-setExtension((String) Rec.getAttr(fEXTENSION).getValue());
+setMimeCode((String) Rec.getAttr(fMIMECODE).getValue());
 assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
@@ -93,7 +93,7 @@ public Record getRecord() throws PDException
 Record Rec=getRecordStruct();
 Rec.getAttr(fNAME).setValue(getName());
 Rec.getAttr(fDESCRIPTION).setValue(getDescription());
-Rec.getAttr(fEXTENSION).setValue(getExtension());
+Rec.getAttr(fMIMECODE).setValue(getMimeCode());
 getCommonValues(Rec);
 return(Rec);
 }
@@ -155,9 +155,9 @@ static synchronized private Record CreateRecordStruct() throws PDException
 if (MimeTypeStruct==null)
     {
     Record R=new Record();
-    R.addAttr( new Attribute(fNAME, "Name", "Standar_Mime_name", Attribute.tSTRING, true, null, 32, true, false, false));
+    R.addAttr( new Attribute(fNAME, "Name", "Standard_Extension_of_file", Attribute.tSTRING, true, null, 32, true, false, false));
     R.addAttr( new Attribute(fDESCRIPTION, "Description", "Description", Attribute.tSTRING, true, null, 128, false, false, true));
-    R.addAttr( new Attribute(fEXTENSION, "Extensión", "Standard_Extension_of_file", Attribute.tSTRING, true, null, 32, false, false, true));
+    R.addAttr( new Attribute(fMIMECODE, "MimeCode", "Standar_Mime_name", Attribute.tSTRING, true, null, 128, false, false, true));
     R.addRecord(getRecordStructCommon());
     return(R);
     }
@@ -208,9 +208,9 @@ this.Description = Description;
 }
 
 /**
-* @return the Extension
+* @return the MimeCode
 */
-public String getExtension()
+public String getMimeCode()
 {
 return Extension;
 }
@@ -218,7 +218,7 @@ return Extension;
 /**
 * @param Extension the Extension to set
 */
-public void setExtension(String Extension)
+public void setMimeCode(String Extension)
 {
 this.Extension = Extension;
 }
@@ -276,30 +276,58 @@ public PDMimeType SolveExt(String Ext) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDMimeType.SolveExt>:"+Ext);
-Record Rec = null;
-for (Iterator Iter = getObjCache().getIter(); Iter.hasNext(); )
-    {
-    String Val=(String) Iter.next();    
-    Rec = (Record)getObjCache().get(Val);
-    if ( ((String)Rec.getAttr(fEXTENSION).getValue()).equalsIgnoreCase(Ext))
-        {
-        assignValues(Rec);
-        if (PDLog.isDebug())
-            PDLog.Debug("PDMimeType SolveExt <");
-        return(this);
-        }
-    }
-Conditions ListCond=new Conditions();
-ListCond.addCondition(new Condition(fEXTENSION, Condition.cEQUAL, Ext));
-Query LoadAct=new Query(getTabName(), getRecordStruct(),ListCond);
-Cursor Cur=getDrv().OpenCursor(LoadAct);
-Rec=getDrv().NextRec(Cur);
-getDrv().CloseCursor(Cur);
-getObjCache().put((String)Rec.getAttr(fNAME).getValue(), Rec);
-assignValues(Rec);
+try {
+Load(Ext);
 if (PDLog.isDebug())
     PDLog.Debug("PDMimeType SolveExt <");
 return(this);
+} catch (PDException ex)
+    {
+    Load("*");
+    if (PDLog.isDebug())
+        PDLog.Debug("PDMimeType SolveExt <");
+    return(this);
+    }
+//Record Rec = null;
+//for (Iterator Iter = getObjCache().getIter(); Iter.hasNext(); )
+//    {
+//    String Val=(String) Iter.next();    
+//    Rec = (Record)getObjCache().get(Val);
+//    if ( ((String)Rec.getAttr(fMIMECODE).getValue()).equalsIgnoreCase(Ext))
+//        {
+//        assignValues(Rec);
+//        if (PDLog.isDebug())
+//            PDLog.Debug("PDMimeType SolveExt <");
+//        return(this);
+//        }
+//    }
+//Conditions ListCond=new Conditions();
+//ListCond.addCondition(new Condition(fMIMECODE, Condition.cEQUAL, Ext));
+//Query LoadAct=new Query(getTabName(), getRecordStruct(),ListCond);
+//Cursor Cur=getDrv().OpenCursor(LoadAct);
+//Rec=getDrv().NextRec(Cur);
+//getDrv().CloseCursor(Cur);
+//getObjCache().put((String)Rec.getAttr(fNAME).getValue(), Rec);
+//assignValues(Rec);
+
 }
 //-------------------------------------------------------------------------
+/**
+ * Obtains te jind of mimetype indcated by Name/extension
+ * @param FileName
+ * @return String indicating the Name/extension corresponding to file
+ * @throws PDException
+ */
+public String SolveName(String FileName) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDMimeType.SolveName>:"+FileName);
+String Exten=FileName.substring(FileName.lastIndexOf('.')+1);
+SolveExt(Exten);
+if (PDLog.isDebug())
+    PDLog.Debug("PDMimeType.SolveName<");
+return (getName());
+}
+//-------------------------------------------------------------------------
+
 }

@@ -135,7 +135,6 @@
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="ACLDescripLabel" linkSize="2" alignment="0" pref="122" max="32767" attributes="1"/>
-                                  <Component id="MimeLabel" linkSize="2" alignment="0" pref="122" max="32767" attributes="1"/>
                                   <Component id="TitleLabel" linkSize="2" alignment="0" pref="122" max="32767" attributes="1"/>
                                   <Component id="DateLabel" linkSize="2" alignment="0" pref="122" max="32767" attributes="1"/>
                                   <Component id="NameLabel" linkSize="2" alignment="0" pref="122" max="32767" attributes="1"/>
@@ -156,7 +155,6 @@
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="ButtonSelFile" min="-2" pref="45" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="MimeTypeCB" alignment="0" pref="380" max="32767" attributes="0"/>
                           <Component id="IdField" linkSize="1" alignment="0" pref="380" max="32767" attributes="1"/>
                           <Component id="ACLComboBox" linkSize="1" alignment="0" pref="380" max="32767" attributes="1"/>
                           <Component id="TitleTextField" linkSize="1" alignment="0" pref="380" max="32767" attributes="1"/>
@@ -168,7 +166,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="IdField" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -200,12 +198,7 @@
                           <Component id="ButtonSelFile" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="FilePathLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="MimeTypeCB" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="MimeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="57" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -328,26 +321,6 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ButtonSelFileActionPerformed"/>
               </Events>
-            </Component>
-            <Component class="javax.swing.JLabel" name="MimeLabel">
-              <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="MainWin.getFontDialog()" type="code"/>
-                </Property>
-                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="MainWin.TT(&quot;MimeType&quot;)" type="code"/>
-                </Property>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JComboBox" name="MimeTypeCB">
-              <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="MainWin.getFontDialog()" type="code"/>
-                </Property>
-                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="getComboMimeFold()" type="code"/>
-                </Property>
-              </Properties>
             </Component>
           </SubComponents>
         </Container>

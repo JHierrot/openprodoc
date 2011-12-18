@@ -39,7 +39,7 @@ public class FMantDocAdv extends FFormBase
 public FieldText  DocTitle;
 public FieldText  DocDate;
 public FieldFile DocFile;
-public FieldCombo ListMime;
+//public FieldCombo ListMime;
 FieldCombo ListTip;
 FieldCombo ListACL;
 
@@ -94,11 +94,11 @@ Attr=TmpFold.getRecord().getAttr(PDDocs.fNAME);
 DocFile=new FieldFile("", Attr.getName());
 DocFile.setCSSClass("FFormInput");
 DocFile.setMensStatus(TT(Attr.getDescription()));
-Attr=TmpFold.getRecord().getAttr(PDDocs.fMIMETYPE);
-ListMime=new FieldCombo(Attr.getName());
-ListMime.setCSSClass("FFormInputCombo");
-ListMime.setMensStatus(TT(Attr.getDescription()));
-FillMime(ListMime);
+//Attr=TmpFold.getRecord().getAttr(PDDocs.fMIMETYPE);
+//ListMime=new FieldCombo(Attr.getName());
+//ListMime.setCSSClass("FFormInputCombo");
+//ListMime.setMensStatus(TT(Attr.getDescription()));
+//FillMime(ListMime);
 Attr=TmpFold.getRecord().getAttr(PDDocs.fDOCTYPE);
 ListTip=new FieldCombo(Attr.getName());
 ListTip.setCSSClass("FFormInputCombo");
@@ -118,8 +118,8 @@ FormTab.getCelda(1,1).AddElem(new Element(TT("Document_Date")+":"));
 FormTab.getCelda(2,1).AddElem(DocDate);
 FormTab.getCelda(1,2).AddElem(new Element(TT("File_name")+":"));
 FormTab.getCelda(2,2).AddElem(DocFile);
-FormTab.getCelda(1,3).AddElem(new Element(TT("Document_MimeType")+":"));
-FormTab.getCelda(2,3).AddElem(ListMime);
+//FormTab.getCelda(1,3).AddElem(new Element(TT("Document_MimeType")+":"));
+//FormTab.getCelda(2,3).AddElem(ListMime);
 FormTab.getCelda(1,4).AddElem(new Element(TT("Document_Type")+":"));
 FormTab.getCelda(2,4).AddElem(ListTip);
 FormTab.getCelda(1,5).AddElem(new Element(TT("Document_ACL")+":"));
@@ -131,13 +131,13 @@ if (pMode!=ADDMOD)
     ListTip.setActivado(false);
     DocTitle.setValue((String)pRec.getAttr(PDDocs.fTITLE).getValue());
     ListACL.setValue((String)pRec.getAttr(PDDocs.fACL).getValue());
-    ListMime.setValue((String)pRec.getAttr(PDDocs.fMIMETYPE).getValue());
+//    ListMime.setValue((String)pRec.getAttr(PDDocs.fMIMETYPE).getValue());
     DocDate.setValue(SParent.FormatDate(Req, (Date)pRec.getAttr(PDDocs.fDOCDATE).getValue()));
     if (pMode==DELMOD)
         {
         DocTitle.setActivado(false);
         ListACL.setActivado(false);
-        ListMime.setActivado(false);
+//        ListMime.setActivado(false);
         DocDate.setActivado(false);
         DocFile.setActivado(false);
         }

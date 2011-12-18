@@ -507,7 +507,8 @@ f.setTitle(getName());
 f.setParentId(PDFolders.USERSFOLDER);
 f.setACL(A.getName());
 f.insert();
-getDrv().RefreshUser(); // to be able of delete the created folder IN rge SAM Session reading the ACL
+if (!getDrv().getUser().getName().equals("Install"))
+    getDrv().RefreshUser(); // to be able of delete the created folder IN the SAME Session reading the ACL
 }
 //-------------------------------------------------------------------------
 /**

@@ -24,6 +24,7 @@ import java.io.OutputStream;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import prodoc.PDDocs;
+import prodoc.PDMimeType;
 
 /**
  *
@@ -77,7 +78,9 @@ if (Ver!=null && Ver.length()!=0)
     doc.LoadVersion(Id, Ver);
 else
     doc.LoadCurrent(Id);
-response.setContentType(doc.getMimeType());
+PDMimeType mt=new PDMimeType(getSessOPD(Req));
+mt.Load(doc.getMimeType());
+response.setContentType(mt.getMimeCode());
 response.setHeader("Content-disposition", "inline; filename=" + doc.getName());
 if (Ver!=null && Ver.length()!=0)
     doc.getStreamVer(out);

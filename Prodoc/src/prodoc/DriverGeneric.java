@@ -502,7 +502,8 @@ for (int i = 0; i < RecD.NumAttr(); i++)
     }
 Trace.add("Document elements created");
 //----------------------
-//Usu.CreateFolder();
+File FileImp=new File("ex/defs.opd");
+ProcessXML(FileImp, PDFolders.ROOTFOLDER);
 this.CerrarTrans();
 Trace.add("Installation finished");
 }
@@ -1543,6 +1544,8 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
 return(Tot);
 }catch(Exception ex)
     {
+    ex.printStackTrace();
+    PDLog.Error(ex.getLocalizedMessage());
     throw new PDException(ex.getLocalizedMessage());
     }
 }
