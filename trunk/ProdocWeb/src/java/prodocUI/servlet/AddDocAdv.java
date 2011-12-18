@@ -34,8 +34,8 @@ import prodoc.Attribute;
 import prodoc.DriverGeneric;
 import prodoc.PDDocs;
 import prodoc.PDException;
+import prodoc.PDMimeType;
 import prodoc.Record;
-import prodocUI.forms.FListDocs;
 import prodocUI.forms.FMantDocAdv;
 
 /**
@@ -161,6 +161,8 @@ while (Attr!=null)
 Doc.assignValues(Rec);
 Doc.setParentId(getActFolderId(Req));
 Doc.setName(FileName);
+PDMimeType mt=new PDMimeType(PDSession);
+Doc.setMimeType(mt.SolveName(FileName));
 Doc.setStream(FileData);
 Doc.insert();
 return(true);

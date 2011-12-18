@@ -789,7 +789,7 @@ if (d.getName()==null || d.getName().length()==0)
     {
     PDMimeType MT=new PDMimeType(getDrv());
     MT.Load(d.getMimeType());
-    d.setName(getPDId()+"."+MT.getExtension());    
+    d.setName(getPDId()+"."+MT.getMimeCode());    
     }
 if (FolderPath.charAt(FolderPath.length()-1)!=File.separatorChar)
     FolderPath+=File.separatorChar+getPDId()+d.getVersion()+d.getName();

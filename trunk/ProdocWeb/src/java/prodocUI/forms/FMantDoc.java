@@ -37,7 +37,7 @@ public class FMantDoc extends FFormBase
 public FieldText  DocTitle;
 public FieldText  DocDate;
 public FieldFile DocFile;
-public FieldCombo ListMime;
+//public FieldCombo ListMime;
 
 
 /** Creates a new instance of FormularioLogin
@@ -80,11 +80,11 @@ Attr=TmpFold.getRecord().getAttr(PDDocs.fNAME);
 DocFile=new FieldFile("", Attr.getName());
 DocFile.setCSSClass("FFormInput");
 DocFile.setMensStatus(TT(Attr.getDescription()));
-Attr=TmpFold.getRecord().getAttr(PDDocs.fMIMETYPE);
-ListMime=new FieldCombo(Attr.getName());
-ListMime.setCSSClass("FFormInputCombo");
-ListMime.setMensStatus(TT(Attr.getDescription()));
-FillMime(ListMime);
+//Attr=TmpFold.getRecord().getAttr(PDDocs.fMIMETYPE);
+//ListMime=new FieldCombo(Attr.getName());
+//ListMime.setCSSClass("FFormInputCombo");
+//ListMime.setMensStatus(TT(Attr.getDescription()));
+//FillMime(ListMime);
 FormTab.getCelda(0,0).setWidth(-25);
 FormTab.getCelda(0,0).setHeight(30);
 FormTab.getCelda(1,0).AddElem(new Element(TT("Document_Title")+":"));
@@ -93,8 +93,8 @@ FormTab.getCelda(1,1).AddElem(new Element(TT("Document_Date")+":"));
 FormTab.getCelda(2,1).AddElem(DocDate);
 FormTab.getCelda(1,2).AddElem(new Element(TT("File_name")+":"));
 FormTab.getCelda(2,2).AddElem(DocFile);
-FormTab.getCelda(1,3).AddElem(new Element(TT("Document_MimeType")+":"));
-FormTab.getCelda(2,3).AddElem(ListMime);
+//FormTab.getCelda(1,3).AddElem(new Element(TT("Document_MimeType")+":"));
+//FormTab.getCelda(2,3).AddElem(ListMime);
 FormTab.getCelda(2,4).AddElem(OkButton);
 FormTab.getCelda(2,4).AddElem(CancelButton);
 Form DocForm=new Form(Destination+"?Read=1","FormVal");

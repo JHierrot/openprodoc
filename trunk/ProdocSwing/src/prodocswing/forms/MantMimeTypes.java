@@ -127,9 +127,9 @@ initComponents();
                             .addComponent(ExtensionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(ExtTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(MimeNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
-                            .addComponent(DescriptionTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)))
+                            .addComponent(DescriptionTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
+                            .addComponent(ExtTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 250, Short.MAX_VALUE)
                         .addComponent(ButtonAcept)
@@ -183,7 +183,7 @@ Attribute Attr = MimeType.getAttr(PDMimeType.fNAME);
 Attr.setValue(MimeNameTextField.getText());
 Attr = MimeType.getAttr(PDMimeType.fDESCRIPTION);
 Attr.setValue(DescriptionTextField.getText());
-Attr = MimeType.getAttr(PDMimeType.fEXTENSION);
+Attr = MimeType.getAttr(PDMimeType.fMIMECODE);
 Attr.setValue(ExtTextField.getText());
 Cancel = false;
 this.dispose();
@@ -271,7 +271,7 @@ DescriptionLabel.setText(Attr.getUserName());
 if (Attr.getValue()!=null)
     DescriptionTextField.setText((String)Attr.getValue());
 DescriptionTextField.setToolTipText(Attr.getDescription());
-Attr=MimeType.getAttr(PDMimeType.fEXTENSION);
+Attr=MimeType.getAttr(PDMimeType.fMIMECODE);
 ExtensionLabel.setText(Attr.getUserName());
 if (Attr.getValue()!=null)
     ExtTextField.setText((String)Attr.getValue());

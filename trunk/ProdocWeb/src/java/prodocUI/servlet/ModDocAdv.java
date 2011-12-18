@@ -34,6 +34,7 @@ import prodoc.Attribute;
 import prodoc.DriverGeneric;
 import prodoc.PDDocs;
 import prodoc.PDException;
+import prodoc.PDMimeType;
 import prodoc.Record;
 import prodocUI.forms.FMantDocAdv;
 
@@ -193,6 +194,8 @@ if (FileName!=null)
     Doc.setName(FileName);
 if (FileData!=null)
     Doc.setStream(FileData);
+PDMimeType mt=new PDMimeType(SParent.getSessOPD(Req));
+Doc.setMimeType(mt.SolveName(FileName));
 Doc.update();
 return(true);
 }

@@ -263,7 +263,7 @@ System.out.println("Test Tipos Mime ----------------------");
 PDMimeType Mime=new PDMimeType(Sesion);
 Mime.setName("app/doc");
 Mime.setDescription("Es doc");
-Mime.setExtension("doc");
+Mime.setMimeCode("doc");
 Mime.insert();
 PDMimeType Mime2=new PDMimeType(Sesion);
 Mime2.Load(Mime.getName());
@@ -273,7 +273,7 @@ else
    System.out.println("Alta Error");
 //------
 Mime.setDescription("Es doc2");
-Mime.setExtension("doc2");
+Mime.setMimeCode("doc2");
 Mime.update();
 Mime2.Load(Mime.getName());
 if (Mime.getRecord().equals(Mime2.getRecord()))

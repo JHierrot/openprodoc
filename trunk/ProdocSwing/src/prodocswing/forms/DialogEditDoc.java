@@ -120,8 +120,6 @@ initComponents();
         FilePathLabel = new javax.swing.JLabel();
         FilePathTextField = new javax.swing.JTextField();
         ButtonSelFile = new javax.swing.JButton();
-        MimeLabel = new javax.swing.JLabel();
-        MimeTypeCB = new javax.swing.JComboBox();
         ButtonAcept = new javax.swing.JButton();
         ButtonCancel = new javax.swing.JButton();
 
@@ -192,12 +190,6 @@ initComponents();
             }
         });
 
-        MimeLabel.setFont(MainWin.getFontDialog());
-        MimeLabel.setText(MainWin.TT("MimeType"));
-
-        MimeTypeCB.setFont(MainWin.getFontDialog());
-        MimeTypeCB.setModel(getComboMimeFold());
-
         javax.swing.GroupLayout AttrBasicLayout = new javax.swing.GroupLayout(AttrBasic);
         AttrBasic.setLayout(AttrBasicLayout);
         AttrBasicLayout.setHorizontalGroup(
@@ -208,7 +200,6 @@ initComponents();
                     .addGroup(AttrBasicLayout.createSequentialGroup()
                         .addGroup(AttrBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(ACLDescripLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                            .addComponent(MimeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
                             .addComponent(TitleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
                             .addComponent(DateLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
                             .addComponent(NameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
@@ -224,7 +215,6 @@ initComponents();
                         .addComponent(FilePathTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(ButtonSelFile, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(MimeTypeCB, 0, 380, Short.MAX_VALUE)
                     .addComponent(IdField, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
                     .addComponent(ACLComboBox, 0, 380, Short.MAX_VALUE)
                     .addComponent(TitleTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
@@ -234,11 +224,11 @@ initComponents();
 
         AttrBasicLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {ACLComboBox, DateTextField, IdField, NameTextField, TitleTextField});
 
-        AttrBasicLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {ACLDescripLabel, DateLabel, FilePathLabel, IdLabel, MimeLabel, NameLabel, TitleLabel});
+        AttrBasicLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {ACLDescripLabel, DateLabel, FilePathLabel, IdLabel, NameLabel, TitleLabel});
 
         AttrBasicLayout.setVerticalGroup(
             AttrBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AttrBasicLayout.createSequentialGroup()
+            .addGroup(AttrBasicLayout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addGroup(AttrBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(IdField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -264,11 +254,7 @@ initComponents();
                     .addComponent(FilePathTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ButtonSelFile)
                     .addComponent(FilePathLabel))
-                .addGap(18, 18, 18)
-                .addGroup(AttrBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(MimeTypeCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(MimeLabel))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(57, Short.MAX_VALUE))
         );
 
         Attributes.addTab(MainWin.TT("Common_Attributes"), AttrBasic);
@@ -349,12 +335,13 @@ Attr = EditedDoc.getAttr(PDDocs.fDOCTYPE);
 Attr.setValue(FoldTypeCB.getSelectedItem());
 Attr = EditedDoc.getAttr(PDDocs.fTITLE);
 Attr.setValue(TitleTextField.getText());
-Attr = EditedDoc.getAttr(PDDocs.fNAME);
-Attr.setValue(NameTextField.getText());
 Attr = EditedDoc.getAttr(PDDocs.fDOCDATE);
 Attr.setValue(DateTextField.getValue());
+Attr = EditedDoc.getAttr(PDDocs.fNAME);
+Attr.setValue(NameTextField.getText());
 Attr = EditedDoc.getAttr(PDDocs.fMIMETYPE);
-Attr.setValue(MimeTypeCB.getSelectedItem());
+PDMimeType mt=new PDMimeType(MainWin.getSession());
+Attr.setValue(mt.SolveName(NameTextField.getText()));
 RetrieveFields(EditedDoc, AttrExcluded, InputFields, Modif);
 Cancel = false;
 this.dispose();
@@ -413,8 +400,6 @@ Cancel=true;
     private javax.swing.JLabel IdLabel;
     private javax.swing.JLabel LabelFoldType;
     private javax.swing.JLabel LabelOperation;
-    private javax.swing.JLabel MimeLabel;
-    private javax.swing.JComboBox MimeTypeCB;
     private javax.swing.JLabel NameLabel;
     private javax.swing.JTextField NameTextField;
     private javax.swing.JLabel TitleLabel;
@@ -511,7 +496,7 @@ FoldTypeCB.setEnabled(false);
 ACLComboBox.setEnabled(false);
 TitleTextField.setEnabled(false);
 DateTextField.setEnabled(false);
-MimeTypeCB.setEnabled(false);
+//MimeTypeCB.setEnabled(false);
 ButtonSelFile.setEnabled(false);
 FilePathTextField.setEnabled(false);
 }
@@ -580,9 +565,9 @@ DateTextField.setToolTipText(MainWin.DrvTT(Attr.getDescription())  +"( "+MainWin
 Attr=EditedDoc.getAttr(PDDocs.fMIMETYPE); //-----------------------------
 AttrExcluded.add(PDDocs.fMIMETYPE);
 //MimeLabel.setText(MainWin.DrvTT(Attr.getUserName()));
-if (Attr.getValue()!=null)
-    MimeTypeCB.setSelectedItem((String)Attr.getValue());
-MimeTypeCB.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
+//if (Attr.getValue()!=null)
+//    MimeTypeCB.setSelectedItem((String)Attr.getValue());
+//MimeTypeCB.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
 SetRecordDocChanged=false;
 if (!Modif)
     {

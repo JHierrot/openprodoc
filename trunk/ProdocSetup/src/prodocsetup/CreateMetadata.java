@@ -402,6 +402,8 @@ CreateMetadataStructure();
 } catch(Exception ex)
     {
     Message(ex.getLocalizedMessage());
+    AcceptButton.setEnabled(true);
+    CancelButton.setEnabled(true);
     return;
     }
     }//GEN-LAST:event_AcceptButtonActionPerformed
