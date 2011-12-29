@@ -120,10 +120,10 @@ FormTab.getCelda(1,2).AddElem(new Element(TT("File_name")+":"));
 FormTab.getCelda(2,2).AddElem(DocFile);
 //FormTab.getCelda(1,3).AddElem(new Element(TT("Document_MimeType")+":"));
 //FormTab.getCelda(2,3).AddElem(ListMime);
-FormTab.getCelda(1,4).AddElem(new Element(TT("Document_Type")+":"));
-FormTab.getCelda(2,4).AddElem(ListTip);
-FormTab.getCelda(1,5).AddElem(new Element(TT("Document_ACL")+":"));
-FormTab.getCelda(2,5).AddElem(ListACL);
+FormTab.getCelda(1,3).AddElem(new Element(TT("Document_Type")+":"));
+FormTab.getCelda(2,3).AddElem(ListTip);
+FormTab.getCelda(1,4).AddElem(new Element(TT("Document_ACL")+":"));
+FormTab.getCelda(2,4).AddElem(ListACL);
 if (pMode!=ADDMOD)
     {
     String Typ=(String)pRec.getAttr(PDDocs.fDOCTYPE).getValue();
@@ -145,8 +145,7 @@ if (pMode!=ADDMOD)
     BorderTab.getCelda(0,2).AddElem(ListFields);
     }
 Form DocForm=new Form(Destination+"?Read=1","FormVal");
-if (pMode==ADDMOD)
-    DocForm.setModoEnvio(true);
+DocForm.setModoEnvio(true);
 BorderTab.getCelda(0,1).AddElem(FormTab);
 DocForm.AddElem(BorderTab);
 AddElem(DocForm);

@@ -31,12 +31,13 @@ Para ello debe elegirse el sistema de base de datos a utilizar y crearse un usua
 
 <h4 id="3">3 - Instalación Cliente OpenProdoc Swing</h4>
 <p>Este cliente debe instalarse al menos una vez para la administración del sistema y además para todos los usuarios que utilicen esta forma de acceso.
-Para ello debe iniciar el script de sistema <b>Install.sh</b> o <b>Install.bat</b> (según el sistema operativo) y cumplimentar los datos requeridos en pantalla.</p>
+    Para ello debe iniciar el script de sistema <b>Install.sh</b> o <b>Install.bat</b> (según el sistema operativo) y cumplimentar los datos requeridos en pantalla.</p>
+<p>En el caso del Linux, dependiendo de la configuración y modelo de seguridad, puede ser necesario cambiar los permisos de Install.sh o de Setup.sh (una vez creado) asignando permisos de ejecución: "chmod 777 Install.sh"</p>
 <p>Por defecto se elegirá el idioma del equipo, siempre que esté soportado, en otro caso se utilizará inglés (EN). Si se desea forzar otro idioma puede pasarse como parámetro de dos letras a la aplicación (Ej. Install.sh EN). Ver <a href="Language.html">Soporte Idiomas</a></p>
 <ul> 
 <li><b>Usuario de conexión a BBDD</b>: Identificación del usuario de BBDD creado en el apartado anterior. (requerido)</li>
 <li><b>Clave usuario BBDD</b>: Clave del usuario de BBDD. (requerido)</li>
-<li><b>Url del servidor de BBDD</b>: Url en formato JDBC del servidor de BBDD (Ej.:<i>"jdbc:mysql://127.0.0.1:3306/Prodoc", "jdbc:derby://localhost:1527/Prodoc"</i>). (requerido)</li>
+<li><b>Url del servidor de BBDD</b>: Url en formato JDBC del servidor de BBDD (Ej.:<i>"jdbc:mysql://127.0.0.1:3306/Prodoc", "jdbc:derby://localhost:1527/Prodoc", "jdbc:oracle:thin:@127.0.0.1:1521:Prodoc"</i>). (requerido)</li>
 <li><b>Tipo de conexión</b>: Indicar el tipo de conexión a utilizar. (Actualmente solo soportado JDBC). (requerido)</li>
 <li><b>Clases java a utilizar</b>: Indicar las clases de conexión (JDBC) a utilizar (Ej.:<i>"org.apache.derby.jdbc.ClientDriver", "com.mysql.jdbc.Driver"</i>). (requerido)</li>
 <li><b>Classpath adicional</b>: Localización de las clases adicionales a las instaladas en la carpeta ".\lib". Debe especificarse el classpath de las clases del driver JDBC.</li>

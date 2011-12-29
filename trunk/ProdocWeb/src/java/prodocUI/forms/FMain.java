@@ -110,6 +110,7 @@ MenuCol MC4=new MenuCol(TT("Help"), 3);
 MainMenu.add(MC4);
 MC4.add(new MenuItem(TT("Contents"), "help/"+SParent.getLang(Req)+"/MainWin.html", "_blank"));
 MC4.add(new MenuItem(TT("About"), About.getUrlServlet(), "_blank"));
+MC4.add(new MenuItem(TT("Reporting_Bugs"), "https://docs.google.com/spreadsheet/viewform?formkey=dFF6ZndKWXFUQnJ0MWtVZWdUWk10X2c6MQ", "_blank"));
 AddHead(MainMenu);
 //---- Menu -------------------------
 Table CentralArea=new Table(3,1,1);
@@ -124,6 +125,7 @@ CentralArea.getCelda(0,0).AddElem(Ar);
 CentralArea.getCelda(0,0).setCSSId("IdTreeFrame");
 CentralArea.getCelda(1,0).setCSSClass("UDFrames");
 CentralArea.getCelda(1,0).setWidth(2);
+CentralArea.getCelda(2,0).setCSSId("IdMain");
 // CentralArea.getCelda(2,0).AddElem(new Element("<iframe src=\"RefreshDocs\" width=\"100%\" height=\"100%\" FRAMEBORDER=\"0\" name=\"MainFrame\"><p>Your browser does not support iframes.</p></iframe>"));
 CentralArea.getCelda(2,0).AddElem(new Element("<iframe src=\"RefreshDocs\" width=\"100%\" height=\"600px\" FRAMEBORDER=\"0\" name=\"MainFrame\"><p>Your browser does not support iframes.</p></iframe>"));
 }

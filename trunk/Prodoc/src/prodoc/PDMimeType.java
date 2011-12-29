@@ -188,7 +188,7 @@ return Name;
 */
 public void setName(String Name)
 {
-this.Name = Name;
+this.Name = Name.toLowerCase();
 }
 
 /**
@@ -277,7 +277,7 @@ public PDMimeType SolveExt(String Ext) throws PDException
 if (PDLog.isDebug())
     PDLog.Debug("PDMimeType.SolveExt>:"+Ext);
 try {
-Load(Ext);
+Load(Ext.toLowerCase());
 if (PDLog.isDebug())
     PDLog.Debug("PDMimeType SolveExt <");
 return(this);

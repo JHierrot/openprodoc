@@ -834,14 +834,14 @@ f.setFolderType(getTableName());
 f.setPDId(ROOTFOLDER);
 f.setTitle(ROOTFOLDER);
 f.setParentId(ROOTFOLDER);
-f.setACL("Administrators");
+f.setACL("Public");
 f.CreateRootFolder();
 PDFolders f2=new PDFolders(Drv);
 f2.setFolderType(getTableName());
 f2.setPDId(USERSFOLDER);
 f2.setTitle(USERSFOLDER);
 f2.setParentId(ROOTFOLDER);
-f2.setACL("Administrators");
+f2.setACL("Public");
 f2.insert();
 }
 //-------------------------------------------------------------------------
