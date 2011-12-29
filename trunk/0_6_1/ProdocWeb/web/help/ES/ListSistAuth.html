@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Lista Sistemas de Autenticación</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+<H4>Lista Sistemas de Autenticación</H4><hr>
+<p>Al seleccionar la opción de administrar Sistemas de Autenticación, aparecerá la pantalla de listado de Sistemas de Autenticación. Esta pantalla permite realizar el mantenimiento de todos los Sistemas de Autenticación del sistema.</p>
+<p>Cada vez que un usuario se conecta, se comprueba su identidad llamando al sistema de autenticación asignado al usuario. Todos los usuarios puede utilizar el mismo sistema o definir distintos sistemas para distintos perfiles de usuario. 
+    Independientemente del sistema de autenticación, el usuario debe estar dado de alta en el sistema, ya que debe asignársele sus permisos y preferencias y darse de alta en grupos y ACL, pues en otro caso no podrá ver ni modificar ningún documento. OPD soporta los tipos de Sistema de Autenticación:</p>
+<ul>
+    <li><b>OPD</b>: OpenProdoc. En este modo, tanto el usuario como la clave (encriptada) se almacenan junto con el resto de los datos de OPD. Se verifica la clave introducida contra estos datos.</li>
+    <li><b>BBDD</b>: Base de Datos. Esta forma de autenticación realiza una conexión contra la base de datos definida en url y con el usuario y clave introducidos para conectarse. Si la BBDD acepta la conexión, OPD reconoce como autenticado al usuario.</li>
+    <li><b>LDAP</b>: El usuario se verifica contra el LDAP indicado en la url. Si la autenticación contra LDAP es correcta, OPD reconoce como autenticado al usuario.</li>
+    <li><b>SO</b>: Esta forma debe utilizarse solo para arrancar procesos en servidor o en entornos con ordenadores personales muy controlados. OPD reconoce como válido el usuario si su nombre de acceso coincide con el nombre de usuario actual de sistema operativo, sin comprobar la clave.</li>
+</ul>
+<p>Para filtrar los Sistemas de Autenticación que se desea revisar, basta introducir parte del nombre en el cuadro de texto y pulsar el botón. La lista de Sistemas de Autenticación que cumplen las condiciones aparecerá en la tabla de resultados. 
+    Si se pulsa el botón sin introducir ningún valor se visualizará todos los elementos sobre los que tenga permiso el usuario.La tabla de resultados muestra los datos:</p>
+<ul>
+    <li>Nombre identificativo</li>
+    <li>Descripción del Sistema de Autenticación</li>
+    <li>Tipo de Sistema de Autenticación</li>    
+    <li>URL o referencia al Sistema de Autenticación</li>    
+    <li>Parámetros adicionales del Sistema de Autenticación (específicos de cada tipo)</li>    
+    <li>Usuario de conexión al Sistema de Autenticación</li>    
+    <li>Password de conexión al Sistema de Autenticación</li>    
+    <li>Nombre del último usuario que modificó la definición del Sistema de Autenticación</li>
+    <li>Fecha y hora de la última modificación</li>
+</ul>
+<p style="text-align:center;"><img alt="Copia de pantalla ListSistAuth" src="img/ListSistAuth.jpg"/></p>
+<p>Esa tabla de resultados puede ordenarse seleccionando la cabecera de cada columna. Puede también cambiarse el tamaño de cada columna arrastrando la línea separadora de las cabeceras</p>
+<p>Sobre la tabla de resultados se dispone de varios botones que permiten realizar operaciones sobre el elemento seleccionado. Las operaciones disponibles son:</p>
+<ul>
+    <li>Añadir un nuevo elemento</li>
+    <li>Eliminar el elemento seleccionado (Siempre que no se esté utilizando)</li>
+    <li>Modificar el elemento seleccionado</li>
+    <li>Crear un nuevo elemento como copia del elemento seleccionado</li>
+    <li>Exportar el elemento seleccionado</li>
+    <li>Exportar todos los elementos listados</li>
+    <li>Importar desde archivo uno o más elementos previamente guardados</li>
+</ul>
+<p>Debe tenerse en cuenta al exportar e importar que algunos elementos pueden tener dependencia de otros, por lo que debe exportarse todos los elementos relacionados y en el momento de importarse hacerlo en el orden adecuado</p>
+<p>En caso de producirse un error (carencia de permisos del usuario, incoherencia de los datos, etc), la operación se cancela y se comunicará al usuario el motivo del error.</p>
+<p>Ver: <a href="MantSistAuth.html">Mantenimiento Sistemas de Autenticación</a> y <a href="ListUsers.html">Lista de Usuarios</a></p>
+<hr>
+<a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>
+    </body>
+</html>
