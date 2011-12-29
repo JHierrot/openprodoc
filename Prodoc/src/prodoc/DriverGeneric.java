@@ -452,10 +452,10 @@ Trace.add("Definitions elements created");
 // --- Folders ---
 PDFolders.CreateBaseRootFold(this);
 PDFolders UsersFold=new PDFolders(this);
-UsersFold.setPDId(PDFolders.USERSFOLDER);
-UsersFold.setTitle(PDFolders.USERSFOLDER);
-UsersFold.setParentId(PDFolders.ROOTFOLDER);
-UsersFold.setACL("Public");
+//UsersFold.setPDId(PDFolders.USERSFOLDER);
+//UsersFold.setTitle(PDFolders.USERSFOLDER);
+//UsersFold.setParentId(PDFolders.ROOTFOLDER);
+//UsersFold.setACL("Public");
 // --- Administrator ---
 PDUser Usu=new PDUser(this);
 Usu.setName("root");
@@ -1203,7 +1203,7 @@ if (PDLog.isDebug())
  */
 static public String getVersion()
 {
-return("0.6");
+return("0.6.1");
 }
 private static final char[] HEX_CHARS = "0123456789abcdef".toCharArray();
 //-----------------------------------------------------------------------------------

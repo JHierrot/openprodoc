@@ -75,6 +75,10 @@ TEXT-DECORATION: underline
     background-color: #cacaca;
     height: 10px;
 }
+#IdMain
+{
+vertical-align: top;    
+}
 .FTitle
 {
     height: 18px;

@@ -83,6 +83,7 @@ return Session;
 public MainWin()
 {
 initComponents();
+TreeFolder.setPreferredSize(null);
 DocsTable.setAutoCreateRowSorter(true);
 DocsTable.setAutoCreateColumnsFromModel(true);
 }
@@ -151,6 +152,7 @@ DocsTable.setAutoCreateColumnsFromModel(true);
         helpMenu = new javax.swing.JMenu();
         contentsMenuItem1 = new javax.swing.JMenuItem();
         aboutMenuItem1 = new javax.swing.JMenuItem();
+        ReportBugs = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("OpenProdoc "+getVersion());
@@ -171,6 +173,7 @@ DocsTable.setAutoCreateColumnsFromModel(true);
         TreeFolder.setMaximumSize(new java.awt.Dimension(400, 76));
         TreeFolder.setMinimumSize(new java.awt.Dimension(200, 60));
         TreeFolder.setPreferredSize(new java.awt.Dimension(200, 76));
+        TreeFolder.setScrollsOnExpand(true);
         TreeFolder.addTreeExpansionListener(new javax.swing.event.TreeExpansionListener() {
             public void treeCollapsed(javax.swing.event.TreeExpansionEvent evt) {
             }
@@ -573,6 +576,15 @@ DocsTable.setAutoCreateColumnsFromModel(true);
         });
         helpMenu.add(aboutMenuItem1);
 
+        ReportBugs.setFont(getFontMenu());
+        ReportBugs.setText(TT("Reporting_Bugs"));
+        ReportBugs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ReportBugsActionPerformed(evt);
+            }
+        });
+        helpMenu.add(ReportBugs);
+
         menuBar.add(helpMenu);
 
         setJMenuBar(menuBar);
@@ -903,6 +915,8 @@ MD.setVisible(true);
 if (MD.isCancel())
     return;
 Doc.assignValues(MD.getRecord());
+if (MD.SelFile!=null)
+    Doc.setFile(MD.SelFile.getAbsolutePath());
 Doc.update();
 RefreshDocs();
 } catch (Exception ex)
@@ -1043,7 +1057,7 @@ Ab.dispose();
 
     private void contentsMenuItem1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_contentsMenuItem1ActionPerformed
     {//GEN-HEADEREND:event_contentsMenuItem1ActionPerformed
-Execute("help"+OSSep()+getLang()+OSSep()+"MainWin.html");   
+Execute("doc"+OSSep()+getLang()+OSSep()+"MainWin.html");   
     }//GEN-LAST:event_contentsMenuItem1ActionPerformed
 
     private void DocsTableMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_DocsTableMouseClicked
@@ -1133,6 +1147,11 @@ Message(DrvTT("Imported")+" "+ExpFolds+" "+DrvTT("Folders")+" / "+ExpDocs +" "+D
 
     }//GEN-LAST:event_ImportFoldActionPerformed
 
+    private void ReportBugsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ReportBugsActionPerformed
+    {//GEN-HEADEREND:event_ReportBugsActionPerformed
+Execute("https://docs.google.com/spreadsheet/viewform?formkey=dFF6ZndKWXFUQnJ0MWtVZWdUWk10X2c6MQ");   
+    }//GEN-LAST:event_ReportBugsActionPerformed
+
 /**
 * @param args the command line arguments
 */
@@ -1192,6 +1211,7 @@ java.awt.EventQueue.invokeLater(new Runnable()
     private javax.swing.JMenuItem PaperBin;
     private javax.swing.JMenuItem RefreshDocs;
     private javax.swing.JMenuItem RefreshFold;
+    private javax.swing.JMenuItem ReportBugs;
     private javax.swing.JMenuItem ReposMenuItem;
     private javax.swing.JMenuItem RolMenuItem;
     private javax.swing.JMenuItem SearchDocs;
@@ -1435,6 +1455,7 @@ for (Iterator it = Child.iterator(); it.hasNext();)
     }
 (((TreeFolder) ChildTreeFolder.getUserObject())).setExpanded(true);
 FoldTreeModel.reload(ChildTreeFolder);
+TreeFolder.setPreferredSize(null);
 } catch (PDException ex)
     {
     Message(DrvTT(ex.getLocalizedMessage()));
@@ -1695,7 +1716,7 @@ return(Tmp);
  */
 static public String getVersion()
 {
-return("0.6");  
+return("0.6.1");  
 }
 //---------------------------------------------------------------------
 

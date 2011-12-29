@@ -191,11 +191,13 @@ else
 Doc.assignValues(Rec);
 Doc.setParentId(getActFolderId(Req));
 if (FileName!=null)
+    {
+    PDMimeType mt=new PDMimeType(SParent.getSessOPD(Req));
+    Doc.setMimeType(mt.SolveName(FileName));
     Doc.setName(FileName);
+    }
 if (FileData!=null)
     Doc.setStream(FileData);
-PDMimeType mt=new PDMimeType(SParent.getSessOPD(Req));
-Doc.setMimeType(mt.SolveName(FileName));
 Doc.update();
 return(true);
 }

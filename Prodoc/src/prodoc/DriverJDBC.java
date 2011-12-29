@@ -48,11 +48,13 @@ private Statement stmt;
 /**
  *
  */
-static final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//static final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+static final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyyMMddHHmmss");
 /**
  *
  */
-static final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
+//static final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
+static final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyyMMdd");
 /**
  *
  * @param pURL
@@ -144,9 +146,9 @@ for (int i=0; i<Fields.NumAttr(); i++)
     else if (A.getType()==Attribute.tBOOLEAN)
         SQL+=" SMALLINT ";
     else if (A.getType()==Attribute.tDATE)
-        SQL+=" DATE ";
+        SQL+=" CHAR(8) ";//        SQL+=" DATE ";
     else if (A.getType()==Attribute.tTIMESTAMP)
-        SQL+=" TIMESTAMP ";
+        SQL+=" CHAR(14) "; // SQL+=" TIMESTAMP ";
     else
         SQL+=" VARCHAR("+ A.getLongStr()+") ";
     if (A.isRequired())
@@ -622,20 +624,30 @@ for (int i = 0; i < Fields.NumAttr(); i++)
     if (Attr.getType()==Attribute.tSTRING)
         Attr.setValue(rs.getString(Attr.getName()));
     else if (Attr.getType()==Attribute.tDATE)
-        {Date d=rs.getDate(Attr.getName());
-         if (d!=null)
-            Attr.setValue(new java.util.Date(d.getTime()));
-         else
-            Attr.setValue(null);
-        }
+            {
+            String D=rs.getString(Attr.getName());
+            if (D!=null && D.length()==8)
+                Attr.setValue(formatterDate.parse(D));
+            }
+//        {Date d=rs.getDate(Attr.getName());
+//         if (d!=null)
+//            Attr.setValue(new java.util.Date(d.getTime()));
+//         else
+//            Attr.setValue(null);
+//        }
     else if (Attr.getType()==Attribute.tTIMESTAMP)
-        {
-        Date d=rs.getTimestamp(Attr.getName());
-         if (d!=null)
-            Attr.setValue(new java.util.Date(d.getTime()));
-         else
-            Attr.setValue(null);
-        }
+            {
+            String D=rs.getString(Attr.getName());
+            if (D!=null && D.length()==14)
+                Attr.setValue(formatterTS.parse(D));
+            }
+//        {
+//        Date d=rs.getTimestamp(Attr.getName());
+//         if (d!=null)
+//            Attr.setValue(new java.util.Date(d.getTime()));
+//         else
+//            Attr.setValue(null);
+//        }
     else if (Attr.getType()==Attribute.tINTEGER)
         Attr.setValue(new Integer(rs.getInt(Attr.getName())));
     else if (Attr.getType()==Attribute.tFLOAT)

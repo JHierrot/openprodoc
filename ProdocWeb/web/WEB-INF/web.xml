@@ -111,10 +111,6 @@
         <servlet-class>prodocUI.servlet.ListVer</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>SendDocVer</servlet-name>
-        <servlet-class>prodocUI.servlet.SendDocVer</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>ListDoc</servlet-name>
         <servlet-class>prodocServ.ListDoc</servlet-class>
     </servlet>
