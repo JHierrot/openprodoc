@@ -19,16 +19,8 @@
 
 package prodoc;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Vector;
+import java.io.*;
+import java.util.*;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -964,12 +956,14 @@ Attribute Attr=RecTot.getAttr(fVERSION);
 Attr.setValue(VersionName);
 Attr=RecTot.getAttr(fLOCKEDBY);
 Attr.setValue("");
-updateFragments(RecTot, Id);
-UpdateVersion(Id, getDrv().getUser().getName(), RecTot);
 StoreGeneric Rep=getDrv().getRepository(getReposit());
 Rep.Connect();
 Rep.Rename(PDId, getDrv().getUser().getName(), PDId, VersionName);
 Rep.Disconnect();
+updateFragments(RecTot, Id);
+UpdateVersion(Id, getDrv().getUser().getName(), RecTot);
+MultiDelete(Id, getDrv().getUser().getName());
+MultiInsert(RecTot);
 getObjCache().remove(getKey());
 } catch (PDException Ex)
     {
@@ -1024,6 +1018,10 @@ Attr.setValue(getDrv().getUser().getName());
 Attr=Rec.getAttr(fDOCTYPE);
 Attr.setValue(TobeUpdated.getDocType());
 getDrv().UpdateRecord(getTabName(), Rec, getConditionsVer());
+Record Mult=TobeUpdated.getRecSum().Copy();
+Attribute AttrVer=Mult.getAttr(fVERSION);
+AttrVer.setValue(getDrv().getUser().getName());
+MultiInsert(Mult);
 getObjCache().remove(getKey());
 } catch (PDException Ex)
     {
@@ -1069,6 +1067,7 @@ setDocType(TobeUpdated.getDocType());
 DeleteVersion(getTabName(), Id, getDrv().getUser().getName());
 StoreGeneric Rep=getDrv().getRepository(TobeUpdated.getReposit());
 Rep.Connect();
+MultiDelete(getPDId(), getDrv().getUser().getName());
 Rep.Delete(PDId, getDrv().getUser().getName());
 Rep.Disconnect();
 getObjCache().remove(getKey());
@@ -1081,6 +1080,36 @@ if (InTransLocal)
     getDrv().CerrarTrans();
 if (PDLog.isDebug())
     PDLog.Debug("PDDocs.CancelCheckout<:"+getPDId());
+}
+//-------------------------------------------------------------------------
+/**
+ * Deletes all the multivalued atributes of the current element
+ * @param Id2Del PDId of document to delete
+ * @param Vers  Version of Document to delete. When null, deletes ALL versions
+ * @throws PDException
+ */
+private void MultiDelete(String Id2Del, String Vers) throws PDException
+{
+Record TypDef;    
+String MultiName;
+Attribute Atr;
+Conditions Conds;
+for (int NumDefTyp = 0; NumDefTyp<getTypeDefs().size(); NumDefTyp++)
+    {
+    TypDef=((Record)getTypeDefs().get(NumDefTyp)).CopyMulti();
+    String TabName=(String)TypDef.getAttr(PDObjDefs.fNAME).getValue();
+    TypDef.initList();
+    for (int NumAttr = 0; NumAttr < TypDef.NumAttr(); NumAttr++)
+        {
+        Atr=TypDef.nextAttr();
+        MultiName=PDObjDefs.genMultValNam(TabName,Atr.getName());
+        Conds=new Conditions();
+        Conds.addCondition(new Condition(fPDID, Condition.cEQUAL, Id2Del));
+        if (Vers!=null)
+            Conds.addCondition(new Condition(fVERSION, Condition.cEQUAL, Vers));
+        getDrv().DeleteRecord(MultiName, Conds);
+        }
+     }
 }
 //-------------------------------------------------------------------------
 /**
@@ -1135,6 +1164,7 @@ if (getMimeType()==null || getMimeType().length()==0)
     setMimeType(MT.getName());
     }
 Record Rec=getRecSum();
+MultiInsert(Rec);
 insertFragments(Rec);
 InsertVersion(getPDId(), getVersion(), Rec);
 StoreGeneric Rep=getDrv().getRepository(getReposit());
@@ -1159,6 +1189,50 @@ if (PDLog.isDebug())
 }
 //-------------------------------------------------------------------------
 /**
+ * Inserts all the multivalued attributed during the Insert
+ * @param Rec Record with the sum of attributes
+ * @throws PDException in any error
+ */
+private void MultiInsert(Record Rec) throws PDException
+{
+Record TypDef;    
+String MultiName;
+Attribute AtrOrig, Atr2Ins;
+TreeSet Values;
+Record RecSave=new Record();
+Object Val2Ins;
+for (int NumDefTyp = 0; NumDefTyp<getTypeDefs().size(); NumDefTyp++)
+    {
+    TypDef=((Record)getTypeDefs().get(NumDefTyp)).CopyMulti();
+    String TabName=(String)TypDef.getAttr(PDObjDefs.fNAME).getValue();
+    TypDef.initList();
+    for (int NumAttr = 0; NumAttr < TypDef.NumAttr(); NumAttr++)
+        {
+        AtrOrig=TypDef.nextAttr();
+        Atr2Ins=Rec.getAttr(AtrOrig.getName());
+        if (Atr2Ins==null) 
+           continue;
+        AtrOrig=Atr2Ins;
+        Values=AtrOrig.getValuesList();
+        MultiName=PDObjDefs.genMultValNam(TabName,AtrOrig.getName());
+        RecSave.Clear();
+        RecSave.addAttr(Rec.getAttr(fPDID));
+        RecSave.addAttr(Rec.getAttr(fVERSION));
+        Atr2Ins=AtrOrig.Copy();
+        Atr2Ins.ClearValues();
+        Atr2Ins.setMultivalued(false);
+        RecSave.addAttr(Atr2Ins);
+        for (Iterator it = Values.iterator(); it.hasNext();)
+            {
+            Val2Ins = it.next();
+            Atr2Ins.setValue(Val2Ins);
+            getDrv().InsertRecord(MultiName, RecSave);    
+            }
+        }
+     }
+}
+//-------------------------------------------------------------------------
+/**
  * Creates a new Version in the version table
  * @param Id PDId of Document to insert
  * @param Ver Version of Document to insert
@@ -1173,7 +1247,7 @@ Record RecV=Rec.Copy();
 Attribute Attr=RecV.getAttr(fVERSION);
 Attr.setValue(Ver);
 Attr=RecV.getAttr(fDOCTYPE);
-getDrv().InsertRecord(getTabNameVer((String)Attr.getValue()), RecV);
+getDrv().InsertRecord(getTabNameVer((String)Attr.getValue()), RecV.CopyMono());
 if (PDLog.isDebug())
     PDLog.Debug("PDDocs.InsertVersion<:"+Id+"/"+Ver+"="+Rec);
 }
@@ -1339,16 +1413,70 @@ if (getTypeDefs().size()>1)
             Conds.addCondition(Con);
             }
         }
-    Query LoadAct=new Query(ListTabs, getRecSum(), Conds, null);
+    Query LoadAct=new Query(ListTabs, getRecSum().CopyMono(), Conds, null);
     Cursor Cur=getDrv().OpenCursor(LoadAct);
     r=getDrv().NextRec(Cur);
     getDrv().CloseCursor(Cur);
     if (r!=null)
+        {
+        MultiLoad(r);
         assignValues(r);
+        }
     }
 if (PDLog.isDebug())
    PDLog.Debug("PDDocs.LoadFull<:"+Ident);
 return(r);
+}
+//-------------------------------------------------------------------------
+/**
+ * Loads all the multivalued attributed during the LoadFull
+ * @param Rec Record with the sum of attributes
+ * @throws PDException in any error
+ */
+private void MultiLoad(Record Rec) throws PDException
+{
+Record TypDef;    
+String MultiName;
+Attribute Atr, Atr2;
+Query LoadAct;
+Conditions Conds;
+String Id=(String)Rec.getAttr(fPDID).getValue();
+String Ver=(String)Rec.getAttr(fVERSION).getValue();
+Record r;
+Cursor Cur;
+Record RecLoad=new Record();
+for (int NumDefTyp = 0; NumDefTyp<getTypeDefs().size(); NumDefTyp++)
+    {
+    TypDef=((Record)getTypeDefs().get(NumDefTyp)).CopyMulti();
+    String TabName=(String)TypDef.getAttr(PDObjDefs.fNAME).getValue();
+    TypDef.initList();
+    for (int NumAttr = 0; NumAttr < TypDef.NumAttr(); NumAttr++)
+        {
+        Atr=TypDef.nextAttr();
+        Atr2=Rec.getAttr(Atr.getName());
+        if (Atr2==null) 
+            {
+            Atr2=Atr.Copy();
+            Rec.addAttr(Atr2);
+            }
+        Atr2.ClearValues();
+        MultiName=PDObjDefs.genMultValNam(TabName,Atr2.getName());
+        Conds=new Conditions();
+        Conds.addCondition(new Condition(fPDID, Condition.cEQUAL, Id));
+        Conds.addCondition(new Condition(fVERSION, Condition.cEQUAL, Ver));
+        RecLoad.Clear();
+        RecLoad.addAttr(Atr2);
+        LoadAct=new Query(MultiName, RecLoad, Conds, null);
+        Cur=getDrv().OpenCursor(LoadAct);
+        r=getDrv().NextRec(Cur);
+        while (r!=null)
+            {
+            Atr2.AddValue(r.getAttr(Atr.getName()).getValue());    
+            r=getDrv().NextRec(Cur);            
+            }
+        getDrv().CloseCursor(Cur);
+        }
+     }
 }
 //-------------------------------------------------------------------------
 /**
@@ -1458,7 +1586,6 @@ Record Rec=getRecSum().Copy();
 Rec.delAttr(fVERSION);
 Attribute Attr=Rec.getAttr(fDOCTYPE);
 Attr.setValue(TobeUpdated.getDocType());
-Rec.delAttr(fVERSION);
 Attr=Rec.getAttr(fNAME);
 if (FilePath!=null)
     {
@@ -1470,6 +1597,11 @@ else
     Attr.setValue(TobeUpdated.getName());
     }
 UpdateVersion(getPDId(), getDrv().getUser().getName(), Rec);
+MultiDelete(Id, getDrv().getUser().getName());
+Rec=getRecSum().Copy();
+Attr=Rec.getAttr(fVERSION);
+Attr.setValue(getDrv().getUser().getName());
+MultiInsert(Rec);
 StoreGeneric Rep=getDrv().getRepository(getReposit());
 Rep.Connect();
 if (FileStream!=null)
@@ -1674,11 +1806,14 @@ public void Purge(String DocTypename, String Id) throws PDException
 boolean InTransLocal;
 if (PDLog.isDebug())
     PDLog.Debug("PDDocs.Purge>:"+getPDId());
-VerifyAllowedIns();
+VerifyAllowedDel();
 InTransLocal=!getDrv().isInTransaction();
 if (InTransLocal)
     getDrv().IniciarTrans();
 try {
+PDDocs Doc2Purge=new PDDocs(getDrv());
+Doc2Purge.LoadFull(Id);
+Doc2Purge.MultiDelete(Id, null);
 Cursor Cur=ListVersions(DocTypename, Id);
 Record Rec=getDrv().NextRec(Cur);
 while (Rec!=null)

@@ -22,6 +22,9 @@ package prodoc;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.StringTokenizer;
+import java.util.TreeSet;
 
 /**
  *
@@ -101,7 +104,26 @@ private boolean Unique=false;
  *
  */
 private boolean ModifAllowed=true;
+/**
+ *
+ */
+private boolean Multivalued=false;
 
+/**
+ * 
+ */
+static final String Attribute_is_not_Multivalued="Attribute_is_not_Multivalued";
+/**
+ * 
+ */
+static final String Incorrect_attribute_length="Incorrect_attribute_length";
+static final char ListSeparator='|';
+static final String StringListSeparator="|";
+
+/**
+ * 
+ */
+private TreeSet ValuesList=null;
 /**
  * Default formater, used to store in DDBB, export, etc
  */
@@ -110,6 +132,38 @@ static final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyy-MM-dd HH:
  * Default formater, used to store in DDBB, export, etc
  */
 static final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
+//--------------------------------------------------------------------------
+/**
+ *
+ * @param pName
+ * @param pUserName
+ * @param pDescription
+ * @param pType
+ * @param pRequired
+ * @param pValue
+ * @param pLongStr
+ * @param pPrimKey
+ * @param pUnique 
+ * @param pModifAllowed
+ * @param pMultivalued 
+ * @throws PDException
+ */
+public Attribute(String pName, String pUserName, String pDescription, int pType,
+                boolean pRequired, Object pValue, int pLongStr,
+                boolean pPrimKey, boolean pUnique, boolean pModifAllowed, boolean pMultivalued)  throws PDException
+{
+setName(pName);
+setUserName(pUserName);
+setDescription(pDescription);
+setType(pType);
+setRequired(pRequired);
+setLongStr(pLongStr);
+setValue(pValue);
+setPrimKey(pPrimKey);
+setUnique(pUnique);
+setModifAllowed(pModifAllowed);
+setMultivalued(pMultivalued);
+}
 //--------------------------------------------------------------------------
 /**
  *
@@ -148,7 +202,7 @@ setModifAllowed(pModifAllowed);
 public Attribute Copy()
 {
 try {
-return new Attribute(Name, UserName, Description, Type, Required, Value, LongStr, PrimKey, Unique, ModifAllowed);
+return new Attribute(Name, UserName, Description, Type, Required, Value, LongStr, PrimKey, Unique, ModifAllowed, Multivalued);
 } catch (PDException ex)
     {
     PDLog.Error("Error_copying_Attribute"+":"+ex.getLocalizedMessage());
@@ -172,7 +226,8 @@ if (getName().equals(Attr.getName())
     && getLongStr()==Attr.getLongStr()
     && isPrimKey()==Attr.isPrimKey()
     && isUnique()==Attr.isUnique()
-    && isModifAllowed()==Attr.isModifAllowed() )
+    && isModifAllowed()==Attr.isModifAllowed() 
+    && isMultivalued()==Attr.isMultivalued() )
     return (true);
 else
     return (false);
@@ -193,7 +248,8 @@ if (getName().equals(Attr.getName())
     && getLongStr()==Attr.getLongStr()
     && isPrimKey()==Attr.isPrimKey()
     && isUnique()==Attr.isUnique()
-    && isModifAllowed()==Attr.isModifAllowed() )
+    && isModifAllowed()==Attr.isModifAllowed() 
+    && isMultivalued()==Attr.isMultivalued() )
     return (true);
 else
     return (false);
@@ -288,11 +344,13 @@ return Value;
 */
 public void setValue(Object pValue) throws PDException
 {
+if (isMultivalued())    
+   PDException.GenPDException("Attribute_is_Multivalued",getName());        
 if (Type==tSTRING)
     {
     if ( getLongStr()!=0 && pValue!=null && ((String)pValue).length()>getLongStr())
         {
-        PDExceptionFunc.GenPDException("Incorrect_attribute_length",getName());
+        PDExceptionFunc.GenPDException(Incorrect_attribute_length,getName());
         }
     if (pValue!=null)
         this.Value = pValue.toString().trim();
@@ -322,10 +380,11 @@ if (Type==tSTRING)
     {
     if (getLongStr()!=0 && getValue()!=null && ((String)Value).length()>getLongStr())
         {
-        PDExceptionFunc.GenPDException("Incorrect_attribute_length",getName());
+        PDExceptionFunc.GenPDException(Incorrect_attribute_length,getName());
         }
     }
 }
+//--------------------------------------------------------------------------
 /**
 * @return the PrimKey
 */
@@ -335,10 +394,13 @@ return PrimKey;
 }
 //--------------------------------------------------------------------------
 /**
-* @param PrimKey the PrimKey to set
+ * @param PrimKey the PrimKey to set
+ * @throws PDException  
 */
-public void setPrimKey(boolean PrimKey)
+public void setPrimKey(boolean PrimKey) throws PDException
 {
+if (PrimKey && isMultivalued())    
+   PDException.GenPDException("Attribute_is_Multivalued",getName());           
 this.PrimKey = PrimKey;
 }
 //--------------------------------------------------------------------------
@@ -353,11 +415,17 @@ return Unique;
 /**
 * @param Unique the Unique to set
 */
-public void setUnique(boolean Unique)
+public void setUnique(boolean Unique) throws PDException
 {
+if (Unique && isMultivalued())    
+   PDException.GenPDException("Attribute_is_Multivalued",getName());           
 this.Unique = Unique;
 }
 //--------------------------------------------------------------------------
+/**
+ * 
+ * @return
+ */
 public String toString()
 {
 if (getValue()==null)
@@ -405,20 +473,83 @@ UserName = pUserName;
  */
 public String Export() throws PDException
 {
-if (getValue()==null)
-    return("");
-if (getType()==Attribute.tSTRING)
-    return((String)getValue());
-else if (getType()==Attribute.tINTEGER)
-    return(""+getValue());
-else if (getType()==Attribute.tBOOLEAN)
-    return(toBooleanString((Boolean)getValue()));
-else if (getType()==Attribute.tDATE)
-    return(formatterDate.format((Date)getValue()));
-else if (getType()==Attribute.tTIMESTAMP)
-    return(formatterTS.format((Date)getValue()));
+if (isMultivalued())    
+    {
+    if (ValuesList==null)
+        return("");
+    StringBuilder Tot=new StringBuilder();
+    for (Iterator it = ValuesList.iterator(); it.hasNext();)
+        {
+        if (Tot.length()!=0)
+            Tot.append(ListSeparator);
+        Object Val = it.next();
+        Tot.append(FormatExport(Val));
+        }
+    return(Tot.toString());
+    }
 else
-    return(getValue().toString());
+    {
+    if (getValue()==null)
+        return("");
+    return(FormatExport(getValue()));
+    }
+}
+//--------------------------------------------------------------------------
+/**
+ * Formats values for export
+ * @param Val Object to be formated
+ * @return String containing the formated object
+ */
+private String FormatExport(Object Val)
+{
+if (getType()==Attribute.tSTRING)
+    return((String)Val);
+else if (getType()==Attribute.tINTEGER)
+    return(""+Val);
+else if (getType()==Attribute.tBOOLEAN)
+    return(toBooleanString((Boolean)Val));
+else if (getType()==Attribute.tDATE)
+    return(formatterDate.format((Date)Val));
+else if (getType()==Attribute.tTIMESTAMP)
+    return(formatterTS.format((Date)Val));
+else
+    return(Val.toString());            
+}
+//--------------------------------------------------------------------------
+private Object FormatImport(String Val) throws PDException
+{
+    if (getType()==Attribute.tSTRING)
+        return(Val);
+    else if (getType()==Attribute.tINTEGER)
+        return(new Integer(Integer.parseInt(Val)));
+    else if (getType()==Attribute.tBOOLEAN)
+        {
+        if (Val.equals("1"))
+            return(true);
+        else
+            return(false);
+        }
+    else if (getType()==Attribute.tDATE)
+        {
+        try {
+        if (Val!=null && Val.length()!=0)
+            return(formatterDate.parse(Val));
+        } catch (ParseException ex)
+            {
+            PDException.GenPDException(ex.getLocalizedMessage(), Val);
+            }
+        }
+    else if (getType()==Attribute.tTIMESTAMP)
+        {
+        try {
+        if (Val!=null && Val.length()!=0)
+            return(formatterTS.parse(Val));
+        } catch (ParseException ex)
+            {
+            PDException.GenPDException(ex.getLocalizedMessage(), Val);
+            }
+        }
+return(null);
 }
 //--------------------------------------------------------------------------
 /**
@@ -428,36 +559,15 @@ else
  */
 public void Import(String Val) throws PDException
 {
-if (getType()==Attribute.tSTRING)
-    setValue(Val);
-else if (getType()==Attribute.tINTEGER)
-    setValue(new Integer(Integer.parseInt(Val)));
-else if (getType()==Attribute.tBOOLEAN)
+if (isMultivalued())    
     {
-    if (Val.equals("1"))
-        setValue(true);
-    else
-        setValue(false);
-    }
-else if (getType()==Attribute.tDATE)
+    StringTokenizer St=new StringTokenizer(Val, StringListSeparator);
+    while (St.hasMoreTokens())
+         AddValue(FormatImport(St.nextToken()));
+    }   
+else
     {
-    try {
-    if (Val!=null && Val.length()!=0)
-        setValue(formatterDate.parse(Val));
-    } catch (ParseException ex)
-        {
-        PDException.GenPDException(ex.getLocalizedMessage(), Val);
-        }
-    }
-else if (getType()==Attribute.tTIMESTAMP)
-    {
-    try {
-    if (Val!=null && Val.length()!=0)
-        setValue(formatterTS.parse(Val));
-    } catch (ParseException ex)
-        {
-        PDException.GenPDException(ex.getLocalizedMessage(), Val);
-        }
+    setValue(FormatImport(Val));    
     }
 }
 //-----------------------------------------------------------------------------------
@@ -490,13 +600,13 @@ if ( isRequired() && getType()==Attribute.tSTRING && ((String)getValue()).length
     }
 if (getValue()!=null && getType()==Attribute.tSTRING && getLongStr()<((String)getValue()).length())
     {
-    PDExceptionFunc.GenPDException("Too_long",getUserName());
+    PDExceptionFunc.GenPDException(Incorrect_attribute_length,getUserName());
     }
 }
 //--------------------------------------------------------------------------
 /**
- * Converts all the attributes of the record to XML
- * @return the XML with the elements.
+ * Converts name and value of the attribute to XML
+ * @return the XML with the elements Name and value.
  * @throws PDException
  */
 public String toXML() throws PDException
@@ -548,8 +658,91 @@ S.append("</UniKey>");
 S.append("<ModAllow>");
 S.append(isModifAllowed());
 S.append("</ModAllow>");
+S.append("<Multi>");
+S.append(isMultivalued());
+S.append("</Multi>");
 S.append("</attr>");
 return(S.toString());
 }
+//--------------------------------------------------------------------------
+/**
+* @return the Multivalued
+*/
+public boolean isMultivalued()
+{
+return Multivalued;
+}
+//--------------------------------------------------------------------------
+/**
+* @param Multivalued the Multivalued to set
+*/
+public void setMultivalued(boolean Multivalued)
+{
+this.Multivalued = Multivalued;
+}
+//--------------------------------------------------------------------------
+/**
+ * @return the ValuesList
+ * @throws PDException  
+*/
+public TreeSet getValuesList() throws PDException
+{
+if (!isMultivalued())    
+   PDException.GenPDException(Attribute_is_not_Multivalued,getName());    
+if (ValuesList==null)   
+    ValuesList=new TreeSet();
+return ValuesList;
+}
+//--------------------------------------------------------------------------
+/**
+ * Add a value to the set of values
+ * @param pValue new value to add
+ * @return true if it's not null correctly added
+ * @throws PDException
+ */
+public boolean AddValue(Object pValue) throws PDException
+{
+if (!isMultivalued())    
+   PDException.GenPDException(Attribute_is_not_Multivalued,getName());        
+if (Type==tSTRING)
+    {
+    if ( getLongStr()!=0 && pValue!=null && ((String)pValue).length()>getLongStr())
+        {
+        PDExceptionFunc.GenPDException(Incorrect_attribute_length,getName());
+        }
+    if (pValue!=null)
+        return(getValuesList().add(pValue.toString().trim()));
+    return(false);
+    }
+else
+    return(getValuesList().add(pValue));
+}        
+//--------------------------------------------------------------------------
+/**
+ * Remove a value from the set of values
+ * @param pValue to remove
+ * @return true if the value was in the set and is removed
+ * @throws PDException
+ */
+public boolean RemoveValue(Object pValue) throws PDException
+{
+if (!isMultivalued())    
+   PDException.GenPDException(Attribute_is_not_Multivalued,getName());        
+if (ValuesList!=null)   
+    return( ValuesList.remove(pValue));    
+return(false);
+}        
+//--------------------------------------------------------------------------
+/**
+ * Clear of the values in multivalued attributes
+ * @throws PDException
+ */
+public void ClearValues() throws PDException
+{
+if (!isMultivalued())    
+   PDException.GenPDException(Attribute_is_not_Multivalued,getName());        
+if (ValuesList!=null)   
+    ValuesList.clear();
+}        
 //--------------------------------------------------------------------------
 }
