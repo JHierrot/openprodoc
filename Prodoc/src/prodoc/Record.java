@@ -19,6 +19,7 @@
 
 package prodoc;
 
+import java.util.ArrayList;
 import java.util.Vector;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -34,7 +35,7 @@ public class Record
 /**
  *
  */
-private Vector VAttr=new Vector();
+private ArrayList VAttr=new ArrayList();
 /**
  *
  */
@@ -123,7 +124,7 @@ public void delAttr(String NameDelAttr)
 Attribute Attrdel;
 for (int i = 0; i < VAttr.size(); i++)
     {
-    Attrdel = (Attribute)VAttr.elementAt(i);
+    Attrdel = (Attribute)VAttr.get(i);
     if (Attrdel.getName().equals(NameDelAttr))
         {
         VAttr.remove(i);
@@ -142,7 +143,7 @@ public boolean ContainsAttr(String NameAttr)
 Attribute Attrdel;
 for (int i = 0; i < VAttr.size(); i++)
     {
-    Attrdel = (Attribute)VAttr.elementAt(i);
+    Attrdel = (Attribute)VAttr.get(i);
     if (Attrdel.getName().equals(NameAttr))
         return(true);
     }
@@ -159,7 +160,7 @@ public Attribute getAttr(String NameAttr)
 Attribute Attr;
 for (int i = 0; i < VAttr.size(); i++)
     {
-    Attr = (Attribute)VAttr.elementAt(i);
+    Attr = (Attribute)VAttr.get(i);
     if (Attr.getName().equalsIgnoreCase(NameAttr))
         {
         return Attr;
@@ -178,7 +179,7 @@ public Attribute getAttr(int NumAttr)  throws PDException
 {
 if (NumAttr<0||NumAttr>=VAttr.size())
     PDException.GenPDException("Incorrect_attribute_number", ""+NumAttr);
-return((Attribute)VAttr.elementAt(NumAttr));
+return((Attribute)VAttr.get(NumAttr));
 }
 //--------------------------------------------------------------------------
 /**
@@ -200,7 +201,7 @@ int N=0;
 Attribute Attr;
 for (int i = 0; i < VAttr.size(); i++)
     {
-    Attr = (Attribute)VAttr.elementAt(i);
+    Attr = (Attribute)VAttr.get(i);
     if (Attr.getValue()!=null)
         N++;
     }
@@ -222,7 +223,7 @@ Pos=0;
 public Attribute nextAttr()
 {
 if (Pos<NumAttr())
-    return(((Attribute)VAttr.elementAt(Pos++)));
+    return(((Attribute)VAttr.get(Pos++)));
 else
     return(null);
 }
@@ -239,6 +240,42 @@ initList();
 for (int i = 0; i < NumAttr(); i++)
     {
     Copy.addAttr(nextAttr().Copy());
+    }
+return(Copy);
+}
+//--------------------------------------------------------------------------
+/**
+ * Returns a Copy of non Multivalued Attributes
+ * @return a new Record with non Multivalued Attributes
+ * @throws PDException in any error
+ */
+public Record CopyMono() throws PDException
+{
+Record Copy=new Record();
+initList();
+for (int i = 0; i < NumAttr(); i++)
+    {
+    Attribute Atr=nextAttr();
+    if (!Atr.isMultivalued())
+        Copy.addAttr(Atr.Copy());
+    }
+return(Copy);
+}
+//--------------------------------------------------------------------------
+/**
+ * Returns a Copy of non Multivalued Attributes
+ * @return a new Record with non Multivalued Attributes
+ * @throws PDException in any error
+ */
+public Record CopyMulti() throws PDException
+{
+Record Copy=new Record();
+initList();
+for (int i = 0; i < NumAttr(); i++)
+    {
+    Attribute Atr=nextAttr();
+    if (Atr.isMultivalued())
+        Copy.addAttr(Atr.Copy());
     }
 return(Copy);
 }

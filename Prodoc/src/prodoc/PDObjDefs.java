@@ -115,6 +115,7 @@ public static final String fATTRUNIQUE="UniqueKey";
  *
  */
 public static final String fATTRMODALLOW="ModifAllowed";
+public static final String fATTRMULTIVALUED="MultiValued";
 
 /**
  *
@@ -194,6 +195,7 @@ public PDObjDefs(DriverGeneric Drv)
 super(Drv);
 }
 //-------------------------------------------------------------------------
+@Override
 public void assignValues(Record Rec) throws PDException
 {
 setName((String) Rec.getAttr(fNAME).getValue());
@@ -267,6 +269,7 @@ this.Active = Active;
  * object "method" needed because static overloading doesn't work in java
  * @return
  */
+@Override
 public String getTabName()
 {
 return(getTableName());
@@ -294,6 +297,7 @@ return ("PD_DOCDEFS_ATTR");
 *
 * @throws PDException
 */
+@Override
 protected void unInstallMulti() throws PDException
 {
 getDrv().DropTable(getTabNameAttrs());
@@ -303,26 +307,28 @@ getDrv().DropTable(getTabNameAttrs());
  *
  * @throws PDException
  */
+@Override
 public Record getRecord() throws PDException
 {
 Record Rec=getRecordStruct();
 Rec.getAttr(fNAME).setValue(getName());
 Rec.getAttr(fCLASSTYPE).setValue(getClassType());
 Rec.getAttr(fDESCRIPTION).setValue(getDescription());
-Rec.getAttr(fACTIVE).setValue(new Boolean(isActive()));
+Rec.getAttr(fACTIVE).setValue(isActive());
 Rec.getAttr(fACL).setValue(getACL());
 Rec.getAttr(fPARENT).setValue(getParent());
 Rec.getAttr(fREPOSIT).setValue(getReposit());
-Rec.getAttr(fTRACEADD).setValue(new Boolean(isTraceAdd()));
-Rec.getAttr(fTRACEDEL).setValue(new Boolean(isTraceDel()));
-Rec.getAttr(fTRACEMOD).setValue(new Boolean(isTraceMod()));
-Rec.getAttr(fTRACEVIEW).setValue(new Boolean(isTraceView()));
+Rec.getAttr(fTRACEADD).setValue(isTraceAdd());
+Rec.getAttr(fTRACEDEL).setValue(isTraceDel());
+Rec.getAttr(fTRACEMOD).setValue(isTraceMod());
+Rec.getAttr(fTRACEVIEW).setValue(isTraceView());
 return(Rec);
 }
 //-------------------------------------------------------------------------
 /**
  *
  */
+@Override
 Record getRecordStruct() throws PDException
 {
 if (DocsDefStruct==null)
@@ -387,6 +393,7 @@ if (DocsDefAttrsStruct==null)
     R.addAttr( new Attribute(fATTRPRIMKEY, "Primary_key", "When_true_the_attribute_it_is_included_in_primary_key", Attribute.tBOOLEAN, true, null, 0, false, false, false));
     R.addAttr( new Attribute(fATTRUNIQUE, "Unique_value", "Unique_value", Attribute.tBOOLEAN, true, null, 0, false, false, false));
     R.addAttr( new Attribute(fATTRMODALLOW, "Modifiable", "When_true_the_attribute_can_be_modified_after_creation", Attribute.tBOOLEAN, true, null, 0, false, false, true));
+    R.addAttr( new Attribute(fATTRMULTIVALUED, "MultiValued", "Attribute_is_Multivalued", Attribute.tBOOLEAN, true, null, 0, false, false, true));
     return(R);
     }
 else
@@ -441,6 +448,7 @@ this.ACL = ACL;
 *
 * @throws PDException
 */
+@Override
 protected void InstallMulti() throws PDException
 {
 getDrv().CreateTable(getTabNameAttrs(), getRecordAttrsStruct());
@@ -556,11 +564,12 @@ Rec.getAttr(fATTRNAME).setValue(Attr.getName());
 Rec.getAttr(fATTRUSERNAME).setValue(Attr.getUserName());
 Rec.getAttr(fATTRDESCRIPTION).setValue(Attr.getDescription());
 Rec.getAttr(fATTRTYPE).setValue(new Integer(Attr.getType()));
-Rec.getAttr(fATTRREQUIRED).setValue(new Boolean(Attr.isRequired()));
+Rec.getAttr(fATTRREQUIRED).setValue(Attr.isRequired());
 Rec.getAttr(fATTRLONG).setValue(new Integer(Attr.getLongStr()));
-Rec.getAttr(fATTRPRIMKEY).setValue(new Boolean(Attr.isPrimKey()));
-Rec.getAttr(fATTRUNIQUE).setValue(new Boolean(Attr.isUnique()));
-Rec.getAttr(fATTRMODALLOW).setValue(new Boolean(Attr.isModifAllowed()));
+Rec.getAttr(fATTRPRIMKEY).setValue(Attr.isPrimKey());
+Rec.getAttr(fATTRUNIQUE).setValue(Attr.isUnique());
+Rec.getAttr(fATTRMODALLOW).setValue(Attr.isModifAllowed());
+Rec.getAttr(fATTRMULTIVALUED).setValue(Attr.isMultivalued());
 return(Rec);
 }
 //-------------------------------------------------------------------------
@@ -579,6 +588,7 @@ int LongStr=((Integer)Rec.getAttr(fATTRLONG).getValue()).intValue();
 String UserName=(String)Rec.getAttr(fATTRUSERNAME).getValue();
 boolean Unique=((Boolean)Rec.getAttr(fATTRUNIQUE).getValue()).booleanValue();
 boolean ModifAlllowed=((Boolean)Rec.getAttr(fATTRMODALLOW).getValue()).booleanValue();
+boolean Multivalued=((Boolean)Rec.getAttr(fATTRMULTIVALUED).getValue()).booleanValue();
 Attribute Attr=new Attribute((String)Rec.getAttr(fATTRNAME).getValue(), UserName,
                              (String)Rec.getAttr(fATTRDESCRIPTION).getValue(),
                              Type,
@@ -587,7 +597,8 @@ Attribute Attr=new Attribute((String)Rec.getAttr(fATTRNAME).getValue(), UserName
                              LongStr,
                              Primkey,
                              Unique,
-                             ModifAlllowed);
+                             ModifAlllowed,
+                             Multivalued);
 return(Attr);
 }
 //-------------------------------------------------------------------------
@@ -675,9 +686,9 @@ return(AttrsDef);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Name
- * @param isFolder
+ * Creates the Objects table with the definition
+ * @param Name Name of the Object definition
+ * @param isFolder true when the definition if of a folder
  * @throws PDException
  */
 public void CreateObjectTables(String Name, boolean isFolder)  throws PDException
@@ -686,9 +697,11 @@ if (PDLog.isDebug())
     PDLog.Debug("PDObjDefs.CreateObjectTables>:"+Name);
 PDObjDefs Def=new PDObjDefs(getDrv());
 Def.Load(Name);
-Record Rec=Def.GetAttrDef();
-Rec.addAttr(new Attribute(PDFolders.fPDID, "PDIP", "Identificador único", Attribute.tSTRING, true, null, 32, true, false, false));
-getDrv().CreateTable(Def.getName(), Rec);
+Record RecDef=Def.GetAttrDef();
+Record RecTab=RecDef.CopyMono();
+Attribute PdId=new Attribute(PDDocs.fPDID, PDDocs.fPDID, "Unique_identifier", Attribute.tSTRING, true, null, 32, true, false, false);
+RecTab.addAttr(PdId);
+getDrv().CreateTable(Def.getName(), RecTab);
 if (isFolder)
     {
     getDrv().AddIntegrity(Def.getName(), PDFolders.fPDID, PDFolders.getTableName(), PDFolders.fPDID);
@@ -705,10 +718,39 @@ else
     Attribute A=RecVer.getAttr(PDDocs.fVERSION);
     A.setPrimKey(true);
     getDrv().CreateTable(GenVerTabName(Def.getName()), RecVer);
-//    getDrv().AddIntegrity(GenVerTabName(Def.getName()), PDDocs.fPDID, PDDocs.getTableName(), PDDocs.fPDID);
+    }
+RecDef.initList();
+Attribute IdVer=PDDocs.getRecordStructPDDocs().getAttr(PDDocs.fVERSION).Copy();
+IdVer.setPrimKey(true);
+for (int i = 0; i < RecDef.NumAttr(); i++)
+    {
+    Attribute Atr=RecDef.nextAttr();
+    if (Atr.isMultivalued())
+        {
+        RecTab.Clear();
+        RecTab.addAttr(PdId);
+        RecTab.addAttr(IdVer);
+        RecTab.addAttr(Atr.Copy()); 
+        String MultiName=genMultValNam(Def.getName(),Atr.getName());
+        getDrv().CreateTable(MultiName, RecTab);
+        getDrv().AddIntegrity(Def.getName(), PDDocs.fPDID, PDDocs.getTableName(), PDDocs.fPDID);
+        }
     }
 if (PDLog.isDebug())
     PDLog.Debug("PDObjDefs.CreateObjectTables<:"+Name);
+}
+//-------------------------------------------------------------------------
+/**
+ * 
+ * @param NameTab
+ * @param NameAtr
+ * @return
+ */
+static protected String genMultValNam(String NameTab, String NameAtr)
+{
+String NewName=NameTab+"_"+NameAtr;    
+int Long=NewName.length();        
+return(NewName.substring(0,Long>32?32:Long));
 }
 //-------------------------------------------------------------------------
 /**
@@ -724,12 +766,24 @@ PDObjDefs Def=new PDObjDefs(getDrv());
 Def.Load(Name);
 getDrv().DropTable(Def.getName());
 getDrv().DropTable(GenVerTabName(Def.getName()));
+Record RecDef=Def.GetAttrDef();
+RecDef.initList();
+for (int i = 0; i < RecDef.NumAttr(); i++)
+    {
+    Attribute Atr=RecDef.nextAttr();
+    if (Atr.isMultivalued())
+        {
+        String MultiName=genMultValNam(Def.getName(),Atr.getName());
+        getDrv().DropTable(MultiName);
+        }
+    }
 }
 //-------------------------------------------------------------------------
 /**
  *
  * @throws PDException
  */
+@Override
 protected void DeleteMulti() throws PDException
 {
 Conditions CondDelAttrs=new Conditions();
