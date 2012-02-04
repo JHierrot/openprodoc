@@ -79,6 +79,8 @@ initComponents();
         UniqueCheckBox = new javax.swing.JCheckBox();
         AllowModLabel = new javax.swing.JLabel();
         AllowModCheckBox = new javax.swing.JCheckBox();
+        MultivalLabel = new javax.swing.JLabel();
+        MultivalCheckBox = new javax.swing.JCheckBox();
         ButtonAcept = new javax.swing.JButton();
         ButtonCancel = new javax.swing.JButton();
 
@@ -91,7 +93,7 @@ initComponents();
             }
         });
 
-        LabelOperation.setFont(new java.awt.Font("DejaVu Sans", 1, 14));
+        LabelOperation.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
         LabelOperation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         LabelOperation.setText("jLabel1");
 
@@ -142,6 +144,16 @@ initComponents();
 
         AllowModCheckBox.setFont(MainWin.getFontDialog());
 
+        MultivalLabel.setFont(MainWin.getFontDialog());
+        MultivalLabel.setText(MainWin.TT("Modifiable"));
+
+        MultivalCheckBox.setFont(MainWin.getFontDialog());
+        MultivalCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MultivalCheckBoxActionPerformed(evt);
+            }
+        });
+
         ButtonAcept.setFont(MainWin.getFontDialog());
         ButtonAcept.setText(MainWin.TT("Ok"));
         ButtonAcept.addActionListener(new java.awt.event.ActionListener() {
@@ -165,18 +177,14 @@ initComponents();
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(AllowModLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(UniqueLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(MultivalLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(PrimKeyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ReqLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(AttrNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(AttrUserNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(AllowModLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(UniqueLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(PrimKeyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ReqLabel)
-                            .addComponent(LongLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(TypeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(DescripLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(DescripTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
                             .addComponent(TypeComboBox, 0, 367, Short.MAX_VALUE)
@@ -189,14 +197,25 @@ initComponents();
                             .addComponent(AttrUserNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE))
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, 513, Short.MAX_VALUE)
-                        .addContainerGap(86, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 373, Short.MAX_VALUE)
+                        .addComponent(MultivalCheckBox)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(ButtonAcept)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(ButtonCancel)
                         .addGap(12, 12, 12))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, 513, Short.MAX_VALUE)
+                .addContainerGap(86, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(DescripLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TypeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(LongLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(AttrUserNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(AttrNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {AllowModLabel, AttrNameLabel, AttrUserNameLabel, DescripLabel, LongLabel, PrimKeyLabel, ReqLabel, TypeLabel, UniqueLabel});
@@ -228,32 +247,38 @@ initComponents();
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(LongMaxTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(LongLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(109, 109, 109)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(ReqCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(4, 4, 4)
+                                        .addComponent(ReqLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                                    .addComponent(PrimKeyLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(PrimKeyCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(UniqueCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(UniqueLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(AllowModCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(AllowModLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(MultivalLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGap(5, 5, 5))
+                                    .addComponent(MultivalCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(ButtonCancel)
-                                    .addComponent(ButtonAcept)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(ReqCheckBox)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(PrimKeyCheckBox))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(ReqLabel)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(PrimKeyLabel)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(UniqueCheckBox)
-                                    .addComponent(UniqueLabel))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(AllowModLabel)
-                                    .addComponent(AllowModCheckBox))))))
-                .addContainerGap(32, Short.MAX_VALUE))
+                                    .addComponent(ButtonAcept))))))
+                .addGap(18, 18, 18))
         );
 
         pack();
@@ -327,6 +352,16 @@ else
     Act =false;
     }
 Attr.setValue(Act);
+Attr = AttrEdit.getAttr(PDObjDefs.fATTRMULTIVALUED);
+if (MultivalCheckBox.isSelected())
+    {
+    Act =true;
+    }
+else
+    {
+    Act =false;
+    }
+Attr.setValue(Act);
 Cancel = false;
 this.dispose();
 } catch (PDException ex)
@@ -339,6 +374,26 @@ this.dispose();
     {//GEN-HEADEREND:event_formWindowClosing
 Cancel=true;
     }//GEN-LAST:event_formWindowClosing
+
+    private void MultivalCheckBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_MultivalCheckBoxActionPerformed
+    {//GEN-HEADEREND:event_MultivalCheckBoxActionPerformed
+if (MultivalCheckBox.isSelected())
+    {
+    TypeComboBox.setSelectedItem("String");    
+    PrimKeyCheckBox.setSelected(true);
+    PrimKeyCheckBox.setEnabled(false);
+    UniqueCheckBox.setSelected(true);
+    UniqueCheckBox.setEnabled(false);
+    ReqCheckBox.setSelected(false);
+    ReqCheckBox.setEnabled(false);
+    }
+else
+    {
+    PrimKeyCheckBox.setEnabled(true);
+    UniqueCheckBox.setEnabled(true);
+    ReqCheckBox.setEnabled(true);
+    }
+    }//GEN-LAST:event_MultivalCheckBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox AllowModCheckBox;
@@ -354,6 +409,8 @@ Cancel=true;
     private javax.swing.JLabel LabelOperation;
     private javax.swing.JLabel LongLabel;
     private javax.swing.JTextField LongMaxTextField;
+    private javax.swing.JCheckBox MultivalCheckBox;
+    private javax.swing.JLabel MultivalLabel;
     private javax.swing.JCheckBox PrimKeyCheckBox;
     private javax.swing.JLabel PrimKeyLabel;
     private javax.swing.JCheckBox ReqCheckBox;
@@ -386,6 +443,7 @@ AllowModCheckBox.setEnabled(false);
 UniqueCheckBox.setEnabled(false);
 PrimKeyCheckBox.setEnabled(false);
 ReqCheckBox.setEnabled(false);
+MultivalCheckBox.setEnabled(false);
 }
 //----------------------------------------------------------------
 /**
@@ -460,6 +518,27 @@ AllowModLabel.setText(MainWin.DrvTT(Attr.getUserName()));
 if (Attr.getValue()!=null)
     AllowModCheckBox.setSelected((Boolean)Attr.getValue());
 AllowModCheckBox.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
+Attr=AttrEdit.getAttr(PDObjDefs.fATTRMULTIVALUED); //-----------------------------
+MultivalLabel.setText(MainWin.DrvTT(Attr.getUserName()));
+if (Attr.getValue()!=null)
+    MultivalCheckBox.setSelected((Boolean)Attr.getValue());
+MultivalCheckBox.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
+if (MultivalCheckBox.isSelected())
+    {
+    TypeComboBox.setSelectedItem("String");    
+    PrimKeyCheckBox.setSelected(true);
+    PrimKeyCheckBox.setEnabled(false);
+    UniqueCheckBox.setSelected(true);
+    UniqueCheckBox.setEnabled(false);
+    ReqCheckBox.setSelected(false);
+    ReqCheckBox.setEnabled(false);
+    }
+else
+    {
+    PrimKeyCheckBox.setEnabled(true);
+    UniqueCheckBox.setEnabled(true);
+    ReqCheckBox.setEnabled(true);
+    }
 }
 //----------------------------------------------------------------
 /**

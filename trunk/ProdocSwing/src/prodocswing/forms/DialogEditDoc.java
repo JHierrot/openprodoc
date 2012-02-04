@@ -26,33 +26,15 @@
 package prodocswing.forms;
 
 import java.awt.Component;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.TreeSet;
 import java.util.Vector;
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.GroupLayout;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-import prodoc.Attribute;
-import prodoc.Cursor;
-import prodoc.DriverGeneric;
-import prodoc.ObjPD;
-import prodoc.PDDocs;
-import prodoc.PDException;
-import prodoc.PDLog;
-import prodoc.PDMimeType;
-import prodoc.PDObjDefs;
-import prodoc.Record;
+import javax.swing.*;
+import prodoc.*;
 
 /**
  *
@@ -132,7 +114,7 @@ initComponents();
             }
         });
 
-        LabelOperation.setFont(new java.awt.Font("DejaVu Sans", 1, 14));
+        LabelOperation.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
         LabelOperation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         LabelOperation.setText("jLabel1");
 
@@ -209,16 +191,16 @@ initComponents();
                         .addComponent(IdLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(AttrBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(NameTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                    .addComponent(IdField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ACLComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TitleTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(DateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(AttrBasicLayout.createSequentialGroup()
                         .addGap(1, 1, 1)
                         .addComponent(FilePathTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(ButtonSelFile, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(IdField, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
-                    .addComponent(ACLComboBox, 0, 380, Short.MAX_VALUE)
-                    .addComponent(TitleTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
-                    .addComponent(DateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(NameTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -283,11 +265,11 @@ initComponents();
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(21, 21, 21)
-                        .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE))
+                        .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(LabelFoldType, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(FoldTypeCB, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(331, 331, 331)
@@ -296,7 +278,7 @@ initComponents();
                         .addComponent(ButtonCancel))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
-                        .addComponent(Attributes, javax.swing.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE)))
+                        .addComponent(Attributes)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -562,7 +544,7 @@ DateTextField.setFormatterFactory(MainWin.getFormFacDate());
 if (Attr.getValue()!=null)
     DateTextField.setValue(Attr.getValue());
 DateTextField.setToolTipText(MainWin.DrvTT(Attr.getDescription())  +"( "+MainWin.getFormatDate()+" )" );
-Attr=EditedDoc.getAttr(PDDocs.fMIMETYPE); //-----------------------------
+//Attr=EditedDoc.getAttr(PDDocs.fMIMETYPE); //-----------------------------
 AttrExcluded.add(PDDocs.fMIMETYPE);
 //MimeLabel.setText(MainWin.DrvTT(Attr.getUserName()));
 //if (Attr.getValue()!=null)
@@ -655,6 +637,14 @@ layout.setHorizontalGroup(hGroup);
 layout.setVerticalGroup(vGroup);
 }
 //----------------------------------------------------------------------
+private void ShowEditList(KeyEvent evt)
+{
+AttrMultiEdit dialog = new AttrMultiEdit(new javax.swing.JFrame(), true);
+dialog.SetValues(((MultiField)evt.getComponent()).getValues());
+dialog.setLocationRelativeTo(null);
+dialog.setVisible(true);
+}
+//----------------------------------------------------------------------
 /**
  *
  * @param Attr
@@ -663,8 +653,26 @@ layout.setVerticalGroup(vGroup);
  */
 private JComponent genComponent(Attribute Attr, boolean Modif)
 {
-JComponent JTF=null;
-if (Attr.getType()==Attribute.tSTRING)
+JComponent JTF;
+if (Attr.isMultivalued())
+    {
+    JTF=new MultiField();
+    try {
+        ((MultiField)JTF).setValues(Attr.getValuesList());
+        JTF.addKeyListener(
+            new java.awt.event.KeyAdapter() 
+            {
+            public void keyTyped(java.awt.event.KeyEvent evt) 
+            {
+            ShowEditList(evt);
+            }
+            } );
+
+    } catch (PDException ex)
+        {// Unnecesary becuase the only exception is No Multivalued
+        }
+    }
+else if (Attr.getType()==Attribute.tSTRING)
     {
     if (Attr.getValue()!=null)
         JTF=new JTextField((String)Attr.getValue());
@@ -774,4 +782,33 @@ else
 }
 
 //--------------------------------------------------------------
+//=========================================
+private class MultiField extends JTextField
+{
+private TreeSet Values;
+
+public MultiField()
+{
+super();
+this.setEditable(false);
+}
+/**
+* @return the Values
+*/
+public TreeSet getValues()
+{
+return Values;
+}
+//--------------------------------------------------------------
+/**
+* @param Values the Values to set
+*/
+public void setValues(TreeSet pValues)
+{
+Values = pValues;
+}
+//--------------------------------------------------------------   
+}
+//=========================================
+
 }

@@ -714,7 +714,7 @@ else
     {
     getDrv().AddIntegrity(Def.getName(), PDDocs.fPDID, PDDocs.getTableName(), PDDocs.fPDID);
     PDDocs DocDef=new PDDocs(getDrv(), Name);
-    Record RecVer=DocDef.getRecSum().Copy();
+    Record RecVer=DocDef.getRecSum().CopyMono();
     Attribute A=RecVer.getAttr(PDDocs.fVERSION);
     A.setPrimKey(true);
     getDrv().CreateTable(GenVerTabName(Def.getName()), RecVer);
@@ -733,7 +733,7 @@ for (int i = 0; i < RecDef.NumAttr(); i++)
         RecTab.addAttr(Atr.Copy()); 
         String MultiName=genMultValNam(Def.getName(),Atr.getName());
         getDrv().CreateTable(MultiName, RecTab);
-        getDrv().AddIntegrity(Def.getName(), PDDocs.fPDID, PDDocs.getTableName(), PDDocs.fPDID);
+        getDrv().AddIntegrity(MultiName, PDDocs.fPDID, PDDocs.getTableName(), PDDocs.fPDID);
         }
     }
 if (PDLog.isDebug())
