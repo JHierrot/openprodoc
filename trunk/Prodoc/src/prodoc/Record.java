@@ -20,7 +20,11 @@
 package prodoc;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.TreeSet;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -89,7 +93,19 @@ for (int i = 0; i < rec.NumAttr(); i++)
     AttrOrig=rec.nextAttr();
     AttrDest=getAttr(AttrOrig.getName());
     if (AttrDest!=null && AttrDest.equalDef(AttrOrig))
-        AttrDest.setValue(AttrOrig.getValue());
+        {
+        if (AttrDest.isMultivalued()) 
+            {
+            AttrDest.ClearValues();
+            TreeSet V=AttrOrig.getValuesList();    
+            for (Iterator it = V.iterator(); it.hasNext();)
+                {
+                AttrDest.AddValue(it.next());                    
+                }
+            }
+        else
+            AttrDest.setValue(AttrOrig.getValue());
+        }
     }
 return(true);
 }
@@ -202,8 +218,20 @@ Attribute Attr;
 for (int i = 0; i < VAttr.size(); i++)
     {
     Attr = (Attribute)VAttr.get(i);
-    if (Attr.getValue()!=null)
-        N++;
+    if (Attr.isMultivalued())
+        {
+        try {
+            if (!Attr.getValuesList().isEmpty())
+                N++;
+        } catch (PDException ex)
+            {
+            }
+        }
+    else
+        {
+        if (Attr.getValue()!=null)
+            N++;
+        }
     }
 return(N);
 }
