@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.TreeSet;
 import javax.swing.DefaultListModel;
 import javax.swing.ListModel;
+import prodoc.Attribute;
+import prodoc.PDException;
 
 /**
  *
@@ -16,6 +18,8 @@ import javax.swing.ListModel;
 public class AttrMultiEdit extends javax.swing.JDialog
 {
 private TreeSet Values=null;
+private Attribute Attr=null;
+private boolean Cancel=true;
 /**
 * Creates new form MultiEdit
 */
@@ -43,10 +47,17 @@ initComponents();
         EditVal = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList();
+        ButtonOk = new javax.swing.JButton();
+        ButtonCancel = new javax.swing.JButton();
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jToolBar1.setRollover(true);
 
@@ -102,16 +113,42 @@ initComponents();
         });
         jScrollPane2.setViewportView(jList1);
 
+        ButtonOk.setFont(MainWin.getFontDialog());
+        ButtonOk.setText(MainWin.TT("Ok"));
+        ButtonOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonOkActionPerformed(evt);
+            }
+        });
+
+        ButtonCancel.setFont(MainWin.getFontDialog());
+        ButtonCancel.setText(MainWin.TT("Cancel"));
+        ButtonCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonCancelActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                .addComponent(EditVal, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(ButtonOk)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ButtonCancel))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(EditVal, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(9, 9, 9))
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 465, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -120,10 +157,14 @@ initComponents();
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(EditVal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addGap(10, 10, 10)
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(ButtonOk)
+                        .addComponent(ButtonCancel)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE))
         );
 
         pack();
@@ -164,9 +205,28 @@ if (ValSel==null)
 EditVal.setText(ValSel);       
     }//GEN-LAST:event_jList1ValueChanged
 
+    private void ButtonOkActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ButtonOkActionPerformed
+    {//GEN-HEADEREND:event_ButtonOkActionPerformed
+Cancel = false;
+this.dispose();
+    }//GEN-LAST:event_ButtonOkActionPerformed
+
+    private void ButtonCancelActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ButtonCancelActionPerformed
+    {//GEN-HEADEREND:event_ButtonCancelActionPerformed
+Cancel = true;
+this.dispose();
+    }//GEN-LAST:event_ButtonCancelActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowClosing
+    {//GEN-HEADEREND:event_formWindowClosing
+Cancel = true;
+    }//GEN-LAST:event_formWindowClosing
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddButton;
+    private javax.swing.JButton ButtonCancel;
+    private javax.swing.JButton ButtonOk;
     private javax.swing.JButton DelButton;
     private javax.swing.JButton EditButton;
     private javax.swing.JTextField EditVal;
@@ -177,7 +237,7 @@ EditVal.setText(ValSel);
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 //----------------------------------------------------------------------------
-public void SetValues(TreeSet pValues)
+private void SetValues(TreeSet pValues)
 {
 Values=pValues;
 RefreshList();
@@ -186,7 +246,7 @@ RefreshList();
 /**
 * @return the Values
 */
-public TreeSet getValues()
+private TreeSet getValues()
 {
 if (Values==null)
     Values=new TreeSet();
@@ -202,11 +262,33 @@ for (Iterator it = getValues().iterator(); it.hasNext();)
     }
 return(LM);
 }
-
 //-----------------------------------------
-
 private void RefreshList()
 {
 jList1.setModel(getListModel());
 }
+//-----------------------------------------
+
+void setAttr(Attribute pAttr)
+{
+Attr=pAttr;
+setTitle(Attr.getUserName());
+jLabel1.setText(Attr.getUserName());
+this.EditVal.setToolTipText(Attr.getDescription());
+try{
+    SetValues(Attr.getValuesList());
+} catch (PDException ex)
+    { // Called always for Multivalued, the exception generated
+    }
+}
+//-----------------------------------------
+/**
+* @return the Cancel
+*/
+public boolean isCancel()
+{
+return Cancel;
+}
+//----------------------------------------------------------------
+
 }

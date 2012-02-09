@@ -25,6 +25,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -202,7 +204,16 @@ setModifAllowed(pModifAllowed);
 public Attribute Copy()
 {
 try {
-return new Attribute(Name, UserName, Description, Type, Required, Value, LongStr, PrimKey, Unique, ModifAllowed, Multivalued);
+Attribute Attr=new Attribute(Name, UserName, Description, Type, Required, Value, LongStr, PrimKey, Unique, ModifAllowed, Multivalued);
+if (Attr.isMultivalued() && ValuesList!=null)
+    {
+    Attr.ClearValues();
+    for (Iterator it = ValuesList.iterator(); it.hasNext();)
+        {
+        Attr.AddValue(it.next());
+        }
+    }
+return(Attr);
 } catch (PDException ex)
     {
     PDLog.Error("Error_copying_Attribute"+":"+ex.getLocalizedMessage());
@@ -222,15 +233,26 @@ if (getName().equals(Attr.getName())
     && getDescription().equals(Attr.getDescription())
     && getType()==Attr.getType()
     && isRequired()==Attr.isRequired()
-    && getValue().toString().equals(Attr.getValue().toString())
     && getLongStr()==Attr.getLongStr()
     && isPrimKey()==Attr.isPrimKey()
     && isUnique()==Attr.isUnique()
     && isModifAllowed()==Attr.isModifAllowed() 
     && isMultivalued()==Attr.isMultivalued() )
-    return (true);
-else
-    return (false);
+    {
+    if (!isMultivalued())
+        {
+        if (getValue().toString().equals(Attr.getValue().toString()))
+          return (true);    
+        }
+    else
+        try {
+            if (getValuesList().equals(Attr.getValuesList()))
+                return (true);
+        } catch (PDException ex)
+            {
+            }    
+    }
+return (false);
 }
 //--------------------------------------------------------------------------
 /**
@@ -431,7 +453,7 @@ public String toString()
 if (getValue()==null)
     return("{"+getName()+"("+getType()+")"+"=Nulo}");
 else
-    return("{"+getName()+"("+getType()+")"+"="+getValue()+"("+getValue().getClass().getName()+")}");
+    return("{"+getName()+"("+getType()+")"+"="+Export()+"}");
 }
 //--------------------------------------------------------------------------
 /**
@@ -471,7 +493,7 @@ UserName = pUserName;
  * @return
  * @throws PDException
  */
-public String Export() throws PDException
+public String Export()
 {
 if (isMultivalued())    
     {
@@ -590,17 +612,36 @@ else
  */
 public void Verify() throws PDException
 {
-if ( isRequired() && getValue()==null)
+if (isMultivalued())  
     {
-    PDExceptionFunc.GenPDException("A_value_is_required",getUserName());
+    if ( isRequired() && getValuesList().isEmpty())
+        {
+        PDExceptionFunc.GenPDException("A_value_is_required",getUserName());
+        }
+    if ( isRequired() && getType()==Attribute.tSTRING)
+        {
+        for (Iterator it = getValuesList().iterator(); it.hasNext();)
+            {
+            String Val = (String)it.next();
+            if (getLongStr()<Val.length())    
+                PDExceptionFunc.GenPDException(Incorrect_attribute_length,getUserName());
+            }
+        }
     }
-if ( isRequired() && getType()==Attribute.tSTRING && ((String)getValue()).length()==0)
+else
     {
-    PDExceptionFunc.GenPDException("A_value_is_required",getUserName());
-    }
-if (getValue()!=null && getType()==Attribute.tSTRING && getLongStr()<((String)getValue()).length())
-    {
-    PDExceptionFunc.GenPDException(Incorrect_attribute_length,getUserName());
+    if ( isRequired() && getValue()==null)
+        {
+        PDExceptionFunc.GenPDException("A_value_is_required",getUserName());
+        }
+    if ( isRequired() && getType()==Attribute.tSTRING && ((String)getValue()).length()==0)
+        {
+        PDExceptionFunc.GenPDException("A_value_is_required",getUserName());
+        }
+    if (getValue()!=null && getType()==Attribute.tSTRING && getLongStr()<((String)getValue()).length())
+        {
+        PDExceptionFunc.GenPDException(Incorrect_attribute_length,getUserName());
+        }
     }
 }
 //--------------------------------------------------------------------------
@@ -715,7 +756,11 @@ if (Type==tSTRING)
     return(false);
     }
 else
+    {
+    if (pValue==null)    
+        return(false);        
     return(getValuesList().add(pValue));
+    }
 }        
 //--------------------------------------------------------------------------
 /**

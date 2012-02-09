@@ -33,6 +33,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.TreeSet;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import prodoc.*;
 
@@ -639,10 +641,14 @@ layout.setVerticalGroup(vGroup);
 //----------------------------------------------------------------------
 private void ShowEditList(KeyEvent evt)
 {
-AttrMultiEdit dialog = new AttrMultiEdit(new javax.swing.JFrame(), true);
-dialog.SetValues(((MultiField)evt.getComponent()).getValues());
-dialog.setLocationRelativeTo(null);
-dialog.setVisible(true);
+AttrMultiEdit MultAttrDlg = new AttrMultiEdit(new javax.swing.JFrame(), true);
+Attribute Attr=((MultiField)evt.getComponent()).getAttr();
+MultAttrDlg.setAttr(Attr);
+MultAttrDlg.setLocationRelativeTo(null);
+MultAttrDlg.setVisible(true);
+if (MultAttrDlg.isCancel())
+    return;
+((MultiField)evt.getComponent()).setText(Attr.Export());
 }
 //----------------------------------------------------------------------
 /**
@@ -656,21 +662,16 @@ private JComponent genComponent(Attribute Attr, boolean Modif)
 JComponent JTF;
 if (Attr.isMultivalued())
     {
-    JTF=new MultiField();
-    try {
-        ((MultiField)JTF).setValues(Attr.getValuesList());
-        JTF.addKeyListener(
-            new java.awt.event.KeyAdapter() 
-            {
-            public void keyTyped(java.awt.event.KeyEvent evt) 
-            {
-            ShowEditList(evt);
-            }
-            } );
-
-    } catch (PDException ex)
-        {// Unnecesary becuase the only exception is No Multivalued
+    JTF=new MultiField(Attr.Export());
+    ((MultiField)JTF).setAttr(Attr);
+    JTF.addKeyListener(
+        new java.awt.event.KeyAdapter() 
+        {
+        public void keyTyped(java.awt.event.KeyEvent evt) 
+        {
+        ShowEditList(evt);
         }
+        } );
     }
 else if (Attr.getType()==Attribute.tSTRING)
     {
@@ -747,9 +748,11 @@ while (Attr!=null)
  * @param jComponent
  */
 private void FillAttr(Attribute Attr, JComponent JTF, boolean Modif) throws PDException
-{
+{    
 if (Modif && !Attr.isModifAllowed())
     return;
+if (Attr.isMultivalued())
+    return; /// we where editing directly values
 if (Attr.getType()==Attribute.tSTRING)
     {
     Attr.setValue(((JTextField)JTF).getText());
@@ -785,30 +788,32 @@ else
 //=========================================
 private class MultiField extends JTextField
 {
-private TreeSet Values;
+private Attribute Attr;
 
 public MultiField()
 {
 super();
 this.setEditable(false);
 }
-/**
-* @return the Values
-*/
-public TreeSet getValues()
+//--------------------------------------------------------------
+public MultiField(String Text)
 {
-return Values;
+super(Text);
+this.setEditable(false);
 }
 //--------------------------------------------------------------
-/**
-* @param Values the Values to set
-*/
-public void setValues(TreeSet pValues)
+private void setAttr(Attribute pAttr)
 {
-Values = pValues;
+Attr=pAttr;
 }
-//--------------------------------------------------------------   
+
+/**
+* @return the Attr
+*/
+public Attribute getAttr()
+{
+return Attr;
 }
-//=========================================
+} //=========================================
 
 }

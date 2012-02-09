@@ -1019,9 +1019,8 @@ Attr=Rec.getAttr(fDOCTYPE);
 Attr.setValue(TobeUpdated.getDocType());
 getDrv().UpdateRecord(getTabName(), Rec, getConditionsVer());
 Record Mult=TobeUpdated.getRecSum().Copy();
-Attribute AttrVer=Mult.getAttr(fVERSION);
-AttrVer.setValue(getDrv().getUser().getName());
-MultiInsert(Mult);
+Mult.getAttr(fVERSION).setValue(getDrv().getUser().getName());
+TobeUpdated.MultiInsert(Mult);
 getObjCache().remove(getKey());
 } catch (PDException Ex)
     {
@@ -1097,7 +1096,7 @@ Conditions Conds;
 for (int NumDefTyp = 0; NumDefTyp<getTypeDefs().size(); NumDefTyp++)
     {
     TypDef=((Record)getTypeDefs().get(NumDefTyp)).CopyMulti();
-    String TabName=(String)TypDef.getAttr(PDObjDefs.fNAME).getValue();
+    String TabName=(String)((Record)getTypeDefs().get(NumDefTyp)).getAttr(PDObjDefs.fNAME).getValue();
     TypDef.initList();
     for (int NumAttr = 0; NumAttr < TypDef.NumAttr(); NumAttr++)
         {
@@ -1164,9 +1163,9 @@ if (getMimeType()==null || getMimeType().length()==0)
     setMimeType(MT.getName());
     }
 Record Rec=getRecSum();
-MultiInsert(Rec);
 insertFragments(Rec);
 InsertVersion(getPDId(), getVersion(), Rec);
+MultiInsert(Rec);
 StoreGeneric Rep=getDrv().getRepository(getReposit());
 Rep.Connect();
 if (FileStream!=null)
@@ -1203,14 +1202,14 @@ Record RecSave=new Record();
 Object Val2Ins;
 for (int NumDefTyp = 0; NumDefTyp<getTypeDefs().size(); NumDefTyp++)
     {
-    TypDef=((Record)getTypeDefs().get(NumDefTyp)).CopyMulti();
-    String TabName=(String)TypDef.getAttr(PDObjDefs.fNAME).getValue();
+    TypDef=((Record)getTypeRecs().get(NumDefTyp)).CopyMulti();
+    String TabName=(String) ((Record)getTypeDefs().get(NumDefTyp)).getAttr(PDObjDefs.fNAME).getValue();
     TypDef.initList();
     for (int NumAttr = 0; NumAttr < TypDef.NumAttr(); NumAttr++)
         {
         AtrOrig=TypDef.nextAttr();
         Atr2Ins=Rec.getAttr(AtrOrig.getName());
-        if (Atr2Ins==null) 
+        if (Atr2Ins==null || Atr2Ins.getValuesList()==null || Atr2Ins.getValuesList().isEmpty())
            continue;
         AtrOrig=Atr2Ins;
         Values=AtrOrig.getValuesList();
@@ -1225,7 +1224,8 @@ for (int NumDefTyp = 0; NumDefTyp<getTypeDefs().size(); NumDefTyp++)
         for (Iterator it = Values.iterator(); it.hasNext();)
             {
             Val2Ins = it.next();
-            Atr2Ins.setValue(Val2Ins);
+            //Atr2Ins.setValue(Val2Ins);
+            RecSave.getAttr(Atr2Ins.getName()).setValue(Val2Ins);
             getDrv().InsertRecord(MultiName, RecSave);    
             }
         }
@@ -1406,7 +1406,7 @@ if (getTypeDefs().size()>1)
         {
         Record TypDef=(Record)getTypeDefs().get(i);
         ListTabs.add((String)TypDef.getAttr(PDObjDefs.fNAME).getValue());
-        if (! ((String)ListTabs.elementAt(i)).equals(PDFolders.getTableName()))
+        if (! ((String)ListTabs.elementAt(i)).equals(PDDocs.getTableName()))
             {
             Condition Con=new Condition(PDDocs.getTableName()+"."+PDFolders.fPDID,
                                         (String)ListTabs.elementAt(i)+"."+PDFolders.fPDID ) ;
@@ -1437,7 +1437,7 @@ private void MultiLoad(Record Rec) throws PDException
 {
 Record TypDef;    
 String MultiName;
-Attribute Atr, Atr2;
+Attribute Atr, Atr2, Attr2Load;
 Query LoadAct;
 Conditions Conds;
 String Id=(String)Rec.getAttr(fPDID).getValue();
@@ -1447,8 +1447,8 @@ Cursor Cur;
 Record RecLoad=new Record();
 for (int NumDefTyp = 0; NumDefTyp<getTypeDefs().size(); NumDefTyp++)
     {
-    TypDef=((Record)getTypeDefs().get(NumDefTyp)).CopyMulti();
-    String TabName=(String)TypDef.getAttr(PDObjDefs.fNAME).getValue();
+    TypDef=((Record)getTypeRecs().get(NumDefTyp)).CopyMulti();
+    String TabName=(String)((Record)getTypeDefs().get(NumDefTyp)).getAttr(PDObjDefs.fNAME).getValue();
     TypDef.initList();
     for (int NumAttr = 0; NumAttr < TypDef.NumAttr(); NumAttr++)
         {
@@ -1465,13 +1465,15 @@ for (int NumDefTyp = 0; NumDefTyp<getTypeDefs().size(); NumDefTyp++)
         Conds.addCondition(new Condition(fPDID, Condition.cEQUAL, Id));
         Conds.addCondition(new Condition(fVERSION, Condition.cEQUAL, Ver));
         RecLoad.Clear();
-        RecLoad.addAttr(Atr2);
+        Attr2Load=Atr2.Copy();
+        Attr2Load.setMultivalued(false);
+        RecLoad.addAttr(Attr2Load);
         LoadAct=new Query(MultiName, RecLoad, Conds, null);
         Cur=getDrv().OpenCursor(LoadAct);
         r=getDrv().NextRec(Cur);
         while (r!=null)
             {
-            Atr2.AddValue(r.getAttr(Atr.getName()).getValue());    
+            Rec.getAttr(Atr.getName()).AddValue(r.getAttr(Atr.getName()).getValue());    
             r=getDrv().NextRec(Cur);            
             }
         getDrv().CloseCursor(Cur);
