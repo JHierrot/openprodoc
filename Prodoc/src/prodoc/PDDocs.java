@@ -31,7 +31,7 @@ import org.w3c.dom.NodeList;
 public class PDDocs extends ObjPD
 {
 final int BUFFSIZE=204800;
-
+private static final String DEFTABNAME="PD_DOCS";
 /**
  *
  */
@@ -136,7 +136,7 @@ private String ACL;
 /**
  *
  */
-private String DocType;
+private String DocType=DEFTABNAME;
 /**
  *
  */
@@ -189,8 +189,9 @@ static private ObjectsCache DocsObjectsCache = null;
 /**
  *
  * @param Drv
+ * @throws PDException  
  */
-public PDDocs(DriverGeneric Drv)
+public PDDocs(DriverGeneric Drv) throws PDException
 {
 super(Drv);
 setDocType(getTableName());
@@ -203,6 +204,7 @@ public void assignValues(Record Rec) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PdDocs.assignValues>:"+Rec);
+setDocType((String) Rec.getAttr(fDOCTYPE).getValue());
 setPDId((String) Rec.getAttr(fPDID).getValue());
 setTitle((String) Rec.getAttr(fTITLE).getValue());
 setDocDate((Date) Rec.getAttr(fDOCDATE).getValue());
@@ -211,7 +213,6 @@ setPDAutor((String) Rec.getAttr(fPDAUTOR).getValue());
 setLockedBy((String) Rec.getAttr(fLOCKEDBY).getValue());
 setPurgeDate((Date) Rec.getAttr(fPURGEDATE).getValue());
 setACL((String) Rec.getAttr(fACL).getValue());
-setDocType((String) Rec.getAttr(fDOCTYPE).getValue());
 setReposit((String) Rec.getAttr(fREPOSIT).getValue());
 setMimeType((String) Rec.getAttr(fMIMETYPE).getValue());
 setName((String) Rec.getAttr(fNAME).getValue());
@@ -298,7 +299,7 @@ return(DocTyp+"_V");
  */
 static public String getTableName()
 {
-return("PD_DOCS");
+return(DEFTABNAME);
 }
 //-------------------------------------------------------------------------
 /**
@@ -613,20 +614,24 @@ public PDDocs(DriverGeneric Drv, String pDocType) throws PDException
 {
 super(Drv);
 setDocType(pDocType);
-getTypeDefs();
 }
 //-------------------------------------------------------------------------
 /**
  * Assign the name of the type used. Deletes the information about attributes structure, repository,etc.
- * @param DocType The name of the document type defined in the database.
+ * @param pDocType The name of the document type defined in the database.
+ * @throws PDException  
 */
-public final void setDocType(String DocType)
+public final void setDocType(String pDocType) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PdDocs.setDocType:"+DocType);
-this.DocType = DocType;
-this.TypeDefs=null;
-this.TypeRecs=null;
+if (!DocType.equalsIgnoreCase(pDocType))
+    {
+    DocType = pDocType;
+    LoadDef(DocType);
+    }
+//this.TypeDefs=null;
+//this.TypeRecs=null;
 }
 //-------------------------------------------------------------------------
 /** Return an ordered list of the hierarchy of document types from whom this
@@ -661,14 +666,14 @@ private void LoadDef(String tableName) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PdDocs.LoadDef>:"+tableName);
-setDocType(tableName);
+//setDocType(tableName);
 TypeDefs=new ArrayList();
 TypeRecs=new ArrayList();
 getDrv().LoadDef(tableName, getTypeDefs(), getTypeRecs());
 RecSum=new Record();
 for (int i = 0; i < getTypeRecs().size(); i++)
     {
-    RecSum.addRecord((Record)getTypeRecs().get(i));
+    RecSum.addRecord(((Record)getTypeRecs().get(i)).Copy());
     }
 RecSum.getAttr(fDOCTYPE).setValue(getDocType());
 if (PDLog.isDebug())
@@ -1095,7 +1100,7 @@ Attribute Atr;
 Conditions Conds;
 for (int NumDefTyp = 0; NumDefTyp<getTypeDefs().size(); NumDefTyp++)
     {
-    TypDef=((Record)getTypeDefs().get(NumDefTyp)).CopyMulti();
+    TypDef=((Record)getTypeRecs().get(NumDefTyp)).CopyMulti();
     String TabName=(String)((Record)getTypeDefs().get(NumDefTyp)).getAttr(PDObjDefs.fNAME).getValue();
     TypDef.initList();
     for (int NumAttr = 0; NumAttr < TypDef.NumAttr(); NumAttr++)
@@ -1354,7 +1359,7 @@ Record r=Load(Ident);
 Conditions Cond=getConditions();
 Cond.addCondition(new Condition(fVERSION, Condition.cEQUAL, Vers));
 Attribute Attr=r.getAttr(fDOCTYPE);
-Query LoadAct=new Query(getTabNameVer((String)Attr.getValue()), getRecSum(), Cond, null);
+Query LoadAct=new Query(getTabNameVer((String)Attr.getValue()), getRecSum().CopyMono(), Cond, null);
 Cursor Cur=getDrv().OpenCursor(LoadAct);
 r=getDrv().NextRec(Cur);
 getDrv().CloseCursor(Cur);
@@ -1364,7 +1369,10 @@ if (!getDrv().getUser().getAclList().containsKey(ActACL))
     PDExceptionFunc.GenPDException("User_without_permissions_over_document",Ident);
     }
 if (r!=null)
+    {
     assignValues(r);
+    MultiLoad(getRecSum());
+    }
 if (PDLog.isDebug())
     PDLog.Debug("PDDocs.LoadVersion<:"+Ident+"/"+Vers);
 return(r);
@@ -1388,17 +1396,20 @@ if (UsuBloq.getValue()!=null &&  ((String)UsuBloq.getValue()).equalsIgnoreCase(g
     Conditions Cond=getConditions();
     Cond.addCondition(new Condition(fVERSION, Condition.cEQUAL, getDrv().getUser().getName()));
      Attribute Attr=r.getAttr(fDOCTYPE);
-    Query LoadAct=new Query(getTabNameVer((String)Attr.getValue()), getRecSum(), Cond, null);
+    Query LoadAct=new Query(getTabNameVer((String)Attr.getValue()), getRecSum().CopyMono(), Cond, null);
     Cursor Cur=getDrv().OpenCursor(LoadAct);
     r=getDrv().NextRec(Cur);
     getDrv().CloseCursor(Cur);
     if (r!=null)
+        {
+        MultiLoad(r);
         assignValues(r);
+        }
     if (PDLog.isDebug())
        PDLog.Debug("PDDocs.LoadFull<:"+Ident);
     return(r);
     }
-if (getTypeDefs().size()>1)
+if (getTypeDefs().size()>1) // If size==1, Load is enough
     {
     Conditions Conds=getConditions();
     Vector ListTabs=new Vector();
@@ -1601,8 +1612,7 @@ else
 UpdateVersion(getPDId(), getDrv().getUser().getName(), Rec);
 MultiDelete(Id, getDrv().getUser().getName());
 Rec=getRecSum().Copy();
-Attr=Rec.getAttr(fVERSION);
-Attr.setValue(getDrv().getUser().getName());
+Rec.getAttr(fVERSION).setValue(getDrv().getUser().getName());
 MultiInsert(Rec);
 StoreGeneric Rep=getDrv().getRepository(getReposit());
 Rep.Connect();
@@ -1874,7 +1884,8 @@ if (PDLog.isDebug())
 Conditions Cond= new Conditions();
 Cond.addCondition(new Condition(fPDID, Condition.cEQUAL, Id));
 Cond.addCondition(new Condition(fACL, new HashSet(getDrv().getUser().getAclList().keySet())));
-Query LoadAct=new Query(getTabNameVer(DocTypename), getRecSum(), Cond, PDDocs.fPDDATE);
+PDDocs Doc=new PDDocs(getDrv(), DocTypename);
+Query LoadAct=new Query(getTabNameVer(DocTypename), Doc.getRecSum().CopyMono(), Cond, PDDocs.fPDDATE);
 Cursor Cur=getDrv().OpenCursor(LoadAct);
 if (PDLog.isDebug())
     PDLog.Debug("PDDocs.ListVersions <");
@@ -1968,7 +1979,7 @@ if (SubFolders)
     }
 Condition CondAcl=new Condition(PDDocs.fACL, new HashSet(getDrv().getUser().getAclList().keySet()));
 ComposedConds.addCondition(CondAcl);
-Query DocSearch=new Query(TypList, Doc.getRecSum(), ComposedConds, Ord);
+Query DocSearch=new Query(TypList, Doc.getRecSum().CopyMono(), ComposedConds, Ord);
 if (PDLog.isDebug())
     PDLog.Debug("PDDocs.Search <");
 return(getDrv().OpenCursor(DocSearch));

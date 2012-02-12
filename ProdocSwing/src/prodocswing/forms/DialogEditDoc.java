@@ -31,10 +31,7 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.TreeSet;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import prodoc.*;
 
@@ -425,28 +422,6 @@ while (Res!=null)
 return(new DefaultComboBoxModel(VObjects));
 }
 //----------------------------------------------------------------
-private ComboBoxModel getComboMimeFold()
-{
-Vector VObjects=new Vector();
-try {
-DriverGeneric Session=MainWin.getSession();
-PDMimeType Obj = new PDMimeType(Session);
-Cursor CursorId = Obj.getAll();
-Record Res=Session.NextRec(CursorId);
-while (Res!=null)
-    {
-    Attribute Attr=Res.getAttr(PDObjDefs.fNAME);
-    VObjects.add(Attr.getValue());
-    Res=Session.NextRec(CursorId);
-    }
-} catch (PDException ex)
-    {
-    MainWin.Message(ex.getLocalizedMessage());
-    }
-return(new DefaultComboBoxModel(VObjects));
-}
-//----------------------------------------------------------------
-
 /**
  * sets the Form in mode Add
  * Disabling fields and changint literals
@@ -467,6 +442,22 @@ public void EditMode()
 LabelOperation.setText(MainWin.TT("Update_Document"));
 FoldTypeCB.setEnabled(false);
 Modif=true;
+}
+//----------------------------------------------------------------
+/**
+ * sets the Form in mode View
+ * Disabling fields and changing literals
+ */
+public void ViewMode()
+{
+LabelOperation.setText(MainWin.TT("Document_Attributes"));
+FoldTypeCB.setEnabled(false);
+ACLComboBox.setEnabled(false);
+TitleTextField.setEnabled(false);
+DateTextField.setEnabled(false);
+//MimeTypeCB.setEnabled(false);
+ButtonSelFile.setEnabled(false);
+FilePathTextField.setEnabled(false);
 }
 //----------------------------------------------------------------
 /**

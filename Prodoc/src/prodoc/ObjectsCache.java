@@ -138,7 +138,7 @@ CachedTime=System.currentTimeMillis();
 } // **** END of CacheObject ***************************************
 static private class CacheCleaner extends Thread  
 {
-static final long MIN=60*1000; // 1 minute
+static final long MIN=600*1000; // 10 minute
 static private long SleepTime=MIN; 
 static private long PurgeTime=5*MIN; 
 static private boolean Continue=true;
