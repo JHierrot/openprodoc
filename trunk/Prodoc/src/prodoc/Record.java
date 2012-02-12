@@ -96,11 +96,14 @@ for (int i = 0; i < rec.NumAttr(); i++)
         {
         if (AttrDest.isMultivalued()) 
             {
-            AttrDest.ClearValues();
-            TreeSet V=AttrOrig.getValuesList();    
-            for (Iterator it = V.iterator(); it.hasNext();)
+            if (AttrDest!=AttrOrig) // to avoid problems when using the same record
                 {
-                AttrDest.AddValue(it.next());                    
+                AttrDest.ClearValues();
+                TreeSet V=AttrOrig.getValuesList();    
+                for (Iterator it = V.iterator(); it.hasNext();)
+                    {
+                    AttrDest.AddValue(it.next());                    
+                    }
                 }
             }
         else

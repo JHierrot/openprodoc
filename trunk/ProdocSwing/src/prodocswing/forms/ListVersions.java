@@ -135,7 +135,19 @@ private void EditButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRS
 {//GEN-HEADEREND:event_EditButtonActionPerformed
 if (getObjectsTable().getSelectedRow()==-1)
     return;
-
+try {
+PDDocs Doc = new PDDocs(MainWin.getSession());
+DialogEditDoc MD = new DialogEditDoc(this,true);
+Doc.assignValues(getPDTableModel().getElement(getSelectedRow()));
+Doc.LoadVersion(Doc.getPDId(), Doc.getVersion());
+MD.setRecord(Doc.getRecSum()); 
+MD.ViewMode();
+MD.setLocationRelativeTo(null);
+MD.setVisible(true);
+} catch (Exception ex)
+    {
+    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
 }//GEN-LAST:event_EditButtonActionPerformed
 
 private void formWindowClosing(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowClosing

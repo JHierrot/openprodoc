@@ -126,6 +126,7 @@ DocsTable.setAutoCreateColumnsFromModel(true);
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
         AddDocAdvanced = new javax.swing.JMenuItem();
         ModDocAdvanced = new javax.swing.JMenuItem();
+        ViewMetadata = new javax.swing.JMenuItem();
         RefreshDocs = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
         CheckOut = new javax.swing.JMenuItem();
@@ -365,6 +366,15 @@ DocsTable.setAutoCreateColumnsFromModel(true);
             }
         });
         DocMenu.add(ModDocAdvanced);
+
+        ViewMetadata.setFont(getFontMenu());
+        ViewMetadata.setText(TT("Document_Attributes"));
+        ViewMetadata.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ViewMetadataActionPerformed(evt);
+            }
+        });
+        DocMenu.add(ViewMetadata);
 
         RefreshDocs.setFont(getFontMenu());
         RefreshDocs.setText(TT("Refresh"));
@@ -857,7 +867,7 @@ try {
 PDDocs Doc = new PDDocs(getSession());
 DialogEditDoc MD = new DialogEditDoc(this,true);
 Doc.assignValues(DocsContained.getElement(DocsTable.convertRowIndexToModel(DocsTable.getSelectedRow())));
-Doc.Load(Doc.getPDId());
+Doc.LoadFull(Doc.getPDId());
 MD.setRecord(Doc.getRecSum());
 MD.DelMode();
 MD.setLocationRelativeTo(null);
@@ -908,7 +918,7 @@ PDDocs Doc = new PDDocs(getSession());
 DialogEditDoc MD = new DialogEditDoc(this,true);
 Doc.assignValues(DocsContained.getElement(DocsTable.convertRowIndexToModel(DocsTable.getSelectedRow())));
 Doc.LoadFull(Doc.getPDId());
-MD.setRecord(Doc.getRecSum());
+MD.setRecord(Doc.getRecSum().Copy()); // we need a copy to avoid edition on the same referenced values
 MD.EditMode();
 MD.setLocationRelativeTo(null);
 MD.setVisible(true);
@@ -1152,6 +1162,30 @@ Message(DrvTT("Imported")+" "+ExpFolds+" "+DrvTT("Folders")+" / "+ExpDocs +" "+D
 Execute("https://docs.google.com/spreadsheet/viewform?formkey=dFF6ZndKWXFUQnJ0MWtVZWdUWk10X2c6MQ");   
     }//GEN-LAST:event_ReportBugsActionPerformed
 
+    private void ViewMetadataActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ViewMetadataActionPerformed
+    {//GEN-HEADEREND:event_ViewMetadataActionPerformed
+if (DocsTable.getSelectedRow()==-1)
+    return;
+try {
+PDDocs Doc = new PDDocs(getSession());
+DialogEditDoc MD = new DialogEditDoc(this,true);
+Doc.assignValues(DocsContained.getElement(DocsTable.convertRowIndexToModel(DocsTable.getSelectedRow())));
+Doc.LoadFull(Doc.getPDId());
+MD.setRecord(Doc.getRecSum());
+MD.ViewMode();
+MD.setLocationRelativeTo(null);
+MD.setVisible(true);
+if (MD.isCancel())
+    return;
+Doc.assignValues(MD.getRecord());
+Doc.delete();
+RefreshDocs();
+} catch (Exception ex)
+    {
+    Message(DrvTT(ex.getLocalizedMessage()));
+    }
+    }//GEN-LAST:event_ViewMetadataActionPerformed
+
 /**
 * @param args the command line arguments
 */
@@ -1219,6 +1253,7 @@ java.awt.EventQueue.invokeLater(new Runnable()
     private javax.swing.JLabel SelFolderDesc;
     private javax.swing.JTree TreeFolder;
     private javax.swing.JMenuItem UserMenuItem;
+    private javax.swing.JMenuItem ViewMetadata;
     private javax.swing.JMenuItem aboutMenuItem1;
     private javax.swing.JMenuItem contentsMenuItem1;
     private javax.swing.JMenuItem exitMenuItem;
