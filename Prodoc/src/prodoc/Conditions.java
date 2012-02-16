@@ -20,7 +20,8 @@
 
 package prodoc;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  *
@@ -35,7 +36,7 @@ private boolean OperatorAnd=true;
 /**
  *
  */
-private Vector CondList=new Vector();
+private ArrayList CondList=new ArrayList();
 //-------------------------------------------------------------------------
 /**
  *
@@ -71,7 +72,7 @@ return(CondList.size());
  */
 public Object Cond(int n)
 {
-return(CondList.elementAt(n));
+return(CondList.get(n));
 }
 //-------------------------------------------------------------------------
 /**
@@ -88,6 +89,25 @@ return OperatorAnd;
 public void setOperatorAnd(boolean OperatorAnd)
 {
 this.OperatorAnd = OperatorAnd;
+}
+//-------------------------------------------------------------------------
+public boolean UsedAttr(String Attrname)
+{
+for (Iterator it = CondList.iterator(); it.hasNext();)
+    {
+    Object object = it.next();   
+    if (object instanceof Conditions)
+        {
+        if (((Conditions)object).UsedAttr(Attrname))
+            return(true);
+        }
+    else
+        {
+        if (((Condition)object).getField().equalsIgnoreCase(Attrname))
+            return(true);
+        }
+    }
+return(false);    
 }
 //-------------------------------------------------------------------------
 }

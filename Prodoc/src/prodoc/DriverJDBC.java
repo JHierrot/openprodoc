@@ -620,6 +620,8 @@ Fields.initList();
 for (int i = 0; i < Fields.NumAttr(); i++)
     {
     Attribute Attr=Fields.nextAttr();
+    if (Attr.getName().contains("."+PDDocs.fVERSION))
+        Attr.setName(PDDocs.fVERSION);
     try {
     if (Attr.getType()==Attribute.tSTRING)
         Attr.setValue(rs.getString(Attr.getName()));
