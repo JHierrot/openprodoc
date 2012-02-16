@@ -31,25 +31,8 @@ import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Vector;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.GroupLayout;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-import prodoc.Attribute;
-import prodoc.Condition;
-import prodoc.Conditions;
-import prodoc.Cursor;
-import prodoc.DriverGeneric;
-import prodoc.PDDocs;
-import prodoc.PDException;
-import prodoc.PDObjDefs;
-import prodoc.Record;
+import javax.swing.*;
+import prodoc.*;
 
 /**
  *
@@ -234,8 +217,16 @@ Cancel=true;
 
     private void FoldTypeCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FoldTypeCBActionPerformed
 try {
-PDDocs newFolder = new PDDocs(MainWin.getSession(), (String) FoldTypeCB.getSelectedItem());
-DocSearched=newFolder.getRecSum();
+PDDocs newDoc = new PDDocs(MainWin.getSession(), (String) FoldTypeCB.getSelectedItem());
+DocSearched=newDoc.getRecSum();
+Attribute Attr;
+DocSearched.initList();
+for (int i = 0; i < DocSearched.NumAttr(); i++)
+    {
+    Attr=DocSearched.nextAttr();
+    if (Attr.isMultivalued())
+        Attr.setMultivalued(false);// to avoid problems with SetValue for searching
+    }
 setRecord(DocSearched);
 } catch (PDException ex)
     {

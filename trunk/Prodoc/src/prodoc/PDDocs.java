@@ -1944,6 +1944,35 @@ if (!SubTypes)
 if (/*!SubTypes ||*/ IncludeVers) //!SubTypes valid if adding condition limiting to actual version
     {
     TypList.add(getTabNameVer(DocType));
+    Conditions CondTyps=new Conditions();
+    ArrayList ListTip=Doc.getTypeDefs();
+    ArrayList ListAttr=Doc.getTypeRecs();
+    for (int NumTabsDef = 0; NumTabsDef < ListTip.size(); NumTabsDef++)
+        { 
+        Record AttrsTab= ((Record)ListAttr.get(NumTabsDef)).Copy();
+        AttrsTab.initList();
+        Attribute Attr;
+        for (int i = 0; i < AttrsTab.NumAttr(); i++)
+            {
+            Attr=AttrsTab.nextAttr();
+            if (Attr.isMultivalued())
+                {
+                if (ComposedConds.UsedAttr(Attr.getName()))
+                    {
+                    Record R= (Record)ListTip.get(NumTabsDef);
+                    Attribute AttrNomTab=R.getAttr(PDObjDefs.fNAME);
+                    String Typ =(String) AttrNomTab.getValue();
+                    String MultiName=PDObjDefs.genMultValNam(Typ, Attr.getName());
+                    Condition Con=new Condition(getTabNameVer(DocType)+"."+fPDID, MultiName+"."+fPDID);
+                    CondTyps.addCondition(Con);
+                    Con=new Condition(getTabNameVer(DocType)+"."+fVERSION, MultiName+"."+fVERSION);
+                    CondTyps.addCondition(Con);
+                    TypList.add(MultiName);
+                    }                            
+                }                    
+            }
+        }
+    ComposedConds.addCondition(CondTyps);
     }
 else 
     {
@@ -1952,11 +1981,12 @@ else
         {
         Conditions CondTyps=new Conditions();
         ArrayList ListTip=Doc.getTypeDefs();
-        for (int i = 0; i < ListTip.size(); i++)
+        ArrayList ListAttr=Doc.getTypeRecs();
+        for (int NumTabsDef = 0; NumTabsDef < ListTip.size(); NumTabsDef++)
             {
-            Record R= (Record)ListTip.get(i);
-            Attribute Attr=R.getAttr(PDObjDefs.fNAME);
-            String Typ =(String) Attr.getValue();
+            Record R= (Record)ListTip.get(NumTabsDef);
+            Attribute AttrNomTab=R.getAttr(PDObjDefs.fNAME);
+            String Typ =(String) AttrNomTab.getValue();
             if (!Typ.equalsIgnoreCase(getTableName()))
                 {
                 Condition Con=new Condition(getTableName()+"."+fPDID, Typ+"."+fPDID);
@@ -1964,6 +1994,25 @@ else
                 }
             if (!Typ.equalsIgnoreCase(DocType))
                 TypList.add(Typ);
+            Record AttrsTab= ((Record)ListAttr.get(NumTabsDef)).Copy();
+            AttrsTab.initList();
+            Attribute Attr;
+            for (int i = 0; i < AttrsTab.NumAttr(); i++)
+                {
+                Attr=AttrsTab.nextAttr();
+                if (Attr.isMultivalued())
+                    {
+                    if (ComposedConds.UsedAttr(Attr.getName()))
+                        {
+                        String MultiName=PDObjDefs.genMultValNam(Typ, Attr.getName());
+                        Condition Con=new Condition(getTableName()+"."+fPDID, MultiName+"."+fPDID);
+                        CondTyps.addCondition(Con);
+                        Con=new Condition(getTableName()+"."+fVERSION, MultiName+"."+fVERSION);
+                        CondTyps.addCondition(Con);
+                        TypList.add(MultiName);
+                        }                            
+                    }                    
+                }
             }
         ComposedConds.addCondition(CondTyps);
         }
@@ -1979,7 +2028,12 @@ if (SubFolders)
     }
 Condition CondAcl=new Condition(PDDocs.fACL, new HashSet(getDrv().getUser().getAclList().keySet()));
 ComposedConds.addCondition(CondAcl);
-Query DocSearch=new Query(TypList, Doc.getRecSum().CopyMono(), ComposedConds, Ord);
+Record RecSearch=Doc.getRecSum().CopyMono();
+if (!IncludeVers)
+    RecSearch.getAttr(fVERSION).setName(getTableName()+"."+fVERSION);
+else
+    RecSearch.getAttr(fVERSION).setName(getTabNameVer(DocType)+"."+fVERSION);
+Query DocSearch=new Query(TypList, RecSearch, ComposedConds, Ord);
 if (PDLog.isDebug())
     PDLog.Debug("PDDocs.Search <");
 return(getDrv().OpenCursor(DocSearch));
@@ -1999,6 +2053,14 @@ Record Rec=getDrv().NextRec(Res);
 if (Rec==null)
     return(NextD);
 String Typ=(String)Rec.getAttr(fDOCTYPE).getValue();
+//Rec.initList();
+//Attribute Attr;
+//for (int i = 0; i < Rec.NumAttr(); i++)
+//    {
+//    Attr=Rec.nextAttr();
+//    if (Attr.getName().contains("."+fVERSION))
+//        Attr.setName(fVERSION);
+//    }
 NextD=new PDDocs(getDrv(), Typ);
 NextD.assignValues(Rec);
 return(NextD);
