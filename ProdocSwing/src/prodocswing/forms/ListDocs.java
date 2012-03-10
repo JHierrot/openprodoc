@@ -44,8 +44,8 @@ PDTableModel DocsList = new PDTableModel();
  */
 protected JDialog MantForm;
 String TypeDocRestore="";
-String FoldType=null;
-private Cursor RetrievedFoldsCur=null;
+String DocType=null;
+private Cursor RetrievedDocsCur=null;
 
 /** Creates new form ListObjects
  * @param parent 
@@ -336,9 +336,9 @@ protected void RefreshTable()
 try {
 DocsList = new PDTableModel();
 DocsList.setDrv(MainWin.getSession());
-PDDocs F=new PDDocs(MainWin.getSession(), FoldType);
-DocsList.setListFields(F.getRecSum());
-DocsList.setCursor(RetrievedFoldsCur);
+PDDocs F=new PDDocs(MainWin.getSession(), DocType);
+DocsList.setListFields(F.getRecSum().CopyMono());
+DocsList.setCursor(RetrievedDocsCur);
 getObjectsTable().setModel(DocsList);
 } catch (PDException ex)
     {
@@ -348,13 +348,13 @@ getObjectsTable().setModel(DocsList);
 //--------------------------------------------------------------------
 /**
  * 
- * @param pFoldType
+ * @param pDocType
  * @param C
  */
-public void setCursor(String pFoldType, Cursor C)
+public void setCursor(String pDocType, Cursor C)
 {
-FoldType=pFoldType;
-RetrievedFoldsCur=C;
+DocType=pDocType;
+RetrievedDocsCur=C;
 }
 //----------------------------------------------------------------
 
