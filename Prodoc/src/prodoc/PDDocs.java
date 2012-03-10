@@ -1424,7 +1424,9 @@ if (getTypeDefs().size()>1) // If size==1, Load is enough
             Conds.addCondition(Con);
             }
         }
-    Query LoadAct=new Query(ListTabs, getRecSum().CopyMono(), Conds, null);
+    Record Rec=getRecSum().CopyMono();
+    Rec.getAttr(fPDID).setName(PDDocs.getTableName()+"."+fPDID);
+    Query LoadAct=new Query(ListTabs, Rec, Conds, null);
     Cursor Cur=getDrv().OpenCursor(LoadAct);
     r=getDrv().NextRec(Cur);
     getDrv().CloseCursor(Cur);
@@ -1972,7 +1974,8 @@ if (/*!SubTypes ||*/ IncludeVers) //!SubTypes valid if adding condition limiting
                 }                    
             }
         }
-    ComposedConds.addCondition(CondTyps);
+    if (CondTyps.NumCond()>0)
+        ComposedConds.addCondition(CondTyps);
     }
 else 
     {
@@ -2029,10 +2032,21 @@ if (SubFolders)
 Condition CondAcl=new Condition(PDDocs.fACL, new HashSet(getDrv().getUser().getAclList().keySet()));
 ComposedConds.addCondition(CondAcl);
 Record RecSearch=Doc.getRecSum().CopyMono();
+// not very "clean" options, but working
 if (!IncludeVers)
     RecSearch.getAttr(fVERSION).setName(getTableName()+"."+fVERSION);
 else
     RecSearch.getAttr(fVERSION).setName(getTabNameVer(DocType)+"."+fVERSION);
+if (RecSearch.ContainsAttr(fPDID))
+    {
+    RecSearch.getAttr(fPDID).setName((String)TypList.get(0)+"."+fPDID);
+    }
+else
+    {
+    Attribute Atr=getRecord().getAttr(fPDID).Copy();
+    Atr.setName((String)TypList.get(0)+"."+fPDID);
+    RecSearch.addAttr(Atr);
+    }
 Query DocSearch=new Query(TypList, RecSearch, ComposedConds, Ord);
 if (PDLog.isDebug())
     PDLog.Debug("PDDocs.Search <");
