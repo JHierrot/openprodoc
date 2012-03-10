@@ -70,7 +70,7 @@ initComponents();
 
         LabelOperation = new javax.swing.JLabel();
         LabelFoldType = new javax.swing.JLabel();
-        FoldTypeCB = new javax.swing.JComboBox();
+        DocTypeCB = new javax.swing.JComboBox();
         Attributes = new javax.swing.JTabbedPane();
         ButtonCancel = new javax.swing.JButton();
         ButtonAcept = new javax.swing.JButton();
@@ -86,18 +86,18 @@ initComponents();
             }
         });
 
-        LabelOperation.setFont(new java.awt.Font("DejaVu Sans", 1, 14));
+        LabelOperation.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
         LabelOperation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         LabelOperation.setText(MainWin.TT("Search_Documents"));
 
         LabelFoldType.setFont(MainWin.getFontDialog());
         LabelFoldType.setText(MainWin.TT("Document_Type"));
 
-        FoldTypeCB.setFont(MainWin.getFontDialog());
-        FoldTypeCB.setModel(getComboModelDoc());
-        FoldTypeCB.addActionListener(new java.awt.event.ActionListener() {
+        DocTypeCB.setFont(MainWin.getFontDialog());
+        DocTypeCB.setModel(getComboModelDoc());
+        DocTypeCB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                FoldTypeCBActionPerformed(evt);
+                DocTypeCBActionPerformed(evt);
             }
         });
 
@@ -157,7 +157,7 @@ initComponents();
                         .addComponent(VersionsCheckB)
                         .addContainerGap(67, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(FoldTypeCB, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(DocTypeCB, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
@@ -168,7 +168,7 @@ initComponents();
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(LabelFoldType)
-                    .addComponent(FoldTypeCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(DocTypeCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(SubTypesCheckB)
@@ -198,10 +198,10 @@ try {
 RetrieveFields(DocSearched, AttrExcluded, InputFields, Comparators);
 Cancel = false;
 PDDocs DocS=new PDDocs(MainWin.getSession());
-Cursor Cur=DocS.Search(getFoldTyp(), getConds(), getSubTyp(), getSubFold(), getVersions(), ActFolderId, null);
+Cursor Cur=DocS.Search(getDocTyp(), getConds(), getSubTyp(), getSubFold(), getVersions(), ActFolderId, null);
 ListDocs LD = new ListDocs(this, true);
 LD.setLocationRelativeTo(null);
-LD.setCursor(getFoldTyp(), Cur);
+LD.setCursor(getDocTyp(), Cur);
 LD.RefreshTable();
 LD.setVisible(true);
 } catch (PDException ex)
@@ -215,9 +215,9 @@ LD.setVisible(true);
 Cancel=true;
     }//GEN-LAST:event_formWindowClosed
 
-    private void FoldTypeCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FoldTypeCBActionPerformed
+    private void DocTypeCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DocTypeCBActionPerformed
 try {
-PDDocs newDoc = new PDDocs(MainWin.getSession(), (String) FoldTypeCB.getSelectedItem());
+PDDocs newDoc = new PDDocs(MainWin.getSession(), (String) DocTypeCB.getSelectedItem());
 DocSearched=newDoc.getRecSum();
 Attribute Attr;
 DocSearched.initList();
@@ -232,13 +232,13 @@ setRecord(DocSearched);
     {
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
-    }//GEN-LAST:event_FoldTypeCBActionPerformed
+    }//GEN-LAST:event_DocTypeCBActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane Attributes;
     private javax.swing.JButton ButtonAcept;
     private javax.swing.JButton ButtonCancel;
-    private javax.swing.JComboBox FoldTypeCB;
+    private javax.swing.JComboBox DocTypeCB;
     private javax.swing.JLabel LabelFoldType;
     private javax.swing.JLabel LabelOperation;
     private javax.swing.JCheckBox SubFoldersCheckB;
@@ -487,9 +487,9 @@ return(SubTypesCheckB.isSelected());
  * 
  * @return
  */
-public String getFoldTyp()
+public String getDocTyp()
 {
-return((String)FoldTypeCB.getSelectedItem());
+return((String)DocTypeCB.getSelectedItem());
 }
 //--------------------------------------------------------------
 /**
