@@ -927,8 +927,9 @@ if (getTypeDefs().size()>1)
             Conds.addCondition(Con);
             }
         }
-    Query LoadAct=new Query(ListTabs, getRecSum(), Conds, null);
-//    Query LoadAct=new Query(getTabName(), getRecSum(),getConditions());
+    Record Rec=getRecSum().CopyMono();
+    Rec.getAttr(fPDID).setName(PDFolders.getTableName()+"."+fPDID);
+    Query LoadAct=new Query(ListTabs, Rec, Conds, null);
     Cursor Cur=getDrv().OpenCursor(LoadAct);
     r=getDrv().NextRec(Cur);
     getDrv().CloseCursor(Cur);
@@ -1080,9 +1081,20 @@ if (SubFolders)
 //    Condition C=new Condition(PDFolders.fPARENTID, Condition.cEQUAL, IdActFold);
 //    ComposedConds.addCondition(C);
 //    }
+Record RecSearch=F.getRecSum().CopyMono();
+if (RecSearch.ContainsAttr(fPDID))
+    {
+    RecSearch.getAttr(fPDID).setName((String)TypList.get(0)+"."+fPDID);
+    }
+else
+    {
+    Attribute Atr=getRecord().getAttr(fPDID).Copy();
+    Atr.setName((String)TypList.get(0)+"."+fPDID);
+    RecSearch.addAttr(Atr);
+    }
 Condition CondAcl=new Condition(PDFolders.fACL, new HashSet(getDrv().getUser().getAclList().keySet()));
 ComposedConds.addCondition(CondAcl);
-Query FoldSearch=new Query(TypList, F.getRecSum(), ComposedConds, Ord);
+Query FoldSearch=new Query(TypList, RecSearch, ComposedConds, Ord);
 if (PDLog.isDebug())
     PDLog.Debug("PDFolders.Search <");
 return(getDrv().OpenCursor(FoldSearch));

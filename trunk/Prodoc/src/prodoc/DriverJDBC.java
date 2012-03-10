@@ -622,6 +622,9 @@ for (int i = 0; i < Fields.NumAttr(); i++)
     Attribute Attr=Fields.nextAttr();
     if (Attr.getName().contains("."+PDDocs.fVERSION))
         Attr.setName(PDDocs.fVERSION);
+    else
+    if (Attr.getName().contains("."+PDDocs.fPDID))
+        Attr.setName(PDDocs.fPDID);
     try {
     if (Attr.getType()==Attribute.tSTRING)
         Attr.setValue(rs.getString(Attr.getName()));
@@ -681,22 +684,22 @@ FieldNames.initList();
 for (int i = 0; i < FieldNames.NumAttr(); i++)
     {
     String FieldName=FieldNames.nextAttr().getName();
-    if (Search.getTables()!=null && Search.getTables().size()>1 && FieldName.equals(PDFolders.fPDID))
-        {
-        Vector v=Search.getTables();
-        for (int j = 0; j < v.size(); j++)
-            {
-            String TabName = (String)v.elementAt(j);
-            if (TabName.equals(PDFolders.getTableName()) || TabName.equals(PDDocs.getTableName()))
-                {
-                SQL+=TabName+"."+FieldName;
-                if (i!=FieldNames.NumAttr()-1)
-                   SQL+=",";
-                break;
-                }
-            }
-        }
-    else
+//    if (Search.getTables()!=null && Search.getTables().size()>1 && FieldName.equals(PDFolders.fPDID))
+//        {
+//        Vector v=Search.getTables();
+//        for (int j = 0; j < v.size(); j++)
+//            {
+//            String TabName = (String)v.elementAt(j);
+//            if (TabName.equals(PDFolders.getTableName()) || TabName.equals(PDDocs.getTableName()))
+//                {
+//                SQL+=TabName+"."+FieldName;
+//                if (i!=FieldNames.NumAttr()-1)
+//                   SQL+=",";
+//                break;
+//                }
+//            }
+//        }
+//    else
         {
         SQL+=FieldName;
         if (i!=FieldNames.NumAttr()-1)
