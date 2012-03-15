@@ -2025,7 +2025,11 @@ if (SubFolders)
     if (!(IdActFold==null || IdActFold.equalsIgnoreCase(PDFolders.ROOTFOLDER)))
         { // add list to conditions
         PDFolders Fold=new PDFolders(getDrv());
-        Condition C=new Condition(PDDocs.fPARENTID, Fold.getListDescendList(IdActFold));
+        HashSet listDescendList = Fold.getListDescendList(IdActFold);
+        if (listDescendList==null)
+            listDescendList=new HashSet();
+        listDescendList.add(IdActFold);
+        Condition C=new Condition(PDDocs.fPARENTID, listDescendList);
         ComposedConds.addCondition(C);
         }
     }

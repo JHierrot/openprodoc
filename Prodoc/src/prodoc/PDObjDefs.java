@@ -185,6 +185,7 @@ private boolean TraceMod=false;
 private boolean TraceView=false;
 
 static private ObjectsCache ObjDefsObjectsCache = null;
+static private ObjectsCache ObjDefsObjectsCacheAtr = null;
 
 /**
  *
@@ -670,18 +671,24 @@ if (!getDrv().getUser().getName().equals("Install"))
  */
 protected Record GetAttrDef() throws PDException
 {
-Record AttrsDef=new Record();
-Conditions Conds=new Conditions();
-Conds.addCondition(new Condition(fTYPNAME, Condition.cEQUAL, getName()));
-Query LoadAct=new Query(getTabNameAttrs(), getRecordAttrsStruct(), Conds);
-Cursor Cur=getDrv().OpenCursor(LoadAct);
-Record r=getDrv().NextRec(Cur);
-while (r!=null)
+Record AttrsDef=(Record)getObjCacheAtr().get(getName());
+if (AttrsDef==null)
     {
-    AttrsDef.addAttr(ConvertRec(r));
-    r=getDrv().NextRec(Cur);
+    AttrsDef=new Record();
+    Conditions Conds=new Conditions();
+    Conds.addCondition(new Condition(fTYPNAME, Condition.cEQUAL, getName()));
+    Query LoadAct=new Query(getTabNameAttrs(), getRecordAttrsStruct(), Conds);
+    Cursor Cur=getDrv().OpenCursor(LoadAct);
+    Record r=getDrv().NextRec(Cur);
+    while (r!=null)
+        {
+        AttrsDef.addAttr(ConvertRec(r));
+        r=getDrv().NextRec(Cur);
+        }
+    getDrv().CloseCursor(Cur);
+    getObjCacheAtr().put(getName(), AttrsDef);
+    return(AttrsDef);
     }
-getDrv().CloseCursor(Cur);
 return(AttrsDef);
 }
 //-------------------------------------------------------------------------
@@ -705,10 +712,10 @@ getDrv().CreateTable(Def.getName(), RecTab);
 if (isFolder)
     {
     getDrv().AddIntegrity(Def.getName(), PDFolders.fPDID, PDFolders.getTableName(), PDFolders.fPDID);
-    PDFolders FolDef=new PDFolders(getDrv(), Name);
-    Record R=FolDef.getRecSum();
-    getDrv().CreateTable(GenVerTabName(Def.getName()), R);
-    getDrv().AddIntegrity(GenVerTabName(Def.getName()), PDFolders.fPDID, PDFolders.getTableName(), PDFolders.fPDID);
+//    PDFolders FolDef=new PDFolders(getDrv(), Name);
+//    Record R=FolDef.getRecSum().CopyMono();
+//    getDrv().CreateTable(GenVerTabName(Def.getName()), R);
+//    getDrv().AddIntegrity(GenVerTabName(Def.getName()), PDFolders.fPDID, PDFolders.getTableName(), PDFolders.fPDID);
     }
 else
     {
@@ -729,11 +736,15 @@ for (int i = 0; i < RecDef.NumAttr(); i++)
         {
         RecTab.Clear();
         RecTab.addAttr(PdId);
-        RecTab.addAttr(IdVer);
+        if (!isFolder)
+            RecTab.addAttr(IdVer);
         RecTab.addAttr(Atr.Copy()); 
         String MultiName=genMultValNam(Def.getName(),Atr.getName());
         getDrv().CreateTable(MultiName, RecTab);
-        getDrv().AddIntegrity(MultiName, PDDocs.fPDID, PDDocs.getTableName(), PDDocs.fPDID);
+        if (isFolder)
+            getDrv().AddIntegrity(MultiName, PDFolders.fPDID, PDFolders.getTableName(), PDFolders.fPDID);
+        else
+            getDrv().AddIntegrity(MultiName, PDDocs.fPDID, PDDocs.getTableName(), PDDocs.fPDID);
         }
     }
 if (PDLog.isDebug())
@@ -1009,6 +1020,17 @@ protected ObjectsCache getObjCache()
 if (ObjDefsObjectsCache==null)
     ObjDefsObjectsCache=new ObjectsCache("ObjDefs");
 return(ObjDefsObjectsCache);    
+}
+//-------------------------------------------------------------------------
+/**
+ * Create if necesary and Assign the Cache for the objects of this type of object
+ * @return the cache object for the type
+ */
+protected ObjectsCache getObjCacheAtr()
+{
+if (ObjDefsObjectsCacheAtr==null)
+    ObjDefsObjectsCacheAtr=new ObjectsCache("ObjDefsAtr");
+return(ObjDefsObjectsCacheAtr);    
 }
 //-------------------------------------------------------------------------
 /**
