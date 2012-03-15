@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Vector;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -1175,11 +1174,6 @@ MD.setRecord(Doc.getRecSum());
 MD.ViewMode();
 MD.setLocationRelativeTo(null);
 MD.setVisible(true);
-if (MD.isCancel())
-    return;
-Doc.assignValues(MD.getRecord());
-Doc.delete();
-RefreshDocs();
 } catch (Exception ex)
     {
     Message(DrvTT(ex.getLocalizedMessage()));
@@ -1600,7 +1594,7 @@ while (Attr!=null)
     if (!List.contains(Attr.getName()))
         {
         Html.append("<br><b>").append(DrvTT(Attr.getUserName())).append("= </b>");
-        Html.append(Attr.getValue());
+        Html.append(Attr.Export());
         }
     Attr=Rec.nextAttr();
     }

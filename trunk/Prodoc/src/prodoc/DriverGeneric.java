@@ -860,7 +860,7 @@ while (!Def.getParent().equalsIgnoreCase(Def.getName()))
     {
     Def.Load(Def.getParent());
     TypeDef.add(Def.getRecord().Copy());
-    TypeRecs.add(Def.GetAttrDef());
+    TypeRecs.add(Def.GetAttrDef().Copy());
     }
 if (PDLog.isDebug())
     PDLog.Debug("DriverGeneric.LoadDef<:"+tableName);

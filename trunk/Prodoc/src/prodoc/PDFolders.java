@@ -20,10 +20,7 @@
 package prodoc;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
@@ -441,9 +438,10 @@ for (int i = getTypeDefs().size()-1; i >=0; i--)
         {
         DatParc.addAttr(getRecSum().getAttr(fPDID));
         }
-    DatParc.assign(this.getRecSum());
+    DatParc.assign(getRecSum().CopyMono());
     getDrv().InsertRecord((String)TypDef.getAttr(PDObjDefs.fNAME).getValue(), DatParc);
     }
+MultiInsert(getRecSum());
 if (!IsRootFolder)
     ActFoldLev();
 getObjCache().put(getKey(), getRecord());
@@ -456,6 +454,50 @@ if (InTransLocal)
     getDrv().CerrarTrans();
 if (PDLog.isDebug())
     PDLog.Debug("PDFolders.Insert<");
+}
+//-------------------------------------------------------------------------
+/**
+ * Inserts all the multivalued attributed during the Insert
+ * @param Rec Record with the sum of attributes
+ * @throws PDException in any error
+ */
+private void MultiInsert(Record Rec) throws PDException
+{
+Record TypDef;    
+String MultiName;
+Attribute AtrOrig, Atr2Ins;
+TreeSet Values;
+Record RecSave=new Record();
+Object Val2Ins;
+for (int NumDefTyp = 0; NumDefTyp<getTypeDefs().size(); NumDefTyp++)
+    {
+    TypDef=((Record)getTypeRecs().get(NumDefTyp)).CopyMulti();
+    String TabName=(String) ((Record)getTypeDefs().get(NumDefTyp)).getAttr(PDObjDefs.fNAME).getValue();
+    TypDef.initList();
+    for (int NumAttr = 0; NumAttr < TypDef.NumAttr(); NumAttr++)
+        {
+        AtrOrig=TypDef.nextAttr();
+        Atr2Ins=Rec.getAttr(AtrOrig.getName());
+        if (Atr2Ins==null || Atr2Ins.getValuesList()==null || Atr2Ins.getValuesList().isEmpty())
+           continue;
+        AtrOrig=Atr2Ins;
+        Values=AtrOrig.getValuesList();
+        MultiName=PDObjDefs.genMultValNam(TabName,AtrOrig.getName());
+        RecSave.Clear();
+        RecSave.addAttr(Rec.getAttr(fPDID));
+        Atr2Ins=AtrOrig.Copy();
+        Atr2Ins.ClearValues();
+        Atr2Ins.setMultivalued(false);
+        RecSave.addAttr(Atr2Ins);
+        for (Iterator it = Values.iterator(); it.hasNext();)
+            {
+            Val2Ins = it.next();
+            //Atr2Ins.setValue(Val2Ins);
+            RecSave.getAttr(Atr2Ins.getName()).setValue(Val2Ins);
+            getDrv().InsertRecord(MultiName, RecSave);    
+            }
+        }
+     }
 }
 //-------------------------------------------------------------------------
 protected void VerifyAllowedIns() throws PDException
@@ -690,6 +732,7 @@ try {
 DeleteFoldersInFolder();
 DeleteDocsInFolder();
 DeleteFoldLevelParents();
+MultiDelete(getPDId());
 DelFoldMetadata();
 getObjCache().remove(getKey());
 } catch (PDException Ex)
@@ -702,6 +745,34 @@ if (InTransLocal)
     getDrv().CerrarTrans();
 if (PDLog.isDebug())
     PDLog.Debug("PDFolders.delete<:"+getPDId());
+}
+//-------------------------------------------------------------------------
+/**
+ * Deletes all the multivalued atributes of the current element
+ * @param Id2Del PDId of document to delete
+ * @param Vers  Version of Document to delete. When null, deletes ALL versions
+ * @throws PDException
+ */
+private void MultiDelete(String Id2Del) throws PDException
+{
+Record TypDef;    
+String MultiName;
+Attribute Atr;
+Conditions Conds;
+for (int NumDefTyp = 0; NumDefTyp<getTypeDefs().size(); NumDefTyp++)
+    {
+    TypDef=((Record)getTypeRecs().get(NumDefTyp)).CopyMulti();
+    String TabName=(String)((Record)getTypeDefs().get(NumDefTyp)).getAttr(PDObjDefs.fNAME).getValue();
+    TypDef.initList();
+    for (int NumAttr = 0; NumAttr < TypDef.NumAttr(); NumAttr++)
+        {
+        Atr=TypDef.nextAttr();
+        MultiName=PDObjDefs.genMultValNam(TabName,Atr.getName());
+        Conds=new Conditions();
+        Conds.addCondition(new Condition(fPDID, Condition.cEQUAL, Id2Del));
+        getDrv().DeleteRecord(MultiName, Conds);
+        }
+     }
 }
 //-------------------------------------------------------------------------
 /**
@@ -934,10 +1005,65 @@ if (getTypeDefs().size()>1)
     r=getDrv().NextRec(Cur);
     getDrv().CloseCursor(Cur);
     if (r!=null)
+        {
+        MultiLoad(r);    
         assignValues(r);
+        }
     getDrv().CloseCursor(Cur);
     }
 return(r);
+}
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
+/**
+ * Loads all the multivalued attributed during the LoadFull
+ * @param Rec Record with the sum of attributes
+ * @throws PDException in any error
+ */
+private void MultiLoad(Record Rec) throws PDException
+{
+Record TypDef;    
+String MultiName;
+Attribute Atr, Atr2, Attr2Load;
+Query LoadAct;
+Conditions Conds;
+String Id=(String)Rec.getAttr(fPDID).getValue();
+Record r;
+Cursor Cur;
+Record RecLoad=new Record();
+for (int NumDefTyp = 0; NumDefTyp<getTypeDefs().size(); NumDefTyp++)
+    {
+    TypDef=((Record)getTypeRecs().get(NumDefTyp)).CopyMulti();
+    String TabName=(String)((Record)getTypeDefs().get(NumDefTyp)).getAttr(PDObjDefs.fNAME).getValue();
+    TypDef.initList();
+    for (int NumAttr = 0; NumAttr < TypDef.NumAttr(); NumAttr++)
+        {
+        Atr=TypDef.nextAttr();
+        Atr2=Rec.getAttr(Atr.getName());
+        if (Atr2==null) 
+            {
+            Atr2=Atr.Copy();
+            Rec.addAttr(Atr2);
+            }
+        Atr2.ClearValues();
+        MultiName=PDObjDefs.genMultValNam(TabName,Atr2.getName());
+        Conds=new Conditions();
+        Conds.addCondition(new Condition(fPDID, Condition.cEQUAL, Id));
+        RecLoad.Clear();
+        Attr2Load=Atr2.Copy();
+        Attr2Load.setMultivalued(false);
+        RecLoad.addAttr(Attr2Load);
+        LoadAct=new Query(MultiName, RecLoad, Conds, null);
+        Cur=getDrv().OpenCursor(LoadAct);
+        r=getDrv().NextRec(Cur);
+        while (r!=null)
+            {
+            Rec.getAttr(Atr.getName()).AddValue(r.getAttr(Atr.getName()).getValue());    
+            r=getDrv().NextRec(Cur);            
+            }
+        getDrv().CloseCursor(Cur);
+        }
+     }
 }
 //-------------------------------------------------------------------------
 /**

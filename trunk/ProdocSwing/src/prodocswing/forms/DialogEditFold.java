@@ -26,28 +26,12 @@
 package prodocswing.forms;
 
 import java.awt.Component;
+import java.awt.event.KeyEvent;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Vector;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.GroupLayout;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-import prodoc.Attribute;
-import prodoc.Cursor;
-import prodoc.DriverGeneric;
-import prodoc.ObjPD;
-import prodoc.PDException;
-import prodoc.PDFolders;
-import prodoc.PDObjDefs;
-import prodoc.Record;
+import javax.swing.*;
+import prodoc.*;
 
 /**
  *
@@ -491,6 +475,18 @@ layout.setHorizontalGroup(hGroup);
 layout.setVerticalGroup(vGroup);
 }
 //----------------------------------------------------------------------
+private void ShowEditList(KeyEvent evt)
+{
+AttrMultiEdit MultAttrDlg = new AttrMultiEdit(new javax.swing.JFrame(), true);
+Attribute Attr=((DialogEditFold.MultiField)evt.getComponent()).getAttr();
+MultAttrDlg.setAttr(Attr);
+MultAttrDlg.setLocationRelativeTo(null);
+MultAttrDlg.setVisible(true);
+if (MultAttrDlg.isCancel())
+    return;
+((DialogEditFold.MultiField)evt.getComponent()).setText(Attr.Export());
+}
+//----------------------------------------------------------------------
 /**
  *
  * @param Attr
@@ -500,7 +496,20 @@ layout.setVerticalGroup(vGroup);
 private JComponent genComponent(Attribute Attr, boolean Modif)
 {
 JComponent JTF=null;
-if (Attr.getType()==Attribute.tSTRING)
+if (Attr.isMultivalued())
+    {
+    JTF=new DialogEditFold.MultiField(Attr.Export());
+    ((DialogEditFold.MultiField)JTF).setAttr(Attr);
+    JTF.addKeyListener(
+        new java.awt.event.KeyAdapter() 
+        {
+        public void keyTyped(java.awt.event.KeyEvent evt) 
+        {
+        ShowEditList(evt);
+        }
+        } );
+    }
+else if (Attr.getType()==Attribute.tSTRING)
     {
     if (Attr.getValue()!=null)
         JTF=new JTextField((String)Attr.getValue());
@@ -532,7 +541,9 @@ else if (Attr.getType()==Attribute.tBOOLEAN)
     }
 else
      JTF=new JTextField("Error");
-if (Delete || (Modif && (!Attr.isModifAllowed() || Attr.isPrimKey()) ) )
+//if (Delete || (Modif && (!Attr.isModifAllowed() || Attr.isPrimKey()) ) )
+//    JTF.setEnabled(false);
+if (Modif && !Attr.isModifAllowed())
     JTF.setEnabled(false);
 if (Attr.getType()==Attribute.tDATE )
     JTF.setToolTipText(MainWin.DrvTT(Attr.getDescription()) +"( "+MainWin.getFormatDate()+" )");
@@ -572,6 +583,8 @@ private void FillAttr(Attribute Attr, JComponent JTF, boolean Modif) throws PDEx
 {
 if (Modif && !Attr.isModifAllowed())
     return;
+if (Attr.isMultivalued())
+    return; /// we where editing directly values
 if (Attr.getType()==Attribute.tSTRING)
     {
     Attr.setValue(((JTextField)JTF).getText());
@@ -606,4 +619,35 @@ public void setAcl(String Acl)
 ACLComboBox.setSelectedItem(Acl);
 }
 //--------------------------------------------------------------
+//=========================================
+private class MultiField extends JTextField
+{
+private Attribute Attr;
+
+public MultiField()
+{
+super();
+this.setEditable(false);
+}
+//--------------------------------------------------------------
+public MultiField(String Text)
+{
+super(Text);
+this.setEditable(false);
+}
+//--------------------------------------------------------------
+private void setAttr(Attribute pAttr)
+{
+Attr=pAttr;
+}
+
+/**
+* @return the Attr
+*/
+public Attribute getAttr()
+{
+return Attr;
+}
+} //=========================================
+
 }

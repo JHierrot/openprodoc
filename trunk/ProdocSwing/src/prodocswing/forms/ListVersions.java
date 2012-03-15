@@ -253,7 +253,7 @@ String Id=(String)DocListed.getAttr(PDDocs.fPDID).getValue();
 String Type=(String)DocListed.getAttr(PDDocs.fDOCTYPE).getValue();
 PDDocs DocVer = new PDDocs(Session, Type);
 Cursor CursorId = DocVer.ListVersions(Type, Id);
-Record Rec=DocVer.getRecSum();
+Record Rec=DocVer.getRecSum().CopyMono();
 ObjectsList2.setListFields(Rec);
 ObjectsList2.setCursor(CursorId);
 getObjectsTable().setModel(ObjectsList2);
