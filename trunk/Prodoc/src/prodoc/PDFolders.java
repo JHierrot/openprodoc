@@ -883,6 +883,8 @@ for (int i = getTypeDefs().size()-1; i >=0; i--)
     if (DatParc.NumAttrFilled()>1) // Id + some value
         getDrv().UpdateRecord((String)TypDef.getAttr(PDObjDefs.fNAME).getValue(), DatParc, getConditionsMaint());
     }
+MultiDelete(this.getPDId());
+MultiInsert(R);
 getObjCache().put(getKey(), getRecord());
 } catch (PDException Ex)
     {

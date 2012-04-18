@@ -507,12 +507,16 @@ if (isMultivalued())
         Object Val = it.next();
         Tot.append(FormatExport(Val));
         }
+    if (PDLog.isDebug())
+        PDLog.Debug("Attribute.Export:"+getValue()+"-->"+Tot.toString());
     return(Tot.toString());
     }
 else
     {
     if (getValue()==null)
         return("");
+    if (PDLog.isDebug())
+        PDLog.Debug("Attribute.Export:"+getValue()+"-->"+FormatExport(getValue()));
     return(FormatExport(getValue()));
     }
 }
@@ -585,10 +589,18 @@ if (isMultivalued())
     {
     StringTokenizer St=new StringTokenizer(Val, StringListSeparator);
     while (St.hasMoreTokens())
-         AddValue(FormatImport(St.nextToken()));
+        {
+        AddValue(FormatImport(St.nextToken()));
+        }
+    if (PDLog.isDebug())
+        {
+        PDLog.Debug("Attribute.Import:"+Val+"-->"+Export());
+        }
     }   
 else
     {
+    if (PDLog.isDebug())
+        PDLog.Debug("Attribute.Import:"+Val+"-->"+FormatImport(Val));
     setValue(FormatImport(Val));    
     }
 }
