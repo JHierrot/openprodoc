@@ -192,5 +192,71 @@ if (http_con==null)
     alert("XMLHttpRequest fail");
 return http_con;
 }
-//----------------------------------------------
+//------------------------------------------------------------
+function Ver(layerName)
+{    
+var List_M=document.getElementById(layerName+"S");
+var Tot=List_M.length;
+for (i=0 ; i < Tot; i++)
+    List_M.remove(0);
+var Field_M=document.getElementById(layerName).value;
+var Terms = Field_M.split("|"); 
+for (i=0 ; i < Terms.length ; i++)
+    {
+    var NewOpt = document.createElement('option');
+    NewOpt.text = Terms[i];
+    NewOpt.value = Terms[i];    
+    List_M.add(NewOpt);
+    }
+var Panel_M=document.getElementById(layerName+"P");
+Panel_M.style.visibility="visible";
+}
+//------------------------------------------------------------
+function NoVer(layerName)
+{
+document.getElementById(layerName+"P").style.visibility="hidden";
+var Attr=document.getElementById(layerName);
+var List_M=document.getElementById(layerName+"S");
+var Sum="";
+for (i=0 ; i < List_M.length; i++)
+    {
+    if (Sum.length!=0)
+        Sum=Sum+"|";
+    Sum=Sum+List_M.options[i].text;
+    }
+Attr.value=Sum;    
+}
+//------------------------------------------------------------
+function SelOption(ElemName)
+{
+var Sel=document.getElementById(ElemName+"S");   
+document.getElementById(ElemName+"F").value=Sel.options[Sel.selectedIndex].text;
+}
+//------------------------------------------------------------
+function Add(ElemName)
+{
+var NewOpt = document.createElement('option');
+var NewTxt=document.getElementById(ElemName+"F").value;
+NewOpt.text = NewTxt;
+NewOpt.value = NewTxt;    
+var Sel=document.getElementById(ElemName+"S");   
+Sel.add(NewOpt);
+}
+//------------------------------------------------------------
+function Del(ElemName)
+{
+var Sel=document.getElementById(ElemName+"S"); 
+document.getElementById(ElemName+"F").value="";
+Sel.remove(Sel.selectedIndex);
+}
+//------------------------------------------------------------
+function Mod(ElemName)
+{
+var NewTxt=document.getElementById(ElemName+"F").value;
+var Sel=document.getElementById(ElemName+"S");  
+Sel.options[Sel.selectedIndex].value=NewTxt;    
+Sel.options[Sel.selectedIndex].text=NewTxt;    
+}
+//------------------------------------------------------------
+
 

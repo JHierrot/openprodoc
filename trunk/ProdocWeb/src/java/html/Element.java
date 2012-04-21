@@ -42,6 +42,8 @@ private static Element Salto=new Element("<br>");
 private static Element Salto2=new Element("<br><br>");
 private static Element Espacio=new Element("&nbsp;");
 private static Element Espacio2=new Element("&nbsp;&nbsp;");
+private String CSSId=null;
+
 //-----------------------------------------------------------------------------------------------    
 /** Creates a new instance of Element */
 public Element()
@@ -84,4 +86,20 @@ public void setHtml(String pHtml)
 Html = pHtml;
 }
 //-----------------------------------------------------------------------------------------------
+/**
+* @param CSSId the CSSId to set
+*/
+public void setCSSId(String CSSId)
+{
+this.CSSId = CSSId;
+}
+//-----------------------------------------------------------------------------------------------
+/**
+* @return the CSSId
+*/
+public String getCSSId()
+{
+return CSSId;
+}
+
 }

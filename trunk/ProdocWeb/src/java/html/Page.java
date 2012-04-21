@@ -57,30 +57,28 @@ Cabecera=pCabecera;
 @Override
 protected String StartCont()
 {
-String retValue;
+StringBuilder retValue=new StringBuilder(1000);
 if (isStrict())
-    retValue="<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">";
+    retValue.append("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">");
 else
-    retValue="<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">";
-retValue+="\n<html><head>\n"
-        +"<meta content=\"text/html; charset=UTF-8\" http-equiv=\"content-type\">"
-        +Cabecera+"<title>"+Titulo+"</title>\n";
+    retValue.append("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">");
+retValue.append("\n<html><head>\n" + "<meta content=\"text/html; charset=UTF-8\" http-equiv=\"content-type\">").append(Cabecera).append("<title>").append(Titulo).append("</title>\n");
 if (ListCSS!=null)
     {for (int i = 0; i<ListCSS.size(); i++)
         {
         String CSS=(String) ListCSS.get(i);
-        retValue+="<link rel=\"stylesheet\"  type=\"text/css\" href=\"css/"+CSS+"\" />\n";
+        retValue.append("<link rel=\"stylesheet\"  type=\"text/css\" href=\"css/").append(CSS).append("\" />\n");
         }
     }
 if (ListJS!=null)
     {for (int i = 0; i<ListJS.size(); i++)
         {
         String JS=(String) ListJS.get(i);
-        retValue+="<script language=\"JavaScript\" type=\"text/javascript\" src=\"js/"+JS+"\"></script>\n";
+        retValue.append("<script language=\"JavaScript\" type=\"text/javascript\" src=\"js/").append(JS).append("\"></script>\n");
         }
     }
-retValue+="</head>\n<body"+((OnLoadJS==null)?"":" onLoad=\""+OnLoadJS+";\"")+">\n";
-return retValue;
+retValue.append("</head>\n<body").append((OnLoadJS==null)?"":" onLoad=\""+OnLoadJS+";\"").append(">\n");
+return retValue.toString();
 }
 //-----------------------------------------------------------------------------------------------
 
@@ -161,19 +159,19 @@ else
 }
 //----------------------------------------------------------
 
-    /**
-     * @return the Strict
-     */
-    public boolean isStrict()
-    {
-        return Strict;
-    }
+/**
+* @return the Strict
+*/
+public boolean isStrict()
+{
+return Strict;
+}
 
-    /**
-     * @param Strict the Strict to set
-     */
-    public void setStrict(boolean Strict)
-    {
-        this.Strict = Strict;
-    }
+/**
+* @param Strict the Strict to set
+*/
+public void setStrict(boolean Strict)
+{
+this.Strict = Strict;
+}
 }

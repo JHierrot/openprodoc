@@ -19,11 +19,7 @@
 
 package prodocServ;
 
-import html.FieldCheck;
-import html.Element;
-import html.Table;
-import html.FieldText;
-import html.Field;
+import html.*;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -113,7 +109,12 @@ for (int i = 0; i < FL.size(); i++)
     AditionFieldsTab.getCelda(1,i).AddElem(new Element(TT(Req, Attr.getUserName())+":"));
     if (Attr.isRequired())
         AditionFieldsTab.getCelda(1,i).setCSSClass("FFormulReq");
-    if (Attr.getType()==Attribute.tBOOLEAN)
+    if (Attr.isMultivalued())
+        {
+        FieldHtml=new FieldMultiOPD(Attr.getName());
+        FieldHtml.setCSSId(Attr.getName()+"_"+i);
+        }
+    else if (Attr.getType()==Attribute.tBOOLEAN)
         {
         FieldHtml=new FieldCheck(Attr.getName());
         }
@@ -149,7 +150,7 @@ for (int i = 0; i < FL.size(); i++)
         }
     if (pMode==FMantFoldAdv.DELMOD || pMode==FMantFoldAdv.EDIMOD && !Attr.isModifAllowed())
         FieldHtml.setActivado(false);
-    FieldHtml.setCSSClass("FFormInput");
+//    FieldHtml.setCSSClass("FFormInput");
     AditionFieldsTab.getCelda(2,i).AddElem(FieldHtml);
     }
 return(AditionFieldsTab);

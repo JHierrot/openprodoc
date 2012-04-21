@@ -79,7 +79,7 @@ while (Attr!=null)
     if (!List.contains(Attr.getName()))
         {
         DescFold.append("<br><b>").append(Attr.getUserName()).append("= </b>");
-        DescFold.append(Attr.getValue());
+        DescFold.append(Attr.Export());
         }
     Attr=DatFold.nextAttr();
     }

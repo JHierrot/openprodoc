@@ -19,7 +19,7 @@
 
 package html;
 
-import javax.servlet.http.*;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -35,13 +35,22 @@ private String CSSClass=null;
 private int Alineacion=-1;
 
 //-----------------------------------------------------------------------------------------------
-    /** Creates a new instance of Image */
+/** Creates a new instance of Image
+ * @param pUrlImag
+ * @param pTextAlt  
+ */
 public Image(String pUrlImag, String pTextAlt)
 {
 UrlImag=pUrlImag;
 TextAlt=pTextAlt;
 }
 //-----------------------------------------------------------------------------------------------
+/**
+ * 
+ * @param Sess
+ * @return
+ */
+@Override
 public String ToHtml(HttpSession Sess)
 {
 String retValue="<img "+CalcularEstilo()+" alt=\""+TextAlt+"\" src=\""+UrlImag+"\" border=0 "+Html+" >\n";

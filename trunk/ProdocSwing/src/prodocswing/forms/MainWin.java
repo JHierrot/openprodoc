@@ -164,6 +164,7 @@ DocsTable.setAutoCreateColumnsFromModel(true);
         });
 
         jSplitPane1.setDividerLocation(150);
+        jSplitPane1.setDividerSize(4);
 
         TreeFolder.setFont(getFontTree());
         TreeFolder.setModel(getTreeModel());
@@ -190,6 +191,8 @@ DocsTable.setAutoCreateColumnsFromModel(true);
 
         jSplitPane1.setLeftComponent(jScrollPane1);
 
+        jSplitPane2.setDividerLocation(100);
+        jSplitPane2.setDividerSize(4);
         jSplitPane2.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
 
         jScrollPane2.setMinimumSize(new java.awt.Dimension(24, 48));
@@ -735,12 +738,8 @@ ExpandFold(TreeFold);
     private void DelFoldActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_DelFoldActionPerformed
     {//GEN-HEADEREND:event_DelFoldActionPerformed
 try {
-//PDFolders Fold=new PDFolders(Session);
-//Fold.setPDId(ActFolderId);
-//Fold.delete();
-//TreePath ParentFold = (TreePath) TreeFolder.getSelectionPath().getParentPath();
-//ExpandFold((DefaultMutableTreeNode)ParentFold.getLastPathComponent());
-DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) TreeFolder.getSelectionPath().getLastPathComponent();
+TreePath selectionPath = TreeFolder.getSelectionPath();
+DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) selectionPath.getLastPathComponent();
 PDFolders Fold= ((TreeFolder) TreeFold.getUserObject()).getFold();
 DialogEditFold DEF = new DialogEditFold(this, true);
 DEF.setLocationRelativeTo(null);
@@ -750,9 +749,14 @@ DEF.setRecord(Fold.getRecord());
 DEF.setVisible(true);
 if (DEF.isCancel())
     return;
+ActFolderId=Fold.getParentId();
 Fold.delete();
 TreePath ParentFold = (TreePath) TreeFolder.getSelectionPath().getParentPath();
 ExpandFold((DefaultMutableTreeNode)ParentFold.getLastPathComponent());
+TreeFolder.setSelectionPath(selectionPath.getParentPath());
+TreeFold = (DefaultMutableTreeNode) selectionPath.getParentPath().getLastPathComponent();
+FoldAct= ((TreeFolder) TreeFold.getUserObject()).getFold();
+SelFolderDesc.setText(HtmlDesc(FoldAct));
 } catch (Exception ex)
     {
     Message(DrvTT(ex.getLocalizedMessage()));
@@ -784,7 +788,8 @@ ExpandFold((DefaultMutableTreeNode)ParentFold.getLastPathComponent());
     private void ModFoldActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ModFoldActionPerformed
     {//GEN-HEADEREND:event_ModFoldActionPerformed
 try {
-DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) TreeFolder.getSelectionPath().getLastPathComponent();
+TreePath selectionPath = TreeFolder.getSelectionPath();
+DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) selectionPath.getLastPathComponent();
 PDFolders Fold= ((TreeFolder) TreeFold.getUserObject()).getFold();
 String NewTitle=DialogReadString(TT("Update_Folder"),TT("Folder_name"), TT("Write_Folder_name"), Fold.getTitle());
 if (NewTitle==null || NewTitle.length()==0)
@@ -793,6 +798,7 @@ Fold.setTitle(NewTitle);
 Fold.update();
 TreePath ParentFold = (TreePath) TreeFolder.getSelectionPath().getParentPath();
 ExpandFold((DefaultMutableTreeNode)ParentFold.getLastPathComponent());
+TreeFolder.setSelectionPath(selectionPath);
 } catch (Exception ex)
     {
     Message(DrvTT(ex.getLocalizedMessage()));
@@ -802,7 +808,8 @@ ExpandFold((DefaultMutableTreeNode)ParentFold.getLastPathComponent());
     private void ModFoldAdvancedActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ModFoldAdvancedActionPerformed
     {//GEN-HEADEREND:event_ModFoldAdvancedActionPerformed
 try {
-DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) TreeFolder.getSelectionPath().getLastPathComponent();
+TreePath selectionPath = TreeFolder.getSelectionPath();
+DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) selectionPath.getLastPathComponent();
 PDFolders Fold= ((TreeFolder) TreeFold.getUserObject()).getFold();
 DialogEditFold DEF = new DialogEditFold(this, true);
 DEF.setLocationRelativeTo(null);
@@ -816,6 +823,7 @@ Fold.assignValues(DEF.getRecord());
 Fold.update();
 TreePath ParentFold = (TreePath) TreeFolder.getSelectionPath().getParentPath();
 ExpandFold((DefaultMutableTreeNode)ParentFold.getLastPathComponent());
+TreeFolder.setSelectionPath(selectionPath);
 } catch (Exception ex)
     {
     Message(DrvTT(ex.getLocalizedMessage()));
