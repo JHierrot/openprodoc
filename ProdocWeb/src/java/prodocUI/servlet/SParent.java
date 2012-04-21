@@ -412,7 +412,12 @@ static public void FillAttr(HttpServletRequest Req, Attribute Attr, String Val, 
 if (Modif && !Attr.isModifAllowed())
     return;
 try {
-if (Attr.getType()==Attribute.tSTRING)
+if (Attr.isMultivalued())    
+    {
+    Attr.ClearValues();   
+    Attr.Import(Val);
+    }
+else if (Attr.getType()==Attribute.tSTRING)
     {
     Attr.setValue(Val);
     }

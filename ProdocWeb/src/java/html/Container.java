@@ -37,7 +37,6 @@ private int MargenDer=0;
 private int Width=0;
 private int Height=0;
 private String CSSClass=null;
-private String CSSId=null;
 
 private String OnClick=null;
 
@@ -56,18 +55,19 @@ ListaElementos.add(E);
 return(0);    
 }
 //-----------------------------------------------------------------------------------------------
+@Override
 public String ToHtml(HttpSession Sess)
 {
 Element E; 
-String ResHtml;
-ResHtml=StartCont();
+StringBuilder ResHtml=new StringBuilder(1000);
+ResHtml.append(StartCont());
 for (int i=0; i<ListaElementos.size(); i++)
     {
     E=(Element)ListaElementos.get(i);
-    ResHtml+=E.ToHtml(Sess);
+    ResHtml.append(E.ToHtml(Sess));
     }
-ResHtml+=EndCont();
-return(ResHtml);
+ResHtml.append(EndCont());
+return(ResHtml.toString());
 }
 //-----------------------------------------------------------------------------------------------
 protected String StartCont()
@@ -145,8 +145,8 @@ if (CStyle.length()!=0)
     CStyle=" style=\""+CStyle+"\"";
 if (CSSClass!=null)
     CStyle+=" class=\""+CSSClass+"\" ";
-if (CSSId!=null)
-    CStyle+=" id=\""+CSSId+"\" ";
+if (getCSSId()!=null)
+    CStyle+=" id=\""+getCSSId()+"\" ";
 if (OnClick!=null)
     CStyle+=" onclick=\""+OnClick+"\" ";
 return(CStyle);
@@ -178,14 +178,6 @@ return CSSClass;
 public void setCSSClass(String CSSClass)
 {
 this.CSSClass = CSSClass;
-}
-//-----------------------------------------------------------------------------------------------
-/**
-* @param CSSId the CSSId to set
-*/
-public void setCSSId(String CSSId)
-{
-this.CSSId = CSSId;
 }
 //-----------------------------------------------------------------------------------------------
 /**

@@ -487,6 +487,18 @@ if (MultAttrDlg.isCancel())
 ((DialogEditFold.MultiField)evt.getComponent()).setText(Attr.Export());
 }
 //----------------------------------------------------------------------
+private void ShowEditList(java.awt.event.MouseEvent evt)
+{
+AttrMultiEdit MultAttrDlg = new AttrMultiEdit(new javax.swing.JFrame(), true);
+Attribute Attr=((DialogEditFold.MultiField)evt.getComponent()).getAttr();
+MultAttrDlg.setAttr(Attr);
+MultAttrDlg.setLocationRelativeTo(null);
+MultAttrDlg.setVisible(true);
+if (MultAttrDlg.isCancel())
+    return;
+((DialogEditFold.MultiField)evt.getComponent()).setText(Attr.Export());
+}
+//----------------------------------------------------------------------
 /**
  *
  * @param Attr
@@ -508,6 +520,15 @@ if (Attr.isMultivalued())
         ShowEditList(evt);
         }
         } );
+    JTF.addMouseListener(
+        new java.awt.event.MouseAdapter() 
+        {
+        public void mouseClicked(java.awt.event.MouseEvent evt) 
+        {
+        ShowEditList(evt);
+        }
+        }            
+          ); 
     }
 else if (Attr.getType()==Attribute.tSTRING)
     {

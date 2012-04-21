@@ -13,6 +13,7 @@ TEXT-DECORATION: underline
 {
     font-family: Arial,Helvetica,sans-serif;
     font-size: 12px;
+    text-align:left;
 }
 .FFormInput
 {
@@ -22,12 +23,14 @@ TEXT-DECORATION: underline
     border: 1px solid black;
     border-right: 2px solid black;
     border-bottom: 2px solid black;
+    text-align:left;
 }
 .FFormInputCheck
 {
     font-family: Arial,Helvetica,sans-serif;
     font-size: 12px;
     border: 2px solid black;
+    text-align:left;
 }
 .FFormInputCombo
 {
@@ -35,6 +38,7 @@ TEXT-DECORATION: underline
     font-size: 12px;
     width: 200px;
     border: 1px solid black;
+    text-align:left;
 }
 .FFormInputButton
 {
@@ -52,6 +56,7 @@ TEXT-DECORATION: underline
     border: 1px solid black;
     border-right: 2px solid black;
     border-bottom: 2px solid black;
+    text-align:left;
 }
 .FFormInputTS
 {
@@ -68,6 +73,7 @@ TEXT-DECORATION: underline
     font-family: Arial,Helvetica,sans-serif;
     font-size: 12px;
     font-weight: bold;
+    text-align:left;
 }
 
 .UDFrames
@@ -142,4 +148,15 @@ table
     font-weight: bold;
     font-size: 10px;
     height: 20px;
+}
+.MultiEdit
+{
+visibility:hidden;
+z-index:10;
+background-color:#ffffff;
+position:fixed;
+border-width:1px;
+border-style:solid;
+border-color:#000000;
+text-align:left;
 }
