@@ -163,13 +163,16 @@ if (getObjectsTable().getSelectedRow()==-1)
 try {
 PDDocs Doc = new PDDocs(MainWin.getSession());
 Doc.assignValues(getPDTableModel().getElement(getSelectedRow()));
-String FileName=Doc.getFileVer(MainWin.getTmp(), Doc.getVersion());
+String FileName;
+if (Doc.IsUrl())
+    FileName=Doc.getUrlVer(Doc.getVersion());
+else
+    FileName=Doc.getFileVer(MainWin.getTmp(), Doc.getVersion());
 MainWin.Execute(FileName);
 } catch (PDException ex)
     {
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
-
 }//GEN-LAST:event_ObjectsTableMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

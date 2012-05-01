@@ -104,7 +104,7 @@ initComponents();
         TypeLabel.setText("jLabel1");
 
         TypeComboBox.setFont(MainWin.getFontDialog());
-        TypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "BBDD", "FS", "FTP" }));
+        TypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "BBDD", "FS", "FTP", "REFURL" }));
 
         URLLabel.setFont(MainWin.getFontDialog());
         URLLabel.setText("jLabel1");
@@ -158,7 +158,7 @@ initComponents();
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
+                        .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(ButtonAcept)

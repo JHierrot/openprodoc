@@ -75,6 +75,10 @@ public static final String tFTP="FTP";
 /**
  *
  */
+public static final String tREFURL="REFURL";
+/**
+ *
+ */
 private static HashSet tList=null;
 /**
 * @return the tList
@@ -87,6 +91,7 @@ if (tList==null)
     tList.add(tFS);
     tList.add(tBBDD);
     tList.add(tFTP);
+    tList.add(tREFURL);
     }
 return tList;
 }

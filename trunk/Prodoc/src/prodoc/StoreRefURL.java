@@ -25,7 +25,7 @@ import java.io.InputStream;
  *
  * @author jhierrot
  */
-public class StoreRefFS extends StoreGeneric
+public class StoreRefURL extends StoreGeneric
 {
 
 
@@ -37,11 +37,23 @@ public class StoreRefFS extends StoreGeneric
  * @param pPassword
  * @param pParam
  */
-protected StoreRefFS(String pServer, String pUser, String pPassword, String pParam)
+protected StoreRefURL(String pServer, String pUser, String pPassword, String pParam)
 {
 super(pServer, pUser, pPassword, pParam);
 }
 //-----------------------------------------------------------------
+/**
+ * @param Id
+ * @param Ver
+ * @param FileName
+ * @return
+ * @throws PDException
+ */
+@Override
+protected int Insert(String Id, String Ver, String FileName) throws PDException
+{
+throw new UnsupportedOperationException("Not supported.");   
+}
 /**
  * 
  * @param Id
@@ -63,7 +75,7 @@ throw new UnsupportedOperationException("Not supported.");
  */
 protected void Delete(String Id, String Ver) throws PDException
 {
-throw new UnsupportedOperationException("Not supported.");
+// ignored. Maintained for generalization.
 }
 //-----------------------------------------------------------------
 /**
@@ -123,5 +135,21 @@ protected boolean IsRef()
 {
 return(true);
 }
+//-----------------------------------------------------------------
+/**
+ * Indicates if the repository is a Referencial Repositorie and then R/O
+ * @return if the repository ir Reference
+ */
+@Override
+protected boolean IsURL()
+{
+return(true);
+}
+//-----------------------------------------------------------------
+@Override
+protected String GetUrl(String DocName)
+{
+return(getServer()+DocName);    
+}        
 //-----------------------------------------------------------------
 }

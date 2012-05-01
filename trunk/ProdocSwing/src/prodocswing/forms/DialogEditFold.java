@@ -475,19 +475,7 @@ layout.setHorizontalGroup(hGroup);
 layout.setVerticalGroup(vGroup);
 }
 //----------------------------------------------------------------------
-private void ShowEditList(KeyEvent evt)
-{
-AttrMultiEdit MultAttrDlg = new AttrMultiEdit(new javax.swing.JFrame(), true);
-Attribute Attr=((DialogEditFold.MultiField)evt.getComponent()).getAttr();
-MultAttrDlg.setAttr(Attr);
-MultAttrDlg.setLocationRelativeTo(null);
-MultAttrDlg.setVisible(true);
-if (MultAttrDlg.isCancel())
-    return;
-((DialogEditFold.MultiField)evt.getComponent()).setText(Attr.Export());
-}
-//----------------------------------------------------------------------
-private void ShowEditList(java.awt.event.MouseEvent evt)
+private void ShowEditList(java.awt.event.InputEvent evt)
 {
 AttrMultiEdit MultAttrDlg = new AttrMultiEdit(new javax.swing.JFrame(), true);
 Attribute Attr=((DialogEditFold.MultiField)evt.getComponent()).getAttr();

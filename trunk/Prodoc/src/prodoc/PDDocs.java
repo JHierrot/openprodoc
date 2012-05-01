@@ -792,6 +792,8 @@ if (FolderPath.charAt(FolderPath.length()-1)!=File.separatorChar)
 else
     FolderPath+=getPDId()+d.getVersion()+d.getName();
 StoreGeneric Rep=getDrv().getRepository(d.getReposit());
+if (Rep.IsURL())
+    throw new UnsupportedOperationException("Not supported.");   
 Rep.Connect();
 File NewF=new File(FolderPath);
 FileOutputStream OutCont=null;
@@ -835,6 +837,8 @@ if (FolderPath.charAt(FolderPath.length()-1)!=File.separatorChar)
 else
     FolderPath+=getPDId()+d.getVersion()+d.getName();
 StoreGeneric Rep=getDrv().getRepository(d.getReposit());
+if (Rep.IsURL())
+    throw new UnsupportedOperationException("Not supported.");   
 Rep.Connect();
 File NewF=new File(FolderPath);
 FileOutputStream OutCont=null;
@@ -863,6 +867,30 @@ Rep.Disconnect();
 return(FolderPath);
 }
 //-------------------------------------------------------------------------
+public boolean IsUrl() throws PDException
+{
+PDDocs d=new PDDocs(getDrv());
+d.Load(getPDId());
+StoreGeneric Rep=getDrv().getRepository(d.getReposit());
+return(Rep.IsURL());
+}
+//-------------------------------------------------------------------------
+public String getUrl() throws PDException
+{
+PDDocs d=new PDDocs(getDrv());
+d.Load(getPDId());
+StoreGeneric Rep=getDrv().getRepository(d.getReposit());
+return(Rep.GetUrl(d.getName()));
+}
+//-------------------------------------------------------------------------
+public String getUrlVer(String Ver) throws PDException
+{
+PDDocs d=new PDDocs(getDrv());
+d.LoadVersion(getPDId(), Ver);
+StoreGeneric Rep=getDrv().getRepository(d.getReposit());
+return(Rep.GetUrl(d.getName()));
+}
+//-------------------------------------------------------------------------
 /**
  * Assign the file to be uploaded when called insert or update.
  * @param Bytes
@@ -883,6 +911,8 @@ public void getStream(OutputStream OutBytes) throws PDException
 InputStream InBytes=null;
 LoadCurrent(getPDId());
 StoreGeneric Rep=getDrv().getRepository(getReposit());
+if (Rep.IsURL())
+    throw new UnsupportedOperationException("Not supported.");   
 Rep.Connect();
 InBytes=Rep.Retrieve(getPDId(), getVersion());
 byte[] buffer = new byte[BUFFSIZE];
@@ -912,6 +942,8 @@ public void getStreamVer(OutputStream OutBytes) throws PDException
 InputStream InBytes=null;
 LoadVersion(getPDId(), getVersion());
 StoreGeneric Rep=getDrv().getRepository(getReposit());
+if (Rep.IsURL())
+    throw new UnsupportedOperationException("Not supported.");   
 Rep.Connect();
 InBytes=Rep.Retrieve(getPDId(), getVersion());
 byte[] buffer = new byte[BUFFSIZE];
@@ -962,9 +994,12 @@ Attr.setValue(VersionName);
 Attr=RecTot.getAttr(fLOCKEDBY);
 Attr.setValue("");
 StoreGeneric Rep=getDrv().getRepository(getReposit());
-Rep.Connect();
-Rep.Rename(PDId, getDrv().getUser().getName(), PDId, VersionName);
-Rep.Disconnect();
+if (!Rep.IsRef())
+    {
+    Rep.Connect();
+    Rep.Rename(PDId, getDrv().getUser().getName(), PDId, VersionName);
+    Rep.Disconnect();
+    }
 updateFragments(RecTot, Id);
 UpdateVersion(Id, getDrv().getUser().getName(), RecTot);
 MultiDelete(Id, getDrv().getUser().getName());
@@ -1068,12 +1103,15 @@ Attr.setValue(TobeUpdated.getDocType());
 Conditions Cond=getConditions();
 getDrv().UpdateRecord(getTabName(), r, Cond);
 setDocType(TobeUpdated.getDocType());
-DeleteVersion(getTabName(), Id, getDrv().getUser().getName());
+DeleteVersion(getDocType(), Id, getDrv().getUser().getName());
 StoreGeneric Rep=getDrv().getRepository(TobeUpdated.getReposit());
-Rep.Connect();
-MultiDelete(getPDId(), getDrv().getUser().getName());
-Rep.Delete(PDId, getDrv().getUser().getName());
-Rep.Disconnect();
+if (!Rep.IsRef())
+    {
+    Rep.Connect();
+    MultiDelete(getPDId(), getDrv().getUser().getName());
+    Rep.Delete(PDId, getDrv().getUser().getName());
+    Rep.Disconnect();
+    }
 getObjCache().remove(getKey());
 } catch (PDException Ex)
     {
@@ -1153,14 +1191,24 @@ if (getReposit()==null || getReposit().length()==0 )
     setReposit(getDrv().getAssignedRepos(getDocType()));
 AddLogFields();
 setVersion("1.0");
+StoreGeneric Rep=getDrv().getRepository(getReposit());
 if (getName()==null || getName().length()==0)
-    if (FilePath!=null)
+    {
+    if (Rep.IsRef())
         {
-        File f=new File(FilePath);
-        setName(f.getName());
+        setName(Rep.ObtainName(FilePath));
         }
     else
-        setName(getPDId());
+        {
+        if (FilePath!=null)
+            {
+            File f=new File(FilePath);
+            setName(f.getName());
+            }
+        else
+            setName(getPDId());
+        }
+    }
 if (getMimeType()==null || getMimeType().length()==0)
     {
     PDMimeType MT=new PDMimeType(getDrv());   
@@ -1171,13 +1219,15 @@ Record Rec=getRecSum();
 insertFragments(Rec);
 InsertVersion(getPDId(), getVersion(), Rec);
 MultiInsert(Rec);
-StoreGeneric Rep=getDrv().getRepository(getReposit());
-Rep.Connect();
-if (FileStream!=null)
-    Rep.Insert(PDId, getVersion(), FileStream);
-else if (FilePath!=null)
-    Rep.Insert(PDId, getVersion(), FilePath);
-Rep.Disconnect();
+if (!Rep.IsRef())
+   {
+    Rep.Connect();
+    if (FileStream!=null)
+        Rep.Insert(PDId, getVersion(), FileStream);
+    else if (FilePath!=null)
+        Rep.Insert(PDId, getVersion(), FilePath);
+    Rep.Disconnect();
+   }
 FilePath=null;
 FileStream=null;
 getObjCache().put(getKey(), getRecord());
@@ -1602,34 +1652,45 @@ Rec.delAttr(fVERSION);
 Attribute Attr=Rec.getAttr(fDOCTYPE);
 Attr.setValue(TobeUpdated.getDocType());
 Attr=Rec.getAttr(fNAME);
-if (FilePath!=null)
+StoreGeneric Rep=getDrv().getRepository(getReposit());
+if (Rep.IsRef())
     {
-    File f=new File(FilePath);
-    Attr.setValue(f.getName());
+    Attr.setValue(Rep.ObtainName(FilePath));
     }
 else
     {
-    Attr.setValue(TobeUpdated.getName());
+    if (FilePath!=null)
+        {
+        File f=new File(FilePath);
+        Attr.setValue(f.getName());
+        }
+    else
+        {
+        Attr.setValue(TobeUpdated.getName());
+        }
     }
+PDMimeType MT=new PDMimeType(getDrv());   
+MT.SolveExt(FilePath.substring(FilePath.lastIndexOf('.')+1));
+Rec.getAttr(fMIMETYPE).setValue(MT.getName());
 UpdateVersion(getPDId(), getDrv().getUser().getName(), Rec);
 MultiDelete(Id, getDrv().getUser().getName());
 Rec=getRecSum().Copy();
 Rec.getAttr(fVERSION).setValue(getDrv().getUser().getName());
 MultiInsert(Rec);
-StoreGeneric Rep=getDrv().getRepository(getReposit());
-Rep.Connect();
-if (FileStream!=null)
-    Rep.Insert(PDId, getDrv().getUser().getName(), FileStream);
-else if (FilePath!=null)
-    Rep.Insert(PDId, getDrv().getUser().getName(), FilePath);
-else
+if (!Rep.IsRef())
     {
-//    PDDocs PublicDoc=new PDDocs(getDrv());
-//    PublicDoc.LoadCurrent(Id);
-    String OriginalVers=TobeUpdated.getVersion();
-    Rep.Copy(Id, OriginalVers, Id, getDrv().getUser().getName());
+    Rep.Connect();
+    if (FileStream!=null)
+        Rep.Insert(PDId, getDrv().getUser().getName(), FileStream);
+    else if (FilePath!=null)
+        Rep.Insert(PDId, getDrv().getUser().getName(), FilePath);
+    else
+        {
+        String OriginalVers=TobeUpdated.getVersion();
+        Rep.Copy(Id, OriginalVers, Id, getDrv().getUser().getName());
+        }
+    Rep.Disconnect();
     }
-Rep.Disconnect();
 FilePath=null;
 FileStream=null;
 getObjCache().put(getKey(), getRecord());
@@ -1837,9 +1898,12 @@ while (Rec!=null)
        PDException.GenPDException("Error_during_purge_of_document", Id);
     String Ver2Del=(String)Rec.getAttr(fVERSION).getValue();
     StoreGeneric Rep=getDrv().getRepository((String)Rec.getAttr(fREPOSIT).getValue());
-    Rep.Connect();
-    Rep.Delete(Id, Ver2Del);
-    Rep.Disconnect();
+    if (!Rep.IsRef())
+        {
+        Rep.Connect();
+        Rep.Delete(Id, Ver2Del);
+        Rep.Disconnect();
+        }
     DeleteVersion(DocTypename, Id, Ver2Del);
     Rec=getDrv().NextRec(Cur);
     }

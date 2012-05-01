@@ -904,8 +904,9 @@ String SelectedType=(String)MD.getRecord().getAttr(PDDocs.fDOCTYPE).getValue();
 if (!SelectedType.equalsIgnoreCase(Doc.getDocType()))
     Doc = new PDDocs(getSession(), SelectedType);
 Doc.assignValues(MD.getRecord());
-if (MD.SelFile!=null)
-    Doc.setFile(MD.SelFile.getAbsolutePath());
+// if (MD.SelFile!=null)
+if (MD.GetSelectPath()!=null && MD.GetSelectPath().length()>0)
+    Doc.setFile(MD.GetSelectPath());
 else
     throw new PDException("Error_retrieving_file");
 Doc.setParentId(ActFolderId);
@@ -932,8 +933,8 @@ MD.setVisible(true);
 if (MD.isCancel())
     return;
 Doc.assignValues(MD.getRecord());
-if (MD.SelFile!=null)
-    Doc.setFile(MD.SelFile.getAbsolutePath());
+if (MD.GetSelectPath()!=null && MD.GetSelectPath().length()>0)
+    Doc.setFile(MD.GetSelectPath());
 Doc.update();
 RefreshDocs();
 } catch (Exception ex)
@@ -1086,8 +1087,12 @@ if (DocsTable.getSelectedRow()==-1)
 try {
 PDDocs Doc = new PDDocs(getSession());
 Doc.assignValues(DocsContained.getElement(DocsTable.convertRowIndexToModel(DocsTable.getSelectedRow())));
-String FileName=Doc.getFile(getTmp());
-Execute(FileName);
+String FileName;
+if (Doc.IsUrl())
+    FileName=Doc.getUrl();
+else
+    FileName=Doc.getFile(getTmp());
+    Execute(FileName);
 } catch (Exception ex)
     {
     Message(DrvTT(ex.getLocalizedMessage()));
@@ -1564,7 +1569,7 @@ try {
 static int Execute(String Doc)
 {
 try {
-String Order="";
+//String Order="";
 String Orders[]= {"xdg-open", Doc};
 String OS=System.getProperty("os.name");
 if (OS.contains("Win"))

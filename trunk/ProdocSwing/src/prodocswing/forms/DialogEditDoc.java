@@ -27,7 +27,6 @@ package prodocswing.forms;
 
 import java.awt.Component;
 import java.awt.event.KeyEvent;
-import java.io.File;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashSet;
@@ -51,7 +50,7 @@ private HashSet AttrExcluded=new HashSet();
 /**
  * 
  */
-public File SelFile=null;
+//public File SelFile=null;
 
 /** Creates new form DialogEditFold
  * @param parent
@@ -322,7 +321,7 @@ Attr = EditedDoc.getAttr(PDDocs.fNAME);
 Attr.setValue(NameTextField.getText());
 Attr = EditedDoc.getAttr(PDDocs.fMIMETYPE);
 PDMimeType mt=new PDMimeType(MainWin.getSession());
-Attr.setValue(mt.SolveName(NameTextField.getText()));
+Attr.setValue(mt.SolveName(FilePathTextField.getText()));
 RetrieveFields(EditedDoc, AttrExcluded, InputFields, Modif);
 Cancel = false;
 this.dispose();
@@ -353,9 +352,9 @@ fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 int returnVal = fc.showOpenDialog(this);
 if (returnVal == JFileChooser.APPROVE_OPTION)
     {
-    SelFile = fc.getSelectedFile();
-    FilePathTextField.setText(SelFile.getAbsolutePath());
-    NameTextField.setText(SelFile.getName());
+//    SelFile = fc.getSelectedFile();
+    FilePathTextField.setText(fc.getSelectedFile().getAbsolutePath());
+    NameTextField.setText(fc.getSelectedFile().getName());
     }
     }//GEN-LAST:event_ButtonSelFileActionPerformed
 
@@ -774,7 +773,11 @@ else if (Attr.getType()==Attribute.tINTEGER)
 else
     Attr.setValue("Error, no implementado");
 }
-
+//--------------------------------------------------------------
+public String GetSelectPath()
+{
+return(FilePathTextField.getText());
+}
 //--------------------------------------------------------------
 //=========================================
 private class MultiField extends JTextField
@@ -806,5 +809,4 @@ public Attribute getAttr()
 return Attr;
 }
 } //=========================================
-
 }
