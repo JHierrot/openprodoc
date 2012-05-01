@@ -1,4 +1,4 @@
-<?xml version="1.1" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.3" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
   <Properties>
@@ -33,7 +33,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="LabelOperation" pref="476" max="32767" attributes="0"/>
+                      <Component id="LabelOperation" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
@@ -44,7 +44,7 @@
                       <Component id="ButtonCreateRep" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="0" max="-2" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Component id="ParamLabel" linkSize="2" min="-2" pref="89" max="-2" attributes="0"/>
@@ -179,10 +179,11 @@
           <Connection code="MainWin.getFontDialog()" type="code"/>
         </Property>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="3">
+          <StringArray count="4">
             <StringItem index="0" value="BBDD"/>
             <StringItem index="1" value="FS"/>
             <StringItem index="2" value="FTP"/>
+            <StringItem index="3" value="REFURL"/>
           </StringArray>
         </Property>
       </Properties>

@@ -19,8 +19,10 @@
 
 package prodocUI.servlet;
 
+import html.Page;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import prodoc.PDDocs;
@@ -42,21 +44,15 @@ public class SendDoc extends SParent
 @Override
 protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 {
-ServletOutputStream out=response.getOutputStream();
 try {
-// if (!Connected(request))
-// an error is generated
-    ProcessPage(request, out, response);
+    ProcessPage(request, response);
 } catch (Exception e)
     {
+    PrintWriter out = response.getWriter();
     ShowMessage(request, out, e.getLocalizedMessage());
     e.printStackTrace();
     AddLog(e.getMessage());
     }
-finally {
-        if (out!=null)
-            out.close();
-        }
 }
 //-----------------------------------------------------------------------------------------------
 /**
@@ -66,10 +62,8 @@ finally {
  * @param response
  * @throws Exception
  */
-protected void ProcessPage(HttpServletRequest Req, OutputStream out,  HttpServletResponse response) throws Exception
+protected void ProcessPage(HttpServletRequest Req, HttpServletResponse response) throws Exception
 {
-try {
-out = response.getOutputStream();
 PDDocs doc=new PDDocs(getSessOPD(Req));
 String Id=Req.getParameter("Id");
 doc.setPDId(Id);
@@ -78,19 +72,36 @@ if (Ver!=null && Ver.length()!=0)
     doc.LoadVersion(Id, Ver);
 else
     doc.LoadCurrent(Id);
-PDMimeType mt=new PDMimeType(getSessOPD(Req));
-mt.Load(doc.getMimeType());
-response.setContentType(mt.getMimeCode());
-response.setHeader("Content-disposition", "inline; filename=" + doc.getName());
-if (Ver!=null && Ver.length()!=0)
-    doc.getStreamVer(out);
-else
-    doc.getStream(out);
-} catch (Exception e)
+if (doc.IsUrl())
     {
-     if (out != null)
-         out.close();
-    throw e;
+    PrintWriter out = response.getWriter();
+    HttpSession Sess=Req.getSession(true);
+    String HeadRefresh="<META http-equiv=\"refresh\" content=\"0; URL=";    
+    if (Ver!=null && Ver.length()!=0)
+        HeadRefresh+=doc.getUrlVer(Ver) +"\">";    
+    else
+        HeadRefresh+=doc.getUrl() +"\">";            
+    Page p= new Page(Req, "Opening....", HeadRefresh);
+    out.println(p.ToHtml(Sess));
+    out.close();
+    }
+else
+    {
+    ServletOutputStream out=response.getOutputStream();
+    PDMimeType mt=new PDMimeType(getSessOPD(Req));
+    mt.Load(doc.getMimeType());
+    response.setContentType(mt.getMimeCode());
+    response.setHeader("Content-disposition", "inline; filename=" + doc.getName());
+    try {
+    if (Ver!=null && Ver.length()!=0)
+        doc.getStreamVer(out);
+    else
+        doc.getStream(out);
+    } catch (Exception e)
+        {
+        out.close();
+        throw e;
+        }
     }
 }
 //-----------------------------------------------------------------------------------------------

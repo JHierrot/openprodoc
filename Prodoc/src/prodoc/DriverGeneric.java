@@ -19,28 +19,15 @@
 
 package prodoc;
 
+import java.io.*;
+import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import prodoc.security.AuthLDAP;
-import prodoc.security.AuthOPD;
-import prodoc.security.AuthDDBB;
-import prodoc.security.AuthGeneric;
-import prodoc.security.AuthSO;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Properties;
-import java.util.Vector;
-import javax.xml.parsers.DocumentBuilderFactory;
+import prodoc.security.*;
 
 /**
  *
@@ -1008,6 +995,10 @@ if (RepTyp.equals(PDRepository.tFS))
     st=new StoreFS(Rep.getURL(), Rep.getUser(), Decode(Rep.getPassword()), Rep.getParam());
 else if (RepTyp.equals(PDRepository.tBBDD))
     st=new StoreDDBB(Rep.getURL(), Rep.getUser(), Decode(Rep.getPassword()), Rep.getParam());
+else if (RepTyp.equals(PDRepository.tFTP))
+    st=new Storeftp(Rep.getURL(), Rep.getUser(), Decode(Rep.getPassword()), Rep.getParam());
+else if (RepTyp.equals(PDRepository.tREFURL))
+    st=new StoreRefURL(Rep.getURL(), Rep.getUser(), Decode(Rep.getPassword()), Rep.getParam());
 else
     PDException.GenPDException("Repository_type_unsuported", RepTyp);
 if (PDLog.isDebug())

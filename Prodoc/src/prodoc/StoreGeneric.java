@@ -325,4 +325,40 @@ protected void CancelTrans()
 {
 }
 //-----------------------------------------------------------------
+/**
+ * Indicates if the repository is a Referencial Repositorie and then R/O
+ * @return if the repository ir Reference
+ */
+protected boolean IsRef()
+{
+return(false);
+}
+//-----------------------------------------------------------------
+/**
+ * Indicates if the repository is a Referencial Repositorie and then R/O
+ * @return if the repository ir Reference
+ */
+protected boolean IsURL()
+{
+return(false);
+}
+//-----------------------------------------------------------------
+
+protected String ObtainName(String FilePath)
+{
+if (IsRef())
+    {
+    if (FilePath.startsWith(Server))
+        return(FilePath.substring(Server.length()));
+    else
+        return(FilePath);
+    }
+throw new UnsupportedOperationException("Unsupported");
+}
+//-----------------------------------------------------------------
+protected String GetUrl(String DocName)
+{
+throw new UnsupportedOperationException("Unsupported");    
+}        
+//-----------------------------------------------------------------
 }

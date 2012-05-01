@@ -19,12 +19,7 @@
 
 package prodocServ;
 
-import html.FieldCheck;
-import html.FieldText;
-import html.Field;
-import html.Element;
-import html.HiperlinkImag;
-import html.Table;
+import html.*;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;

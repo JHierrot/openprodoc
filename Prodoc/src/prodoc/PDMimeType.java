@@ -276,40 +276,11 @@ public PDMimeType SolveExt(String Ext) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDMimeType.SolveExt>:"+Ext);
-try {
-Load(Ext.toLowerCase());
+if (Load(Ext.toLowerCase())==null)
+    Load("*");
 if (PDLog.isDebug())
     PDLog.Debug("PDMimeType SolveExt <");
 return(this);
-} catch (PDException ex)
-    {
-    Load("*");
-    if (PDLog.isDebug())
-        PDLog.Debug("PDMimeType SolveExt <");
-    return(this);
-    }
-//Record Rec = null;
-//for (Iterator Iter = getObjCache().getIter(); Iter.hasNext(); )
-//    {
-//    String Val=(String) Iter.next();    
-//    Rec = (Record)getObjCache().get(Val);
-//    if ( ((String)Rec.getAttr(fMIMECODE).getValue()).equalsIgnoreCase(Ext))
-//        {
-//        assignValues(Rec);
-//        if (PDLog.isDebug())
-//            PDLog.Debug("PDMimeType SolveExt <");
-//        return(this);
-//        }
-//    }
-//Conditions ListCond=new Conditions();
-//ListCond.addCondition(new Condition(fMIMECODE, Condition.cEQUAL, Ext));
-//Query LoadAct=new Query(getTabName(), getRecordStruct(),ListCond);
-//Cursor Cur=getDrv().OpenCursor(LoadAct);
-//Rec=getDrv().NextRec(Cur);
-//getDrv().CloseCursor(Cur);
-//getObjCache().put((String)Rec.getAttr(fNAME).getValue(), Rec);
-//assignValues(Rec);
-
 }
 //-------------------------------------------------------------------------
 /**
