@@ -68,7 +68,7 @@ static private int ExpFolds=0;
 static private int ExpDocs=0;
 private PDFolders FoldAct=null;
 static private String List=PDFolders.fACL+"/"+PDFolders.fFOLDTYPE+"/"+PDFolders.fPARENTID+"/"+PDFolders.fPDID+"/"+PDFolders.fTITLE+"/"+PDFolders.fPDAUTOR+"/"+PDFolders.fPDDATE;
-
+static private HashSet ExecFiles=new HashSet();
 
 /**
 * @return the Session
@@ -1091,8 +1091,11 @@ String FileName;
 if (Doc.IsUrl())
     FileName=Doc.getUrl();
 else
-    FileName=Doc.getFile(getTmp());
-    Execute(FileName);
+    {
+    FileName=Doc.getFileOpt(getTmp(), false);
+    AddExec(FileName);
+    }
+Execute(FileName);
 } catch (Exception ex)
     {
     Message(DrvTT(ex.getLocalizedMessage()));
@@ -1381,6 +1384,7 @@ ProdocFW.ShutdownProdoc("PD");
     {
     Message(DrvTT(ex.getLocalizedMessage()));
     }
+DestroyExec();
 System.exit(0);
 }
 //---------------------------------------------------------------------
@@ -1575,20 +1579,6 @@ String OS=System.getProperty("os.name");
 if (OS.contains("Win"))
     Orders[0]="explorer";
 Runtime.getRuntime().exec(Orders);
-/*
-Process Pr=Runtime.getRuntime().exec(Order, null, null);
-String s = null;
-BufferedReader stdInput = new BufferedReader(new InputStreamReader(Pr.getInputStream()));
-BufferedReader stdError = new BufferedReader(new InputStreamReader(Pr.getErrorStream()));
-while ((s = stdInput.readLine()) != null)
-    {
-    System.out.println(s);
-    }
-while ((s = stdError.readLine()) != null)
-    {
-    System.out.println(s);
-    }
-*/
 } catch (Exception ex)
     {
     Message(ex.getLocalizedMessage());
@@ -1871,6 +1861,28 @@ for (int i = 0; i < DirList.size(); i++)
     File SubDir = (File) DirList.get(i);
     Import(NewFold, SubDir.getAbsolutePath(), IsOneLevel, IncludeMetadata, IncludeDocs, FoldType, DocType);    
     }
+}
+//---------------------------------------------------------------------
+static protected void AddExec(String FileName)
+{
+ExecFiles.add(FileName);  
+File f=new File(FileName);
+f.setReadOnly();
+}
+//---------------------------------------------------------------------
+static private void DestroyExec()
+{
+for (Iterator it = ExecFiles.iterator(); it.hasNext();)
+    {
+    try {
+    String FileName = (String)it.next();
+    File f=new File(FileName);
+    f.setWritable(true);
+    f.delete();
+    } catch (Exception ex)
+        {   
+        }
+    } 
 }
 //---------------------------------------------------------------------
 }

@@ -238,7 +238,7 @@ return PDId;
  * Sets the unique identifier of the document
  * @param pPDId the new identifier to set.
  */
-public void setPDId(String pPDId)
+public void setPDId(String pPDId) throws PDExceptionFunc
 {
 this.PDId = pPDId;
 }
@@ -390,7 +390,7 @@ return(ListCond);
  * @param Ident
  */
 @Override
-protected void AsignKey(String Ident)
+protected void AsignKey(String Ident) throws PDExceptionFunc
 {
 setPDId(Ident);
 }
@@ -779,6 +779,18 @@ FilePath=pFilePath;
  */
 public String getFile(String FolderPath) throws PDException
 {
+return(getFileOpt(FolderPath, true));
+}
+//-------------------------------------------------------------------------
+/**
+ * "Download" a file referenced by the PDID. Optimized so that if file exist, don't download
+ * @param FolderPath path to recover/download the file
+ * @param Overwrite If true, the content is overwrited, else maintain the existing file
+ * @return The complete name of the downloaded file
+ * @throws PDException
+ */
+public String getFileOpt(String FolderPath, boolean Overwrite) throws PDException
+{
 PDDocs d=new PDDocs(getDrv());
 d.LoadCurrent(getPDId());
 if (d.getName()==null || d.getName().length()==0)
@@ -796,6 +808,8 @@ if (Rep.IsURL())
     throw new UnsupportedOperationException("Not supported.");   
 Rep.Connect();
 File NewF=new File(FolderPath);
+if (!Overwrite && NewF.exists())
+    return(FolderPath);
 FileOutputStream OutCont=null;
 try {
 NewF.createNewFile();
@@ -830,6 +844,19 @@ return(FolderPath);
  */
 public String getFileVer(String FolderPath, String Ver) throws PDException
 {
+return(getFileVerOpt(FolderPath, Ver, true));
+}
+//-------------------------------------------------------------------------
+/**
+ * "Download" a file referenced by the PDID-
+ * @param FolderPath path to recover/download the file
+ * @param Ver 
+ * @param Overwrite 
+ * @return The complete name of the downloaded file
+ * @throws PDException
+ */
+public String getFileVerOpt(String FolderPath, String Ver, boolean Overwrite) throws PDException
+{
 PDDocs d=new PDDocs(getDrv());
 d.LoadVersion(getPDId(), Ver);
 if (FolderPath.charAt(FolderPath.length()-1)!=File.separatorChar)
@@ -841,6 +868,8 @@ if (Rep.IsURL())
     throw new UnsupportedOperationException("Not supported.");   
 Rep.Connect();
 File NewF=new File(FolderPath);
+if (!Overwrite && NewF.exists())
+    return(FolderPath);
 FileOutputStream OutCont=null;
 try {
 NewF.createNewFile();

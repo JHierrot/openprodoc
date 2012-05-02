@@ -66,6 +66,7 @@ static public final String XML_Metadata="Metadata";
 static public final String XML_Field="Field";
 static public final String XML_Attr="Attr";
 
+static public final String AllowedChars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789";
 
 //-------------------------------------------------------------------------
 /**
@@ -312,7 +313,7 @@ return(r);
  *
  * @param Ident
  */
-abstract protected void AsignKey(String Ident);
+abstract protected void AsignKey(String Ident) throws PDException;
 //-------------------------------------------------------------------------
 abstract protected String getKey();
 //-------------------------------------------------------------------------
@@ -574,5 +575,23 @@ for (int i = 0; i < childNodes.getLength(); i++)
     }
 insert();
 }    
+//-------------------------------------------------------------------------
+public static String CheckName(String Name) throws PDExceptionFunc
+{
+// pendiente de resolver compatibilidad con clear()
+if (Name==null)    
+    return(Name);
+Name=Name.trim();
+if (Name.length()==0)   
+    PDExceptionFunc.GenPDException("Empty_Name_not_allowed",Name);
+if (Name.length()>32)   
+    PDExceptionFunc.GenPDException("Name_longer_than_allowed",Name);
+for (int i=0; i<Name.length(); i++)
+    {
+    if (AllowedChars.indexOf(Name.charAt(i))==-1)
+       PDExceptionFunc.GenPDException("Character_not_included_in_the_allowed_set",AllowedChars);
+    }
+return(Name);
+}
 //-------------------------------------------------------------------------
 }

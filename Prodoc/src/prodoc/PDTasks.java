@@ -20,7 +20,6 @@
 package prodoc;
 
 import java.util.Date;
-import java.util.Iterator;
 
 /**
  *
@@ -186,8 +185,9 @@ else
 /**
  *
  * @param Ident
+ * @throws PDExceptionFunc  
  */
-protected void AsignKey(String Ident)
+protected void AsignKey(String Ident) throws PDExceptionFunc
 {
 setName(Ident);
 }
@@ -202,11 +202,12 @@ return Name;
 }
 
 /**
-* @param Name the Name to set
+ * @param Name the Name to set
+ * @throws PDExceptionFunc  
 */
-public void setName(String Name)
+public void setName(String Name) throws PDExceptionFunc
 {
-this.Name = Name.toLowerCase();
+this.Name = CheckName(Name);
 }
 
 /**
