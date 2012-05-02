@@ -172,9 +172,9 @@ return Name;
 /**
 * @param Name the Name to set
 */
-public void setName(String Name)
+public void setName(String Name) throws PDExceptionFunc
 {
-this.Name = Name;
+this.Name = CheckName(Name);
 }
 //-------------------------------------------------------------------------
 /**
@@ -448,7 +448,7 @@ public void setValidation(String pValidation) throws PDException
  *
  * @param Ident
  */
-protected void AsignKey(String Ident)
+protected void AsignKey(String Ident) throws PDExceptionFunc
 {
 setName(Ident);
 }

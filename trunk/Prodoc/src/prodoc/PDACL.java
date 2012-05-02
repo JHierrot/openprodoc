@@ -315,11 +315,12 @@ return Name;
 }
 //-------------------------------------------------------------------------
 /**
-* @param Name the Name to set
+ * @param Name the Name to set
+ * @throws PDExceptionFunc  
 */
-public void setName(String Name)
+public void setName(String Name) throws PDExceptionFunc
 {
-this.Name = Name;
+this.Name = CheckName(Name);
 }
 //-------------------------------------------------------------------------
 /**
@@ -548,8 +549,9 @@ if (PDLog.isDebug())
 /**
  *
  * @param Ident
+ * @throws PDException  
  */
-protected void AsignKey(String Ident)
+protected void AsignKey(String Ident) throws PDException
 {
 setName(Ident);
 }

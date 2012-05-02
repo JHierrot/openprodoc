@@ -316,9 +316,9 @@ return Name;
 /**
  * @param Name
 */
-public void setName(String Name)
+public void setName(String Name) throws PDExceptionFunc
 {
-this.Name = Name;
+this.Name = CheckName(Name);
 }
 //-------------------------------------------------------------------------
 /**
@@ -550,7 +550,7 @@ if (PDLog.isDebug())
  *
  * @param Ident
  */
-protected void AsignKey(String Ident)
+protected void AsignKey(String Ident) throws PDExceptionFunc
 {
 setName(Ident);
 }

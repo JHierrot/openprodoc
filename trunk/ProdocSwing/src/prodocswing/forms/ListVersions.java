@@ -167,7 +167,10 @@ String FileName;
 if (Doc.IsUrl())
     FileName=Doc.getUrlVer(Doc.getVersion());
 else
-    FileName=Doc.getFileVer(MainWin.getTmp(), Doc.getVersion());
+    {
+    FileName=Doc.getFileVerOpt(MainWin.getTmp(), Doc.getVersion(), false);
+    MainWin.AddExec(FileName);
+    }
 MainWin.Execute(FileName);
 } catch (PDException ex)
     {

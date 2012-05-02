@@ -25,8 +25,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -291,10 +289,6 @@ return Name;
 */
 public void setName(String pName) throws PDException
 {
-if (pName==null || pName.length()<=0)
-    {
-    PDExceptionFunc.GenPDException("Incorrect_attribute_name", null);
-    }
 Name = pName;
 }
 //--------------------------------------------------------------------------

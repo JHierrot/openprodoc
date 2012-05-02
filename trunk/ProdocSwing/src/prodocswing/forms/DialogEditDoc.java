@@ -629,7 +629,7 @@ layout.setHorizontalGroup(hGroup);
 layout.setVerticalGroup(vGroup);
 }
 //----------------------------------------------------------------------
-private void ShowEditList(KeyEvent evt)
+private void ShowEditList(java.awt.event.InputEvent  evt)
 {
 AttrMultiEdit MultAttrDlg = new AttrMultiEdit(new javax.swing.JFrame(), true);
 Attribute Attr=((MultiField)evt.getComponent()).getAttr();
@@ -662,6 +662,16 @@ if (Attr.isMultivalued())
         ShowEditList(evt);
         }
         } );
+    JTF.addMouseListener(
+        new java.awt.event.MouseAdapter() 
+        {
+        public void mouseClicked(java.awt.event.MouseEvent evt) 
+        {
+        ShowEditList(evt);
+        }
+        }            
+          ); 
+
     }
 else if (Attr.getType()==Attribute.tSTRING)
     {
@@ -759,9 +769,9 @@ else if (Attr.getType()==Attribute.tBOOLEAN)
     {
     Boolean Act;
     if (((JCheckBox)JTF).isSelected())
-        Act=new Boolean(true);
+        Act=true;
     else
-        Act=new Boolean(false);
+        Act=false;
     Attr.setValue(Act);
     }
 else if (Attr.getType()==Attribute.tINTEGER)

@@ -161,7 +161,7 @@ return PDId;
 /**
  * @param pPDId
  */
-public void setPDId(String pPDId)
+public void setPDId(String pPDId) throws PDExceptionFunc
 {
 this.PDId = pPDId;
 }
@@ -336,7 +336,7 @@ return(ListCond);
  *
  * @param Ident
  */
-protected void AsignKey(String Ident)
+protected void AsignKey(String Ident) throws PDExceptionFunc
 {
 setPDId(Ident);
 }

@@ -229,9 +229,9 @@ return Name;
 /**
 * @param Name the Name to set
 */
-public void setName(String Name)
+public void setName(String Name) throws PDExceptionFunc
 {
-this.Name = Name;
+this.Name = CheckName(Name);
 }
 //-------------------------------------------------------------------------
 /**
@@ -424,7 +424,7 @@ return(ListCond);
  *
  * @param Ident
  */
-protected void AsignKey(String Ident)
+protected void AsignKey(String Ident) throws PDExceptionFunc
 {
 setName(Ident);
 }
@@ -500,6 +500,7 @@ public void addAtribute(Attribute Attr) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDObjDefs.addAtribute>:"+Attr.getName());
+Attr.setName(ObjPD.CheckName(Attr.getName()));
 VerifyAllowedUpd();
 boolean InTransLocal;
 InTransLocal=!getDrv().isInTransaction();
