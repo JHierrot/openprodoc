@@ -727,8 +727,10 @@ try {
 PDFolders Fold=new PDFolders(Session);
 Fold.setPDId(ActFolderId);
 Fold.CreateChild(NewFoldChild);
-DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) TreeFolder.getSelectionPath().getLastPathComponent();
+TreePath ActualPath = TreeFolder.getSelectionPath();
+DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) ActualPath.getLastPathComponent();
 ExpandFold(TreeFold);
+TreeFolder.setSelectionPath(ActualPath);
 } catch (Exception ex)
     {
     Message(DrvTT(ex.getLocalizedMessage()));
@@ -777,8 +779,10 @@ PDFolders Fold=new PDFolders(Session);
 Fold.assignValues(DEF.getRecord());
 Fold.setParentId(ActFolderId);
 Fold.insert();
-TreePath ParentFold = (TreePath) TreeFolder.getSelectionPath().getParentPath();
+TreePath ActualPath = TreeFolder.getSelectionPath();
+TreePath ParentFold = (TreePath) ActualPath.getParentPath();
 ExpandFold((DefaultMutableTreeNode)ParentFold.getLastPathComponent());
+TreeFolder.setSelectionPath(ActualPath);
 } catch (Exception ex)
     {
     Message(DrvTT(ex.getLocalizedMessage()));
@@ -844,26 +848,37 @@ LOD.setVisible(true);
     }//GEN-LAST:event_ObjDefMenuItemActionPerformed
 
     private void AddDocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddDocActionPerformed
-try {
-PDDocs Doc = new PDDocs(getSession());
 DialogEditDocReduced MD = new DialogEditDocReduced(this,true);
+PDDocs Doc;
+try {
+Doc = new PDDocs(getSession());
 MD.setRecord(Doc.getRecSum());
 MD.AddMode();
 MD.setLocationRelativeTo(null);
-MD.setVisible(true);
-if (MD.isCancel())
-    return;
-Doc.assignValues(MD.getRecord());
-if (MD.SelFile!=null)
-    Doc.setFile(MD.SelFile.getAbsolutePath());
-else
-    throw new PDException("Error_retrieving_file");
-Doc.setParentId(ActFolderId);
-Doc.insert();
-RefreshDocs();
 } catch (Exception ex)
     {
     Message(DrvTT(ex.getLocalizedMessage()));
+    return;
+    }
+while (true)
+    {
+    try {
+    MD.setVisible(true);
+    if (MD.isCancel())
+        return;
+    Doc.assignValues(MD.getRecord());
+    if (MD.SelFile!=null)
+        Doc.setFile(MD.SelFile.getAbsolutePath());
+    else
+        throw new PDException("Error_retrieving_file");
+    Doc.setParentId(ActFolderId);
+    Doc.insert();
+    RefreshDocs();
+    return;
+    } catch (Exception ex)
+        {
+        Message(DrvTT(ex.getLocalizedMessage()));
+        }
     }
     }//GEN-LAST:event_AddDocActionPerformed
 
@@ -891,55 +906,77 @@ RefreshDocs();
     }//GEN-LAST:event_DelDocActionPerformed
 
     private void AddDocAdvancedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddDocAdvancedActionPerformed
-try {
-PDDocs Doc = new PDDocs(getSession());
+PDDocs Doc;
 DialogEditDoc MD = new DialogEditDoc(this,true);
+try {
+Doc = new PDDocs(getSession());
 MD.setRecord(Doc.getRecSum());
 MD.AddMode();
 MD.setLocationRelativeTo(null);
-MD.setVisible(true);
-if (MD.isCancel())
-    return;
-String SelectedType=(String)MD.getRecord().getAttr(PDDocs.fDOCTYPE).getValue();
-if (!SelectedType.equalsIgnoreCase(Doc.getDocType()))
-    Doc = new PDDocs(getSession(), SelectedType);
-Doc.assignValues(MD.getRecord());
-// if (MD.SelFile!=null)
-if (MD.GetSelectPath()!=null && MD.GetSelectPath().length()>0)
-    Doc.setFile(MD.GetSelectPath());
-else
-    throw new PDException("Error_retrieving_file");
-Doc.setParentId(ActFolderId);
-Doc.insert();
-RefreshDocs();
 } catch (Exception ex)
     {
     Message(DrvTT(ex.getLocalizedMessage()));
+    return;
+    }
+while (true)
+    {
+    try {
+    MD.setVisible(true);
+    if (MD.isCancel())
+        return;
+    String SelectedType=(String)MD.getRecord().getAttr(PDDocs.fDOCTYPE).getValue();
+    if (!SelectedType.equalsIgnoreCase(Doc.getDocType()))
+        Doc = new PDDocs(getSession(), SelectedType);
+    Doc.assignValues(MD.getRecord());
+    // if (MD.SelFile!=null)
+    if (MD.GetSelectPath()!=null && MD.GetSelectPath().length()>0)
+        Doc.setFile(MD.GetSelectPath());
+    else
+        throw new PDException("Error_retrieving_file");
+    Doc.setParentId(ActFolderId);
+    Doc.insert();
+    RefreshDocs();
+    return;
+    } catch (Exception ex)
+        {
+        Message(DrvTT(ex.getLocalizedMessage()));
+        }
     }
     }//GEN-LAST:event_AddDocAdvancedActionPerformed
 
     private void ModDocAdvancedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ModDocAdvancedActionPerformed
 if (DocsTable.getSelectedRow()==-1)
     return;
-try {
-PDDocs Doc = new PDDocs(getSession());
 DialogEditDoc MD = new DialogEditDoc(this,true);
+PDDocs Doc;
+try {
+Doc = new PDDocs(getSession());
 Doc.assignValues(DocsContained.getElement(DocsTable.convertRowIndexToModel(DocsTable.getSelectedRow())));
 Doc.LoadFull(Doc.getPDId());
 MD.setRecord(Doc.getRecSum().Copy()); // we need a copy to avoid edition on the same referenced values
 MD.EditMode();
 MD.setLocationRelativeTo(null);
-MD.setVisible(true);
-if (MD.isCancel())
-    return;
-Doc.assignValues(MD.getRecord());
-if (MD.GetSelectPath()!=null && MD.GetSelectPath().length()>0)
-    Doc.setFile(MD.GetSelectPath());
-Doc.update();
-RefreshDocs();
 } catch (Exception ex)
     {
     Message(DrvTT(ex.getLocalizedMessage()));
+    return;
+    }
+while (true)
+    {   
+    try {
+    MD.setVisible(true);
+    if (MD.isCancel())
+        return;
+    Doc.assignValues(MD.getRecord());
+    if (MD.GetSelectPath()!=null && MD.GetSelectPath().length()>0)
+        Doc.setFile(MD.GetSelectPath());
+    Doc.update();
+    RefreshDocs();
+    return;
+    } catch (Exception ex)
+        {
+        Message(DrvTT(ex.getLocalizedMessage()));
+        }
     }
     }//GEN-LAST:event_ModDocAdvancedActionPerformed
 
@@ -1748,7 +1785,7 @@ return(Tmp);
  */
 static public String getVersion()
 {
-return("0.6.1");  
+return("0.7");  
 }
 //---------------------------------------------------------------------
 

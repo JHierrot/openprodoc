@@ -1,4 +1,4 @@
-<?xml version="1.1" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.3" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
   <NonVisualComponents>
@@ -47,44 +47,53 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="140" max="-2" attributes="0"/>
-                      <Component id="ButtonAcept" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="140" max="-2" attributes="0"/>
+                              <Component id="ButtonAcept" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="Author2" alignment="0" min="-2" max="-2" attributes="1"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="Title" min="-2" pref="145" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="Logo" min="-2" pref="174" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="103" alignment="0" groupAlignment="1" attributes="0">
+                              <Component id="Author5" min="-2" max="-2" attributes="1"/>
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="Author4" alignment="0" min="-2" max="-2" attributes="1"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+                                      <Component id="Author3" min="-2" max="-2" attributes="1"/>
+                                  </Group>
+                              </Group>
+                          </Group>
+                      </Group>
+                      <EmptySpace min="-2" pref="95" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="Engine" linkSize="1" alignment="0" pref="150" max="32767" attributes="1"/>
+                          <Component id="Engine" linkSize="1" alignment="0" max="32767" attributes="1"/>
                           <Component id="Author" alignment="0" min="-2" max="-2" attributes="1"/>
-                          <Component id="Repository" linkSize="1" alignment="0" pref="150" max="32767" attributes="1"/>
-                          <Component id="Application" linkSize="1" alignment="0" pref="150" max="32767" attributes="1"/>
+                          <Component id="Repository" linkSize="1" alignment="0" max="32767" attributes="1"/>
+                          <Component id="Application" linkSize="1" alignment="0" max="32767" attributes="1"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="Repository1" alignment="0" pref="125" max="32767" attributes="1"/>
+                          <Component id="Repository1" alignment="0" max="32767" attributes="1"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="Engine1" alignment="0" pref="101" max="32767" attributes="1"/>
-                                  <Component id="Application1" alignment="0" pref="101" max="32767" attributes="1"/>
-                                  <Component id="Author1" alignment="0" pref="101" max="32767" attributes="1"/>
+                                  <Component id="Engine1" alignment="0" max="32767" attributes="1"/>
+                                  <Component id="Application1" alignment="0" max="32767" attributes="1"/>
+                                  <Component id="Author1" alignment="0" max="32767" attributes="1"/>
                               </Group>
                               <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                  </Group>
-                  <Component id="Author2" alignment="0" min="-2" max="-2" attributes="1"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
-                      <Component id="Author3" min="-2" max="-2" attributes="1"/>
-                      <EmptySpace pref="106" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="Title" min="-2" pref="145" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="Logo" min="-2" pref="174" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -117,11 +126,15 @@
                       <Component id="Author1" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="54" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
               <Component id="Author2" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="Author3" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="Author4" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="Author5" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
               <Component id="ButtonAcept" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -242,6 +255,22 @@
           <Connection code="MainWin.getFontDialog()" type="code"/>
         </Property>
         <Property name="text" type="java.lang.String" value="licence Apache Software Foundation"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="Author4">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="MainWin.getFontDialog()" type="code"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Portable OPD: HSQLDB"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="Author5">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="MainWin.getFontDialog()" type="code"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="licence HSQL Development Group"/>
       </Properties>
     </Component>
   </SubComponents>
