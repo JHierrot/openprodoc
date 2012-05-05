@@ -29,24 +29,10 @@ import java.awt.Frame;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.Vector;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import prodoc.Attribute;
-import prodoc.Cursor;
-import prodoc.DriverGeneric;
-import prodoc.ObjPD;
-import prodoc.PDACL;
-import prodoc.PDAuthenticators;
-import prodoc.PDCustomization;
-import prodoc.PDException;
-import prodoc.PDGroups;
-import prodoc.PDRepository;
-import prodoc.PDRoles;
-import prodoc.PDUser;
-import prodoc.Record;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.*;
+import prodoc.*;
 import prodocswing.PDTableModel;
 
 /**
@@ -268,25 +254,34 @@ if (Tot>0)
 
     private void AddButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_AddButtonActionPerformed
     {//GEN-HEADEREND:event_AddButtonActionPerformed
-try {
 int Pos=getObjectsTable().getSelectedRow();
+try {
 PDObject.Clear();
 MantForm=AddMode();
 MantForm.setLocationRelativeTo(null);
-MantForm.setVisible(true);
-if (!AddModeOk())
-    return;
-PDObject.insert();
-PostInsert();
-RefreshTable();
-int Tot=getObjectsTable().getRowCount();
-if (Tot>0)
-    {
-    int Sel=Math.min(Tot-1, Pos);
-    getObjectsTable().setRowSelectionInterval(Sel, Sel);
-    }
 } catch (PDException ex)
-    {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+        {
+        MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+        }
+while (true)
+    {
+    try {
+    MantForm.setVisible(true);
+    if (!AddModeOk())
+        return;
+    PDObject.insert();
+    PostInsert();
+    RefreshTable();
+    int Tot=getObjectsTable().getRowCount();
+    if (Tot>0)
+        {
+        int Sel=Math.min(Tot-1, Pos);
+        getObjectsTable().setRowSelectionInterval(Sel, Sel);
+        }
+    return;
+    } catch (PDException ex)
+        {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+        }
     }
     }//GEN-LAST:event_AddButtonActionPerformed
 
@@ -322,20 +317,28 @@ if (Pos==-1)
 try {
 MantForm=EditMode();
 MantForm.setLocationRelativeTo(null);
-MantForm.setVisible(true);
-if (!EditModeOk())
-    return;
-PDObject.update();
-PostEdit();
-RefreshTable();
-int Tot=getObjectsTable().getRowCount();
-if (Tot>0)
-    {
-    int Sel=Math.min(Tot-1, Pos);
-    getObjectsTable().setRowSelectionInterval(Sel, Sel);
-    }
 } catch (PDException ex)
     {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
+while (true)
+    {
+    try {
+    MantForm.setVisible(true);
+    if (!EditModeOk())
+        return;
+    PDObject.update();
+    PostEdit();
+    RefreshTable();
+    int Tot=getObjectsTable().getRowCount();
+    if (Tot>0)
+        {
+        int Sel=Math.min(Tot-1, Pos);
+        getObjectsTable().setRowSelectionInterval(Sel, Sel);
+        }
+    return;
+    } catch (PDException ex)
+        {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+        }
     }
 }//GEN-LAST:event_EditButtonActionPerformed
 

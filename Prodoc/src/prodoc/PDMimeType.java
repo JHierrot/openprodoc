@@ -188,7 +188,8 @@ return Name;
 */
 public void setName(String Name)
 {
-this.Name = Name.toLowerCase();
+if (Name!=null)    
+    this.Name = Name.toLowerCase();
 }
 
 /**

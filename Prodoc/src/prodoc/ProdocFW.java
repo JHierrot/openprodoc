@@ -89,12 +89,29 @@ static public void InitProdoc(String ConectorName, String FileConf) throws PDExc
 if (ConectList.isEmpty())
     {
     InitEngine(ConectorName, FileConf);
+    if(PDLog.isDebug() || PDLog.isInfo())
+        {
+        PDLog.Info("*************************************************************************************");
+        PDLog.Info("ProdocFW.InitProdoc:"+ConectorName+"="+FileConf);
+        PDLog.Info("os.arch="+System.getProperty("os.arch"));
+        PDLog.Info("os.name="+System.getProperty("os.name"));
+        PDLog.Info("sun.desktop="+System.getProperty("sun.desktop"));
+        PDLog.Info("java.runtime.name="+System.getProperty("java.runtime.name"));
+        PDLog.Info("java.runtime.version="+System.getProperty("java.runtime.version"));
+        PDLog.Info("java.specification.vendor="+System.getProperty("java.specification.vendor"));
+        PDLog.Info("java.vm.name="+System.getProperty("java.vm.name"));
+        PDLog.Info("java.vm.vendor="+System.getProperty("java.vm.vendor"));
+        PDLog.Info("java.io.tmpdir="+System.getProperty("java.io.tmpdir"));
+        PDLog.Info("sun.boot.class.path="+System.getProperty("sun.boot.class.path"));
+        PDLog.Info("java.class.path="+System.getProperty("java.class.path"));
+        PDLog.Info("*************************************************************************************");
+        }
     return;
     }
-if(PDLog.isDebug())
-    PDLog.Debug("ProdocFW.InitProdoc:"+ConectorName+"="+FileConf);
 try {
 SearchConector(ConectorName);
+if(PDLog.isDebug())
+    PDLog.Debug("ProdocFW.InitProdoc:"+ConectorName+"="+FileConf);
 } catch (PDException e)
     {
     InitEngine(ConectorName, FileConf);
