@@ -23,13 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.Vector;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
-import prodoc.Attribute;
-import prodoc.Cursor;
-import prodoc.DriverGeneric;
-import prodoc.PDACL;
-import prodoc.PDException;
-import prodoc.PDObjDefs;
-import prodoc.Record;
+import prodoc.*;
 import prodocswing.forms.MainWin;
 
 /**
@@ -69,12 +63,7 @@ else
 //-------------------------------------------------------------
 public int getRowCount()
 {
-if (CursorId == null)
-    return 0;
-else
-    {
-    return(NumRows);
-    }
+return(NumRows);
 }
 //-------------------------------------------------------------
 public int getColumnCount()
@@ -267,6 +256,21 @@ return formatterDate;
 public void setFormatterDate(SimpleDateFormat formatterDate)
 {
 this.formatterDate = formatterDate;
+}
+//---------------------------------------------------------
+/**
+ * Used to edit in-memory list
+ * @param AttrList 
+ */
+public void setVector(Vector AttrList)
+{
+//ListRes.clear();
+//for (int i = 0; i < AttrList.size(); i++)
+//    {
+//    ListRes.add(AttrList.elementAt(i));
+//    }
+ListRes=AttrList;
+NumRows=ListRes.size();
 }
 //---------------------------------------------------------
 }

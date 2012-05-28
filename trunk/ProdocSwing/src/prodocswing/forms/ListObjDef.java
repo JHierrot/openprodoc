@@ -19,11 +19,9 @@
 
 package prodocswing.forms;
 
+import java.util.Vector;
 import javax.swing.JDialog;
-import prodoc.ObjPD;
-import prodoc.PDException;
-import prodoc.PDObjDefs;
-import prodoc.Record;
+import prodoc.*;
 
 /**
  *
@@ -53,6 +51,7 @@ Child.getAttr(PDObjDefs.fPARENT).setValue(Parent.getAttr(PDObjDefs.fNAME).getVal
 Child.getAttr(PDObjDefs.fACL).setValue(Parent.getAttr(PDObjDefs.fACL).getValue());
 Child.getAttr(PDObjDefs.fREPOSIT).setValue(Parent.getAttr(PDObjDefs.fREPOSIT).getValue());
 Child.getAttr(PDObjDefs.fACTIVE).setValue(Parent.getAttr(PDObjDefs.fACTIVE).getValue());
+Child.getAttr(PDObjDefs.fCREATED).setValue(false);
 MU.setRecord(Child);
 MU.AddMode();
 return(MU);
@@ -179,4 +178,34 @@ getjLabel1().setText(MainWin.TT("Filter_Object_definition"));
 getUserFilter().setToolTipText(MainWin.TT("Type_partial_or_complete_Object_definition_name"));
 }
 //--------------------------------------------------------------------
+/* method to overwrite to do a postinsert operation
+ *
+ * @throws PDException
+ */
+@Override
+protected void PostInsert(JDialog D) throws PDException
+{
+PDObjDefs Def=(PDObjDefs)PDObject;    
+Attribute Attr = PDObject.getRecord().getAttr(PDObjDefs.fNAME);
+String Name=(String)Attr.getValue();    
+Vector ListAtt=((MantObjDefs)D).getListRes();
+for (int i = 0; i < ListAtt.size(); i++)
+    {
+    Def.addAtribute(Def.ConvertRec((Record)ListAtt.elementAt(i)));
+    }
+}
+//--------------------------------------------------------------------
+/* method to overwrite to do a postEdit operation
+ *
+ * @throws PDException
+ */
+@Override
+protected void PostEdit(JDialog D) throws PDException
+{
+PDObjDefs Def=(PDObjDefs)PDObject;    
+Def.DelAtributes();
+PostInsert(D);
+}
+//--------------------------------------------------------------------
+
 }
