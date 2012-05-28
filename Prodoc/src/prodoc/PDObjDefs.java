@@ -760,7 +760,7 @@ for (int i = 0; i < RecDef.NumAttr(); i++)
         if (isFolder)
             getDrv().AddIntegrity(MultiName, PDFolders.fPDID, PDFolders.getTableName(), PDFolders.fPDID);
         else
-            getDrv().AddIntegrity(MultiName, PDDocs.fPDID, PDDocs.getTableName(), PDDocs.fPDID);
+            getDrv().AddIntegrity(MultiName, PDDocs.fPDID, PDDocs.fVERSION, PDDocs.getTabNameVer(Def.getName()), PDDocs.fPDID, PDDocs.fVERSION);
         }
     }
 Def.setCreated(true);
@@ -1144,6 +1144,7 @@ for (int NumNodes = 0; NumNodes < childNodes.getLength(); NumNodes++)
         {
         Record r=Record.FillFromXML(ListElements, getRecord());
         assignValues(r);
+        setCreated(false);
         insert();
         }
     else if (ListElements.getNodeName().equalsIgnoreCase(XML_Metadata)) 

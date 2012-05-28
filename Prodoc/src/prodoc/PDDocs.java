@@ -2234,22 +2234,28 @@ PrintWriter FMetadataXML = null;
 if (FolderPath.charAt(FolderPath.length()-1)!=File.separatorChar)
     FolderPath+=File.separatorChar;
 LoadFull(getPDId());
-String PathContent=getFile(FolderPath);
 try {
+String PathContent="";
+if (!IsUrl())
+   PathContent=getFile(FolderPath);
 FMetadataXML = new PrintWriter(FolderPath+getPDId()+".opd", "UTF-8");
 String OrigName=getName(); //Name can be empty or relative. A tmp copy is needed.
-if (AbsPath)
-    setName(PathContent);
-else
+if (!IsUrl())
     {
-    int StartName=PathContent.lastIndexOf(File.separatorChar);
-    if (StartName==-1)
+    if (AbsPath)
         setName(PathContent);
     else
-        setName(PathContent.substring(StartName+1));
+        {
+        int StartName=PathContent.lastIndexOf(File.separatorChar);
+        if (StartName==-1)
+            setName(PathContent);
+        else
+            setName(PathContent.substring(StartName+1));
+        }
     }
 FMetadataXML.print(toXML());
-setName(OrigName);
+if (!IsUrl())
+   setName(OrigName);
 FMetadataXML.close();
 FMetadataXML=null;
 } catch (Exception e)
