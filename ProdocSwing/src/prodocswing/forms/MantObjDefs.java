@@ -26,13 +26,9 @@
 package prodocswing.forms;
 
 import java.awt.Frame;
+import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
-import prodoc.Attribute;
-import prodoc.PDDocs;
-import prodoc.PDObjDefs;
-import prodoc.PDException;
-import prodoc.PDFolders;
-import prodoc.Record;
+import prodoc.*;
 import prodocswing.PDTableModel;
 
 /**
@@ -47,6 +43,7 @@ private PDObjDefs EditObjDef;
 Frame Fparent;
 private PDTableModel AttrMembers;
 private PDTableModel InheritAttrMembers;
+private Vector ListRes=null;
 
 /** Creates new form MantUsers
  * @param parent
@@ -124,7 +121,7 @@ InheritAttrTable.setAutoCreateColumnsFromModel(true);
             }
         });
 
-        LabelOperation.setFont(new java.awt.Font("DejaVu Sans", 1, 14));
+        LabelOperation.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
         LabelOperation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         LabelOperation.setText("jLabel1");
 
@@ -132,6 +129,11 @@ InheritAttrTable.setAutoCreateColumnsFromModel(true);
         TypeNameLabel.setText("Nombre");
 
         TypeNameTextField.setFont(MainWin.getFontDialog());
+        TypeNameTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                TypeNameTextFieldKeyReleased(evt);
+            }
+        });
 
         TypeDescripLabel.setFont(MainWin.getFontDialog());
         TypeDescripLabel.setText("Descripción");
@@ -418,7 +420,7 @@ InheritAttrTable.setAutoCreateColumnsFromModel(true);
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(LabelOperation, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE)
+                            .addComponent(LabelOperation, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(TypeNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -432,13 +434,13 @@ InheritAttrTable.setAutoCreateColumnsFromModel(true);
                         .addComponent(ButtonCreateObject)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(ButtonDestroyObject)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 154, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(ButtonAcept)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(ButtonCancel))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE)))
+                        .addComponent(jTabbedPane1)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -471,12 +473,12 @@ InheritAttrTable.setAutoCreateColumnsFromModel(true);
     private void ButtonCancelActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ButtonCancelActionPerformed
     {//GEN-HEADEREND:event_ButtonCancelActionPerformed
 Cancel=true;
-try {
-if (MainWin.getSession().isInTransaction())
-   MainWin.getSession().AnularTrans();
-} catch (PDException ex)
-    {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
-    }
+//try {
+//if (MainWin.getSession().isInTransaction())
+//   MainWin.getSession().AnularTrans();
+//} catch (PDException ex)
+//    {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+//    }
 this.dispose();
     }//GEN-LAST:event_ButtonCancelActionPerformed
 
@@ -526,8 +528,8 @@ if (TraceViewCheckBox.isSelected())
 else
     Act=    false;
 Attr.setValue(Act);
-if (MainWin.getSession().isInTransaction())
-    MainWin.getSession().CerrarTrans();
+//if (MainWin.getSession().isInTransaction())
+//    MainWin.getSession().CerrarTrans();
 } catch (PDException ex)
     {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
@@ -538,20 +540,20 @@ this.dispose();
     private void formWindowClosing(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowClosing
     {//GEN-HEADEREND:event_formWindowClosing
 Cancel=true;
-try {
-if (MainWin.getSession().isInTransaction())
-        MainWin.getSession().AnularTrans();
-} catch (PDException ex)
-    {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
-    }
+//try {
+//if (MainWin.getSession().isInTransaction())
+//        MainWin.getSession().AnularTrans();
+//} catch (PDException ex)
+//    {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+//    }
     }//GEN-LAST:event_formWindowClosing
 
     private void AddButtonAttrActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_AddButtonAttrActionPerformed
     {//GEN-HEADEREND:event_AddButtonAttrActionPerformed
 try {
-PDObjDefs newObjDef=new PDObjDefs((MainWin.getSession()));
-newObjDef.setName((String)ObjDef.getAttr(PDObjDefs.fNAME).getValue());
-Record r=newObjDef.getRecordAttrsStruct();
+//PDObjDefs newObjDef=new PDObjDefs((MainWin.getSession()));
+//newObjDef.setName((String)ObjDef.getAttr(PDObjDefs.fNAME).getValue());
+Record r=PDObjDefs.getRecordAttrsStruct();
 MantAttr MP = new MantAttr(Fparent, true, true);
 MP.setRecord(r);
 MP.AddMode();
@@ -559,9 +561,9 @@ MP.setLocationRelativeTo(null);
 MP.setVisible(true);
 if (MP.isCancel())
     return;
-r.assign(MP.getRecord());
-newObjDef.addAtribute(newObjDef.ConvertRec(r));
-RefreshOwnAttr(newObjDef.getName());
+//r.assign(MP.getRecord());
+getListRes().add(MP.getRecord());
+RefreshOwnAttr(TypeNameTextField.getText());
 } catch (PDException ex)
     {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
@@ -572,8 +574,8 @@ RefreshOwnAttr(newObjDef.getName());
 if (AttrTable.getSelectedRow()==-1)
     return;
 try {
-PDObjDefs newObjDef=new PDObjDefs((MainWin.getSession()));
-newObjDef.setName((String)ObjDef.getAttr(PDObjDefs.fNAME).getValue());
+//PDObjDefs newObjDef=new PDObjDefs((MainWin.getSession()));
+//newObjDef.setName((String)ObjDef.getAttr(PDObjDefs.fNAME).getValue());
 MantAttr MP = new MantAttr(Fparent, true, true);
 MP.setRecord(AttrMembers.getElement(AttrTable.convertRowIndexToModel(AttrTable.getSelectedRow())));
 MP.DelMode();
@@ -582,8 +584,17 @@ MP.setVisible(true);
 if (MP.isCancel())
     return;
 String AttrName=(String) MP.getRecord().getAttr(PDObjDefs.fATTRNAME).getValue();
-newObjDef.delAtribute(AttrName);
-RefreshOwnAttr(newObjDef.getName());
+for (int i = 0; i < getListRes().size(); i++)
+    {
+    String AttrNameI=(String)((Record)getListRes().elementAt(i)).getAttr(PDObjDefs.fATTRNAME).getValue();
+    if (AttrNameI.equals(AttrName))
+       {
+                    getListRes().remove(i);   
+       break;
+       }   
+    }
+// newObjDef.delAtribute(AttrName);
+RefreshOwnAttr(TypeNameTextField.getText());
 } catch (PDException ex)
     {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
@@ -594,8 +605,8 @@ RefreshOwnAttr(newObjDef.getName());
 if (AttrTable.getSelectedRow()==-1)
     return;
 try {
-PDObjDefs newObjDef=new PDObjDefs((MainWin.getSession()));
-newObjDef.setName((String)ObjDef.getAttr(PDObjDefs.fNAME).getValue());
+//PDObjDefs newObjDef=new PDObjDefs((MainWin.getSession()));
+//newObjDef.setName((String)ObjDef.getAttr(PDObjDefs.fNAME).getValue());
 MantAttr MP = new MantAttr(Fparent, true, true);
 MP.setRecord(AttrMembers.getElement(AttrTable.convertRowIndexToModel(AttrTable.getSelectedRow())));
 MP.EditMode();
@@ -604,11 +615,16 @@ MP.setVisible(true);
 if (MP.isCancel())
     return;
 String AttrName=(String) MP.getRecord().getAttr(PDObjDefs.fATTRNAME).getValue();
-newObjDef.delAtribute(AttrName);
-Record r=newObjDef.getRecordAttrsStruct();
-r.assign(MP.getRecord());
-newObjDef.addAtribute(newObjDef.ConvertRec(r));
-RefreshOwnAttr(newObjDef.getName());
+for (int i = 0; i < getListRes().size(); i++)
+    {
+    String AttrNameI=(String)((Record)getListRes().elementAt(i)).getAttr(PDObjDefs.fATTRNAME).getValue();
+    if (AttrNameI.equals(AttrName))
+       {
+                    getListRes().set(i, MP.getRecord());
+       break;
+       }   
+    }
+RefreshOwnAttr(TypeNameTextField.getText());
 } catch (PDException ex)
     {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
@@ -620,8 +636,9 @@ PDObjDefs newObjDef=new PDObjDefs((MainWin.getSession()));
 newObjDef.Load((String)ObjDef.getAttr(PDObjDefs.fNAME).getValue()); // exist the object?
 newObjDef.CreateObjectTables(newObjDef.getName(),
            ((String)ClassTypeComboBox.getSelectedItem()).equalsIgnoreCase(PDObjDefs.CT_FOLDER));
-if (MainWin.getSession().isInTransaction())
-        MainWin.getSession().CerrarTrans();
+//if (MainWin.getSession().isInTransaction())
+//        MainWin.getSession().CerrarTrans();
+ObjDef.getAttr(PDObjDefs.fCREATED).setValue(true);
 } catch (PDException ex)
     {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
@@ -633,13 +650,22 @@ try {
 PDObjDefs newObjDef=new PDObjDefs((MainWin.getSession()));
 newObjDef.Load((String)ObjDef.getAttr(PDObjDefs.fNAME).getValue()); // exist the object?
 newObjDef.DeleteObjectTables(newObjDef.getName());
-if (MainWin.getSession().isInTransaction())
-        MainWin.getSession().CerrarTrans();
+//if (MainWin.getSession().isInTransaction())
+//        MainWin.getSession().CerrarTrans();
 } catch (PDException ex)
     {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
 this.dispose();
     }//GEN-LAST:event_ButtonDestroyObjectActionPerformed
+
+    private void TypeNameTextFieldKeyReleased(java.awt.event.KeyEvent evt)//GEN-FIRST:event_TypeNameTextFieldKeyReleased
+    {//GEN-HEADEREND:event_TypeNameTextFieldKeyReleased
+try {
+RefreshOwnAttr(TypeNameTextField.getText());
+} catch (PDException ex)
+    {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
+    }//GEN-LAST:event_TypeNameTextFieldKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox ACLComboBox;
@@ -691,10 +717,11 @@ public void AddMode()
 {
 LabelOperation.setText(MainWin.TT("Add_Object_definition"));
 ParentNameTextField.setEnabled(false);
-AddButtonAttr.setEnabled(false);
-DelButtonAttr.setEnabled(false);
-EditButtonAttr.setEnabled(false);
-PanelAttr.setEnabled(false);
+//AddButtonAttr.setEnabled(false);
+//DelButtonAttr.setEnabled(false);
+//EditButtonAttr.setEnabled(false);
+//PanelAttr.setEnabled(false);
+ButtonCreateObject.setEnabled(false);
 PanelInheritAttr.setEnabled(false);
 }
 //----------------------------------------------------------------
@@ -711,6 +738,7 @@ ParentNameTextField.setEditable(false);
 AddButtonAttr.setEnabled(false);
 DelButtonAttr.setEnabled(false);
 EditButtonAttr.setEnabled(false);
+ButtonCreateObject.setEnabled(false);
 }
 //----------------------------------------------------------------
 /**
@@ -722,11 +750,11 @@ LabelOperation.setText(MainWin.TT("Update_Object_definition"));
 TypeNameTextField.setEditable(false);
 ClassTypeComboBox.setEnabled(false);
 ParentNameTextField.setEditable(false);
-try {
-MainWin.getSession().IniciarTrans();
-} catch (PDException ex)
-    {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
-    }
+//try {
+//MainWin.getSession().IniciarTrans();
+//} catch (PDException ex)
+//    {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+//    }
 }
 //----------------------------------------------------------------
 /**
@@ -760,13 +788,14 @@ TypeNameLabel.setText(MainWin.DrvTT(Attr.getUserName()));
 if (Attr.getValue() != null)
     {
     TypeNameTextField.setText((String) Attr.getValue());
-    if ( !(((String) Attr.getValue()).equalsIgnoreCase(PDDocs.getTableName())
-     || ((String) Attr.getValue()).equalsIgnoreCase(PDFolders.getTableName())) )
-        {
-        RefreshInheAttr((String)Attr.getValue());
-        RefreshOwnAttr((String)Attr.getValue());
-        }
+//    if ( !(((String) Attr.getValue()).equalsIgnoreCase(PDDocs.getTableName())
+//     || ((String) Attr.getValue()).equalsIgnoreCase(PDFolders.getTableName())) )
+//        {
+//        RefreshInheAttr((String)Attr.getValue());
+//        RefreshOwnAttr((String)Attr.getValue());
+//        }
     }
+RefreshOwnAttr((String)Attr.getValue());
 TypeNameTextField.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
 Attr = ObjDef.getAttr(PDObjDefs.fDESCRIPTION); //-----------------------------
 TypeDescripLabel.setText(MainWin.DrvTT(Attr.getUserName()));
@@ -783,6 +812,7 @@ ParentNameLabel.setText(MainWin.DrvTT(Attr.getUserName()));
 if (Attr.getValue() != null)
     ParentNameTextField.setText((String) Attr.getValue());
 ParentNameTextField.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
+RefreshInheAttr((String)Attr.getValue());
 Attr=ObjDef.getAttr(PDObjDefs.fCLASSTYPE); //-----------------------------
 ClasTypeDescripLabel.setText(MainWin.DrvTT(Attr.getUserName()));
 boolean ShowRep=true;
@@ -840,6 +870,20 @@ if (Attr.getValue() != null)
     TraceViewCheckBox.setSelected((Boolean)Attr.getValue());
     }
 TraceViewCheckBox.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
+Attr=ObjDef.getAttr(PDObjDefs.fCREATED); //-----------------------------
+if (Attr.getValue() != null)
+    {
+    ButtonCreateObject.setEnabled(!(Boolean)Attr.getValue());
+    AddButtonAttr.setEnabled(!(Boolean)Attr.getValue());
+    DelButtonAttr.setEnabled(!(Boolean)Attr.getValue());
+    EditButtonAttr.setEnabled(!(Boolean)Attr.getValue());
+    ButtonDestroyObject.setEnabled((Boolean)Attr.getValue());
+    }
+else
+    {
+    ButtonCreateObject.setEnabled(true);
+    ButtonDestroyObject.setEnabled(false);
+    }
 } catch (PDException ex)
     {
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
@@ -856,7 +900,7 @@ private void RefreshInheAttr(String TypeName) throws PDException
 InheritAttrMembers = new PDTableModel();
 InheritAttrMembers.setDrv(MainWin.getSession());
 InheritAttrMembers.setListFields(EditObjDef.getRecordAttrsStruct());
-InheritAttrMembers.setCursor(EditObjDef.getListParentAttr(TypeName));
+InheritAttrMembers.setCursor(EditObjDef.getListParentAttr2(TypeName));
 InheritAttrTable.setModel(InheritAttrMembers);
 //InheritAttrTable.getColumnModel().getColumn(0).setMaxWidth(0);
 //InheritAttrTable.getColumnModel().removeColumn(AttrTable.getColumnModel().getColumn(0));
@@ -869,11 +913,35 @@ InheritAttrTable.setModel(InheritAttrMembers);
  */
 private void RefreshOwnAttr(String TypeName) throws PDException
 {
+    
 AttrMembers = new PDTableModel();
-AttrMembers.setDrv(MainWin.getSession());
+//AttrMembers.setDrv(MainWin.getSession());
 AttrMembers.setListFields(EditObjDef.getRecordAttrsStruct());
-AttrMembers.setCursor(EditObjDef.getListAttr(TypeName));
+if (    getListRes()==null)
+    {
+    ListRes=new Vector();    
+    if (TypeName!=null && TypeName.length()!=0)
+        {
+        Cursor CursorId=EditObjDef.getListAttr(TypeName);
+        Record Res=MainWin.getSession().NextRec(CursorId);
+        while (Res!=null)
+            {
+                    getListRes().add(Res);
+            Res=MainWin.getSession().NextRec(CursorId);
+            }
+        MainWin.getSession().CloseCursor(CursorId);
+        }
+    }
+else
+    {
+    for (int i = 0; i < getListRes().size(); i++)
+        {
+        ((Record) getListRes().elementAt(i)).getAttr(PDObjDefs.fTYPNAME).setValue(TypeName);   
+        }
+    }
+AttrMembers.setVector(getListRes());
 AttrTable.setModel(AttrMembers);
+AttrTable.repaint();
 //AttrTable.getColumnModel().getColumn(0).setMaxWidth(0);
 //AttrTable.getColumnModel().removeColumn(AttrTable.getColumnModel().getColumn(0));
 }
@@ -891,4 +959,12 @@ private DefaultComboBoxModel getComboModel(String Type)
 return(ListObjects.getComboModel(Type));
 }
 //----------------------------------------------------------------
+
+    /**
+     * @return the ListRes
+     */
+    public Vector getListRes()
+    {
+        return ListRes;
+    }
 }

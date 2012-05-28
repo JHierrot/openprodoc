@@ -780,8 +780,7 @@ Fold.assignValues(DEF.getRecord());
 Fold.setParentId(ActFolderId);
 Fold.insert();
 TreePath ActualPath = TreeFolder.getSelectionPath();
-TreePath ParentFold = (TreePath) ActualPath.getParentPath();
-ExpandFold((DefaultMutableTreeNode)ParentFold.getLastPathComponent());
+ExpandFold((DefaultMutableTreeNode)ActualPath.getLastPathComponent());
 TreeFolder.setSelectionPath(ActualPath);
 } catch (Exception ex)
     {

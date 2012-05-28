@@ -517,6 +517,8 @@ Attr=AttrEdit.getAttr(PDObjDefs.fATTRMODALLOW); //-----------------------------
 AllowModLabel.setText(MainWin.DrvTT(Attr.getUserName()));
 if (Attr.getValue()!=null)
     AllowModCheckBox.setSelected((Boolean)Attr.getValue());
+else
+    AllowModCheckBox.setSelected(true);
 AllowModCheckBox.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
 Attr=AttrEdit.getAttr(PDObjDefs.fATTRMULTIVALUED); //-----------------------------
 MultivalLabel.setText(MainWin.DrvTT(Attr.getUserName()));

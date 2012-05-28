@@ -269,8 +269,10 @@ while (true)
     MantForm.setVisible(true);
     if (!AddModeOk())
         return;
+    MainWin.getSession().IniciarTrans();
     PDObject.insert();
-    PostInsert();
+    PostInsert(MantForm);
+    MainWin.getSession().CerrarTrans();
     RefreshTable();
     int Tot=getObjectsTable().getRowCount();
     if (Tot>0)
@@ -280,7 +282,15 @@ while (true)
         }
     return;
     } catch (PDException ex)
-        {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+        {
+        if (MainWin.getSession().isInTransaction())    
+            {try{
+             MainWin.getSession().AnularTrans();
+                } catch (PDException ex1)
+                {
+                }
+            }
+        MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
         }
     }
     }//GEN-LAST:event_AddButtonActionPerformed
@@ -296,7 +306,9 @@ MantForm.setLocationRelativeTo(null);
 MantForm.setVisible(true);
 if (!DelModeOk())
     return;
+MainWin.getSession().IniciarTrans();
 PDObject.delete();
+MainWin.getSession().CerrarTrans();
 RefreshTable();
 int Tot=getObjectsTable().getRowCount();
 if (Tot>0)
@@ -305,7 +317,15 @@ if (Tot>0)
     getObjectsTable().setRowSelectionInterval(Sel, Sel);
     }
 } catch (PDException ex)
-    {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    {
+    if (MainWin.getSession().isInTransaction())    
+        {try{
+            MainWin.getSession().AnularTrans();
+            } catch (PDException ex1)
+            {
+            }
+        }
+MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
     }//GEN-LAST:event_DelButtonActionPerformed
 
@@ -326,8 +346,10 @@ while (true)
     MantForm.setVisible(true);
     if (!EditModeOk())
         return;
+    MainWin.getSession().IniciarTrans();
     PDObject.update();
-    PostEdit();
+    PostEdit(MantForm);
+    MainWin.getSession().CerrarTrans();
     RefreshTable();
     int Tot=getObjectsTable().getRowCount();
     if (Tot>0)
@@ -335,9 +357,17 @@ while (true)
         int Sel=Math.min(Tot-1, Pos);
         getObjectsTable().setRowSelectionInterval(Sel, Sel);
         }
-    return;
-    } catch (PDException ex)
-        {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    return; 
+   } catch (PDException ex)
+        {
+        if (MainWin.getSession().isInTransaction())    
+            {try{
+             MainWin.getSession().AnularTrans();
+                } catch (PDException ex1)
+                {
+                }
+            }
+        MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
         }
     }
 }//GEN-LAST:event_EditButtonActionPerformed
@@ -357,7 +387,9 @@ MantForm.setLocationRelativeTo(null);
 MantForm.setVisible(true);
 if (!CopyModeOk())
     return;
+MainWin.getSession().IniciarTrans();
 PDObject.insert();
+MainWin.getSession().CerrarTrans();
 RefreshTable();
 int Tot=getObjectsTable().getRowCount();
 if (Tot>0)
@@ -366,7 +398,15 @@ if (Tot>0)
     getObjectsTable().setRowSelectionInterval(Sel, Sel);
     }
 } catch (PDException ex)
-    {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    {
+    if (MainWin.getSession().isInTransaction())    
+        {try{
+            MainWin.getSession().AnularTrans();
+            } catch (PDException ex1)
+            {
+            }
+        }
+    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
 }//GEN-LAST:event_CopyButtonActionPerformed
 
@@ -700,7 +740,7 @@ return ObjectsTable;
  * not abstract to avoid create in all clases
  * @throws PDException
  */
-protected void PostInsert() throws PDException
+protected void PostInsert(JDialog D) throws PDException
 {
 }
 //--------------------------------------------------------------------
@@ -708,7 +748,7 @@ protected void PostInsert() throws PDException
  * not abstract to avoid create in all clases
  * @throws PDException
  */
-protected void PostEdit() throws PDException
+protected void PostEdit(JDialog D) throws PDException
 {
 }
 //--------------------------------------------------------------------

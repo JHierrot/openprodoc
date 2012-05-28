@@ -177,7 +177,7 @@ getUserFilter().setToolTipText(MainWin.TT("Type_partial_or_complete_User_name"))
  * @throws PDException
  */
 @Override
-protected void PostInsert() throws PDException
+protected void PostInsert(JDialog D) throws PDException
 {
 Attribute Attr = PDObject.getRecord().getAttr(PDUser.fPASSWORD);
 String Pass=(String)Attr.getValue();
@@ -195,7 +195,7 @@ MainWin.getSession().SetPassword(Name, Pass);
  * @throws PDException
  */
 @Override
-protected void PostEdit() throws PDException
+protected void PostEdit(JDialog D) throws PDException
 {
 Attribute Attr = PDObject.getRecord().getAttr(PDUser.fPASSWORD);
 String Pass=(String)Attr.getValue();

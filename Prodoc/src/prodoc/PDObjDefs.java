@@ -49,6 +49,10 @@ public static final String fACTIVE="Active";
 /**
  *
  */
+public static final String fCREATED="Created";
+/**
+ *
+ */
 public static final String fACL="ACL";
 /**
  *
@@ -74,7 +78,6 @@ public static final String fTRACEMOD="TraceMod";
  *
  */
 public static final String fTRACEVIEW="TraceView";
-
 /**
  *
  */
@@ -158,6 +161,10 @@ private boolean Active=true;
 /**
  *
  */
+private boolean Created=true;
+/**
+ *
+ */
 private String ACL=null;
 /**
  *
@@ -204,6 +211,8 @@ setClassType((String) Rec.getAttr(fCLASSTYPE).getValue());
 setDescription((String) Rec.getAttr(fDESCRIPTION).getValue());
 if (Rec.getAttr(fACTIVE).getValue()!=null)
     setActive(((Boolean)Rec.getAttr(fACTIVE).getValue()).booleanValue());
+if (Rec.getAttr(fCREATED).getValue()!=null)
+    setCreated(((Boolean)Rec.getAttr(fCREATED).getValue()).booleanValue());
 setACL((String)  Rec.getAttr(fACL).getValue());
 setParent((String)  Rec.getAttr(fPARENT).getValue());
 setReposit((String) Rec.getAttr(fREPOSIT).getValue());
@@ -316,6 +325,7 @@ Rec.getAttr(fNAME).setValue(getName());
 Rec.getAttr(fCLASSTYPE).setValue(getClassType());
 Rec.getAttr(fDESCRIPTION).setValue(getDescription());
 Rec.getAttr(fACTIVE).setValue(isActive());
+Rec.getAttr(fCREATED).setValue(isCreated());
 Rec.getAttr(fACL).setValue(getACL());
 Rec.getAttr(fPARENT).setValue(getParent());
 Rec.getAttr(fREPOSIT).setValue(getReposit());
@@ -349,6 +359,7 @@ if (DocsDefStruct==null)
     R.addAttr( new Attribute(fCLASSTYPE, "Object_type", "Object_type", Attribute.tSTRING, true, null, 32, false, false, false));
     R.addAttr( new Attribute(fDESCRIPTION, "Description", "Description", Attribute.tSTRING, true, null, 128, false, false, true));
     R.addAttr( new Attribute(fACTIVE, "Active", "When_true_it_is_allowed_to_create_elements_of_the_type", Attribute.tBOOLEAN, true, null, 0, false, false, true));
+    R.addAttr( new Attribute(fCREATED, "Created", "When_true_the_table_to_store_elements_is_created", Attribute.tBOOLEAN, true, null, 0, false, false, true));
     R.addAttr( new Attribute(fACL, "ACL", "Default_ACL_and_definition_ACL", Attribute.tSTRING, true, null, 32, false, false, true));
     R.addAttr( new Attribute(fPARENT, "Parent_Class", "Parent_Class", Attribute.tSTRING, true, null, 32, false, false, false));
     R.addAttr( new Attribute(fREPOSIT, "Repository", "Repository_to_store_documents", Attribute.tSTRING, false, null, 32, false, false, true));
@@ -367,7 +378,7 @@ else
  * @return
  * @throws PDException
  */
-public Record getRecordAttrsStruct()  throws PDException
+static public Record getRecordAttrsStruct()  throws PDException
 {
 if (DocsDefAttrsStruct==null)
     DocsDefAttrsStruct=CreateRecordAttrsStruct();
@@ -552,6 +563,14 @@ if (PDLog.isDebug())
     PDLog.Debug("PDObjDefs.delAtribute>:"+AttrName);
 }
 //-------------------------------------------------------------------------
+public void DelAtributes() throws PDException
+{
+Conditions CondDelAttrs=new Conditions();
+Condition CondDelAttr=new Condition(fTYPNAME, Condition.cEQUAL, getName());
+CondDelAttrs.addCondition(CondDelAttr);
+getDrv().DeleteRecord(getTabNameAttrs(), CondDelAttrs);
+}
+//-------------------------------------------------------------------------
 /**
  *
  * @param Attr
@@ -713,10 +732,6 @@ getDrv().CreateTable(Def.getName(), RecTab);
 if (isFolder)
     {
     getDrv().AddIntegrity(Def.getName(), PDFolders.fPDID, PDFolders.getTableName(), PDFolders.fPDID);
-//    PDFolders FolDef=new PDFolders(getDrv(), Name);
-//    Record R=FolDef.getRecSum().CopyMono();
-//    getDrv().CreateTable(GenVerTabName(Def.getName()), R);
-//    getDrv().AddIntegrity(GenVerTabName(Def.getName()), PDFolders.fPDID, PDFolders.getTableName(), PDFolders.fPDID);
     }
 else
     {
@@ -748,6 +763,8 @@ for (int i = 0; i < RecDef.NumAttr(); i++)
             getDrv().AddIntegrity(MultiName, PDDocs.fPDID, PDDocs.getTableName(), PDDocs.fPDID);
         }
     }
+Def.setCreated(true);
+Def.update();
 if (PDLog.isDebug())
     PDLog.Debug("PDObjDefs.CreateObjectTables<:"+Name);
 }
@@ -789,6 +806,8 @@ for (int i = 0; i < RecDef.NumAttr(); i++)
         getDrv().DropTable(MultiName);
         }
     }
+Def.setCreated(false);
+Def.update();
 }
 //-------------------------------------------------------------------------
 /**
@@ -798,10 +817,7 @@ for (int i = 0; i < RecDef.NumAttr(); i++)
 @Override
 protected void DeleteMulti() throws PDException
 {
-Conditions CondDelAttrs=new Conditions();
-Condition CondDelAttr=new Condition(fTYPNAME, Condition.cEQUAL, getName());
-CondDelAttrs.addCondition(CondDelAttr);
-getDrv().DeleteRecord(getTabNameAttrs(), CondDelAttrs);
+DelAtributes();
 }
 //-------------------------------------------------------------------------
 /**
@@ -971,6 +987,27 @@ return(Cur);
 }
 //-----------------------------------------------------------------------
 /**
+ * return a Cursor with the list of atributes of parent class of ClassName
+ * including inherited.
+ * @param ClassName name of the Class whom parent are searched
+ * @return Cursor with list of attributes definition
+ * @throws PDException in any error
+ */
+public Cursor getListParentAttr2(String ClassName) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDObjDefs.getListParentAttr>:"+ClassName);
+Condition CondType=new Condition(fTYPNAME, new HashSet(getListParentClases2(ClassName)));
+Conditions Conds=new Conditions();
+Conds.addCondition(CondType);
+Query ListAttr=new Query(getTabNameAttrs(), getRecordAttrsStruct(), Conds);
+Cursor Cur=getDrv().OpenCursor(ListAttr);
+if (PDLog.isDebug())
+    PDLog.Debug("PDObjDefs.getListParentAttr<:"+Cur);
+return(Cur);
+}
+//-----------------------------------------------------------------------
+/**
  * return an ORDERED Vector of clases parent of ClassName (excluded)
  * @param ClassName Class to bew searched
  * @return return an ORDERED Vector of clases: last the first parent
@@ -981,6 +1018,30 @@ public Vector getListParentClases(String ClassName) throws PDException
 if (PDLog.isDebug())
     PDLog.Debug("PDObjDefs.getListParentClases>:"+ClassName);
 Vector v=new Vector();
+PDObjDefs Def=new PDObjDefs(getDrv());
+Def.Load(ClassName);
+while (!Def.getParent().equalsIgnoreCase(Def.getName()))
+    {
+    Def.Load(Def.getParent());
+    v.add(Def.getName());
+    }
+if (PDLog.isDebug())
+    PDLog.Debug("PDObjDefs.getListParentClases<:"+v);
+return(v);
+}
+//-----------------------------------------------------------------------
+/**
+ * return an ORDERED Vector of clases parent of ClassName (Included)
+ * @param ClassName Class to bew searched
+ * @return return an ORDERED Vector of clases: last the first parent
+ * @throws PDException in any error
+ */
+public Vector getListParentClases2(String ClassName) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDObjDefs.getListParentClases>:"+ClassName);
+Vector v=new Vector();
+v.add(ClassName);
 PDObjDefs Def=new PDObjDefs(getDrv());
 Def.Load(ClassName);
 while (!Def.getParent().equalsIgnoreCase(Def.getName()))
@@ -1103,4 +1164,20 @@ for (int NumNodes = 0; NumNodes < childNodes.getLength(); NumNodes++)
     }
 }    
 //-------------------------------------------------------------------------
+
+    /**
+     * @return the Created
+     */
+    public boolean isCreated()
+    {
+        return Created;
+    }
+
+    /**
+     * @param Created the Created to set
+     */
+    public void setCreated(boolean Created)
+    {
+        this.Created = Created;
+    }
 }

@@ -295,6 +295,8 @@ public String SolveName(String FileName) throws PDException
 if (PDLog.isDebug())
     PDLog.Debug("PDMimeType.SolveName>:"+FileName);
 String Exten=FileName.substring(FileName.lastIndexOf('.')+1);
+if (Exten.length()==0)
+    PDExceptionFunc.GenPDException("Null_Extension", Exten);
 SolveExt(Exten);
 if (PDLog.isDebug())
     PDLog.Debug("PDMimeType.SolveName<");

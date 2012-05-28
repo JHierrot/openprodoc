@@ -26,7 +26,6 @@
 package prodocswing.forms;
 
 import java.awt.Component;
-import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashSet;
@@ -47,6 +46,7 @@ private boolean Modif=false;
 private boolean SetRecordDocChanged=false;
 private Vector InputFields=new Vector();
 private HashSet AttrExcluded=new HashSet();
+private boolean DelMode=false;
 /**
  * 
  */
@@ -309,20 +309,23 @@ this.dispose();
     private void ButtonAceptActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ButtonAceptActionPerformed
     {//GEN-HEADEREND:event_ButtonAceptActionPerformed
 try {
-Attribute Attr = EditedDoc.getAttr(PDDocs.fACL);
-Attr.setValue(ACLComboBox.getSelectedItem());
-Attr = EditedDoc.getAttr(PDDocs.fDOCTYPE);
-Attr.setValue(FoldTypeCB.getSelectedItem());
-Attr = EditedDoc.getAttr(PDDocs.fTITLE);
-Attr.setValue(TitleTextField.getText());
-Attr = EditedDoc.getAttr(PDDocs.fDOCDATE);
-Attr.setValue(DateTextField.getValue());
-Attr = EditedDoc.getAttr(PDDocs.fNAME);
-Attr.setValue(NameTextField.getText());
-Attr = EditedDoc.getAttr(PDDocs.fMIMETYPE);
-PDMimeType mt=new PDMimeType(MainWin.getSession());
-Attr.setValue(mt.SolveName(FilePathTextField.getText()));
-RetrieveFields(EditedDoc, AttrExcluded, InputFields, Modif);
+if (!DelMode)    
+   {
+    Attribute Attr = EditedDoc.getAttr(PDDocs.fACL);
+    Attr.setValue(ACLComboBox.getSelectedItem());
+    Attr = EditedDoc.getAttr(PDDocs.fDOCTYPE);
+    Attr.setValue(FoldTypeCB.getSelectedItem());
+    Attr = EditedDoc.getAttr(PDDocs.fTITLE);
+    Attr.setValue(TitleTextField.getText());
+    Attr = EditedDoc.getAttr(PDDocs.fDOCDATE);
+    Attr.setValue(DateTextField.getValue());
+    Attr = EditedDoc.getAttr(PDDocs.fNAME);
+    Attr.setValue(NameTextField.getText());
+    Attr = EditedDoc.getAttr(PDDocs.fMIMETYPE);
+    PDMimeType mt=new PDMimeType(MainWin.getSession());
+    Attr.setValue(mt.SolveName(FilePathTextField.getText()));
+    RetrieveFields(EditedDoc, AttrExcluded, InputFields, Modif);
+   }
 Cancel = false;
 this.dispose();
 } catch (PDException ex)
@@ -473,6 +476,7 @@ DateTextField.setEnabled(false);
 //MimeTypeCB.setEnabled(false);
 ButtonSelFile.setEnabled(false);
 FilePathTextField.setEnabled(false);
+DelMode=true;
 }
 //----------------------------------------------------------------
 /**
