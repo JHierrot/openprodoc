@@ -127,5 +127,11 @@ throw new UnsupportedOperationException("Not supported yet.");
 }
 //--------------------------------------------------------------------------
 
+    @Override
+    protected void AddIntegrity(String TableName1, String Field11, String Field12, String TableName2, String Field21, String Field22) throws PDException
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 
 }

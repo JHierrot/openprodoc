@@ -297,6 +297,19 @@ protected void AddIntegrity(String TableName1, String Field1, String TableName2,
 String SQL="ALTER TABLE "+TableName1+" ADD FOREIGN KEY ("+Field1+") REFERENCES "+TableName2+"("+Field2+")";
 this.ExecuteSql(SQL);
 }
+/**
+ *
+ * @param TableName1
+ * @param Field1
+ * @param TableName2
+ * @param Field2
+ * @throws PDException
+ */
+protected void AddIntegrity(String TableName1, String Field11, String Field12, String TableName2, String Field21, String Field22) throws PDException
+{
+String SQL="ALTER TABLE "+TableName1+" ADD FOREIGN KEY ("+Field11+","+Field12+") REFERENCES "+TableName2+"("+Field21+","+Field22+")";
+this.ExecuteSql(SQL);
+}
 
 /**
  *
