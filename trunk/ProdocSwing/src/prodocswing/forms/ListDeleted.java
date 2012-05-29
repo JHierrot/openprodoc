@@ -295,7 +295,7 @@ DeletedDocsList = new PDTableModel();
 DeletedDocsList.setDrv(MainWin.getSession());
 PDDocs DocVer = new PDDocs(MainWin.getSession(), TypeDocRestore);
 Cursor CursorId = DocVer.ListDeleted(TypeDocRestore);
-Record Rec=DocVer.getRecSum();
+Record Rec=DocVer.getRecSum().CopyMono();
 DeletedDocsList.setListFields(Rec);
 DeletedDocsList.setCursor(CursorId);
 getObjectsTable().setModel(DeletedDocsList);

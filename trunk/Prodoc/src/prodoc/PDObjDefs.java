@@ -759,8 +759,8 @@ for (int i = 0; i < RecDef.NumAttr(); i++)
         getDrv().CreateTable(MultiName, RecTab);
         if (isFolder)
             getDrv().AddIntegrity(MultiName, PDFolders.fPDID, PDFolders.getTableName(), PDFolders.fPDID);
-        else
-            getDrv().AddIntegrity(MultiName, PDDocs.fPDID, PDDocs.fVERSION, PDDocs.getTabNameVer(Def.getName()), PDDocs.fPDID, PDDocs.fVERSION);
+//        else // Very complex to maintain. The checkout makes "imposible" the colission.
+//            getDrv().AddIntegrity(MultiName, PDDocs.fPDID, PDDocs.getTabNameVer(Def.getName()), PDDocs.fPDID);
         }
     }
 Def.setCreated(true);
