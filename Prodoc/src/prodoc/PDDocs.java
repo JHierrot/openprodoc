@@ -2000,7 +2000,7 @@ if (PDLog.isDebug())
 Conditions Cond= new Conditions();
 Cond.addCondition(new Condition(fSTATUS, Condition.cEQUAL, fSTATUS_LASTDEL));
 Cond.addCondition(new Condition(fACL, new HashSet(getDrv().getUser().getAclList().keySet())));
-Query LoadAct=new Query(getTabNameVer(DocTypename), getRecSum(), Cond, null);
+Query LoadAct=new Query(getTabNameVer(DocTypename), getRecSum().CopyMono(), Cond, null);
 Cursor Cur=getDrv().OpenCursor(LoadAct);
 if (PDLog.isDebug())
     PDLog.Debug("PDDocs.ListDeleted <");
