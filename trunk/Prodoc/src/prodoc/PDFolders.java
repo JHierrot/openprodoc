@@ -112,6 +112,8 @@ private Record RecSum=null;
 
 static private ObjectsCache FoldObjectsCache = null;
 
+static private final String NotAllowedChars="/\\:*?";
+
 //-------------------------------------------------------------------------
 /**
  *
@@ -177,9 +179,22 @@ return Title;
 /**
  * @param pTitle
 */
-public void setTitle(String pTitle)
+public void setTitle(String pTitle) throws PDExceptionFunc
 {
+if (pTitle==null)    
+    return;
+pTitle=pTitle.trim();
+if (pTitle.length()==0)   
+    PDExceptionFunc.GenPDException("Empty_Name_not_allowed",pTitle);
+if (pTitle.length()>254)   
+    PDExceptionFunc.GenPDException("Name_longer_than_allowed",pTitle);
+for (int i=0; i<pTitle.length(); i++)
+    {
+    if (! (NotAllowedChars.indexOf(pTitle.charAt(i))==-1))
+       PDExceptionFunc.GenPDException("Character_not_included_in_the_allowed_set",AllowedChars);
+    }
 this.Title = pTitle;
+
 }
 //-------------------------------------------------------------------------
 /**
