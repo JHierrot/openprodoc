@@ -1,4 +1,4 @@
-<?xml version="1.1" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.3" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
@@ -32,9 +32,9 @@
                       <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                       <Component id="jLabel1" min="-2" pref="484" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jTabbedPane1" alignment="0" pref="582" max="32767" attributes="0"/>
+                  <Component id="jTabbedPane1" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace pref="401" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Component id="AcceptButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="9" pref="9" max="9" attributes="0"/>
                       <Component id="CancelButton" min="-2" max="-2" attributes="0"/>
@@ -253,6 +253,8 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Arial" size="12" style="0"/>
                 </Property>
+                <Property name="text" type="java.lang.String" value="EN"/>
+                <Property name="toolTipText" type="java.lang.String" value="EN, ES, PT (ISO code two character for language for the default customization )"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel3">
@@ -270,6 +272,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Arial" size="12" style="0"/>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" value="Password for user administrator &quot;root&quot; created during installation. It is possible to define several users with several administrator permissions, &quot;root&quot; is only the default administrator"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel10">
@@ -297,6 +300,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Arial" size="12" style="0"/>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" value="IP or URI of the repository (depending on the kind of repository can be a local mounted path, a database, and ftp, etc..). It must be visible using the same name(URI) for any &quot;client&quot;(that is installation of a Web o Swing Client"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel8">
@@ -314,6 +318,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Arial" size="12" style="0"/>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" value="Boolean value, when checked, the documents in the repository will be encrypted"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel7">
@@ -331,6 +336,8 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Arial" size="12" style="0"/>
                 </Property>
+                <Property name="text" type="java.lang.String" value="Reposit"/>
+                <Property name="toolTipText" type="java.lang.String" value="Descriptive name of the default documents repository. Later it will be possible to create additional repositories with different characteristics"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel6">
@@ -348,6 +355,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Arial" size="12" style="0"/>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" value="Main key used to encrypt several elements in OPD, including document repositories without native support for encription. It should contain characters with lower and upper case and numbers, with a size big enough to offer a reasonable security"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="RepUserTF">
@@ -355,6 +363,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Arial" size="12" style="0"/>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" value="User with permissions for the repository.(required depending on Repository type)"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel11">
@@ -372,6 +381,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Arial" size="12" style="0"/>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" value="Password of the User with permissions for the repository. Both fields will be empty if the repository is a Filesystem. (required depending on Repository type)"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel12">
@@ -396,6 +406,7 @@
                     <StringItem index="2" value="FTP"/>
                   </StringArray>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" value="One of the supported Repository Types  (required)&#xa;      FS: Filesystem (can be a mounted disk or server) identified by a path&#xa;      FTP: Ftp Server&#xa;      BLOB: Storing of documents as BLOB field in a Database that can be the same used to store metadata or another one.&#xa;l"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel13">
@@ -413,6 +424,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Arial" size="12" style="0"/>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" value="Additional parameters that can be different depending on the repository type (required depending on Repository type). For BLOB it is:&#xa;&quot;JDBC Driver name;Table Name&quot;&#xa;Ie.: &#xa;    com.mysql.jdbc.Driver;TableBlob&#xa;"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="DateFormat">
@@ -420,6 +432,8 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Arial" size="12" style="0"/>
                 </Property>
+                <Property name="text" type="java.lang.String" value="dd/MM/yyyy"/>
+                <Property name="toolTipText" type="java.lang.String" value="Format to display and read date fields in default customization, according to formats of the Java formatter"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel4">
@@ -447,6 +461,8 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Arial" size="12" style="0"/>
                 </Property>
+                <Property name="text" type="java.lang.String" value="dd/MM/yyyy  HH:mm:ss"/>
+                <Property name="toolTipText" type="java.lang.String" value="Format to display and read timestamp fields in default customization, according to formats of the Java formatter"/>
               </Properties>
             </Component>
           </SubComponents>

@@ -107,7 +107,7 @@ setLocationRelativeTo(null);
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText(TT("Prodoc_Metadata_Creation"));
 
-        AcceptButton.setFont(new java.awt.Font("Arial", 0, 12));
+        AcceptButton.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         AcceptButton.setText(TT("Ok"));
         AcceptButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -115,7 +115,7 @@ setLocationRelativeTo(null);
             }
         });
 
-        CancelButton.setFont(new java.awt.Font("Arial", 0, 12));
+        CancelButton.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         CancelButton.setText(TT("Cancel"));
         CancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -123,68 +123,84 @@ setLocationRelativeTo(null);
             }
         });
 
-        AttrTab.setFont(new java.awt.Font("Arial", 0, 12));
+        AttrTab.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
-        jLabel2.setFont(new java.awt.Font("Arial", 1, 12));
+        jLabel2.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel2.setText(TT("Administrator_Password"));
 
-        LangCode.setFont(new java.awt.Font("Arial", 0, 12));
+        LangCode.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        LangCode.setText("EN");
+        LangCode.setToolTipText("EN, ES, PT (ISO code two character for language for the default customization )");
 
-        jLabel3.setFont(new java.awt.Font("Arial", 1, 12));
+        jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel3.setText(TT("Default_Language_Code"));
 
-        RootPasswordTF.setFont(new java.awt.Font("Arial", 0, 12));
+        RootPasswordTF.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        RootPasswordTF.setToolTipText("Password for user administrator \"root\" created during installation. It is possible to define several users with several administrator permissions, \"root\" is only the default administrator");
 
-        jLabel10.setFont(new java.awt.Font("Arial", 0, 12));
+        jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel10.setText(TT("Repository_User"));
 
-        jLabel9.setFont(new java.awt.Font("Arial", 1, 12));
+        jLabel9.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel9.setText(TT("Repository_Url"));
 
-        RepUrlTF.setFont(new java.awt.Font("Arial", 0, 12));
+        RepUrlTF.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        RepUrlTF.setToolTipText("IP or URI of the repository (depending on the kind of repository can be a local mounted path, a database, and ftp, etc..). It must be visible using the same name(URI) for any \"client\"(that is installation of a Web o Swing Client");
 
-        jLabel8.setFont(new java.awt.Font("Arial", 0, 12));
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel8.setText(TT("Repository_Encrypted"));
 
-        RepEncrypCB.setFont(new java.awt.Font("Arial", 0, 12));
+        RepEncrypCB.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        RepEncrypCB.setToolTipText("Boolean value, when checked, the documents in the repository will be encrypted");
 
-        jLabel7.setFont(new java.awt.Font("Arial", 1, 12));
+        jLabel7.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel7.setText(TT("Default_Repository_Name"));
 
-        RepNameTF.setFont(new java.awt.Font("Arial", 0, 12));
+        RepNameTF.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        RepNameTF.setText("Reposit");
+        RepNameTF.setToolTipText("Descriptive name of the default documents repository. Later it will be possible to create additional repositories with different characteristics");
 
-        jLabel6.setFont(new java.awt.Font("Arial", 1, 12));
+        jLabel6.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel6.setText(TT("Main_Key"));
 
-        MainKeyTF.setFont(new java.awt.Font("Arial", 0, 12));
+        MainKeyTF.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        MainKeyTF.setToolTipText("Main key used to encrypt several elements in OPD, including document repositories without native support for encription. It should contain characters with lower and upper case and numbers, with a size big enough to offer a reasonable security");
 
-        RepUserTF.setFont(new java.awt.Font("Arial", 0, 12));
+        RepUserTF.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        RepUserTF.setToolTipText("User with permissions for the repository.(required depending on Repository type)");
 
-        jLabel11.setFont(new java.awt.Font("Arial", 0, 12));
+        jLabel11.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel11.setText(TT("Repository_User_Password"));
 
-        RepPassTF.setFont(new java.awt.Font("Arial", 0, 12));
+        RepPassTF.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        RepPassTF.setToolTipText("Password of the User with permissions for the repository. Both fields will be empty if the repository is a Filesystem. (required depending on Repository type)");
 
-        jLabel12.setFont(new java.awt.Font("Arial", 1, 12));
+        jLabel12.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel12.setText(TT("Repository_Type"));
 
-        RepTypeCB.setFont(new java.awt.Font("Arial", 0, 12));
+        RepTypeCB.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         RepTypeCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "FS", "DDBB", "FTP" }));
+        RepTypeCB.setToolTipText("One of the supported Repository Types  (required)\n      FS: Filesystem (can be a mounted disk or server) identified by a path\n      FTP: Ftp Server\n      BLOB: Storing of documents as BLOB field in a Database that can be the same used to store metadata or another one.\nl");
 
-        jLabel13.setFont(new java.awt.Font("Arial", 0, 12));
+        jLabel13.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel13.setText(TT("Repository_Aditional_Param"));
 
-        RepParamTF.setFont(new java.awt.Font("Arial", 0, 12));
+        RepParamTF.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        RepParamTF.setToolTipText("Additional parameters that can be different depending on the repository type (required depending on Repository type). For BLOB it is:\n\"JDBC Driver name;Table Name\"\nIe.: \n    com.mysql.jdbc.Driver;TableBlob\n");
 
-        DateFormat.setFont(new java.awt.Font("Arial", 0, 12));
+        DateFormat.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        DateFormat.setText("dd/MM/yyyy");
+        DateFormat.setToolTipText("Format to display and read date fields in default customization, according to formats of the Java formatter");
 
-        jLabel4.setFont(new java.awt.Font("Arial", 1, 12));
+        jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel4.setText(TT("TimeStamp_Format"));
 
-        jLabel5.setFont(new java.awt.Font("Arial", 1, 12));
+        jLabel5.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel5.setText(TT("Date_Format"));
 
-        TimeStampFormat.setFont(new java.awt.Font("Arial", 0, 12));
+        TimeStampFormat.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        TimeStampFormat.setText("dd/MM/yyyy  HH:mm:ss");
+        TimeStampFormat.setToolTipText("Format to display and read timestamp fields in default customization, according to formats of the Java formatter");
 
         javax.swing.GroupLayout AttrTabLayout = new javax.swing.GroupLayout(AttrTab);
         AttrTab.setLayout(AttrTabLayout);
@@ -292,7 +308,7 @@ setLocationRelativeTo(null);
 
         EvolTab.setEnabled(false);
         EvolTab.setFocusable(false);
-        EvolTab.setFont(new java.awt.Font("Arial", 0, 12));
+        EvolTab.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         jList1.setModel(getListModel());
         jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -330,9 +346,9 @@ setLocationRelativeTo(null);
                     .addGroup(layout.createSequentialGroup()
                         .addGap(25, 25, 25)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 484, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 582, Short.MAX_VALUE)
+                    .addComponent(jTabbedPane1)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(401, Short.MAX_VALUE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(AcceptButton)
                         .addGap(9, 9, 9)
                         .addComponent(CancelButton)))
