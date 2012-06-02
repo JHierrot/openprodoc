@@ -180,7 +180,7 @@
         </Property>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="4">
-            <StringItem index="0" value="BBDD"/>
+            <StringItem index="0" value="DDBB"/>
             <StringItem index="1" value="FS"/>
             <StringItem index="2" value="FTP"/>
             <StringItem index="3" value="REFURL"/>

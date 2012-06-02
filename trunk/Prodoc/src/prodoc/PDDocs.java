@@ -1458,7 +1458,7 @@ return(r);
 }
 //-------------------------------------------------------------------------
 /**
- *
+ * Load to memory all the elements of a Doc, including all the inherited attributes and multivalued
  * @param Ident
  * @return
  * @throws PDException
@@ -1898,6 +1898,34 @@ if (InTransLocal)
 if (PDLog.isDebug())
     PDLog.Debug("PDDocs.UnDelete <");
 }
+//------------------------------------------------------------------------------
+/**
+ * Load to memory the elements of a deleted Doc, only to obtainf a complete definition
+ * @param DocTypename 
+ * @param Ident
+ * @return
+ * @throws PDException
+ */
+private Record LoadDeleted(String DocTypename, String Ident) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDDocs.LoadDeleted>:"+DocTypename+"/"+Ident);
+Conditions Cond=new Conditions();
+Cond.addCondition(new Condition(fPDID, Condition.cEQUAL, Ident));
+Cond.addCondition(new Condition(fVERSION, Condition.cEQUAL, fSTATUS_LASTDEL));
+Record r;
+Query LoadAct = new Query(getTabNameVer(DocTypename), getRecordStruct(), Cond, null);
+Cursor Cur = getDrv().OpenCursor(LoadAct);
+r=getDrv().NextRec(Cur);
+getDrv().CloseCursor(Cur);
+if (r!=null)
+    assignValues(r);
+getTypeDefs();
+if (PDLog.isDebug())
+   PDLog.Debug("PDDocs.LoadDeleted<:"+DocTypename+"/"+Ident);
+return(r);
+}
+
 //-------------------------------------------------------------------------
 /**
  * Permanently Destroy document and metadata
@@ -1909,14 +1937,14 @@ public void Purge(String DocTypename, String Id) throws PDException
 {
 boolean InTransLocal;
 if (PDLog.isDebug())
-    PDLog.Debug("PDDocs.Purge>:"+getPDId());
+    PDLog.Debug("PDDocs.Purge>:"+DocTypename+"/"+Id);
 VerifyAllowedDel();
 InTransLocal=!getDrv().isInTransaction();
 if (InTransLocal)
     getDrv().IniciarTrans();
 try {
-PDDocs Doc2Purge=new PDDocs(getDrv());
-Doc2Purge.LoadFull(Id);
+PDDocs Doc2Purge=new PDDocs(getDrv(), DocTypename);
+Doc2Purge.LoadDeleted(DocTypename, Id);
 Doc2Purge.MultiDelete(Id, null);
 Cursor Cur=ListVersions(DocTypename, Id);
 Record Rec=getDrv().NextRec(Cur);
@@ -1937,7 +1965,7 @@ while (Rec!=null)
     Rec=getDrv().NextRec(Cur);
     }
 getDrv().CloseCursor(Cur);
-} catch (PDException Ex)
+} catch (Exception Ex)
     {
     getDrv().AnularTrans();
     PDException.GenPDException("Error_during_purge_of_document", Id);
@@ -1956,7 +1984,6 @@ public String getStatus()
 return Status;
 }
 //-------------------------------------------------------------------------
-
 /**
 * @param Status the Status to set
 */

@@ -1165,6 +1165,7 @@ try {
 PDDocs Doc = new PDDocs(getSession());
 File FileImp=new File(FileName);  
 getSession().ProcessXML(FileImp, ActFolderId); 
+RefreshDocs();
 } catch (Exception ex)
     {
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
@@ -1201,6 +1202,10 @@ if (ImpFold.isCancel())
     return;
 Import(FoldAct, ImpFold.SelFolder.getAbsolutePath(), ImpFold.IsOneLevel(), ImpFold.IncludeMetadata(), ImpFold.IncludeDocs(), ImpFold.FoldType(), ImpFold.DocType());
 Message(DrvTT("Imported")+" "+ExpFolds+" "+DrvTT("Folders")+" / "+ExpDocs +" "+DrvTT("Documents"));
+TreePath ActualPath = TreeFolder.getSelectionPath();
+DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) ActualPath.getLastPathComponent();
+ExpandFold(TreeFold);
+TreeFolder.setSelectionPath(ActualPath);
 } catch (Exception ex)
     {
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
