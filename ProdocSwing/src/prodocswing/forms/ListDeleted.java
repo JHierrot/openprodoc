@@ -30,14 +30,7 @@ import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import prodoc.Attribute;
-import prodoc.Cursor;
-import prodoc.DriverGeneric;
-import prodoc.PDDocs;
-import prodoc.PDException;
-import prodoc.PDObjDefs;
-import prodoc.PDRoles;
-import prodoc.Record;
+import prodoc.*;
 import prodocswing.PDTableModel;
 
 /**

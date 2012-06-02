@@ -74,7 +74,7 @@ setTable(pParam);
 protected void Create() throws PDException
 {
     // PdId includes PDID+Version
-String SQL="CREATE TABLE "+getTable()+"(PDId varchar(32) PRIMARY KEY NOT NULL, PDVersion varchar(32) PRIMARY KEY NOT NULL, PDDATE timestamp NOT NULL, PDCONT BLOB NOT NULL)";
+String SQL="CREATE TABLE "+getTable()+"(PDId varchar(32) NOT NULL, PDVersion varchar(32) NOT NULL, PDDATE timestamp NOT NULL, PDCONT BLOB NOT NULL, PRIMARY KEY(PDId, PDVersion))";
 try {
 stmt. execute(SQL);
 } catch (Exception ex)

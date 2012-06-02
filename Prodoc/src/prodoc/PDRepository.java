@@ -355,7 +355,7 @@ return Password;
 */
 public void setPassword(String pPassword)
 {
-this.Password = pPassword;
+Password = (pPassword);
 }
 //-------------------------------------------------------------------------
 /**

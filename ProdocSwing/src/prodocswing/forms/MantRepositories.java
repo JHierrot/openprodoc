@@ -104,7 +104,7 @@ initComponents();
         TypeLabel.setText("jLabel1");
 
         TypeComboBox.setFont(MainWin.getFontDialog());
-        TypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "BBDD", "FS", "FTP", "REFURL" }));
+        TypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "DDBB", "FS", "FTP", "REFURL" }));
 
         URLLabel.setFont(MainWin.getFontDialog());
         URLLabel.setText("jLabel1");
