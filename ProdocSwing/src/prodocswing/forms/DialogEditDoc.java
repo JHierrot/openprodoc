@@ -130,6 +130,7 @@ initComponents();
         IdLabel.setFont(MainWin.getFontDialog());
         IdLabel.setText("Id");
 
+        IdField.setColumns(32);
         IdField.setEditable(false);
         IdField.setFont(MainWin.getFontDialog());
         IdField.setEnabled(false);
@@ -139,16 +140,19 @@ initComponents();
 
         ACLComboBox.setFont(MainWin.getFontDialog());
         ACLComboBox.setModel(getComboModel());
+        ACLComboBox.setPreferredSize(new java.awt.Dimension(43, 27));
 
         TitleLabel.setFont(MainWin.getFontDialog());
         TitleLabel.setText(MainWin.TT("Document_Title"));
 
         TitleTextField.setFont(MainWin.getFontDialog());
+        TitleTextField.setPreferredSize(new java.awt.Dimension(32, 27));
 
         DateLabel.setFont(MainWin.getFontDialog());
         DateLabel.setText(MainWin.TT("Document_Date"));
 
         DateTextField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd-MM-yyyy"))));
+        DateTextField.setPreferredSize(new java.awt.Dimension(12, 27));
 
         NameLabel.setFont(MainWin.getFontDialog());
         NameLabel.setText(MainWin.TT("Name"));
@@ -179,14 +183,14 @@ initComponents();
                 .addGroup(AttrBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(AttrBasicLayout.createSequentialGroup()
                         .addGroup(AttrBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(ACLDescripLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                            .addComponent(TitleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                            .addComponent(DateLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                            .addComponent(NameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                            .addComponent(FilePathLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE))
+                            .addComponent(ACLDescripLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(TitleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(DateLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(NameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(FilePathLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(33, 33, 33))
                     .addGroup(AttrBasicLayout.createSequentialGroup()
-                        .addComponent(IdLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                        .addComponent(IdLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(AttrBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(IdField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
