@@ -134,16 +134,16 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="ACLDescripLabel" linkSize="2" alignment="0" pref="122" max="32767" attributes="1"/>
-                                  <Component id="TitleLabel" linkSize="2" alignment="0" pref="122" max="32767" attributes="1"/>
-                                  <Component id="DateLabel" linkSize="2" alignment="0" pref="122" max="32767" attributes="1"/>
-                                  <Component id="NameLabel" linkSize="2" alignment="0" pref="122" max="32767" attributes="1"/>
-                                  <Component id="FilePathLabel" linkSize="2" alignment="0" pref="122" max="32767" attributes="1"/>
+                                  <Component id="ACLDescripLabel" linkSize="2" alignment="0" max="32767" attributes="1"/>
+                                  <Component id="TitleLabel" linkSize="2" alignment="0" max="32767" attributes="1"/>
+                                  <Component id="DateLabel" linkSize="2" alignment="0" max="32767" attributes="1"/>
+                                  <Component id="NameLabel" linkSize="2" alignment="0" max="32767" attributes="1"/>
+                                  <Component id="FilePathLabel" linkSize="2" alignment="0" max="32767" attributes="1"/>
                               </Group>
                               <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="IdLabel" linkSize="2" pref="122" max="32767" attributes="1"/>
+                              <Component id="IdLabel" linkSize="2" max="32767" attributes="1"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -214,6 +214,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="IdField">
               <Properties>
+                <Property name="columns" type="int" value="32"/>
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="MainWin.getFontDialog()" type="code"/>
@@ -239,6 +240,9 @@
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="getComboModel()" type="code"/>
                 </Property>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[43, 27]"/>
+                </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="TitleLabel">
@@ -256,6 +260,9 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="MainWin.getFontDialog()" type="code"/>
                 </Property>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[32, 27]"/>
+                </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="DateLabel">
@@ -272,6 +279,9 @@
               <Properties>
                 <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
                   <Format format="dd-MM-yyyy" subtype="-1" type="1"/>
+                </Property>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[12, 27]"/>
                 </Property>
               </Properties>
             </Component>

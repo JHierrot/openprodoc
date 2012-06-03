@@ -909,6 +909,10 @@ PDDocs Doc;
 DialogEditDoc MD = new DialogEditDoc(this,true);
 try {
 Doc = new PDDocs(getSession());
+TreePath selectionPath = TreeFolder.getSelectionPath();
+DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) selectionPath.getLastPathComponent();
+PDFolders Fold= ((TreeFolder) TreeFold.getUserObject()).getFold();
+Doc.setACL(Fold.getACL());
 MD.setRecord(Doc.getRecSum());
 MD.AddMode();
 MD.setLocationRelativeTo(null);

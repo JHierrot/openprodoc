@@ -561,8 +561,8 @@ MP.setLocationRelativeTo(null);
 MP.setVisible(true);
 if (MP.isCancel())
     return;
-//r.assign(MP.getRecord());
 getListRes().add(MP.getRecord());
+ButtonCreateObject.setEnabled(false);
 RefreshOwnAttr(TypeNameTextField.getText());
 } catch (PDException ex)
     {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
@@ -593,7 +593,7 @@ for (int i = 0; i < getListRes().size(); i++)
        break;
        }   
     }
-// newObjDef.delAtribute(AttrName);
+ButtonCreateObject.setEnabled(false);
 RefreshOwnAttr(TypeNameTextField.getText());
 } catch (PDException ex)
     {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
@@ -605,8 +605,6 @@ RefreshOwnAttr(TypeNameTextField.getText());
 if (AttrTable.getSelectedRow()==-1)
     return;
 try {
-//PDObjDefs newObjDef=new PDObjDefs((MainWin.getSession()));
-//newObjDef.setName((String)ObjDef.getAttr(PDObjDefs.fNAME).getValue());
 MantAttr MP = new MantAttr(Fparent, true, true);
 MP.setRecord(AttrMembers.getElement(AttrTable.convertRowIndexToModel(AttrTable.getSelectedRow())));
 MP.EditMode();
@@ -624,6 +622,7 @@ for (int i = 0; i < getListRes().size(); i++)
        break;
        }   
     }
+ButtonCreateObject.setEnabled(false);
 RefreshOwnAttr(TypeNameTextField.getText());
 } catch (PDException ex)
     {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
