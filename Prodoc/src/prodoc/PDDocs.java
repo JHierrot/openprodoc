@@ -30,7 +30,7 @@ import org.w3c.dom.NodeList;
  */
 public class PDDocs extends ObjPD
 {
-final int BUFFSIZE=204800;
+private static final int BUFFSIZE=1024*64;
 private static final String DEFTABNAME="PD_DOCS";
 /**
  *
@@ -549,10 +549,10 @@ if (!getDrv().getUser().getRol().isAllowCreateDoc() )
 PDObjDefs D=new PDObjDefs(getDrv());
 D.Load(getDocType());    
 if (!getDrv().getUser().getAclList().containsKey(D.getACL()))
-    PDExceptionFunc.GenPDException("Document_creation_not_allowed_to_user",getDocType());
+    PDExceptionFunc.GenPDException("Document_creation_not_allowed_to_user",getDrv().getUser().getName()+" / "+getDocType());
 Integer Perm=(Integer)getDrv().getUser().getAclList().get(D.getACL());
 if (Perm.intValue()<PDACL.pUPDATE)
-    PDExceptionFunc.GenPDException("Document_creation_not_allowed_to_user",getDocType());
+    PDExceptionFunc.GenPDException("Document_creation_not_allowed_to_user",getDrv().getUser().getName()+" / "+getDocType());
 }
 //-------------------------------------------------------------------------
 /**
@@ -1684,7 +1684,8 @@ Attr=Rec.getAttr(fNAME);
 StoreGeneric Rep=getDrv().getRepository(getReposit());
 if (Rep.IsRef())
     {
-    Attr.setValue(Rep.ObtainName(FilePath));
+    if (FilePath!=null)
+        Attr.setValue(Rep.ObtainName(FilePath));
     }
 else
     {
@@ -1698,9 +1699,12 @@ else
         Attr.setValue(TobeUpdated.getName());
         }
     }
-PDMimeType MT=new PDMimeType(getDrv());   
-MT.SolveExt(FilePath.substring(FilePath.lastIndexOf('.')+1));
-Rec.getAttr(fMIMETYPE).setValue(MT.getName());
+if (FilePath!=null)
+    {
+    PDMimeType MT=new PDMimeType(getDrv());   
+    MT.SolveExt(FilePath.substring(FilePath.lastIndexOf('.')+1));
+    Rec.getAttr(fMIMETYPE).setValue(MT.getName());
+    }
 UpdateVersion(getPDId(), getDrv().getUser().getName(), Rec);
 MultiDelete(Id, getDrv().getUser().getName());
 Rec=getRecSum().Copy();
@@ -1723,7 +1727,7 @@ if (!Rep.IsRef())
 FilePath=null;
 FileStream=null;
 getObjCache().put(getKey(), getRecord());
-} catch (PDException Ex)
+} catch (Exception Ex)
     {
     getDrv().AnularTrans();
     PDExceptionFunc.GenPDException("Error_updating_Document",Ex.getLocalizedMessage());
@@ -1837,7 +1841,7 @@ Attr.setValue(fSTATUS_LASTDEL); // actual version muts be indicated
 UpdateVersion(Id, Vers, R);
 DeleteFragments(TypeDefs, Id);
 getObjCache().remove(getKey());
-} catch (PDException Ex)
+} catch (Exception Ex)
     {
     getDrv().AnularTrans();
     PDException.GenPDException("Error_deleting_Document",Ex.getLocalizedMessage());

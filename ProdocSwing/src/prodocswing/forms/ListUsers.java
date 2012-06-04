@@ -122,6 +122,9 @@ if (MU.isCancel())
     return(false);
 //MU.getRecord().Verify();
 PDObject.assignValues(MU.getRecord());
+PDUser U=(PDUser)PDObject;
+if (U.getPassword()!=null && U.getPassword().length()==0 )
+    U.setPassword(null);
 return(true);
 }
 //--------------------------------------------------------------------

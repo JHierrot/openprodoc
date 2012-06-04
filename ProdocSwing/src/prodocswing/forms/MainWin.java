@@ -931,7 +931,6 @@ while (true)
     if (!SelectedType.equalsIgnoreCase(Doc.getDocType()))
         Doc = new PDDocs(getSession(), SelectedType);
     Doc.assignValues(MD.getRecord());
-    // if (MD.SelFile!=null)
     if (MD.GetSelectPath()!=null && MD.GetSelectPath().length()>0)
         Doc.setFile(MD.GetSelectPath());
     else
