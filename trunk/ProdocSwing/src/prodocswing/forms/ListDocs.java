@@ -88,6 +88,11 @@ ObjectsTable.setAutoCreateColumnsFromModel(true);
 
         ObjectsTable.setAutoCreateRowSorter(true);
         ObjectsTable.setFont(MainWin.getFontList());
+        ObjectsTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ObjectsTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(ObjectsTable);
 
         jToolBar1.setRollover(true);
@@ -288,6 +293,30 @@ Doc.CancelCheckout();
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
 }//GEN-LAST:event_CancelCheckoutButtonActionPerformed
+
+    private void ObjectsTableMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_ObjectsTableMouseClicked
+    {//GEN-HEADEREND:event_ObjectsTableMouseClicked
+if (evt.getClickCount()<2)
+    return;
+if (getObjectsTable().getSelectedRow()==-1)
+    return;
+try {
+PDDocs Doc = new PDDocs(MainWin.getSession());
+Doc.assignValues(DocsList.getElement(getObjectsTable().convertRowIndexToModel(getObjectsTable().getSelectedRow())));
+String FileName;
+if (Doc.IsUrl())
+    FileName=Doc.getUrl();
+else
+    {
+    FileName=Doc.getFileOpt(MainWin.getTmp(), false);
+    MainWin.AddExec(FileName);
+    }
+MainWin.Execute(FileName);
+} catch (Exception ex)
+    {
+    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
+    }//GEN-LAST:event_ObjectsTableMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CancelCheckoutButton;

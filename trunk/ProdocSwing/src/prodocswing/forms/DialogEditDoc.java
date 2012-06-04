@@ -325,9 +325,12 @@ if (!DelMode)
     Attr.setValue(DateTextField.getValue());
     Attr = EditedDoc.getAttr(PDDocs.fNAME);
     Attr.setValue(NameTextField.getText());
-    Attr = EditedDoc.getAttr(PDDocs.fMIMETYPE);
-    PDMimeType mt=new PDMimeType(MainWin.getSession());
-    Attr.setValue(mt.SolveName(FilePathTextField.getText()));
+    if (FilePathTextField.getText().length()>0)
+        {
+        Attr = EditedDoc.getAttr(PDDocs.fMIMETYPE);
+        PDMimeType mt=new PDMimeType(MainWin.getSession());
+        Attr.setValue(mt.SolveName(FilePathTextField.getText()));
+        }
     RetrieveFields(EditedDoc, AttrExcluded, InputFields, Modif);
    }
 Cancel = false;

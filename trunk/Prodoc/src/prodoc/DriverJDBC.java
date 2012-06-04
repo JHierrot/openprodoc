@@ -524,7 +524,13 @@ if (Condit.getcType()==Condition.ctNORMAL)
         }
     Object O=Condit.getValue();
     if (O instanceof String)
-        SQLWhere+=toString((String)O);
+        {
+        String S=(String)O;    
+        if (Condit.getComparation()==Condition.cLIKE && S.indexOf('%')==-1)
+            SQLWhere+=toString("%"+S+"%");
+        else    
+            SQLWhere+=toString(S);
+        }
     else if (O instanceof Date)
         SQLWhere+=toDate((Date)O);
     else if (O instanceof Boolean)
