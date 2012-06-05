@@ -46,7 +46,7 @@ private boolean Modif=false;
 private boolean SetRecordDocChanged=false;
 private Vector InputFields=new Vector();
 private HashSet AttrExcluded=new HashSet();
-private boolean DelMode=false;
+private boolean ViewMode=false;
 /**
  * 
  */
@@ -313,7 +313,7 @@ this.dispose();
     private void ButtonAceptActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ButtonAceptActionPerformed
     {//GEN-HEADEREND:event_ButtonAceptActionPerformed
 try {
-if (!DelMode)    
+if (!ViewMode)    
    {
     Attribute Attr = EditedDoc.getAttr(PDDocs.fACL);
     Attr.setValue(ACLComboBox.getSelectedItem());
@@ -467,6 +467,7 @@ DateTextField.setEnabled(false);
 //MimeTypeCB.setEnabled(false);
 ButtonSelFile.setEnabled(false);
 FilePathTextField.setEnabled(false);
+ViewMode=true;
 }
 //----------------------------------------------------------------
 /**
@@ -483,7 +484,7 @@ DateTextField.setEnabled(false);
 //MimeTypeCB.setEnabled(false);
 ButtonSelFile.setEnabled(false);
 FilePathTextField.setEnabled(false);
-DelMode=true;
+ViewMode=true;
 }
 //----------------------------------------------------------------
 /**
@@ -625,6 +626,8 @@ while (Attr!=null)
         JLabel Lab=new JLabel(MainWin.DrvTT(Attr.getUserName()));
         Lab.setFont(MainWin.getFontDialog());
         JComponent JTF=genComponent(Attr, Modif);
+        if (ViewMode)
+            JTF.setEnabled(false);
         InputFields.add(JTF);
         LGroup.addComponent(Lab);
         TGroup.addComponent(JTF);

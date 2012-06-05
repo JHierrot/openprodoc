@@ -347,7 +347,8 @@ void DelMode()
 {
 LabelOperation.setText(MainWin.TT("Delete_Folder"));
 FoldTypeCB.setEnabled(false);
-this.TitleTextField.setEnabled(false);
+TitleTextField.setEnabled(false);
+ACLComboBox.setEnabled(false);
 Modif=true;
 Delete=true;
 }
@@ -460,6 +461,8 @@ while (Attr!=null)
         JLabel Lab=new JLabel(Attr.getUserName());
         Lab.setFont(MainWin.getFontDialog());
         JComponent JTF=genComponent(Attr, Modif);
+        if (Delete)
+            JTF.setEnabled(false);
         InputFields.add(JTF);
         LGroup.addComponent(Lab);
         TGroup.addComponent(JTF);

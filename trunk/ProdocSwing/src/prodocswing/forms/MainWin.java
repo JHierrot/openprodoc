@@ -889,8 +889,8 @@ PDDocs Doc = new PDDocs(getSession());
 DialogEditDoc MD = new DialogEditDoc(this,true);
 Doc.assignValues(DocsContained.getElement(DocsTable.convertRowIndexToModel(DocsTable.getSelectedRow())));
 Doc.LoadFull(Doc.getPDId());
-MD.setRecord(Doc.getRecSum());
 MD.DelMode();
+MD.setRecord(Doc.getRecSum());
 MD.setLocationRelativeTo(null);
 MD.setVisible(true);
 if (MD.isCancel())
@@ -1230,8 +1230,8 @@ PDDocs Doc = new PDDocs(getSession());
 DialogEditDoc MD = new DialogEditDoc(this,true);
 Doc.assignValues(DocsContained.getElement(DocsTable.convertRowIndexToModel(DocsTable.getSelectedRow())));
 Doc.LoadFull(Doc.getPDId());
-MD.setRecord(Doc.getRecSum());
 MD.ViewMode();
+MD.setRecord(Doc.getRecSum());
 MD.setLocationRelativeTo(null);
 MD.setVisible(true);
 } catch (Exception ex)

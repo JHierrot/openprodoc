@@ -793,8 +793,22 @@ if (PDLog.isDebug())
     PDLog.Debug("PDObjDefs.DeleteObjectTables:"+Name);
 PDObjDefs Def=new PDObjDefs(getDrv());
 Def.Load(Name);
+String Err="";
+try {
 getDrv().DropTable(Def.getName());
-getDrv().DropTable(GenVerTabName(Def.getName()));
+} catch (Exception ex)
+    {
+    Err=ex.getLocalizedMessage();    
+    }
+if (!Def.getClassType().equals(CT_FOLDER))
+    {
+    try {
+    getDrv().DropTable(GenVerTabName(Def.getName()));
+    } catch (Exception ex)
+        {
+        Err+="/"+ex.getLocalizedMessage();    
+        }
+    }
 Record RecDef=Def.GetAttrDef();
 RecDef.initList();
 for (int i = 0; i < RecDef.NumAttr(); i++)
@@ -803,9 +817,16 @@ for (int i = 0; i < RecDef.NumAttr(); i++)
     if (Atr.isMultivalued())
         {
         String MultiName=genMultValNam(Def.getName(),Atr.getName());
+        try {
         getDrv().DropTable(MultiName);
+        } catch (Exception ex)
+            {
+            Err+="/"+ex.getLocalizedMessage();    
+            }
         }
     }
+if (Err.length()>0)
+   PDExceptionFunc.GenPDException(Err, Name);
 Def.setCreated(false);
 Def.update();
 }
