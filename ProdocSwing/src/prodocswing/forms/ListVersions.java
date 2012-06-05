@@ -140,8 +140,8 @@ PDDocs Doc = new PDDocs(MainWin.getSession());
 DialogEditDoc MD = new DialogEditDoc(this,true);
 Doc.assignValues(getPDTableModel().getElement(getSelectedRow()));
 Doc.LoadVersion(Doc.getPDId(), Doc.getVersion());
-MD.setRecord(Doc.getRecSum()); 
 MD.ViewMode();
+MD.setRecord(Doc.getRecSum()); 
 MD.setLocationRelativeTo(null);
 MD.setVisible(true);
 } catch (Exception ex)
