@@ -719,12 +719,14 @@ else if (Attr.getType()==Attribute.tBOOLEAN)
     }
 else if (Attr.getType()==Attribute.tINTEGER)
     {
-    JTF=new JFormattedTextField(new DecimalFormat());
+    JTF=new JFormattedTextField(new DecimalFormat("#######0"));
     if (Attr.getValue()!=null)
         ((JFormattedTextField)JTF).setValue((Integer)Attr.getValue());
+    else
+        ((JFormattedTextField)JTF).setValue((Integer)0);
     }
 else
-     JTF=new JTextField("Error, unimplementd field type");
+     JTF=new JTextField("Error, unimplemented field type");
 if (Modif && !Attr.isModifAllowed())
     JTF.setEnabled(false);
 if (Attr.getType()==Attribute.tDATE )
@@ -792,7 +794,6 @@ else if (Attr.getType()==Attribute.tINTEGER)
     {
     Long l=(Long)((JFormattedTextField)JTF).getValue();
     Attr.setValue(new Integer(l.intValue()));
-//    Attr.setValue((Integer)((JFormattedTextField)JTF).getValue());
     }
 else
     Attr.setValue("Error, no implementado");

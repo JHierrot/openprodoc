@@ -26,7 +26,8 @@
 package prodocswing.forms;
 
 import java.awt.Component;
-import java.awt.event.KeyEvent;
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Vector;
@@ -238,13 +239,16 @@ this.dispose();
     private void ButtonAceptActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ButtonAceptActionPerformed
     {//GEN-HEADEREND:event_ButtonAceptActionPerformed
 try {
-Attribute Attr = Folder.getAttr(PDFolders.fACL);
-Attr.setValue(ACLComboBox.getSelectedItem());
-Attr = Folder.getAttr(PDFolders.fFOLDTYPE);
-Attr.setValue(FoldTypeCB.getSelectedItem());
-Attr = Folder.getAttr(PDFolders.fTITLE);
-Attr.setValue(TitleTextField.getText());
-RetrieveFields(Folder, AttrExcluded, InputFields, Modif);
+if (!Delete)  
+    {
+    Attribute Attr = Folder.getAttr(PDFolders.fACL);
+    Attr.setValue(ACLComboBox.getSelectedItem());
+    Attr = Folder.getAttr(PDFolders.fFOLDTYPE);
+    Attr.setValue(FoldTypeCB.getSelectedItem());
+    Attr = Folder.getAttr(PDFolders.fTITLE);
+    Attr.setValue(TitleTextField.getText());
+    RetrieveFields(Folder, AttrExcluded, InputFields, Modif);
+    }
 Cancel = false;
 this.dispose();
 } catch (PDException ex)
@@ -551,8 +555,16 @@ else if (Attr.getType()==Attribute.tBOOLEAN)
         }
     JTF=JCB;
     }
+else if (Attr.getType()==Attribute.tINTEGER)
+    {
+    JTF=new JFormattedTextField(new DecimalFormat("#######0"));
+    if (Attr.getValue()!=null)
+        ((JFormattedTextField)JTF).setValue((Integer)Attr.getValue());
+    else
+        ((JFormattedTextField)JTF).setValue((Integer)0);
+    }
 else
-     JTF=new JTextField("Error");
+     JTF=new JTextField("Error, unimplemented field type");
 //if (Delete || (Modif && (!Attr.isModifAllowed() || Attr.isPrimKey()) ) )
 //    JTF.setEnabled(false);
 if (Modif && !Attr.isModifAllowed())
@@ -617,6 +629,11 @@ else if (Attr.getType()==Attribute.tBOOLEAN)
     else
         Act=false;
     Attr.setValue(Act);
+    }
+else if (Attr.getType()==Attribute.tINTEGER)
+    {
+    Long l=(Long)((JFormattedTextField)JTF).getValue();
+    Attr.setValue(new Integer(l.intValue()));
     }
 else
     Attr.setValue("Error");
