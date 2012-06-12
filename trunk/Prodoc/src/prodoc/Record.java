@@ -264,7 +264,7 @@ else
  * @return
  * @throws PDException 
  */
-public Record Copy() throws PDException
+synchronized public Record Copy() throws PDException
 {
 Record Copy=new Record();
 initList();
@@ -280,7 +280,7 @@ return(Copy);
  * @return a new Record with non Multivalued Attributes
  * @throws PDException in any error
  */
-public Record CopyMono() throws PDException
+synchronized public Record CopyMono() throws PDException
 {
 Record Copy=new Record();
 initList();
@@ -298,7 +298,7 @@ return(Copy);
  * @return a new Record with non Multivalued Attributes
  * @throws PDException in any error
  */
-public Record CopyMulti() throws PDException
+synchronized public Record CopyMulti() throws PDException
 {
 Record Copy=new Record();
 initList();
