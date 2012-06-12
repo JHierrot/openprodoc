@@ -318,7 +318,7 @@ getDrv().DropTable(getTabNameAttrs());
  * @throws PDException
  */
 @Override
-public Record getRecord() throws PDException
+public synchronized Record getRecord() throws PDException
 {
 Record Rec=getRecordStruct();
 Rec.getAttr(fNAME).setValue(getName());
@@ -340,7 +340,7 @@ return(Rec);
  *
  */
 @Override
-Record getRecordStruct() throws PDException
+synchronized Record getRecordStruct() throws PDException
 {
 if (DocsDefStruct==null)
     DocsDefStruct=CreateRecordStruct();

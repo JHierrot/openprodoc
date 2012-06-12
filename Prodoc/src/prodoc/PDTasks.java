@@ -88,13 +88,16 @@ super(Drv);
  * @param Rec
  * @throws PDException
  */
+@Override
 public void assignValues(Record Rec) throws PDException
 {
 setName((String) Rec.getAttr(fNAME).getValue());
 setDescription((String) Rec.getAttr(fDESCRIPTION).getValue());
 setStartDate((Date) Rec.getAttr(fSTARTDATE).getValue());
 setNextDate((Date) Rec.getAttr(fNEXTDATE).getValue());
-setNextDate((Date) Rec.getAttr(fNEXTDATE).getValue());
+setAddDays(AddDays);
+setAddHours(AddHours);
+setAddMins(AddMins);
 assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
