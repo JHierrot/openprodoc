@@ -324,8 +324,8 @@ return("PD_USERS");
  *
  * @throws PDException 
  */
-    @Override
-public Record getRecord() throws PDException
+@Override
+synchronized public Record getRecord() throws PDException
 {
 Record Rec=getRecordStruct();
 Rec.getAttr(fNAME).setValue(getName());

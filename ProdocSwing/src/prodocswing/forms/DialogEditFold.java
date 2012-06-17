@@ -632,8 +632,9 @@ else if (Attr.getType()==Attribute.tBOOLEAN)
     }
 else if (Attr.getType()==Attribute.tINTEGER)
     {
-    Long l=(Long)((JFormattedTextField)JTF).getValue();
-    Attr.setValue(new Integer(l.intValue()));
+//    Long l=(Long)((JFormattedTextField)JTF).getValue();
+//    Attr.setValue(new Integer(l.intValue()));
+    Attr.setValue(((JFormattedTextField)JTF).getValue());
     }
 else
     Attr.setValue("Error");
