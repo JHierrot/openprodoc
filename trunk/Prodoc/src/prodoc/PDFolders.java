@@ -239,7 +239,8 @@ Drv.CreateTable(getTableName(), getRecordStructPDFolder());
  *
  * @throws PDException
  */
-public Record getRecord() throws PDException
+@Override
+synchronized public Record getRecord() throws PDException
 {
 return(getRecSum());
 }

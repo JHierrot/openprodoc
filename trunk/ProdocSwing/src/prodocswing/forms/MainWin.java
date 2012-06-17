@@ -163,7 +163,7 @@ DocsTable.setAutoCreateColumnsFromModel(true);
             }
         });
 
-        jSplitPane1.setDividerLocation(150);
+        jSplitPane1.setDividerLocation(180);
         jSplitPane1.setDividerSize(4);
 
         TreeFolder.setFont(getFontTree());
@@ -191,7 +191,7 @@ DocsTable.setAutoCreateColumnsFromModel(true);
 
         jSplitPane1.setLeftComponent(jScrollPane1);
 
-        jSplitPane2.setDividerLocation(100);
+        jSplitPane2.setDividerLocation(160);
         jSplitPane2.setDividerSize(4);
         jSplitPane2.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
 
@@ -605,11 +605,11 @@ DocsTable.setAutoCreateColumnsFromModel(true);
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 647, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 732, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE)
         );
 
         pack();
@@ -1622,6 +1622,8 @@ String Orders[]= {"xdg-open", Doc};
 String OS=System.getProperty("os.name");
 if (OS.contains("Win"))
     Orders[0]="explorer";
+else if (OS.contains("OS X") || OS.contains("Mac"))
+    Orders[0]="open";
 Runtime.getRuntime().exec(Orders);
 } catch (Exception ex)
     {

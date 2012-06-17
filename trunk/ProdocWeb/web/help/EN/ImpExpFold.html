@@ -3,6 +3,8 @@
     <head>
         <title>Import and Export Folders</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management"/>
+        <meta name="author" content="Joaquin Hierro" />
         <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
     </head>
     <body>
@@ -16,6 +18,7 @@
 <li><b>Include Metadata</b>: If you select this option, the export will generate the same level and with the same name as the element, a file ". opd" with the object's metadata (folder or document ). Otherwise, just is created in the file system the folder or document. </li>
 <li><b>The destination folder</b> indicates the file system folder under which to create the structure of folders and documents. </li>
 </ul>
+<p style="text-align:center;"><img alt="Screenshot Export" src="img/Export.jpg"/></p>
 <p>Export only include the documents for which the user has access permissions, therefore should not be assumed that the entire tree has exported unless the user has access permissions to all branches and documents.</p>
 <p>After the export, OPD will present a summary containing the number of folders exported and the number of documents. If an error occurs, a message will be presented with the reason for the error.</p>
 <p>Should be noted that to avoid unwanted effects on import, OPD does not include definitions during export. Therefore, the definitions of elements such as document type (with metadata correspondence), ACL, mime type, etc.. must exist at the time of import (in the current system or at a different location). To export the definitions should be used explicitly maintenance functions of the administration screens.</p>
@@ -28,6 +31,7 @@
 <li><b>Document Type:</b> If you do not import metadata (by choice or because it is a file system that does not contain them), this parameter indicates the document type  to be assigned to imported documents. The type can not be include mandatory metadata, since the import will fail.</li>
 <li><b>source folder:</b> indicates the file system folder from which you will start to import the structure of folders and documents. </li>
 </ul>
+<p style="text-align:center;"><img alt="Screenshot Import" src="img/Import.jpg"/></p>
 <p>When ends importing, OPD will present a summary the number of folders containing imported and the number of documents. If an error occurs, a message will be presented with the reason for the error. </p>
 <p>At the time of import, should exist the definitions of: </p>
 <ul>

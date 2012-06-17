@@ -326,7 +326,7 @@ else
     Act =false;
     }
 Attr.setValue(Act);
-//Attr = AttrEdit.getAttr(PDObjDefs.fATTRPRIMKEY);
+Attr = AttrEdit.getAttr(PDObjDefs.fATTRPRIMKEY);
 //if (PrimKeyCheckBox.isSelected())
 //    {
 //    Act =true;
@@ -335,7 +335,15 @@ Attr.setValue(Act);
 //    {
 //    Act =false;
 //    }
-//Attr.setValue(Act);
+if (MultivalCheckBox.isSelected())  // no es error, debe ser primary key 
+    {
+    Act =true;
+    }
+else
+    {
+    Act =false;
+    }
+Attr.setValue(Act);
 Attr = AttrEdit.getAttr(PDObjDefs.fATTRMODALLOW);
 if (AllowModCheckBox.isSelected())
     {

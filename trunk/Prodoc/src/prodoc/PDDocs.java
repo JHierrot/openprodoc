@@ -309,7 +309,7 @@ return(DEFTABNAME);
  * @return a record with all the attributes of the document type
  */
 @Override
-public Record getRecord() throws PDException
+synchronized public Record getRecord() throws PDException
 {
 return(getRecSum());
 }
@@ -320,7 +320,7 @@ return(getRecSum());
  * @return a copy of the static structure of attributes for the class
  */
 @Override
-public Record getRecordStruct() throws PDException
+synchronized public Record getRecordStruct() throws PDException
 {
 if (DocsStruct==null)
     DocsStruct=CreateRecordStructPDDocs();
