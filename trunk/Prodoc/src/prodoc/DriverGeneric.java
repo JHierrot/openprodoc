@@ -1512,6 +1512,7 @@ return PDCust;
  * 
  * @param XMLFile
  * @param ParentFolderId
+ * @return Num of elements processed
  * @throws PDException
  */
 public int ProcessXML(File XMLFile, String ParentFolderId) throws PDException
@@ -1545,7 +1546,6 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
 return(Tot);
 }catch(Exception ex)
     {
-    ex.printStackTrace();
     PDLog.Error(ex.getLocalizedMessage());
     throw new PDException(ex.getLocalizedMessage());
     }

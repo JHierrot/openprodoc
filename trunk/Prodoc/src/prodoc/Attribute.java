@@ -663,7 +663,7 @@ S.append("<"+ObjPD.XML_Attr+" Name=\"");
 S.append(getName());
 S.append("\">");
 S.append(Export());
-S.append("</"+ObjPD.XML_Attr+">");
+S.append("</"+ObjPD.XML_Attr+">\n");
 return(S.toString());
 }
 //--------------------------------------------------------------------------
@@ -708,7 +708,7 @@ S.append("</ModAllow>");
 S.append("<Multi>");
 S.append(isMultivalued());
 S.append("</Multi>");
-S.append("</attr>");
+S.append("</attr>\n");
 return(S.toString());
 }
 //--------------------------------------------------------------------------

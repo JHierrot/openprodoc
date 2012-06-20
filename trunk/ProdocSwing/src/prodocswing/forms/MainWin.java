@@ -85,6 +85,7 @@ initComponents();
 TreeFolder.setPreferredSize(null);
 DocsTable.setAutoCreateRowSorter(true);
 DocsTable.setAutoCreateColumnsFromModel(true);
+SetMenu();
 }
 
     /** This method is called from within the constructor to
@@ -1929,6 +1930,41 @@ for (Iterator it = ExecFiles.iterator(); it.hasNext();)
         {   
         }
     } 
+}
+//---------------------------------------------------------------------
+private void SetMenu()
+{
+try {    
+PDRoles R=MainWin.getSession().getUser().getRol();
+ACLMenuItem.setVisible(R.isAllowCreateAcl() || R.isAllowMaintainAcl());
+AuthentMenuItem.setVisible(R.isAllowCreateAuth()  || R.isAllowMaintainAuth());
+CustomMenuItem.setVisible(R.isAllowCreateCustom()  || R.isAllowMaintainCustom());
+GroupMenuItem.setVisible(R.isAllowCreateGroup()  || R.isAllowMaintainGroup());
+MimeTypeMenuItem.setVisible(R.isAllowCreateMime()  || R.isAllowMaintainMime());
+ObjDefMenuItem.setVisible(R.isAllowCreateObject()  || R.isAllowMaintainObject());
+ReposMenuItem.setVisible(R.isAllowCreateRepos()  || R.isAllowMaintainRepos());
+RolMenuItem.setVisible(R.isAllowCreateRole()  || R.isAllowMaintainRole());
+UserMenuItem.setVisible(R.isAllowCreateUser()  || R.isAllowMaintainUser());
+AddFold.setVisible(R.isAllowCreateFolder());
+AddFoldAdvanced.setVisible(R.isAllowCreateFolder());
+ImportFold.setVisible(R.isAllowCreateFolder());
+ModFold.setVisible(R.isAllowMaintainFolder());
+ModFoldAdvanced.setVisible(R.isAllowMaintainFolder());
+DelFold.setVisible(R.isAllowMaintainFolder());
+AddDoc.setVisible(R.isAllowCreateDoc());
+AddDocAdvanced.setVisible(R.isAllowCreateDoc());
+ImportDoc.setVisible(R.isAllowCreateDoc());
+PaperBin.setVisible(R.isAllowCreateDoc() && R.isAllowMaintainDoc());
+ModDocAdvanced.setVisible(R.isAllowMaintainDoc());
+CheckOut.setVisible(R.isAllowMaintainDoc());
+CancelCheckout.setVisible(R.isAllowMaintainDoc());
+CheckIn.setVisible(R.isAllowMaintainDoc());
+CheckOut.setVisible(R.isAllowMaintainDoc());
+DelDoc.setVisible(R.isAllowMaintainDoc());
+} catch (Exception ex)
+    {
+    Message(ex.getLocalizedMessage());
+    }
 }
 //---------------------------------------------------------------------
 }

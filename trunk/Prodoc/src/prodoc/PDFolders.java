@@ -139,7 +139,7 @@ setFolderType(pFoldType);
 getTypeDefs();
 }
 //-------------------------------------------------------------------------
-
+@Override
 public void assignValues(Record Rec) throws PDException
 {
 setPDId((String) Rec.getAttr(fPDID).getValue());
@@ -178,6 +178,7 @@ return Title;
 //-------------------------------------------------------------------------
 /**
  * @param pTitle
+ * @throws PDExceptionFunc  
 */
 public void setTitle(String pTitle) throws PDExceptionFunc
 {
@@ -201,6 +202,7 @@ this.Title = pTitle;
  * object "method" needed because static overloading doesn't work in java
  * @return
  */
+@Override
 public String getTabName()
 {
 return(getTableName());
@@ -245,6 +247,7 @@ synchronized public Record getRecord() throws PDException
 return(getRecSum());
 }
 //-------------------------------------------------------------------------
+@Override
 protected Record getRecordStruct() throws PDException
 {
 return( getRecSum().Copy());
@@ -273,10 +276,10 @@ if (FoldersStruct==null)
     {
     Record R=new Record();
     R.addAttr( new Attribute(fPDID, "PDID","Unique_identifier", Attribute.tSTRING, true, null, 32, true, false, false));
-    R.addAttr( new Attribute(fTITLE, "Folder_Title","Folder_Title", Attribute.tSTRING, true, null, 254, false, false, true));
+    R.addAttr( new Attribute(fTITLE, "Folder_Title","Folder_Title", Attribute.tSTRING, true, null, 254, false, true, true));
     R.addAttr( new Attribute(fACL, "Folder_ACL", "Folder_ACL", Attribute.tSTRING, true, null, 32, false, false, true));
     R.addAttr( new Attribute(fFOLDTYPE, "Folder_Type", "Folder_Type", Attribute.tSTRING, true, null, 32, false, false, false));
-    R.addAttr( new Attribute(fPARENTID, "Parent_Folder","Parent_Folder", Attribute.tSTRING, true, null, 32, false, false, false));
+    R.addAttr( new Attribute(fPARENTID, "Parent_Folder","Parent_Folder", Attribute.tSTRING, true, null, 32, false, true, false));
     R.addRecord(getRecordStructCommon());
     return(R);
     }
@@ -944,13 +947,13 @@ public HashSet getListDirectDescendList(String PDId) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDFolders.getListDirectDescendList>:"+PDId);
-HashSet Result=new HashSet();
+LinkedHashSet Result=new LinkedHashSet();
 Condition CondParents=new Condition( fPARENTID, Condition.cEQUAL, PDId);
 Condition CondAcl=new Condition(PDFolders.fACL, new HashSet(getDrv().getUser().getAclList().keySet()));
 Conditions Conds=new Conditions();
 Conds.addCondition(CondParents);
 Conds.addCondition(CondAcl);
-Query Q=new Query(getTabName(), getRecordStructPDFolder(), Conds);
+Query Q=new Query(getTabName(), getRecordStructPDFolder(), Conds, fTITLE);
 Cursor CursorId=getDrv().OpenCursor(Q);
 Record Res=getDrv().NextRec(CursorId);
 while (Res!=null)

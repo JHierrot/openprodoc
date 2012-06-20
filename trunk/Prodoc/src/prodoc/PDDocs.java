@@ -1751,7 +1751,7 @@ for (int i = getTypeDefs().size()-1; i >=0; i--)
     {
     Record TypDef=(Record)getTypeDefs().get(i);
     Record DatParc=(Record)getTypeRecs().get(i);
-    if (i!=getTypeDefs().size()-1)
+    if (DatParc.getAttr(fPDID)==null)
         {
         DatParc.addAttr(RecTot.getAttr(fPDID));
         }

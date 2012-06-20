@@ -135,6 +135,7 @@ if (PDLog.isInfo())
     PDLog.Info("DriverJDBC.CreateTable>:"+TableName+"/"+Fields);
 String SQL;
 String ClavePrin="";
+String UniqueKey="";
 Fields.initList();
 SQL="CREATE TABLE "+TableName+"( ";
 for (int i=0; i<Fields.NumAttr(); i++)
@@ -153,13 +154,18 @@ for (int i=0; i<Fields.NumAttr(); i++)
         SQL+=" VARCHAR("+ A.getLongStr()+") ";
     if (A.isRequired())
         SQL+=" NOT NULL ";
-
     if (A.isPrimKey())
         {if (ClavePrin.length()>0)
             ClavePrin+=", ";
         ClavePrin+=A.getName();}
+    if (A.isUnique())
+        {if (UniqueKey.length()>0)
+            UniqueKey+=", ";
+        UniqueKey+=A.getName();}
     SQL+=", ";  // ya que luego siempre está clave principal
     }
+if (UniqueKey.length()!=0)
+    SQL+=" CONSTRAINT "+TableName+"_uniq UNIQUE("+UniqueKey+"), ";
 if (ClavePrin.length()!=0)
     SQL+=" PRIMARY KEY("+ClavePrin+") ";
 else // debemos quitar la última ,
