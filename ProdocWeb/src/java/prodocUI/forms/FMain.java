@@ -23,27 +23,8 @@ import html.*;
 import javax.servlet.http.HttpServletRequest;
 import prodoc.PDException;
 import prodoc.PDFolders;
-import prodocUI.servlet.About;
-import prodocUI.servlet.AddDoc;
-import prodocUI.servlet.AddDocAdv;
-import prodocUI.servlet.AddFold;
-import prodocUI.servlet.AddFoldAdv;
-import prodocUI.servlet.CheckOut;
-import prodocUI.servlet.CancelCheckOut;
-import prodocUI.servlet.CheckIn;
-import prodocUI.servlet.DelDoc;
-import prodocUI.servlet.DelFold;
-import prodocUI.servlet.ListVer;
-import prodocUI.servlet.ModDocAdv;
-import prodocUI.servlet.ModFold;
-import prodocUI.servlet.ModFoldAdv;
-import prodocUI.servlet.RefreshFold;
-import prodocUI.servlet.SExit;
-import prodocUI.servlet.SPaperBin;
-import prodocUI.servlet.SParent;
-import prodocUI.servlet.SPassChange;
-import prodocUI.servlet.SearchDoc;
-import prodocUI.servlet.SearchFold;
+import prodoc.PDRoles;
+import prodocUI.servlet.*;
 
 /**
  *
@@ -76,12 +57,18 @@ String WorkArea="MainFrame";
 Menu MainMenu=new Menu();
 MenuCol MC1=new MenuCol(TT("Folders"), 0);
 MainMenu.add(MC1);
-MC1.add(new MenuItem(TT("Add"), AddFold.getUrlServlet(), WorkArea));
-MC1.add(new MenuItem(TT("Delete"), DelFold.getUrlServlet(), WorkArea));
-MC1.add(new MenuItem(TT("Update"), ModFold.getUrlServlet(), WorkArea));
+PDRoles R=SMain.getSessOPD(Req).getUser().getRol();
+if (R.isAllowCreateFolder())
+    MC1.add(new MenuItem(TT("Add"), AddFold.getUrlServlet(), WorkArea));
+if (R.isAllowMaintainFolder())
+    MC1.add(new MenuItem(TT("Delete"), DelFold.getUrlServlet(), WorkArea));
+if (R.isAllowMaintainFolder())
+    MC1.add(new MenuItem(TT("Update"), ModFold.getUrlServlet(), WorkArea));
 MC1.add(MenuItem.getMISeparator());
-MC1.add(new MenuItem(TT("Extended_Add"), AddFoldAdv.getUrlServlet(), WorkArea));
-MC1.add(new MenuItem(TT("Update_Extended"), ModFoldAdv.getUrlServlet(), WorkArea));
+if (R.isAllowCreateFolder())
+    MC1.add(new MenuItem(TT("Extended_Add"), AddFoldAdv.getUrlServlet(), WorkArea));
+if (R.isAllowMaintainFolder())
+    MC1.add(new MenuItem(TT("Update_Extended"), ModFoldAdv.getUrlServlet(), WorkArea));
 MC1.add(new MenuItem(TT("Refresh"), RefreshFold.getUrlServlet(), WorkArea));
 MC1.add(MenuItem.getMISeparator());
 MC1.add(new MenuItem(TT("Search_Folders"), SearchFold.getUrlServlet(), WorkArea));
@@ -89,22 +76,30 @@ MC1.add(MenuItem.getMISeparator());
 MC1.add(new MenuItem(TT("Exit"), SExit.getUrlServlet()));
 MenuCol MC2=new MenuCol(TT("Documents"), 1);
 MainMenu.add(MC2);
-MC2.add(new MenuItem(TT("Add"), AddDoc.getUrlServlet(), WorkArea));
-MC2.add(new MenuItem(TT("Delete"), DelDoc.getUrlServlet(), WorkArea));
+if (R.isAllowCreateDoc())
+    MC2.add(new MenuItem(TT("Add"), AddDoc.getUrlServlet(), WorkArea));
+if (R.isAllowMaintainDoc())
+    MC2.add(new MenuItem(TT("Delete"), DelDoc.getUrlServlet(), WorkArea));
 MC2.add(MenuItem.getMISeparator());
-MC2.add(new MenuItem(TT("Extended_Add"), AddDocAdv.getUrlServlet(), WorkArea));
-MC2.add(new MenuItem(TT("Update_Extended"), ModDocAdv.getUrlServlet(), WorkArea));
+if (R.isAllowCreateDoc())
+    MC2.add(new MenuItem(TT("Extended_Add"), AddDocAdv.getUrlServlet(), WorkArea));
+if (R.isAllowMaintainDoc())
+    MC2.add(new MenuItem(TT("Update_Extended"), ModDocAdv.getUrlServlet(), WorkArea));
 MC2.add(new MenuItem(TT("Refresh"), RefreshFold.getUrlServlet(), WorkArea));
 MC2.add(MenuItem.getMISeparator());
-MC2.add(new MenuItem(TT("CheckOut"), CheckOut.getUrlServlet(), WorkArea));
-MC2.add(new MenuItem(TT("CheckIn"), CheckIn.getUrlServlet(), WorkArea));
-MC2.add(new MenuItem(TT("Cancel_CheckOut"), CancelCheckOut.getUrlServlet(), WorkArea));
+if (R.isAllowMaintainDoc())
+    MC2.add(new MenuItem(TT("CheckOut"), CheckOut.getUrlServlet(), WorkArea));
+if (R.isAllowMaintainDoc())
+    MC2.add(new MenuItem(TT("CheckIn"), CheckIn.getUrlServlet(), WorkArea));
+if (R.isAllowMaintainDoc())
+    MC2.add(new MenuItem(TT("Cancel_CheckOut"), CancelCheckOut.getUrlServlet(), WorkArea));
 MC2.add(new MenuItem(TT("List_of_Versions"), ListVer.getUrlServlet(), WorkArea));
 MC2.add(MenuItem.getMISeparator());
 MC2.add(new MenuItem(TT("Search_Documents"), SearchDoc.getUrlServlet(), WorkArea));
 MenuCol MC3=new MenuCol(TT("Other_Tasks"), 2);
 MainMenu.add(MC3);
-MC3.add(new MenuItem(TT("Trash_bin"), SPaperBin.getUrlServlet(), WorkArea));
+if (R.isAllowCreateDoc() && R.isAllowMaintainDoc())
+    MC3.add(new MenuItem(TT("Trash_bin"), SPaperBin.getUrlServlet(), WorkArea));
 MC3.add(new MenuItem(TT("Password_change"), SPassChange.getUrlServlet(), WorkArea));
 MenuCol MC4=new MenuCol(TT("Help"), 3);
 MainMenu.add(MC4);

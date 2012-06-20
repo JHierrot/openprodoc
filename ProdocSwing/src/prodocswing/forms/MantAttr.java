@@ -384,7 +384,7 @@ if (MultivalCheckBox.isSelected())
     TypeComboBox.setSelectedItem("String");    
 //    PrimKeyCheckBox.setSelected(true);
 //    PrimKeyCheckBox.setEnabled(false);
-    UniqueCheckBox.setSelected(true);
+    UniqueCheckBox.setSelected(false);
     UniqueCheckBox.setEnabled(false);
     ReqCheckBox.setSelected(false);
     ReqCheckBox.setEnabled(false);

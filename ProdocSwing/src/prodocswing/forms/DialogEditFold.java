@@ -27,7 +27,6 @@ package prodocswing.forms;
 
 import java.awt.Component;
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Vector;
@@ -414,7 +413,7 @@ for (int i = 0; i < List.length; i++)
         Attributes.remove(component);
         }
     }
-GenerateTabs(Folder, Attributes, 5, MainWin.TT("Other_Attributes"), AttrExcluded, Modif);
+GenerateTabs(Folder, Attributes, 10, MainWin.TT("Other_Attributes"), AttrExcluded, Modif);
 }
 //----------------------------------------------------------------
 /**

@@ -499,7 +499,10 @@ return Reposit;
 */
 public void setReposit(String Reposit)
 {
-this.Reposit = Reposit;
+if (getClassType()!=null && !getClassType().equals(CT_FOLDER))    
+    this.Reposit = Reposit;
+else
+    this.Reposit = null;
 }
 //-------------------------------------------------------------------------
 /**
@@ -740,6 +743,11 @@ else
     Record RecVer=DocDef.getRecSum().CopyMono();
     Attribute A=RecVer.getAttr(PDDocs.fVERSION);
     A.setPrimKey(true);
+    RecVer.initList();
+    for (int i = 0; i < RecVer.NumAttr(); i++)
+        {
+        RecVer.nextAttr().setUnique(false);
+        }
     getDrv().CreateTable(GenVerTabName(Def.getName()), RecVer);
     }
 RecDef.initList();
@@ -1166,6 +1174,8 @@ for (int NumNodes = 0; NumNodes < childNodes.getLength(); NumNodes++)
         Record r=Record.FillFromXML(ListElements, getRecord());
         assignValues(r);
         setCreated(false);
+        if (getClassType().equals(CT_FOLDER))
+            setReposit(null);
         insert();
         }
     else if (ListElements.getNodeName().equalsIgnoreCase(XML_Metadata)) 

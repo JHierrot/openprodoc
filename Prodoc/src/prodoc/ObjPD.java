@@ -528,22 +528,22 @@ abstract protected ObjectsCache getObjCache();
  */
 public String toXML() throws PDException
 {
-StringBuilder XML=new StringBuilder("<"+XML_OPDObject+" type=\""+getTabName()+"\">");
-XML.append("<"+XML_ListAttr+">");
+StringBuilder XML=new StringBuilder("<"+XML_OPDObject+" type=\""+getTabName()+"\">\n");
+XML.append("<"+XML_ListAttr+">\n");
 XML.append(getRecord().toXML());
 XML.append(toXML2());
-XML.append("</"+XML_OPDObject+">");
+XML.append("</"+XML_OPDObject+">\n");
 return XML.toString();
 }
 //-------------------------------------------------------------------------
 public String StartXML()
 {
-return("<"+XML_OPDList+">");    
+return("<"+XML_OPDList+">\n");    
 }
 //-------------------------------------------------------------------------
 public String EndXML()
 {
-return("</"+XML_OPDList+">");    
+return("</"+XML_OPDList+">\n");    
 }
 //-------------------------------------------------------------------------
 /**
@@ -553,7 +553,7 @@ return("</"+XML_OPDList+">");
  */
 protected String toXML2() throws PDException
 {
-return("</"+XML_ListAttr+">");    
+return("</"+XML_ListAttr+">\n");    
 }
 //-------------------------------------------------------------------------
 /**

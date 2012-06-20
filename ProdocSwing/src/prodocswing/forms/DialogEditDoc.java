@@ -575,7 +575,7 @@ for (int i = 0; i < List.length; i++)
         Attributes.remove(component);
         }
     }
-GenerateTabs(EditedDoc, Attributes, 5, MainWin.TT("Other_Attributes"), AttrExcluded, Modif);
+GenerateTabs(EditedDoc, Attributes, 10, MainWin.TT("Other_Attributes"), AttrExcluded, Modif);
 }
 //----------------------------------------------------------------
 /**
