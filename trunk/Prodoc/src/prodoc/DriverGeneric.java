@@ -360,12 +360,16 @@ Au.insert();
 Trace.add("Authenticator element created");
 //----- Styles ---------
 Cu.setName("Prodoc");
-Cu.setDescription("Estilo por defecto de Prodoc");
+Cu.setDescription("Prodoc default style");
 Cu.setDateFormat(DefDateFormat); // "dd-MM-yyyy"
 Cu.setTimeFormat(DefTimeFormat); // "dd-MM-yyyy HH:mm:ss"
 Cu.setLanguage(DefLang);
 Cu.setStyle("");
 Cu.setSwingStyle("\"Arial\",0,12,\"Arial\",0,12,\"Arial\",0,12,\"Arial\",0,12");
+Cu.insert();
+Cu.setName("ProdocAdm");
+Cu.setDescription("Prodoc Admin style");
+Cu.setStyle("adm");
 Cu.insert();
 Trace.add("Customization element created");
 //----- Roles ---------
@@ -459,7 +463,7 @@ Usu.setDescription("Administrator");
 Usu.setActive(true);
 Usu.setValidation(Au.getName());
 Usu.setRole(Ro.getName());
-Usu.setCustom(Cu.getName());
+Usu.setCustom(Cu.getName()); // ProdocAdm
 Usu.insert();
 Grp.addUser("root");
 Trace.add("Administrator created");

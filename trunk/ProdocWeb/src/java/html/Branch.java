@@ -27,6 +27,7 @@ public class Branch extends Element
 private String Name="";
 private String Id="";
 private boolean SelectedBr=false;
+private String Style="";
 //----------------------------------------------------------------------------
 public Branch(String pName, String pId)
 {
@@ -34,17 +35,18 @@ Name=pName;
 Id=pId;
 }
 //----------------------------------------------------------------------------
-public Branch(String pName, String pId, boolean Selected)
+public Branch(String pName, String pId, boolean Selected, String pStyle)
 {
 Name=pName;
 Id=pId;
 SelectedBr=Selected;
+Style=pStyle;
 }
 //----------------------------------------------------------------------------
 protected String HtmlPropio(String Url, String Target)
 {
 StringBuilder Cad=new StringBuilder("<li id=\"");
-Cad.append(Id).append("\"><img src=\"img/unkown.gif\" alt=\"?\" onclick=\"ExpandContract('").append(Id).append("');\" /> <a href=\"");
+Cad.append(Id).append("\"><img src=\"img/"+Style+"unkown.gif\" alt=\"?\" onclick=\"ExpandContract('").append(Id).append("');\" /> <a href=\"");
 Cad.append(Url).append("?FoldId=").append(Id).append("\" ").append((Target==null)?"":"target=\""+Target+"\"").append(">").append(Name).append("</a> </li>");       
 return(Cad.toString());
 }

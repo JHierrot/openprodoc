@@ -66,6 +66,14 @@ public DialogEditFold(JFrame parent, boolean modal)
 {
 super(parent, modal);
 initComponents();
+try {
+PDFolders newFolder=new PDFolders(MainWin.getSession());
+Folder=newFolder.getRecord();
+} catch (PDException ex)
+    {
+    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
+setRecord(Folder);
 }
 
     /** This method is called from within the constructor to

@@ -101,6 +101,8 @@ else if (Sess!=null)
     }
 String retValue="<input name=\""+Nombre+"\" value=\""+Val+"\" "+HtmlPropio()+(Activado?"":" disabled=\"disabled\" ");
 retValue+=CarcularEstilo();
+if (getCSSId()!=null)
+    retValue+=" id=\""+getCSSId()+"\" ";
 if (MensStatus!=null && Activado)
     retValue+=" onmouseover=\"this.form.Status.value='"+MensStatus
               +"'\" onfocus=\"this.form.Status.value='"+MensStatus

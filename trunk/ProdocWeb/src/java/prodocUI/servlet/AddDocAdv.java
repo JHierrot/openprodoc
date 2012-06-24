@@ -160,10 +160,18 @@ while (Attr!=null)
     }
 Doc.assignValues(Rec);
 Doc.setParentId(getActFolderId(Req));
-Doc.setName(FileName);
-PDMimeType mt=new PDMimeType(PDSession);
-Doc.setMimeType(mt.SolveName(FileName));
-Doc.setStream(FileData);
+String RefFile=(String) ListFields.get(PDDocs.fNAME+"_");
+if (RefFile!=null && RefFile.length()!=0)
+    {
+    Doc.setFile(RefFile);
+    }
+else
+    {
+    Doc.setName(FileName);
+    PDMimeType mt=new PDMimeType(PDSession);
+    Doc.setMimeType(mt.SolveName(FileName));
+    Doc.setStream(FileData);
+    }
 Doc.insert();
 return(true);
 }

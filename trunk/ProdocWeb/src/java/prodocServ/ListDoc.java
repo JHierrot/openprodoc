@@ -86,7 +86,8 @@ if (FL.isEmpty())
 Table AditionFieldsTab=new Table(4, FL.size(), 0);
 AditionFieldsTab.setWidth(-100);
 AditionFieldsTab.setCellPadding(0);
-AditionFieldsTab.setCSSClass("FFormularios");
+AditionFieldsTab.setCSSClass("CentArea");
+//AditionFieldsTab.setCSSClass("FFormularios");
 AditionFieldsTab.getCelda(0,0).setWidth(-5);
 AditionFieldsTab.getCelda(1,0).setWidth(-45);
 AditionFieldsTab.getCelda(2,0).setWidth(-45);

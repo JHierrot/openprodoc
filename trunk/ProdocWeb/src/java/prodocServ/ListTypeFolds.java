@@ -111,7 +111,7 @@ for (int i = 0; i < FL.size(); i++)
         AditionFieldsTab.getCelda(1,i).setCSSClass("FFormulReq");
     if (Attr.isMultivalued())
         {
-        FieldHtml=new FieldMultiOPD(Attr.getName());
+        FieldHtml=new FieldMultiOPD(Attr.getName(), SParent.getStyle(Req));
         FieldHtml.setCSSId(Attr.getName()+"_"+i);
         }
     else if (Attr.getType()==Attribute.tBOOLEAN)

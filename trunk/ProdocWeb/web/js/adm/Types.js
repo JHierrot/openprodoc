@@ -86,7 +86,6 @@ if (http_con.readyState == READY_STATE_COMPLETE)
        }
     }
 }
-
 function ObtainDefRep()
 {
 if (http_con2.readyState == READY_STATE_COMPLETE)
@@ -99,7 +98,6 @@ if (http_con2.readyState == READY_STATE_COMPLETE)
        }
     }
 }
-
 }
 //----------------------------------------------
 function FillRep(RepIsUrl)

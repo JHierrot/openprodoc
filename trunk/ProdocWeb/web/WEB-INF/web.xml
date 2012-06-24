@@ -122,6 +122,10 @@
         <servlet-name>About</servlet-name>
         <servlet-class>prodocUI.servlet.About</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ListTypeRep</servlet-name>
+        <servlet-class>prodocServ.ListTypeRep</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SParent</servlet-name>
         <url-pattern>/SParent</url-pattern>
@@ -241,6 +245,10 @@
     <servlet-mapping>
         <servlet-name>About</servlet-name>
         <url-pattern>/About</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListTypeRep</servlet-name>
+        <url-pattern>/ListTypeRep</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
