@@ -25,6 +25,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import prodoc.DriverGeneric;
 import prodoc.PDException;
+import prodoc.PDRepository;
 import prodoc.ProdocFW;
 import prodocUI.forms.FLogin;
 
@@ -185,6 +186,17 @@ public static DriverGeneric getSession(HttpServletRequest Req)
 {
 HttpSession Sess=Req.getSession(true);
 return (DriverGeneric)Sess.getAttribute("PRODOC_SESS");
+}
+//----------------------------------------------------------
+public static boolean IsUrl(HttpServletRequest Req, String RepName) throws PDException
+{
+DriverGeneric Drv=getSession(Req);
+PDRepository Rep=new PDRepository(Drv);
+Rep.Load(RepName);
+if (Rep.getRepType().equals(PDRepository.tREFURL ))
+    return (true);
+else
+    return (false);
 }
 //----------------------------------------------------------
 

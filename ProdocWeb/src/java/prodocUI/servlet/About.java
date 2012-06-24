@@ -52,7 +52,7 @@ AboutPage.setWidth(440);
 AboutPage.setHeight(330);
 AboutPage.AddCSS("prodoc.css");
 Table TabAbout=new Table(2, 9, 0);
-TabAbout.setCSSClass("FFormulReq");
+//TabAbout.setCSSClass("FFormulReq");
 TabAbout.getCelda(0,0).AddElem(new Element("OpenProdoc"));
 TabAbout.getCelda(1,0).AddElem(new Image("img/LogoProdoc.jpg", "Logo OpenProdoc"));
 TabAbout.getCelda(0,1).setHeight(10);

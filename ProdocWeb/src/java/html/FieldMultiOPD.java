@@ -31,17 +31,17 @@ public class FieldMultiOPD extends FieldMulti
 /** Creates a new instance of Literal
  * @param pNombre 
  */
-public FieldMultiOPD(String pNombre)
+public FieldMultiOPD(String pNombre, String pStyle)
 {
 super(pNombre);
-setUrlImagArrowD("img/ArrowD.png");
-setUrlImagAdd("img/add.png");
+setUrlImagArrowD("img/"+pStyle+"ArrowD.png");
+setUrlImagAdd("img/"+pStyle+"add.png");
 setAltImagAdd("Add");
-setUrlImagDel("img/del.png");
+setUrlImagDel("img/"+pStyle+"del.png");
 setAltImagDel("Del");
-setUrlImagMod("img/edit.png");
+setUrlImagMod("img/"+pStyle+"edit.png");
 setAltImagMod("Edit");
-setUrlImagExit("img/Ok.png");
+setUrlImagExit("img/"+pStyle+"Ok.png");
 setAltImagExit("Ok");
 }
 }

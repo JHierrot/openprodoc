@@ -189,15 +189,21 @@ else
         }
     }
 Doc.assignValues(Rec);
-Doc.setParentId(getActFolderId(Req));
-if (FileName!=null && FileName.length()>0)
+String RefFile=(String) ListFields.get(PDDocs.fNAME+"_");
+if (RefFile!=null && RefFile.length()!=0)
+    Doc.setFile(RefFile);
+else
     {
-    PDMimeType mt=new PDMimeType(SParent.getSessOPD(Req));
-    Doc.setMimeType(mt.SolveName(FileName));
-    Doc.setName(FileName);
-    if (FileData!=null)
-        Doc.setStream(FileData);    
+    if (FileName!=null && FileName.length()>0)
+        {
+        PDMimeType mt=new PDMimeType(SParent.getSessOPD(Req));
+        Doc.setMimeType(mt.SolveName(FileName));
+        Doc.setName(FileName);
+        if (FileData!=null)
+            Doc.setStream(FileData);    
+        }
     }
+Doc.setParentId(getActFolderId(Req));
 Doc.update();
 return(true);
 }

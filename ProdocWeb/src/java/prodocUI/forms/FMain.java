@@ -69,7 +69,7 @@ if (R.isAllowCreateFolder())
     MC1.add(new MenuItem(TT("Extended_Add"), AddFoldAdv.getUrlServlet(), WorkArea));
 if (R.isAllowMaintainFolder())
     MC1.add(new MenuItem(TT("Update_Extended"), ModFoldAdv.getUrlServlet(), WorkArea));
-MC1.add(new MenuItem(TT("Refresh"), RefreshFold.getUrlServlet(), WorkArea));
+//MC1.add(new MenuItem(TT("Refresh"), RefreshFold.getUrlServlet(), WorkArea));
 MC1.add(MenuItem.getMISeparator());
 MC1.add(new MenuItem(TT("Search_Folders"), SearchFold.getUrlServlet(), WorkArea));
 MC1.add(MenuItem.getMISeparator());
@@ -85,7 +85,7 @@ if (R.isAllowCreateDoc())
     MC2.add(new MenuItem(TT("Extended_Add"), AddDocAdv.getUrlServlet(), WorkArea));
 if (R.isAllowMaintainDoc())
     MC2.add(new MenuItem(TT("Update_Extended"), ModDocAdv.getUrlServlet(), WorkArea));
-MC2.add(new MenuItem(TT("Refresh"), RefreshFold.getUrlServlet(), WorkArea));
+//MC2.add(new MenuItem(TT("Refresh"), RefreshFold.getUrlServlet(), WorkArea));
 MC2.add(MenuItem.getMISeparator());
 if (R.isAllowMaintainDoc())
     MC2.add(new MenuItem(TT("CheckOut"), CheckOut.getUrlServlet(), WorkArea));
@@ -111,11 +111,11 @@ AddHead(MainMenu);
 Table CentralArea=new Table(3,1,1);
 CentralArea.setWidth(-100);
 CentralArea.setHeight(600);
-//CentralArea.getCelda(0,0).setWidth(-25);
-CentralArea.getCelda(0,0).setWidth(200);
+CentralArea.setCSSClass("CentArea");
+CentralArea.getCelda(0,0).setWidth(300);
 AddBody(CentralArea);
 Tree Ar=new Tree();
-Ar.add(new Branch(PDFolders.ROOTFOLDER, PDFolders.ROOTFOLDER, true));
+Ar.add(new Branch(PDFolders.ROOTFOLDER, PDFolders.ROOTFOLDER, true, getStyle()));
 CentralArea.getCelda(0,0).AddElem(Ar);
 CentralArea.getCelda(0,0).setCSSId("IdTreeFrame");
 CentralArea.getCelda(1,0).setCSSClass("UDFrames");

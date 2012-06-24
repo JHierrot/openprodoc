@@ -69,7 +69,7 @@ CancelButton.setCSSClass("FFormInputButton");
 Status=new FieldText("Status");
 Status.setCSSClass("FFormularios");
 Status.setActivado(false);
-Status.setSize(128);
+Status.setSize(100);
 HHelp=new HiperlinkImag("img/"+getStyle()+"help.jpg", "Help", "help/"+SParent.getLang(Req)+"/"+getFormHelp()+".html", "");
 HHelp.setTarget("_blank");
 }

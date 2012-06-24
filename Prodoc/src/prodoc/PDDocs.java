@@ -2324,13 +2324,17 @@ for (int i = 0; i < childNodes.getLength(); i++)
          if (!MaintainId)
             NewDoc.setPDId(null);
         NewDoc.setParentId(DestFold);
-        Attribute DocName=r.getAttr(fNAME);
-        String Path=(String)DocName.getValue();
-        if (Path.contains(File.separator)) // if absolute reference, maintain
-            NewDoc.setFile(Path);
-        else
-            NewDoc.setFile(FolderPath+Path);
-        NewDoc.setName(null); // calculated by when inserting
+        StoreGeneric Rep=getDrv().getRepository(NewDoc.getReposit());
+        if (!Rep.IsURL())
+            {
+            Attribute DocName=r.getAttr(fNAME);
+            String Path=(String)DocName.getValue();
+            if (Path.contains(File.separator)) // if absolute reference, maintain
+                NewDoc.setFile(Path);
+            else
+                NewDoc.setFile(FolderPath+Path);
+            NewDoc.setName(null); // calculated by when inserting
+            }
         }
     }
 NewDoc.insert();
