@@ -138,7 +138,7 @@ return(true);
 //-----------------------------------------------------------------
 /**
  * Indicates if the repository is a Referencial Repositorie and then R/O
- * @return if the repository ir Reference
+ * @return if the repository is Reference
  */
 @Override
 protected boolean IsURL()
@@ -149,7 +149,10 @@ return(true);
 @Override
 protected String GetUrl(String DocName)
 {
-return(getServer()+DocName);    
+String S=getServer()+DocName;  
+S=S.replace("=", "%3D");
+S=S.replace("?", "%3F");
+return(S);    
 }        
 //-----------------------------------------------------------------
 }

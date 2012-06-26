@@ -124,7 +124,7 @@ for (int i = 0; i < FL.size(); i++)
     AditionFieldsTab.getCelda(2,i).AddElem(FieldHtml);
     }
 HiperlinkImag HHelp;
-HHelp=new HiperlinkImag("img/"+SParent.getStyle(Req)+"help.jpg", "Help", "help/"+SParent.getLang(Req)+"/ListVersions.html", "");
+HHelp=new HiperlinkImag("img/"+SParent.getStyle(Req)+"Help.png", "Help", "help/"+SParent.getLang(Req)+"/ListVersions.html", "");
 HHelp.setTarget("_blank");
 AditionFieldsTab.getCelda(3,FL.size()-1).AddElem(HHelp);
 return(AditionFieldsTab);

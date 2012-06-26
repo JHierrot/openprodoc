@@ -70,7 +70,7 @@ Status=new FieldText("Status");
 Status.setCSSClass("FFormularios");
 Status.setActivado(false);
 Status.setSize(100);
-HHelp=new HiperlinkImag("img/"+getStyle()+"help.jpg", "Help", "help/"+SParent.getLang(Req)+"/"+getFormHelp()+".html", "");
+HHelp=new HiperlinkImag("img/"+getStyle()+"Help.png", "Help", "help/"+SParent.getLang(Req)+"/"+getFormHelp()+".html", "");
 HHelp.setTarget("_blank");
 }
 //------------------------------------------------------------------------------
