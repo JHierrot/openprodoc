@@ -12,13 +12,13 @@
         </tr>  
     </thead>
     <tr>
-        <td>&nbsp;&nbsp;<img alt="Bandera" src="img/F_Spain.png"/>&nbsp;&nbsp;Spanish</td><td style="text-align:center;">Yes</td> <td style="text-align:center;">Yes</td> <td style="text-align:center;">Yes</td>
+        <td>  <img alt="Bandera" src="img/F_Spain.png"/>  Spanish</td><td style="text-align:center;">Yes</td> <td style="text-align:center;">Yes</td> <td style="text-align:center;">Yes</td>
     </tr>
     <tr>
-        <td>&nbsp;&nbsp;<img alt="Bandera" src="img/F_UK.png"/>&nbsp;&nbsp;English</td><td style="text-align:center;">Yes</td> <td style="text-align:center;">Yes</td> <td style="text-align:center;">Yes</td>
+        <td>  <img alt="Bandera" src="img/F_UK.png"/>  English</td><td style="text-align:center;">Yes</td> <td style="text-align:center;">Yes</td> <td style="text-align:center;">Yes</td>
     </tr>
     <tr>
-        <td>&nbsp;&nbsp;<img alt="Bandera" src="img/F_Portugal.png"/>&nbsp;&nbsp;Portuguese</td><td style="text-align:center;">Yes</td> <td style="text-align:center;">No</td> <td style="text-align:center;">No</td>
+        <td>  <img alt="Bandera" src="img/F_Portugal.png"/>  Portuguese</td><td style="text-align:center;">Yes</td> <td style="text-align:center;">No</td> <td style="text-align:center;">No</td>
     </tr>
 </table>
 <p>Regarding location should be noted that the date format is covered with customization ( [EN_ListCustom]), so that support for countries sharing a language, but a different format date is just translation.</p>

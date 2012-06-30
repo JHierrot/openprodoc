@@ -46,7 +46,7 @@ Estos ficheros pueden copiarse y usarse en cualquier equipo siempre que: </p>
 <h4 id="4">4 - Creación estructura de datos</h4>
 <p>Una vez instalado el cliente, debe ejecutarse la aplicación de creación de la estructura de datos <b>Setup.sh</b> o <b>Setup.bat</b>, contestando a las preguntas de la aplicación.</p>
 <p>Por defecto se elegirá el idioma del equipo, siempre que esté soportado, en otro caso se utilizará inglés (EN). Si se desea forzar otro idioma puede pasarse como parámetro de dos letras a la aplicación (Ej. Setup.sh EN). Ver [ES_Language]</p>
-<ul>
+
   <li><b>Password Administrador</b>: Clave de acceso del usuario administrador "root" creado al instalar. Otros usuarios pueden tener los mismos permisos, "root" se crea por defecto</li>
   <li><b>Código del Lenguaje por defecto</b>: Código ISO del lenguaje por defecto para la parametrización por defecto.</li>
   <li><b>Formato Fecha/Hora</b>: Formato de presentación y lectura de los campos fecha-hora según formatter java. (Ej. yyyy-MM-dd HH:mm:ss )</li>
@@ -67,7 +67,7 @@ Estos ficheros pueden copiarse y usarse en cualquier equipo siempre que: </p>
 "Nombre del driver;Nombre tabla"
 Ej.: 
     com.mysql.jdbc.Driver;TablaBlob</li>
-</ul> 
+
 <p>Este proceso creará toda la estructura de tablas y elementos necesaria para OPD. Posteriormente, al definir nuevos tipos de Documento o Carpeta se crearán tablas y elementos auxiliares.</p>
 <h4 id="5">5 - Instalación resto de clientes</h4>
 <p>
