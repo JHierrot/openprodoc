@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mantenimiento Personalizaciones</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+<H4>Mantenimiento Personalizaciones</H4><hr>
+<p>Al seleccionar en el formulario de <a href="ListCustom.html">Lista Personalizaciones</a> las opciones de Alta, Baja, Modificación o Copia de Personalizaciones aparecerá este formulario con diversos campos activados o desactivados.</p>
+<p>Este formulario contiene la información:</p>
+<ul>
+    <li><b>Nombre identificativo</b>: Identificador de la Personalización cuyo valor no puede repetirse ni cambiar una vez asignado. Puede tener una longitud máxima de 32 caracteres. (Ej. "RRHH_Portugal")</li>
+    <li><b>Descripción de la Personalización</b>: Descripción de la Personalización que permita interpretar y recordar el sentido de la misma. Puede tener una longitud máxima de 128 caracteres. (Ej.: "Personalización en Portugues para Recursos Humanos Portugal")</li>
+    <li><b>Idioma del interfaz de usuario</b>: Idioma en que se presentará todos los mensaje y literales de OPD. Los literales de los elementos (Documentos, Carpetas, etc) se presentarán siempre tal como fueron creados, en esta versión de OPD no hay soporte para objetos multiidioma. Se utilizan los códigos ISO 639-1 de dos caracteres. Para ver los detalles de idiomas consultar <a href="Language.html">Idiomas</a></li>    
+    <li><b>Formato de entrada y presentación de las Fechas</b>: Formato en que se presentará la fecha. (Ej. "MM/dd/yyyy")</li>
+    <li><b>Formato de entrada y presentación de las Fecha y hora</b>: Formato en que se presentará la fecha y hora . (Ej. "MM/dd/yyyy HH:mm")</li>
+    <li><b>Path de parametrización para el cliente Web</b>: Path relativo dentro de la aplicación web donde se encuentran todos los elementos propios de la apariencia. OPD Incluye algunos estilos en diversos subdirectorios que pueden copiarse, modificando únicamente los elementos deseados. Cuando se indica un path debe crearse siempre TODOS los elementos necesarios (CSS, imágenes, Javascript, etc) por lo que lo mejor es copiar y modificar los elementos deseados.</li>
+    <li><b>Fuentes a utilizar en el cliente Java Swing</b>: Fuentes a utilizar para el interfaz Swing. Para cada elemento se indica el tipo de fuente, atributos de la fuente (según las definiciones de awt.font) y el tamaño para los elementos:
+        <ul>
+            <li>Menú</li>
+            <li>Arbol de carpetas</li>
+            <li>Listados de elementos</li>
+            <li>Cuadros de diálogo</li>
+        </ul>
+    </li>    
+</ul>
+<p style="text-align:center;"><img alt="Copia de pantalla MantCustom" src="img/MantCustom.jpg"/></p>
+<p>Ver: <a href="ListCustom.html">Lista Personalizaciones</a></p>
+<hr>
+<a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>
+    </body>
+</html>
