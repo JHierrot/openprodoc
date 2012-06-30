@@ -1,0 +1,8 @@
+----------------------------------------------------------------
+2012-05-02 11:02:46.917 GMT:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.6.2.1 - (999685): instance a816c00e-0137-0d37-724c-000002680d30 
+on database directory /home/jhierrot/OPD/OPDPortable/DB  with class loader sun.misc.Launcher$AppClassLoader@16f0472 
+Loaded from file:/home/jhierrot/OPD/lib/derby.jar
+java.vendor=Sun Microsystems Inc.
+java.runtime.version=1.6.0_24-b07
+Database Class Loader started - derby.database.classpath=''
