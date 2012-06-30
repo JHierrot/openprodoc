@@ -1,5 +1,5 @@
 <H4>What is new in this version of OpenProdoc</H4><hr>
-<p>Versión 0.7 (/5/2012): Public Beta Version</p>
+<p>Versión 0.7 (26/6/2012): Public Beta Version</p>
 <ul>
     <li>Portable distribution Multiplatform (Linuax, Windows, Mac) </li>
     <li>Multivalued  Attributes in engine and clients</li>
