@@ -1,14 +1,14 @@
-<H4>About OpenProdoc</H4>
+<H4>Acerca de OpenProdoc</H4>
 <hr>
 http://dl.dropbox.com/u/49603479/OpenProdoc/ES/Img/LogoProdoc.jpg
 <p>Technical Design and Development: <b>Joaquín Hierro</b></p>
-<p>License GPL v3</p>
-<p>(Though it is a multilicenses product and therefore a particular license can be requested the author)</p>
+<p>Licencia  GPL v3</p>
+<p>Aunque es un producto multilicencia y por tanto puede solicitarse al autor una licencia particular</p>
 <br><br>
-<p>OpenProdoc uses the products:</p>
+<p>OpenProdoc utiliza los productos:</p>
 <p>[http://logging.apache.org/log4j/ log4j], [http://commons.apache.org/net/ commons-net.ftp], [http://commons.apache.org/fileupload commons-fileupload]: <b>[http://www.apache.org/licenses licence Apache Software Foundation]</b></p>
-<p>OpenProdoc Portable uses additionally the embedded DD.BB.:</p>
+<p>OpenProdoc Portable utiliza ademas la BBDD embebida:</p>
 <p>[http://hsqldb.org HSQLDB], : <b>[http://hsqldb.org/web/hsqlLicense.html license HSQLDB (based on BSD License)]</b></p>
 <br>
 <hr>
-[EN_HelpIndex Help Index]
+[ES_HelpIndex Indice General]

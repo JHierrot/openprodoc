@@ -1,0 +1,81 @@
+<H4>Help Index OpenProdoc</H4><hr>
+<ul>
+<li>[EN_Intro Introduction]: General introduction to the characteristics of OpenProdoc.</li>
+<li>[EN_MainWin Main Window]: Shows an overview of the main window.</li>
+<li><b>Folders</b>
+    <ul>
+        <li>[EN_AddFolder Add Folder]: Adds a folder introducing only the name.</li>
+        <li>[EN_DelFolder Delete Folder]: Deletes the current folder, asking confirmation for the operation.</li>
+        <li>[EN_ModFolder Update Folder]: Modifies the current folder.</li>
+        <li>[EN_AddExtFolder Add Folder in extended mode]:  Adds a folder selecting type and introducing all the metadata.</li>
+        <li>[EN_ModExtFolder Update Folder in extended mode]: Modifies any metadata of the current folder.</li>
+        <li>[EN_SearchFolder Search Folder]: Search of folders by different criteria and metadata.</li>
+        <li>[EN_ImpExpFold Import and Export Folders]: Allows you to export an OPD folder structure to disk or to import a disk structure to OPD.</li>
+    </ul>    
+</li>
+<li><b>Documents</b><ul>
+        <li>[EN_AddDoc Add Document]: Adds a document, introducing a minimum of information.</li>
+        <li>[EN_DelDoc Delete Document]: Deletes the current document, asking confirmation for the operation.</li>
+        <li>[EN_AddExtDoc Add Document in extended mode]: Adds a document selecting type and introducing all the metadata.</li>
+        <li>[EN_ModExtDoc Update Document in extended mode]: Modifies any metadata of the current document.</li>
+        <li>[EN_Checkout CheckOut Document]: Locks the current document for editing.</li>
+        <li>[EN_CheckIn CheckIn Document]: Confirms changes in a locked document.</li>
+        <li>[EN_CancelCheckout Cancel Checkout of Document]: Cancel changes in the document.</li>
+        <li>[EN_ListVersions List Versions of Document]: Lists all versions of the current document.</li>
+        <li>[EN_SearchDocs Search Documents]: Search of documents by different criteria and metadata.</li>
+       <li>[EN_ImpExpDocs Import and Export Documents]Allows you to export a single document to disk or import a document from disk to OPD.</li>
+    </ul></li>
+<li><b>Other Tasks</b><ul>
+        <li>[EN_PaperBin Paper Bin]: Shows the deleted documents de every type, allowing to recover them or to delete them permanently.</li>
+        <li>[EN_ChangePassword Change Password]: Allows to change the password (if the kind of authentication allows the operation ).</li>
+    </ul></li>
+<li><b>Administration</b> (This options will be visible or not depending on version of OpenProdoc client and the user permissions)<ul>
+        <li>[EN_ListACL ACL]: Allows to manage the permissions (Access Control List) used in  all the elements of OPD.
+            <ul>
+                <li>[EN_MantACL ACL maintenance]: Details of the ACLs and its edition.</li>
+            </ul></li>
+        <li>[EN_ListGroups Groups]: Allows to manage the groups over which the user has permissions.
+            <ul>
+                <li>[EN_MantGroups Groups maintenance]: Details of the Groups and its edition.</li>
+            </ul></li>
+        <li>[EN_ListUsers Users]: Allows to manage the Users.
+            <ul>
+                <li>[EN_MantUsers Users maintenance]: Details of the Users and its edition.</li>
+            </ul></li>
+        <li>[EN_ListRoles Roles]: Allows to manage the users' roles, setting the authorized tasks.
+            <ul>
+                <li>[EN_MantRoles Roles maintenance]: Details of the Roles and its edition.</li>
+            </ul></li>
+        <li>[EN_ListMimeTypes Mime Types]: Allows to manage the mime types and the linked extensions.
+            <ul>
+                <li>[EN_MantMimeTypes Mime Types maintenance]: Details of the Mime Types and its edition.</li>
+            </ul></li>
+        <li>[EN_ListRepositories Repositories]: Allows to manage the repositories in which store the documents.
+            <ul>
+                <li>[EN_MantRepositories Repositories maintenance]: Details of the Repositories and its edition.</li>
+            </ul></li>
+        <li>[EN_ListObjDef Objects definitions]: Allows to manage the documents types and the folders types (containers).
+            <ul>
+                <li>[EN_MantObjDef Objects definitions maintenance]: Details of the Objects definitions and its edition.</li>
+                <li>[EN_MantAttr Metadata maintenance]: Metadata definition for the document types.</li>
+            </ul></li>
+        <li>[EN_ListSistAuth Authentication Systems]: Allows to manage the different kind and origins of users authentication.
+            <ul>
+                <li>[EN_MantSistAuth Authentication Systems maintenance]: Details of the Authentication Systems and its edition.</li>
+            </ul></li>
+        <li>[EN_ListCustom Customizations]: Allows to manage the Customizations (styles, language, etc).
+            <ul>
+                <li>[EN_MantCustom Customizations maintenance]: Details of the Customizations and its edition.</li>
+            </ul></li>
+    </ul></li>
+<li><b>Other information</b><ul>
+        <li>[EN_BeforeInstall Requirements]: Requirements and itemts to check before install.</li>
+        <li>[EN_Install Install]: Instructions for installations and setup.</li>
+        <li>[EN_Interfaz Users interfaces]: Description of the general criteria for users interfaces and differences between client version (Web and Swing).</li>
+        <li>[EN_Language Languages support]: Reference of the supported languages and the localization criteria in current version.</li>
+        <li>[EN_ReportBugs Reporting bugs and problems]: How to detect and report problems and bugs in OPD.</li>
+        <li>[EN_WhatIsNew What Is New]: Contains descriptions of what changed in this version and previous versions.</li>
+        <li>[EN_About About..]: References to authors and licences.</li>
+    </ul></li>
+</ul>
+<hr>

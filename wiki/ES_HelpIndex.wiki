@@ -1,0 +1,81 @@
+<H4>Índice Ayuda OpenProdoc</H4><hr>
+<ul>
+<li>[ES_Intro Introducción]: Introducción general a las características de OpenProdoc.</li>
+<li>[ES_MainWin Ventana Principal]: Muestra un esquema general de la ventana principal.</li>
+<li><b>Carpetas</b>
+    <ul>
+        <li>[ES_AddFolder Añadir Carpeta]: Permite añadir una carpeta de forma simple.</li>
+        <li>[ES_DelFolder Borrar Carpeta]: Borra la carpeta actual tras confirmar.</li>
+        <li>[ES_ModFolder Modificar Carpeta]: Modifica la carpeta actual.</li>
+        <li>[ES_AddExtFolder Añadir en modo Extendido Carpeta]: Permite añadir una carpeta eligiendo tipo e informando todos los metadatos.</li>
+        <li>[ES_ModExtFolder Modificar Extendido Carpeta]: Modifica cualquier metadato de la carpeta actual.</li>
+        <li>[ES_SearchFolder Buscar Carpeta]: Permite buscar carpetas de acuerdo a diversos criterios.</li>
+        <li>[ES_ImpExpFold Importar y Exportar Carpetas]: Permite exportar una estructura de carpetas OPD a disco o importar una estructura de disco a OPD.</li>
+    </ul>
+</li>
+<li><b>Documentos</b><ul>
+        <li>[ES_AddDoc Añadir Documento]: Permite añadir un documento de forma simple.</li>
+        <li>[ES_DelDoc Borrar Documento]: Borra el documento actual tras confirmar.</li>
+        <li>[ES_AddExtDoc Añadir en modo Extendido Documentos]: Permite añadir un documento eligiendo tipo e informando todos los metadatos.</li>
+        <li>[ES_ModExtDoc Modificar Extendido Documentos]: Modifica cualquier metadato del documento actual.</li>
+        <li>[ES_Checkout CheckOut Documentos]: Protege el documento actual para permitir su edición.</li>
+        <li>[ES_CheckIn CheckIn Documentos]: Confirma todos los cambios realizados sobre el documento.</li>
+        <li>[ES_CancelCheckout CancelCheckout Documentos]: Cancela todos los cambios realizados.</li>
+        <li>[ES_ListVersions Listar Versiones Documento]: Lista todas las versiones del documento actual.</li>
+        <li>[ES_SearchDocs Buscar Documentos]: Permite buscar documentos de acuerdo a diversos criterios.</li>
+        <li>[ES_ImpExpDocs Importar y Exportar Documento]: Permite exportar un documento aislado a disco o importar un documento de disco a OPD.</li>
+    </ul></li>
+<li><b>Otras Tareas</b><ul>
+        <li>[ES_PaperBin Papelera]: Presenta los documentos borrados de cada tipo permitiendo recuperarlos o eliminarlos definitvamente.</li>
+        <li>[ES_ChangePassword Cambiar Clave]: Permite al usuario cambiar su clave si su forma de autenticación soporta el cambio de clave.</li>
+    </ul></li>
+<li><b>Administración</b> (Estas opciones serán visibles dependiendo de la versión de Cliente OpenProdoc usado y los permisos del usuario)<ul>
+        <li>[ES_ListACL Lista de ACL]: Permite administrar los permisos sobre todos los elementos de OPD (Listas de Control de Acceso).
+            <ul>
+                <li>[ES_MantACL Mantenimiento de ACL]: Detalle de los ACL y de la edicion de los mismos.</li>
+            </ul></li>
+        <li>[ES_ListGroups Grupos]: Permite administrar los grupos sobre los que tenga permiso el usuario.
+            <ul>
+                <li>[ES_MantGroups Mantenimiento de Grupos]: Detalle de los Grupos y de la edicion de los mismos.</li>
+            </ul></li>
+        <li>[ES_ListUsers Usuarios]: Permite administrar los usuarios.
+            <ul>
+                <li>[ES_MantUsers Mantenimiento de Usuarios]: Detalle de los Usuarios y de la edicion de los mismos.</li>
+            </ul></li>
+        <li>[ES_ListRoles Roles]: Permite administrar los perfiles de usuarios, indicando sus tareas autorizadas.
+            <ul>
+                <li>[ES_MantRoles Mantenimiento de Roles]: Detalle de los Roles y de la edicion de los mismos.</li>
+            </ul></li>
+        <li>[ES_ListMimeTypes Tipos Mime]: Permite administrar los tipos y extensiones de archivo.
+            <ul>
+                <li>[ES_MantMimeTypes Mantenimiento de Tipos Mime]: Detalle de los Tipos de archivo y de la edicion de los mismos.</li>
+            </ul></li>
+        <li>[ES_ListRepositories Repositorios]: Permite administrar los repositorios de distinto tipo en que almacenar los documentos.
+            <ul>
+                <li>[ES_MantRepositories Mantenimiento de Repositorios]: Detalle de los Repositorios y de la edicion de los mismos.</li>
+            </ul></li>
+        <li>[ES_ListObjDef Definiciones de objetos]: Permite administrar los tipos documentales y tipos de carpeta(contenedores).
+            <ul>
+                <li>[ES_MantObjDef Mantenimiento de Tipos de Objeto]: Detalle de los Tipos de objeto y de la edicion de los mismos.</li>
+                <li>[ES_MantAttr Mantenimiento de Metadatos]: Posibilidades de definición de los metadatos de los tipos documentales.</li>
+            </ul></li>
+        <li>[ES_ListSistAuth Sistemas de Autenticación]: Permite administrar los distintos tipos y orígenes de autenticación de usuarios.
+            <ul>
+                <li>[ES_MantSistAuth Mantenimiento de Sistemas de Autenticación]: Detalle de los Sistemas de Autenticación y de la edicion de los mismos.</li>
+            </ul></li>
+        <li>[ES_ListCustom Lista de Personalizaciones]: Permite administrar las personalizaciones (apariencia, idioma, etc).
+            <ul>
+                <li>[ES_MantCustom Mantenimiento de Personalizaciones]: Detalle del significado de cada elemento y de la edicion de los mismos.</li>
+            </ul></li>
+    </ul></li>
+<li><b>Otros</b><ul>
+        <li>[ES_BeforeInstall Requerimientos]: Requerimientos y elementos a verificar antes de la instalación.</li>
+        <li>[ES_Install Instalación]: Instrucciones para la instalación y configuración inicial.</li>
+        <li>[ES_Interfaz Interfaz  de usuario]: Se describe los criterios generales y diferencias entre versiones (Swing/Web) de los formularios OPD.</li>
+        <li>[ES_Language Idiomas]: Indicación de los criterios de soporte de Idiomas y de los idiomas soportados en la versión actual.</li>
+        <li>[ES_ReportBugs Cómo reportar Fallos]: Indica como reportar fallos producidos en OPD.</li>
+        <li>[ES_WhatIsNew Novedades de esta versión]: Describe las novedades y cambios de la versión vigente y de las anteriores.</li>
+        <li>[ES_About Acerca de..]: Referencia a autores, colaboradores y licencias.</li>
+    </ul></li>
+</ul>
+<hr>
