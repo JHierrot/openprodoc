@@ -12,13 +12,13 @@
         </tr>  
     </thead>
     <tr>
-        <td>  http://dl.dropbox.com/u/49603479/OpenProdoc/ES/Img/F_Spain.png  Castellano</td><td style="text-align:center;">Si</td> <td style="text-align:center;">Si</td> <td style="text-align:center;">Si</td>
+        <td>  http://dl.dropbox.com/u/49603479/OpenProdoc/ES/Img/F_Spain.png    Castellano   </td><td style="text-align:center;">Si</td> <td style="text-align:center;">Si</td> <td style="text-align:center;">Si</td>
     </tr>
     <tr>
-        <td>  http://dl.dropbox.com/u/49603479/OpenProdoc/ES/Img/F_UK.png  Inglés</td><td style="text-align:center;">Si</td> <td style="text-align:center;">Si</td> <td style="text-align:center;">Si</td>
+        <td>  http://dl.dropbox.com/u/49603479/OpenProdoc/ES/Img/F_UK.png    Inglés   </td><td style="text-align:center;">Si</td> <td style="text-align:center;">Si</td> <td style="text-align:center;">Si</td>
     </tr>
     <tr>
-        <td>  http://dl.dropbox.com/u/49603479/OpenProdoc/ES/Img/F_Portugal.png  Portugués</td><td style="text-align:center;">Si</td> <td style="text-align:center;">No</td> <td style="text-align:center;">No</td>
+        <td>  http://dl.dropbox.com/u/49603479/OpenProdoc/ES/Img/F_Portugal.png     Portugués  </td><td style="text-align:center;">Si</td> <td style="text-align:center;">No</td> <td style="text-align:center;">No</td>
     </tr>
 </table>
 <p>Debe tenerse en cuenta, en cuanto a localización, que el formato de fechas se cubre con la personalización ( [ES_ListCustom Personalización] ), por lo que el soporte para paises compartiendo el idioma pero distinto formato de fecha se hace solo traduciendo.</p>
