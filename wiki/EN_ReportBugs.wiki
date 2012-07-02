@@ -34,4 +34,4 @@
 <p>TRACECONF  indicates the path where is stored the file of the trace configuration (eg TRACECONF = /home/OPD/log4j.properties).</p>
 <p> By default, a file is provided but can be modified at will according to the log4j format, the tool used to log. For those who know log4j, should be noted that the log level parameter assigned in TraceLevel takes precedence over the value assigned in the configuration file log4j.properties </p>
 <hr>
-[HelpIndex.html Help Index]
+[EN_HelpIndex Help Index]
