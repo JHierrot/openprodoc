@@ -21,6 +21,6 @@
         <td>  <img alt="Bandera" src="img/F_Portugal.png"/>  Portuguese</td><td style="text-align:center;">Yes</td> <td style="text-align:center;">No</td> <td style="text-align:center;">No</td>
     </tr>
 </table>
-<p>Regarding location should be noted that the date format is covered with customization ( [EN_ListCustom]), so that support for countries sharing a language, but a different format date is just translation.</p>
+<p>Regarding location should be noted that the date format is covered with customization ( [EN_ListCustom Customizacion]), so that support for countries sharing a language, but a different format date is just translation.</p>
 <hr>
-[EN_HelpIndex]
+[EN_HelpIndex Help Index]

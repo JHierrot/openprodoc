@@ -21,6 +21,6 @@
         <td>  <img alt="Bandera" src="img/F_Portugal.png"/>  Portugués</td><td style="text-align:center;">Si</td> <td style="text-align:center;">No</td> <td style="text-align:center;">No</td>
     </tr>
 </table>
-<p>Debe tenerse en cuenta, en cuanto a localización, que el formato de fechas se cubre con la personalización ( [ES_ListCustom] ), por lo que el soporte para paises compartiendo el idioma pero distinto formato de fecha se hace solo traduciendo.</p>
+<p>Debe tenerse en cuenta, en cuanto a localización, que el formato de fechas se cubre con la personalización ( [ES_ListCustom Personalización] ), por lo que el soporte para paises compartiendo el idioma pero distinto formato de fecha se hace solo traduciendo.</p>
 <hr>
-[ES_HelpIndex]
+[ES_HelpIndex Indice general]

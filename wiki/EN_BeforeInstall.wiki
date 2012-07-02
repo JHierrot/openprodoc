@@ -36,5 +36,5 @@
     <li>(There are errors under OpenJDK that make imposible to use the program)</li>    
 </ul>
 <hr>
-[EN_HelpIndex]
+[EN_HelpIndex Help Index]
 

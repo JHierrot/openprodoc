@@ -25,7 +25,7 @@ Para ello debe elegirse el sistema de base de datos a utilizar y crearse un usua
 <p>Este cliente debe instalarse al menos una vez para la administración del sistema y además para todos los usuarios que utilicen esta forma de acceso.
     Para ello debe iniciar el script de sistema <b>Install.sh</b> o <b>Install.bat</b> (según el sistema operativo) y cumplimentar los datos requeridos en pantalla.</p>
 <p>En el caso del Linux, dependiendo de la configuración y modelo de seguridad, puede ser necesario cambiar los permisos de Install.sh o de Setup.sh (una vez creado) asignando permisos de ejecución: "chmod 777 Install.sh"</p>
-<p>Por defecto se elegirá el idioma del equipo, siempre que esté soportado, en otro caso se utilizará inglés (EN). Si se desea forzar otro idioma puede pasarse como parámetro de dos letras a la aplicación (Ej. Install.sh EN). Ver [ES_Language]</p>
+<p>Por defecto se elegirá el idioma del equipo, siempre que esté soportado, en otro caso se utilizará inglés (EN). Si se desea forzar otro idioma puede pasarse como parámetro de dos letras a la aplicación (Ej. Install.sh EN). Ver [ES_Language Idiomas]</p>
 <ul> 
   <li><b>Usuario de conexión a BBDD</b>: Identificación del usuario de BBDD creado en el apartado anterior. (requerido)</li>
   <li><b>Clave usuario BBDD</b>: Clave del usuario de BBDD. (requerido)</li>
@@ -45,7 +45,7 @@ Estos ficheros pueden copiarse y usarse en cualquier equipo siempre que: </p>
 
 <h4 id="4">4 - Creación estructura de datos</h4>
 <p>Una vez instalado el cliente, debe ejecutarse la aplicación de creación de la estructura de datos <b>Setup.sh</b> o <b>Setup.bat</b>, contestando a las preguntas de la aplicación.</p>
-<p>Por defecto se elegirá el idioma del equipo, siempre que esté soportado, en otro caso se utilizará inglés (EN). Si se desea forzar otro idioma puede pasarse como parámetro de dos letras a la aplicación (Ej. Setup.sh EN). Ver [ES_Language]</p>
+<p>Por defecto se elegirá el idioma del equipo, siempre que esté soportado, en otro caso se utilizará inglés (EN). Si se desea forzar otro idioma puede pasarse como parámetro de dos letras a la aplicación (Ej. Setup.sh EN). Ver [ES_Language Idiomas]</p>
 
   <li><b>Password Administrador</b>: Clave de acceso del usuario administrador "root" creado al instalar. Otros usuarios pueden tener los mismos permisos, "root" se crea por defecto</li>
   <li><b>Código del Lenguaje por defecto</b>: Código ISO del lenguaje por defecto para la parametrización por defecto.</li>
@@ -77,4 +77,4 @@ A continuación debe configurarse el fichero de configuración <b>Prodoc.propert
 <p>Por ultimo, en el directorio home (ej.: /home/J_Smith) del usuario con que se ejecuta el servidor J2EE debe copiarse el archivo <b>OPDWeb.properties</b>, modificando la entrada para que referencie la ubicación del fichero <b>Prodoc.properties</b></p>
  
 <hr>
-[ES_HelpIndex]
+[ES_HelpIndex Indice general]

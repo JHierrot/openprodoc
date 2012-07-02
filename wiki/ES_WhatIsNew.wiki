@@ -33,5 +33,5 @@
     <li>Autenticación OPD, LDAP, BBDD, SO</li>
 </ul>
 <hr>
-[ES_HelpIndex]
+[ES_HelpIndex Indice general]
 
