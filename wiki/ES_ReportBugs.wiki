@@ -35,4 +35,4 @@
 <p>Por defecto se suministra un fichero pero puede modificarse a voluntad según el formato de log4j, la herramienta utilizada. Para los conocedores de log4j debe indicarse que el nivel indicado en TRACELEVEL predomina sobre el indicado en el fichero de configuración log4j.properties</p>
 
 <hr>
-[ HelpIndex Indice General]
+[ES_HelpIndex Indice General]
