@@ -21,6 +21,9 @@ package prodoc;
 
 import java.io.*;
 import java.util.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -2340,5 +2343,27 @@ for (int i = 0; i < childNodes.getLength(); i++)
 NewDoc.insert();
 }    
 //-------------------------------------------------------------------------
-
+static public PDDocs ProcessXMLAbby(DriverGeneric Sess, File XMLFile, String ParentFoldId) throws PDException
+{
+try {    
+PDDocs NewDocs=null;
+DocumentBuilder DB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+Document XMLObjects = DB.parse(XMLFile);
+NodeList OPDObjectList = XMLObjects.getElementsByTagName("form:Documents");
+Node OPDObject = null;
+ObjPD Obj2Build=null;
+for (int i=0; i<OPDObjectList.getLength(); i++)
+    {
+    Node item = OPDObjectList.item(i).getChildNodes().item(0);
+    String TypeName=item.getNodeName();
+    TypeName=TypeName.substring(1);
+    }
+return(NewDocs);
+}catch(Exception ex)
+    {
+    PDLog.Error(ex.getLocalizedMessage());
+    throw new PDException(ex.getLocalizedMessage());
+    }
+}
+//-------------------------------------------------------------------------
 }
