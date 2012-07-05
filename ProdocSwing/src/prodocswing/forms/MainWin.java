@@ -118,6 +118,7 @@ SetMenu();
         jSeparator6 = new javax.swing.JPopupMenu.Separator();
         ExportFold = new javax.swing.JMenuItem();
         ImportFold = new javax.swing.JMenuItem();
+        ImportExtFold = new javax.swing.JMenuItem();
         jSeparator5 = new javax.swing.JPopupMenu.Separator();
         exitMenuItem = new javax.swing.JMenuItem();
         DocMenu = new javax.swing.JMenu();
@@ -314,6 +315,15 @@ SetMenu();
             }
         });
         FolderMenu.add(ImportFold);
+
+        ImportExtFold.setFont(getFontMenu());
+        ImportExtFold.setText(TT("Import_Folders"));
+        ImportExtFold.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ImportExtFoldActionPerformed(evt);
+            }
+        });
+        FolderMenu.add(ImportExtFold);
         FolderMenu.add(jSeparator5);
 
         exitMenuItem.setFont(getFontMenu());
@@ -1219,7 +1229,7 @@ TreeFolder.setSelectionPath(ActualPath);
 
     private void ReportBugsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ReportBugsActionPerformed
     {//GEN-HEADEREND:event_ReportBugsActionPerformed
-Execute("https://docs.google.com/spreadsheet/viewform?formkey=dFF6ZndKWXFUQnJ0MWtVZWdUWk10X2c6MQ");   
+Execute("https://docs.google.com/spreadsheet/viewform?formkey%3DdFF6ZndKWXFUQnJ0MWtVZWdUWk10X2c6MQ");   
     }//GEN-LAST:event_ReportBugsActionPerformed
 
     private void ViewMetadataActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ViewMetadataActionPerformed
@@ -1240,6 +1250,29 @@ MD.setVisible(true);
     Message(DrvTT(ex.getLocalizedMessage()));
     }
     }//GEN-LAST:event_ViewMetadataActionPerformed
+
+    private void ImportExtFoldActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ImportExtFoldActionPerformed
+    {//GEN-HEADEREND:event_ImportExtFoldActionPerformed
+try {
+        return;
+//ExpFolds=0;
+//ExpDocs=0;    
+//DialogImportExtFolders ImpFold = new DialogImportExtFolders(this,true);
+//ImpFold.setLocationRelativeTo(null);
+//ImpFold.setVisible(true);
+//if (ImpFold.isCancel())
+//    return;
+//ImportExt(FoldAct, ImpFold.SelFolder.getAbsolutePath());
+//Message(DrvTT("Imported")+" "+ExpFolds+" "+DrvTT("Folders")+" / "+ExpDocs +" "+DrvTT("Documents"));
+//TreePath ActualPath = TreeFolder.getSelectionPath();
+//DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) ActualPath.getLastPathComponent();
+//ExpandFold(TreeFold);
+//TreeFolder.setSelectionPath(ActualPath);
+} catch (Exception ex)
+    {
+    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
+    }//GEN-LAST:event_ImportExtFoldActionPerformed
 
 /**
 * @param args the command line arguments
@@ -1289,6 +1322,7 @@ java.awt.EventQueue.invokeLater(new Runnable()
     private javax.swing.JMenu FolderMenu;
     private javax.swing.JMenuItem GroupMenuItem;
     private javax.swing.JMenuItem ImportDoc;
+    private javax.swing.JMenuItem ImportExtFold;
     private javax.swing.JMenuItem ImportFold;
     private javax.swing.JMenuItem ListVersions;
     private javax.swing.JMenuItem MimeTypeMenuItem;
@@ -1850,7 +1884,6 @@ if (!IsOneLevel)
     }    
 }
 //---------------------------------------------------------------------
-
 private void Import(PDFolders FoldAct, String OriginPath, boolean IsOneLevel, boolean IncludeMetadata, boolean IncludeDocs, String FoldType, String DocType) throws PDException
 {
 PDFolders NewFold=new PDFolders(FoldAct.getDrv(), FoldType);    
@@ -1907,6 +1940,47 @@ for (int i = 0; i < DirList.size(); i++)
     {
     File SubDir = (File) DirList.get(i);
     Import(NewFold, SubDir.getAbsolutePath(), IsOneLevel, IncludeMetadata, IncludeDocs, FoldType, DocType);    
+    }
+}
+//---------------------------------------------------------------------
+
+private void ImportExt(PDFolders FoldAct, String OriginPath) throws PDException
+{
+PDFolders NewFold=new PDFolders(FoldAct.getDrv());   
+HashSet ChildF=NewFold.getListDirectDescendList(FoldAct.getPDId());
+String Name=OriginPath.substring(OriginPath.lastIndexOf(File.separatorChar)+1);
+try {
+String IdFold=NewFold.GetIdChild(FoldAct.getPDId(), Name);
+NewFold.Load(IdFold);
+} catch( PDException ex)
+    {
+    NewFold.setTitle(Name);
+    NewFold.setParentId(FoldAct.getPDId());   
+    NewFold.insert();
+    }
+ExpFolds++;
+File ImpFold=new File(OriginPath);
+File []ListOrigin=ImpFold.listFiles();
+ArrayList DirList=new ArrayList(5);
+for (int i = 0; i < ListOrigin.length; i++)
+    {
+    File ListElement = ListOrigin[i];
+    if (ListElement.isDirectory())
+        {
+        DirList.add(ListElement);
+        continue;
+        }
+    if (ListElement.getName().endsWith(".xml"))
+        {       
+        ExpDocs++;
+        PDDocs.ProcessXMLAbby(getSession(), ListElement, NewFold.getPDId());   
+        }
+    }
+ListOrigin=null; // to help gc and save memory during recursivity
+for (int i = 0; i < DirList.size(); i++)
+    {
+    File SubDir = (File) DirList.get(i);
+    ImportExt(NewFold, SubDir.getAbsolutePath());    
     }
 }
 //---------------------------------------------------------------------
