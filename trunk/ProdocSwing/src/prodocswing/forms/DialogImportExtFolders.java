@@ -66,11 +66,21 @@ initComponents();
     private void initComponents() {
 
         LabelOperation = new javax.swing.JLabel();
+        OrigFormatLabel = new javax.swing.JLabel();
+        CBOrigFormat = new javax.swing.JComboBox();
+        DeleteAfterImportLab = new javax.swing.JLabel();
+        CheckDelete = new javax.swing.JCheckBox();
+        LabelFoldType1 = new javax.swing.JLabel();
+        FoldTypeCB = new javax.swing.JComboBox();
+        DateFormatLab = new javax.swing.JLabel();
+        DateFormatTF = new javax.swing.JTextField();
+        TimeStampForLab = new javax.swing.JLabel();
+        TimeStampForTF = new javax.swing.JTextField();
         FilePathLabel = new javax.swing.JLabel();
         FilePathTextField = new javax.swing.JTextField();
         ButtonSelFile = new javax.swing.JButton();
-        ButtonCancel = new javax.swing.JButton();
         ButtonAcept = new javax.swing.JButton();
+        ButtonCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(MainWin.TT("Import_Folders"));
@@ -86,6 +96,35 @@ initComponents();
         LabelOperation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         LabelOperation.setText(MainWin.TT("Import_Folders"));
 
+        OrigFormatLabel.setFont(MainWin.getFontDialog());
+        OrigFormatLabel.setText(MainWin.TT("Origin_System"));
+
+        CBOrigFormat.setFont(MainWin.getFontDialog());
+        CBOrigFormat.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Abby" }));
+
+        DeleteAfterImportLab.setFont(MainWin.getFontDialog());
+        DeleteAfterImportLab.setText(MainWin.TT("Delete_After_Import"));
+
+        CheckDelete.setFont(MainWin.getFontDialog());
+
+        LabelFoldType1.setFont(MainWin.getFontDialog());
+        LabelFoldType1.setText(MainWin.TT("Folder_Type"));
+
+        FoldTypeCB.setFont(MainWin.getFontDialog());
+        FoldTypeCB.setModel(getComboModelFold());
+
+        DateFormatLab.setFont(MainWin.getFontDialog());
+        DateFormatLab.setText(MainWin.TT("Date_format"));
+
+        DateFormatTF.setFont(MainWin.getFontDialog());
+        DateFormatTF.setText("yyyy-MM-dd");
+
+        TimeStampForLab.setFont(MainWin.getFontDialog());
+        TimeStampForLab.setText(MainWin.TT("TimeStamp_format"));
+
+        TimeStampForTF.setFont(MainWin.getFontDialog());
+        TimeStampForTF.setText("yyyy-MM-dd HH:mm:ss");
+
         FilePathLabel.setFont(MainWin.getFontDialog());
         FilePathLabel.setText(MainWin.TT("Source_Folder"));
 
@@ -99,14 +138,6 @@ initComponents();
             }
         });
 
-        ButtonCancel.setFont(MainWin.getFontDialog());
-        ButtonCancel.setText(MainWin.TT("Cancel"));
-        ButtonCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ButtonCancelActionPerformed(evt);
-            }
-        });
-
         ButtonAcept.setFont(MainWin.getFontDialog());
         ButtonAcept.setText(MainWin.TT("Ok"));
         ButtonAcept.addActionListener(new java.awt.event.ActionListener() {
@@ -115,35 +146,79 @@ initComponents();
             }
         });
 
+        ButtonCancel.setFont(MainWin.getFontDialog());
+        ButtonCancel.setText(MainWin.TT("Cancel"));
+        ButtonCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonCancelActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(17, Short.MAX_VALUE)
-                .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(DeleteAfterImportLab, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TimeStampForLab, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(FilePathLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(LabelFoldType1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(OrigFormatLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(DateFormatLab, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(7, 7, 7)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(CheckDelete)
+                            .addComponent(TimeStampForTF, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(FilePathTextField)
+                            .addComponent(CBOrigFormat, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(FoldTypeCB, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(DateFormatTF, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(ButtonSelFile, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(ButtonAcept)
                         .addGap(18, 18, 18)
-                        .addComponent(ButtonCancel))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(FilePathLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(FilePathTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(ButtonSelFile, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(20, 20, 20))
+                        .addComponent(ButtonCancel)
+                        .addGap(20, 20, 20))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {DateFormatLab, DeleteAfterImportLab, FilePathLabel, LabelFoldType1, OrigFormatLabel, TimeStampForLab});
+
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(LabelOperation)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 216, Short.MAX_VALUE)
+                .addGap(37, 37, 37)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(CBOrigFormat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(OrigFormatLabel))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(CheckDelete)
+                    .addComponent(DeleteAfterImportLab))
+                .addGap(12, 12, 12)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(LabelFoldType1)
+                    .addComponent(FoldTypeCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(DateFormatTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(DateFormatLab))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(TimeStampForTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TimeStampForLab))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(FilePathTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(FilePathLabel)
@@ -195,9 +270,19 @@ Cancel=true;
     private javax.swing.JButton ButtonAcept;
     private javax.swing.JButton ButtonCancel;
     private javax.swing.JButton ButtonSelFile;
+    private javax.swing.JComboBox CBOrigFormat;
+    private javax.swing.JCheckBox CheckDelete;
+    private javax.swing.JLabel DateFormatLab;
+    private javax.swing.JTextField DateFormatTF;
+    private javax.swing.JLabel DeleteAfterImportLab;
     private javax.swing.JLabel FilePathLabel;
     private javax.swing.JTextField FilePathTextField;
+    private javax.swing.JComboBox FoldTypeCB;
+    private javax.swing.JLabel LabelFoldType1;
     private javax.swing.JLabel LabelOperation;
+    private javax.swing.JLabel OrigFormatLabel;
+    private javax.swing.JLabel TimeStampForLab;
+    private javax.swing.JTextField TimeStampForTF;
     // End of variables declaration//GEN-END:variables
 
 //----------------------------------------------------------------
@@ -267,5 +352,29 @@ while (Res!=null)
 return(new DefaultComboBoxModel(VObjects));
 }
 //----------------------------------------------------------------
-
+public String ImpFormat()
+{
+return((String)CBOrigFormat.getSelectedItem());  
+}    
+//----------------------------------------------------------------
+public boolean DeleteAfterImport()
+{
+return(CheckDelete.isSelected());  
+}    
+//----------------------------------------------------------------
+public String DefaultFoldType()
+{
+return((String)FoldTypeCB.getSelectedItem());  
+}    
+//----------------------------------------------------------------
+public String DateFormat()
+{
+return(DateFormatTF.getText());  
+}    
+//----------------------------------------------------------------
+public String TimeStampFormat()
+{
+return(TimeStampForTF.getText());  
+}    
+//----------------------------------------------------------------
 }

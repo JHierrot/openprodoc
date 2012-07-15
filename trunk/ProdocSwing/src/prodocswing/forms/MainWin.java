@@ -69,6 +69,9 @@ static private int ExpDocs=0;
 private PDFolders FoldAct=null;
 static private String List=PDFolders.fACL+"/"+PDFolders.fFOLDTYPE+"/"+PDFolders.fPARENTID+"/"+PDFolders.fPDID+"/"+PDFolders.fTITLE+"/"+PDFolders.fPDAUTOR+"/"+PDFolders.fPDDATE;
 static private HashSet ExecFiles=new HashSet();
+static private java.awt.Cursor DefCur=new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR);
+static private final java.awt.Cursor WaitCur=new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR);
+
 
 /**
 * @return the Session
@@ -176,7 +179,6 @@ SetMenu();
         TreeFolder.setMaximumSize(new java.awt.Dimension(400, 76));
         TreeFolder.setMinimumSize(new java.awt.Dimension(200, 60));
         TreeFolder.setPreferredSize(new java.awt.Dimension(200, 76));
-        TreeFolder.setScrollsOnExpand(true);
         TreeFolder.addTreeExpansionListener(new javax.swing.event.TreeExpansionListener() {
             public void treeCollapsed(javax.swing.event.TreeExpansionEvent evt) {
             }
@@ -317,7 +319,7 @@ SetMenu();
         FolderMenu.add(ImportFold);
 
         ImportExtFold.setFont(getFontMenu());
-        ImportExtFold.setText(TT("Import_Folders"));
+        ImportExtFold.setText(TT("Import_Ext_Systems"));
         ImportExtFold.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ImportExtFoldActionPerformed(evt);
@@ -1189,6 +1191,7 @@ RefreshDocs();
     private void ExportFoldActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ExportFoldActionPerformed
     {//GEN-HEADEREND:event_ExportFoldActionPerformed
 try {
+setCursor(WaitCur);    
 ExpFolds=0;
 ExpDocs=0;    
 DialogExportFolders ExpFold = new DialogExportFolders(this,true);
@@ -1197,9 +1200,11 @@ ExpFold.setVisible(true);
 if (ExpFold.isCancel())
     return;
 Export(FoldAct, ExpFold.SelFolder.getAbsolutePath(), ExpFold.IsOneLevel(), ExpFold.IncludeMetadata(), ExpFold.IncludeDocs());
+setCursor(DefCur);
 Message(DrvTT("Exported")+" "+ExpFolds+" "+DrvTT("Folders")+" / "+ExpDocs +" "+DrvTT("Documents"));
 } catch (Exception ex)
     {
+    setCursor(DefCur);    
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
     }//GEN-LAST:event_ExportFoldActionPerformed
@@ -1207,6 +1212,7 @@ Message(DrvTT("Exported")+" "+ExpFolds+" "+DrvTT("Folders")+" / "+ExpDocs +" "+D
     private void ImportFoldActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ImportFoldActionPerformed
     {//GEN-HEADEREND:event_ImportFoldActionPerformed
 try {
+setCursor(WaitCur);
 ExpFolds=0;
 ExpDocs=0;    
 DialogImportFolders ImpFold = new DialogImportFolders(this,true);
@@ -1215,13 +1221,15 @@ ImpFold.setVisible(true);
 if (ImpFold.isCancel())
     return;
 Import(FoldAct, ImpFold.SelFolder.getAbsolutePath(), ImpFold.IsOneLevel(), ImpFold.IncludeMetadata(), ImpFold.IncludeDocs(), ImpFold.FoldType(), ImpFold.DocType());
-Message(DrvTT("Imported")+" "+ExpFolds+" "+DrvTT("Folders")+" / "+ExpDocs +" "+DrvTT("Documents"));
 TreePath ActualPath = TreeFolder.getSelectionPath();
 DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) ActualPath.getLastPathComponent();
 ExpandFold(TreeFold);
 TreeFolder.setSelectionPath(ActualPath);
+setCursor(DefCur);
+Message(DrvTT("Imported")+" "+ExpFolds+" "+DrvTT("Folders")+" / "+ExpDocs +" "+DrvTT("Documents"));
 } catch (Exception ex)
     {
+    setCursor(DefCur);
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
 
@@ -1254,22 +1262,24 @@ MD.setVisible(true);
     private void ImportExtFoldActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ImportExtFoldActionPerformed
     {//GEN-HEADEREND:event_ImportExtFoldActionPerformed
 try {
-        return;
-//ExpFolds=0;
-//ExpDocs=0;    
-//DialogImportExtFolders ImpFold = new DialogImportExtFolders(this,true);
-//ImpFold.setLocationRelativeTo(null);
-//ImpFold.setVisible(true);
-//if (ImpFold.isCancel())
-//    return;
-//ImportExt(FoldAct, ImpFold.SelFolder.getAbsolutePath());
-//Message(DrvTT("Imported")+" "+ExpFolds+" "+DrvTT("Folders")+" / "+ExpDocs +" "+DrvTT("Documents"));
-//TreePath ActualPath = TreeFolder.getSelectionPath();
-//DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) ActualPath.getLastPathComponent();
-//ExpandFold(TreeFold);
-//TreeFolder.setSelectionPath(ActualPath);
+setCursor(WaitCur);
+ExpFolds=0;
+ExpDocs=0;    
+DialogImportExtFolders ImpFold = new DialogImportExtFolders(this,true);
+ImpFold.setLocationRelativeTo(null);
+ImpFold.setVisible(true);
+if (ImpFold.isCancel())
+    return;
+ImportExt(FoldAct, ImpFold.SelFolder.getAbsolutePath(), ImpFold.DeleteAfterImport(), ImpFold.ImpFormat(), ImpFold.DefaultFoldType(), ImpFold.DateFormat(), ImpFold.TimeStampFormat());
+TreePath ActualPath = TreeFolder.getSelectionPath();
+DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) ActualPath.getLastPathComponent();
+ExpandFold(TreeFold);
+TreeFolder.setSelectionPath(ActualPath);
+setCursor(DefCur);
+Message(DrvTT("Imported")+" "+ExpFolds+" "+DrvTT("Folders")+" / "+ExpDocs +" "+DrvTT("Documents"));
 } catch (Exception ex)
     {
+    setCursor(DefCur);
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
     }//GEN-LAST:event_ImportExtFoldActionPerformed
@@ -1944,9 +1954,9 @@ for (int i = 0; i < DirList.size(); i++)
 }
 //---------------------------------------------------------------------
 
-private void ImportExt(PDFolders FoldAct, String OriginPath) throws PDException
+private void ImportExt(PDFolders FoldAct, String OriginPath, boolean DeleteAfter, String Format, String DefFoldType, String DateFormat, String TimeStampFormat) throws PDException
 {
-PDFolders NewFold=new PDFolders(FoldAct.getDrv());   
+PDFolders NewFold=new PDFolders(FoldAct.getDrv(), DefFoldType);   
 HashSet ChildF=NewFold.getListDirectDescendList(FoldAct.getPDId());
 String Name=OriginPath.substring(OriginPath.lastIndexOf(File.separatorChar)+1);
 try {
@@ -1962,6 +1972,7 @@ ExpFolds++;
 File ImpFold=new File(OriginPath);
 File []ListOrigin=ImpFold.listFiles();
 ArrayList DirList=new ArrayList(5);
+File ImageFile=null;
 for (int i = 0; i < ListOrigin.length; i++)
     {
     File ListElement = ListOrigin[i];
@@ -1973,14 +1984,25 @@ for (int i = 0; i < ListOrigin.length; i++)
     if (ListElement.getName().endsWith(".xml"))
         {       
         ExpDocs++;
-        PDDocs.ProcessXMLAbby(getSession(), ListElement, NewFold.getPDId());   
+        if (Format.equals("Abby"))
+            ImageFile=PDDocs.ProcessXMLAbby(getSession(), ListElement, NewFold.getPDId(), DateFormat, TimeStampFormat); 
+//        else
+//            kofax
+        if (DeleteAfter)
+            {
+            if (ImageFile!=null)    
+                ImageFile.delete();
+            ListElement.delete();
+            }
         }
     }
 ListOrigin=null; // to help gc and save memory during recursivity
 for (int i = 0; i < DirList.size(); i++)
     {
     File SubDir = (File) DirList.get(i);
-    ImportExt(NewFold, SubDir.getAbsolutePath());    
+    ImportExt(NewFold, SubDir.getAbsolutePath(), DeleteAfter, Format, DefFoldType, DateFormat, TimeStampFormat);    
+    if (DeleteAfter)
+        SubDir.delete();
     }
 }
 //---------------------------------------------------------------------
