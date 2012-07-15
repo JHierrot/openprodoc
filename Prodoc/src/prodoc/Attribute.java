@@ -501,8 +501,8 @@ if (isMultivalued())
         Object Val = it.next();
         Tot.append(FormatExport(Val));
         }
-    if (PDLog.isDebug())
-        PDLog.Debug("Attribute.Export:"+getValue()+"-->"+Tot.toString());
+//    if (PDLog.isDebug())
+//        PDLog.Debug("Attribute.Export:"+getValue()+"-->"+Tot.toString());
     return(Tot.toString());
     }
 else
@@ -586,15 +586,13 @@ if (isMultivalued())
         {
         AddValue(FormatImport(St.nextToken()));
         }
-    if (PDLog.isDebug())
-        {
-        PDLog.Debug("Attribute.Import:"+Val+"-->"+Export());
-        }
+//    if (PDLog.isDebug())
+//        PDLog.Debug("Attribute.Import:"+Val+"-->"+Export());
     }   
 else
     {
-    if (PDLog.isDebug())
-        PDLog.Debug("Attribute.Import:"+Val+"-->"+FormatImport(Val));
+//    if (PDLog.isDebug())
+//        PDLog.Debug("Attribute.Import:"+Val+"-->"+FormatImport(Val));
     setValue(FormatImport(Val));    
     }
 }

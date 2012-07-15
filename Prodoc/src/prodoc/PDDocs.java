@@ -20,6 +20,7 @@
 package prodoc;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -2343,22 +2344,71 @@ for (int i = 0; i < childNodes.getLength(); i++)
 NewDoc.insert();
 }    
 //-------------------------------------------------------------------------
-static public PDDocs ProcessXMLAbby(DriverGeneric Sess, File XMLFile, String ParentFoldId) throws PDException
+static public File ProcessXMLAbby(DriverGeneric Sess, File XMLFile, String ParentFoldId, String DateFormat, String TimeStampFormat) throws PDException
 {
 try {    
-PDDocs NewDocs=null;
+File ImageFile=null;
 DocumentBuilder DB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 Document XMLObjects = DB.parse(XMLFile);
-NodeList OPDObjectList = XMLObjects.getElementsByTagName("form:Documents");
-Node OPDObject = null;
-ObjPD Obj2Build=null;
-for (int i=0; i<OPDObjectList.getLength(); i++)
+NodeList DocList = XMLObjects.getElementsByTagName("form:Documents");
+NodeList DocElem;
+NodeList SectElem;
+NodeList AttrElem;
+for (int NumDocs=0; NumDocs<DocList.getLength(); NumDocs++)
     {
-    Node item = OPDObjectList.item(i).getChildNodes().item(0);
-    String TypeName=item.getNodeName();
-    TypeName=TypeName.substring(1);
+    DocElem=DocList.item(NumDocs).getChildNodes(); 
+    for (int NumDoc = 0; NumDoc < DocElem.getLength(); NumDoc++)
+        {
+        if (DocElem.item(NumDoc).getNodeType()==Node.ELEMENT_NODE)
+            {
+            String TypeName=DocElem.item(NumDoc).getNodeName();
+            TypeName=TypeName.substring(1, TypeName.indexOf(":"));
+            String FileName=DocElem.item(NumDoc).getAttributes().getNamedItem("addData:ImagePath").getNodeValue();    
+            SectElem=DocElem.item(NumDoc).getChildNodes(); 
+            for (int NumSect = 0; NumSect < SectElem.getLength(); NumSect++)
+                {
+                if (SectElem.item(NumSect).getNodeType()==Node.ELEMENT_NODE)
+                    {
+                    PDDocs Doc=new PDDocs(Sess, TypeName);
+                    ImageFile=new File(XMLFile.getParent()+File.separator+FileName);
+                    Doc.setFile(ImageFile.getAbsolutePath());
+                    Doc.setParentId(ParentFoldId);
+                    Record Rec=Doc.getRecSum();
+                    AttrElem=SectElem.item(NumSect).getChildNodes(); 
+                    for (int NumAttr = 0; NumAttr < AttrElem.getLength(); NumAttr++)
+                        {
+                        if (AttrElem.item(NumAttr).getNodeType()==Node.ELEMENT_NODE)
+                            {
+                            String NameAttr=AttrElem.item(NumAttr).getNodeName().substring(1);
+                            String Val=AttrElem.item(NumAttr).getTextContent();
+                            if (Rec.ContainsAttr(NameAttr))
+                                {
+                                int Type=Rec.getAttr(NameAttr).getType();    
+                                if (Type==Attribute.tDATE)  
+                                    {
+                                    SimpleDateFormat formatterDate = new SimpleDateFormat(DateFormat);
+                                    Rec.getAttr(NameAttr).setValue(formatterDate.parse(Val));
+                                    }
+                                else if (Type==Attribute.tTIMESTAMP) 
+                                    {
+                                    SimpleDateFormat formatterTS = new SimpleDateFormat(TimeStampFormat);
+                                    Rec.getAttr(NameAttr).setValue(formatterTS.parse(Val));
+                                    }
+                                else
+                                    Rec.getAttr(NameAttr).Import(Val);
+                                }
+                            }
+                        }
+                    Doc.assignValues(Rec);
+                    if (Doc.getTitle()==null)
+                        Doc.setTitle(FileName);
+                    Doc.insert();
+                    }                    
+                }
+            }
+        }
     }
-return(NewDocs);
+return(ImageFile);
 }catch(Exception ex)
     {
     PDLog.Error(ex.getLocalizedMessage());

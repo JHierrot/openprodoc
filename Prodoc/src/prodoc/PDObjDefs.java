@@ -946,7 +946,7 @@ Condition CondAcl=new Condition(PDObjDefs.fACL, new HashSet(getDrv().getUser().g
 Conditions Conds=new Conditions();
 Conds.addCondition(CondType);
 Conds.addCondition(CondAcl);
-Query ListFold=new Query(getTabName(), getRecordStruct(), Conds);
+Query ListFold=new Query(getTabName(), getRecordStruct(), Conds, PDObjDefs.fNAME);
 Cursor Cur=getDrv().OpenCursor(ListFold);
 if (PDLog.isDebug())
     PDLog.Debug("PDObjDefs.getListFold<:"+Cur);
@@ -967,7 +967,7 @@ Condition CondAcl=new Condition(PDObjDefs.fACL, new HashSet(getDrv().getUser().g
 Conditions Conds=new Conditions();
 Conds.addCondition(CondType);
 Conds.addCondition(CondAcl);
-Query ListFold=new Query(getTabName(), getRecordStruct(), Conds);
+Query ListFold=new Query(getTabName(), getRecordStruct(), Conds, PDObjDefs.fNAME);
 Cursor Cur=getDrv().OpenCursor(ListFold);
 if (PDLog.isDebug())
     PDLog.Debug("PDObjDefs.getListDocs<:"+Cur);
