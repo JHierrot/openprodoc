@@ -1,0 +1,8 @@
+<H4>Delete Document OpenProdoc</H4><hr>
+<p>When select the option "documents->delete" it will be displayed this form showing all the information related to the document; this allows to review that is the correct document to be deleted.</p>
+<p>A document cannot be deleted if it's locked for editing or if the user hasn't enough privileges over the document.</p>
+<p style="text-align:center;"> http://dl.dropbox.com/u/49603479/OpenProdoc/EN/Img/DelDoc.jpg </p>
+<p>If the user accept to delete the document, it will be moved to the paper bin, from where it can be recovered or permanently deleted.</p>
+<p>View: [EN_PaperBin Paper bin]</p>
+<hr>
+[EN_HelpIndex Help Index OpenProdoc]
