@@ -1191,7 +1191,6 @@ RefreshDocs();
     private void ExportFoldActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ExportFoldActionPerformed
     {//GEN-HEADEREND:event_ExportFoldActionPerformed
 try {
-setCursor(WaitCur);    
 ExpFolds=0;
 ExpDocs=0;    
 DialogExportFolders ExpFold = new DialogExportFolders(this,true);
@@ -1199,6 +1198,7 @@ ExpFold.setLocationRelativeTo(null);
 ExpFold.setVisible(true);
 if (ExpFold.isCancel())
     return;
+setCursor(WaitCur);    
 Export(FoldAct, ExpFold.SelFolder.getAbsolutePath(), ExpFold.IsOneLevel(), ExpFold.IncludeMetadata(), ExpFold.IncludeDocs());
 setCursor(DefCur);
 Message(DrvTT("Exported")+" "+ExpFolds+" "+DrvTT("Folders")+" / "+ExpDocs +" "+DrvTT("Documents"));
@@ -1212,7 +1212,6 @@ Message(DrvTT("Exported")+" "+ExpFolds+" "+DrvTT("Folders")+" / "+ExpDocs +" "+D
     private void ImportFoldActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ImportFoldActionPerformed
     {//GEN-HEADEREND:event_ImportFoldActionPerformed
 try {
-setCursor(WaitCur);
 ExpFolds=0;
 ExpDocs=0;    
 DialogImportFolders ImpFold = new DialogImportFolders(this,true);
@@ -1220,6 +1219,7 @@ ImpFold.setLocationRelativeTo(null);
 ImpFold.setVisible(true);
 if (ImpFold.isCancel())
     return;
+setCursor(WaitCur);
 Import(FoldAct, ImpFold.SelFolder.getAbsolutePath(), ImpFold.IsOneLevel(), ImpFold.IncludeMetadata(), ImpFold.IncludeDocs(), ImpFold.FoldType(), ImpFold.DocType());
 TreePath ActualPath = TreeFolder.getSelectionPath();
 DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) ActualPath.getLastPathComponent();
@@ -1262,7 +1262,6 @@ MD.setVisible(true);
     private void ImportExtFoldActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ImportExtFoldActionPerformed
     {//GEN-HEADEREND:event_ImportExtFoldActionPerformed
 try {
-setCursor(WaitCur);
 ExpFolds=0;
 ExpDocs=0;    
 DialogImportExtFolders ImpFold = new DialogImportExtFolders(this,true);
@@ -1270,6 +1269,7 @@ ImpFold.setLocationRelativeTo(null);
 ImpFold.setVisible(true);
 if (ImpFold.isCancel())
     return;
+setCursor(WaitCur);
 ImportExt(FoldAct, ImpFold.SelFolder.getAbsolutePath(), ImpFold.DeleteAfterImport(), ImpFold.ImpFormat(), ImpFold.DefaultFoldType(), ImpFold.DateFormat(), ImpFold.TimeStampFormat());
 TreePath ActualPath = TreeFolder.getSelectionPath();
 DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) ActualPath.getLastPathComponent();
