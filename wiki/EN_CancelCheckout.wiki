@@ -1,0 +1,6 @@
+<H4>Cancel Document CheckOut OpenProdoc</H4><hr>
+<p>The option <b>Cancel Checkout</b> CANCELS all the changes made to the document and deletes the temporal work versions stored for the user in the OPD server.</p>
+<p style="text-align:center;"> http://dl.dropbox.com/u/49603479/OpenProdoc/EN/Img/CancelCheckOut.jpg </p>
+<p>View: [EN_CheckIn CheckIn] (Confirms changes in a locked document) y [EN_Checkout CheckOut] (Locks a Document for editing)</p>
+<hr>
+[EN_HelpIndex Help Index OpenProdoc]
