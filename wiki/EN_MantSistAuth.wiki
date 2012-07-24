@@ -17,7 +17,7 @@
     <li><b>Connection user to Authentication System</b>: User need to connect to the system. Not currently used.</li>    
     <li><b>Connection password to Authentication System </b>: password required to connect to the system. Not currently used.</li>    
 </ul>
-<p style="text-align:center;"><img alt="Screenshot MantSistAuth" src="img/MantSistAuth.jpg"/></p>
+<p style="text-align:center;"> http://dl.dropbox.com/u/49603479/OpenProdoc/EN/Img/MantSistAuth.jpg </p>
 <p>Ver: [EN_ListSistAuth Authentication Systems List]</p>
 <hr>
 [EN_HelpIndex Help Index OpenProdoc]

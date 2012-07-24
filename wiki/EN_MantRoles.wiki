@@ -27,7 +27,7 @@
             <li><b>AllowCreateCustom</b>: Enables you to create a user customization user but not to modify existing ones</li>
             <li><b>AllowMaintainCustom</b>: Allows you to modify and delete user customizations</li>  
 </ul>
-<p style="text-align:center;"><img alt="Screenshot MantRoles" src="img/MantRoles.jpg"/></p>
+<p style="text-align:center;"> http://dl.dropbox.com/u/49603479/OpenProdoc/EN/Img/MantRoles.jpg </p>
 <p>View: [EN_ListRoles Roles List]</p>
 <hr>
 [EN_HelpIndex Help Index OpenProdoc]

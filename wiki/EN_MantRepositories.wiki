@@ -18,7 +18,7 @@
     <li><b>Repository Password</b>: Password required to connect to remote server, not required for FS.</li>    
     <li><b>Flag indicating whether the repository is encrypted</b>: If this option is checked, documents will be encrypted when stored and decrypted when recover. This ensures that even if someone has access to documents through the disc, the documents are readable only through OPD. Keep in mind that this process introduces a small overhead and OPD do not use a sophisticated encryption system, so if there are highly confidential documents should be evaluated using additional measures.</li>    
 </ul>
-<p style="text-align:center;"><img alt="Screenshot MantRepositories" src="img/MantRepositories.jpg"/></p>
+<p style="text-align:center;"> http://dl.dropbox.com/u/49603479/OpenProdoc/EN/Img/MantRepositories.jpg </p>
 <p>View: [EN_ListRepositories Repositories List]</p>
 <hr>
 [EN_HelpIndex Help Index OpenProdoc]
