@@ -34,6 +34,6 @@ Regardless of the authentication system, the user must be registered in the syst
 </ul>
 <p>It should be noted on export and import, that some elements may have dependency on others, so you must export all related and imported at the time of it in the proper order.</p>
 <p>In the event of an error (lack of user permissions, data inconsistency, etc.), the operation is canceled and will present the reason for the error to the user.</p>
-<p>View: <a href="MantSistAuth.html">Authentication System Maintenance</a> and <a href="ListUsers.html">Users List</a></p>
+<p>View: [EN_MantSistAuth Authentication System Maintenance] and [EN_ListUsers Users List]</p>
 <hr>
-<a href="HelpIndex.html">Help Index OpenProdoc</a>
+[EN_HelpIndex Help Index OpenProdoc]
