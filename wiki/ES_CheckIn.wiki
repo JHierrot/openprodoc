@@ -1,0 +1,7 @@
+<H4>CheckIn Documento OpenProdoc</H4><hr>
+<p>La opción de <b>CheckIn</b> CONFIRMA todos los cambios que se han realizado sobre un documento y elimina las copias de trabajo del usuario en el servidor, publicando como versión vigente la nueva versión.</p>
+<p>Debe introducirse un código o nombre de versión significativo que permita identificarlo y recuperar la versión cuando se consulte la lista de versiones del documento</p>
+<p style="text-align:center;"> http://dl.dropbox.com/u/49603479/OpenProdoc/ES/Img/CheckIn.jpg </p>
+<p>Ver: [ES_Checkout CheckOut ](Confirmar cambios en Documento Bloqueado) y [ES_CancelCheckout Cancel Checkout] (Cancelar Cambios en Documento)</p>
+<hr>
+[ES_HelpIndex Índice Ayuda OpenProdoc]
