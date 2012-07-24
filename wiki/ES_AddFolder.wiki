@@ -1,0 +1,8 @@
+<H4>Añadir Carpeta OpenProdoc</H4><hr>
+<br>
+<p>Este formulario permite crear una carpeta simple introduciendo el nombre. La carpeta se creará dentro de la carpeta actual. La seguridad (ACL) será el mismo que el de la carpeta contenedora</p>
+<p style="text-align:center;"> http://dl.dropbox.com/u/49603479/OpenProdoc/ES/Img/AddFold.jpg </p>
+<p>Para crear una carpeta eligiendo tipo e introduciendo información detallada debe utilizarse: [ES_AddExtFolder Añadir Carpeta Ampliado]</p>
+<p>En caso de producirse un error (carencia de permisos del usuario, error de comunicaciones, fecha incorrecta, etc), la operación se cancela y se comunicará al usuario el motivo del error.</p>
+<hr>
+[ES_HelpIndex Índice Ayuda OpenProdoc]
