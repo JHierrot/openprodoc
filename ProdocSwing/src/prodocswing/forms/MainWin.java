@@ -144,6 +144,7 @@ SetMenu();
         OtherMenu = new javax.swing.JMenu();
         PaperBin = new javax.swing.JMenuItem();
         ChangePass = new javax.swing.JMenuItem();
+        Thesaur = new javax.swing.JMenuItem();
         AdminMenu = new javax.swing.JMenu();
         ACLMenuItem = new javax.swing.JMenuItem();
         GroupMenuItem = new javax.swing.JMenuItem();
@@ -491,6 +492,9 @@ SetMenu();
             }
         });
         OtherMenu.add(ChangePass);
+
+        Thesaur.setLabel("Thesaurus");
+        OtherMenu.add(Thesaur);
 
         menuBar.add(OtherMenu);
 
@@ -1350,6 +1354,7 @@ java.awt.EventQueue.invokeLater(new Runnable()
     private javax.swing.JMenuItem SearchDocs;
     private javax.swing.JMenuItem SearchFold;
     private javax.swing.JLabel SelFolderDesc;
+    private javax.swing.JMenuItem Thesaur;
     private javax.swing.JTree TreeFolder;
     private javax.swing.JMenuItem UserMenuItem;
     private javax.swing.JMenuItem ViewMetadata;
@@ -1659,7 +1664,7 @@ try {
     }
 }
 //---------------------------------------------------------------------
-static int Execute(String Doc)
+static protected int Execute(String Doc)
 {
 try {
 //String Order="";
@@ -1811,8 +1816,7 @@ if (formFacDate==null)
 return formFacDate;
 }
 //---------------------------------------------------------------------
-
-private String getLang()
+static protected String getLang()
 {
 try {
     return(getSession().getPDCust().getLanguage());
@@ -1822,7 +1826,7 @@ try {
     }
 }
 //---------------------------------------------------------------------
-private String OSSep()
+static protected String OSSep()
 {
 return(File.separator);
 }
