@@ -325,6 +325,9 @@ Trace.add("Event Table created");
 PDMessage ME=new PDMessage(this);
 ME.Install();
 Trace.add("Message Table created");
+PDThesaur TE=new PDThesaur(this);
+TE.Install();
+Trace.add("Thesaur Table created");
 //-------- Tables creation 2 phase ----
 getUser().InstallMulti();
 Trace.add("User relations created");
@@ -344,6 +347,8 @@ M.InstallMulti();
 Trace.add("Mime relations created");
 ME.InstallMulti();
 Trace.add("Message relations created");
+TE.InstallMulti();
+Trace.add("Thesaur relations created");
 //--- insertion of objects ----
 this.IniciarTrans();
 //----- Servidor ---------
@@ -404,6 +409,8 @@ Ro.setAllowCreateAuth(true);
 Ro.setAllowMaintainAuth(true);
 Ro.setAllowCreateCustom(true);
 Ro.setAllowMaintainCustom(true);
+Ro.setAllowCreateThesaur(true);
+Ro.setAllowMaintainThesaur(true);
 Ro.insert();
 Trace.add("Roles elements created");
 // --- Acl Administrators ---

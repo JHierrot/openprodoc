@@ -121,6 +121,14 @@ public static final String fALLOWCREATECUSTOM="AllowCreateCustom";
  *
  */
 public static final String fALLOWMAINTAINCUSTOM="AllowMaintainCustom";
+/**
+ *
+ */
+public static final String fALLOWCREATETHESAUR="AllowCreateThesaur";
+/**
+ *
+ */
+public static final String fALLOWMAINTAINTHESAUR="AllowMaintainThesaur";
 
 /**
  *
@@ -222,6 +230,14 @@ private boolean AllowCreateCustom=false;
  *
  */
 private boolean AllowMaintainCustom=false;
+/**
+ *
+ */
+private boolean AllowCreateThesaur=false;
+/**
+ *
+ */
+private boolean AllowMaintainThesaur=false;
 
 static private ObjectsCache RolesObjectsCache = null;
 
@@ -857,6 +873,38 @@ return(RolesObjectsCache);
 protected String getKey()
 {
 return(getName());
+}
+//-------------------------------------------------------------------------
+/**
+* @return the AllowCreateThesaur
+*/
+public boolean isAllowCreateThesaur()
+{
+return AllowCreateThesaur;
+}
+//-------------------------------------------------------------------------
+/**
+* @param AllowCreateThesaur the AllowCreateThesaur to set
+*/
+public void setAllowCreateThesaur(boolean AllowCreateThesaur)
+{
+this.AllowCreateThesaur = AllowCreateThesaur;
+}
+//-------------------------------------------------------------------------
+/**
+* @return the AllowMaintainThesaur
+*/
+public boolean isAllowMaintainThesaur()
+{
+return AllowMaintainThesaur;
+}
+//-------------------------------------------------------------------------
+/**
+* @param AllowMaintainThesaur the AllowMaintainThesaur to set
+*/
+public void setAllowMaintainThesaur(boolean AllowMaintainThesaur)
+{
+this.AllowMaintainThesaur = AllowMaintainThesaur;
 }
 //-------------------------------------------------------------------------
 }
