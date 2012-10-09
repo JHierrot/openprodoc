@@ -329,7 +329,7 @@ if (NewFoldChild==null || NewFoldChild.length()==0)
 try {
 PDThesaur Fold=new PDThesaur(Session);
 Fold.setPDId(ActTermId);
-Fold.CreateChild(NewFoldChild);
+//Fold.CreateChild(NewFoldChild);
 TreePath ActualPath = TreeTerm.getSelectionPath();
 DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) ActualPath.getLastPathComponent();
 ExpandFold(TreeFold);
@@ -572,7 +572,7 @@ if (TermTreeModel==null)
     PDThesaur RootFolder=null;
     try {
     RootFolder = new PDThesaur(Session);
-    RootFolder.Load(PDThesaur.ROOTFOLDER);
+//    RootFolder.Load(PDThesaur.ROOTFOLDER);
     TreeTerm TF=new TreeTerm(RootFolder);
     DefaultMutableTreeNode RootTreeFolder = new DefaultMutableTreeNode(TF);
     TermTreeModel=new DefaultTreeModel(RootTreeFolder);
