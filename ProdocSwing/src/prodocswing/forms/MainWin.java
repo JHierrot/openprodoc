@@ -98,7 +98,8 @@ SetMenu();
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jSplitPane1 = new javax.swing.JSplitPane();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -163,8 +164,10 @@ SetMenu();
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("OpenProdoc "+getVersion());
         setIconImage(getIcon());
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
+        addWindowListener(new java.awt.event.WindowAdapter()
+        {
+            public void windowClosing(java.awt.event.WindowEvent evt)
+            {
                 formWindowClosing(evt);
             }
         });
@@ -180,15 +183,20 @@ SetMenu();
         TreeFolder.setMaximumSize(new java.awt.Dimension(400, 76));
         TreeFolder.setMinimumSize(new java.awt.Dimension(200, 60));
         TreeFolder.setPreferredSize(new java.awt.Dimension(200, 76));
-        TreeFolder.addTreeExpansionListener(new javax.swing.event.TreeExpansionListener() {
-            public void treeCollapsed(javax.swing.event.TreeExpansionEvent evt) {
+        TreeFolder.addTreeExpansionListener(new javax.swing.event.TreeExpansionListener()
+        {
+            public void treeCollapsed(javax.swing.event.TreeExpansionEvent evt)
+            {
             }
-            public void treeExpanded(javax.swing.event.TreeExpansionEvent evt) {
+            public void treeExpanded(javax.swing.event.TreeExpansionEvent evt)
+            {
                 TreeFolderTreeExpanded(evt);
             }
         });
-        TreeFolder.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
-            public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
+        TreeFolder.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener()
+        {
+            public void valueChanged(javax.swing.event.TreeSelectionEvent evt)
+            {
                 TreeFolderValueChanged(evt);
             }
         });
@@ -210,15 +218,19 @@ SetMenu();
 
         DocsTable.setFont(getFontList());
         DocsTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object [][]
+            {
 
             },
-            new String [] {
+            new String []
+            {
 
             }
         ));
-        DocsTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        DocsTable.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 DocsTableMouseClicked(evt);
             }
         });
@@ -236,8 +248,10 @@ SetMenu();
         AddFold.setFont(getFontMenu());
         AddFold.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/add.png"))); // NOI18N
         AddFold.setText(TT("Add"));
-        AddFold.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        AddFold.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 AddFoldActionPerformed(evt);
             }
         });
@@ -246,8 +260,10 @@ SetMenu();
         DelFold.setFont(getFontMenu());
         DelFold.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/del.png"))); // NOI18N
         DelFold.setText(TT("Delete"));
-        DelFold.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        DelFold.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 DelFoldActionPerformed(evt);
             }
         });
@@ -255,8 +271,10 @@ SetMenu();
 
         ModFold.setFont(getFontMenu());
         ModFold.setText(TT("Update"));
-        ModFold.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ModFold.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ModFoldActionPerformed(evt);
             }
         });
@@ -265,8 +283,10 @@ SetMenu();
 
         AddFoldAdvanced.setFont(getFontMenu());
         AddFoldAdvanced.setText(TT("Extended_Add"));
-        AddFoldAdvanced.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        AddFoldAdvanced.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 AddFoldAdvancedActionPerformed(evt);
             }
         });
@@ -275,8 +295,10 @@ SetMenu();
         ModFoldAdvanced.setFont(getFontMenu());
         ModFoldAdvanced.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/edit.png"))); // NOI18N
         ModFoldAdvanced.setText(TT("Update_Extended"));
-        ModFoldAdvanced.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ModFoldAdvanced.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ModFoldAdvancedActionPerformed(evt);
             }
         });
@@ -284,8 +306,10 @@ SetMenu();
 
         RefreshFold.setFont(getFontMenu());
         RefreshFold.setText(TT("Refresh"));
-        RefreshFold.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        RefreshFold.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 RefreshFoldActionPerformed(evt);
             }
         });
@@ -293,8 +317,10 @@ SetMenu();
 
         SearchFold.setFont(getFontMenu());
         SearchFold.setText(TT("Search_Folders"));
-        SearchFold.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        SearchFold.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 SearchFoldActionPerformed(evt);
             }
         });
@@ -303,8 +329,10 @@ SetMenu();
 
         ExportFold.setFont(getFontMenu());
         ExportFold.setText(TT("Export_Folders"));
-        ExportFold.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ExportFold.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ExportFoldActionPerformed(evt);
             }
         });
@@ -312,8 +340,10 @@ SetMenu();
 
         ImportFold.setFont(getFontMenu());
         ImportFold.setText(TT("Import_Folders"));
-        ImportFold.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ImportFold.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ImportFoldActionPerformed(evt);
             }
         });
@@ -321,8 +351,10 @@ SetMenu();
 
         ImportExtFold.setFont(getFontMenu());
         ImportExtFold.setText(TT("Import_Ext_Systems"));
-        ImportExtFold.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ImportExtFold.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ImportExtFoldActionPerformed(evt);
             }
         });
@@ -331,8 +363,10 @@ SetMenu();
 
         exitMenuItem.setFont(getFontMenu());
         exitMenuItem.setText(TT("Exit"));
-        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 exitMenuItemActionPerformed(evt);
             }
         });
@@ -346,8 +380,10 @@ SetMenu();
         AddDoc.setFont(getFontMenu());
         AddDoc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/add.png"))); // NOI18N
         AddDoc.setText(TT("Add"));
-        AddDoc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        AddDoc.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 AddDocActionPerformed(evt);
             }
         });
@@ -356,8 +392,10 @@ SetMenu();
         DelDoc.setFont(getFontMenu());
         DelDoc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/del.png"))); // NOI18N
         DelDoc.setText(TT("Delete"));
-        DelDoc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        DelDoc.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 DelDocActionPerformed(evt);
             }
         });
@@ -366,8 +404,10 @@ SetMenu();
 
         AddDocAdvanced.setFont(getFontMenu());
         AddDocAdvanced.setText(TT("Extended_Add"));
-        AddDocAdvanced.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        AddDocAdvanced.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 AddDocAdvancedActionPerformed(evt);
             }
         });
@@ -376,8 +416,10 @@ SetMenu();
         ModDocAdvanced.setFont(getFontMenu());
         ModDocAdvanced.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/edit.png"))); // NOI18N
         ModDocAdvanced.setText(TT("Update_Extended"));
-        ModDocAdvanced.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ModDocAdvanced.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ModDocAdvancedActionPerformed(evt);
             }
         });
@@ -385,8 +427,10 @@ SetMenu();
 
         ViewMetadata.setFont(getFontMenu());
         ViewMetadata.setText(TT("Document_Attributes"));
-        ViewMetadata.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ViewMetadata.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ViewMetadataActionPerformed(evt);
             }
         });
@@ -394,8 +438,10 @@ SetMenu();
 
         RefreshDocs.setFont(getFontMenu());
         RefreshDocs.setText(TT("Refresh"));
-        RefreshDocs.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        RefreshDocs.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 RefreshDocsActionPerformed(evt);
             }
         });
@@ -405,8 +451,10 @@ SetMenu();
         CheckOut.setFont(getFontMenu());
         CheckOut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/checkout.png"))); // NOI18N
         CheckOut.setText("CheckOut");
-        CheckOut.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        CheckOut.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 CheckOutActionPerformed(evt);
             }
         });
@@ -415,8 +463,10 @@ SetMenu();
         CheckIn.setFont(getFontMenu());
         CheckIn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/checkin.png"))); // NOI18N
         CheckIn.setText("CheckIn");
-        CheckIn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        CheckIn.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 CheckInActionPerformed(evt);
             }
         });
@@ -425,8 +475,10 @@ SetMenu();
         CancelCheckout.setFont(getFontMenu());
         CancelCheckout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/cancelcheckout.png"))); // NOI18N
         CancelCheckout.setText("CancelCheckout");
-        CancelCheckout.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        CancelCheckout.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 CancelCheckoutActionPerformed(evt);
             }
         });
@@ -434,8 +486,10 @@ SetMenu();
 
         ListVersions.setFont(getFontMenu());
         ListVersions.setText(TT("List_of_Versions"));
-        ListVersions.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ListVersions.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ListVersionsActionPerformed(evt);
             }
         });
@@ -444,8 +498,10 @@ SetMenu();
 
         SearchDocs.setFont(getFontMenu());
         SearchDocs.setText(TT("Search_Documents"));
-        SearchDocs.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        SearchDocs.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 SearchDocsActionPerformed(evt);
             }
         });
@@ -453,8 +509,10 @@ SetMenu();
 
         ExportDoc.setFont(getFontMenu());
         ExportDoc.setText(TT("Export_Doc"));
-        ExportDoc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ExportDoc.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ExportDocActionPerformed(evt);
             }
         });
@@ -462,8 +520,10 @@ SetMenu();
 
         ImportDoc.setFont(getFontMenu());
         ImportDoc.setText(TT("Import_Doc"));
-        ImportDoc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ImportDoc.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ImportDocActionPerformed(evt);
             }
         });
@@ -477,8 +537,10 @@ SetMenu();
         PaperBin.setFont(getFontMenu());
         PaperBin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/undel.png"))); // NOI18N
         PaperBin.setText(MainWin.TT("Trash_bin"));
-        PaperBin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        PaperBin.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 PaperBinActionPerformed(evt);
             }
         });
@@ -486,14 +548,23 @@ SetMenu();
 
         ChangePass.setFont(getFontMenu());
         ChangePass.setText(MainWin.TT("Password_change"));
-        ChangePass.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ChangePass.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ChangePassActionPerformed(evt);
             }
         });
         OtherMenu.add(ChangePass);
 
         Thesaur.setLabel("Thesaurus");
+        Thesaur.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                ThesaurActionPerformed(evt);
+            }
+        });
         OtherMenu.add(Thesaur);
 
         menuBar.add(OtherMenu);
@@ -503,8 +574,10 @@ SetMenu();
 
         ACLMenuItem.setFont(getFontMenu());
         ACLMenuItem.setText("ACL");
-        ACLMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ACLMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ACLMenuItemActionPerformed(evt);
             }
         });
@@ -512,8 +585,10 @@ SetMenu();
 
         GroupMenuItem.setFont(getFontMenu());
         GroupMenuItem.setText(TT("Groups"));
-        GroupMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        GroupMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 GroupMenuItemActionPerformed(evt);
             }
         });
@@ -521,8 +596,10 @@ SetMenu();
 
         UserMenuItem.setFont(getFontMenu());
         UserMenuItem.setText(TT("Users"));
-        UserMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        UserMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 UserMenuItemActionPerformed(evt);
             }
         });
@@ -530,8 +607,10 @@ SetMenu();
 
         RolMenuItem.setFont(getFontMenu());
         RolMenuItem.setText(TT("Roles"));
-        RolMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        RolMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 RolMenuItemActionPerformed(evt);
             }
         });
@@ -539,8 +618,10 @@ SetMenu();
 
         MimeTypeMenuItem.setFont(getFontMenu());
         MimeTypeMenuItem.setText(TT("Mime_Types"));
-        MimeTypeMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        MimeTypeMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 MimeTypeMenuItemActionPerformed(evt);
             }
         });
@@ -548,8 +629,10 @@ SetMenu();
 
         ReposMenuItem.setFont(getFontMenu());
         ReposMenuItem.setText(TT("Repositories"));
-        ReposMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ReposMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ReposMenuItemActionPerformed(evt);
             }
         });
@@ -557,8 +640,10 @@ SetMenu();
 
         ObjDefMenuItem.setFont(getFontMenu());
         ObjDefMenuItem.setText(TT("Object_definitions"));
-        ObjDefMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ObjDefMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ObjDefMenuItemActionPerformed(evt);
             }
         });
@@ -566,8 +651,10 @@ SetMenu();
 
         AuthentMenuItem.setFont(getFontMenu());
         AuthentMenuItem.setText(TT("Authenticators"));
-        AuthentMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        AuthentMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 AuthentMenuItemActionPerformed(evt);
             }
         });
@@ -575,8 +662,10 @@ SetMenu();
 
         CustomMenuItem.setFont(getFontMenu());
         CustomMenuItem.setText(TT("Customizations"));
-        CustomMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        CustomMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 CustomMenuItemActionPerformed(evt);
             }
         });
@@ -589,8 +678,10 @@ SetMenu();
 
         contentsMenuItem1.setFont(getFontMenu());
         contentsMenuItem1.setText(TT("Contents"));
-        contentsMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        contentsMenuItem1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 contentsMenuItem1ActionPerformed(evt);
             }
         });
@@ -598,8 +689,10 @@ SetMenu();
 
         aboutMenuItem1.setFont(getFontMenu());
         aboutMenuItem1.setText(TT("About"));
-        aboutMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        aboutMenuItem1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 aboutMenuItem1ActionPerformed(evt);
             }
         });
@@ -607,8 +700,10 @@ SetMenu();
 
         ReportBugs.setFont(getFontMenu());
         ReportBugs.setText(TT("Reporting_Bugs"));
-        ReportBugs.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ReportBugs.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ReportBugsActionPerformed(evt);
             }
         });
@@ -1288,6 +1383,13 @@ Message(DrvTT("Imported")+" "+ExpFolds+" "+DrvTT("Folders")+" / "+ExpDocs +" "+D
     }
     }//GEN-LAST:event_ImportExtFoldActionPerformed
 
+    private void ThesaurActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ThesaurActionPerformed
+    {//GEN-HEADEREND:event_ThesaurActionPerformed
+MainThesaur MTW=new MainThesaur(Session);
+MTW.setLocationRelativeTo(null);
+MTW.setVisible(true);
+    }//GEN-LAST:event_ThesaurActionPerformed
+
 /**
 * @param args the command line arguments
 */
@@ -1843,7 +1945,7 @@ return(Tmp);
  */
 static public String getVersion()
 {
-return("0.7");  
+return("0.8");  
 }
 //---------------------------------------------------------------------
 

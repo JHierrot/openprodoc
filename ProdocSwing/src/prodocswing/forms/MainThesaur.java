@@ -20,7 +20,7 @@
 /*
  * MainWin.java
  *
- * Created on 29-ene-2010, 0:52:22
+ * Created on 29-jul-2012, 9:52:00
  */
 
 package prodocswing.forms;
@@ -28,7 +28,6 @@ package prodocswing.forms;
 import java.awt.Font;
 import java.awt.Image;
 import java.io.File;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import javax.swing.ImageIcon;
@@ -51,7 +50,6 @@ public class MainThesaur extends javax.swing.JFrame
 private static DriverGeneric Session=null;
 static private DefaultTreeModel TermTreeModel=null;
 static private String ActTermId=null;
-static private PDTableModel DocsContained;
 private PDThesaur TermAct=null;
 //static private String List=PDThesaur.fACL+"/"+PDThesaur.fFOLDTYPE+"/"+PDThesaur.fPARENTID+"/"+PDThesaur.fPDID+"/"+PDThesaur.fTITLE+"/"+PDThesaur.fPDAUTOR+"/"+PDThesaur.fPDDATE;
 
@@ -72,13 +70,14 @@ public static void setSession(DriverGeneric pSess)
 Session=pSess;
 }
 //--------------------------------------------------------
-/** Creates new form MainWin */
-public MainThesaur()
+/** Creates new form MainWin
+ * @param pSess 
+ */
+public MainThesaur(DriverGeneric pSess)
 {
+setSession(pSess);    
 initComponents();
 TreeTerm.setPreferredSize(null);
-DocsTable.setAutoCreateRowSorter(true);
-DocsTable.setAutoCreateColumnsFromModel(true);
 }
 
     /** This method is called from within the constructor to
@@ -88,16 +87,30 @@ DocsTable.setAutoCreateColumnsFromModel(true);
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jSplitPane1 = new javax.swing.JSplitPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         TreeTerm = new javax.swing.JTree();
         jSplitPane2 = new javax.swing.JSplitPane();
+        TermAttr = new javax.swing.JPanel();
+        NameLabel = new javax.swing.JLabel();
+        NameTextField = new javax.swing.JTextField();
+        DescripLabel = new javax.swing.JLabel();
+        DescripTextField = new javax.swing.JTextField();
+        UseLabel = new javax.swing.JLabel();
+        UseTextField = new javax.swing.JTextField();
+        Relations = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        SelFolderDesc = new javax.swing.JLabel();
+        NTjTable = new javax.swing.JTable();
+        jPanel2 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        DocsTable = new javax.swing.JTable();
+        RTjTable = new javax.swing.JTable();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        UFjTable = new javax.swing.JTable();
         menuBar = new javax.swing.JMenuBar();
         ThesaurMenu = new javax.swing.JMenu();
         AddThesaur = new javax.swing.JMenuItem();
@@ -113,16 +126,11 @@ DocsTable.setAutoCreateColumnsFromModel(true);
         helpMenu = new javax.swing.JMenu();
         ThesaurHelp = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("OpenProdoc Thesaurus");
         setIconImage(getIcon());
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                formWindowClosing(evt);
-            }
-        });
 
-        jSplitPane1.setDividerLocation(270);
+        jSplitPane1.setDividerLocation(250);
         jSplitPane1.setDividerSize(4);
 
         TreeTerm.setFont(getFontTree());
@@ -133,15 +141,20 @@ DocsTable.setAutoCreateColumnsFromModel(true);
         TreeTerm.setMaximumSize(new java.awt.Dimension(400, 76));
         TreeTerm.setMinimumSize(new java.awt.Dimension(200, 60));
         TreeTerm.setPreferredSize(new java.awt.Dimension(200, 76));
-        TreeTerm.addTreeExpansionListener(new javax.swing.event.TreeExpansionListener() {
-            public void treeCollapsed(javax.swing.event.TreeExpansionEvent evt) {
+        TreeTerm.addTreeExpansionListener(new javax.swing.event.TreeExpansionListener()
+        {
+            public void treeCollapsed(javax.swing.event.TreeExpansionEvent evt)
+            {
             }
-            public void treeExpanded(javax.swing.event.TreeExpansionEvent evt) {
+            public void treeExpanded(javax.swing.event.TreeExpansionEvent evt)
+            {
                 TreeTermTreeExpanded(evt);
             }
         });
-        TreeTerm.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
-            public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
+        TreeTerm.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener()
+        {
+            public void valueChanged(javax.swing.event.TreeSelectionEvent evt)
+            {
                 TreeTermValueChanged(evt);
             }
         });
@@ -149,30 +162,165 @@ DocsTable.setAutoCreateColumnsFromModel(true);
 
         jSplitPane1.setLeftComponent(jScrollPane1);
 
-        jSplitPane2.setDividerLocation(260);
+        jSplitPane2.setDividerLocation(160);
         jSplitPane2.setDividerSize(4);
         jSplitPane2.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
 
-        jScrollPane2.setMinimumSize(new java.awt.Dimension(24, 48));
+        TermAttr.setMinimumSize(new java.awt.Dimension(100, 100));
 
-        SelFolderDesc.setFont(getFontMenu());
-        SelFolderDesc.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        jScrollPane2.setViewportView(SelFolderDesc);
+        NameLabel.setFont(MainWin.getFontDialog());
+        NameLabel.setText("Name");
 
-        jSplitPane2.setTopComponent(jScrollPane2);
+        NameTextField.setEditable(false);
+        NameTextField.setFont(MainWin.getFontDialog());
 
-        DocsTable.setFont(getFontList());
-        DocsTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+        DescripLabel.setFont(MainWin.getFontDialog());
+        DescripLabel.setText("Descrip");
 
+        DescripTextField.setEditable(false);
+        DescripTextField.setFont(MainWin.getFontDialog());
+
+        UseLabel.setFont(MainWin.getFontDialog());
+        UseLabel.setText("Use");
+
+        UseTextField.setEditable(false);
+        UseTextField.setFont(MainWin.getFontDialog());
+
+        javax.swing.GroupLayout TermAttrLayout = new javax.swing.GroupLayout(TermAttr);
+        TermAttr.setLayout(TermAttrLayout);
+        TermAttrLayout.setHorizontalGroup(
+            TermAttrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(TermAttrLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(TermAttrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(TermAttrLayout.createSequentialGroup()
+                        .addComponent(NameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(NameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(TermAttrLayout.createSequentialGroup()
+                        .addComponent(DescripLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(DescripTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(TermAttrLayout.createSequentialGroup()
+                        .addComponent(UseLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(UseTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(29, Short.MAX_VALUE))
+        );
+        TermAttrLayout.setVerticalGroup(
+            TermAttrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(TermAttrLayout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addGroup(TermAttrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(NameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(NameLabel))
+                .addGap(18, 18, 18)
+                .addGroup(TermAttrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(DescripTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(DescripLabel))
+                .addGap(18, 18, 18)
+                .addGroup(TermAttrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(UseTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(UseLabel))
+                .addContainerGap(31, Short.MAX_VALUE))
+        );
+
+        jSplitPane2.setLeftComponent(TermAttr);
+
+        jPanel1.setFont(MainWin.getFontDialog());
+
+        NTjTable.setFont(MainWin.getFontList());
+        NTjTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
-            new String [] {
-
+            new String []
+            {
+                "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane3.setViewportView(DocsTable);
+        jScrollPane2.setViewportView(NTjTable);
 
-        jSplitPane2.setRightComponent(jScrollPane3);
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
+        );
+
+        Relations.addTab("NT", jPanel1);
+
+        jPanel2.setFont(MainWin.getFontDialog());
+
+        RTjTable.setFont(MainWin.getFontList());
+        RTjTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String []
+            {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(RTjTable);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
+        );
+
+        Relations.addTab("RT", jPanel2);
+
+        jPanel3.setFont(MainWin.getFontDialog());
+
+        UFjTable.setFont(MainWin.getFontList());
+        UFjTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String []
+            {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane4.setViewportView(UFjTable);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
+        );
+
+        Relations.addTab("UF", jPanel3);
+
+        jSplitPane2.setRightComponent(Relations);
 
         jSplitPane1.setRightComponent(jSplitPane2);
 
@@ -184,8 +332,10 @@ DocsTable.setAutoCreateColumnsFromModel(true);
         AddThesaur.setFont(getFontMenu());
         AddThesaur.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/add.png"))); // NOI18N
         AddThesaur.setText(MainWin.DrvTT("Create_Theusurus"));
-        AddThesaur.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        AddThesaur.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 AddThesaurActionPerformed(evt);
             }
         });
@@ -194,8 +344,10 @@ DocsTable.setAutoCreateColumnsFromModel(true);
         DelThesaur.setFont(getFontMenu());
         DelThesaur.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/del.png"))); // NOI18N
         DelThesaur.setText(MainWin.DrvTT("Delete_Thesaurus"));
-        DelThesaur.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        DelThesaur.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 DelThesaurActionPerformed(evt);
             }
         });
@@ -204,8 +356,10 @@ DocsTable.setAutoCreateColumnsFromModel(true);
 
         AddTerm.setFont(getFontMenu());
         AddTerm.setText(MainWin.DrvTT("Add_Term"));
-        AddTerm.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        AddTerm.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 AddTermActionPerformed(evt);
             }
         });
@@ -214,8 +368,10 @@ DocsTable.setAutoCreateColumnsFromModel(true);
         ModTerm.setFont(getFontMenu());
         ModTerm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/edit.png"))); // NOI18N
         ModTerm.setText(MainWin.DrvTT("Update_Term"));
-        ModTerm.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ModTerm.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ModTermActionPerformed(evt);
             }
         });
@@ -224,8 +380,10 @@ DocsTable.setAutoCreateColumnsFromModel(true);
         DelTerm.setFont(getFontMenu());
         DelTerm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/del.png"))); // NOI18N
         DelTerm.setText(MainWin.DrvTT("Delete_Term"));
-        DelTerm.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        DelTerm.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 DelTermActionPerformed(evt);
             }
         });
@@ -233,8 +391,10 @@ DocsTable.setAutoCreateColumnsFromModel(true);
 
         RefreshTerm.setFont(getFontMenu());
         RefreshTerm.setText(MainWin.DrvTT("Refresh"));
-        RefreshTerm.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        RefreshTerm.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 RefreshTermActionPerformed(evt);
             }
         });
@@ -242,8 +402,10 @@ DocsTable.setAutoCreateColumnsFromModel(true);
 
         SearchTerm.setFont(getFontMenu());
         SearchTerm.setText(MainWin.DrvTT("Search_Terms"));
-        SearchTerm.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        SearchTerm.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 SearchTermActionPerformed(evt);
             }
         });
@@ -252,8 +414,10 @@ DocsTable.setAutoCreateColumnsFromModel(true);
 
         exitMenuItem.setFont(getFontMenu());
         exitMenuItem.setText(MainWin.DrvTT("Close_Window"));
-        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 exitMenuItemActionPerformed(evt);
             }
         });
@@ -266,8 +430,10 @@ DocsTable.setAutoCreateColumnsFromModel(true);
 
         ThesaurHelp.setFont(getFontMenu());
         ThesaurHelp.setText(MainWin.DrvTT("Thesaurus_MainWin"));
-        ThesaurHelp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ThesaurHelp.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ThesaurHelpActionPerformed(evt);
             }
         });
@@ -285,7 +451,7 @@ DocsTable.setAutoCreateColumnsFromModel(true);
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE)
+            .addComponent(jSplitPane1)
         );
 
         pack();
@@ -294,10 +460,6 @@ DocsTable.setAutoCreateColumnsFromModel(true);
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
 this.dispose();
     }//GEN-LAST:event_exitMenuItemActionPerformed
-
-    private void formWindowClosing(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowClosing
-    {//GEN-HEADEREND:event_formWindowClosing
-    }//GEN-LAST:event_formWindowClosing
 
     private void TreeTermTreeExpanded(javax.swing.event.TreeExpansionEvent evt)//GEN-FIRST:event_TreeTermTreeExpanded
     {//GEN-HEADEREND:event_TreeTermTreeExpanded
@@ -312,9 +474,7 @@ ExpandFold(TreeFold);
 try {
 DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) evt.getPath().getLastPathComponent();
 TermAct= ((TreeTerm) TreeFold.getUserObject()).getFold();
-SelFolderDesc.setText(HtmlDesc(TermAct));
 ActTermId=TermAct.getPDId();
-RefreshDocs();
 } catch (Exception ex)
     {
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
@@ -327,9 +487,10 @@ String NewFoldChild=DialogReadString(MainWin.DrvTT("Add_Folder"),MainWin.DrvTT("
 if (NewFoldChild==null || NewFoldChild.length()==0)
     return;
 try {
-PDThesaur Fold=new PDThesaur(Session);
-Fold.setPDId(ActTermId);
-//Fold.CreateChild(NewFoldChild);
+PDThesaur Term=new PDThesaur(Session);
+Term.setPDId(ActTermId);
+// Term. CreateChild(NewFoldChild);
+
 TreePath ActualPath = TreeTerm.getSelectionPath();
 DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) ActualPath.getLastPathComponent();
 ExpandFold(TreeFold);
@@ -361,7 +522,6 @@ ExpandFold((DefaultMutableTreeNode)ParentFold.getLastPathComponent());
 TreeTerm.setSelectionPath(selectionPath.getParentPath());
 TreeFold = (DefaultMutableTreeNode) selectionPath.getParentPath().getLastPathComponent();
 TermAct= ((TreeTerm) TreeFold.getUserObject()).getFold();
-SelFolderDesc.setText(HtmlDesc(TermAct));
 } catch (Exception ex)
     {
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
@@ -444,19 +604,32 @@ private void DelTermActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:e
     private javax.swing.JMenuItem AddThesaur;
     private javax.swing.JMenuItem DelTerm;
     private javax.swing.JMenuItem DelThesaur;
-    private javax.swing.JTable DocsTable;
+    private javax.swing.JLabel DescripLabel;
+    private javax.swing.JTextField DescripTextField;
     private javax.swing.JMenuItem ModTerm;
+    private javax.swing.JTable NTjTable;
+    private javax.swing.JLabel NameLabel;
+    private javax.swing.JTextField NameTextField;
+    private javax.swing.JTable RTjTable;
     private javax.swing.JMenuItem RefreshTerm;
+    private javax.swing.JTabbedPane Relations;
     private javax.swing.JMenuItem SearchTerm;
-    private javax.swing.JLabel SelFolderDesc;
+    private javax.swing.JPanel TermAttr;
     private javax.swing.JMenuItem ThesaurHelp;
     private javax.swing.JMenu ThesaurMenu;
     private javax.swing.JTree TreeTerm;
+    private javax.swing.JTable UFjTable;
+    private javax.swing.JLabel UseLabel;
+    private javax.swing.JTextField UseTextField;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu helpMenu;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JSplitPane jSplitPane1;
@@ -499,25 +672,6 @@ return (MainWin.getFontList());
 static public Font getFontDialog()
 {
 return (MainWin.getFontDialog());
-}
-//---------------------------------------------------------------------
-private PDTableModel getTableModel()
-{
-return new PDTableModel();
-}
-//---------------------------------------------------------------------
-/**
- * 
- * @param pMessage to show to the user
- * @return if the user selects OK
- */
-static public boolean MessageQuestion(String pMessage)
-{
-DialogInfoQuestion DI=new DialogInfoQuestion(null, true);
-DI.SetMessage(MainWin.DrvTT(pMessage));
-DI.setLocationRelativeTo(null);
-DI.setVisible( true);
-return (DI.getReturnStatus()==DialogInfoQuestion.RET_OK);
 }
 //---------------------------------------------------------------------
 /**
@@ -564,7 +718,6 @@ if (fc.showSaveDialog(null)!=JFileChooser.APPROVE_OPTION)
 return(fc.getSelectedFile().getAbsolutePath());
 }
 //---------------------------------------------------------------------
-
 private TreeModel getTreeModel()
 {
 if (TermTreeModel==null)
@@ -572,7 +725,7 @@ if (TermTreeModel==null)
     PDThesaur RootFolder=null;
     try {
     RootFolder = new PDThesaur(Session);
-//    RootFolder.Load(PDThesaur.ROOTFOLDER);
+    RootFolder.Load(PDThesaur.ROOTTERM);
     TreeTerm TF=new TreeTerm(RootFolder);
     DefaultMutableTreeNode RootTreeFolder = new DefaultMutableTreeNode(TF);
     TermTreeModel=new DefaultTreeModel(RootTreeFolder);
@@ -614,11 +767,6 @@ TreeTerm.setPreferredSize(null);
     }
 }
 //---------------------------------------------------------------------
-static private String FormatDate(Date d)
-{
-return(MainWin.getFormatterTS().format(d));
-}
-//---------------------------------------------------------------------
 /**
  * 
  * @param Title
@@ -643,44 +791,6 @@ static private Image getIcon()
 {
 ImageIcon PDIcon=new ImageIcon("resources/LogoProdoc.jpg");
 return PDIcon.getImage();
-}
-//---------------------------------------------------------------------
-/**
- * Refresh the list of documents
- * called after changing folder or adding, modifying or deleting a document
- */
-private void RefreshDocs()
-{
-try {
-    DocsContained = new PDTableModel();
-    DocsContained.setDrv(MainThesaur.getSession());
-    TermAct.getListDirectDescendList(ActTermId);
-    PDDocs Doc = new PDDocs(getSession());
-    DocsContained.setListFields(Doc.getRecordStruct());
-    DocsContained.setCursor(Doc.getListContainedDocs(TermAct.getPDId()));
-    DocsTable.setModel(DocsContained);
-    DocsTable.getColumnModel().removeColumn(DocsTable.getColumnModel().getColumn(13));
-    DocsTable.getColumnModel().removeColumn(DocsTable.getColumnModel().getColumn(12));
-    DocsTable.getColumnModel().removeColumn(DocsTable.getColumnModel().getColumn(11));
-    DocsTable.getColumnModel().removeColumn(DocsTable.getColumnModel().getColumn(10));
-    DocsTable.getColumnModel().removeColumn(DocsTable.getColumnModel().getColumn(9));
-    DocsTable.getColumnModel().removeColumn(DocsTable.getColumnModel().getColumn(8));
-    DocsTable.getColumnModel().removeColumn(DocsTable.getColumnModel().getColumn(7));
-    DocsTable.getColumnModel().removeColumn(DocsTable.getColumnModel().getColumn(6));
-    DocsTable.getColumnModel().removeColumn(DocsTable.getColumnModel().getColumn(5));
-    DocsTable.getColumnModel().removeColumn(DocsTable.getColumnModel().getColumn(0));
-//   0 4 5 7 8 9 10 11 12
-} catch (PDException ex)
-    {
-    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
-    }
-}
-//---------------------------------------------------------------------
-private String HtmlDesc(PDThesaur TermAct) throws PDException
-{
-StringBuilder Html=new StringBuilder("<html><b>"+TermAct.getDescription()+"</b> : "+FormatDate(TermAct.getPDDate())+ "<hr>");
-Html.append("</html>");
-return(Html.toString());
 }
 //---------------------------------------------------------------------
 }
