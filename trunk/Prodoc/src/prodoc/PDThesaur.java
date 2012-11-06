@@ -44,6 +44,8 @@ public static final String fNAME="Name";
 public static final String fDESCRIP="Description";
 public static final String fUSE="USE";
 public static final String fPDID2="PDId2";
+
+public static final String ROOTTERM="ROOT";
 /**
  *
  */
@@ -916,12 +918,17 @@ public void setUse(String Use)
 this.Use = Use;
 }
 //---------------------------------------------------------------------
+/**
+ * List all the Thesaurs
+ * @return hashset containing all the thesaurs Id
+ * @throws PDExceptionon any error
+ */
 public HashSet ListThes() throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.ListThes>:"+PDId);
 LinkedHashSet Result=new LinkedHashSet(5);
-Condition CondParents=new Condition( fPARENTID, fPDID);
+Condition CondParents=new Condition(fPARENTID, fPDID);
 Conditions Conds=new Conditions();
 Conds.addCondition(CondParents);
 Query Q=new Query(getTabName(), getRecordStructPDThesaur(), Conds, fNAME);
@@ -937,7 +944,63 @@ getDrv().CloseCursor(CursorId);
 if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.ListThes<:"+PDId);
 return(Result);
-
+}
+//---------------------------------------------------------------------
+public HashSet getListRT(String TermId) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.getListRT>:"+PDId);
+Condition CondRT1=new Condition(fPDID, Condition.cEQUAL, TermId);
+Condition CondRT2=new Condition(fPDID2, Condition.cEQUAL, TermId);
+Conditions Conds=new Conditions();
+Conds.setOperatorAnd(false);
+Conds.addCondition(CondRT1);
+Conds.addCondition(CondRT2);
+Query Q=new Query(getTableNameThesRT(), getRecordStructPDThesaurRT(), Conds, fNAME);
+Cursor CursorId=getDrv().OpenCursor(Q);
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.getListRT<:"+PDId);
+return(CursorId);
+}
+//---------------------------------------------------------------------
+public Cursor ListRT(String TermId) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.ListRT>:"+PDId);
+Condition CondRT1=new Condition(fPDID, getListRT(TermId));
+Conditions Conds=new Conditions();
+Conds.addCondition(CondRT1);
+Query Q=new Query(getTableName(), getRecordStructPDThesaur(), Conds, fNAME);
+Cursor CursorId=getDrv().OpenCursor(Q);
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.ListRT<:"+PDId);
+return(CursorId);
+}
+//---------------------------------------------------------------------
+public HashSet getListUF(String TermId) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.getListUF>:"+PDId);
+Conditions Conds=new Conditions();
+Conds.addCondition(new Condition(fUSE, Condition.cEQUAL, TermId));
+Query Q=new Query(getTabName(), getRecordStructPDThesaur(), Conds, fNAME);
+Cursor CursorId=getDrv().OpenCursor(Q);
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.getListUF<:"+PDId);
+return(CursorId);
+}
+//---------------------------------------------------------------------
+public Cursor ListUF(String TermId) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.ListUF>:"+PDId);
+Conditions Conds=new Conditions();
+Conds.addCondition(new Condition(fUSE, Condition.cEQUAL, TermId));
+Query Q=new Query(getTabName(), getRecordStructPDThesaur(), Conds, fNAME);
+Cursor CursorId=getDrv().OpenCursor(Q);
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.ListUF<:"+PDId);
+return(CursorId);
 }
 //---------------------------------------------------------------------
 }
