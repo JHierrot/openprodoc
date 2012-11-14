@@ -25,7 +25,6 @@
 
 package prodocswing.forms;
 
-import java.awt.Frame;
 import java.util.Vector;
 import prodoc.Attribute;
 import prodoc.PDException;
@@ -107,7 +106,7 @@ UFTable.setAutoCreateColumnsFromModel(true);
         ButtonCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle(MainWin.TT("Groups_Maintenance"));
+        setTitle(MainWin.TT("Term_Maintenance"));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter()
         {
@@ -192,7 +191,7 @@ UFTable.setAutoCreateColumnsFromModel(true);
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab(MainWin.TT("Groups"), PanelNT);
+        jTabbedPane1.addTab(MainWin.TT("Narrow_Terms"), PanelNT);
 
         jScrollPane2.setViewportView(RTTable);
 
@@ -250,7 +249,7 @@ UFTable.setAutoCreateColumnsFromModel(true);
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab(MainWin.TT("Users"), PanelRT);
+        jTabbedPane1.addTab(MainWin.TT("Related_Terms"), PanelRT);
 
         jScrollPane3.setViewportView(UFTable);
 
@@ -308,7 +307,7 @@ UFTable.setAutoCreateColumnsFromModel(true);
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab(MainWin.TT("Groups"), PanelUF);
+        jTabbedPane1.addTab(MainWin.TT("Used_For"), PanelUF);
 
         ButtonAcept.setFont(MainWin.getFontDialog());
         ButtonAcept.setText(MainWin.TT("Ok"));
@@ -491,7 +490,7 @@ if (UFTable.getSelectedRow()==-1)
 */
 public void AddMode()
 {
-LabelOperation.setText(MainWin.TT("Add_Group"));
+LabelOperation.setText(MainWin.TT("Add_Term"));
 AddButtonG.setEnabled(false);
 DelButtonG.setEnabled(false);
 AddButtonU.setEnabled(false);
@@ -503,7 +502,7 @@ DelButtonU.setEnabled(false);
 */
 public void DelMode()
 {
-LabelOperation.setText(MainWin.TT("Delete_Group"));
+LabelOperation.setText(MainWin.TT("Delete_Term"));
 TermNameTextField.setEditable(false);
 TermDescripTextField.setEditable(false);
 }
@@ -513,7 +512,7 @@ TermDescripTextField.setEditable(false);
 */
 public void EditMode()
 {
-LabelOperation.setText(MainWin.TT("Update_Group"));
+LabelOperation.setText(MainWin.TT("Update_Term"));
 TermNameTextField.setEditable(false);
 try {
 MainWin.getSession().IniciarTrans();
@@ -527,7 +526,7 @@ MainWin.getSession().IniciarTrans();
 */
 public void CopyMode()
 {
-LabelOperation.setText(MainWin.TT("Copy_Group"));
+LabelOperation.setText(MainWin.TT("Copy_Term"));
 TermNameTextField.setText(TermNameTextField.getText()+"1");
 }
 //----------------------------------------------------------------
@@ -547,28 +546,29 @@ public void setRecord(Record pTerm)
 try {
 Term = pTerm;
 Attribute Attr = Term.getAttr(PDThesaur.fPDID);
-if (Attr.getValue() != null)
+String Id=(String)Attr.getValue();
+if (Id != null)
     {
-    RefreshNT((String)Attr.getValue());
-    RefreshRT((String)Attr.getValue());
-    RefreshUF((String)Attr.getValue());
+    RefreshNT(Id);
+    RefreshRT(Id);
+    RefreshUF(Id);
     }
 Attr = Term.getAttr(PDThesaur.fNAME);
-TermNameLabel.setText(Attr.getUserName());
+TermNameLabel.setText(MainWin.TT(Attr.getUserName()));
 if (Attr.getValue() != null)
     {
     TermNameTextField.setText((String) Attr.getValue());
     }
 TermNameTextField.setToolTipText(Attr.getDescription());
 Attr = Term.getAttr(PDThesaur.fDESCRIP);
-TermDescripLabel.setText(Attr.getUserName());
+TermDescripLabel.setText(MainWin.TT(Attr.getUserName()));
 if (Attr.getValue() != null)
     {
     TermDescripTextField.setText((String) Attr.getValue());
     }
 TermDescripTextField.setToolTipText(Attr.getDescription());
 Attr=Term.getAttr(PDThesaur.fUSE);
-USELabel.setText(Attr.getUserName());
+USELabel.setText(MainWin.TT(Attr.getUserName()));
 if (Attr.getValue() != null)
     {
     USETextField.setText((String) Attr.getValue());
@@ -580,18 +580,18 @@ USETextField.setToolTipText(Attr.getDescription());
     }
 }
 //----------------------------------------------------------------
-private void RefreshNT(String TermId) throws PDException
+private void RefreshRT(String TermId) throws PDException
 {
 RTMembers = new PDTableModel();
 RTMembers.setDrv(MainWin.getSession());
 RTMembers.setListFields(PDThesaur.getRecordStructPDThesaur());
 RTMembers.setVector(new Vector(EditTerm.getListDirectDescendList(TermId)));
 RTTable.setModel(RTMembers);
-//UsersTable.getColumnModel().getColumn(0).setMaxWidth(0);
+RTTable.getColumnModel().getColumn(0).setMaxWidth(0);
 RTTable.getColumnModel().removeColumn(RTTable.getColumnModel().getColumn(0));
 }
 //----------------------------------------------------------------
-private void RefreshRT(String TermId) throws PDException
+private void RefreshNT(String TermId) throws PDException
 {
 NTMembers = new PDTableModel();
 NTMembers.setDrv(MainWin.getSession());
