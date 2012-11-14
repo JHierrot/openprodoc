@@ -38,7 +38,6 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import prodoc.*;
-import prodocswing.PDTableModel;
 import prodocswing.TreeTerm;
 
 /**
@@ -473,8 +472,11 @@ ExpandFold(TreeFold);
     {//GEN-HEADEREND:event_TreeTermValueChanged
 try {
 DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) evt.getPath().getLastPathComponent();
-TermAct= ((TreeTerm) TreeFold.getUserObject()).getFold();
+TermAct= ((TreeTerm) TreeFold.getUserObject()).getTerm();
 ActTermId=TermAct.getPDId();
+this.NameTextField.setText(TermAct.getName());
+this.DescripTextField.setText(TermAct.getDescription());
+this.UseTextField.setText(TermAct.getUse());
 } catch (Exception ex)
     {
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
@@ -483,17 +485,20 @@ ActTermId=TermAct.getPDId();
 
     private void AddThesaurActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_AddThesaurActionPerformed
     {//GEN-HEADEREND:event_AddThesaurActionPerformed
-String NewFoldChild=DialogReadString(MainWin.DrvTT("Add_Folder"),MainWin.DrvTT("Folder_name"), MainWin.DrvTT("Write_Folder_name"), null);
-if (NewFoldChild==null || NewFoldChild.length()==0)
-    return;
 try {
+MantThes MTF = new MantThes(this, true);
+MTF.setLocationRelativeTo(null);
+MTF.setRecord(PDThesaur.getRecordStructPDThesaur());
+MTF.AddMode();
+MTF.setVisible(true);
+if (MTF.isCancel())
+    return;
 PDThesaur Term=new PDThesaur(Session);
-Term.setPDId(ActTermId);
-// Term. CreateChild(NewFoldChild);
-
+Term.assignValues(MTF.getRecord());
+Term.setParentId(PDThesaur.ROOTTERM);
+Term.insert();
 TreePath ActualPath = TreeTerm.getSelectionPath();
-DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) ActualPath.getLastPathComponent();
-ExpandFold(TreeFold);
+ExpandFold((DefaultMutableTreeNode)ActualPath.getLastPathComponent());
 TreeTerm.setSelectionPath(ActualPath);
 } catch (Exception ex)
     {
@@ -506,14 +511,14 @@ TreeTerm.setSelectionPath(ActualPath);
 try {
 TreePath selectionPath = TreeTerm.getSelectionPath();
 DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) selectionPath.getLastPathComponent();
-PDThesaur Term= ((TreeTerm) TreeFold.getUserObject()).getFold();
-DialogEditFold DEF = new DialogEditFold(this, true);
-DEF.setLocationRelativeTo(null);
-DEF.DelMode();
+PDThesaur Term= ((TreeTerm) TreeFold.getUserObject()).getTerm();
+MantThes MTF = new MantThes(this, true);
+MTF.setLocationRelativeTo(null);
+MTF.DelMode();
 Term.Load(ActTermId);
-DEF.setRecord(Term.getRecord());
-DEF.setVisible(true);
-if (DEF.isCancel())
+MTF.setRecord(Term.getRecord());
+MTF.setVisible(true);
+if (MTF.isCancel())
     return;
 ActTermId=Term.getParentId();
 Term.delete();
@@ -521,7 +526,7 @@ TreePath ParentFold = (TreePath) TreeTerm.getSelectionPath().getParentPath();
 ExpandFold((DefaultMutableTreeNode)ParentFold.getLastPathComponent());
 TreeTerm.setSelectionPath(selectionPath.getParentPath());
 TreeFold = (DefaultMutableTreeNode) selectionPath.getParentPath().getLastPathComponent();
-TermAct= ((TreeTerm) TreeFold.getUserObject()).getFold();
+TermAct= ((TreeTerm) TreeFold.getUserObject()).getTerm();
 } catch (Exception ex)
     {
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
@@ -531,16 +536,17 @@ TermAct= ((TreeTerm) TreeFold.getUserObject()).getFold();
     private void AddTermActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_AddTermActionPerformed
     {//GEN-HEADEREND:event_AddTermActionPerformed
 try {
-DialogEditFold DEF = new DialogEditFold(this, true);
-DEF.setLocationRelativeTo(null);
-DEF.AddMode();
-DEF.setVisible(true);
-if (DEF.isCancel())
+MantTerm MTF = new MantTerm(this, true);
+MTF.setLocationRelativeTo(null);
+MTF.setRecord(PDThesaur.getRecordStructPDThesaur());
+MTF.AddMode();
+MTF.setVisible(true);
+if (MTF.isCancel())
     return;
-PDThesaur Fold=new PDThesaur(Session);
-Fold.assignValues(DEF.getRecord());
-Fold.setParentId(ActTermId);
-Fold.insert();
+PDThesaur Term=new PDThesaur(Session);
+Term.assignValues(MTF.getRecord());
+Term.setParentId(ActTermId);
+Term.insert();
 TreePath ActualPath = TreeTerm.getSelectionPath();
 ExpandFold((DefaultMutableTreeNode)ActualPath.getLastPathComponent());
 TreeTerm.setSelectionPath(ActualPath);
@@ -555,16 +561,16 @@ TreeTerm.setSelectionPath(ActualPath);
 try {
 TreePath selectionPath = TreeTerm.getSelectionPath();
 DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) selectionPath.getLastPathComponent();
-PDThesaur Fold= ((TreeTerm) TreeFold.getUserObject()).getFold();
-DialogEditFold DEF = new DialogEditFold(this, true);
-DEF.setLocationRelativeTo(null);
-DEF.EditMode();
+PDThesaur Fold= ((TreeTerm) TreeFold.getUserObject()).getTerm();
+MantTerm MTF = new MantTerm(this, true);
+MTF.setLocationRelativeTo(null);
+MTF.EditMode();
 Fold.Load(Fold.getPDId());
-DEF.setRecord(Fold.getRecord());
-DEF.setVisible(true);
-if (DEF.isCancel())
+MTF.setRecord(Fold.getRecord());
+MTF.setVisible(true);
+if (MTF.isCancel())
     return;
-Fold.assignValues(DEF.getRecord());
+Fold.assignValues(MTF.getRecord());
 Fold.update();
 TreePath ParentFold = (TreePath) TreeTerm.getSelectionPath().getParentPath();
 ExpandFold((DefaultMutableTreeNode)ParentFold.getLastPathComponent());
@@ -743,7 +749,7 @@ private void ExpandFold(DefaultMutableTreeNode ChildTreeFolder)
 {
 try {
 ChildTreeFolder.removeAllChildren();
-PDThesaur Fold= ((TreeTerm) ChildTreeFolder.getUserObject()).getFold();
+PDThesaur Fold= ((TreeTerm) ChildTreeFolder.getUserObject()).getTerm();
 HashSet Child =Fold.getListDirectDescendList(Fold.getPDId());
 for (Iterator it = Child.iterator(); it.hasNext();)
     {

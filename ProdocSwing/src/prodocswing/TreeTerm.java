@@ -41,9 +41,9 @@ Term=pTerm;
 
 //------------------------------------------------------------------------
 /**
-* @return the Fold
+* @return the Term
 */
-public PDThesaur getFold()
+public PDThesaur getTerm()
 {
 return Term;
 }

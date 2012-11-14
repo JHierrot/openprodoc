@@ -557,6 +557,7 @@ SetMenu();
         });
         OtherMenu.add(ChangePass);
 
+        Thesaur.setFont(getFontMenu());
         Thesaur.setLabel("Thesaurus");
         Thesaur.addActionListener(new java.awt.event.ActionListener()
         {
