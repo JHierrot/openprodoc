@@ -84,7 +84,6 @@ private boolean IsRootThesaur=false;
 /**
  *
  */
-private Record RecSum=null;
 
 static private ObjectsCache ThesaurObjectsCache = null;
 
@@ -198,6 +197,8 @@ synchronized public Record getRecord() throws PDException
 Record Rec=getRecordStruct();    
 Rec.getAttr(fPDID).setValue(getPDId());
 Rec.getAttr(fNAME).setValue(getName());
+Rec.getAttr(fDESCRIP).setValue(getDescription());
+Rec.getAttr(fUSE).setValue(getUse());
 Rec.getAttr(fPDDATE).setValue(getPDDate());
 Rec.getAttr(fPARENTID).setValue(getParentId());
 getCommonValues(Rec);
@@ -946,10 +947,14 @@ if (PDLog.isDebug())
 return(Result);
 }
 //---------------------------------------------------------------------
+/* Obtain a list of the Codes of related terms
+ * 
+ */
 public HashSet getListRT(String TermId) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.getListRT>:"+PDId);
+HashSet ListRT=new HashSet();
 Condition CondRT1=new Condition(fPDID, Condition.cEQUAL, TermId);
 Condition CondRT2=new Condition(fPDID2, Condition.cEQUAL, TermId);
 Conditions Conds=new Conditions();
@@ -958,11 +963,27 @@ Conds.addCondition(CondRT1);
 Conds.addCondition(CondRT2);
 Query Q=new Query(getTableNameThesRT(), getRecordStructPDThesaurRT(), Conds, fNAME);
 Cursor CursorId=getDrv().OpenCursor(Q);
+Record Res=getDrv().NextRec(CursorId);
+while (Res!=null)
+    {
+    String PD1=(String) Res.getAttr(fPDID).getValue();
+    if (!PD1.equalsIgnoreCase(TermId))
+        ListRT.add(PD1);
+    else
+        {
+        ListRT.add((String) Res.getAttr(fPDID2).getValue());
+        }
+    Res=getDrv().NextRec(CursorId);
+    }
+getDrv().CloseCursor(CursorId);
 if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.getListRT<:"+PDId);
-return(CursorId);
+return(ListRT);
 }
 //---------------------------------------------------------------------
+/* Obtain a CURSOR of the <b>Records<b> of related terms
+ * 
+ */
 public Cursor ListRT(String TermId) throws PDException
 {
 if (PDLog.isDebug())
@@ -977,19 +998,34 @@ if (PDLog.isDebug())
 return(CursorId);
 }
 //---------------------------------------------------------------------
+/* Obtain a list of the Codes of Used For terms
+ * 
+ */
 public HashSet getListUF(String TermId) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.getListUF>:"+PDId);
+HashSet ListUF=new HashSet();
 Conditions Conds=new Conditions();
 Conds.addCondition(new Condition(fUSE, Condition.cEQUAL, TermId));
 Query Q=new Query(getTabName(), getRecordStructPDThesaur(), Conds, fNAME);
 Cursor CursorId=getDrv().OpenCursor(Q);
+Record Res=getDrv().NextRec(CursorId);
+while (Res!=null)
+    {
+    String PD1=(String) Res.getAttr(fPDID).getValue();
+    ListUF.add(PD1);
+    Res=getDrv().NextRec(CursorId);
+    }
+getDrv().CloseCursor(CursorId);
 if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.getListUF<:"+PDId);
-return(CursorId);
+return(ListUF);
 }
 //---------------------------------------------------------------------
+/* Obtain a CURSOR  of the records of Used For terms
+ * 
+ */
 public Cursor ListUF(String TermId) throws PDException
 {
 if (PDLog.isDebug())
