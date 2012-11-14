@@ -305,6 +305,10 @@ if (Rec.getAttr(fALLOWCREATECUSTOM).getValue()!=null)
     setAllowCreateCustom(((Boolean)Rec.getAttr(fALLOWCREATECUSTOM).getValue()).booleanValue());
 if (Rec.getAttr(fALLOWMAINTAINCUSTOM).getValue()!=null)
     setAllowMaintainCustom(((Boolean)Rec.getAttr(fALLOWMAINTAINCUSTOM).getValue()).booleanValue());
+if (Rec.getAttr(fALLOWCREATETHESAUR).getValue()!=null)
+    setAllowCreateThesaur(((Boolean)Rec.getAttr(fALLOWCREATETHESAUR).getValue()).booleanValue());
+if (Rec.getAttr(fALLOWMAINTAINTHESAUR).getValue()!=null)
+    setAllowMaintainThesaur(((Boolean)Rec.getAttr(fALLOWMAINTAINTHESAUR).getValue()).booleanValue());
 assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
@@ -341,6 +345,8 @@ Rec.getAttr(fALLOWCREATEAUTH).setValue(isAllowCreateAuth());
 Rec.getAttr(fALLOWMAINTAINAUTH).setValue(isAllowMaintainAuth());
 Rec.getAttr(fALLOWCREATECUSTOM).setValue(isAllowCreateCustom());
 Rec.getAttr(fALLOWMAINTAINCUSTOM).setValue(isAllowMaintainCustom());
+Rec.getAttr(fALLOWCREATETHESAUR).setValue(isAllowCreateThesaur());
+Rec.getAttr(fALLOWMAINTAINTHESAUR).setValue(isAllowMaintainThesaur());
 getCommonValues(Rec);
 return(Rec);
 }
@@ -426,6 +432,8 @@ if (RolesStruct==null)
     R.addAttr( new Attribute(fALLOWMAINTAINCUSTOM, fALLOWMAINTAINCUSTOM,"When_true_the_user_can_maintain_Configurations", Attribute.tBOOLEAN, true, null, 0, false, false, true));
     R.addAttr( new Attribute(fALLOWCREATEAUTH,fALLOWCREATEAUTH, "When_true_the_user_can_create_Authenticators", Attribute.tBOOLEAN, true, null, 0, false, false, true));
     R.addAttr( new Attribute(fALLOWMAINTAINAUTH, fALLOWMAINTAINAUTH,"When_true_the_user_can_maintain_Authenticators", Attribute.tBOOLEAN, true, null, 0, false, false, true));
+    R.addAttr( new Attribute(fALLOWCREATETHESAUR,fALLOWCREATETHESAUR, "When_true_the_user_can_create_Thesaurus", Attribute.tBOOLEAN, true, null, 0, false, false, true));
+    R.addAttr( new Attribute(fALLOWMAINTAINTHESAUR, fALLOWMAINTAINTHESAUR,"When_true_the_user_can_maintain_Thesaurus", Attribute.tBOOLEAN, true, null, 0, false, false, true));
     R.addRecord(getRecordStructCommon());
     return(R);
     }
