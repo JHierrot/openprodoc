@@ -347,7 +347,7 @@ M.InstallMulti();
 Trace.add("Mime relations created");
 ME.InstallMulti();
 Trace.add("Message relations created");
-TE.InstallMulti();
+PDThesaur.InstallMulti(this);
 Trace.add("Thesaur relations created");
 //--- insertion of objects ----
 this.IniciarTrans();
@@ -512,6 +512,7 @@ Trace.add("Document elements created");
 //----------------------
 File FileImp=new File("ex/defs.opd");
 ProcessXML(FileImp, PDFolders.ROOTFOLDER);
+TE.CreateRootThesaur();
 this.CerrarTrans();
 Trace.add("Installation finished");
 }
