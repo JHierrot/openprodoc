@@ -162,6 +162,7 @@ return PDId;
 //-------------------------------------------------------------------------
 /**
  * @param pPDId
+ * @throws PDExceptionFunc  
  */
 public void setPDId(String pPDId) throws PDExceptionFunc
 {
@@ -354,6 +355,7 @@ return(ListCond);
 /**
  *
  * @param Ident
+ * @throws PDExceptionFunc  
  */
 protected void AsignKey(String Ident) throws PDExceptionFunc
 {
@@ -1300,7 +1302,15 @@ RFull.delRecord(getRecord());
 return(RFull.toXML()+"</ListAttr>");    
 }
 //-------------------------------------------------------------------------
-public PDFolders ImportXMLNode(Node OPDObject, String ParentFolderId, boolean MaintainId) throws PDException
+    /**
+     *
+     * @param OPDObject
+     * @param ParentFolderId
+     * @param MaintainId
+     * @return
+     * @throws PDException
+     */
+    public PDFolders ImportXMLNode(Node OPDObject, String ParentFolderId, boolean MaintainId) throws PDException
 {
 NodeList childNodes = OPDObject.getChildNodes();
 PDFolders NewFold=null;

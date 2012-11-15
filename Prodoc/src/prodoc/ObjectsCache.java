@@ -91,14 +91,21 @@ CleanerThread=new CacheCleaner();
 CleanerThread.start();
 }
 //----------------------------------------------------------------------------
-static public void EndCleaner()
+    /**
+     *
+     */
+    static public void EndCleaner()
 {
 if (CleanerThread==null)
     return;
 CleanerThread.End();
 }
 //---------------------------------------------------------------------------
-public Iterator getIter()
+    /**
+     *
+     * @return
+     */
+    public Iterator getIter()
 {
 return(CacheValues.keySet().iterator());    
 }

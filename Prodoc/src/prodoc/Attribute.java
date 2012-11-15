@@ -429,7 +429,8 @@ return Unique;
 }
 //--------------------------------------------------------------------------
 /**
-* @param Unique the Unique to set
+ * @param Unique the Unique to set
+ * @throws PDException  
 */
 public void setUnique(boolean Unique) throws PDException
 {
@@ -485,7 +486,6 @@ UserName = pUserName;
 /**
  *
  * @return
- * @throws PDException
  */
 public String Export()
 {

@@ -241,6 +241,7 @@ return PDId;
 /**
  * Sets the unique identifier of the document
  * @param pPDId the new identifier to set.
+ * @throws PDExceptionFunc  
  */
 public void setPDId(String pPDId) throws PDExceptionFunc
 {
@@ -843,6 +844,7 @@ return(FolderPath);
 /**
  * "Download" a file referenced by the PDID-
  * @param FolderPath path to recover/download the file
+ * @param Ver 
  * @return The complete name of the downloaded file
  * @throws PDException
  */
@@ -900,7 +902,12 @@ Rep.Disconnect();
 return(FolderPath);
 }
 //-------------------------------------------------------------------------
-public boolean IsUrl() throws PDException
+    /**
+     *
+     * @return
+     * @throws PDException
+     */
+    public boolean IsUrl() throws PDException
 {
 PDDocs d=new PDDocs(getDrv());
 d.Load(getPDId());
@@ -908,7 +915,12 @@ StoreGeneric Rep=getDrv().getRepository(d.getReposit());
 return(Rep.IsURL());
 }
 //-------------------------------------------------------------------------
-public String getUrl() throws PDException
+    /**
+     *
+     * @return
+     * @throws PDException
+     */
+    public String getUrl() throws PDException
 {
 PDDocs d=new PDDocs(getDrv());
 d.Load(getPDId());
@@ -916,7 +928,13 @@ StoreGeneric Rep=getDrv().getRepository(d.getReposit());
 return(Rep.GetUrl(d.getName()));
 }
 //-------------------------------------------------------------------------
-public String getUrlVer(String Ver) throws PDException
+    /**
+     *
+     * @param Ver
+     * @return
+     * @throws PDException
+     */
+    public String getUrlVer(String Ver) throws PDException
 {
 PDDocs d=new PDDocs(getDrv());
 d.LoadVersion(getPDId(), Ver);
@@ -2344,7 +2362,17 @@ for (int i = 0; i < childNodes.getLength(); i++)
 NewDoc.insert();
 }    
 //-------------------------------------------------------------------------
-static public File ProcessXMLAbby(DriverGeneric Sess, File XMLFile, String ParentFoldId, String DateFormat, String TimeStampFormat) throws PDException
+    /**
+     *
+     * @param Sess
+     * @param XMLFile
+     * @param ParentFoldId
+     * @param DateFormat
+     * @param TimeStampFormat
+     * @return
+     * @throws PDException
+     */
+    static public File ProcessXMLAbby(DriverGeneric Sess, File XMLFile, String ParentFoldId, String DateFormat, String TimeStampFormat) throws PDException
 {
 try {    
 File ImageFile=null;

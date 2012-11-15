@@ -268,7 +268,8 @@ return Name;
 }
 //-------------------------------------------------------------------------
 /**
-* @param Name the Name to set
+ * @param Name the Name to set
+ * @throws PDExceptionFunc  
 */
 public void setName(String Name) throws PDExceptionFunc
 {
@@ -326,6 +327,7 @@ this.Param = PARAM;
 /**
  *
  * @param Ident
+ * @throws PDExceptionFunc  
  */
 protected void AsignKey(String Ident) throws PDExceptionFunc
 {

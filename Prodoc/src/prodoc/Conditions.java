@@ -91,7 +91,12 @@ public void setOperatorAnd(boolean OperatorAnd)
 this.OperatorAnd = OperatorAnd;
 }
 //-------------------------------------------------------------------------
-public boolean UsedAttr(String Attrname)
+    /**
+     *
+     * @param Attrname
+     * @return
+     */
+    public boolean UsedAttr(String Attrname)
 {
 for (Iterator it = CondList.iterator(); it.hasNext();)
     {
