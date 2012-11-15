@@ -55,10 +55,9 @@ initComponents();
  */
 @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
-        ButtonAcept = new javax.swing.JButton();
-        ButtonCancel = new javax.swing.JButton();
         LabelOperation = new javax.swing.JLabel();
         UserNameLabel = new javax.swing.JLabel();
         DescriptionLabel = new javax.swing.JLabel();
@@ -82,33 +81,23 @@ initComponents();
         ModifyDocCheck = new javax.swing.JCheckBox();
         CreateMimeCheck = new javax.swing.JCheckBox();
         ModifyMimeCheck = new javax.swing.JCheckBox();
+        CreateThesCheck = new javax.swing.JCheckBox();
+        ModifyThesCheck = new javax.swing.JCheckBox();
+        ButtonAcept = new javax.swing.JButton();
+        ButtonCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(MainWin.TT("Roles_Maintenance"));
         setResizable(false);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
+        addWindowListener(new java.awt.event.WindowAdapter()
+        {
+            public void windowClosing(java.awt.event.WindowEvent evt)
+            {
                 formWindowClosing(evt);
             }
         });
 
-        ButtonAcept.setFont(MainWin.getFontDialog());
-        ButtonAcept.setText(MainWin.TT("Ok"));
-        ButtonAcept.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ButtonAceptActionPerformed(evt);
-            }
-        });
-
-        ButtonCancel.setFont(MainWin.getFontDialog());
-        ButtonCancel.setText(MainWin.TT("Cancel"));
-        ButtonCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ButtonCancelActionPerformed(evt);
-            }
-        });
-
-        LabelOperation.setFont(new java.awt.Font("DejaVu Sans", 1, 14));
+        LabelOperation.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
         LabelOperation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         LabelOperation.setText("jLabel1");
 
@@ -185,56 +174,86 @@ initComponents();
         ModifyMimeCheck.setFont(MainWin.getFontDialog());
         ModifyMimeCheck.setText("MMime");
 
+        CreateThesCheck.setFont(MainWin.getFontDialog());
+        CreateThesCheck.setText("CThes");
+        CreateThesCheck.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+
+        ModifyThesCheck.setFont(MainWin.getFontDialog());
+        ModifyThesCheck.setText("MThes");
+
+        ButtonAcept.setFont(MainWin.getFontDialog());
+        ButtonAcept.setText(MainWin.TT("Ok"));
+        ButtonAcept.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                ButtonAceptActionPerformed(evt);
+            }
+        });
+
+        ButtonCancel.setFont(MainWin.getFontDialog());
+        ButtonCancel.setText(MainWin.TT("Cancel"));
+        ButtonCancel.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                ButtonCancelActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(CreateDocCheck)
-                    .addComponent(CreateFoldCheck)
-                    .addComponent(CreateReposCheck)
-                    .addComponent(CreateMimeCheck)
-                    .addComponent(CreateGroupCheck)
-                    .addComponent(CreateRoleCheck)
-                    .addComponent(CreateObjectCheck)
-                    .addComponent(CreateUserCheck)
-                    .addComponent(CreateACLCheck))
-                .addGap(118, 118, 118)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(DescriptionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(DescriptionTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
+                        .addContainerGap(74, Short.MAX_VALUE))))
+            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ModifyMimeCheck)
-                    .addComponent(ModifyACLCheck)
-                    .addComponent(ModifyUserCheck)
-                    .addComponent(ModifyRoleCheck)
-                    .addComponent(ModifyGroupCheck)
-                    .addComponent(ModifyObjectCheck)
-                    .addComponent(ModifyFoldCheck)
-                    .addComponent(ModifyDocCheck)
-                    .addComponent(ModifyReposCheck))
-                .addContainerGap(191, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(245, Short.MAX_VALUE)
-                .addComponent(ButtonAcept)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(ButtonCancel)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(UserNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(RoleNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(CreateDocCheck)
+                            .addComponent(CreateFoldCheck)
+                            .addComponent(CreateReposCheck)
+                            .addComponent(CreateMimeCheck)
+                            .addComponent(CreateGroupCheck)
+                            .addComponent(CreateRoleCheck)
+                            .addComponent(CreateObjectCheck)
+                            .addComponent(CreateUserCheck)
+                            .addComponent(CreateACLCheck)
+                            .addComponent(CreateThesCheck))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ModifyThesCheck)
+                            .addComponent(ModifyMimeCheck)
+                            .addComponent(ModifyACLCheck)
+                            .addComponent(ModifyUserCheck)
+                            .addComponent(ModifyRoleCheck)
+                            .addComponent(ModifyGroupCheck)
+                            .addComponent(ModifyObjectCheck)
+                            .addComponent(ModifyFoldCheck)
+                            .addComponent(ModifyDocCheck)
+                            .addComponent(ModifyReposCheck)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(ButtonAcept)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(ButtonCancel)))))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addComponent(UserNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(RoleNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(168, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addComponent(DescriptionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(DescriptionTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, 413, Short.MAX_VALUE)
-                .addContainerGap(46, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -285,11 +304,15 @@ initComponents();
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(CreateMimeCheck)
                     .addComponent(ModifyMimeCheck))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(CreateThesCheck)
+                    .addComponent(ModifyThesCheck))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButtonCancel)
                     .addComponent(ButtonAcept))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addGap(32, 32, 32))
         );
 
         pack();
@@ -311,110 +334,123 @@ Attr.setValue(DescriptionTextField.getText());
 Boolean Act;
 Attr=Role.getAttr(PDRoles.fALLOWCREATEACL); //-----
 if (CreateACLCheck.isSelected())
-    Act=new Boolean(true);
+    Act=true;
 else
-    Act=new Boolean(false);
+    Act=false;
 Attr.setValue(Act);
 Attr=Role.getAttr(PDRoles.fALLOWMAINTAINACL);
 if (ModifyACLCheck.isSelected())
-    Act=new Boolean(true);
+    Act=true;
 else
-    Act=new Boolean(false);
+    Act=false;
 Attr.setValue(Act);
 Attr=Role.getAttr(PDRoles.fALLOWCREATEDOC); //-----
 if (CreateDocCheck.isSelected())
-    Act=new Boolean(true);
+    Act=true;
 else
-    Act=new Boolean(false);
+    Act=false;
 Attr.setValue(Act);
 Attr=Role.getAttr(PDRoles.fALLOWMAINTAINDOC);
 if (ModifyDocCheck.isSelected())
-    Act=new Boolean(true);
+    Act=true;
 else
-    Act=new Boolean(false);
+    Act=false;
 Attr.setValue(Act);
 Attr=Role.getAttr(PDRoles.fALLOWCREATEFOLD); //-----
 if (CreateFoldCheck.isSelected())
-    Act=new Boolean(true);
+    Act=true;
 else
-    Act=new Boolean(false);
+    Act=false;
 Attr.setValue(Act);
 Attr=Role.getAttr(PDRoles.fALLOWMAINTAINFOLD);
 if (ModifyFoldCheck.isSelected())
-    Act=new Boolean(true);
+    Act=true;
 else
-    Act=new Boolean(false);
+    Act=false;
 Attr.setValue(Act);
 Attr=Role.getAttr(PDRoles.fALLOWCREATEGROUP); //-----
 if (CreateGroupCheck.isSelected())
-    Act=new Boolean(true);
+    Act=true;
 else
-    Act=new Boolean(false);
+    Act=false;
 Attr.setValue(Act);
 Attr=Role.getAttr(PDRoles.fALLOWMAINTAINGROUP);
 if (ModifyGroupCheck.isSelected())
-    Act=new Boolean(true);
+    Act=true;
 else
-    Act=new Boolean(false);
+    Act=false;
 Attr.setValue(Act);
 Attr=Role.getAttr(PDRoles.fALLOWCREATEMIME); //-----
 if (CreateMimeCheck.isSelected())
-    Act=new Boolean(true);
+    Act=true;
 else
-    Act=new Boolean(false);
+    Act=false;
 Attr.setValue(Act);
 Attr=Role.getAttr(PDRoles.fALLOWMAINTAINMIME);
 if (ModifyMimeCheck.isSelected())
-    Act=new Boolean(true);
+    Act=true;
 else
-    Act=new Boolean(false);
+    Act=false;
 Attr.setValue(Act);
 Attr=Role.getAttr(PDRoles.fALLOWCREATEOBJECT); //-----
 if (CreateObjectCheck.isSelected())
-    Act=new Boolean(true);
+    Act=true;
 else
-    Act=new Boolean(false);
+    Act=false;
 Attr.setValue(Act);
 Attr=Role.getAttr(PDRoles.fALLOWMAINTAINOBJECT);
 if (ModifyObjectCheck.isSelected())
-    Act=new Boolean(true);
+    Act=true;
 else
-    Act=new Boolean(false);
+    Act=false;
 Attr.setValue(Act);
 Attr=Role.getAttr(PDRoles.fALLOWCREATEREPOS); //-----
 if (CreateReposCheck.isSelected())
-    Act=new Boolean(true);
+    Act=true;
 else
-    Act=new Boolean(false);
+    Act=false;
 Attr.setValue(Act);
 Attr=Role.getAttr(PDRoles.fALLOWMAINTAINREPOS);
 if (ModifyReposCheck.isSelected())
-    Act=new Boolean(true);
+    Act=true;
 else
-    Act=new Boolean(false);
+    Act=false;
 Attr.setValue(Act);
 Attr=Role.getAttr(PDRoles.fALLOWCREATEROLE); //-----
 if (CreateRoleCheck.isSelected())
-    Act=new Boolean(true);
+    Act=true;
 else
-    Act=new Boolean(false);
+    Act=false;
 Attr.setValue(Act);
 Attr=Role.getAttr(PDRoles.fALLOWMAINTAINROLE);
 if (ModifyRoleCheck.isSelected())
-    Act=new Boolean(true);
+    Act=true;
 else
-    Act=new Boolean(false);
+    Act=false;
 Attr.setValue(Act);
 Attr=Role.getAttr(PDRoles.fALLOWCREATEUSER); //-----
 if (CreateUserCheck.isSelected())
-    Act=new Boolean(true);
+    Act=true;
 else
-    Act=new Boolean(false);
+    Act=false;
+Attr.setValue(Act);
 Attr=Role.getAttr(PDRoles.fALLOWMAINTAINUSER);
 if (ModifyUserCheck.isSelected())
-    Act=new Boolean(true);
+    Act=true;
 else
-    Act=new Boolean(false);
+    Act=false;
+Attr.setValue(Act);
+Attr=Role.getAttr(PDRoles.fALLOWCREATETHESAUR); //-----
+if (CreateThesCheck.isSelected())
+    Act=true;
+else
+    Act=false;
+Attr.setValue(Act);
+Attr=Role.getAttr(PDRoles.fALLOWMAINTAINTHESAUR);
+if (ModifyThesCheck.isSelected())
+    Act=true;
+else
+    Act=false;
 Attr.setValue(Act);
 this.dispose();
 } catch (PDException ex)
@@ -439,6 +475,7 @@ Cancel=true;
     private javax.swing.JCheckBox CreateObjectCheck;
     private javax.swing.JCheckBox CreateReposCheck;
     private javax.swing.JCheckBox CreateRoleCheck;
+    private javax.swing.JCheckBox CreateThesCheck;
     private javax.swing.JCheckBox CreateUserCheck;
     private javax.swing.JLabel DescriptionLabel;
     private javax.swing.JTextField DescriptionTextField;
@@ -451,6 +488,7 @@ Cancel=true;
     private javax.swing.JCheckBox ModifyObjectCheck;
     private javax.swing.JCheckBox ModifyReposCheck;
     private javax.swing.JCheckBox ModifyRoleCheck;
+    private javax.swing.JCheckBox ModifyThesCheck;
     private javax.swing.JCheckBox ModifyUserCheck;
     private javax.swing.JTextField RoleNameTextField;
     private javax.swing.JLabel UserNameLabel;
@@ -490,6 +528,8 @@ CreateRoleCheck.setEnabled(false);
 ModifyRoleCheck.setEnabled(false);
 CreateUserCheck.setEnabled(false);
 ModifyUserCheck.setEnabled(false);
+CreateThesCheck.setEnabled(false);
+ModifyThesCheck.setEnabled(false);
 }
 //----------------------------------------------------------------
 /**
@@ -624,6 +664,16 @@ ModifyUserCheck.setText(MainWin.DrvTT(Attr.getUserName()));
 if (Attr.getValue()!=null)
     ModifyUserCheck.setSelected((Boolean)Attr.getValue());
 ModifyUserCheck.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
+Attr=Role.getAttr(PDRoles.fALLOWCREATETHESAUR);  //--------------
+CreateThesCheck.setText(MainWin.DrvTT(Attr.getUserName()));
+if (Attr.getValue()!=null)
+    CreateThesCheck.setSelected((Boolean)Attr.getValue());
+CreateThesCheck.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
+Attr=Role.getAttr(PDRoles.fALLOWMAINTAINTHESAUR);
+ModifyThesCheck.setText(MainWin.DrvTT(Attr.getUserName()));
+if (Attr.getValue()!=null)
+    ModifyThesCheck.setSelected((Boolean)Attr.getValue());
+ModifyThesCheck.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
 }
 //----------------------------------------------------------------
 /**

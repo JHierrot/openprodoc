@@ -1,4 +1,4 @@
-<?xml version="1.1" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.3" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
   <Properties>
@@ -30,57 +30,64 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="12" pref="12" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="CreateDocCheck" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="CreateFoldCheck" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="CreateReposCheck" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="CreateMimeCheck" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="CreateGroupCheck" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="CreateRoleCheck" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="CreateObjectCheck" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="CreateUserCheck" alignment="0" min="-2" max="-2" attributes="1"/>
-                  <Component id="CreateACLCheck" alignment="0" min="-2" max="-2" attributes="1"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="DescriptionLabel" min="-2" pref="89" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="DescriptionTextField" pref="401" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="LabelOperation" pref="440" max="32767" attributes="0"/>
+                      <EmptySpace pref="74" max="32767" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace min="-2" pref="118" max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="ModifyMimeCheck" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="ModifyACLCheck" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="ModifyUserCheck" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="ModifyRoleCheck" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="ModifyGroupCheck" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="ModifyObjectCheck" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="ModifyFoldCheck" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="ModifyDocCheck" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="ModifyReposCheck" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="12" pref="12" max="12" attributes="0"/>
+                      <Component id="UserNameLabel" min="-2" pref="89" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="RoleNameTextField" min="-2" pref="190" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="CreateDocCheck" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="CreateFoldCheck" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="CreateReposCheck" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="CreateMimeCheck" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="CreateGroupCheck" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="CreateRoleCheck" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="CreateObjectCheck" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="CreateUserCheck" alignment="0" min="-2" max="-2" attributes="1"/>
+                          <Component id="CreateACLCheck" alignment="0" min="-2" max="-2" attributes="1"/>
+                          <Component id="CreateThesCheck" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="ModifyThesCheck" min="-2" max="-2" attributes="0"/>
+                          <Component id="ModifyMimeCheck" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="ModifyACLCheck" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="ModifyUserCheck" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="ModifyRoleCheck" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="ModifyGroupCheck" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="ModifyObjectCheck" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="ModifyFoldCheck" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="ModifyDocCheck" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="ModifyReposCheck" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="ButtonAcept" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="ButtonCancel" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                  </Group>
               </Group>
-              <EmptySpace pref="191" max="32767" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace pref="245" max="32767" attributes="0"/>
-              <Component id="ButtonAcept" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="ButtonCancel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="12" pref="12" max="12" attributes="0"/>
-              <Component id="UserNameLabel" min="-2" pref="89" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="RoleNameTextField" min="-2" pref="190" max="-2" attributes="0"/>
-              <EmptySpace pref="168" max="32767" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="12" pref="12" max="12" attributes="0"/>
-              <Component id="DescriptionLabel" min="-2" pref="89" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="DescriptionTextField" pref="346" max="32767" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="12" pref="12" max="12" attributes="0"/>
-              <Component id="LabelOperation" pref="413" max="32767" attributes="0"/>
-              <EmptySpace pref="46" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -144,43 +151,22 @@
                   <Component id="CreateMimeCheck" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="ModifyMimeCheck" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="CreateThesCheck" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="ModifyThesCheck" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace pref="14" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="ButtonCancel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="ButtonAcept" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="29" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JButton" name="ButtonAcept">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="MainWin.getFontDialog()" type="code"/>
-        </Property>
-        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="MainWin.TT(&quot;Ok&quot;)" type="code"/>
-        </Property>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ButtonAceptActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="ButtonCancel">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="MainWin.getFontDialog()" type="code"/>
-        </Property>
-        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="MainWin.TT(&quot;Cancel&quot;)" type="code"/>
-        </Property>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ButtonCancelActionPerformed"/>
-      </Events>
-    </Component>
     <Component class="javax.swing.JLabel" name="LabelOperation">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -372,6 +358,49 @@
         </Property>
         <Property name="text" type="java.lang.String" value="MMime"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="CreateThesCheck">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="MainWin.getFontDialog()" type="code"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="CThes"/>
+        <Property name="horizontalAlignment" type="int" value="11"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="ModifyThesCheck">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="MainWin.getFontDialog()" type="code"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="MThes"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="ButtonAcept">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="MainWin.getFontDialog()" type="code"/>
+        </Property>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="MainWin.TT(&quot;Ok&quot;)" type="code"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ButtonAceptActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="ButtonCancel">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="MainWin.getFontDialog()" type="code"/>
+        </Property>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="MainWin.TT(&quot;Cancel&quot;)" type="code"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ButtonCancelActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
