@@ -30,6 +30,7 @@ import java.awt.Image;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Vector;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -38,6 +39,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import prodoc.*;
+import prodocswing.PDTableModel;
 import prodocswing.TreeTerm;
 
 /**
@@ -50,6 +52,10 @@ private static DriverGeneric Session=null;
 static private DefaultTreeModel TermTreeModel=null;
 static private String ActTermId=null;
 private PDThesaur TermAct=null;
+private PDTableModel NTMembers;
+private PDTableModel RTMembers;
+private PDTableModel UFMembers;
+
 //static private String List=PDThesaur.fACL+"/"+PDThesaur.fFOLDTYPE+"/"+PDThesaur.fPARENTID+"/"+PDThesaur.fPDID+"/"+PDThesaur.fTITLE+"/"+PDThesaur.fPDAUTOR+"/"+PDThesaur.fPDDATE;
 
 //--------------------------------------------------------
@@ -77,6 +83,12 @@ public MainThesaur(DriverGeneric pSess)
 setSession(pSess);    
 initComponents();
 TreeTerm.setPreferredSize(null);
+NTTable.setAutoCreateRowSorter(true);
+NTTable.setAutoCreateColumnsFromModel(true);
+RTTable.setAutoCreateRowSorter(true);
+RTTable.setAutoCreateColumnsFromModel(true);
+UFTable.setAutoCreateRowSorter(true);
+UFTable.setAutoCreateColumnsFromModel(true);   
 }
 
     /** This method is called from within the constructor to
@@ -103,13 +115,13 @@ TreeTerm.setPreferredSize(null);
         Relations = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        NTjTable = new javax.swing.JTable();
+        NTTable = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        RTjTable = new javax.swing.JTable();
+        RTTable = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        UFjTable = new javax.swing.JTable();
+        UFTable = new javax.swing.JTable();
         menuBar = new javax.swing.JMenuBar();
         ThesaurMenu = new javax.swing.JMenu();
         AddThesaur = new javax.swing.JMenuItem();
@@ -204,7 +216,7 @@ TreeTerm.setPreferredSize(null);
                         .addComponent(UseLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(UseTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         TermAttrLayout.setVerticalGroup(
             TermAttrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -221,15 +233,15 @@ TreeTerm.setPreferredSize(null);
                 .addGroup(TermAttrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(UseTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(UseLabel))
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         jSplitPane2.setLeftComponent(TermAttr);
 
         jPanel1.setFont(MainWin.getFontDialog());
 
-        NTjTable.setFont(MainWin.getFontList());
-        NTjTable.setModel(new javax.swing.table.DefaultTableModel(
+        NTTable.setFont(MainWin.getFontList());
+        NTTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][]
             {
                 {null, null, null, null},
@@ -242,7 +254,7 @@ TreeTerm.setPreferredSize(null);
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(NTjTable);
+        jScrollPane2.setViewportView(NTTable);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -252,15 +264,15 @@ TreeTerm.setPreferredSize(null);
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
         );
 
         Relations.addTab("NT", jPanel1);
 
         jPanel2.setFont(MainWin.getFontDialog());
 
-        RTjTable.setFont(MainWin.getFontList());
-        RTjTable.setModel(new javax.swing.table.DefaultTableModel(
+        RTTable.setFont(MainWin.getFontList());
+        RTTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][]
             {
                 {null, null, null, null},
@@ -273,7 +285,7 @@ TreeTerm.setPreferredSize(null);
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane3.setViewportView(RTjTable);
+        jScrollPane3.setViewportView(RTTable);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -283,15 +295,15 @@ TreeTerm.setPreferredSize(null);
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
         );
 
         Relations.addTab("RT", jPanel2);
 
         jPanel3.setFont(MainWin.getFontDialog());
 
-        UFjTable.setFont(MainWin.getFontList());
-        UFjTable.setModel(new javax.swing.table.DefaultTableModel(
+        UFTable.setFont(MainWin.getFontList());
+        UFTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][]
             {
                 {null, null, null, null},
@@ -304,7 +316,7 @@ TreeTerm.setPreferredSize(null);
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane4.setViewportView(UFjTable);
+        jScrollPane4.setViewportView(UFTable);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -314,7 +326,7 @@ TreeTerm.setPreferredSize(null);
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
         );
 
         Relations.addTab("UF", jPanel3);
@@ -477,6 +489,7 @@ ActTermId=TermAct.getPDId();
 this.NameTextField.setText(TermAct.getName());
 this.DescripTextField.setText(TermAct.getDescription());
 this.UseTextField.setText(TermAct.getUse());
+UpdateTabs(ActTermId);
 } catch (Exception ex)
     {
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
@@ -509,6 +522,8 @@ TreeTerm.setSelectionPath(ActualPath);
     private void DelThesaurActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_DelThesaurActionPerformed
     {//GEN-HEADEREND:event_DelThesaurActionPerformed
 try {
+if (ActTermId.equals(PDThesaur.ROOTTERM))
+    return;
 TreePath selectionPath = TreeTerm.getSelectionPath();
 DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) selectionPath.getLastPathComponent();
 PDThesaur Term= ((TreeTerm) TreeFold.getUserObject()).getTerm();
@@ -561,17 +576,17 @@ TreeTerm.setSelectionPath(ActualPath);
 try {
 TreePath selectionPath = TreeTerm.getSelectionPath();
 DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) selectionPath.getLastPathComponent();
-PDThesaur Fold= ((TreeTerm) TreeFold.getUserObject()).getTerm();
+PDThesaur Term= ((TreeTerm) TreeFold.getUserObject()).getTerm();
 MantTerm MTF = new MantTerm(this, true);
 MTF.setLocationRelativeTo(null);
 MTF.EditMode();
-Fold.Load(Fold.getPDId());
-MTF.setRecord(Fold.getRecord());
+Term.Load(Term.getPDId());
+MTF.setRecord(Term.getRecord());
 MTF.setVisible(true);
 if (MTF.isCancel())
     return;
-Fold.assignValues(MTF.getRecord());
-Fold.update();
+Term.assignValues(MTF.getRecord());
+Term.update();
 TreePath ParentFold = (TreePath) TreeTerm.getSelectionPath().getParentPath();
 ExpandFold((DefaultMutableTreeNode)ParentFold.getLastPathComponent());
 TreeTerm.setSelectionPath(selectionPath);
@@ -613,10 +628,10 @@ private void DelTermActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:e
     private javax.swing.JLabel DescripLabel;
     private javax.swing.JTextField DescripTextField;
     private javax.swing.JMenuItem ModTerm;
-    private javax.swing.JTable NTjTable;
+    private javax.swing.JTable NTTable;
     private javax.swing.JLabel NameLabel;
     private javax.swing.JTextField NameTextField;
-    private javax.swing.JTable RTjTable;
+    private javax.swing.JTable RTTable;
     private javax.swing.JMenuItem RefreshTerm;
     private javax.swing.JTabbedPane Relations;
     private javax.swing.JMenuItem SearchTerm;
@@ -624,7 +639,7 @@ private void DelTermActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:e
     private javax.swing.JMenuItem ThesaurHelp;
     private javax.swing.JMenu ThesaurMenu;
     private javax.swing.JTree TreeTerm;
-    private javax.swing.JTable UFjTable;
+    private javax.swing.JTable UFTable;
     private javax.swing.JLabel UseLabel;
     private javax.swing.JTextField UseTextField;
     private javax.swing.JMenuItem exitMenuItem;
@@ -799,4 +814,44 @@ ImageIcon PDIcon=new ImageIcon("resources/LogoProdoc.jpg");
 return PDIcon.getImage();
 }
 //---------------------------------------------------------------------
+private void UpdateTabs(String ActTermId) throws PDException
+{
+RefreshRT(ActTermId);
+RefreshNT(ActTermId);
+RefreshUF(ActTermId);
+}
+//----------------------------------------------------------------
+private void RefreshRT(String TermId) throws PDException
+{
+RTMembers = new PDTableModel();
+RTMembers.setDrv(MainWin.getSession());
+RTMembers.setListFields(PDThesaur.getRecordStructPDThesaur());
+RTMembers.setVector(new Vector(TermAct.getListDirectDescendList(TermId)));
+RTTable.setModel(RTMembers);
+RTTable.getColumnModel().getColumn(0).setMaxWidth(0);
+RTTable.getColumnModel().removeColumn(RTTable.getColumnModel().getColumn(0));
+}
+//----------------------------------------------------------------
+private void RefreshNT(String TermId) throws PDException
+{
+NTMembers = new PDTableModel();
+NTMembers.setDrv(MainWin.getSession());
+NTMembers.setListFields(PDThesaur.getRecordStructPDThesaur());
+NTMembers.setCursor(TermAct.ListRT(TermId));
+NTTable.setModel(NTMembers);
+NTTable.getColumnModel().getColumn(0).setMaxWidth(0);
+NTTable.getColumnModel().removeColumn(NTTable.getColumnModel().getColumn(0));
+}
+///----------------------------------------------------------------
+private void RefreshUF(String TermId) throws PDException
+{
+UFMembers = new PDTableModel();
+UFMembers.setDrv(MainWin.getSession());
+UFMembers.setListFields(PDThesaur.getRecordStructPDThesaur());
+UFMembers.setCursor(TermAct.ListUF(TermId));
+UFTable.setModel(UFMembers);
+UFTable.getColumnModel().getColumn(0).setMaxWidth(0);
+UFTable.getColumnModel().removeColumn(UFTable.getColumnModel().getColumn(0));
+}
+
 }
