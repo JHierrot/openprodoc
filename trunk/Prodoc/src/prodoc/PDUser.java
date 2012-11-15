@@ -170,7 +170,8 @@ return Name;
 //-------------------------------------------------------------------------
 
 /**
-* @param Name the Name to set
+ * @param Name the Name to set
+ * @throws PDExceptionFunc  
 */
 public void setName(String Name) throws PDExceptionFunc
 {
@@ -447,6 +448,7 @@ public void setValidation(String pValidation) throws PDException
 /**
  *
  * @param Ident
+ * @throws PDExceptionFunc  
  */
 protected void AsignKey(String Ident) throws PDExceptionFunc
 {

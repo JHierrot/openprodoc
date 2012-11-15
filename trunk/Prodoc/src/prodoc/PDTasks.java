@@ -43,10 +43,22 @@ public static final String fSTARTDATE="StartDate";
  *
  */
 public static final String fNEXTDATE="NextDate";
-public static final String fADDMONTH="AddMonth";
-public static final String fADDDAYS="AddDays";
-public static final String fADDHOURS="AddHours";
-public static final String fADDMINS="AddMins";
+    /**
+     *
+     */
+    public static final String fADDMONTH="AddMonth";
+    /**
+     *
+     */
+    public static final String fADDDAYS="AddDays";
+    /**
+     *
+     */
+    public static final String fADDHOURS="AddHours";
+    /**
+     *
+     */
+    public static final String fADDMINS="AddMins";
 
 /**
  *
@@ -254,8 +266,8 @@ return NextDate;
 }
 
 /**
-* @param StartDate the NextDate to set
-*/
+ * @param NextDate 
+ */
 public void setNextDate(Date NextDate)
 {
 this.NextDate = NextDate;

@@ -314,6 +314,7 @@ return Name;
 //-------------------------------------------------------------------------
 /**
  * @param Name
+ * @throws PDExceptionFunc  
 */
 public void setName(String Name) throws PDExceptionFunc
 {
@@ -548,6 +549,7 @@ if (PDLog.isDebug())
 /**
  *
  * @param Ident
+ * @throws PDExceptionFunc  
  */
 protected void AsignKey(String Ident) throws PDExceptionFunc
 {

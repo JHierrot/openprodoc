@@ -274,7 +274,13 @@ protected String getKey()
 return(getName());
 }
 //-------------------------------------------------------------------------
-public PDMimeType SolveExt(String Ext) throws PDException
+    /**
+     *
+     * @param Ext
+     * @return
+     * @throws PDException
+     */
+    public PDMimeType SolveExt(String Ext) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDMimeType.SolveExt>:"+Ext);

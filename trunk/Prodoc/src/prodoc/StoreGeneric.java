@@ -344,7 +344,12 @@ return(false);
 }
 //-----------------------------------------------------------------
 
-protected String ObtainName(String FilePath)
+    /**
+     *
+     * @param FilePath
+     * @return
+     */
+    protected String ObtainName(String FilePath)
 {
 if (IsRef())
     {
@@ -356,7 +361,12 @@ if (IsRef())
 throw new UnsupportedOperationException("Unsupported");
 }
 //-----------------------------------------------------------------
-protected String GetUrl(String DocName)
+    /**
+     *
+     * @param DocName
+     * @return
+     */
+    protected String GetUrl(String DocName)
 {
 throw new UnsupportedOperationException("Unsupported");    
 }        

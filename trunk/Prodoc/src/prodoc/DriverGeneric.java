@@ -255,7 +255,17 @@ abstract protected void UpdateRecord(String TableName, Record NewFields, Conditi
 abstract protected void AddIntegrity(String TableName1, String Field1, String TableName2, String Field2) throws PDException;
 //--------------------------------------------------------------------------
 
-abstract protected void AddIntegrity(String TableName1, String Field11, String Field12, String TableName2, String Field21, String Field22) throws PDException;
+    /**
+     *
+     * @param TableName1
+     * @param Field11
+     * @param Field12
+     * @param TableName2
+     * @param Field21
+     * @param Field22
+     * @throws PDException
+     */
+    abstract protected void AddIntegrity(String TableName1, String Field11, String Field12, String TableName2, String Field21, String Field22) throws PDException;
 
 /**
  * 

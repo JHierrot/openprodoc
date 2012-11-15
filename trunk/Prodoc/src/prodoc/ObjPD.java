@@ -55,18 +55,51 @@ private String PDAutor;
  */
 static private Record CommonStruct=null;
 
-static public final String XML_ListAttr="ListAttr";
-static public final String XML_OPDObject="OPDObject";
-static public final String XML_OPDList="OPDList";
-static public final String XML_GroupMembers="GroupMembers";
-static public final String XML_UserMembers="UserMembers";
-static public final String XML_Group="Group";
-static public final String XML_User="User";
-static public final String XML_Metadata="Metadata";
-static public final String XML_Field="Field";
-static public final String XML_Attr="Attr";
+    /**
+     *
+     */
+    static public final String XML_ListAttr="ListAttr";
+    /**
+     *
+     */
+    static public final String XML_OPDObject="OPDObject";
+    /**
+     *
+     */
+    static public final String XML_OPDList="OPDList";
+    /**
+     *
+     */
+    static public final String XML_GroupMembers="GroupMembers";
+    /**
+     *
+     */
+    static public final String XML_UserMembers="UserMembers";
+    /**
+     *
+     */
+    static public final String XML_Group="Group";
+    /**
+     *
+     */
+    static public final String XML_User="User";
+    /**
+     *
+     */
+    static public final String XML_Metadata="Metadata";
+    /**
+     *
+     */
+    static public final String XML_Field="Field";
+    /**
+     *
+     */
+    static public final String XML_Attr="Attr";
 
-static public final String AllowedChars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789";
+    /**
+     *
+     */
+    static public final String AllowedChars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789";
 
 //-------------------------------------------------------------------------
 /**
@@ -312,10 +345,15 @@ return(r);
 /**
  *
  * @param Ident
+ * @throws PDException  
  */
 abstract protected void AsignKey(String Ident) throws PDException;
 //-------------------------------------------------------------------------
-abstract protected String getKey();
+    /**
+     *
+     * @return
+     */
+    abstract protected String getKey();
 //-------------------------------------------------------------------------
 
 /**
@@ -536,12 +574,20 @@ XML.append("</"+XML_OPDObject+">\n");
 return XML.toString();
 }
 //-------------------------------------------------------------------------
-public String StartXML()
+    /**
+     *
+     * @return
+     */
+    public String StartXML()
 {
 return("<"+XML_OPDList+">\n");    
 }
 //-------------------------------------------------------------------------
-public String EndXML()
+    /**
+     *
+     * @return
+     */
+    public String EndXML()
 {
 return("</"+XML_OPDList+">\n");    
 }
@@ -576,7 +622,13 @@ for (int i = 0; i < childNodes.getLength(); i++)
 insert();
 }    
 //-------------------------------------------------------------------------
-public static String CheckName(String Name) throws PDExceptionFunc
+    /**
+     *
+     * @param Name
+     * @return
+     * @throws PDExceptionFunc
+     */
+    public static String CheckName(String Name) throws PDExceptionFunc
 {
 // pendiente de resolver compatibilidad con clear()
 if (Name==null)    

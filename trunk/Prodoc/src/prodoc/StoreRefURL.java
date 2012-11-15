@@ -146,7 +146,12 @@ protected boolean IsURL()
 return(true);
 }
 //-----------------------------------------------------------------
-@Override
+    /**
+     *
+     * @param DocName
+     * @return
+     */
+    @Override
 protected String GetUrl(String DocName)
 {
 String S=getServer()+DocName;  

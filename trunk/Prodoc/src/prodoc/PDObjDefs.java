@@ -118,7 +118,10 @@ public static final String fATTRUNIQUE="UniqueKey";
  *
  */
 public static final String fATTRMODALLOW="ModifAllowed";
-public static final String fATTRMULTIVALUED="MultiValued";
+    /**
+     *
+     */
+    public static final String fATTRMULTIVALUED="MultiValued";
 
 /**
  *
@@ -236,7 +239,8 @@ return Name;
 }
 //-------------------------------------------------------------------------
 /**
-* @param Name the Name to set
+ * @param Name the Name to set
+ * @throws PDExceptionFunc  
 */
 public void setName(String Name) throws PDExceptionFunc
 {
@@ -434,6 +438,7 @@ return(ListCond);
 /**
  *
  * @param Ident
+ * @throws PDExceptionFunc  
  */
 protected void AsignKey(String Ident) throws PDExceptionFunc
 {
@@ -566,7 +571,11 @@ if (PDLog.isDebug())
     PDLog.Debug("PDObjDefs.delAtribute>:"+AttrName);
 }
 //-------------------------------------------------------------------------
-public void DelAtributes() throws PDException
+    /**
+     *
+     * @throws PDException
+     */
+    public void DelAtributes() throws PDException
 {
 Conditions CondDelAttrs=new Conditions();
 Condition CondDelAttr=new Condition(fTYPNAME, Condition.cEQUAL, getName());

@@ -41,11 +41,23 @@ public static final String fPDID="PDId";
  *
  */
 public static final String fNAME="Name";
-public static final String fDESCRIP="Description";
-public static final String fUSE="USE";
-public static final String fPDID2="PDId2";
+    /**
+     *
+     */
+    public static final String fDESCRIP="Description";
+    /**
+     *
+     */
+    public static final String fUSE="USE";
+    /**
+     *
+     */
+    public static final String fPDID2="PDId2";
 
-public static final String ROOTTERM="OPD_Thesaurus";
+    /**
+     *
+     */
+    public static final String ROOTTERM="OPD_Thesaurus";
 /**
  *
  */
@@ -119,6 +131,7 @@ return PDId;
 //-------------------------------------------------------------------------
 /**
  * @param pPDId
+ * @throws PDExceptionFunc  
  */
 public void setPDId(String pPDId) throws PDExceptionFunc
 {
@@ -341,6 +354,7 @@ return(ListCond);
 /**
  *
  * @param Ident
+ * @throws PDExceptionFunc  
  */
 protected void AsignKey(String Ident) throws PDExceptionFunc
 {
@@ -749,7 +763,6 @@ return((String)A.getValue());
  * indicated values of fields. Only return the Thesaurs alowed for the user, as defined by ACL.
  * @param ThesaurType Type of Thesaur to search. Can return Thesaurs of subtype.
  * @param AttrConds Conditions over the fields ofthe ThesaurType
- * @param SubTypes if true, returns results of the indicated type AND susbtipes
  * @param SubThesaurs if true seach in actual Thesaur AND subThesaurs, if false, serach in ALL the structure
  * @param IdActFold Thesaur to start the search. if null, start in the root level
  * @param Ord
@@ -841,7 +854,15 @@ RFull.delRecord(getRecord());
 return(RFull.toXML()+"</ListAttr>");    
 }
 //-------------------------------------------------------------------------
-public PDThesaur ImportXMLNode(Node OPDObject, String ParentThesaurId, boolean MaintainId) throws PDException
+    /**
+     *
+     * @param OPDObject
+     * @param ParentThesaurId
+     * @param MaintainId
+     * @return
+     * @throws PDException
+     */
+    public PDThesaur ImportXMLNode(Node OPDObject, String ParentThesaurId, boolean MaintainId) throws PDException
 {
 NodeList childNodes = OPDObject.getChildNodes();
 PDThesaur NewFold=null;
@@ -927,7 +948,7 @@ this.Use = Use;
 /**
  * List all the Thesaurs
  * @return hashset containing all the thesaurs Id
- * @throws PDExceptionon any error
+ * @throws PDException 
  */
 public HashSet ListThes() throws PDException
 {
@@ -955,7 +976,13 @@ return(Result);
 /* Obtain a list of the Codes of related terms
  * 
  */
-public HashSet getListRT(String TermId) throws PDException
+    /**
+     *
+     * @param TermId
+     * @return
+     * @throws PDException
+     */
+    public HashSet getListRT(String TermId) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.getListRT>:"+PDId);
@@ -989,7 +1016,13 @@ return(ListRT);
 /* Obtain a CURSOR of the <b>Records<b> of related terms
  * 
  */
-public Cursor ListRT(String TermId) throws PDException
+    /**
+     *
+     * @param TermId
+     * @return
+     * @throws PDException
+     */
+    public Cursor ListRT(String TermId) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.ListRT>:"+PDId);
@@ -1006,7 +1039,13 @@ return(CursorId);
 /* Obtain a list of the Codes of Used For terms
  * 
  */
-public HashSet getListUF(String TermId) throws PDException
+    /**
+     *
+     * @param TermId
+     * @return
+     * @throws PDException
+     */
+    public HashSet getListUF(String TermId) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.getListUF>:"+PDId);
@@ -1031,7 +1070,13 @@ return(ListUF);
 /* Obtain a CURSOR  of the records of Used For terms
  * 
  */
-public Cursor ListUF(String TermId) throws PDException
+    /**
+     *
+     * @param TermId
+     * @return
+     * @throws PDException
+     */
+    public Cursor ListUF(String TermId) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.ListUF>:"+PDId);
