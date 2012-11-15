@@ -45,7 +45,7 @@ public static final String fDESCRIP="Description";
 public static final String fUSE="USE";
 public static final String fPDID2="PDId2";
 
-public static final String ROOTTERM="ROOT";
+public static final String ROOTTERM="OPD_Thesaurus";
 /**
  *
  */
@@ -402,6 +402,7 @@ if (PDLog.isDebug())
 //-------------------------------------------------------------------------
 protected void VerifyAllowedIns() throws PDException
 {
+if (!getDrv().getUser().getName().equals("Install"))  
 if (!getDrv().getUser().getRol().isAllowCreateThesaur() )
    PDExceptionFunc.GenPDException("Thesaur_creation_not_allowed_to_user", null);
 }
@@ -438,9 +439,13 @@ this.ParentId = pParentId;
  *
  * @throws PDException
  */
-public void CreateRootThesaur() throws PDException
+protected void CreateRootThesaur() throws PDException
 {
 IsRootThesaur=true;
+setPDId(ROOTTERM);
+setName(ROOTTERM);
+setDescription(ROOTTERM);
+setParentId(ROOTTERM);
 insert();
 IsRootThesaur=false;
 }
