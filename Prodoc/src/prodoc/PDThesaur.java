@@ -854,15 +854,15 @@ RFull.delRecord(getRecord());
 return(RFull.toXML()+"</ListAttr>");    
 }
 //-------------------------------------------------------------------------
-    /**
-     *
-     * @param OPDObject
-     * @param ParentThesaurId
-     * @param MaintainId
-     * @return
-     * @throws PDException
-     */
-    public PDThesaur ImportXMLNode(Node OPDObject, String ParentThesaurId, boolean MaintainId) throws PDException
+/**
+ *
+ * @param OPDObject
+ * @param ParentThesaurId
+ * @param MaintainId
+ * @return
+ * @throws PDException
+ */
+public PDThesaur ImportXMLNode(Node OPDObject, String ParentThesaurId, boolean MaintainId) throws PDException
 {
 NodeList childNodes = OPDObject.getChildNodes();
 PDThesaur NewFold=null;
@@ -973,19 +973,16 @@ if (PDLog.isDebug())
 return(Result);
 }
 //---------------------------------------------------------------------
-/* Obtain a list of the Codes of related terms
+/** Obtain a list of the Codes of related terms
  * 
+ * @param TermId
+ * @return
+ * @throws PDException
  */
-    /**
-     *
-     * @param TermId
-     * @return
-     * @throws PDException
-     */
-    public HashSet getListRT(String TermId) throws PDException
+public HashSet getListRT(String TermId) throws PDException
 {
 if (PDLog.isDebug())
-    PDLog.Debug("PDThesaurs.getListRT>:"+PDId);
+    PDLog.Debug("PDThesaurs.getListRT>:"+TermId);
 HashSet ListRT=new HashSet();
 Condition CondRT1=new Condition(fPDID, Condition.cEQUAL, TermId);
 Condition CondRT2=new Condition(fPDID2, Condition.cEQUAL, TermId);
@@ -993,7 +990,7 @@ Conditions Conds=new Conditions();
 Conds.setOperatorAnd(false);
 Conds.addCondition(CondRT1);
 Conds.addCondition(CondRT2);
-Query Q=new Query(getTableNameThesRT(), getRecordStructPDThesaurRT(), Conds, fNAME);
+Query Q=new Query(getTableNameThesRT(), getRecordStructPDThesaurRT(), Conds, null);
 Cursor CursorId=getDrv().OpenCursor(Q);
 Record Res=getDrv().NextRec(CursorId);
 while (Res!=null)
@@ -1009,46 +1006,52 @@ while (Res!=null)
     }
 getDrv().CloseCursor(CursorId);
 if (PDLog.isDebug())
-    PDLog.Debug("PDThesaurs.getListRT<:"+PDId);
+    PDLog.Debug("PDThesaurs.getListRT<:"+TermId);
 return(ListRT);
 }
 //---------------------------------------------------------------------
-/* Obtain a CURSOR of the <b>Records<b> of related terms
+/** Obtain a CURSOR of the <b>Records<b> of narrow terms
  * 
+ * @param TermId
+ * @return
+ * @throws PDException
  */
-    /**
-     *
-     * @param TermId
-     * @return
-     * @throws PDException
-     */
-    public Cursor ListRT(String TermId) throws PDException
+public Cursor ListNT(String TermId) throws PDException
 {
 if (PDLog.isDebug())
-    PDLog.Debug("PDThesaurs.ListRT>:"+PDId);
-Condition CondRT1=new Condition(fPDID, getListRT(TermId));
-Conditions Conds=new Conditions();
-Conds.addCondition(CondRT1);
-Query Q=new Query(getTableName(), getRecordStructPDThesaur(), Conds, fNAME);
-Cursor CursorId=getDrv().OpenCursor(Q);
+    PDLog.Debug("PDThesaurs.ListRT>:"+TermId);
+Cursor CursorId=LoadList(getListDirectDescendList(TermId));
 if (PDLog.isDebug())
-    PDLog.Debug("PDThesaurs.ListRT<:"+PDId);
+    PDLog.Debug("PDThesaurs.ListRT<:"+TermId);
 return(CursorId);
 }
 //---------------------------------------------------------------------
-/* Obtain a list of the Codes of Used For terms
+/** Obtain a CURSOR of the <b>Records<b> of related terms
  * 
+ * @param TermId
+ * @return
+ * @throws PDException
  */
-    /**
-     *
-     * @param TermId
-     * @return
-     * @throws PDException
-     */
-    public HashSet getListUF(String TermId) throws PDException
+public Cursor ListRT(String TermId) throws PDException
 {
 if (PDLog.isDebug())
-    PDLog.Debug("PDThesaurs.getListUF>:"+PDId);
+    PDLog.Debug("PDThesaurs.ListRT>:"+TermId);
+Cursor CursorId=LoadList(getListRT(TermId));
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.ListRT<:"+TermId);
+return(CursorId);
+}
+//---------------------------------------------------------------------
+/** Obtain a list of the Codes of Used For terms
+ * 
+ * @param TermId
+ * @return
+ * @throws PDException
+ */
+public HashSet getListUF(String TermId) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.getListUF>:"+TermId);
 HashSet ListUF=new HashSet();
 Conditions Conds=new Conditions();
 Conds.addCondition(new Condition(fUSE, Condition.cEQUAL, TermId));
@@ -1063,20 +1066,17 @@ while (Res!=null)
     }
 getDrv().CloseCursor(CursorId);
 if (PDLog.isDebug())
-    PDLog.Debug("PDThesaurs.getListUF<:"+PDId);
+    PDLog.Debug("PDThesaurs.getListUF<:"+TermId);
 return(ListUF);
 }
 //---------------------------------------------------------------------
 /* Obtain a CURSOR  of the records of Used For terms
  * 
+ * @param TermId
+ * @return
+ * @throws PDException
  */
-    /**
-     *
-     * @param TermId
-     * @return
-     * @throws PDException
-     */
-    public Cursor ListUF(String TermId) throws PDException
+public Cursor ListUF(String TermId) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.ListUF>:"+PDId);
@@ -1089,4 +1089,25 @@ if (PDLog.isDebug())
 return(CursorId);
 }
 //---------------------------------------------------------------------
+/**
+ * Creates a Cursot containing all the termm with the PDID included in IdList
+ * @param IdList List of Ids
+ * @return Cursor Opened
+ * @throws PDException in an error
+ */
+public Cursor LoadList(HashSet IdList) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.LoadList<:"+IdList);
+Condition CondRT1=new Condition(fPDID, IdList);
+Conditions Conds=new Conditions();
+Conds.addCondition(CondRT1);
+Query Q=new Query(getTableName(), getRecordStructPDThesaur(), Conds, fNAME);
+Cursor CursorId=getDrv().OpenCursor(Q);
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.LoadList<");
+return(CursorId);   
+}
+//---------------------------------------------------------------------
+
 }
