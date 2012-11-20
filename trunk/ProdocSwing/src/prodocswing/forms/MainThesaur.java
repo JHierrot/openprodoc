@@ -55,7 +55,7 @@ private PDThesaur TermAct=null;
 private PDTableModel NTMembers;
 private PDTableModel RTMembers;
 private PDTableModel UFMembers;
-
+private Vector VEmpty=new Vector();
 //static private String List=PDThesaur.fACL+"/"+PDThesaur.fFOLDTYPE+"/"+PDThesaur.fPARENTID+"/"+PDThesaur.fPDID+"/"+PDThesaur.fTITLE+"/"+PDThesaur.fPDAUTOR+"/"+PDThesaur.fPDDATE;
 
 //--------------------------------------------------------
@@ -816,8 +816,8 @@ return PDIcon.getImage();
 //---------------------------------------------------------------------
 private void UpdateTabs(String ActTermId) throws PDException
 {
-RefreshRT(ActTermId);
 RefreshNT(ActTermId);
+RefreshRT(ActTermId);
 RefreshUF(ActTermId);
 }
 //----------------------------------------------------------------
@@ -826,7 +826,11 @@ private void RefreshRT(String TermId) throws PDException
 RTMembers = new PDTableModel();
 RTMembers.setDrv(MainWin.getSession());
 RTMembers.setListFields(PDThesaur.getRecordStructPDThesaur());
-RTMembers.setVector(new Vector(TermAct.getListDirectDescendList(TermId)));
+HashSet Mem=TermAct.getListRT(TermId);
+if (!Mem.isEmpty())
+    RTMembers.setCursor(TermAct.LoadList(Mem));
+else    
+    RTMembers.setVector(VEmpty);
 RTTable.setModel(RTMembers);
 RTTable.getColumnModel().getColumn(0).setMaxWidth(0);
 RTTable.getColumnModel().removeColumn(RTTable.getColumnModel().getColumn(0));
@@ -837,7 +841,11 @@ private void RefreshNT(String TermId) throws PDException
 NTMembers = new PDTableModel();
 NTMembers.setDrv(MainWin.getSession());
 NTMembers.setListFields(PDThesaur.getRecordStructPDThesaur());
-NTMembers.setCursor(TermAct.ListRT(TermId));
+HashSet Mem=TermAct.getListDirectDescendList(TermId);
+if (!Mem.isEmpty())
+    NTMembers.setCursor(TermAct.LoadList(Mem));
+else    
+    NTMembers.setVector(VEmpty);
 NTTable.setModel(NTMembers);
 NTTable.getColumnModel().getColumn(0).setMaxWidth(0);
 NTTable.getColumnModel().removeColumn(NTTable.getColumnModel().getColumn(0));
@@ -848,7 +856,11 @@ private void RefreshUF(String TermId) throws PDException
 UFMembers = new PDTableModel();
 UFMembers.setDrv(MainWin.getSession());
 UFMembers.setListFields(PDThesaur.getRecordStructPDThesaur());
-UFMembers.setCursor(TermAct.ListUF(TermId));
+HashSet Mem=TermAct.getListUF(TermId);
+if (!Mem.isEmpty())
+    UFMembers.setCursor(TermAct.LoadList(Mem));
+else    
+    UFMembers.setVector(VEmpty);
 UFTable.setModel(UFMembers);
 UFTable.getColumnModel().getColumn(0).setMaxWidth(0);
 UFTable.getColumnModel().removeColumn(UFTable.getColumnModel().getColumn(0));
