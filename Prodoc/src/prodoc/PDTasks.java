@@ -30,35 +30,16 @@ public class PDTasks extends ObjPD
 /**
  *
  */
+public static final String fPDID="PDId";
 public static final String fNAME="Name";
-/**
- *
- */
-public static final String fDESCRIPTION="Description";
-/**
- *
- */
-public static final String fSTARTDATE="StartDate";
-/**
- *
- */
-public static final String fNEXTDATE="NextDate";
-    /**
-     *
-     */
-    public static final String fADDMONTH="AddMonth";
-    /**
-     *
-     */
-    public static final String fADDDAYS="AddDays";
-    /**
-     *
-     */
-    public static final String fADDHOURS="AddHours";
-    /**
-     *
-     */
-    public static final String fADDMINS="AddMins";
+public static final String fCATEGORY="Category";
+public static final String fTYPE="TaskType";
+public static final String fOBJTYPE="ObjType";
+public static final String fFILTER="ObjFilter";
+public static final String fPARAM="TaskParam";
+public static final String fTASKUSER="TaskUser";
+public static final String fACTIVE="Active";
+public static final String fTRANSACT="Transact";
 
 /**
  *
@@ -68,21 +49,26 @@ static private Record TaksTypeStruct=null;
  *
  */
 private String Name;
+private String PDId;
+private String Category;
 /**
- *
+ * Type of task:
+ * -1: Externa
+ * 0: Expurgo
+ * 1: Copia
+ * 
  */
-private String Description;
+private int Type=0;
 /**
- *
+ * Parameters to be interpreteddepending of task
  */
-private Date StartDate;
-private Date NextDate;
-private int AddMonth=0;
-private int AddDays=0;
-private int AddHours=0;
-private int AddMins=0;
+private String ObjType="";
+private String ObjFilter="";
+private String Param="";
+private String TaskUser="";
+private boolean Transact=false;
 
-static private ObjectsCache TaksObjectsCache = null;
+static private ObjectsCache TaksDefObjectsCache = null;
 
 //-------------------------------------------------------------------------
 /**
@@ -104,12 +90,14 @@ super(Drv);
 public void assignValues(Record Rec) throws PDException
 {
 setName((String) Rec.getAttr(fNAME).getValue());
-setDescription((String) Rec.getAttr(fDESCRIPTION).getValue());
-setStartDate((Date) Rec.getAttr(fSTARTDATE).getValue());
-setNextDate((Date) Rec.getAttr(fNEXTDATE).getValue());
-setAddDays(AddDays);
-setAddHours(AddHours);
-setAddMins(AddMins);
+setCategory((String) Rec.getAttr(fCATEGORY).getValue());
+setPDId((String) Rec.getAttr(fPDID).getValue());
+setType((Integer) Rec.getAttr(fTYPE).getValue());
+setObjType((String) Rec.getAttr(fOBJTYPE).getValue());
+setObjFilter((String) Rec.getAttr(fFILTER).getValue());
+setParam((String) Rec.getAttr(fPARAM).getValue());
+setTaskUser((String) Rec.getAttr(fTASKUSER).getValue());
+setTransact((Boolean) Rec.getAttr(fTRANSACT).getValue());
 assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
@@ -123,9 +111,14 @@ synchronized public Record getRecord() throws PDException
 {
 Record Rec=getRecordStruct();
 Rec.getAttr(fNAME).setValue(getName());
-Rec.getAttr(fDESCRIPTION).setValue(getDescription());
-Rec.getAttr(fSTARTDATE).setValue(getStartDate());
-Rec.getAttr(fNEXTDATE).setValue(getNextDate());
+Rec.getAttr(fCATEGORY).setValue(getCategory());
+Rec.getAttr(fPDID).setValue(getPDId());
+Rec.getAttr(fTYPE).setValue(getType());
+Rec.getAttr(fPARAM).setValue(getParam());
+Rec.getAttr(fTASKUSER).setValue(getTaskUser());
+Rec.getAttr(fOBJTYPE).setValue(getObjType());
+Rec.getAttr(fFILTER).setValue(getObjFilter());
+Rec.getAttr(fTRANSACT).setValue(isTransact());
 getCommonValues(Rec);
 return(Rec);
 }
@@ -153,6 +146,7 @@ return(ListCond);
 *
 * @return
 */
+@Override
 public String getTabName()
 {
 return (getTableName());
@@ -164,13 +158,14 @@ return (getTableName());
 */
 static public String getTableName()
 {
-return ("PD_TASKS");
+return ("PD_TASKSDEF");
 }
 //-------------------------------------------------------------------------
 /**
 *
 * @return
 */
+@Override
 Record getRecordStruct() throws PDException
 {
 if (TaksTypeStruct==null)
@@ -187,10 +182,16 @@ static synchronized private Record CreateRecordStruct() throws PDException
 if (TaksTypeStruct==null)
     {
     Record R=new Record();
-    R.addAttr( new Attribute(fNAME, "Name", "Name of tasks", Attribute.tSTRING, true, null, 32, true, false, false));
-    R.addAttr( new Attribute(fDESCRIPTION, "Description", "Description", Attribute.tSTRING, true, null, 128, false, false, true));
-    R.addAttr( new Attribute(fSTARTDATE, "StartDate", "Start Date of execution", Attribute.tDATE, true, null, 128, false, false, true));
-    R.addAttr( new Attribute(fNEXTDATE, "NextDate", "Next Date of execution", Attribute.tDATE, true, null, 128, false, false, true));
+    R.addAttr( new Attribute(fPDID, fPDID, "PDId", Attribute.tSTRING, true, null, 32, true, false, false));
+    R.addAttr( new Attribute(fNAME, fNAME, "Name of tasks", Attribute.tSTRING, true, null, 32, false, false, false));
+    R.addAttr( new Attribute(fCATEGORY, fCATEGORY, "Group of tasks", Attribute.tSTRING, false, null, 32, false, false, true));
+    R.addAttr( new Attribute(fTYPE, fTYPE, "Type of Task", Attribute.tINTEGER, true, null, 128, false, false, true));
+    R.addAttr( new Attribute(fOBJTYPE, fOBJTYPE, "Target Object(s)", Attribute.tSTRING, true, null, 128, false, false, true));
+    R.addAttr( new Attribute(fFILTER, fFILTER, "Filter of Object(s)", Attribute.tSTRING, false, null, 254, false, false, true));
+    R.addAttr( new Attribute(fPARAM, fPARAM, "Params of Task", Attribute.tSTRING, false, null, 256, false, false, true));
+    R.addAttr( new Attribute(fTASKUSER, fTASKUSER, "User for executing Task", Attribute.tSTRING, true, null, 32, false, false, true));
+    R.addAttr( new Attribute(fACTIVE, fACTIVE, "Indicates if the definition is active", Attribute.tBOOLEAN, true, null, 32, false, false, true));
+    R.addAttr( new Attribute(fTRANSACT, fTRANSACT, "Indicates if the task id transactional", Attribute.tBOOLEAN, true, null, 32, false, false, true));
     R.addRecord(getRecordStructCommon());
     return(R);
     }
@@ -208,7 +209,6 @@ protected void AsignKey(String Ident) throws PDExceptionFunc
 setName(Ident);
 }
 //-------------------------------------------------------------------------
-
 /**
 * @return the Name
 */
@@ -216,7 +216,7 @@ public String getName()
 {
 return Name;
 }
-
+//-----------------------------------------------------------------------
 /**
  * @param Name the Name to set
  * @throws PDExceptionFunc  
@@ -224,53 +224,6 @@ return Name;
 public void setName(String Name) throws PDExceptionFunc
 {
 this.Name = CheckName(Name);
-}
-
-/**
-* @return the Description
-*/
-public String getDescription()
-{
-return Description;
-}
-
-/**
-* @param Description the Description to set
-*/
-public void setDescription(String Description)
-{
-this.Description = Description;
-}
-
-/**
-* @return the StartDate
-*/
-public Date getStartDate()
-{
-return StartDate;
-}
-
-/**
-* @param StartDate the StartDate to set
-*/
-public void setStartDate(Date StartDate)
-{
-this.StartDate = StartDate;
-}
-/**
-* @return the NextDate
-*/
-public Date getNextDate()
-{
-return NextDate;
-}
-
-/**
- * @param NextDate 
- */
-public void setNextDate(Date NextDate)
-{
-this.NextDate = NextDate;
 }
 //-----------------------------------------------------------------------
 protected void VerifyAllowedIns() throws PDException
@@ -307,9 +260,9 @@ return(fNAME);
  */
 protected ObjectsCache getObjCache()
 {
-if (TaksObjectsCache==null)
-    TaksObjectsCache=new ObjectsCache("Tasks");
-return(TaksObjectsCache);    
+if (TaksDefObjectsCache==null)
+    TaksDefObjectsCache=new ObjectsCache("TasksDef");
+return(TaksDefObjectsCache);    
 }
 //-------------------------------------------------------------------------
 /**
@@ -322,69 +275,185 @@ protected String getKey()
 return(getName());
 }
 //-------------------------------------------------------------------------
-
-    /**
-     * @return the AddMonth
-     */
-    public int getAddMonth()
+/**
+ * @return the Type
+ */
+public int getType()
+{
+return Type;
+}
+//-------------------------------------------------------------------------
+/**
+ * @param Type the Type to set
+ */
+public void setType(int Type)
+{
+this.Type = Type;
+}
+//-------------------------------------------------------------------------
+/**
+ * @return the Param
+ */
+public String getParam()
+{
+return Param;
+}
+//-------------------------------------------------------------------------
+/**
+ * @param Param the Param to set
+ */
+public void setParam(String Param)
+{
+this.Param = Param;
+}
+//-------------------------------------------------------------------------
+/**
+ * @return the TaskUser
+ */
+public String getTaskUser()
+{
+return TaskUser;
+}
+//-------------------------------------------------------------------------
+/**
+ * @param TaskUser the TaskUser to set
+ */
+public void setTaskUser(String TaskUser)
+{
+this.TaskUser = TaskUser;
+}
+//-------------------------------------------------------------------------
+/**
+ * Start the main tasks that supervises and starts all the others.
+ * @param Drv
+ */
+public static void StartTaskGenerator(DriverGeneric Drv)
+{
+    
+}
+//-------------------------------------------------------------------------
+/**
+ * Stops the main tasks that supervises and starts all the others.
+ */
+public static void StopTaskGenerator()
+{
+    
+}
+//-------------------------------------------------------------------------
+/**
+* The install method is generic because for instantiate a object, the class
+* need to access to the tables for definition
+ * @param Drv
+ * @throws PDException
+*/
+static protected void InstallMulti(DriverGeneric Drv) throws PDException
+{
+Drv.AddIntegrity(getTableName(), fTASKUSER, PDUser.getTableName(),PDUser.fNAME);
+}
+//-------------------------------------------------------------------------
+/**
+ * @return the ObjType
+ */
+public String getObjType()
+{
+return ObjType;
+}
+//-------------------------------------------------------------------------
+/**
+ * @param ObjType the ObjType to set
+ */
+public void setObjType(String ObjType)
+{
+this.ObjType = ObjType;
+}
+//-------------------------------------------------------------------------
+/**
+ * @return the ObjFilter
+ */
+public String getObjFilter()
+{
+return ObjFilter;
+}
+//-------------------------------------------------------------------------
+/**
+ * @param ObjFilter the ObjFilter to set
+ */
+public void setObjFilter(String ObjFilter)
+{
+this.ObjFilter = ObjFilter;
+}
+//-------------------------------------------------------------------------
+/**
+ * @return the Transact
+ */
+public boolean isTransact()
+{
+return Transact;
+}
+//-------------------------------------------------------------------------
+/**
+ * @param Transact the Transact to set
+ */
+public void setTransact(boolean Transact)
+{
+this.Transact = Transact;
+}
+//-------------------------------------------------------------------------
+/**
+ * @return the Category
+ */
+public String getCategory()
+{
+return Category;
+}
+//-------------------------------------------------------------------------
+/**
+ * @param Category the Category to set
+ */
+public void setCategory(String Category)
+{
+this.Category = Category;
+}
+//-------------------------------------------------------------------------
+/**
+ * @return the PDId
+ */
+public String getPDId()
+{
+return PDId;
+}
+//-------------------------------------------------------------------------
+/**
+ * @param PDId the PDId to set
+ */
+public void setPDId(String PDId)
+{
+this.PDId = PDId;
+}
+//-------------------------------------------------------------------------
+/*
+ * Executes the Tasks connecting trought the Driver of the object
+ */
+protected void Execute()
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasks.Execute>:"+PDId);  
+try {
+Cursor ObjList=PDTasksDef.GenerateList(this);   
+Record Res=getDrv().NextRec(ObjList);
+while (Res!=null)
     {
-        return AddMonth;
+    String PD1=(String) Res.getAttr(fPDID).getValue();
+//    ListUF.add(PD1);
+    Res=getDrv().NextRec(ObjList);
     }
-
-    /**
-     * @param AddMonth the AddMonth to set
-     */
-    public void setAddMonth(int AddMonth)
+getDrv().CloseCursor(ObjList);
+} catch(Exception ex)
     {
-        this.AddMonth = AddMonth;
+    
     }
-
-    /**
-     * @return the AddDays
-     */
-    public int getAddDays()
-    {
-        return AddDays;
-    }
-
-    /**
-     * @param AddDays the AddDays to set
-     */
-    public void setAddDays(int AddDays)
-    {
-        this.AddDays = AddDays;
-    }
-
-    /**
-     * @return the AddHours
-     */
-    public int getAddHours()
-    {
-        return AddHours;
-    }
-
-    /**
-     * @param AddHours the AddHours to set
-     */
-    public void setAddHours(int AddHours)
-    {
-        this.AddHours = AddHours;
-    }
-
-    /**
-     * @return the AddMins
-     */
-    public int getAddMins()
-    {
-        return AddMins;
-    }
-
-    /**
-     * @param AddMins the AddMins to set
-     */
-    public void setAddMins(int AddMins)
-    {
-        this.AddMins = AddMins;
-    }
-
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasks.Execute<:"+PDId);    
+}
+//-------------------------------------------------------------------------
 }
