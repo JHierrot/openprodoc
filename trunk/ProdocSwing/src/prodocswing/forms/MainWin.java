@@ -1386,7 +1386,7 @@ Message(DrvTT("Imported")+" "+ExpFolds+" "+DrvTT("Folders")+" / "+ExpDocs +" "+D
 
     private void ThesaurActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ThesaurActionPerformed
     {//GEN-HEADEREND:event_ThesaurActionPerformed
-MainThesaur MTW=new MainThesaur(Session);
+MainThes MTW=new MainThes(this, false, Session);
 MTW.setLocationRelativeTo(null);
 MTW.setVisible(true);
     }//GEN-LAST:event_ThesaurActionPerformed
