@@ -50,6 +50,7 @@ private Vector VEmpty=new Vector();
 private HashSet MemUF;
 private HashSet MemNT;
 private HashSet MemRT;
+PDThesaur UseTerm=null;
 
 /** Creates new form MantUsers
  * @param parent 
@@ -373,8 +374,8 @@ Attribute Attr=Term.getAttr(PDThesaur.fNAME);
 Attr.setValue(TermNameTextField.getText());
 Attr=Term.getAttr(PDThesaur.fDESCRIP);
 Attr.setValue(TermDescripTextField.getText());
-Attr=Term.getAttr(PDThesaur.fDESCRIP);
-Attr.setValue(TermDescripTextField.getText());
+Attr=Term.getAttr(PDThesaur.fUSE);
+Attr.setValue(UseTerm.getPDId());
 if (MainWin.getSession().isInTransaction())
         MainWin.getSession().CerrarTrans();
 } catch (PDException ex)
@@ -401,10 +402,16 @@ if (RTTable.getSelectedRow()==-1)
 
     private void AddButtonU1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_AddButtonU1ActionPerformed
     {//GEN-HEADEREND:event_AddButtonU1ActionPerformed
-MainThes MTW=new MainThes( (JDialog)this, false, MainWin.getSession());
+MainThes MTW=new MainThes( (JDialog)this, false, MainWin.getSession(), "Tes1");
 MTW.setLocationRelativeTo(null);
 MTW.ModeSelect();
+MTW.setModal(true);
 MTW.setVisible(true);
+UseTerm=MTW.getTermAct();
+if (UseTerm==null)
+    USETextField.setText("");
+else
+    USETextField.setText(UseTerm.getName());
     }//GEN-LAST:event_AddButtonU1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -528,9 +535,12 @@ if (Attr.getValue() != null)
 TermDescripTextField.setToolTipText(Attr.getDescription());
 Attr=Term.getAttr(PDThesaur.fUSE);
 USELabel.setText(MainWin.TT(Attr.getUserName()));
+UseTerm=new PDThesaur(MainWin.getSession());
 if (Attr.getValue() != null)
     {
-    USETextField.setText((String) Attr.getValue());
+
+    UseTerm.Load((String) Attr.getValue());
+    USETextField.setText(UseTerm.getName());
     }
 USETextField.setToolTipText(Attr.getDescription());
 
