@@ -612,13 +612,13 @@ ExpandFold(TreeFold);
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_exitMenuItemActionPerformed
     {//GEN-HEADEREND:event_exitMenuItemActionPerformed
-        setTermAct(null);
+setTermAct(null);
 this.dispose();
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void ThesaurHelpActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ThesaurHelpActionPerformed
     {//GEN-HEADEREND:event_ThesaurHelpActionPerformed
-        MainWin.Execute("doc"+MainWin.OSSep()+MainWin.getLang()+MainWin.OSSep()+"ThesaurWin.html");
+MainWin.Execute("doc"+MainWin.OSSep()+MainWin.getLang()+MainWin.OSSep()+"ThesaurWin.html");
     }//GEN-LAST:event_ThesaurHelpActionPerformed
 
     private void TreeTermTreeExpanded(javax.swing.event.TreeExpansionEvent evt)//GEN-FIRST:event_TreeTermTreeExpanded
@@ -633,12 +633,20 @@ ExpandFold(TreeFold);
     {//GEN-HEADEREND:event_TreeTermValueChanged
 try {
 DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) evt.getPath().getLastPathComponent();
-            setTermAct(((TreeTerm) TreeFold.getUserObject()).getTerm());
+setTermAct(((TreeTerm) TreeFold.getUserObject()).getTerm());
 ActTermId=  getTermAct().getPDId();
 this.NameTextField.setText(getTermAct().getName());
 this.DescripTextField.setText(getTermAct().getDescription());
-this.UseTextField.setText(getTermAct().getUse());
-UpdateTabs(ActTermId);
+if (getTermAct().getUse()!=null && getTermAct().getUse().length()!=0)
+    {
+    PDThesaur UseTerm=new PDThesaur(Session);
+    UseTerm.Load(getTermAct().getUse());
+    UseTextField.setText(UseTerm.getName());
+    }
+else
+    UseTextField.setText("");    
+if (ShowDetails.isSelected() && ShowChild.isSelected())
+    UpdateTabs(ActTermId);
 } catch (Exception ex)
     {
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
@@ -654,6 +662,12 @@ this.dispose();
     {//GEN-HEADEREND:event_ShowDetailsActionPerformed
 if (ShowDetails.isSelected())
     {
+    try {
+        UpdateTabs(ActTermId);
+    } catch (PDException ex)
+        {
+        MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+        }
     ShowDetails(true);
     }
 else
@@ -665,6 +679,12 @@ else
     private void ShowChildActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ShowChildActionPerformed
 if (ShowChild.isSelected())
     {
+    try {
+        UpdateTabs(ActTermId);
+    } catch (PDException ex)
+        {
+        MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+        }
     DetailsPanel.setDividerLocation(DividerLocRel);
     Relations.setVisible(true);    
     }
@@ -679,13 +699,13 @@ else
 if (ActTermId.equals(getIdLocalRootTerm()))
     return;
 try {
-MantTerm MTF = new MantTerm(this, true);
+MantTerm MTF = new MantTerm(this, true, IdLocalRootTerm.equals(PDThesaur.ROOTTERM)?getTermAct().getIDThesaur():IdLocalRootTerm);
 MTF.setLocationRelativeTo(null);
 MTF.setRecord(PDThesaur.getRecordStructPDThesaur());
 MTF.AddMode();
 MTF.setVisible(true);
 if (MTF.isCancel())
-return;
+    return;
 PDThesaur Term=new PDThesaur(Session);
 Term.assignValues(MTF.getRecord());
 Term.setParentId(ActTermId);
@@ -709,22 +729,22 @@ PDThesaur Term= ((TreeTerm) TreeFold.getUserObject()).getTerm();
 Term.Load(Term.getPDId());
 if (Term.getParentId().equals(PDThesaur.ROOTTERM))
     return; // trying to edit a Thesaur as term
-MantTerm MTF = new MantTerm(this, true);
+MantTerm MTF = new MantTerm(this, true, IdLocalRootTerm.equals(PDThesaur.ROOTTERM)?getTermAct().getIDThesaur():IdLocalRootTerm);
 MTF.setLocationRelativeTo(null);
 MTF.EditMode();
 MTF.setRecord(Term.getRecord());
 MTF.setVisible(true);
 if (MTF.isCancel())
-return;
+    return;
 Term.assignValues(MTF.getRecord());
 Term.update();
 TreePath ParentFold = (TreePath) TreeTerm.getSelectionPath().getParentPath();
 ExpandFold((DefaultMutableTreeNode)ParentFold.getLastPathComponent());
 TreeTerm.setSelectionPath(selectionPath);
 } catch (Exception ex)
-{
+    {
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
-}
+    }
     }//GEN-LAST:event_ModTermActionPerformed
 
     private void DelTermActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DelTermActionPerformed
@@ -737,21 +757,21 @@ PDThesaur Term= ((TreeTerm) TreeFold.getUserObject()).getTerm();
 Term.Load(Term.getPDId());
 if (Term.getParentId().equals(PDThesaur.ROOTTERM))
     return; // trying to edit a Thesaur as term
-MantTerm MTF = new MantTerm(this, true);
+MantTerm MTF = new MantTerm(this, true, IdLocalRootTerm.equals(PDThesaur.ROOTTERM)?getTermAct().getIDThesaur():IdLocalRootTerm);
 MTF.setLocationRelativeTo(null);
 MTF.DelMode();
 MTF.setRecord(Term.getRecord());
 MTF.setVisible(true);
 if (MTF.isCancel())
-return;
+    return;
 Term.delete();
 TreePath ParentFold = (TreePath) TreeTerm.getSelectionPath().getParentPath();
 ExpandFold((DefaultMutableTreeNode)ParentFold.getLastPathComponent());
 TreeTerm.setSelectionPath(selectionPath);
 } catch (Exception ex)
-{
+    {
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
-}
+    }
     }//GEN-LAST:event_DelTermActionPerformed
 
     private void SearchTerm1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchTerm1ActionPerformed
@@ -760,7 +780,7 @@ TreeTerm.setSelectionPath(selectionPath);
 
     private void formWindowClosing(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowClosing
     {//GEN-HEADEREND:event_formWindowClosing
-        setTermAct(null);
+setTermAct(null);
     }//GEN-LAST:event_formWindowClosing
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

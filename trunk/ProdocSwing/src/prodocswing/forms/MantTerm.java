@@ -50,17 +50,20 @@ private Vector VEmpty=new Vector();
 private HashSet MemUF;
 private HashSet MemNT;
 private HashSet MemRT;
+private Vector AttrMemRT=new Vector();
 PDThesaur UseTerm=null;
+String LocalThes=PDThesaur.ROOTTERM;
 
 /** Creates new form MantUsers
  * @param parent 
  * @param modal
  */
-public MantTerm(JDialog parent, boolean modal)
+public MantTerm(JDialog parent, boolean modal, String Thes)
 {
 super(parent, modal);
 try {
 initComponents();
+LocalThes=Thes;
 TermAct = new PDThesaur(MainWin.getSession());
 NTTable.setAutoCreateRowSorter(true);
 NTTable.setAutoCreateColumnsFromModel(true);
@@ -165,7 +168,7 @@ UFTable.setAutoCreateColumnsFromModel(true);
                 .addContainerGap()
                 .addComponent(ToolBarNT, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -223,7 +226,7 @@ UFTable.setAutoCreateColumnsFromModel(true);
                 .addContainerGap()
                 .addComponent(ToolBarRT, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -253,7 +256,7 @@ UFTable.setAutoCreateColumnsFromModel(true);
                 .addContainerGap()
                 .addComponent(ToolBarUF, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -338,17 +341,16 @@ UFTable.setAutoCreateColumnsFromModel(true);
                     .addComponent(TermDescripLabel))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(USELabel)
-                            .addComponent(USETextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(42, 42, 42)
-                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(ButtonCancel)
-                            .addComponent(ButtonAcept)))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(USELabel)
+                        .addComponent(USETextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(AddButtonU1, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ButtonCancel)
+                    .addComponent(ButtonAcept))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -377,7 +379,7 @@ Attr.setValue(TermDescripTextField.getText());
 Attr=Term.getAttr(PDThesaur.fUSE);
 Attr.setValue(UseTerm.getPDId());
 if (MainWin.getSession().isInTransaction())
-        MainWin.getSession().CerrarTrans();
+    MainWin.getSession().CerrarTrans();
 } catch (PDException ex)
     {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
@@ -392,17 +394,38 @@ Cancel=true;
 
     private void AddButtonRTActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_AddButtonRTActionPerformed
     {//GEN-HEADEREND:event_AddButtonRTActionPerformed
+try {
+AddTermRT ART=new AddTermRT(this, true, LocalThes);
+ART.AddMode();
+ART.setLocationRelativeTo(null);
+ART.setVisible(true);
+if (ART.isCancel())
+    return;
+PDThesaur RTerm=ART.getUseTerm();
+if (RTerm==null)
+    return;
+MemRT.add(RTerm.getPDId());
+RefreshRT();
+} catch (PDException ex)
+    {
+    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
     }//GEN-LAST:event_AddButtonRTActionPerformed
 
     private void DelButtonRTActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_DelButtonRTActionPerformed
     {//GEN-HEADEREND:event_DelButtonRTActionPerformed
-if (RTTable.getSelectedRow()==-1)
+AddTermRT ART=new AddTermRT(this, true, LocalThes);
+ART.DelMode();
+ART.setLocationRelativeTo(null);
+ART.setVisible(true);
+if (ART.isCancel())
     return;
+// todo
     }//GEN-LAST:event_DelButtonRTActionPerformed
 
     private void AddButtonU1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_AddButtonU1ActionPerformed
     {//GEN-HEADEREND:event_AddButtonU1ActionPerformed
-MainThes MTW=new MainThes( (JDialog)this, false, MainWin.getSession(), "Tes1");
+MainThes MTW=new MainThes( (JDialog)this, false, MainWin.getSession(), LocalThes);
 MTW.setLocationRelativeTo(null);
 MTW.ModeSelect();
 MTW.setModal(true);
@@ -509,9 +532,9 @@ if (Id != null)
     MemUF=TermAct.getListUF(Id);
     MemNT=TermAct.getListDirectDescendList(Id);
     MemRT=TermAct.getListRT(Id);
-    RefreshNT(Id);
-    RefreshRT(Id);
-    RefreshUF(Id);
+    RefreshNT();
+    RefreshRT();
+    RefreshUF();
     }
 else
     {
@@ -538,33 +561,32 @@ USELabel.setText(MainWin.TT(Attr.getUserName()));
 UseTerm=new PDThesaur(MainWin.getSession());
 if (Attr.getValue() != null)
     {
-
     UseTerm.Load((String) Attr.getValue());
     USETextField.setText(UseTerm.getName());
     }
 USETextField.setToolTipText(Attr.getDescription());
-
 } catch (PDException ex)
     {
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
 }
 //----------------------------------------------------------------
-private void RefreshRT(String TermId) throws PDException
+private void RefreshRT() throws PDException
 {
 RTMembers = new PDTableModel();
 RTMembers.setDrv(MainWin.getSession());
 RTMembers.setListFields(PDThesaur.getRecordStructPDThesaur());
 if (!MemRT.isEmpty())
-    RTMembers.setCursor(TermAct.LoadList(MemRT));
-else    
-    RTMembers.setVector(VEmpty);
+    {
+    AttrMemRT=TermAct.getList(MemRT);
+    }
+RTMembers.setVector(AttrMemRT);
 RTTable.setModel(RTMembers);
 RTTable.getColumnModel().getColumn(0).setMaxWidth(0);
 RTTable.getColumnModel().removeColumn(RTTable.getColumnModel().getColumn(0));
 }
 //----------------------------------------------------------------
-private void RefreshNT(String TermId) throws PDException
+private void RefreshNT() throws PDException
 {
 NTMembers = new PDTableModel();
 NTMembers.setDrv(MainWin.getSession());
@@ -578,7 +600,7 @@ NTTable.getColumnModel().getColumn(0).setMaxWidth(0);
 NTTable.getColumnModel().removeColumn(NTTable.getColumnModel().getColumn(0));
 }
 //----------------------------------------------------------------
-private void RefreshUF(String TermId) throws PDException
+private void RefreshUF() throws PDException
 {
 UFMembers = new PDTableModel();
 UFMembers.setDrv(MainWin.getSession());
