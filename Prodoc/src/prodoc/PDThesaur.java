@@ -41,23 +41,23 @@ public static final String fPDID="PDId";
  *
  */
 public static final String fNAME="Name";
-    /**
-     *
-     */
-    public static final String fDESCRIP="Description";
-    /**
-     *
-     */
-    public static final String fUSE="USE";
-    /**
-     *
-     */
-    public static final String fPDID2="PDId2";
+/**
+ *
+ */
+public static final String fDESCRIP="Description";
+/**
+ *
+ */
+public static final String fUSE="USE";
+/**
+ *
+ */
+public static final String fPDID2="PDId2";
 
-    /**
-     *
-     */
-    public static final String ROOTTERM="OPD_Thesaurus";
+/**
+ *
+ */
+public static final String ROOTTERM="OPD_Thesaurus";
 /**
  *
  */
@@ -1109,5 +1109,38 @@ if (PDLog.isDebug())
 return(CursorId);   
 }
 //---------------------------------------------------------------------
-
+/**
+ * Creates a Cursot containing all the termm with the PDID included in IdList
+ * @param IdList List of Ids
+ * @return Cursor Opened
+ * @throws PDException in an error
+ */
+public Vector getList(HashSet IdList) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.getList<:"+IdList);
+PDThesaur Term=new PDThesaur(getDrv());
+Vector ListAtr=new Vector(IdList.size());
+for (Iterator it = IdList.iterator(); it.hasNext();)
+    {
+    Term.Load((String)it.next());
+    ListAtr.add(Term.getRecord());    
+    }
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.getList<");
+return(ListAtr);   
+}
+//---------------------------------------------------------------------
+/* For the current PDID of a term, return the Id of the container thesaur.
+ * 
+ */
+public String getIDThesaur() throws PDException
+{
+if (getParentId().equals(PDThesaur.ROOTTERM))
+    return(getPDId());
+PDThesaur Term=new PDThesaur(getDrv());
+Term.Load(getParentId());
+return(Term.getIDThesaur());
+}
+//---------------------------------------------------------------------
 }
