@@ -404,7 +404,7 @@ if (ART.isCancel())
 PDThesaur RTerm=ART.getUseTerm();
 if (RTerm==null)
     return;
-MemRT.add(RTerm.getPDId());
+getMemRT().add(RTerm.getPDId());
 RefreshRT();
 } catch (PDException ex)
     {
@@ -414,13 +414,22 @@ RefreshRT();
 
     private void DelButtonRTActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_DelButtonRTActionPerformed
     {//GEN-HEADEREND:event_DelButtonRTActionPerformed
+if (RTTable.getSelectedRow()==-1)
+    return;
+try {
 AddTermRT ART=new AddTermRT(this, true, LocalThes);
+ART.setRecord(RTMembers.getElement(RTTable.convertRowIndexToModel(RTTable.getSelectedRow())));
 ART.DelMode();
 ART.setLocationRelativeTo(null);
 ART.setVisible(true);
 if (ART.isCancel())
     return;
-// todo
+getMemRT().remove(ART.getUseTerm().getPDId());
+RefreshRT();
+} catch (PDException ex)
+    {
+    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
     }//GEN-LAST:event_DelButtonRTActionPerformed
 
     private void AddButtonU1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_AddButtonU1ActionPerformed
@@ -471,8 +480,8 @@ else
 public void AddMode()
 {
 LabelOperation.setText(MainWin.TT("Add_Term"));
-AddButtonRT.setEnabled(false);
-DelButtonRT.setEnabled(false);
+//AddButtonRT.setEnabled(false);
+//DelButtonRT.setEnabled(false);
 }
 //----------------------------------------------------------------
 /**
@@ -494,11 +503,6 @@ public void EditMode()
 {
 LabelOperation.setText(MainWin.TT("Update_Term"));
 TermNameTextField.setEditable(false);
-try {
-MainWin.getSession().IniciarTrans();
-} catch (PDException ex)
-    {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
-    }
 }
 //----------------------------------------------------------------
 /**
@@ -576,10 +580,7 @@ private void RefreshRT() throws PDException
 RTMembers = new PDTableModel();
 RTMembers.setDrv(MainWin.getSession());
 RTMembers.setListFields(PDThesaur.getRecordStructPDThesaur());
-if (!MemRT.isEmpty())
-    {
-    AttrMemRT=TermAct.getList(MemRT);
-    }
+AttrMemRT=TermAct.getList(getMemRT());
 RTMembers.setVector(AttrMemRT);
 RTTable.setModel(RTMembers);
 RTTable.getColumnModel().getColumn(0).setMaxWidth(0);
@@ -622,4 +623,12 @@ public boolean isCancel()
 return Cancel;
 }
 //----------------------------------------------------------------
+
+    /**
+     * @return the MemRT
+     */
+    public HashSet getMemRT()
+    {
+        return MemRT;
+    }
 }

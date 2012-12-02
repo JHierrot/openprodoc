@@ -590,7 +590,7 @@ if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.delete<:"+getPDId());
 }
 //-------------------------------------------------------------------------
-private void DeleteTermRT() throws PDException
+public void DeleteTermRT() throws PDException
 {   
 if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.DeleteTermRT:"+getPDId());     
@@ -1141,6 +1141,43 @@ if (getParentId().equals(PDThesaur.ROOTTERM))
 PDThesaur Term=new PDThesaur(getDrv());
 Term.Load(getParentId());
 return(Term.getIDThesaur());
+}
+//---------------------------------------------------------------------
+public void AddRT(HashSet memRT) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.AddRT:"+getPDId()+">"+memRT);
+boolean InTransLocal;
+VerifyAllowedIns();
+InTransLocal=!getDrv().isInTransaction();
+if (InTransLocal)
+    getDrv().IniciarTrans();
+Record R=getRecordStructPDThesaurRT();
+try {
+for (Iterator it = memRT.iterator(); it.hasNext();)
+    {
+    String IdRT=(String)it.next();
+    if (IdRT.compareTo(getPDId())>0)
+        {
+        R.getAttr(fPDID).setValue(IdRT);
+        R.getAttr(fPDID2).setValue(getPDId());
+        }
+    else if (IdRT.compareTo(getPDId())<0) // necesary to ifnore Id2==Id
+        {
+        R.getAttr(fPDID).setValue(getPDId());        
+        R.getAttr(fPDID2).setValue(IdRT);
+        }
+    getDrv().InsertRecord(getTableNameThesRT(), R);
+    }
+} catch (PDException Ex)
+    {
+    getDrv().AnularTrans();
+    PDException.GenPDException("Error_creating_Thesaur",Ex.getLocalizedMessage());
+    }
+if (InTransLocal)
+    getDrv().CerrarTrans();
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.AddRT:"+getPDId()+"<");
 }
 //---------------------------------------------------------------------
 }

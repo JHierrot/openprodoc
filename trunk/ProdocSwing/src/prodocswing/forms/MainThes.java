@@ -709,14 +709,17 @@ if (MTF.isCancel())
 PDThesaur Term=new PDThesaur(Session);
 Term.assignValues(MTF.getRecord());
 Term.setParentId(ActTermId);
+Session.IniciarTrans();
 Term.insert();
+Term.AddRT(MTF.getMemRT());
+Session.CerrarTrans();
 TreePath ActualPath = TreeTerm.getSelectionPath();
 ExpandFold((DefaultMutableTreeNode)ActualPath.getLastPathComponent());
 TreeTerm.setSelectionPath(ActualPath);
 } catch (Exception ex)
-{
+    {
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
-}
+    }
     }//GEN-LAST:event_AddTermActionPerformed
 
     private void ModTermActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ModTermActionPerformed
@@ -737,7 +740,11 @@ MTF.setVisible(true);
 if (MTF.isCancel())
     return;
 Term.assignValues(MTF.getRecord());
+Session.IniciarTrans();
 Term.update();
+Term.DeleteTermRT();
+Term.AddRT(MTF.getMemRT());
+Session.CerrarTrans();
 TreePath ParentFold = (TreePath) TreeTerm.getSelectionPath().getParentPath();
 ExpandFold((DefaultMutableTreeNode)ParentFold.getLastPathComponent());
 TreeTerm.setSelectionPath(selectionPath);
