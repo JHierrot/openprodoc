@@ -37,9 +37,9 @@ import prodoc.Record;
  */
 public class AddTermRT extends javax.swing.JDialog
 {
-private Record Perm;
+private Record RTTermRecord;
 private boolean Cancel;
-private PDThesaur UseTerm=null;
+private PDThesaur RTUseTerm=null;
 String LocalThes=PDThesaur.ROOTTERM;
 
 /** Creates new form MantUsers
@@ -120,7 +120,7 @@ initComponents();
         });
 
         RTLabe.setFont(MainWin.getFontDialog());
-        RTLabe.setText("jLabel1");
+        RTLabe.setText(MainWin.TT("Related_Term"));
 
         RTTextField.setEditable(false);
         RTTextField.setFont(MainWin.getFontDialog());
@@ -195,7 +195,7 @@ MTW.setLocationRelativeTo(null);
 MTW.ModeSelect();
 MTW.setModal(true);
 MTW.setVisible(true);
-UseTerm=MTW.getTermAct();
+RTUseTerm=MTW.getTermAct();
 if (getUseTerm()==null)
     RTTextField.setText("");
 else
@@ -229,22 +229,15 @@ this.AddButtonU1.setEnabled(false);
 }
 //----------------------------------------------------------------
 /**
-* @return the User
+ * @param pRTTerm
 */
-public Record getRecord()
-{
-return Perm;
-}
-//----------------------------------------------------------------
-/**
- * @param pPerm
-*/
-public void setRecord(Record pPerm)
+public void setRecord(Record pRTTerm)
 {
 try {    
-Perm = pPerm;
-Attribute Attr;
-UseTerm=new PDThesaur(MainWin.getSession());
+RTTermRecord = pRTTerm;
+RTUseTerm=new PDThesaur(MainWin.getSession());
+RTUseTerm.assignValues(RTTermRecord);
+this.RTTextField.setText(RTUseTerm.getName());
 } catch (PDException ex)
     {
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
@@ -259,12 +252,12 @@ public boolean isCancel()
 return Cancel;
 }
 //----------------------------------------------------------------
-
-    /**
-     * @return the UseTerm
-     */
-    public PDThesaur getUseTerm()
-    {
-        return UseTerm;
-    }
+/**
+ * @return the UseTerm
+ */
+public PDThesaur getUseTerm()
+{
+return RTUseTerm;
+}
+//----------------------------------------------------------------
 }
