@@ -782,7 +782,10 @@ TreeTerm.setSelectionPath(selectionPath);
     }//GEN-LAST:event_DelTermActionPerformed
 
     private void SearchTerm1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchTerm1ActionPerformed
-        // TODO add your handling code here:
+SearchThes SF = new SearchThes(this, true);
+SF.setLocationRelativeTo(null);
+SF.setFoldAct(ActTermId);
+SF.setVisible(true);     
     }//GEN-LAST:event_SearchTerm1ActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowClosing

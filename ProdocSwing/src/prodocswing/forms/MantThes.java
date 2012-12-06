@@ -187,13 +187,21 @@ this.dispose();
     {//GEN-HEADEREND:event_ButtonAceptActionPerformed
 try {
 Attribute Attr=Term.getAttr(PDThesaur.fPDID);
+try {
+Integer.parseInt(IdTextField.getText()); // to ensure aThesaur ID usable in attr definition
+} catch (Exception e)
+    {
+    PDException.GenPDException( MainWin.TT("Thesaur_code_must_be_numeric"), null);
+    }
 Attr.setValue(IdTextField.getText());
 Attr=Term.getAttr(PDThesaur.fNAME);
 Attr.setValue(TermNameTextField.getText());
 Attr=Term.getAttr(PDThesaur.fDESCRIP);
 Attr.setValue(TermDescripTextField.getText());
 } catch (PDException ex)
-    {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    {
+    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    return;
     }
 Cancel=false;
 this.dispose();
