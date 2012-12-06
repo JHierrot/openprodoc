@@ -760,7 +760,7 @@ return((String)A.getValue());
 //-------------------------------------------------------------------------
 /**
  * Search for Thesaurs returning a cursor with the results of Thesaurs with the
- * indicated values of fields. Only return the Thesaurs alowed for the user, as defined by ACL.
+ * indicated values of fields. 
  * @param ThesaurType Type of Thesaur to search. Can return Thesaurs of subtype.
  * @param AttrConds Conditions over the fields ofthe ThesaurType
  * @param SubThesaurs if true seach in actual Thesaur AND subThesaurs, if false, serach in ALL the structure
@@ -769,15 +769,15 @@ return((String)A.getValue());
  * @return a Cursor with the results of the query to use o send to NextTerm()
  * @throws PDException when occurs any problem
  */
-public Cursor Search(String ThesaurType, Conditions AttrConds, boolean SubThesaurs, String IdActFold, Vector Ord) throws PDException
+public Cursor Search(Conditions AttrConds, boolean SubThesaurs, String IdActFold, Vector Ord) throws PDException
 {
 if (PDLog.isDebug())
-    PDLog.Debug("PDThesaurs.Search >:"+ThesaurType+" {"+AttrConds+"} SubThesaurs:"+SubThesaurs+" IdActFold:"+IdActFold+" Ord:"+Ord);
+    PDLog.Debug("PDThesaurs.Search >: {"+AttrConds+"} SubThesaurs:"+SubThesaurs+" IdActFold:"+IdActFold+" Ord:"+Ord);
 PDThesaur F=new PDThesaur(getDrv());
 Conditions ComposedConds=new Conditions();
 ComposedConds.addCondition(AttrConds);
 Vector TypList=new Vector();
-TypList.add(ThesaurType);
+TypList.add(getTabName());
 if (SubThesaurs)
     {
     if (!(IdActFold==null) )
