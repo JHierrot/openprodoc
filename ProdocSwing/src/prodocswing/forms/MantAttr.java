@@ -28,7 +28,9 @@ package prodocswing.forms;
 import prodoc.Attribute;
 import prodoc.PDException;
 import prodoc.PDObjDefs;
+import prodoc.PDThesaur;
 import prodoc.Record;
+import prodocswing.ThesField;
 
 /**
  *
@@ -38,7 +40,9 @@ public class MantAttr extends javax.swing.JDialog
 {
 private Record AttrEdit;
 private boolean Cancel;
-
+private ThesField ThesSelect=null;
+private PDThesaur SelectedThes=null;
+private String MaxLongLabel;
 
 /** Creates new form MantUsers
  * @param parent
@@ -58,7 +62,8 @@ initComponents();
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         LabelOperation = new javax.swing.JLabel();
         AttrNameLabel = new javax.swing.JLabel();
@@ -85,8 +90,10 @@ initComponents();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(MainWin.TT("Attributes_Maintenance"));
         setResizable(false);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
+        addWindowListener(new java.awt.event.WindowAdapter()
+        {
+            public void windowClosing(java.awt.event.WindowEvent evt)
+            {
                 formWindowClosing(evt);
             }
         });
@@ -114,8 +121,15 @@ initComponents();
         TypeLabel.setText(MainWin.TT("attribute_type"));
 
         TypeComboBox.setFont(MainWin.getFontDialog());
-        TypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Integer", "Float", "String", "Date", "Boolean", "TimeStamp" }));
+        TypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Integer", "Float", "String", "Date", "Boolean", "TimeStamp", "Thesaur" }));
         TypeComboBox.setSelectedIndex(2);
+        TypeComboBox.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                TypeComboBoxActionPerformed(evt);
+            }
+        });
 
         LongLabel.setFont(MainWin.getFontDialog());
         LongLabel.setText(MainWin.TT("Length"));
@@ -141,24 +155,30 @@ initComponents();
         MultivalLabel.setText(MainWin.TT("Modifiable"));
 
         MultivalCheckBox.setFont(MainWin.getFontDialog());
-        MultivalCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        MultivalCheckBox.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 MultivalCheckBoxActionPerformed(evt);
             }
         });
 
         ButtonAcept.setFont(MainWin.getFontDialog());
         ButtonAcept.setText(MainWin.TT("Ok"));
-        ButtonAcept.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ButtonAcept.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ButtonAceptActionPerformed(evt);
             }
         });
 
         ButtonCancel.setFont(MainWin.getFontDialog());
         ButtonCancel.setText(MainWin.TT("Cancel"));
-        ButtonCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ButtonCancel.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ButtonCancelActionPerformed(evt);
             }
         });
@@ -167,30 +187,6 @@ initComponents();
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(ReqLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(DescripTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
-                            .addComponent(TypeComboBox, 0, 367, Short.MAX_VALUE)
-                            .addComponent(LongMaxTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
-                            .addComponent(ReqCheckBox)
-                            .addComponent(AttrNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
-                            .addComponent(AttrUserNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE))
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(ButtonAcept)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(ButtonCancel)
-                        .addGap(12, 12, 12))))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, 513, Short.MAX_VALUE)
-                .addContainerGap(86, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -202,16 +198,32 @@ initComponents();
                             .addComponent(AttrUserNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(AttrNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
+                        .addGap(369, 369, 369)
+                        .addComponent(ButtonAcept)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(ButtonCancel)))
+                .addGap(12, 12, 12))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ReqLabel)
                             .addComponent(AllowModLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(UniqueLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(MultivalLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(LongMaxTextField)
+                            .addComponent(MultivalCheckBox)
+                            .addComponent(DescripTextField)
+                            .addComponent(TypeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(AttrNameTextField)
+                            .addComponent(ReqCheckBox)
+                            .addComponent(AttrUserNameTextField)
                             .addComponent(AllowModCheckBox)
-                            .addComponent(UniqueCheckBox)
-                            .addComponent(MultivalCheckBox))))
+                            .addComponent(UniqueCheckBox))))
                 .addContainerGap())
         );
 
@@ -294,8 +306,14 @@ Attr = AttrEdit.getAttr(PDObjDefs.fATTRUSERNAME);
 Attr.setValue(AttrUserNameTextField.getText());
 Attr = AttrEdit.getAttr(PDObjDefs.fATTRDESCRIPTION);
 Attr.setValue(DescripTextField.getText());
+Attr = AttrEdit.getAttr(PDObjDefs.fATTRTYPE);
+Attr.setValue(TypeComboBox.getSelectedIndex());
 Attr = AttrEdit.getAttr(PDObjDefs.fATTRLONG);
-if (LongMaxTextField.getText().length() > 0 && ((String) TypeComboBox.getSelectedItem()).equalsIgnoreCase("String"))
+if (TypeComboBox.getSelectedIndex()==Attribute.tTHES)
+    {
+    Attr.setValue(new Integer(ThesSelect.getUseTerm().getPDId()));
+    }
+else if (LongMaxTextField.getText().length() > 0 && ((String) TypeComboBox.getSelectedItem()).equalsIgnoreCase("String"))
     {
     Attr.setValue(new Integer(LongMaxTextField.getText()));
     }
@@ -303,8 +321,10 @@ else
     {
     Attr.setValue(new Integer(0));
     }
-Attr = AttrEdit.getAttr(PDObjDefs.fATTRTYPE);
-Attr.setValue(TypeComboBox.getSelectedIndex());
+if (TypeComboBox.getSelectedIndex()==Attribute.tTHES && (Integer)Attr.getValue()==0)
+    throw new PDException("Thesaur_unselected");
+if (TypeComboBox.getSelectedIndex()==Attribute.tSTRING && (Integer)Attr.getValue()==0)
+    throw new PDException("String_long_unselected");    
 Attr = AttrEdit.getAttr(PDObjDefs.fATTRREQUIRED);
 Boolean Act;
 if (ReqCheckBox.isSelected())
@@ -382,8 +402,6 @@ Cancel=true;
 if (MultivalCheckBox.isSelected())
     {
     TypeComboBox.setSelectedItem("String");    
-//    PrimKeyCheckBox.setSelected(true);
-//    PrimKeyCheckBox.setEnabled(false);
     UniqueCheckBox.setSelected(false);
     UniqueCheckBox.setEnabled(false);
     ReqCheckBox.setSelected(false);
@@ -391,11 +409,16 @@ if (MultivalCheckBox.isSelected())
     }
 else
     {
-//    PrimKeyCheckBox.setEnabled(true);
     UniqueCheckBox.setEnabled(true);
     ReqCheckBox.setEnabled(true);
     }
     }//GEN-LAST:event_MultivalCheckBoxActionPerformed
+
+    private void TypeComboBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_TypeComboBoxActionPerformed
+    {//GEN-HEADEREND:event_TypeComboBoxActionPerformed
+int SelType=TypeComboBox.getSelectedIndex();
+AdaptForm2Type(SelType);
+    }//GEN-LAST:event_TypeComboBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox AllowModCheckBox;
@@ -466,8 +489,9 @@ return AttrEdit;
 /**
  * @param pAttrEdit
 */
-public void setRecord(Record pAttrEdit)
+public void setRecord(Record pAttrEdit) throws PDException
 {
+int SelType=2;    
 AttrEdit = pAttrEdit;
 Attribute Attr;
 Attr=AttrEdit.getAttr(PDObjDefs.fATTRNAME); //-----------------------------
@@ -489,14 +513,24 @@ Attr=AttrEdit.getAttr(PDObjDefs.fATTRTYPE); //-------------------
 TypeLabel.setText(MainWin.DrvTT(Attr.getUserName()));
 if (Attr.getValue()!=null)
     {
-    int Level=(Integer)Attr.getValue();
-    TypeComboBox.setSelectedIndex(Level);
+    SelType=(Integer)Attr.getValue();
+    TypeComboBox.setSelectedIndex(SelType);
     }
 TypeComboBox.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
 Attr=AttrEdit.getAttr(PDObjDefs.fATTRLONG); //-----------------------------
 LongLabel.setText(MainWin.DrvTT(Attr.getUserName()));
+MaxLongLabel=LongLabel.getText();
 if (Attr.getValue() != null)
-    LongMaxTextField.setText(((Integer) Attr.getValue()).toString());
+    {
+    if (SelType==Attribute.tTHES)   
+        {
+        SelectedThes=new PDThesaur(MainWin.getSession());
+        SelectedThes.Load(((Integer) Attr.getValue()).toString());
+        getThesSelect().setUseTerm(SelectedThes);
+        }
+    else
+        LongMaxTextField.setText(((Integer) Attr.getValue()).toString());
+    }
 LongMaxTextField.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
 Attr=AttrEdit.getAttr(PDObjDefs.fATTRREQUIRED); //-----------------------------
 ReqLabel.setText(MainWin.DrvTT(Attr.getUserName()));
@@ -541,6 +575,7 @@ else
     UniqueCheckBox.setEnabled(true);
     ReqCheckBox.setEnabled(true);
     }
+AdaptForm2Type(SelType);
 }
 //----------------------------------------------------------------
 /**
@@ -551,4 +586,60 @@ public boolean isCancel()
 return Cancel;
 }
 //----------------------------------------------------------------
+/**
+ * @return the ThesSelect
+ */
+public ThesField getThesSelect()
+{
+if (ThesSelect==null)    
+    {
+    try {    
+        if (SelectedThes==null)
+            SelectedThes=new PDThesaur(MainWin.getSession());
+        ThesSelect=new ThesField(this, SelectedThes, PDThesaur.ROOTTERM);
+        ThesSelect.setBounds(LongMaxTextField.getBounds());
+        this.add(ThesSelect);
+    } catch (PDException ex)
+        {
+        MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+        }
+    }
+return(ThesSelect);
+}
+//----------------------------------------------------------------
+
+private void AdaptForm2Type(int SelType)
+{
+if (SelType==Attribute.tSTRING)
+    {
+    MultivalCheckBox.setEnabled(true);
+    LongMaxTextField.setEnabled(true);
+    LongMaxTextField.setVisible(true);
+    LongLabel.setVisible(true);
+    LongLabel.setText(MaxLongLabel);
+    getThesSelect().setVisible(false);
+    }
+else
+    {
+    LongMaxTextField.setText("");
+    LongMaxTextField.setEnabled(false);   
+    LongMaxTextField.setVisible(false);
+    getThesSelect().setVisible(false);
+    if (SelType==Attribute.tTHES)
+        {
+        MultivalCheckBox.setEnabled(false);
+        MultivalCheckBox.setSelected(false);
+        getThesSelect().setVisible(true);
+        LongLabel.setVisible(true);
+        LongLabel.setText("Thesaur");
+        }
+    else
+        {
+        LongLabel.setVisible(false);
+        MultivalCheckBox.setEnabled(true);
+        }
+    }
+}
+//----------------------------------------------------------------
+
 }

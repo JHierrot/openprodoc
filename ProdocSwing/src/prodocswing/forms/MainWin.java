@@ -1796,7 +1796,14 @@ while (Attr!=null)
     if (!List.contains(Attr.getName()))
         {
         Html.append("<br><b>").append(DrvTT(Attr.getUserName())).append("= </b>");
-        Html.append(Attr.Export());
+        if (Attr.getType()==Attribute.tTHES)
+            {
+            PDThesaur Term=new PDThesaur(Session);
+            Term.Load((String)Attr.getValue());
+            Html.append(Term.getName());
+            }
+        else
+            Html.append(Attr.Export());
         }
     Attr=Rec.nextAttr();
     }

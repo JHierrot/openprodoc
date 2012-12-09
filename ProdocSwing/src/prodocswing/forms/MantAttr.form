@@ -30,36 +30,6 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="ReqLabel" linkSize="1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="DescripTextField" alignment="0" pref="367" max="32767" attributes="1"/>
-                          <Component id="TypeComboBox" alignment="0" pref="367" max="32767" attributes="1"/>
-                          <Component id="LongMaxTextField" alignment="0" pref="367" max="32767" attributes="1"/>
-                          <Component id="ReqCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="AttrNameTextField" alignment="0" pref="367" max="32767" attributes="1"/>
-                          <Component id="AttrUserNameTextField" alignment="0" pref="367" max="32767" attributes="1"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      <Component id="ButtonAcept" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="ButtonCancel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="12" pref="12" max="12" attributes="0"/>
-                  </Group>
-              </Group>
-          </Group>
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="12" pref="12" max="-2" attributes="0"/>
-              <Component id="LabelOperation" pref="513" max="32767" attributes="0"/>
-              <EmptySpace pref="86" max="32767" attributes="0"/>
-          </Group>
-          <Group type="102" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <EmptySpace min="12" pref="12" max="-2" attributes="0"/>
@@ -72,21 +42,40 @@
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="369" pref="369" max="-2" attributes="0"/>
+                      <Component id="ButtonAcept" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="ButtonCancel" min="-2" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="LabelOperation" max="32767" attributes="0"/>
+                  <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="ReqLabel" linkSize="1" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="AllowModLabel" linkSize="1" alignment="0" min="-2" pref="208" max="-2" attributes="0"/>
                           <Component id="UniqueLabel" linkSize="1" alignment="0" min="-2" pref="89" max="-2" attributes="0"/>
                           <Component id="MultivalLabel" alignment="0" min="-2" pref="208" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="LongMaxTextField" alignment="0" max="32767" attributes="1"/>
+                          <Component id="MultivalCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="DescripTextField" alignment="0" max="32767" attributes="1"/>
+                          <Component id="TypeComboBox" alignment="0" max="32767" attributes="1"/>
+                          <Component id="AttrNameTextField" alignment="0" max="32767" attributes="1"/>
+                          <Component id="ReqCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="AttrUserNameTextField" alignment="0" max="32767" attributes="1"/>
                           <Component id="AllowModCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="UniqueCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="MultivalCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -243,17 +232,21 @@
           <Connection code="MainWin.getFontDialog()" type="code"/>
         </Property>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="6">
+          <StringArray count="7">
             <StringItem index="0" value="Integer"/>
             <StringItem index="1" value="Float"/>
             <StringItem index="2" value="String"/>
             <StringItem index="3" value="Date"/>
             <StringItem index="4" value="Boolean"/>
             <StringItem index="5" value="TimeStamp"/>
+            <StringItem index="6" value="Thesaur"/>
           </StringArray>
         </Property>
         <Property name="selectedIndex" type="int" value="2"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TypeComboBoxActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="LongLabel">
       <Properties>

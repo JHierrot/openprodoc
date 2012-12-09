@@ -28,6 +28,7 @@ import java.util.Vector;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -58,6 +59,9 @@ private String IdLocalRootTerm=PDThesaur.ROOTTERM;
 boolean ShowDet=true;
 /**
  * Creates new form MainThes
+ * @param parent
+ * @param modal 
+ * @param Sess  
  */
 public MainThes(java.awt.Frame parent, boolean modal, DriverGeneric Sess)
 {
@@ -67,6 +71,10 @@ initComponents();
 }
 /**
  * Creates new form MainThes
+ * @param parent
+ * @param modal
+ * @param Sess 
+ * @param RootTerm  
  */
 public MainThes(JDialog parent, boolean modal, DriverGeneric Sess, String RootTerm)
 {
@@ -701,7 +709,7 @@ if (ActTermId.equals(getIdLocalRootTerm()))
 try {
 MantTerm MTF = new MantTerm(this, true, IdLocalRootTerm.equals(PDThesaur.ROOTTERM)?getTermAct().getIDThesaur():IdLocalRootTerm);
 MTF.setLocationRelativeTo(null);
-MTF.setRecord(PDThesaur.getRecordStructPDThesaur());
+MTF.setRecord(PDThesaur.getRecordStructPDThesaur(), getTermAct().getName());
 MTF.AddMode();
 MTF.setVisible(true);
 if (MTF.isCancel())
@@ -735,7 +743,9 @@ if (Term.getParentId().equals(PDThesaur.ROOTTERM))
 MantTerm MTF = new MantTerm(this, true, IdLocalRootTerm.equals(PDThesaur.ROOTTERM)?getTermAct().getIDThesaur():IdLocalRootTerm);
 MTF.setLocationRelativeTo(null);
 MTF.EditMode();
-MTF.setRecord(Term.getRecord());
+PDThesaur ParentTerm=new PDThesaur(Session);
+ParentTerm.Load(Term.getParentId());
+MTF.setRecord(Term.getRecord(), ParentTerm.getName());
 MTF.setVisible(true);
 if (MTF.isCancel())
     return;
@@ -767,7 +777,9 @@ if (Term.getParentId().equals(PDThesaur.ROOTTERM))
 MantTerm MTF = new MantTerm(this, true, IdLocalRootTerm.equals(PDThesaur.ROOTTERM)?getTermAct().getIDThesaur():IdLocalRootTerm);
 MTF.setLocationRelativeTo(null);
 MTF.DelMode();
-MTF.setRecord(Term.getRecord());
+PDThesaur ParentTerm=new PDThesaur(Session);
+ParentTerm.Load(Term.getParentId());
+MTF.setRecord(Term.getRecord(), ParentTerm.getName());
 MTF.setVisible(true);
 if (MTF.isCancel())
     return;
