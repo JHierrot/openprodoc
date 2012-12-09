@@ -150,7 +150,9 @@ for (int i=0; i<Fields.NumAttr(); i++)
         SQL+=" CHAR(8) ";//        SQL+=" DATE ";
     else if (A.getType()==Attribute.tTIMESTAMP)
         SQL+=" CHAR(14) "; // SQL+=" TIMESTAMP ";
-    else
+    else if (A.getType()==Attribute.tTHES)
+        SQL+=" VARCHAR(32) ";
+    else 
         SQL+=" VARCHAR("+ A.getLongStr()+") ";
     if (A.isRequired())
         SQL+=" NOT NULL ";
@@ -172,6 +174,13 @@ else // debemos quitar la última ,
     SQL=SQL.substring(0, SQL.length()-2);
 SQL+="  ) ";
 ExecuteSql(SQL);
+Fields.initList();
+for (int i=0; i<Fields.NumAttr(); i++)
+    {
+    Attribute A=Fields.nextAttr();
+    if (A.getType()==Attribute.tTHES)
+        AddIntegrity(TableName, A.getName(), PDThesaur.getTableName(), PDThesaur.fPDID);
+    }
 if (PDLog.isInfo())
     PDLog.Info("DriverJDBC.CreateTable<:"+TableName);
 }
@@ -223,6 +232,13 @@ for (int i = 0; i < NumAttr; i++)
         Attrs+=At.getName();
         if (At.getType()==Attribute.tSTRING)
             Vals+=toString((String)At.getValue());
+        else if (At.getType()==Attribute.tTHES)
+            {
+            if (At.getValue()==null || ((String)At.getValue()).length()==0)
+                Vals+="Null";
+            else
+                Vals+=toString((String)At.getValue());
+            }
         else if (At.getType()==Attribute.tDATE)
             Vals+=toDate((Date)At.getValue());
         else if (At.getType()==Attribute.tTIMESTAMP)
@@ -274,6 +290,14 @@ for (int i = 0; i < NumAttr; i++)
         Second=true;
         if (At.getType()==Attribute.tSTRING)
             SQL+=toString((String)At.getValue());
+        else if (At.getType()==Attribute.tTHES)
+            {
+            if (At.getValue()==null || ((String)At.getValue()).length()==0)
+                Vals+="Null";
+            else
+                Vals+=toString((String)At.getValue());
+            }
+
         else if (At.getType()==Attribute.tDATE)
             SQL+=toDate((Date)At.getValue());
         else if (At.getType()==Attribute.tTIMESTAMP)
@@ -654,6 +678,8 @@ for (int i = 0; i < Fields.NumAttr(); i++)
         Attr.setName(PDDocs.fPDID);
     try {
     if (Attr.getType()==Attribute.tSTRING)
+        Attr.setValue(rs.getString(Attr.getName()));
+    else if (Attr.getType()==Attribute.tTHES)
         Attr.setValue(rs.getString(Attr.getName()));
     else if (Attr.getType()==Attribute.tDATE)
             {
