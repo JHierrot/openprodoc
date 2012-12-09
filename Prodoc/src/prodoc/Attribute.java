@@ -72,6 +72,7 @@ public static final int tBOOLEAN  =4;
  *
  */
 public static final int tTIMESTAMP=5;
+public static final int tTHES=6;
 /**
  *
  */
@@ -79,7 +80,7 @@ public static final int tMIN  =tINTEGER;
 /**
  *
  */
-public static final int tMAX  =tTIMESTAMP;
+public static final int tMAX  =tTHES;
 /**
  *
  */
@@ -524,6 +525,8 @@ private String FormatExport(Object Val)
 {
 if (getType()==Attribute.tSTRING)
     return((String)Val);
+else if (getType()==Attribute.tTHES)
+    return((String)Val);
 else if (getType()==Attribute.tINTEGER)
     return(""+Val);
 else if (getType()==Attribute.tBOOLEAN)
@@ -538,37 +541,39 @@ else
 //--------------------------------------------------------------------------
 private Object FormatImport(String Val) throws PDException
 {
-    if (getType()==Attribute.tSTRING)
-        return(Val);
-    else if (getType()==Attribute.tINTEGER)
-        return(new Integer(Integer.parseInt(Val)));
-    else if (getType()==Attribute.tBOOLEAN)
+if (getType()==Attribute.tSTRING)
+    return(Val);
+else if (getType()==Attribute.tTHES)
+    return(Val);
+else if (getType()==Attribute.tINTEGER)
+    return(new Integer(Integer.parseInt(Val)));
+else if (getType()==Attribute.tBOOLEAN)
+    {
+    if (Val.equals("1"))
+        return(true);
+    else
+        return(false);
+    }
+else if (getType()==Attribute.tDATE)
+    {
+    try {
+    if (Val!=null && Val.length()!=0)
+        return(formatterDate.parse(Val));
+    } catch (ParseException ex)
         {
-        if (Val.equals("1"))
-            return(true);
-        else
-            return(false);
+        PDException.GenPDException(ex.getLocalizedMessage(), Val);
         }
-    else if (getType()==Attribute.tDATE)
+    }
+else if (getType()==Attribute.tTIMESTAMP)
+    {
+    try {
+    if (Val!=null && Val.length()!=0)
+        return(formatterTS.parse(Val));
+    } catch (ParseException ex)
         {
-        try {
-        if (Val!=null && Val.length()!=0)
-            return(formatterDate.parse(Val));
-        } catch (ParseException ex)
-            {
-            PDException.GenPDException(ex.getLocalizedMessage(), Val);
-            }
+        PDException.GenPDException(ex.getLocalizedMessage(), Val);
         }
-    else if (getType()==Attribute.tTIMESTAMP)
-        {
-        try {
-        if (Val!=null && Val.length()!=0)
-            return(formatterTS.parse(Val));
-        } catch (ParseException ex)
-            {
-            PDException.GenPDException(ex.getLocalizedMessage(), Val);
-            }
-        }
+    }
 return(null);
 }
 //--------------------------------------------------------------------------

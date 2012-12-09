@@ -152,15 +152,15 @@ return Name;
 */
 public void setName(String pName) throws PDExceptionFunc
 {
-if (pName==null)    
-    return;
-pName=pName.trim();
-if (pName.length()==0)   
-    PDExceptionFunc.GenPDException("Empty_Name_not_allowed",pName);
-if (pName.length()>128)   
-    PDExceptionFunc.GenPDException("Name_longer_than_allowed",pName);
-this.Name = pName;
-
+if (pName!=null)    
+    {
+    pName=pName.trim();
+    if (pName.length()==0)   
+        PDExceptionFunc.GenPDException("Empty_Name_not_allowed",pName);
+    if (pName.length()>128)   
+        PDExceptionFunc.GenPDException("Name_longer_than_allowed",pName);
+    }
+Name = pName;
 }
 //-------------------------------------------------------------------------
 /**
@@ -924,7 +924,7 @@ return Description;
  */
 public void setDescription(String pDescription) throws PDExceptionFunc
 {
-if (pDescription.length()>254)   
+if (pDescription!=null && pDescription.length()>254)
     PDExceptionFunc.GenPDException("Description_longer_than_allowed", pDescription);
 Description = pDescription;
 }
