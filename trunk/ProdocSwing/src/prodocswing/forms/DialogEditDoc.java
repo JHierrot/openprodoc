@@ -32,6 +32,7 @@ import java.util.HashSet;
 import java.util.Vector;
 import javax.swing.*;
 import prodoc.*;
+import prodocswing.ThesField;
 
 /**
  *
@@ -498,7 +499,7 @@ return EditedDoc;
 /**
 * @param pFolder the User to set
 */
-public void setRecord(Record pFolder)
+public void setRecord(Record pFolder) throws PDException
 {
 EditedDoc = pFolder;
 AttrExcluded.clear();
@@ -586,7 +587,7 @@ public boolean isCancel()
 return Cancel;
 }
 //----------------------------------------------------------------
-private void GenerateTabs(Record Rec, JTabbedPane Tabs, int MAXFIELDS, String Title, HashSet AttrExcluded, boolean Modif)
+private void GenerateTabs(Record Rec, JTabbedPane Tabs, int MAXFIELDS, String Title, HashSet AttrExcluded, boolean Modif) throws PDException
 {
 InputFields.clear();
 JPanel ActPanel=null;
@@ -661,7 +662,7 @@ if (MultAttrDlg.isCancel())
  * @param Modif
  * @return
  */
-private JComponent genComponent(Attribute Attr, boolean Modif)
+private JComponent genComponent(Attribute Attr, boolean Modif) throws PDException
 {
 JComponent JTF;
 if (Attr.isMultivalued())
@@ -693,6 +694,13 @@ else if (Attr.getType()==Attribute.tSTRING)
         JTF=new JTextField((String)Attr.getValue());
     else
         JTF=new JTextField();
+    }
+else if (Attr.getType()==Attribute.tTHES)
+    {
+    PDThesaur UseTerm=new PDThesaur(MainWin.getSession());    
+    if (Attr.getValue()!=null)
+        UseTerm.Load((String)Attr.getValue());
+    JTF=new ThesField(this, UseTerm, ""+Attr.getLongStr());
     }
 else if (Attr.getType()==Attribute.tDATE)
     {
@@ -772,6 +780,10 @@ if (Attr.isMultivalued())
 if (Attr.getType()==Attribute.tSTRING)
     {
     Attr.setValue(((JTextField)JTF).getText());
+    }
+else if (Attr.getType()==Attribute.tTHES)
+    {
+    Attr.setValue(((ThesField)JTF).getUseTerm().getPDId());
     }
 else if (Attr.getType()==Attribute.tDATE)
     {

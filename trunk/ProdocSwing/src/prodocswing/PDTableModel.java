@@ -85,6 +85,8 @@ else
     Attribute Attr=(Attribute) Rec.getAttr(col);
     if (Attr.getValue()==null)
         return("");
+    if (Attr.getType()==Attribute.tTHES)
+        return( ThesFormat(Attr.getValue()));
     if (Attr.getType()==Attribute.tTIMESTAMP)
         return( getFormatterTS().format(Attr.getValue()));
     if (Attr.getType()==Attribute.tDATE)
@@ -223,6 +225,8 @@ if (AttrType==Attribute.tBOOLEAN)
     return("Boolean");
 if (AttrType==Attribute.tFLOAT)
     return("Float");
+if (AttrType==Attribute.tTHES)
+    return("Thes");
 return("");
 }
 //---------------------------------------------------------
@@ -271,6 +275,16 @@ public void setVector(Vector AttrList)
 //    }
 ListRes=AttrList;
 NumRows=ListRes.size();
+}
+//---------------------------------------------------------
+
+private Object ThesFormat(Object Id) throws PDException
+{
+if(Id==null)
+    return("");
+PDThesaur UseTerm=new PDThesaur(getDrv());    
+UseTerm.Load((String)Id);
+return(UseTerm.getName());
 }
 //---------------------------------------------------------
 }

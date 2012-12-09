@@ -99,7 +99,7 @@ try {
         SubFoldersCheckB = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle(MainWin.TT("Search_Folders"));
+        setTitle(MainWin.TT("Search_Term"));
         addWindowListener(new java.awt.event.WindowAdapter()
         {
             public void windowClosed(java.awt.event.WindowEvent evt)
@@ -110,7 +110,7 @@ try {
 
         LabelOperation.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
         LabelOperation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        LabelOperation.setText(MainWin.TT("Search_Folders"));
+        LabelOperation.setText(MainWin.TT("Search_Term"));
 
         ButtonCancel.setFont(MainWin.getFontDialog());
         ButtonCancel.setText(MainWin.TT("Cancel"));
@@ -133,8 +133,8 @@ try {
         });
 
         SubFoldersCheckB.setFont(MainWin.getFontDialog());
-        SubFoldersCheckB.setText(MainWin.TT("SubFolders"));
-        SubFoldersCheckB.setToolTipText(MainWin.TT("When_checked_limits_the_search_to_actual_folder_and_subfolders"));
+        SubFoldersCheckB.setText(MainWin.TT("Narrow_Terms"));
+        SubFoldersCheckB.setToolTipText(MainWin.TT("When_checked_limits_the_search_to_actual_term_and_specific_terms"));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -301,7 +301,7 @@ while (Attr!=null)
                 layout.setVerticalGroup(vGroup);
                 }
             ActPanel=new JPanel();
-            ActPanel.setName(Title+(int)CountFields/MAXFIELDS);
+            ActPanel.setName(Title);
             Tabs.add(ActPanel);
             layout = new GroupLayout(ActPanel);
             layout.setAutoCreateGaps(true);

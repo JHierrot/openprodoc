@@ -404,7 +404,7 @@
                               <Component id="UseTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="UseLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="40" max="32767" attributes="0"/>
+                          <EmptySpace pref="31" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -491,7 +491,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane2" alignment="0" pref="273" max="32767" attributes="0"/>
+                          <Component id="jScrollPane2" alignment="0" pref="282" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -544,7 +544,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane3" alignment="0" pref="273" max="32767" attributes="0"/>
+                          <Component id="jScrollPane3" alignment="0" pref="282" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -597,7 +597,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane4" alignment="0" pref="273" max="32767" attributes="0"/>
+                          <Component id="jScrollPane4" alignment="0" pref="282" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>

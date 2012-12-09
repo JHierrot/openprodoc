@@ -33,6 +33,7 @@ import java.util.HashSet;
 import java.util.Vector;
 import javax.swing.*;
 import prodoc.*;
+import prodocswing.ThesField;
 
 /**
  *
@@ -283,7 +284,7 @@ return DocSearched;
 /**
 * @param pFolder the User to set
 */
-public void setRecord(Record pFolder)
+public void setRecord(Record pFolder) throws PDException
 {
 DocSearched = pFolder;
 AttrExcluded.clear();
@@ -305,7 +306,7 @@ public boolean isCancel()
 return Cancel;
 }
 //----------------------------------------------------------------
-private void GenerateTabs(Record Rec, JTabbedPane Tabs, int MAXFIELDS, String Title, HashSet AttrExcluded)
+private void GenerateTabs(Record Rec, JTabbedPane Tabs, int MAXFIELDS, String Title, HashSet AttrExcluded) throws PDException
 {
 InputFields.clear();
 Comparators.clear();
@@ -353,7 +354,7 @@ while (Attr!=null)
         SelComb.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "=", ">", "<", ">=", "<=", "<>", "Contains" }));
         SelComb.setMaximumSize(new Dimension(40, 24));
         Comparators.add(SelComb);
-        JComponent JTF=genComponent(Attr, Modif);
+        JComponent JTF=genComponent(Attr);
         InputFields.add(JTF);
         LGroup.addComponent(Lab);
         CGroup.addComponent(SelComb);
@@ -377,12 +378,17 @@ layout.setVerticalGroup(vGroup);
  * @param Modif
  * @return
  */
-private JComponent genComponent(Attribute Attr, boolean Modif)
+private JComponent genComponent(Attribute Attr) throws PDException
 {
 JComponent JTF=null;
 if (Attr.getType()==Attribute.tSTRING)
     {
     JTF=new JTextField();
+    }
+else if (Attr.getType()==Attribute.tTHES)
+    {
+    PDThesaur UseTerm=new PDThesaur(MainWin.getSession());    
+    JTF=new ThesField(this, UseTerm, ""+Attr.getLongStr());
     }
 else if (Attr.getType()==Attribute.tDATE)
     {
@@ -437,6 +443,10 @@ private void FillAttr(Attribute Attr, JComponent JTF) throws PDException
 if (Attr.getType()==Attribute.tSTRING)
     {
     Attr.setValue(((JTextField)JTF).getText());
+    }
+else if (Attr.getType()==Attribute.tTHES)
+    {
+    Attr.setValue(((ThesField)JTF).getUseTerm().getPDId());
     }
 else if (Attr.getType()==Attribute.tDATE)
     {

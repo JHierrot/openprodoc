@@ -57,6 +57,7 @@ String LocalThes=PDThesaur.ROOTTERM;
 /** Creates new form MantUsers
  * @param parent 
  * @param modal
+ * @param Thes  
  */
 public MantTerm(JDialog parent, boolean modal, String Thes)
 {
@@ -87,12 +88,17 @@ UFTable.setAutoCreateColumnsFromModel(true);
     {
 
         LabelOperation = new javax.swing.JLabel();
+        ParentNameLabel = new javax.swing.JLabel();
+        ParentNameTextField = new javax.swing.JTextField();
+        IdNameLabel = new javax.swing.JLabel();
+        IdNameTextField = new javax.swing.JTextField();
         TermNameLabel = new javax.swing.JLabel();
-        TermDescripLabel = new javax.swing.JLabel();
-        USELabel = new javax.swing.JLabel();
         TermNameTextField = new javax.swing.JTextField();
+        TermDescripLabel = new javax.swing.JLabel();
         TermDescripTextField = new javax.swing.JTextField();
+        USELabel = new javax.swing.JLabel();
         USETextField = new javax.swing.JTextField();
+        SelUseButton = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         PanelNT = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -110,7 +116,6 @@ UFTable.setAutoCreateColumnsFromModel(true);
         ToolBarUF = new javax.swing.JToolBar();
         ButtonAcept = new javax.swing.JButton();
         ButtonCancel = new javax.swing.JButton();
-        AddButtonU1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(MainWin.TT("Term_Maintenance"));
@@ -128,21 +133,46 @@ UFTable.setAutoCreateColumnsFromModel(true);
         LabelOperation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         LabelOperation.setText("jLabel1");
 
+        ParentNameLabel.setFont(MainWin.getFontDialog());
+        ParentNameLabel.setText("jLabel1");
+
+        ParentNameTextField.setEditable(false);
+        ParentNameTextField.setFont(MainWin.getFontDialog());
+
+        IdNameLabel.setFont(MainWin.getFontDialog());
+        IdNameLabel.setText("jLabel1");
+
+        IdNameTextField.setEditable(false);
+        IdNameTextField.setFont(MainWin.getFontDialog());
+
         TermNameLabel.setFont(MainWin.getFontDialog());
         TermNameLabel.setText("jLabel1");
+
+        TermNameTextField.setFont(MainWin.getFontDialog());
 
         TermDescripLabel.setFont(MainWin.getFontDialog());
         TermDescripLabel.setText("jLabel1");
 
+        TermDescripTextField.setFont(MainWin.getFontDialog());
+
         USELabel.setFont(MainWin.getFontDialog());
         USELabel.setText("jLabel1");
 
-        TermNameTextField.setFont(MainWin.getFontDialog());
-
-        TermDescripTextField.setFont(MainWin.getFontDialog());
-
         USETextField.setEditable(false);
         USETextField.setFont(MainWin.getFontDialog());
+
+        SelUseButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/tree.png"))); // NOI18N
+        SelUseButton.setToolTipText(MainWin.TT("Add_Related_Term"));
+        SelUseButton.setFocusable(false);
+        SelUseButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        SelUseButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        SelUseButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                SelUseButtonActionPerformed(evt);
+            }
+        });
 
         jScrollPane1.setViewportView(NTTable);
 
@@ -153,22 +183,19 @@ UFTable.setAutoCreateColumnsFromModel(true);
         PanelNTLayout.setHorizontalGroup(
             PanelNTLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelNTLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(PanelNTLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PanelNTLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(ToolBarNT, javax.swing.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelNTLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 567, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
+                    .addComponent(ToolBarNT, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE))
                 .addContainerGap())
         );
         PanelNTLayout.setVerticalGroup(
             PanelNTLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelNTLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(ToolBarNT, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(6, 6, 6)
+                .addComponent(ToolBarNT, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -214,19 +241,19 @@ UFTable.setAutoCreateColumnsFromModel(true);
                 .addGroup(PanelRTLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelRTLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(ToolBarRT, javax.swing.GroupLayout.DEFAULT_SIZE, 562, Short.MAX_VALUE))
+                        .addComponent(ToolBarRT, javax.swing.GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelRTLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 567, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         PanelRTLayout.setVerticalGroup(
             PanelRTLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelRTLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(ToolBarRT, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
+                .addComponent(ToolBarRT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -244,19 +271,19 @@ UFTable.setAutoCreateColumnsFromModel(true);
                 .addGroup(PanelUFLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelUFLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(ToolBarUF, javax.swing.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE))
+                        .addComponent(ToolBarUF, javax.swing.GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelUFLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 567, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         PanelUFLayout.setVerticalGroup(
             PanelUFLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelUFLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(ToolBarUF, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(8, 8, 8)
+                .addComponent(ToolBarUF, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -282,19 +309,6 @@ UFTable.setAutoCreateColumnsFromModel(true);
             }
         });
 
-        AddButtonU1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/tree.png"))); // NOI18N
-        AddButtonU1.setToolTipText(MainWin.TT("Add_user_to_group"));
-        AddButtonU1.setFocusable(false);
-        AddButtonU1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        AddButtonU1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        AddButtonU1.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                AddButtonU1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -305,22 +319,35 @@ UFTable.setAutoCreateColumnsFromModel(true);
                     .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(ButtonAcept)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(ButtonCancel))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(USELabel, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(TermNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(TermDescripLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(IdNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(TermNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(TermDescripTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 443, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(USETextField, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(AddButtonU1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addComponent(IdNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(176, 176, 176))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(ParentNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ParentNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(USELabel, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(TermNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(TermDescripLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(TermNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(TermDescripTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 443, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(USETextField, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(SelUseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(ButtonAcept)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(ButtonCancel)))))
                 .addContainerGap())
         );
 
@@ -331,22 +358,30 @@ UFTable.setAutoCreateColumnsFromModel(true);
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(LabelOperation)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ParentNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ParentNameLabel))
+                .addGap(9, 9, 9)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(IdNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(IdNameLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(TermNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(TermNameLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(TermDescripTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(TermDescripLabel))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(USELabel)
                         .addComponent(USETextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(AddButtonU1, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SelUseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButtonCancel)
@@ -377,9 +412,10 @@ Attr.setValue(TermNameTextField.getText());
 Attr=Term.getAttr(PDThesaur.fDESCRIP);
 Attr.setValue(TermDescripTextField.getText());
 Attr=Term.getAttr(PDThesaur.fUSE);
-Attr.setValue(UseTerm.getPDId());
-if (MainWin.getSession().isInTransaction())
-    MainWin.getSession().CerrarTrans();
+if (UseTerm!=null)
+    Attr.setValue(UseTerm.getPDId());
+//if (MainWin.getSession().isInTransaction())
+//    MainWin.getSession().CerrarTrans();
 } catch (PDException ex)
     {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
@@ -432,8 +468,8 @@ RefreshRT();
     }
     }//GEN-LAST:event_DelButtonRTActionPerformed
 
-    private void AddButtonU1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_AddButtonU1ActionPerformed
-    {//GEN-HEADEREND:event_AddButtonU1ActionPerformed
+    private void SelUseButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_SelUseButtonActionPerformed
+    {//GEN-HEADEREND:event_SelUseButtonActionPerformed
 MainThes MTW=new MainThes( (JDialog)this, false, MainWin.getSession(), LocalThes);
 MTW.setLocationRelativeTo(null);
 MTW.ModeSelect();
@@ -444,20 +480,24 @@ if (UseTerm==null)
     USETextField.setText("");
 else
     USETextField.setText(UseTerm.getName());
-    }//GEN-LAST:event_AddButtonU1ActionPerformed
+    }//GEN-LAST:event_SelUseButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddButtonRT;
-    private javax.swing.JButton AddButtonU1;
     private javax.swing.JButton ButtonAcept;
     private javax.swing.JButton ButtonCancel;
     private javax.swing.JButton DelButtonRT;
+    private javax.swing.JLabel IdNameLabel;
+    private javax.swing.JTextField IdNameTextField;
     private javax.swing.JLabel LabelOperation;
     private javax.swing.JTable NTTable;
     private javax.swing.JPanel PanelNT;
     private javax.swing.JPanel PanelRT;
     private javax.swing.JPanel PanelUF;
+    private javax.swing.JLabel ParentNameLabel;
+    private javax.swing.JTextField ParentNameTextField;
     private javax.swing.JTable RTTable;
+    private javax.swing.JButton SelUseButton;
     private javax.swing.JLabel TermDescripLabel;
     private javax.swing.JTextField TermDescripTextField;
     private javax.swing.JLabel TermNameLabel;
@@ -502,7 +542,7 @@ DelButtonRT.setEnabled(false);
 public void EditMode()
 {
 LabelOperation.setText(MainWin.TT("Update_Term"));
-TermNameTextField.setEditable(false);
+//TermNameTextField.setEditable(false);
 }
 //----------------------------------------------------------------
 /**
@@ -525,7 +565,7 @@ return Term;
 /**
  * @param pTerm
 */
-public void setRecord(Record pTerm)
+public void setRecord(Record pTerm, String ParentName)
 {
 try {
 Term = pTerm;
@@ -533,6 +573,7 @@ Attribute Attr = Term.getAttr(PDThesaur.fPDID);
 String Id=(String)Attr.getValue();
 if (Id != null)
     {
+    IdNameTextField.setText(Id);    
     MemUF=TermAct.getListUF(Id);
     MemNT=TermAct.getListDirectDescendList(Id);
     MemRT=TermAct.getListRT(Id);
@@ -542,10 +583,17 @@ if (Id != null)
     }
 else
     {
+    IdNameTextField.setText("");    
     MemUF=new HashSet();
     MemRT=new HashSet();
     MemNT=new HashSet();
     }
+IdNameLabel.setText(MainWin.TT(Attr.getUserName()));
+IdNameTextField.setToolTipText(Attr.getDescription());
+Attr = Term.getAttr(PDThesaur.fPARENTID);
+ParentNameLabel.setText(MainWin.TT("Broad_Term"));
+ParentNameTextField.setText(ParentName);
+ParentNameTextField.setToolTipText(Attr.getDescription());
 Attr = Term.getAttr(PDThesaur.fNAME);
 TermNameLabel.setText(MainWin.TT(Attr.getUserName()));
 if (Attr.getValue() != null)

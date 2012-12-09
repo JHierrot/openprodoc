@@ -26,25 +26,28 @@
 package prodocswing.forms;
 
 import javax.swing.JDialog;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 import prodoc.Cursor;
 import prodoc.PDException;
 import prodoc.PDThesaur;
 import prodoc.Record;
 import prodocswing.PDTableModel;
+import prodocswing.TreeTerm;
 
 /**
  *
  * @author jhierrot
  */
-public final class ListTerms extends javax.swing.JDialog
+public class ListTerms extends javax.swing.JDialog
 {
-PDTableModel FolderList = new PDTableModel();
+private PDTableModel TermList = new PDTableModel();
 /**
  * 
  */
 protected JDialog MantForm;
 String TypeDocRestore="";
-private Cursor RetrievedFoldsCur=null;
+private Cursor RetrievedTermsCur=null;
 
 /** Creates new form ListObjects
  * @param parent 
@@ -76,7 +79,7 @@ ObjectsTable.setAutoCreateColumnsFromModel(true);
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle(MainWin.TT("Search_Folders"));
+        setTitle(MainWin.TT("Search_Term"));
         addWindowListener(new java.awt.event.WindowAdapter()
         {
             public void windowClosing(java.awt.event.WindowEvent evt)
@@ -92,7 +95,7 @@ ObjectsTable.setAutoCreateColumnsFromModel(true);
         jToolBar1.setRollover(true);
 
         ModButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/edit.png"))); // NOI18N
-        ModButton.setToolTipText(MainWin.TT("Edit_selected_folder"));
+        ModButton.setToolTipText(MainWin.TT("Update_Term"));
         ModButton.setFocusable(false);
         ModButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         ModButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -106,7 +109,7 @@ ObjectsTable.setAutoCreateColumnsFromModel(true);
         jToolBar1.add(ModButton);
 
         DelButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/del.png"))); // NOI18N
-        DelButton.setToolTipText(MainWin.TT("Delete_selected_folder"));
+        DelButton.setToolTipText(MainWin.TT("Delete_Term"));
         DelButton.setFocusable(false);
         DelButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         DelButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -154,51 +157,57 @@ private void formWindowClosing(java.awt.event.WindowEvent evt)//GEN-FIRST:event_
 private void ModButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ModButtonActionPerformed
 if (getObjectsTable().getSelectedRow()==-1)
     return;
-//try {
-//Record r = FolderList.getElement(getSelectedRow());
-//String Id = (String) r.getAttr(PDFolders.fPDID).getValue();
-//String FType = (String) r.getAttr(PDFolders.fFOLDTYPE).getValue();
-//PDFolders Fold = new PDFolders(MainWin.getSession(), FType);
-//DialogEditFold DEF = new DialogEditFold(this, true);
-//DEF.setLocationRelativeTo(null);
-//DEF.EditMode();
-//Fold.LoadFull(Id);
-////Fold.assignValues(r); // i can't assign attr becuase there are only the attr of parent type
-//DEF.setRecord(Fold.getRecSum());
-//DEF.setVisible(true);
-//if (DEF.isCancel())
-//    return;
-//Fold.assignValues(DEF.getRecord());
-//Fold.update();
-//RefreshTable();
-//} catch (PDException ex)
-//    {
-//    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
-//    }    
+try {
+Record r = TermList.getElement(getSelectedRow());
+PDThesaur Term=new PDThesaur(MainWin.getSession());
+Term.assignValues(r);
+if (Term.getParentId().equals(PDThesaur.ROOTTERM))
+    return; // trying to edit a Thesaur as term
+MantTerm MTF = new MantTerm(this, true, Term.getIDThesaur());
+MTF.setLocationRelativeTo(null);
+MTF.EditMode();
+PDThesaur ParentTerm=new PDThesaur(MainWin.getSession());
+ParentTerm.Load(Term.getParentId());
+MTF.setRecord(Term.getRecord(), ParentTerm.getName());
+MTF.setVisible(true);
+if (MTF.isCancel())
+    return;
+Term.assignValues(MTF.getRecord());
+MainWin.getSession().IniciarTrans();
+Term.update();
+Term.DeleteTermRT();
+Term.AddRT(MTF.getMemRT());
+MainWin.getSession().CerrarTrans();
+} catch (Exception ex)
+    {
+    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
 }//GEN-LAST:event_ModButtonActionPerformed
 
 private void DelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DelButtonActionPerformed
 if (getObjectsTable().getSelectedRow()==-1)
     return;
-//try {
-//Record r = FolderList.getElement(getSelectedRow());
-//String Id = (String) r.getAttr(PDFolders.fPDID).getValue();
-//String FType = (String) r.getAttr(PDFolders.fFOLDTYPE).getValue();
-//PDFolders Fold = new PDFolders(MainWin.getSession(), FType);
-//DialogEditFold DEF = new DialogEditFold(this, true);
-//DEF.setLocationRelativeTo(null);
-//DEF.DelMode();
-//Fold.LoadFull(Id);
-//DEF.setRecord(Fold.getRecSum());
-//DEF.setVisible(true);
-//if (DEF.isCancel())
-//    return;
-//Fold.delete();
-////RefreshTable();
-//} catch (PDException ex)
-//    {
-//    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
-//    }
+try {
+Record r = TermList.getElement(getSelectedRow());
+PDThesaur Term=new PDThesaur(MainWin.getSession());
+Term.assignValues(r);
+if (Term.getParentId().equals(PDThesaur.ROOTTERM))
+    return; // trying to edit a Thesaur as term
+MantTerm MTF = new MantTerm(this, true, Term.getIDThesaur());
+MTF.setLocationRelativeTo(null);
+MTF.DelMode();
+PDThesaur ParentTerm=new PDThesaur(MainWin.getSession());
+ParentTerm.Load(Term.getParentId());
+MTF.setRecord(Term.getRecord(), ParentTerm.getName());
+MTF.setVisible(true);
+if (MTF.isCancel())
+    return;
+Term.assignValues(MTF.getRecord());
+Term.delete();
+} catch (Exception ex)
+    {
+    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
 }//GEN-LAST:event_DelButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -211,20 +220,20 @@ if (getObjectsTable().getSelectedRow()==-1)
     // End of variables declaration//GEN-END:variables
 
 //----------------------------------------------------------------
-    /**
-     * 
-     * @return
-     */
-    protected PDTableModel getPDTableModel()
+/**
+ * 
+ * @return
+ */
+protected PDTableModel getPDTableModel()
 {
 return ((PDTableModel) getObjectsTable().getModel());
 }
 //----------------------------------------------------------------
-    /**
-     * 
-     * @return
-     */
-    protected int getSelectedRow()
+/**
+ * 
+ * @return
+ */
+protected int getSelectedRow()
 {
 return (getObjectsTable().convertRowIndexToModel(getObjectsTable().getSelectedRow()));
 }
@@ -243,11 +252,11 @@ return ObjectsTable;
 protected void RefreshTable()
 {
 try {
-FolderList = new PDTableModel();
-FolderList.setDrv(MainWin.getSession());
-FolderList.setListFields(PDThesaur.getRecordStructPDThesaur());
-FolderList.setCursor(RetrievedFoldsCur);
-getObjectsTable().setModel(FolderList);
+TermList = new PDTableModel();
+TermList.setDrv(MainWin.getSession());
+TermList.setListFields(PDThesaur.getRecordStructPDThesaur());
+TermList.setCursor(RetrievedTermsCur);
+getObjectsTable().setModel(TermList);
 } catch (PDException ex)
     {
     MainWin.Message(MainWin.TT("Error_assigning_columns_to_table")+":"+MainWin.DrvTT(ex.getLocalizedMessage()));
@@ -261,7 +270,7 @@ getObjectsTable().setModel(FolderList);
  */
 public void setCursor(Cursor C)
 {
-RetrievedFoldsCur=C;
+RetrievedTermsCur=C;
 }
 //----------------------------------------------------------------
 }

@@ -27,6 +27,7 @@ package prodocswing.forms;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Vector;
@@ -48,7 +49,9 @@ import prodoc.DriverGeneric;
 import prodoc.PDException;
 import prodoc.PDFolders;
 import prodoc.PDObjDefs;
+import prodoc.PDThesaur;
 import prodoc.Record;
+import prodocswing.ThesField;
 
 /**
  *
@@ -286,7 +289,7 @@ return Folder;
 /**
 * @param pFolder the User to set
 */
-public void setRecord(Record pFolder)
+public void setRecord(Record pFolder) throws PDException
 {
 Folder = pFolder;
 AttrExcluded.clear();
@@ -308,7 +311,7 @@ public boolean isCancel()
 return Cancel;
 }
 //----------------------------------------------------------------
-private void GenerateTabs(Record Rec, JTabbedPane Tabs, int MAXFIELDS, String Title, HashSet AttrExcluded)
+private void GenerateTabs(Record Rec, JTabbedPane Tabs, int MAXFIELDS, String Title, HashSet AttrExcluded) throws PDException
 {
 InputFields.clear();
 Comparators.clear();
@@ -356,7 +359,7 @@ while (Attr!=null)
         SelComb.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "=", ">", "<", ">=", "<=", "<>", "Contains" }));
         SelComb.setMaximumSize(new Dimension(40, 24));
         Comparators.add(SelComb);
-        JComponent JTF=genComponent(Attr, Modif);
+        JComponent JTF=genComponent(Attr);
         InputFields.add(JTF);
         LGroup.addComponent(Lab);
         CGroup.addComponent(SelComb);
@@ -380,12 +383,17 @@ layout.setVerticalGroup(vGroup);
  * @param Modif
  * @return
  */
-private JComponent genComponent(Attribute Attr, boolean Modif)
+private JComponent genComponent(Attribute Attr) throws PDException
 {
 JComponent JTF=null;
 if (Attr.getType()==Attribute.tSTRING)
     {
     JTF=new JTextField();
+    }
+else if (Attr.getType()==Attribute.tTHES)
+    {
+    PDThesaur UseTerm=new PDThesaur(MainWin.getSession());    
+    JTF=new ThesField(this, UseTerm, ""+Attr.getLongStr());
     }
 else if (Attr.getType()==Attribute.tDATE)
     {
@@ -398,6 +406,10 @@ else if (Attr.getType()==Attribute.tTIMESTAMP)
 else if (Attr.getType()==Attribute.tBOOLEAN)
     {
     JCheckBox JCB=new JCheckBox( );
+    }
+else if (Attr.getType()==Attribute.tINTEGER)
+    {
+    JTF=new JFormattedTextField(new DecimalFormat());
     }
 else
      JTF=new JTextField("Error");
@@ -437,6 +449,10 @@ if (Attr.getType()==Attribute.tSTRING)
     {
     Attr.setValue(((JTextField)JTF).getText());
     }
+else if (Attr.getType()==Attribute.tTHES)
+    {
+    Attr.setValue(((ThesField)JTF).getUseTerm().getPDId());
+    }
 else if (Attr.getType()==Attribute.tDATE)
     {
     Attr.setValue((Date)((JFormattedTextField)JTF).getValue());
@@ -453,6 +469,12 @@ else if (Attr.getType()==Attribute.tBOOLEAN)
     else
         Act=new Boolean(false);
     Attr.setValue(Act);
+    }
+else if (Attr.getType()==Attribute.tINTEGER)
+    {
+    Long l=(Long)((JFormattedTextField)JTF).getValue();
+    if (l!=null)
+        Attr.setValue(new Integer(l.intValue()));
     }
 else
     Attr.setValue("Error");
