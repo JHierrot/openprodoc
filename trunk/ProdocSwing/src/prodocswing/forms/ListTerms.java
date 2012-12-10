@@ -26,14 +26,11 @@
 package prodocswing.forms;
 
 import javax.swing.JDialog;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
 import prodoc.Cursor;
 import prodoc.PDException;
 import prodoc.PDThesaur;
 import prodoc.Record;
 import prodocswing.PDTableModel;
-import prodocswing.TreeTerm;
 
 /**
  *

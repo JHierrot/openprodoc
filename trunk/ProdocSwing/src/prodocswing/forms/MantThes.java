@@ -250,12 +250,6 @@ public void EditMode()
 {
 LabelOperation.setText(MainWin.TT("Update_Thesaurus"));
 IdTextField.setEditable(false);
-//TermNameTextField.setEditable(false);
-try {
-MainWin.getSession().IniciarTrans();
-} catch (PDException ex)
-    {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
-    }
 }
 //----------------------------------------------------------------
 /**

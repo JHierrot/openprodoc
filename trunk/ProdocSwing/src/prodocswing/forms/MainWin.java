@@ -1799,8 +1799,11 @@ while (Attr!=null)
         if (Attr.getType()==Attribute.tTHES)
             {
             PDThesaur Term=new PDThesaur(Session);
-            Term.Load((String)Attr.getValue());
-            Html.append(Term.getName());
+            if (Attr.getValue()!=null)
+                {
+                Term.Load((String)Attr.getValue());
+                Html.append(Term.getName());
+                }
             }
         else
             Html.append(Attr.Export());

@@ -282,7 +282,7 @@ boolean Second=false;
 for (int i = 0; i < NumAttr; i++)
     {
     At=NewFields.nextAttr();
-    if (At.getValue()!=null && !At.isPrimKey())
+    if ((At.getValue()!=null || (At.getValue()==null && At.getType()==Attribute.tTHES)) && !At.isPrimKey())
         {
         if (Second)
             SQL+=", ";
@@ -293,9 +293,9 @@ for (int i = 0; i < NumAttr; i++)
         else if (At.getType()==Attribute.tTHES)
             {
             if (At.getValue()==null || ((String)At.getValue()).length()==0)
-                Vals+="Null";
+                SQL+="Null";
             else
-                Vals+=toString((String)At.getValue());
+                SQL+=toString((String)At.getValue());
             }
 
         else if (At.getType()==Attribute.tDATE)

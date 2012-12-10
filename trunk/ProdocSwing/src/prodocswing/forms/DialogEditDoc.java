@@ -783,7 +783,9 @@ if (Attr.getType()==Attribute.tSTRING)
     }
 else if (Attr.getType()==Attribute.tTHES)
     {
-    Attr.setValue(((ThesField)JTF).getUseTerm().getPDId());
+    PDThesaur SelTerm=((ThesField)JTF).getUseTerm();
+    if (SelTerm!=null)
+        Attr.setValue(SelTerm.getPDId());
     }
 else if (Attr.getType()==Attribute.tDATE)
     {
