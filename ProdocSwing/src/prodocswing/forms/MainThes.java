@@ -28,7 +28,6 @@ import java.util.Vector;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -47,7 +46,7 @@ public class MainThes extends javax.swing.JDialog
 
 private static DriverGeneric Session=null;
 private DefaultTreeModel TermTreeModel=null;
-static private String ActTermId=null;
+private String ActTermId=null;
 private PDThesaur TermAct=null;
 private PDTableModel NTMembers;
 private PDTableModel RTMembers;
