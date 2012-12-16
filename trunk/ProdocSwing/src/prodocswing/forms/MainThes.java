@@ -104,6 +104,10 @@ initComponents();
         DescripTextField = new javax.swing.JTextField();
         UseLabel = new javax.swing.JLabel();
         UseTextField = new javax.swing.JTextField();
+        SCNLabel = new javax.swing.JLabel();
+        LangTextField = new javax.swing.JTextField();
+        SCNTextField = new javax.swing.JTextField();
+        LangLabel = new javax.swing.JLabel();
         Relations = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -200,13 +204,25 @@ initComponents();
         UseTextField.setEditable(false);
         UseTextField.setFont(MainWin.getFontDialog());
 
+        SCNLabel.setFont(MainWin.getFontDialog());
+        SCNLabel.setText("SCN");
+
+        LangTextField.setEditable(false);
+        LangTextField.setFont(MainWin.getFontDialog());
+
+        SCNTextField.setEditable(false);
+        SCNTextField.setFont(MainWin.getFontDialog());
+
+        LangLabel.setFont(MainWin.getFontDialog());
+        LangLabel.setText("Language");
+
         javax.swing.GroupLayout TermAttrLayout = new javax.swing.GroupLayout(TermAttr);
         TermAttr.setLayout(TermAttrLayout);
         TermAttrLayout.setHorizontalGroup(
             TermAttrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(TermAttrLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(TermAttrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(TermAttrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(TermAttrLayout.createSequentialGroup()
                         .addComponent(NameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -218,9 +234,20 @@ initComponents();
                     .addGroup(TermAttrLayout.createSequentialGroup()
                         .addComponent(UseLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(UseTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(UseTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(TermAttrLayout.createSequentialGroup()
+                        .addGroup(TermAttrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(LangLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
+                            .addComponent(SCNLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(TermAttrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(LangTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(SCNTextField))))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
+
+        TermAttrLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {DescripLabel, LangLabel, NameLabel, SCNLabel, UseLabel});
+
         TermAttrLayout.setVerticalGroup(
             TermAttrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(TermAttrLayout.createSequentialGroup()
@@ -228,16 +255,26 @@ initComponents();
                 .addGroup(TermAttrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(NameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(NameLabel))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(TermAttrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(DescripTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(DescripLabel))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(TermAttrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(UseTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(UseLabel))
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(TermAttrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(LangLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(LangTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(TermAttrLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(SCNLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SCNTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14))
         );
+
+        TermAttrLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {DescripLabel, LangLabel, NameLabel, SCNLabel, UseLabel});
 
         DetailsPanel.setLeftComponent(TermAttr);
 
@@ -263,7 +300,7 @@ initComponents();
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -294,7 +331,7 @@ initComponents();
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -325,7 +362,7 @@ initComponents();
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -519,7 +556,7 @@ initComponents();
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 729, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -652,6 +689,8 @@ if (getTermAct().getUse()!=null && getTermAct().getUse().length()!=0)
     }
 else
     UseTextField.setText("");    
+this.LangTextField.setText(getTermAct().getLang());
+this.SCNTextField.setText(getTermAct().getSCN());
 if (ShowDetails.isSelected() && ShowChild.isSelected())
     UpdateTabs(ActTermId);
 } catch (Exception ex)
@@ -812,6 +851,8 @@ setTermAct(null);
     private javax.swing.JLabel DescripLabel;
     private javax.swing.JTextField DescripTextField;
     private javax.swing.JSplitPane DetailsPanel;
+    private javax.swing.JLabel LangLabel;
+    private javax.swing.JTextField LangTextField;
     private javax.swing.JMenuItem ModTerm;
     private javax.swing.JTable NTTable;
     private javax.swing.JLabel NameLabel;
@@ -819,6 +860,8 @@ setTermAct(null);
     private javax.swing.JTable RTTable;
     private javax.swing.JMenuItem RefreshTerm;
     private javax.swing.JTabbedPane Relations;
+    private javax.swing.JLabel SCNLabel;
+    private javax.swing.JTextField SCNTextField;
     private javax.swing.JMenuItem SearchTerm1;
     private javax.swing.JMenuItem Select;
     private javax.swing.JMenu Selecting;
