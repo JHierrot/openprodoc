@@ -98,6 +98,10 @@ UFTable.setAutoCreateColumnsFromModel(true);
         TermDescripTextField = new javax.swing.JTextField();
         USELabel = new javax.swing.JLabel();
         USETextField = new javax.swing.JTextField();
+        LangLabel = new javax.swing.JLabel();
+        SCNTextField = new javax.swing.JTextField();
+        SCNLabel = new javax.swing.JLabel();
+        LangTextField = new javax.swing.JTextField();
         SelUseButton = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         PanelNT = new javax.swing.JPanel();
@@ -134,32 +138,42 @@ UFTable.setAutoCreateColumnsFromModel(true);
         LabelOperation.setText("jLabel1");
 
         ParentNameLabel.setFont(MainWin.getFontDialog());
-        ParentNameLabel.setText("jLabel1");
+        ParentNameLabel.setText("BT");
 
         ParentNameTextField.setEditable(false);
         ParentNameTextField.setFont(MainWin.getFontDialog());
 
         IdNameLabel.setFont(MainWin.getFontDialog());
-        IdNameLabel.setText("jLabel1");
+        IdNameLabel.setText("Id");
 
         IdNameTextField.setEditable(false);
         IdNameTextField.setFont(MainWin.getFontDialog());
 
         TermNameLabel.setFont(MainWin.getFontDialog());
-        TermNameLabel.setText("jLabel1");
+        TermNameLabel.setText("Name");
 
         TermNameTextField.setFont(MainWin.getFontDialog());
 
         TermDescripLabel.setFont(MainWin.getFontDialog());
-        TermDescripLabel.setText("jLabel1");
+        TermDescripLabel.setText("Definition");
 
         TermDescripTextField.setFont(MainWin.getFontDialog());
 
         USELabel.setFont(MainWin.getFontDialog());
-        USELabel.setText("jLabel1");
+        USELabel.setText("USE");
 
         USETextField.setEditable(false);
         USETextField.setFont(MainWin.getFontDialog());
+
+        LangLabel.setFont(MainWin.getFontDialog());
+        LangLabel.setText("Language");
+
+        SCNTextField.setFont(MainWin.getFontDialog());
+
+        SCNLabel.setFont(MainWin.getFontDialog());
+        SCNLabel.setText("SCN");
+
+        LangTextField.setFont(MainWin.getFontDialog());
 
         SelUseButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/tree.png"))); // NOI18N
         SelUseButton.setToolTipText(MainWin.TT("Add_Related_Term"));
@@ -185,8 +199,8 @@ UFTable.setAutoCreateColumnsFromModel(true);
             .addGroup(PanelNTLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(PanelNTLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
-                    .addComponent(ToolBarNT, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE)
+                    .addComponent(ToolBarNT, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE))
                 .addContainerGap())
         );
         PanelNTLayout.setVerticalGroup(
@@ -195,7 +209,7 @@ UFTable.setAutoCreateColumnsFromModel(true);
                 .addGap(6, 6, 6)
                 .addComponent(ToolBarNT, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -241,10 +255,10 @@ UFTable.setAutoCreateColumnsFromModel(true);
                 .addGroup(PanelRTLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelRTLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(ToolBarRT, javax.swing.GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE))
+                        .addComponent(ToolBarRT, javax.swing.GroupLayout.DEFAULT_SIZE, 585, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelRTLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         PanelRTLayout.setVerticalGroup(
@@ -253,7 +267,7 @@ UFTable.setAutoCreateColumnsFromModel(true);
                 .addGap(2, 2, 2)
                 .addComponent(ToolBarRT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -271,10 +285,10 @@ UFTable.setAutoCreateColumnsFromModel(true);
                 .addGroup(PanelUFLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelUFLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(ToolBarUF, javax.swing.GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE))
+                        .addComponent(ToolBarUF, javax.swing.GroupLayout.DEFAULT_SIZE, 585, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelUFLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         PanelUFLayout.setVerticalGroup(
@@ -283,7 +297,7 @@ UFTable.setAutoCreateColumnsFromModel(true);
                 .addGap(8, 8, 8)
                 .addComponent(ToolBarUF, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -316,38 +330,48 @@ UFTable.setAutoCreateColumnsFromModel(true);
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jTabbedPane1)
                     .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(IdNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(IdNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(176, 176, 176))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(ParentNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(ParentNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(ButtonAcept)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(ButtonCancel))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ParentNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(LangLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(SCNLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(LangTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(SCNTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 443, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(USELabel, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(TermNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(TermDescripLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(USELabel, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TermNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TermDescripLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(TermNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TermDescripTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 443, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(USETextField, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(SelUseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(ParentNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(IdNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(TermNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(TermDescripTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 443, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(USETextField, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(SelUseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(ButtonAcept)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(ButtonCancel)))))
+                                .addComponent(IdNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(176, 176, 176)))
                 .addContainerGap())
         );
 
@@ -367,26 +391,37 @@ UFTable.setAutoCreateColumnsFromModel(true);
                     .addComponent(IdNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(IdNameLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(TermNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(TermNameLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(TermDescripTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(TermDescripLabel))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(TermNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TermNameLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(TermDescripTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TermDescripLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(USETextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(SelUseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(USELabel)
+                        .addGap(2, 2, 2)))
+                .addGap(4, 4, 4)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(LangTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(LangLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(USELabel)
-                        .addComponent(USETextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(SelUseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(SCNTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SCNLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButtonCancel)
                     .addComponent(ButtonAcept))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -414,8 +449,10 @@ Attr.setValue(TermDescripTextField.getText());
 Attr=Term.getAttr(PDThesaur.fUSE);
 if (UseTerm!=null)
     Attr.setValue(UseTerm.getPDId());
-//if (MainWin.getSession().isInTransaction())
-//    MainWin.getSession().CerrarTrans();
+Attr=Term.getAttr(PDThesaur.fLANG);
+Attr.setValue(LangTextField.getText());
+Attr=Term.getAttr(PDThesaur.fSCN);
+Attr.setValue(SCNTextField.getText());
 } catch (PDException ex)
     {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
@@ -490,6 +527,8 @@ else
     private javax.swing.JLabel IdNameLabel;
     private javax.swing.JTextField IdNameTextField;
     private javax.swing.JLabel LabelOperation;
+    private javax.swing.JLabel LangLabel;
+    private javax.swing.JTextField LangTextField;
     private javax.swing.JTable NTTable;
     private javax.swing.JPanel PanelNT;
     private javax.swing.JPanel PanelRT;
@@ -497,6 +536,8 @@ else
     private javax.swing.JLabel ParentNameLabel;
     private javax.swing.JTextField ParentNameTextField;
     private javax.swing.JTable RTTable;
+    private javax.swing.JLabel SCNLabel;
+    private javax.swing.JTextField SCNTextField;
     private javax.swing.JButton SelUseButton;
     private javax.swing.JLabel TermDescripLabel;
     private javax.swing.JTextField TermDescripTextField;
@@ -534,6 +575,9 @@ TermNameTextField.setEditable(false);
 TermDescripTextField.setEditable(false);
 AddButtonRT.setEnabled(false);
 DelButtonRT.setEnabled(false);
+USETextField.setEnabled(false);
+LangTextField.setEditable(false);
+SCNTextField.setEditable(false);
 }
 //----------------------------------------------------------------
 /**
@@ -617,6 +661,20 @@ if (Attr.getValue() != null)
     USETextField.setText(UseTerm.getName());
     }
 USETextField.setToolTipText(Attr.getDescription());
+Attr = Term.getAttr(PDThesaur.fLANG);
+LangLabel.setText(MainWin.TT(Attr.getUserName()));
+if (Attr.getValue() != null)
+    {
+    LangTextField.setText((String) Attr.getValue());
+    }
+LangTextField.setToolTipText(Attr.getDescription());
+Attr = Term.getAttr(PDThesaur.fSCN);
+SCNLabel.setText(MainWin.TT(Attr.getUserName()));
+if (Attr.getValue() != null)
+    {
+    SCNTextField.setText((String) Attr.getValue());
+    }
+SCNTextField.setToolTipText(Attr.getDescription());
 } catch (PDException ex)
     {
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));

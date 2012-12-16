@@ -140,22 +140,22 @@ try {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Attributes, javax.swing.GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(312, Short.MAX_VALUE)
+                        .addContainerGap(317, Short.MAX_VALUE)
                         .addComponent(ButtonAcept)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(ButtonCancel))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(21, 21, 21)
-                        .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)))
+                        .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, 544, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(SubFoldersCheckB)
                 .addContainerGap())
+            .addComponent(Attributes, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -165,12 +165,12 @@ try {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(SubFoldersCheckB)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Attributes, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(Attributes, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButtonCancel)
                     .addComponent(ButtonAcept))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(6, 6, 6))
         );
 
         pack();
@@ -261,7 +261,7 @@ for (int i = 0; i < List.length; i++)
     JPanel component =(JPanel) List[i];
     Attributes.remove(component);
     }
-GenerateTabs(Folder, Attributes, 7, MainWin.TT("Search_Attributes"), AttrExcluded);
+GenerateTabs(Folder, Attributes, 9, MainWin.TT("Search_Attributes"), AttrExcluded);
 }
 //----------------------------------------------------------------
 /**

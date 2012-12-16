@@ -44,11 +44,13 @@ public static final String fNAME="Name";
 /**
  *
  */
-public static final String fDESCRIP="Description";
+public static final String fDESCRIP="Definition";
 /**
  *
  */
 public static final String fUSE="USE";
+public static final String fLANG="LANG";
+public static final String fSCN="SCN";
 /**
  *
  */
@@ -85,6 +87,8 @@ private String PDId=null;
 private String Name=null;
 private String Description=null;
 private String Use=null;
+private String SCN=null;
+private String Lang=null;
 /**
  *
  */
@@ -118,6 +122,8 @@ setName((String) Rec.getAttr(fNAME).getValue());
 setDescription((String) Rec.getAttr(fDESCRIP).getValue());
 setUse((String) Rec.getAttr(fUSE).getValue());
 setParentId((String) Rec.getAttr(fPARENTID).getValue());
+setSCN((String) Rec.getAttr(fSCN).getValue());
+setLang((String) Rec.getAttr(fLANG).getValue());
 assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
@@ -213,6 +219,8 @@ Rec.getAttr(fNAME).setValue(getName());
 Rec.getAttr(fDESCRIP).setValue(getDescription());
 Rec.getAttr(fUSE).setValue(getUse());
 Rec.getAttr(fPDDATE).setValue(getPDDate());
+Rec.getAttr(fSCN).setValue(getSCN());
+Rec.getAttr(fLANG).setValue(getLang());
 Rec.getAttr(fPARENTID).setValue(getParentId());
 getCommonValues(Rec);
 return Rec;
@@ -251,8 +259,10 @@ if (ThesaurStruct==null)
     Record R=new Record();
     R.addAttr( new Attribute(fPDID, "PDID","Unique_identifier", Attribute.tSTRING, true, null, 32, true, false, false));
     R.addAttr( new Attribute(fNAME, "Term_Name","Term_Name", Attribute.tSTRING, true, null, 128, false, true, true));
-    R.addAttr( new Attribute(fDESCRIP, "Description","Description", Attribute.tSTRING, true, null, 254, false, false, true));
+    R.addAttr( new Attribute(fDESCRIP, "Definition","Definition", Attribute.tSTRING, true, null, 254, false, false, true));
     R.addAttr( new Attribute(fUSE, "USE","Use_this_term", Attribute.tSTRING, false, null, 32, false, false, true));
+    R.addAttr( new Attribute(fSCN, "Scope Note","Scope Note", Attribute.tSTRING, false, null, 254, false, false, true));
+    R.addAttr( new Attribute(fLANG, "Language","Term Language", Attribute.tSTRING, false, null, 2, false, false, true));
     R.addAttr( new Attribute(fPARENTID, "Parent_Term","Parent_Term", Attribute.tSTRING, true, null, 32, false, true, false));
     R.addRecord(getRecordStructCommon());
     return(R);
@@ -1180,4 +1190,36 @@ if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.AddRT:"+getPDId()+"<");
 }
 //---------------------------------------------------------------------
+
+    /**
+     * @return the SCN
+     */
+    public String getSCN()
+    {
+        return SCN;
+    }
+
+    /**
+     * @param SCN the SCN to set
+     */
+    public void setSCN(String SCN)
+    {
+        this.SCN = SCN;
+    }
+
+    /**
+     * @return the Lang
+     */
+    public String getLang()
+    {
+        return Lang;
+    }
+
+    /**
+     * @param Lang the Lang to set
+     */
+    public void setLang(String Lang)
+    {
+        this.Lang = Lang;
+    }
 }
