@@ -45,12 +45,15 @@ private boolean Cancel;
 private PDThesaur TermAct;
 private PDTableModel NTMembers;
 private PDTableModel RTMembers;
+private PDTableModel LangMembers;
 private PDTableModel UFMembers;
 private Vector VEmpty=new Vector();
 private HashSet MemUF;
 private HashSet MemNT;
 private HashSet MemRT;
+private HashSet MemLang;
 private Vector AttrMemRT=new Vector();
+private Vector AttrMemLang=new Vector();
 PDThesaur UseTerm=null;
 String LocalThes=PDThesaur.ROOTTERM;
 
@@ -104,20 +107,26 @@ UFTable.setAutoCreateColumnsFromModel(true);
         LangTextField = new javax.swing.JTextField();
         SelUseButton = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        PanelNT = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        NTTable = new javax.swing.JTable();
-        ToolBarNT = new javax.swing.JToolBar();
         PanelRT = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         RTTable = new javax.swing.JTable();
         ToolBarRT = new javax.swing.JToolBar();
         AddButtonRT = new javax.swing.JButton();
         DelButtonRT = new javax.swing.JButton();
+        PanelLang = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        LangTable = new javax.swing.JTable();
+        ToolBarLang = new javax.swing.JToolBar();
+        AddButtonLang = new javax.swing.JButton();
+        DelButtonLang = new javax.swing.JButton();
         PanelUF = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         UFTable = new javax.swing.JTable();
         ToolBarUF = new javax.swing.JToolBar();
+        PanelNT = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        NTTable = new javax.swing.JTable();
+        ToolBarNT = new javax.swing.JToolBar();
         ButtonAcept = new javax.swing.JButton();
         ButtonCancel = new javax.swing.JButton();
 
@@ -188,33 +197,6 @@ UFTable.setAutoCreateColumnsFromModel(true);
             }
         });
 
-        jScrollPane1.setViewportView(NTTable);
-
-        ToolBarNT.setRollover(true);
-
-        javax.swing.GroupLayout PanelNTLayout = new javax.swing.GroupLayout(PanelNT);
-        PanelNT.setLayout(PanelNTLayout);
-        PanelNTLayout.setHorizontalGroup(
-            PanelNTLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelNTLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(PanelNTLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE)
-                    .addComponent(ToolBarNT, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        PanelNTLayout.setVerticalGroup(
-            PanelNTLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelNTLayout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addComponent(ToolBarNT, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        jTabbedPane1.addTab(MainWin.TT("Narrow_Terms"), PanelNT);
-
         jScrollPane2.setViewportView(RTTable);
 
         ToolBarRT.setRollover(true);
@@ -273,6 +255,64 @@ UFTable.setAutoCreateColumnsFromModel(true);
 
         jTabbedPane1.addTab(MainWin.TT("Related_Terms"), PanelRT);
 
+        jScrollPane4.setViewportView(LangTable);
+
+        ToolBarLang.setRollover(true);
+
+        AddButtonLang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/add.png"))); // NOI18N
+        AddButtonLang.setToolTipText(MainWin.TT("Add_user_to_group"));
+        AddButtonLang.setFocusable(false);
+        AddButtonLang.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        AddButtonLang.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        AddButtonLang.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                AddButtonLangActionPerformed(evt);
+            }
+        });
+        ToolBarLang.add(AddButtonLang);
+
+        DelButtonLang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/del.png"))); // NOI18N
+        DelButtonLang.setToolTipText(MainWin.TT("Delete_user_from_group"));
+        DelButtonLang.setFocusable(false);
+        DelButtonLang.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        DelButtonLang.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        DelButtonLang.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                DelButtonLangActionPerformed(evt);
+            }
+        });
+        ToolBarLang.add(DelButtonLang);
+
+        javax.swing.GroupLayout PanelLangLayout = new javax.swing.GroupLayout(PanelLang);
+        PanelLang.setLayout(PanelLangLayout);
+        PanelLangLayout.setHorizontalGroup(
+            PanelLangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelLangLayout.createSequentialGroup()
+                .addGroup(PanelLangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PanelLangLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(ToolBarLang, javax.swing.GroupLayout.DEFAULT_SIZE, 585, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelLangLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        PanelLangLayout.setVerticalGroup(
+            PanelLangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelLangLayout.createSequentialGroup()
+                .addGap(2, 2, 2)
+                .addComponent(ToolBarLang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab(MainWin.TT("Translations"), PanelLang);
+
         jScrollPane3.setViewportView(UFTable);
 
         ToolBarUF.setRollover(true);
@@ -302,6 +342,33 @@ UFTable.setAutoCreateColumnsFromModel(true);
         );
 
         jTabbedPane1.addTab(MainWin.TT("Used_For"), PanelUF);
+
+        jScrollPane1.setViewportView(NTTable);
+
+        ToolBarNT.setRollover(true);
+
+        javax.swing.GroupLayout PanelNTLayout = new javax.swing.GroupLayout(PanelNT);
+        PanelNT.setLayout(PanelNTLayout);
+        PanelNTLayout.setHorizontalGroup(
+            PanelNTLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelNTLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(PanelNTLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE)
+                    .addComponent(ToolBarNT, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        PanelNTLayout.setVerticalGroup(
+            PanelNTLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelNTLayout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addComponent(ToolBarNT, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab(MainWin.TT("Narrow_Terms"), PanelNT);
 
         ButtonAcept.setFont(MainWin.getFontDialog());
         ButtonAcept.setText(MainWin.TT("Ok"));
@@ -519,17 +586,65 @@ else
     USETextField.setText(UseTerm.getName());
     }//GEN-LAST:event_SelUseButtonActionPerformed
 
+    private void AddButtonLangActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_AddButtonLangActionPerformed
+    {//GEN-HEADEREND:event_AddButtonLangActionPerformed
+try {
+AddTermRT ALang=new AddTermRT(this, true, LocalThes);
+ALang.setTranslations(true);
+ALang.AddMode();
+ALang.setLocationRelativeTo(null);
+ALang.setVisible(true);
+if (ALang.isCancel())
+    return;
+PDThesaur RTerm=ALang.getUseTerm();
+if (RTerm==null)
+    return;
+getMemLang().add(RTerm.getPDId());
+RefreshLang();
+} catch (PDException ex)
+    {
+    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
+
+    }//GEN-LAST:event_AddButtonLangActionPerformed
+
+    private void DelButtonLangActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_DelButtonLangActionPerformed
+    {//GEN-HEADEREND:event_DelButtonLangActionPerformed
+if (RTTable.getSelectedRow()==-1)
+    return;
+try {
+AddTermRT ALang=new AddTermRT(this, true, LocalThes);
+ALang.setTranslations(true);
+ALang.setRecord(RTMembers.getElement(RTTable.convertRowIndexToModel(RTTable.getSelectedRow())));
+ALang.DelMode();
+ALang.setLocationRelativeTo(null);
+ALang.setVisible(true);
+if (ALang.isCancel())
+    return;
+getMemLang().remove(ALang.getUseTerm().getPDId());
+RefreshLang();
+} catch (PDException ex)
+    {
+    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
+
+    }//GEN-LAST:event_DelButtonLangActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton AddButtonLang;
     private javax.swing.JButton AddButtonRT;
     private javax.swing.JButton ButtonAcept;
     private javax.swing.JButton ButtonCancel;
+    private javax.swing.JButton DelButtonLang;
     private javax.swing.JButton DelButtonRT;
     private javax.swing.JLabel IdNameLabel;
     private javax.swing.JTextField IdNameTextField;
     private javax.swing.JLabel LabelOperation;
     private javax.swing.JLabel LangLabel;
+    private javax.swing.JTable LangTable;
     private javax.swing.JTextField LangTextField;
     private javax.swing.JTable NTTable;
+    private javax.swing.JPanel PanelLang;
     private javax.swing.JPanel PanelNT;
     private javax.swing.JPanel PanelRT;
     private javax.swing.JPanel PanelUF;
@@ -543,6 +658,7 @@ else
     private javax.swing.JTextField TermDescripTextField;
     private javax.swing.JLabel TermNameLabel;
     private javax.swing.JTextField TermNameTextField;
+    private javax.swing.JToolBar ToolBarLang;
     private javax.swing.JToolBar ToolBarNT;
     private javax.swing.JToolBar ToolBarRT;
     private javax.swing.JToolBar ToolBarUF;
@@ -552,6 +668,7 @@ else
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
     // End of variables declaration//GEN-END:variables
 
@@ -575,6 +692,8 @@ TermNameTextField.setEditable(false);
 TermDescripTextField.setEditable(false);
 AddButtonRT.setEnabled(false);
 DelButtonRT.setEnabled(false);
+AddButtonLang.setEnabled(false);
+DelButtonLang.setEnabled(false);
 USETextField.setEnabled(false);
 LangTextField.setEditable(false);
 SCNTextField.setEditable(false);
@@ -621,8 +740,10 @@ if (Id != null)
     MemUF=TermAct.getListUF(Id);
     MemNT=TermAct.getListDirectDescendList(Id);
     MemRT=TermAct.getListRT(Id);
+    MemLang=TermAct.getListLang(Id);
     RefreshNT();
     RefreshRT();
+    RefreshLang();
     RefreshUF();
     }
 else
@@ -630,6 +751,7 @@ else
     IdNameTextField.setText("");    
     MemUF=new HashSet();
     MemRT=new HashSet();
+    MemLang=new HashSet();
     MemNT=new HashSet();
     }
 IdNameLabel.setText(MainWin.TT(Attr.getUserName()));
@@ -693,6 +815,18 @@ RTTable.getColumnModel().getColumn(0).setMaxWidth(0);
 RTTable.getColumnModel().removeColumn(RTTable.getColumnModel().getColumn(0));
 }
 //----------------------------------------------------------------
+private void RefreshLang() throws PDException
+{
+LangMembers = new PDTableModel();    
+LangMembers.setDrv(MainWin.getSession());
+LangMembers.setListFields(PDThesaur.getRecordStructPDThesaur());
+AttrMemLang=TermAct.getList(getMemLang());
+LangMembers.setVector(AttrMemLang);
+LangTable.setModel(LangMembers);
+LangTable.getColumnModel().getColumn(0).setMaxWidth(0);
+LangTable.getColumnModel().removeColumn(LangTable.getColumnModel().getColumn(0));
+}
+//----------------------------------------------------------------
 private void RefreshNT() throws PDException
 {
 NTMembers = new PDTableModel();
@@ -729,12 +863,17 @@ public boolean isCancel()
 return Cancel;
 }
 //----------------------------------------------------------------
-
-    /**
-     * @return the MemRT
-     */
-    public HashSet getMemRT()
-    {
-        return MemRT;
-    }
+/**
+ * @return the MemRT
+ */
+public HashSet getMemRT()
+{
+return MemRT;
+}
+//----------------------------------------------------------------
+HashSet getMemLang()
+{
+return MemLang;
+}
+//----------------------------------------------------------------
 }
