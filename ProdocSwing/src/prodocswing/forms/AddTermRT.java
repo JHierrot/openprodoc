@@ -26,7 +26,6 @@
 package prodocswing.forms;
 
 import javax.swing.JDialog;
-import prodoc.Attribute;
 import prodoc.PDException;
 import prodoc.PDThesaur;
 import prodoc.Record;
@@ -41,6 +40,7 @@ private Record RTTermRecord;
 private boolean Cancel;
 private PDThesaur RTUseTerm=null;
 String LocalThes=PDThesaur.ROOTTERM;
+private boolean Translations=false;
 
 /** Creates new form MantUsers
  * @param parent
@@ -216,7 +216,10 @@ else
 */
 public void AddMode()
 {
-LabelOperation.setText(MainWin.TT("Add_Related_Term"));
+if (Translations)    
+    LabelOperation.setText(MainWin.TT("Add_translation_of_the_Term"));
+else
+    LabelOperation.setText(MainWin.TT("Add_Related_Term"));
 }
 //----------------------------------------------------------------
 /**
@@ -224,7 +227,10 @@ LabelOperation.setText(MainWin.TT("Add_Related_Term"));
 */
 public void DelMode()
 {
-LabelOperation.setText(MainWin.TT("Delete_Relation_with_Term"));
+if (Translations)    
+    LabelOperation.setText(MainWin.TT("Delete_translation_of_the_Term"));
+else    
+    LabelOperation.setText(MainWin.TT("Delete_Relation_with_Term"));
 this.AddButtonU1.setEnabled(false);
 }
 //----------------------------------------------------------------
@@ -260,4 +266,12 @@ public PDThesaur getUseTerm()
 return RTUseTerm;
 }
 //----------------------------------------------------------------
+
+/**
+ * @param Translations the Translations to set
+ */
+public void setTranslations(boolean Translations)
+{
+this.Translations = Translations;
+}
 }

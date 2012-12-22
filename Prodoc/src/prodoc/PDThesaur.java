@@ -77,6 +77,7 @@ static private Record ThesaurStruct=null;
  */
 static private Record ThesaurLevStruct=null;
 static private Record ThesaurRTStruct=null;
+static private Record ThesaurLangStruct=null;
 /**
  *
  */
@@ -207,6 +208,15 @@ return("PD_THES_RT");
 }
 //-------------------------------------------------------------------------
 /**
+ * static method
+ * @return
+ */
+static public String getTableNameThesLang()
+{
+return("PD_THES_LANG");
+}
+//-------------------------------------------------------------------------
+/**
  *
  * @throws PDException
  */
@@ -259,10 +269,10 @@ if (ThesaurStruct==null)
     Record R=new Record();
     R.addAttr( new Attribute(fPDID, "PDID","Unique_identifier", Attribute.tSTRING, true, null, 32, true, false, false));
     R.addAttr( new Attribute(fNAME, "Term_Name","Term_Name", Attribute.tSTRING, true, null, 128, false, true, true));
-    R.addAttr( new Attribute(fDESCRIP, "Definition","Definition", Attribute.tSTRING, true, null, 254, false, false, true));
+    R.addAttr( new Attribute(fDESCRIP, "Definition","Definition", Attribute.tSTRING, false, null, 254, false, false, true));
     R.addAttr( new Attribute(fUSE, "USE","Use_this_term", Attribute.tSTRING, false, null, 32, false, false, true));
     R.addAttr( new Attribute(fSCN, "Scope Note","Scope Note", Attribute.tSTRING, false, null, 254, false, false, true));
-    R.addAttr( new Attribute(fLANG, "Language","Term Language", Attribute.tSTRING, false, null, 2, false, false, true));
+    R.addAttr( new Attribute(fLANG, "Language","Term Language", Attribute.tSTRING, false, null, 2, false, true, true));
     R.addAttr( new Attribute(fPARENTID, "Parent_Term","Parent_Term", Attribute.tSTRING, true, null, 32, false, true, false));
     R.addRecord(getRecordStructCommon());
     return(R);
@@ -332,6 +342,36 @@ else
 }
 //-------------------------------------------------------------------------
 /**
+ * Returns the fixed structure for levels of Thesaurs
+ * @return
+ * @throws PDException
+ */
+static protected Record getRecordStructPDThesaurLang() throws PDException
+{
+if (ThesaurLangStruct==null)
+    ThesaurLangStruct=CreateRecordStructPDThesaurLang();
+return(ThesaurLangStruct.Copy());
+}
+//-------------------------------------------------------------------------
+/**
+ * Returns the fixed structure for levels of Thesaurs
+ * @return
+ * @throws PDException
+ */
+static private synchronized Record CreateRecordStructPDThesaurLang() throws PDException
+{
+if (ThesaurLangStruct==null)
+    {
+    Record R=new Record();
+    R.addAttr( new Attribute(fPDID, fPDID, fPDID, Attribute.tSTRING, true, null, 32, true, false, false));
+    R.addAttr( new Attribute(fPDID2,fPDID2, fPDID2, Attribute.tSTRING, true, null, 32, true, false, false));
+    return(R);
+    }
+else
+    return(ThesaurLangStruct);
+}
+//-------------------------------------------------------------------------
+/**
  *
  * @throws PDException
  */
@@ -386,6 +426,9 @@ Drv.AddIntegrity(getTableNameThesLev(), fGRANTPARENTID, getTableName(), fPDID);
 Drv.CreateTable(getTableNameThesRT(), getRecordStructPDThesaurRT());
 Drv.AddIntegrity(getTableNameThesRT(), fPDID,          getTableName(), fPDID);
 Drv.AddIntegrity(getTableNameThesRT(), fPDID2, getTableName(), fPDID);
+Drv.CreateTable(getTableNameThesLang(), getRecordStructPDThesaurLang());
+Drv.AddIntegrity(getTableNameThesLang(), fPDID,  getTableName(), fPDID);
+Drv.AddIntegrity(getTableNameThesLang(), fPDID2, getTableName(), fPDID);
 }
 //-------------------------------------------------------------------------
 /**
@@ -584,6 +627,7 @@ if (InTransLocal)
     getDrv().IniciarTrans();
 try {
 DeleteTermRT();    
+DeleteTermLang();    
 DeleteTermsInTerm();
 DeleteFoldLevelParents();
 getDrv().DeleteRecord(getTabName(), getConditions());
@@ -609,6 +653,17 @@ Conds.addCondition(new Condition(PDThesaur.fPDID, Condition.cEQUAL, getPDId()));
 Conds.addCondition(new Condition(PDThesaur.fPDID2, Condition.cEQUAL, getPDId()));
 Conds.setOperatorAnd(false);
 getDrv().DeleteRecord(getTableNameThesRT(), Conds);
+}
+//-------------------------------------------------------------------------
+public void DeleteTermLang() throws PDException
+{   
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.DeleteTermLang:"+getPDId());     
+Conditions Conds=new Conditions();
+Conds.addCondition(new Condition(PDThesaur.fPDID, Condition.cEQUAL, getPDId()));
+Conds.addCondition(new Condition(PDThesaur.fPDID2, Condition.cEQUAL, getPDId()));
+Conds.setOperatorAnd(false);
+getDrv().DeleteRecord(getTableNameThesLang(), Conds);
 }
 //-------------------------------------------------------------------------
 /**
@@ -1020,6 +1075,43 @@ if (PDLog.isDebug())
 return(ListRT);
 }
 //---------------------------------------------------------------------
+/** Obtain a list of the Codes of related terms
+ * 
+ * @param TermId
+ * @return
+ * @throws PDException
+ */
+public HashSet getListLang(String TermId) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.getListLang>:"+TermId);
+HashSet ListRT=new HashSet();
+Condition CondRT1=new Condition(fPDID, Condition.cEQUAL, TermId);
+Condition CondRT2=new Condition(fPDID2, Condition.cEQUAL, TermId);
+Conditions Conds=new Conditions();
+Conds.setOperatorAnd(false);
+Conds.addCondition(CondRT1);
+Conds.addCondition(CondRT2);
+Query Q=new Query(getTableNameThesLang(), getRecordStructPDThesaurLang(), Conds, null);
+Cursor CursorId=getDrv().OpenCursor(Q);
+Record Res=getDrv().NextRec(CursorId);
+while (Res!=null)
+    {
+    String PD1=(String) Res.getAttr(fPDID).getValue();
+    if (!PD1.equalsIgnoreCase(TermId))
+        ListRT.add(PD1);
+    else
+        {
+        ListRT.add((String) Res.getAttr(fPDID2).getValue());
+        }
+    Res=getDrv().NextRec(CursorId);
+    }
+getDrv().CloseCursor(CursorId);
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.getListLang<:"+TermId);
+return(ListRT);
+}
+//---------------------------------------------------------------------
 /** Obtain a CURSOR of the <b>Records<b> of narrow terms
  * 
  * @param TermId
@@ -1049,6 +1141,22 @@ if (PDLog.isDebug())
 Cursor CursorId=LoadList(getListRT(TermId));
 if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.ListRT<:"+TermId);
+return(CursorId);
+}
+//---------------------------------------------------------------------
+/** Obtain a CURSOR of the <b>Records<b> of related terms
+ * 
+ * @param TermId
+ * @return
+ * @throws PDException
+ */
+public Cursor ListLang(String TermId) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.ListLang>:"+TermId);
+Cursor CursorId=LoadList(getListLang(TermId));
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.ListLang<:"+TermId);
 return(CursorId);
 }
 //---------------------------------------------------------------------
@@ -1190,36 +1298,73 @@ if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.AddRT:"+getPDId()+"<");
 }
 //---------------------------------------------------------------------
-
-    /**
-     * @return the SCN
-     */
-    public String getSCN()
+public void AddLang(HashSet memLang) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.AddLang:"+getPDId()+">"+memLang);
+boolean InTransLocal;
+VerifyAllowedIns();
+InTransLocal=!getDrv().isInTransaction();
+if (InTransLocal)
+    getDrv().IniciarTrans();
+Record R=getRecordStructPDThesaurLang();
+try {
+for (Iterator it = memLang.iterator(); it.hasNext();)
     {
-        return SCN;
+    String IdRT=(String)it.next();
+    if (IdRT.compareTo(getPDId())>0)
+        {
+        R.getAttr(fPDID).setValue(IdRT);
+        R.getAttr(fPDID2).setValue(getPDId());
+        }
+    else if (IdRT.compareTo(getPDId())<0) // necesary to ignore Id2==Id
+        {
+        R.getAttr(fPDID).setValue(getPDId());        
+        R.getAttr(fPDID2).setValue(IdRT);
+        }
+    getDrv().InsertRecord(getTableNameThesLang(), R);
     }
-
-    /**
-     * @param SCN the SCN to set
-     */
-    public void setSCN(String SCN)
+} catch (PDException Ex)
     {
-        this.SCN = SCN;
+    getDrv().AnularTrans();
+    PDException.GenPDException("Error_creating_Thesaur",Ex.getLocalizedMessage());
     }
-
-    /**
-     * @return the Lang
-     */
-    public String getLang()
-    {
-        return Lang;
-    }
-
-    /**
-     * @param Lang the Lang to set
-     */
-    public void setLang(String Lang)
-    {
-        this.Lang = Lang;
-    }
+if (InTransLocal)
+    getDrv().CerrarTrans();
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.AddLang:"+getPDId()+"<");
+}
+//---------------------------------------------------------------------
+/**
+ * @return the SCN
+ */
+public String getSCN()
+{
+return SCN;
+}
+//---------------------------------------------------------------------
+/**
+ * @param SCN the SCN to set
+ */
+public void setSCN(String SCN)
+{
+this.SCN = SCN;
+}
+//---------------------------------------------------------------------
+/**
+ * @return the Lang
+ */
+public String getLang()
+{
+return Lang;
+}
+//---------------------------------------------------------------------
+/**
+ * @param Lang the Lang to set
+ */
+public void setLang(String Lang)
+{
+this.Lang = Lang;
+}
+//---------------------------------------------------------------------
 }

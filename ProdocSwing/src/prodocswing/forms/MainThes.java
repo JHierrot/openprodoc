@@ -50,6 +50,7 @@ private String ActTermId=null;
 private PDThesaur TermAct=null;
 private PDTableModel NTMembers;
 private PDTableModel RTMembers;
+private PDTableModel LangMembers;
 private PDTableModel UFMembers;
 private Vector VEmpty=new Vector();
 private int DividerLocRel=100, DividerLocTerm=100;
@@ -109,15 +110,18 @@ initComponents();
         SCNTextField = new javax.swing.JTextField();
         LangLabel = new javax.swing.JLabel();
         Relations = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        NTTable = new javax.swing.JTable();
-        jPanel2 = new javax.swing.JPanel();
+        jPanelRT = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         RTTable = new javax.swing.JTable();
-        jPanel3 = new javax.swing.JPanel();
+        jPanelLang = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        LangTable = new javax.swing.JTable();
+        jPanelUF = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         UFTable = new javax.swing.JTable();
+        jPanelNT = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        NTTable = new javax.swing.JTable();
         menuBar = new javax.swing.JMenuBar();
         ThesaurMenu = new javax.swing.JMenu();
         AddThesaur = new javax.swing.JMenuItem();
@@ -278,38 +282,7 @@ initComponents();
 
         DetailsPanel.setLeftComponent(TermAttr);
 
-        jPanel1.setFont(MainWin.getFontDialog());
-
-        NTTable.setFont(MainWin.getFontList());
-        NTTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][]
-            {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String []
-            {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane2.setViewportView(NTTable);
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
-        );
-
-        Relations.addTab("NT", jPanel1);
-
-        jPanel2.setFont(MainWin.getFontDialog());
+        jPanelRT.setFont(MainWin.getFontDialog());
 
         RTTable.setFont(MainWin.getFontList());
         RTTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -327,20 +300,51 @@ initComponents();
         ));
         jScrollPane3.setViewportView(RTTable);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jPanelRTLayout = new javax.swing.GroupLayout(jPanelRT);
+        jPanelRT.setLayout(jPanelRTLayout);
+        jPanelRTLayout.setHorizontalGroup(
+            jPanelRTLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanelRTLayout.setVerticalGroup(
+            jPanelRTLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
         );
 
-        Relations.addTab("RT", jPanel2);
+        Relations.addTab("RT", jPanelRT);
 
-        jPanel3.setFont(MainWin.getFontDialog());
+        jPanelLang.setFont(MainWin.getFontDialog());
+
+        LangTable.setFont(MainWin.getFontList());
+        LangTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String []
+            {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane5.setViewportView(LangTable);
+
+        javax.swing.GroupLayout jPanelLangLayout = new javax.swing.GroupLayout(jPanelLang);
+        jPanelLang.setLayout(jPanelLangLayout);
+        jPanelLangLayout.setHorizontalGroup(
+            jPanelLangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
+        );
+        jPanelLangLayout.setVerticalGroup(
+            jPanelLangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
+        );
+
+        Relations.addTab("Lang", jPanelLang);
+
+        jPanelUF.setFont(MainWin.getFontDialog());
 
         UFTable.setFont(MainWin.getFontList());
         UFTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -358,18 +362,49 @@ initComponents();
         ));
         jScrollPane4.setViewportView(UFTable);
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jPanelUFLayout = new javax.swing.GroupLayout(jPanelUF);
+        jPanelUF.setLayout(jPanelUFLayout);
+        jPanelUFLayout.setHorizontalGroup(
+            jPanelUFLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanelUFLayout.setVerticalGroup(
+            jPanelUFLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
         );
 
-        Relations.addTab("UF", jPanel3);
+        Relations.addTab("UF", jPanelUF);
+
+        jPanelNT.setFont(MainWin.getFontDialog());
+
+        NTTable.setFont(MainWin.getFontList());
+        NTTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String []
+            {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(NTTable);
+
+        javax.swing.GroupLayout jPanelNTLayout = new javax.swing.GroupLayout(jPanelNT);
+        jPanelNT.setLayout(jPanelNTLayout);
+        jPanelNTLayout.setHorizontalGroup(
+            jPanelNTLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
+        );
+        jPanelNTLayout.setVerticalGroup(
+            jPanelNTLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
+        );
+
+        Relations.addTab("NT", jPanelNT);
 
         DetailsPanel.setRightComponent(Relations);
 
@@ -744,62 +779,90 @@ else
     private void AddTermActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddTermActionPerformed
 if (ActTermId.equals(getIdLocalRootTerm()))
     return;
+MantTerm MTF;
 try {
-MantTerm MTF = new MantTerm(this, true, IdLocalRootTerm.equals(PDThesaur.ROOTTERM)?getTermAct().getIDThesaur():IdLocalRootTerm);
+MTF = new MantTerm(this, true, IdLocalRootTerm.equals(PDThesaur.ROOTTERM)?getTermAct().getIDThesaur():IdLocalRootTerm);
 MTF.setLocationRelativeTo(null);
 MTF.setRecord(PDThesaur.getRecordStructPDThesaur(), getTermAct().getName());
 MTF.AddMode();
-MTF.setVisible(true);
-if (MTF.isCancel())
-    return;
-PDThesaur Term=new PDThesaur(Session);
-Term.assignValues(MTF.getRecord());
-Term.setParentId(ActTermId);
-Session.IniciarTrans();
-Term.insert();
-Term.AddRT(MTF.getMemRT());
-Session.CerrarTrans();
-TreePath ActualPath = TreeTerm.getSelectionPath();
-ExpandFold((DefaultMutableTreeNode)ActualPath.getLastPathComponent());
-TreeTerm.setSelectionPath(ActualPath);
-} catch (Exception ex)
+    } catch (Exception ex)
+        {
+        MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+        return;
+        }    
+while (true)
     {
-    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
-    }
+    try {
+    MTF.setVisible(true);
+    if (MTF.isCancel())
+        return;
+    PDThesaur Term=new PDThesaur(Session);
+    Term.assignValues(MTF.getRecord());
+    Term.setParentId(ActTermId);
+    Session.IniciarTrans();
+    Term.insert();
+    Term.AddRT(MTF.getMemRT());
+    Term.AddLang(MTF.getMemLang());
+    Session.CerrarTrans();
+    TreePath ActualPath = TreeTerm.getSelectionPath();
+    ExpandFold((DefaultMutableTreeNode)ActualPath.getLastPathComponent());
+    TreeTerm.setSelectionPath(ActualPath);
+    return;
+    } catch (Exception ex)
+        {
+        MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+        }    
+}
     }//GEN-LAST:event_AddTermActionPerformed
 
     private void ModTermActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ModTermActionPerformed
 if (ActTermId.equals(getIdLocalRootTerm()))
     return;
+PDThesaur Term;
+MantTerm MTF;
+TreePath selectionPath;
 try {
-TreePath selectionPath = TreeTerm.getSelectionPath();
+selectionPath = TreeTerm.getSelectionPath();
 DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) selectionPath.getLastPathComponent();
-PDThesaur Term= ((TreeTerm) TreeFold.getUserObject()).getTerm();
+Term= ((TreeTerm) TreeFold.getUserObject()).getTerm();
 Term.Load(Term.getPDId());
 if (Term.getParentId().equals(PDThesaur.ROOTTERM))
     return; // trying to edit a Thesaur as term
-MantTerm MTF = new MantTerm(this, true, IdLocalRootTerm.equals(PDThesaur.ROOTTERM)?getTermAct().getIDThesaur():IdLocalRootTerm);
+MTF = new MantTerm(this, true, IdLocalRootTerm.equals(PDThesaur.ROOTTERM)?getTermAct().getIDThesaur():IdLocalRootTerm);
 MTF.setLocationRelativeTo(null);
 MTF.EditMode();
 PDThesaur ParentTerm=new PDThesaur(Session);
 ParentTerm.Load(Term.getParentId());
 MTF.setRecord(Term.getRecord(), ParentTerm.getName());
-MTF.setVisible(true);
-if (MTF.isCancel())
-    return;
-Term.assignValues(MTF.getRecord());
-Session.IniciarTrans();
-Term.update();
-Term.DeleteTermRT();
-Term.AddRT(MTF.getMemRT());
-Session.CerrarTrans();
-TreePath ParentFold = (TreePath) TreeTerm.getSelectionPath().getParentPath();
-ExpandFold((DefaultMutableTreeNode)ParentFold.getLastPathComponent());
-TreeTerm.setSelectionPath(selectionPath);
-} catch (Exception ex)
+    } catch (Exception ex)
+        {
+        MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+        return;
+        }
+while (true)
     {
-    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    try {
+    MTF.setVisible(true);
+    if (MTF.isCancel())
+        return;
+    Term.assignValues(MTF.getRecord());
+    Session.IniciarTrans();
+    Term.update();
+    Term.DeleteTermRT();
+    Term.AddRT(MTF.getMemRT());
+    Term.DeleteTermLang();
+    Term.AddLang(MTF.getMemLang());
+    Session.CerrarTrans();
+    TreePath ParentFold = (TreePath) TreeTerm.getSelectionPath().getParentPath();
+    ExpandFold((DefaultMutableTreeNode)ParentFold.getLastPathComponent());
+    TreeTerm.setSelectionPath(selectionPath);
+    return;
+    } catch (Exception ex)
+        {
+        MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+        }
     }
+
     }//GEN-LAST:event_ModTermActionPerformed
 
     private void DelTermActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DelTermActionPerformed
@@ -852,6 +915,7 @@ setTermAct(null);
     private javax.swing.JTextField DescripTextField;
     private javax.swing.JSplitPane DetailsPanel;
     private javax.swing.JLabel LangLabel;
+    private javax.swing.JTable LangTable;
     private javax.swing.JTextField LangTextField;
     private javax.swing.JMenuItem ModTerm;
     private javax.swing.JTable NTTable;
@@ -878,13 +942,15 @@ setTermAct(null);
     private javax.swing.JTextField UseTextField;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu helpMenu;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanelLang;
+    private javax.swing.JPanel jPanelNT;
+    private javax.swing.JPanel jPanelRT;
+    private javax.swing.JPanel jPanelUF;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator6;
@@ -1052,6 +1118,7 @@ private void UpdateTabs(String ActTermId) throws PDException
 {
 RefreshNT(ActTermId);
 RefreshRT(ActTermId);
+RefreshLang(ActTermId);
 RefreshUF(ActTermId);
 }
 //----------------------------------------------------------------
@@ -1068,6 +1135,21 @@ else
 RTTable.setModel(RTMembers);
 RTTable.getColumnModel().getColumn(0).setMaxWidth(0);
 RTTable.getColumnModel().removeColumn(RTTable.getColumnModel().getColumn(0));
+}
+//----------------------------------------------------------------
+private void RefreshLang(String TermId) throws PDException
+{
+LangMembers = new PDTableModel();
+LangMembers.setDrv(MainWin.getSession());
+LangMembers.setListFields(PDThesaur.getRecordStructPDThesaur());
+HashSet Mem=getTermAct().getListLang(TermId);
+if (!Mem.isEmpty())
+    LangMembers.setCursor(getTermAct().LoadList(Mem));
+else    
+    LangMembers.setVector(VEmpty);
+LangTable.setModel(LangMembers);
+LangTable.getColumnModel().getColumn(0).setMaxWidth(0);
+LangTable.getColumnModel().removeColumn(LangTable.getColumnModel().getColumn(0));
 }
 //----------------------------------------------------------------
 private void RefreshNT(String TermId) throws PDException

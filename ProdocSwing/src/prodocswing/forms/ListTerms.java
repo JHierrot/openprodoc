@@ -174,6 +174,8 @@ MainWin.getSession().IniciarTrans();
 Term.update();
 Term.DeleteTermRT();
 Term.AddRT(MTF.getMemRT());
+Term.DeleteTermLang();
+Term.AddLang(MTF.getMemLang());
 MainWin.getSession().CerrarTrans();
 } catch (Exception ex)
     {
