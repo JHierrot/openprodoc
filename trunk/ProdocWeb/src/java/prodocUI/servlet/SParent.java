@@ -35,9 +35,11 @@ import prodoc.DriverGeneric;
 import prodoc.PDDocs;
 import prodoc.PDException;
 import prodoc.PDFolders;
+import prodoc.PDThesaur;
 import prodoc.ProdocFW;
 import prodoc.Record;
 import prodocUI.forms.FListDocs;
+import prodocUI.forms.FListTerm;
 import prodocUI.forms.FLogin;
 import prodocUI.forms.FMessage;
 import prodocUI.forms.FSearchDocAdv;
@@ -273,17 +275,6 @@ if (getSessOPD(Req)==null)
 else
     return( getSessOPD(Req).TT(Text) );
 }
-//----------------------------------------------------------
-///**
-// * 
-// * @param Req
-// * @return
-// */
-//public static DriverGeneric getSession(HttpServletRequest Req)
-//{
-//HttpSession Sess=Req.getSession(true);
-//return (DriverGeneric)Sess.getAttribute("PRODOC_SESS");
-//}
 //----------------------------------------------------------
 /**
  * 
@@ -532,6 +523,26 @@ Req.getSession().setAttribute("FOLD_REC", ActFold);
 }
 //--------------------------------------------------------------
 /**
+ *
+ * @param Req
+ * @return
+ */
+public static Record getActTerm(HttpServletRequest Req)
+{
+return (Record)Req.getSession().getAttribute("TERM_REC");
+}
+//--------------------------------------------------------------
+/**
+ *
+ * @param Req
+ * @param ActFold 
+ */
+public static void setActTerm(HttpServletRequest Req, Record ActTerm)
+{
+Req.getSession().setAttribute("TERM_REC", ActTerm);
+}
+//--------------------------------------------------------------
+/**
  * 
  * @param Req
  * @return
@@ -552,68 +563,27 @@ public static void setActFoldId(HttpServletRequest Req, String ActFoldId)
 Req.getSession().setAttribute("FoldId", ActFoldId);
 }
 //--------------------------------------------------------------
-///**
-// *
-// * @param Req
-// * @return
-// */
-//public static String getTabId(HttpServletRequest Req)
-//{
-//HttpSession Sess=Req.getSession();
-//return (String)Sess.getAttribute("NewTabId");
-//}
-////-----------------------------------------------------------------------------------------------
-///**
-// *
-// * @param Req
-// * @param ActTabId
-// */
-//public static void setTabId(HttpServletRequest Req, String ActTabId)
-//{
-//Req.getSession().setAttribute("NewTabId", ActTabId);
-//}
-////--------------------------------------------------------------
-///**
-// *
-// * @param Req
-// * @return
-// */
-//public static String getRowId(HttpServletRequest Req)
-//{
-//HttpSession Sess=Req.getSession();
-//return (String)Sess.getAttribute("RowI");
-//}
-////-----------------------------------------------------------------------------------------------
-///**
-// *
-// * @param Req
-// * @param ActRowId
-// */
-//public static void setRowId(HttpServletRequest Req, String ActRowId)
-//{
-//Req.getSession().setAttribute("RowI", ActRowId);
-//}
-////--------------------------------------------------------------
-///**
-// * 
-// * @param tabId
-// * @return
-// */
-//static String CalculateTab(String tabId)
-//{
-//return(tabId.substring(0, tabId.lastIndexOf('_')));
-//}
-////--------------------------------------------------------------
-///**
-// *
-// * @param tabId
-// * @return
-// */
-//static String CalculateRow(String tabId)
-//{
-//return(tabId.substring(tabId.lastIndexOf('_')+1));
-//}
-////--------------------------------------------------------------
+/**
+ * 
+ * @param Req
+ * @return
+ */
+public static String getActTermId(HttpServletRequest Req)
+{
+HttpSession Sess=Req.getSession();
+return (String)Sess.getAttribute("TermId");
+}
+//-----------------------------------------------------------------------------------------------
+/**
+ * 
+ * @param Req
+ * @param ActTermId
+ */
+public static void setActTermId(HttpServletRequest Req, String ActTermId)
+{
+Req.getSession().setAttribute("TermId", ActTermId);
+}
+//--------------------------------------------------------------
 /**
  *
  * @param Req
@@ -717,7 +687,7 @@ while (Attr!=null)
 //--------------------------------------------------------------
 /**
  * Evaluates y generates corrected form
- * @param Req Serblet request
+ * @param Req Servlet request
  * @param out 
  * @param Form  one of the *_FORM constants
  * @param OnLoadJS
@@ -793,6 +763,53 @@ if (OnLoadJS!=null && OnLoadJS.length()>0)
     fm.AddOnLoad(OnLoadJS);
 out.println(fm.ToHtml(Sess));
 Sess.setAttribute("LastForm", LISTDOC_FORM);
+}
+//--------------------------------------------------------------
+public static void GenListThes(HttpServletRequest Req, PrintWriter out, int Form, String OnLoadJS, Cursor Results) throws PDException
+{
+HttpSession Sess=Req.getSession(true);
+Integer Last=(Integer)Sess.getAttribute("ThesLastForm");
+int LastForm;
+if (Last!=null)
+    LastForm=Last;
+else
+    LastForm=LISTDOC_FORM;
+if (Form==SEARCHFOLD_FORM || Form==LAST_FORM && LastForm==SEARCHFOLD_FORM)
+    {
+    DriverGeneric PDSession=SParent.getSessOPD(Req);
+    PDFolders F = new PDFolders(PDSession);
+    Record Rec=F.getRecord();
+    if (Results==null)
+        {
+        String FType=(String)Sess.getAttribute("SD_FType");
+        if (FType!=null)
+            {
+            Conditions Cond=(Conditions)Sess.getAttribute("SD_Cond");
+            boolean SubT=(Boolean) Sess.getAttribute("SD_SubT");
+            boolean SubF=(Boolean) Sess.getAttribute("SD_SubF");
+            String actFolderId=(String) Sess.getAttribute("SD_actFolderId");
+            Vector Ord=(Vector)Sess.getAttribute("SD_Ord");
+            Results=F.Search(FType, Cond, SubT, SubF, actFolderId, Ord);
+            }
+        } 
+    FSearchFoldAdv f=new FSearchFoldAdv(Req, FSearchFoldAdv.ADDMOD, Rec, SearchFold.getUrlServlet(), Results);
+    out.println(f.ToHtml(Req.getSession()));
+    Sess.setAttribute("ThesLastForm", SEARCHFOLD_FORM);
+    return;
+    }
+String TermId=Req.getParameter("ThesId");
+if (TermId==null)
+    {
+    TermId=SParent.getActTermId(Req);
+    if (TermId==null)
+        TermId=PDThesaur.ROOTTERM;
+    }
+SParent.setActTermId(Req, TermId);
+FListTerm fm=new FListTerm(Req, TermId);
+if (OnLoadJS!=null && OnLoadJS.length()>0)
+    fm.AddOnLoad(OnLoadJS);
+out.println(fm.ToHtml(Sess));
+Sess.setAttribute("ThesLastForm", LISTDOC_FORM);
 }
 //--------------------------------------------------------------
 /**

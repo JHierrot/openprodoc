@@ -101,6 +101,7 @@ MainMenu.add(MC3);
 if (R.isAllowCreateDoc() && R.isAllowMaintainDoc())
     MC3.add(new MenuItem(TT("Trash_bin"), SPaperBin.getUrlServlet(), WorkArea));
 MC3.add(new MenuItem(TT("Password_change"), SPassChange.getUrlServlet(), WorkArea));
+MC3.add(new MenuItem(TT("Thesaurus"), SMainThes.getUrlServlet(), "Thes"));
 MenuCol MC4=new MenuCol(TT("Help"), 3);
 MainMenu.add(MC4);
 MC4.add(new MenuItem(TT("Contents"), "help/"+SParent.getLang(Req)+"/MainWin.html", "_blank"));

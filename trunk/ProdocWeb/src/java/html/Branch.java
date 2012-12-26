@@ -43,11 +43,11 @@ SelectedBr=Selected;
 Style=pStyle;
 }
 //----------------------------------------------------------------------------
-protected String HtmlPropio(String Url, String Target)
+protected String HtmlPropio(String Url, String Target, String Order, String ElemType)
 {
 StringBuilder Cad=new StringBuilder("<li id=\"");
-Cad.append(Id).append("\"><img src=\"img/"+Style+"unkown.gif\" alt=\"?\" onclick=\"ExpandContract('").append(Id).append("');\" /> <a href=\"");
-Cad.append(Url).append("?FoldId=").append(Id).append("\" ").append((Target==null)?"":"target=\""+Target+"\"").append(">").append(Name).append("</a> </li>");       
+Cad.append(Id).append("\"><img src=\"img/"+Style+"unkown.gif\" alt=\"?\" onclick=\""+Order+"('").append(Id).append("');\" /> <a href=\"");
+Cad.append(Url).append("?"+ElemType+"=").append(Id).append("\" ").append((Target==null)?"":"target=\""+Target+"\"").append(">").append(Name).append("</a> </li>");       
 return(Cad.toString());
 }
 //----------------------------------------------------------------------------

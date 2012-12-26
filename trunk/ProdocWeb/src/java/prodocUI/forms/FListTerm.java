@@ -28,7 +28,6 @@ import prodoc.Cursor;
 import prodoc.DriverGeneric;
 import prodoc.PDDocs;
 import prodoc.PDException;
-import prodoc.PDFolders;
 import prodoc.PDThesaur;
 import prodoc.Record;
 import prodocUI.servlet.SParent;
@@ -38,69 +37,56 @@ import prodocUI.servlet.SendDoc;
  *
  * @author jhierrot
  */
-public class FListDocs extends Page
+public class FListTerm extends Page
 {
 public FieldText FoldTitle;
 public FieldButton2 OkButton;
 public FieldButton2 CancelButton;
 
-final static private String List=PDFolders.fACL+"/"+PDFolders.fFOLDTYPE+"/"+PDFolders.fPARENTID+"/"+PDFolders.fPDID+"/"+PDFolders.fTITLE+"/"+PDFolders.fPDAUTOR+"/"+PDFolders.fPDDATE;
+//final static private String List=PDFolders.fACL+"/"+PDFolders.fFOLDTYPE+"/"+PDFolders.fPARENTID+"/"+PDFolders.fPDID+"/"+PDFolders.fTITLE+"/"+PDFolders.fPDAUTOR+"/"+PDFolders.fPDDATE;
 
 /** Creates a new instance of FormularioLogin
  * @param Req
  * @param CarpId
  * @throws PDException 
  */
-public FListDocs(HttpServletRequest Req, String CarpId) throws PDException
+public FListTerm(HttpServletRequest Req, String CarpId) throws PDException
 {
-super( Req, SParent.TT(Req, "Maintenance_Folders"), "");
+super( Req, SParent.TT(Req, "Term_Maintenance"), "");
 DriverGeneric PDSession=SParent.getSessOPD(Req);
-PDFolders FoldAct=new PDFolders(PDSession);
-Record DatFold=SParent.getActFold(Req);
-if (DatFold==null || !((String)DatFold.getAttr(PDFolders.fPDID).getValue()).equals(CarpId))
+PDThesaur TermAct=new PDThesaur(PDSession);
+Record DatFold=SParent.getActTerm(Req);
+if (DatFold==null || !((String)DatFold.getAttr(PDThesaur.fPDID).getValue()).equals(CarpId))
     {
-    FoldAct.LoadFull(CarpId);
-    DatFold=FoldAct.getRecSum();
+    TermAct.Load(CarpId);
+    DatFold=TermAct.getRecord();
     SParent.setActFold(Req, DatFold);
     }
 else
-    FoldAct.assignValues(DatFold);
+    TermAct.assignValues(DatFold);
 AddCSS("prodoc.css");
 AddJS("Types.js");
-Table Tab=new Table(1,2,0);
-Tab.getCelda(0,0).setCSSId("HeaderRight");
+Table Tab=new Table(2,6,0);
+Tab.setCSSId("HeaderRight");
 Tab.setCellSpacing(0);
 Tab.setWidth(-100);
 Tab.setHeight(-100);
-StringBuilder DescFold=new StringBuilder("<b>"+FoldAct.getTitle()+"</b> ("+FoldAct.getFolderType() +") - "+SParent.FormatTS(Req, FoldAct.getPDDate())+ "<hr> ACL="+FoldAct.getACL());
-DatFold.initList();
-Attribute Attr=DatFold.nextAttr();
-while (Attr!=null)
-    {
-    if (!List.contains(Attr.getName()))
-        {
-        DescFold.append("<br><b>").append(Attr.getUserName()).append("= </b>");
-        if (Attr.getType()==Attribute.tTHES)
-            {
-            PDThesaur Term=new PDThesaur(PDSession);
-            if (Attr.getValue()!=null)
-                {
-                Term.Load((String)Attr.getValue());
-                DescFold.append(Term.getName());
-                }
-            }
-        else
-            DescFold.append(Attr.Export());
-        }
-    Attr=DatFold.nextAttr();
-    }
-Tab.getCelda(0,0).AddElem(new Element(DescFold.toString()));
-Tab.getCelda(0,0).setCSSId("HeaderRight");
+Tab.getCelda(0,0).AddElem(new Element(DatFold.getAttr(PDThesaur.fNAME).getName()));
+Tab.getCelda(0,1).AddElem(new Element(DatFold.getAttr(PDThesaur.fDESCRIP).getName()));
+Tab.getCelda(0,2).AddElem(new Element(DatFold.getAttr(PDThesaur.fUSE).getName()));
+Tab.getCelda(0,3).AddElem(new Element(DatFold.getAttr(PDThesaur.fLANG).getName()));
+Tab.getCelda(0,4).AddElem(new Element(DatFold.getAttr(PDThesaur.fSCN).getName()));
+Tab.getCelda(1,0).AddElem(new Element((String)DatFold.getAttr(PDThesaur.fNAME).getValue()));
+Tab.getCelda(1,1).AddElem(new Element((String)DatFold.getAttr(PDThesaur.fDESCRIP).getValue()));
+Tab.getCelda(1,2).AddElem(new Element((String)DatFold.getAttr(PDThesaur.fUSE).getValue()));
+Tab.getCelda(1,3).AddElem(new Element((String)DatFold.getAttr(PDThesaur.fLANG).getValue()));
+Tab.getCelda(1,4).AddElem(new Element((String)DatFold.getAttr(PDThesaur.fSCN).getValue()));
 AddElem(Tab);
 Table TabDocs=new Table(5,1,1);
 TabDocs.setCellSpacing(0);
 TabDocs.setWidth(-100);
 TabDocs.setHeight(-100);
+TabDocs.setCSSClass("ListDocs");
 TabDocs.getFila(0).setCSSClass("ListDocsHead");
 Record NextDoc=PDDocs.getRecordStructPDDocs();
 Attribute AttrD=NextDoc.getAttr(PDDocs.fTITLE);
@@ -116,7 +102,7 @@ TabDocs.getCelda(4,0).AddElem(new Element(TT(AttrD.getUserName())));
 String ActDoc=SParent.getActDocId(Req);
 String DocId=null;
 PDDocs Doc=new PDDocs(PDSession);
-Cursor ListDocs=Doc.getListContainedDocs(FoldAct.getPDId());
+Cursor ListDocs=Doc.getListContainedDocs(TermAct.getPDId());
 int Row=0;
 NextDoc=PDSession.NextRec(ListDocs);
 while (NextDoc!=null)
@@ -124,7 +110,6 @@ while (NextDoc!=null)
     TabDocs.AddFila(); Row++;
     AttrD=NextDoc.getAttr(PDDocs.fTITLE);
     DocId=(String)NextDoc.getAttr(PDDocs.fPDID).getValue();
-    // TabDocs.getCelda(0,Row).AddElem(new Element((String)AttrD.getValue()));
     HiperlinkText hv=new html.HiperlinkText(SendDoc.getUrlServlet()+"?Id="+DocId, (String)AttrD.getValue());
     hv.setTarget("_blank");
     TabDocs.getCelda(0,Row).AddElem(hv);
@@ -147,8 +132,7 @@ while (NextDoc!=null)
     TabDocs.getFila(Row).setOnClick("SelectRow('"+DocId+"')");
     NextDoc=PDSession.NextRec(ListDocs);
     }
-Tab.getCelda(0,1).setCSSClass("ListDocs");
-Tab.getCelda(0,1).AddElem(TabDocs);
+AddElem(TabDocs);
 PDSession.CloseCursor(ListDocs);
 }
 //-----------------------------------------------------------------------------------------------    

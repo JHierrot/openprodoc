@@ -53,7 +53,10 @@ public Element()
 /** Creates a new instance of Element */
 public Element(String pHtml)
 {
-Html=pHtml;    
+if (pHtml==null)  
+    Html="";    
+else    
+    Html=pHtml;    
 }
 //-----------------------------------------------------------------------------------------------
 public String ToHtml(HttpSession Sess)

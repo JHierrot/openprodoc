@@ -30,10 +30,22 @@ public class Tree extends Element
 {
 
 private ArrayList ListRows=new ArrayList();
+private String ShowContent="RefreshDocs";
+private String TargetFrame="MainFrame";
+private String Order="ExpandContract";
+private String ElemType="FoldId";
 
 /** Creates a new instance of Tree */
 public Tree()
 {
+}
+/** Creates a new instance of Tree */
+public Tree(String pShowContent, String pTargetFrame, String pOrder, String pElemType)
+{
+ShowContent=pShowContent;
+TargetFrame=pTargetFrame;  
+Order=pOrder;
+ElemType=pElemType;
 }
 //----------------------------------------------------------------------------
 public String ToHtml(HttpSession Sess)
@@ -41,7 +53,7 @@ public String ToHtml(HttpSession Sess)
 String CadHtml=" <ul class=\"Showed\">";
 for (int i = 0; i < ListRows.size(); i++)
     {
-    CadHtml+=((Branch)ListRows.get(i)).HtmlPropio("RefreshDocs", "MainFrame");
+    CadHtml+=((Branch)ListRows.get(i)).HtmlPropio(ShowContent, TargetFrame, Order, ElemType);
     }
 return(CadHtml+"</ul>");
 }
