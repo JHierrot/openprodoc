@@ -17,49 +17,56 @@
  * 
  */
 
-package prodocUI.servlet;
+package prodocServ;
 
-import java.io.PrintWriter;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import prodocUI.forms.FMain;
+import java.io.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import javax.servlet.http.*;
+import prodoc.DriverGeneric;
+import prodoc.PDThesaur;
+
 
 /**
  *
  * @author jhierrot
+ * @version
  */
-public class SMain extends SParent
+public class ListTerm extends ServParent
 {
 //-----------------------------------------------------------------------------------------------
-/**
- *
- * @param Req
- * @param out
- * @throws Exception
- */
 @Override
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {
-//out.println("Principal");
+out.println("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+out.println("<ListTerm>");
 HttpSession Sess=Req.getSession(true);
-FMain f=new FMain(Req, "OpenProdoc", "");
-out.println(f.ToHtml(Sess));
+String Id=(String)Req.getParameter("Id");
+DriverGeneric PDSession=(DriverGeneric)Sess.getAttribute("PRODOC_SESS");
+PDThesaur RootFolder = new PDThesaur(PDSession);
+HashSet Child =RootFolder.getListDirectDescendList(Id);
+for (Iterator it = Child.iterator(); it.hasNext();)
+    {
+    String ChildId=(String)it.next();
+     if (ChildId.compareTo(PDThesaur.ROOTTERM)==0)
+        continue;
+    PDThesaur ChildFolder=new PDThesaur(PDSession);
+    ChildFolder.Load(ChildId);
+    out.println("<Term><id>"+ChildFolder.getPDId()+"</id>");
+    out.println("<name>"+ChildFolder.getName()+"</name></Term>");
+     }
+out.println("</ListTerm>");
 }
-//-----------------------------------------------------------------------------------------------
-
-/** 
- * Returns a short description of the servlet.
- * @return a String containing servlet description
- */
-@Override
+/** Returns a short description of the servlet.
+*/
 public String getServletInfo()
 {
-return "Main Servlet";
+return "Servlet AJAX returning list of Term";
 }
 //-----------------------------------------------------------------------------------------------
 static public String getUrlServlet()
 {
-return("SMain");
+return("ListTerm");
 }
-//-----------------------------------------------------------------------------------------------
+
 }

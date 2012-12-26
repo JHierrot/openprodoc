@@ -22,13 +22,13 @@ package prodocUI.servlet;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import prodocUI.forms.FMain;
+import prodocUI.forms.FMainThes;
 
 /**
  *
  * @author jhierrot
  */
-public class SMain extends SParent
+public class SMainThes extends SParent
 {
 //-----------------------------------------------------------------------------------------------
 /**
@@ -42,7 +42,7 @@ protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Excep
 {
 //out.println("Principal");
 HttpSession Sess=Req.getSession(true);
-FMain f=new FMain(Req, "OpenProdoc", "");
+FMainThes f=new FMainThes(Req, "Thesaurus OpenProdoc", "");
 out.println(f.ToHtml(Sess));
 }
 //-----------------------------------------------------------------------------------------------
@@ -54,12 +54,12 @@ out.println(f.ToHtml(Sess));
 @Override
 public String getServletInfo()
 {
-return "Main Servlet";
+return "Main Thesaurus Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 static public String getUrlServlet()
 {
-return("SMain");
+return("SMainThes");
 }
 //-----------------------------------------------------------------------------------------------
 }

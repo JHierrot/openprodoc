@@ -126,6 +126,22 @@
         <servlet-name>ListTypeRep</servlet-name>
         <servlet-class>prodocServ.ListTypeRep</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SMainThes</servlet-name>
+        <servlet-class>prodocUI.servlet.SMainThes</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddThes</servlet-name>
+        <servlet-class>prodocUI.servlet.AddThes</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RefreshThes</servlet-name>
+        <servlet-class>prodocUI.servlet.RefreshThes</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListTerm</servlet-name>
+        <servlet-class>prodocServ.ListTerm</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SParent</servlet-name>
         <url-pattern>/SParent</url-pattern>
@@ -249,6 +265,22 @@
     <servlet-mapping>
         <servlet-name>ListTypeRep</servlet-name>
         <url-pattern>/ListTypeRep</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SMainThes</servlet-name>
+        <url-pattern>/SMainThes</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddThes</servlet-name>
+        <url-pattern>/AddThes</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RefreshThes</servlet-name>
+        <url-pattern>/RefreshThes</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListTerm</servlet-name>
+        <url-pattern>/ListTerm</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

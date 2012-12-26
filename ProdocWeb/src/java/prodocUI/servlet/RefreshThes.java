@@ -22,14 +22,15 @@ package prodocUI.servlet;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import prodocUI.forms.FMain;
+import prodoc.PDThesaur;
 
 /**
  *
  * @author jhierrot
  */
-public class SMain extends SParent
+public class RefreshThes extends SParent
 {
+
 //-----------------------------------------------------------------------------------------------
 /**
  *
@@ -40,26 +41,23 @@ public class SMain extends SParent
 @Override
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {
-//out.println("Principal");
-HttpSession Sess=Req.getSession(true);
-FMain f=new FMain(Req, "OpenProdoc", "");
-out.println(f.ToHtml(Sess));
+GenListThes(Req, out, LISTDOC_FORM, null, null);
 }
 //-----------------------------------------------------------------------------------------------
 
-/** 
+/**
  * Returns a short description of the servlet.
  * @return a String containing servlet description
  */
 @Override
 public String getServletInfo()
 {
-return "Main Servlet";
+return "RefreshThes Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 static public String getUrlServlet()
 {
-return("SMain");
+return("RefreshThes");
 }
 //-----------------------------------------------------------------------------------------------
 }

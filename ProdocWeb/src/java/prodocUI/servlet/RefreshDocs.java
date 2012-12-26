@@ -42,25 +42,15 @@ static private String List=PDFolders.fACL+"/"+PDFolders.fFOLDTYPE+"/"+PDFolders.
 @Override
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {
-HttpSession Sess=Req.getSession(true);
-String NewTabId=Req.getParameter("NewTabId");
-if (NewTabId==null)
-    NewTabId="T0";
-Sess.setAttribute("NewTabId", NewTabId);
-String I=Req.getParameter("RowI");
-if (I==null)
-    I="0";
-Sess.setAttribute("RowI", I);
-//String CarpId=Req.getParameter("FoldId");
-//if (CarpId==null)
-//    {
-//    CarpId=SParent.getActFolderId(Req);
-//    if (CarpId==null)
-//        CarpId=PDFolders.ROOTFOLDER;
-//    }
-//SParent.setActFoldId(Req, CarpId);
-//FListDocs fm=new FListDocs(Req, CarpId);
-//out.println(fm.ToHtml(Sess));
+//HttpSession Sess=Req.getSession(true);
+//String NewTabId=Req.getParameter("NewTabId");
+//if (NewTabId==null)
+//    NewTabId="T0";
+//Sess.setAttribute("NewTabId", NewTabId);
+//String I=Req.getParameter("RowI");
+//if (I==null)
+//    I="0";
+//Sess.setAttribute("RowI", I);
 GenListForm(Req, out, LISTDOC_FORM, null, null);
 }
 //-----------------------------------------------------------------------------------------------
