@@ -21,7 +21,6 @@ package prodocUI.servlet;
 
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
-import prodoc.Attribute;
 import prodoc.DriverGeneric;
 import prodoc.PDException;
 import prodoc.PDThesaur;
@@ -32,7 +31,7 @@ import prodocUI.forms.FMantThes;
  *
  * @author jhierrot
  */
-public class AddThes extends SParent
+public class DelThes extends SParent
 {
 //-----------------------------------------------------------------------------------------------
 /**
@@ -44,22 +43,24 @@ public class AddThes extends SParent
 @Override
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {
+DriverGeneric PDSession=SParent.getSessOPD(Req)  ;
+PDThesaur F = new PDThesaur(PDSession);
+F.Load(getActTermId(Req));
 if (!Reading(Req))
     {
-    FMantThes f=new FMantThes(Req, FMantThes.ADDMOD, null, getUrlServlet());
+    Record Rec=F.getRecord();
+    FMantThes f=new FMantThes(Req, FMantThes.DELMOD, Rec, getUrlServlet());
     out.println(f.ToHtml(Req.getSession()));
     return;
     }
 else
     {
     try {
-    FMantThes f=new FMantThes(Req, FMantThes.ADDMOD, null, getUrlServlet() );
-    String Acept=f.OkButton.getValue(Req);
-    if (Acept!=null && Acept.length()!=0)
+    boolean Acept=DelTerm(Req);
+    if (Acept)
         {
-        String Id=AddThes(Req);
-        String TermName=f.TermName.getValue(Req);
-        GenListThes(Req, out, LAST_FORM,  "parent.ThesAppend('"+getActTermId(Req)+"','"+Id+"','"+TermName+"')", null);
+        SParent.setActTermId(Req, F.getParentId());
+        GenListThes(Req, out, LAST_FORM, "parent.ThesDelete('"+F.getPDId()+"')", null);
         }
     else
         GenListThes(Req, out, LAST_FORM, null, null);
@@ -78,44 +79,24 @@ else
 @Override
 public String getServletInfo()
 {
-return "Add Thesaurus Servlet";
+return "DelThes Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 static public String getUrlServlet()
 {
-return("AddThes");
+return("DelThes");
 }
 //-----------------------------------------------------------------------------------------------
-private String AddThes(HttpServletRequest Req) throws PDException
+private boolean DelTerm(HttpServletRequest Req) throws PDException
 {
-PDThesaur Newterm;
-Record Rec;
+String Acept=Req.getParameter("BOk");
+if (Acept==null || Acept.length()==0)
+    return(false);
 DriverGeneric PDSession=SParent.getSessOPD(Req);
-Newterm = new PDThesaur(PDSession);
-Rec=Newterm.getRecord();
-Rec.initList();
-Attribute Attr=Rec.nextAttr();
-while (Attr!=null)
-    {
-    String Val=Req.getParameter(Attr.getName());
-    if (Attr.getType()==Attribute.tBOOLEAN)
-        {
-        if(Val == null)
-            Attr.setValue(false);
-        else
-            Attr.setValue(true);
-        }
-    else if(Val != null)
-        {
-        SParent.FillAttr(Req, Attr, Val, false);
-        }
-    Attr=Rec.nextAttr();
-    }
-Newterm.assignValues(Rec);
-Newterm.setParentId(getActTermId(Req));
-Newterm.insert();
-return(Newterm.getPDId());
+PDThesaur F = new PDThesaur(PDSession);
+F.setPDId(getActTermId(Req));
+F.delete();
+return(true);
 }
 //-----------------------------------------------------------------------------------------------
-
 }

@@ -55,85 +55,189 @@ public FListTerm(HttpServletRequest Req, String CarpId) throws PDException
 super( Req, SParent.TT(Req, "Term_Maintenance"), "");
 DriverGeneric PDSession=SParent.getSessOPD(Req);
 PDThesaur TermAct=new PDThesaur(PDSession);
-Record DatFold=SParent.getActTerm(Req);
-if (DatFold==null || !((String)DatFold.getAttr(PDThesaur.fPDID).getValue()).equals(CarpId))
+Record DatTerm=SParent.getActTerm(Req);
+if (DatTerm==null || !((String)DatTerm.getAttr(PDThesaur.fPDID).getValue()).equals(CarpId))
     {
     TermAct.Load(CarpId);
-    DatFold=TermAct.getRecord();
-    SParent.setActFold(Req, DatFold);
+    DatTerm=TermAct.getRecord();
+    SParent.setActFold(Req, DatTerm);
     }
 else
-    TermAct.assignValues(DatFold);
+    TermAct.assignValues(DatTerm);
+PDThesaur Term=new PDThesaur(PDSession);
 AddCSS("prodoc.css");
 AddJS("Types.js");
 Table Tab=new Table(2,6,0);
-Tab.setCSSId("HeaderRight");
-Tab.setCellSpacing(0);
-Tab.setWidth(-100);
-Tab.setHeight(-100);
-Tab.getCelda(0,0).AddElem(new Element(DatFold.getAttr(PDThesaur.fNAME).getName()));
-Tab.getCelda(0,1).AddElem(new Element(DatFold.getAttr(PDThesaur.fDESCRIP).getName()));
-Tab.getCelda(0,2).AddElem(new Element(DatFold.getAttr(PDThesaur.fUSE).getName()));
-Tab.getCelda(0,3).AddElem(new Element(DatFold.getAttr(PDThesaur.fLANG).getName()));
-Tab.getCelda(0,4).AddElem(new Element(DatFold.getAttr(PDThesaur.fSCN).getName()));
-Tab.getCelda(1,0).AddElem(new Element((String)DatFold.getAttr(PDThesaur.fNAME).getValue()));
-Tab.getCelda(1,1).AddElem(new Element((String)DatFold.getAttr(PDThesaur.fDESCRIP).getValue()));
-Tab.getCelda(1,2).AddElem(new Element((String)DatFold.getAttr(PDThesaur.fUSE).getValue()));
-Tab.getCelda(1,3).AddElem(new Element((String)DatFold.getAttr(PDThesaur.fLANG).getValue()));
-Tab.getCelda(1,4).AddElem(new Element((String)DatFold.getAttr(PDThesaur.fSCN).getValue()));
-AddElem(Tab);
-Table TabDocs=new Table(5,1,1);
-TabDocs.setCellSpacing(0);
-TabDocs.setWidth(-100);
-TabDocs.setHeight(-100);
-TabDocs.setCSSClass("ListDocs");
-TabDocs.getFila(0).setCSSClass("ListDocsHead");
-Record NextDoc=PDDocs.getRecordStructPDDocs();
-Attribute AttrD=NextDoc.getAttr(PDDocs.fTITLE);
-TabDocs.getCelda(0,0).AddElem(new Element(TT(AttrD.getUserName())));
-AttrD=NextDoc.getAttr(PDDocs.fDOCTYPE);
-TabDocs.getCelda(1,0).AddElem(new Element(TT(AttrD.getUserName())));
-AttrD=NextDoc.getAttr(PDDocs.fDOCDATE);
-TabDocs.getCelda(2,0).AddElem(new Element(TT(AttrD.getUserName())));
-AttrD=NextDoc.getAttr(PDDocs.fLOCKEDBY);
-TabDocs.getCelda(3,0).AddElem(new Element(TT(AttrD.getUserName())));
-AttrD=NextDoc.getAttr(PDDocs.fPDDATE);
-TabDocs.getCelda(4,0).AddElem(new Element(TT(AttrD.getUserName())));
-String ActDoc=SParent.getActDocId(Req);
-String DocId=null;
-PDDocs Doc=new PDDocs(PDSession);
-Cursor ListDocs=Doc.getListContainedDocs(TermAct.getPDId());
-int Row=0;
-NextDoc=PDSession.NextRec(ListDocs);
-while (NextDoc!=null)
+Tab.setCSSClass("FFormularios");
+Tab.setCellSpacing(2);
+Tab.getCelda(0,0).AddElem(new Element(DatTerm.getAttr(PDThesaur.fNAME).getUserName()));
+Tab.getCelda(0,0).setCSSClass("FFormulReq");
+Tab.getCelda(0,1).AddElem(new Element(DatTerm.getAttr(PDThesaur.fDESCRIP).getUserName()));
+Tab.getCelda(0,1).setCSSClass("FFormulReq");
+Tab.getCelda(0,2).AddElem(new Element(DatTerm.getAttr(PDThesaur.fUSE).getUserName()));
+Tab.getCelda(0,2).setCSSClass("FFormulReq");
+Tab.getCelda(0,3).AddElem(new Element(DatTerm.getAttr(PDThesaur.fLANG).getUserName()));
+Tab.getCelda(0,3).setCSSClass("FFormulReq");
+Tab.getCelda(0,4).AddElem(new Element(DatTerm.getAttr(PDThesaur.fSCN).getUserName()));
+Tab.getCelda(0,4).setCSSClass("FFormulReq");
+Tab.getCelda(1,0).AddElem(new Element((String)DatTerm.getAttr(PDThesaur.fNAME).getValue()));
+Tab.getCelda(1,1).AddElem(new Element((String)DatTerm.getAttr(PDThesaur.fDESCRIP).getValue()));
+if (((String)DatTerm.getAttr(PDThesaur.fUSE).getValue())!=null)
     {
-    TabDocs.AddFila(); Row++;
-    AttrD=NextDoc.getAttr(PDDocs.fTITLE);
-    DocId=(String)NextDoc.getAttr(PDDocs.fPDID).getValue();
-    HiperlinkText hv=new html.HiperlinkText(SendDoc.getUrlServlet()+"?Id="+DocId, (String)AttrD.getValue());
-    hv.setTarget("_blank");
-    TabDocs.getCelda(0,Row).AddElem(hv);
-    AttrD=NextDoc.getAttr(PDDocs.fDOCTYPE);
-    TabDocs.getCelda(1,Row).AddElem(new Element((String)AttrD.getValue()));
-    AttrD=NextDoc.getAttr(PDDocs.fDOCDATE);
-    TabDocs.getCelda(2,Row).AddElem(new Element(SParent.FormatDate(Req,(Date)AttrD.getValue())));
-    AttrD=NextDoc.getAttr(PDDocs.fLOCKEDBY);
-    if (AttrD.getValue()==null || ((String)AttrD.getValue()).length()==0)
-        TabDocs.getCelda(3,Row).AddElem(Element.getEspacio());
-    else
-        TabDocs.getCelda(3,Row).AddElem(new Element((String)AttrD.getValue()));
-    AttrD=NextDoc.getAttr(PDDocs.fPDDATE);
-    TabDocs.getCelda(4,Row).AddElem(new Element(SParent.FormatTS(Req,(Date)AttrD.getValue())));
-    if (DocId.equals(ActDoc))
-        TabDocs.getFila(Row).setCSSClass("ListDocsSel");
-    else
-        TabDocs.getFila(Row).setCSSClass("ListDocs");
-    TabDocs.getFila(Row).setCSSId(DocId);
-    TabDocs.getFila(Row).setOnClick("SelectRow('"+DocId+"')");
-    NextDoc=PDSession.NextRec(ListDocs);
+    Term.Load((String)DatTerm.getAttr(PDThesaur.fUSE).getValue());    
+    Tab.getCelda(1,2).AddElem(new Element(Term.getName()));
     }
-AddElem(TabDocs);
-PDSession.CloseCursor(ListDocs);
+Tab.getCelda(1,3).AddElem(new Element((String)DatTerm.getAttr(PDThesaur.fLANG).getValue()));
+Tab.getCelda(1,4).AddElem(new Element((String)DatTerm.getAttr(PDThesaur.fSCN).getValue()));
+AddElem(Tab);
+/***/
+Record NextTerm;
+Attribute AttrD;
+int Row=0;
+if (!Term.getListRT(TermAct.getPDId()).isEmpty())
+    {
+    Span S=new Span();
+    S.AddElem(new Element(TT("Related_Terms")));
+    S.setCSSClass("FFormularios");
+    AddElem(S);
+    Table TabRT=new Table(5,1,1);
+    TabRT.setCellSpacing(0);
+//    TabRT.setWidth(-100);
+//    TabRT.setHeight(-100);
+    TabRT.setCSSClass("ListThes");
+    TabRT.getFila(0).setCSSClass("ListThesHead");
+    NextTerm=PDThesaur.getRecordStructPDThesaur();
+    AttrD=NextTerm.getAttr(PDThesaur.fNAME);
+    TabRT.getCelda(0,0).AddElem(new Element(TT(AttrD.getUserName())));
+    AttrD=NextTerm.getAttr(PDThesaur.fDESCRIP);
+    TabRT.getCelda(1,0).AddElem(new Element(TT(AttrD.getUserName())));
+    AttrD=NextTerm.getAttr(PDThesaur.fUSE);
+    TabRT.getCelda(2,0).AddElem(new Element(TT(AttrD.getUserName())));
+    AttrD=NextTerm.getAttr(PDThesaur.fLANG);
+    TabRT.getCelda(3,0).AddElem(new Element(TT(AttrD.getUserName())));
+    AttrD=NextTerm.getAttr(PDThesaur.fSCN);
+    TabRT.getCelda(4,0).AddElem(new Element(TT(AttrD.getUserName())));
+    Cursor ListRT=Term.ListRT(TermAct.getPDId());
+    NextTerm=PDSession.NextRec(ListRT);
+    while (NextTerm!=null)
+        {
+        TabRT.AddFila(); Row++;
+        AttrD=NextTerm.getAttr(PDThesaur.fNAME);
+        TabRT.getCelda(0,Row).AddElem(new Element((String)AttrD.getValue()));
+        AttrD=NextTerm.getAttr(PDThesaur.fDESCRIP);
+        TabRT.getCelda(1,Row).AddElem(new Element((String)AttrD.getValue()));
+        AttrD=NextTerm.getAttr(PDThesaur.fUSE);
+        if (((String)AttrD.getValue())!=null)
+            {
+            Term.Load((String)AttrD.getValue());    
+            TabRT.getCelda(2,Row).AddElem(new Element(Term.getName()));
+            }
+        AttrD=NextTerm.getAttr(PDThesaur.fLANG);
+        TabRT.getCelda(3,Row).AddElem(new Element((String)AttrD.getValue()));
+        AttrD=NextTerm.getAttr(PDThesaur.fSCN);
+        TabRT.getCelda(4,Row).AddElem(new Element((String)AttrD.getValue()));
+        NextTerm=PDSession.NextRec(ListRT);
+        }
+    PDSession.CloseCursor(ListRT);
+    AddElem(TabRT);
+    }
+if (!Term.getListUF(TermAct.getPDId()).isEmpty())
+    {
+    Span S=new Span();
+    S.AddElem(new Element(TT("Used_For")));
+    S.setCSSClass("FFormularios");
+    AddElem(S);
+    Table TabUF=new Table(5,1,1);
+    TabUF.setCellSpacing(0);
+    TabUF.setWidth(-100);
+    TabUF.setHeight(-100);
+    TabUF.setCSSClass("ListThes");
+    TabUF.getFila(0).setCSSClass("ListThesHead");
+    NextTerm=PDThesaur.getRecordStructPDThesaur();
+    AttrD=NextTerm.getAttr(PDThesaur.fNAME);
+    TabUF.getCelda(0,0).AddElem(new Element(TT(AttrD.getUserName())));
+    AttrD=NextTerm.getAttr(PDThesaur.fDESCRIP);
+    TabUF.getCelda(1,0).AddElem(new Element(TT(AttrD.getUserName())));
+    AttrD=NextTerm.getAttr(PDThesaur.fUSE);
+    TabUF.getCelda(2,0).AddElem(new Element(TT(AttrD.getUserName())));
+    AttrD=NextTerm.getAttr(PDThesaur.fLANG);
+    TabUF.getCelda(3,0).AddElem(new Element(TT(AttrD.getUserName())));
+    AttrD=NextTerm.getAttr(PDThesaur.fSCN);
+    TabUF.getCelda(4,0).AddElem(new Element(TT(AttrD.getUserName())));
+    Cursor ListUF=Term.ListUF(TermAct.getPDId());
+    Row=0;
+    NextTerm=PDSession.NextRec(ListUF);
+    while (NextTerm!=null)
+        {
+        TabUF.AddFila(); Row++;
+        AttrD=NextTerm.getAttr(PDThesaur.fNAME);
+        TabUF.getCelda(0,Row).AddElem(new Element((String)AttrD.getValue()));
+        AttrD=NextTerm.getAttr(PDThesaur.fDESCRIP);
+        TabUF.getCelda(1,Row).AddElem(new Element((String)AttrD.getValue()));
+        AttrD=NextTerm.getAttr(PDThesaur.fUSE);
+        if (((String)AttrD.getValue())!=null)
+            {
+            Term.Load((String)AttrD.getValue());    
+            TabUF.getCelda(2,Row).AddElem(new Element(Term.getName()));
+            }
+        AttrD=NextTerm.getAttr(PDThesaur.fLANG);
+        TabUF.getCelda(3,Row).AddElem(new Element((String)AttrD.getValue()));
+        AttrD=NextTerm.getAttr(PDThesaur.fSCN);
+        TabUF.getCelda(4,Row).AddElem(new Element((String)AttrD.getValue()));
+        NextTerm=PDSession.NextRec(ListUF);
+        }
+    AddElem(TabUF);
+    PDSession.CloseCursor(ListUF);
+    }
+if (!Term.getListLang(TermAct.getPDId()).isEmpty())
+    {
+    Span S=new Span();
+    S.AddElem(new Element(TT("Translations")));
+    S.setCSSClass("FFormularios");
+    AddElem(S);
+    Table TabLang=new Table(5,1,1);
+    TabLang.setCellSpacing(0);
+    TabLang.setWidth(-100);
+    TabLang.setHeight(-100);
+    TabLang.setCSSClass("ListThes");
+    TabLang.getFila(0).setCSSClass("ListThesHead");
+    NextTerm=PDThesaur.getRecordStructPDThesaur();
+    AttrD=NextTerm.getAttr(PDThesaur.fNAME);
+    TabLang.getCelda(0,0).AddElem(new Element(TT(AttrD.getUserName())));
+    AttrD=NextTerm.getAttr(PDThesaur.fDESCRIP);
+    TabLang.getCelda(1,0).AddElem(new Element(TT(AttrD.getUserName())));
+    AttrD=NextTerm.getAttr(PDThesaur.fUSE);
+    TabLang.getCelda(2,0).AddElem(new Element(TT(AttrD.getUserName())));
+    AttrD=NextTerm.getAttr(PDThesaur.fLANG);
+    TabLang.getCelda(3,0).AddElem(new Element(TT(AttrD.getUserName())));
+    AttrD=NextTerm.getAttr(PDThesaur.fSCN);
+    TabLang.getCelda(4,0).AddElem(new Element(TT(AttrD.getUserName())));
+    Cursor ListLang=Term.ListLang(TermAct.getPDId());
+    Row=0;
+    NextTerm=PDSession.NextRec(ListLang);
+    while (NextTerm!=null)
+        {
+        TabLang.AddFila(); Row++;
+        AttrD=NextTerm.getAttr(PDThesaur.fNAME);
+        TabLang.getCelda(0,Row).AddElem(new Element((String)AttrD.getValue()));
+        AttrD=NextTerm.getAttr(PDThesaur.fDESCRIP);
+        TabLang.getCelda(1,Row).AddElem(new Element((String)AttrD.getValue()));
+        AttrD=NextTerm.getAttr(PDThesaur.fUSE);
+        if (((String)AttrD.getValue())!=null)
+            {
+            Term.Load((String)AttrD.getValue());    
+            TabLang.getCelda(2,Row).AddElem(new Element(Term.getName()));
+            }
+        AttrD=NextTerm.getAttr(PDThesaur.fLANG);
+        TabLang.getCelda(3,Row).AddElem(new Element((String)AttrD.getValue()));
+        AttrD=NextTerm.getAttr(PDThesaur.fSCN);
+        TabLang.getCelda(4,Row).AddElem(new Element((String)AttrD.getValue()));
+        NextTerm=PDSession.NextRec(ListLang);
+        }
+    AddElem(TabLang);
+    PDSession.CloseCursor(ListLang);
+    }
+/****/
 }
 //-----------------------------------------------------------------------------------------------    
 }

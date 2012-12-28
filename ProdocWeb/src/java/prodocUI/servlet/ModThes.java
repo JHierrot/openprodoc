@@ -32,8 +32,10 @@ import prodocUI.forms.FMantThes;
  *
  * @author jhierrot
  */
-public class AddThes extends SParent
+public class ModThes extends SParent
 {
+static private String List=PDThesaur.fPARENTID+"/"+PDThesaur.fPDID+"/"+PDThesaur.fPDAUTOR+"/"+PDThesaur.fPDDATE;
+
 //-----------------------------------------------------------------------------------------------
 /**
  *
@@ -44,22 +46,23 @@ public class AddThes extends SParent
 @Override
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {
+DriverGeneric PDSession=SParent.getSessOPD(Req)  ;
+PDThesaur F = new PDThesaur(PDSession);
+F.Load(getActTermId(Req));
 if (!Reading(Req))
     {
-    FMantThes f=new FMantThes(Req, FMantThes.ADDMOD, null, getUrlServlet());
+    Record Rec=F.getRecord();
+    FMantThes f=new FMantThes(Req, FMantThes.EDIMOD, Rec, getUrlServlet());
     out.println(f.ToHtml(Req.getSession()));
-    return;
     }
 else
     {
     try {
-    FMantThes f=new FMantThes(Req, FMantThes.ADDMOD, null, getUrlServlet() );
-    String Acept=f.OkButton.getValue(Req);
-    if (Acept!=null && Acept.length()!=0)
+    boolean Acept=ModThes(Req);
+    if (Acept)
         {
-        String Id=AddThes(Req);
-        String TermName=f.TermName.getValue(Req);
-        GenListThes(Req, out, LAST_FORM,  "parent.ThesAppend('"+getActTermId(Req)+"','"+Id+"','"+TermName+"')", null);
+        String NewTit=Req.getParameter(PDThesaur.fNAME);
+        GenListThes(Req, out, LAST_FORM, "parent.ThesUpdate('"+F.getPDId()+"','"+NewTit+"')", null);
         }
     else
         GenListThes(Req, out, LAST_FORM, null, null);
@@ -78,44 +81,48 @@ else
 @Override
 public String getServletInfo()
 {
-return "Add Thesaurus Servlet";
+return "ModThes Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 static public String getUrlServlet()
 {
-return("AddThes");
+return("ModThes");
 }
 //-----------------------------------------------------------------------------------------------
-private String AddThes(HttpServletRequest Req) throws PDException
+private boolean ModThes(HttpServletRequest Req) throws PDException
 {
-PDThesaur Newterm;
-Record Rec;
+String Acept=Req.getParameter("BOk");
+if (Acept==null || Acept.length()==0)
+    return(false);
 DriverGeneric PDSession=SParent.getSessOPD(Req);
-Newterm = new PDThesaur(PDSession);
-Rec=Newterm.getRecord();
+PDThesaur F = new PDThesaur(PDSession);
+F.Load(getActTermId(Req));
+Record Rec=F.getRecord();
 Rec.initList();
 Attribute Attr=Rec.nextAttr();
 while (Attr!=null)
     {
-    String Val=Req.getParameter(Attr.getName());
-    if (Attr.getType()==Attribute.tBOOLEAN)
+    if (!List.contains(Attr.getName()))
         {
-        if(Val == null)
-            Attr.setValue(false);
-        else
-            Attr.setValue(true);
-        }
-    else if(Val != null)
-        {
-        SParent.FillAttr(Req, Attr, Val, false);
+        String Val=Req.getParameter(Attr.getName());
+        if (Attr.getType()==Attribute.tBOOLEAN)
+            {
+            if(Val == null)
+                Attr.setValue(false);
+            else
+                Attr.setValue(true);
+            }
+        else if(Val != null)
+            {
+            SParent.FillAttr(Req, Attr, Val, false);
+            }
         }
     Attr=Rec.nextAttr();
     }
-Newterm.assignValues(Rec);
-Newterm.setParentId(getActTermId(Req));
-Newterm.insert();
-return(Newterm.getPDId());
+F.assignValues(Rec);
+F.update();
+SParent.setActTerm(Req, F.getRecord());
+return(true);
 }
 //-----------------------------------------------------------------------------------------------
-
 }

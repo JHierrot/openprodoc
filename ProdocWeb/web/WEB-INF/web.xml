@@ -142,6 +142,14 @@
         <servlet-name>ListTerm</servlet-name>
         <servlet-class>prodocServ.ListTerm</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DelThes</servlet-name>
+        <servlet-class>prodocUI.servlet.DelThes</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ModThes</servlet-name>
+        <servlet-class>prodocUI.servlet.ModThes</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SParent</servlet-name>
         <url-pattern>/SParent</url-pattern>
@@ -281,6 +289,14 @@
     <servlet-mapping>
         <servlet-name>ListTerm</servlet-name>
         <url-pattern>/ListTerm</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DelThes</servlet-name>
+        <url-pattern>/DelThes</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ModThes</servlet-name>
+        <url-pattern>/ModThes</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

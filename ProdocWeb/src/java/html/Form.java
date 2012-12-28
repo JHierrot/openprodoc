@@ -27,7 +27,7 @@ public class Form extends Container
 {
 private String Url="";
 private String Titulo="";
-private boolean ModoEnvio=false;
+private boolean ModoEnvioMultipart=false;
 //-----------------------------------------------------------------------------------------------
 
 /** Creates a new instance of Form */
@@ -44,7 +44,7 @@ if (getCSSClass()!=null)
     retValue+=" class=\""+getCSSClass()+"\" ";
 else if (f!=null)
     retValue+=" style=\""+f.ToHtml()+"\" "; 
-if (ModoEnvio)
+if (ModoEnvioMultipart)
     retValue+=" enctype=\"multipart/form-data\" ";
 return(retValue+" >\n");
 }
@@ -67,15 +67,15 @@ this.Url = pUrl;
 }
 //-----------------------------------------------------------------------------------------------    
 
-public boolean isModoEnvio()
+public boolean isModoEnvioMultipart()
 {
-return ModoEnvio;
+return ModoEnvioMultipart;
 }
 //-----------------------------------------------------------------------------------------------    
 
-public void setModoEnvio(boolean pModoEnvio)
+public void setModoEnvioMultipart(boolean pModoEnvio)
 {
-ModoEnvio = pModoEnvio;
+ModoEnvioMultipart = pModoEnvio;
 }
 //-----------------------------------------------------------------------------------------------    
 }
