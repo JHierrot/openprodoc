@@ -98,7 +98,7 @@ FormTab.getCelda(2,2).AddElem(DocFile);
 FormTab.getCelda(2,4).AddElem(OkButton);
 FormTab.getCelda(2,4).AddElem(CancelButton);
 Form DocForm=new Form(Destination+"?Read=1","FormVal");
-DocForm.setModoEnvio(true);
+DocForm.setModoEnvioMultipart(true);
 BorderTab.getCelda(0,1).AddElem(FormTab);
 DocForm.AddElem(BorderTab);
 AddElem(DocForm);

@@ -142,6 +142,21 @@ table
     height: 20px;
     background-color: #ffffff;
 }
+.ListThesHead
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    height: 20px;
+    background-color: #c0c0c0;
+    font-weight: bold;
+}
+.ListThes
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    height: 20px;
+    background-color: #ffffff;
+}
 .ListDocsSel
 {
     font-family: Arial,Helvetica,sans-serif;

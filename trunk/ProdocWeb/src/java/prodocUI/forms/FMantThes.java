@@ -23,8 +23,8 @@ package prodocUI.forms;
 import html.*;
 import javax.servlet.http.HttpServletRequest;
 import prodoc.Attribute;
-import prodoc.PDDocs;
 import prodoc.PDException;
+import prodoc.PDThesaur;
 import prodoc.Record;
 import prodocUI.servlet.SParent;
 
@@ -34,9 +34,11 @@ import prodocUI.servlet.SParent;
  */
 public class FMantThes extends FFormBase
 {
-public FieldText  DocTitle;
-public FieldText  DocDate;
-public FieldFile DocFile;
+public FieldText TermName;
+public FieldText TermId;
+public FieldText TermDef;
+public FieldText TermLang;
+public FieldText TermSCN;
 //public FieldCombo ListMime;
 
 
@@ -65,38 +67,75 @@ BorderTab.getCelda(0,2).AddElem(Status);
 BorderTab.getCelda(0,2).AddElem(Element.getEspacio2());
 BorderTab.getCelda(0,2).AddElem(HHelp);
 BorderTab.setContorno(true);
-Table FormTab=new Table(3, 5, 0);
+Table FormTab=new Table(3, 7, 0);
 FormTab.setCellPadding(10);
 FormTab.setWidth(-100);
 FormTab.setCSSClass("FFormularios");
 Attribute Attr;
-PDDocs TmpFold=new PDDocs(Session);
-Attr=TmpFold.getRecord().getAttr(PDDocs.fTITLE);
-DocTitle=new FieldText(Attr.getName());
-DocTitle.setMaxSize(Attr.getLongStr());
-DocTitle.setCSSClass("FFormInput");
-DocTitle.setMensStatus(TT(Attr.getDescription()));
-Attr=TmpFold.getRecord().getAttr(PDDocs.fDOCDATE);
-DocDate=new FieldText(Attr.getName());
-DocDate.setMaxSize(Attr.getLongStr());
-DocDate.setCSSClass("FFormInputDate");
-DocDate.setMensStatus(TT(Attr.getDescription()));
-Attr=TmpFold.getRecord().getAttr(PDDocs.fNAME);
-DocFile=new FieldFile("", Attr.getName());
-DocFile.setCSSClass("FFormInput");
-DocFile.setMensStatus(TT(Attr.getDescription()));
+Record TermRec;
+if (pRec!=null)
+   TermRec=pRec;
+else
+    TermRec=PDThesaur.getRecordStructPDThesaur();
 FormTab.getCelda(0,0).setWidth(-25);
 FormTab.getCelda(0,0).setHeight(30);
-FormTab.getCelda(1,0).AddElem(new Element(TT("Document_Title")+":"));
-FormTab.getCelda(2,0).AddElem(DocTitle);
-FormTab.getCelda(1,1).AddElem(new Element(TT("Document_Date")+":"));
-FormTab.getCelda(2,1).AddElem(DocDate);
-FormTab.getCelda(1,2).AddElem(new Element(TT("File_name")+":"));
-FormTab.getCelda(2,2).AddElem(DocFile);
-FormTab.getCelda(2,4).AddElem(OkButton);
-FormTab.getCelda(2,4).AddElem(CancelButton);
+Attr=TermRec.getAttr(PDThesaur.fPDID);
+TermId=new FieldText(Attr.getName());
+TermId.setMaxSize(Attr.getLongStr());
+TermId.setCSSClass("FFormInputDate");
+TermId.setMensStatus(TT(Attr.getDescription()));
+if (pMode!=ADDMOD)
+    TermId.setActivado(false);
+if (Attr.getValue()!=null)
+    TermId.setValue((String)Attr.getValue());
+FormTab.getCelda(1,0).AddElem(new Element(TT(Attr.getUserName())+":"));
+FormTab.getCelda(2,0).AddElem(TermId);
+Attr=TermRec.getAttr(PDThesaur.fNAME);
+TermName=new FieldText(Attr.getName());
+TermName.setMaxSize(Attr.getLongStr());
+TermName.setCSSClass("FFormInput");
+TermName.setMensStatus(TT(Attr.getDescription()));
+if (Attr.getValue()!=null)
+    TermName.setValue((String)Attr.getValue());
+FormTab.getCelda(1,1).AddElem(new Element(TT(Attr.getUserName())+":"));
+FormTab.getCelda(2,1).AddElem(TermName);
+Attr=TermRec.getAttr(PDThesaur.fDESCRIP);
+TermDef=new FieldText(Attr.getName());
+TermDef.setMaxSize(Attr.getLongStr());
+TermDef.setCSSClass("FFormInput");
+TermDef.setMensStatus(TT(Attr.getDescription()));
+if (Attr.getValue()!=null)
+    TermDef.setValue((String)Attr.getValue());
+FormTab.getCelda(1,2).AddElem(new Element(TT(Attr.getUserName())+":"));
+FormTab.getCelda(2,2).AddElem(TermDef);
+Attr=TermRec.getAttr(PDThesaur.fLANG);
+TermLang=new FieldText(Attr.getName());
+TermLang.setMaxSize(Attr.getLongStr());
+TermLang.setCSSClass("FFormInput");
+TermLang.setMensStatus(TT(Attr.getDescription()));
+if (Attr.getValue()!=null)
+    TermLang.setValue((String)Attr.getValue());
+FormTab.getCelda(1,3).AddElem(new Element(TT(Attr.getUserName())+":"));
+FormTab.getCelda(2,3).AddElem(TermLang);
+Attr=TermRec.getAttr(PDThesaur.fSCN);
+TermSCN=new FieldText(Attr.getName());
+TermSCN.setMaxSize(Attr.getLongStr());
+TermSCN.setCSSClass("FFormInput");
+TermSCN.setMensStatus(TT(Attr.getDescription()));
+if (Attr.getValue()!=null)
+    TermSCN.setValue((String)Attr.getValue());
+FormTab.getCelda(1,4).AddElem(new Element(TT(Attr.getUserName())+":"));
+FormTab.getCelda(2,4).AddElem(TermSCN);
+if (pMode==DELMOD)
+    {
+    TermName.setActivado(false);
+    TermDef.setActivado(false);
+    TermLang.setActivado(false);
+    TermSCN.setActivado(false);
+    }
+FormTab.getCelda(2,6).AddElem(OkButton);
+FormTab.getCelda(2,6).AddElem(CancelButton);
 Form DocForm=new Form(Destination+"?Read=1","FormVal");
-DocForm.setModoEnvio(true);
 BorderTab.getCelda(0,1).AddElem(FormTab);
 DocForm.AddElem(BorderTab);
 AddElem(DocForm);
@@ -108,11 +147,11 @@ protected String getFormHelp()
 switch (Mode)  
     {
     case ADDMOD:
-        return("AddDoc");
+        return("AddThes");
     case DELMOD:
-        return("DelDoc");
+        return("DelThes");
     case EDIMOD:
-        return("ModDoc");
+        return("ModThes");
     }
 return("HelpIndex");
 }
