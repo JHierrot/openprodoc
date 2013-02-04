@@ -422,6 +422,7 @@ CreateMetadataStructure();
     CancelButton.setEnabled(true);
     return;
     }
+System.exit(0);
     }//GEN-LAST:event_AcceptButtonActionPerformed
 
 /**

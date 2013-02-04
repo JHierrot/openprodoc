@@ -758,6 +758,7 @@ DelFoldMetadata();
 getObjCache().remove(getKey());
 } catch (PDException Ex)
     {
+    Ex.printStackTrace();    
     getDrv().AnularTrans();
     PDException.GenPDException("Error_deleting_folder",Ex.getLocalizedMessage());
     throw Ex;

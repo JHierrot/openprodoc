@@ -1993,6 +1993,7 @@ while (Rec!=null)
 getDrv().CloseCursor(Cur);
 } catch (Exception Ex)
     {
+    Ex.printStackTrace();    
     getDrv().AnularTrans();
     PDException.GenPDException("Error_during_purge_of_document", Id);
     }

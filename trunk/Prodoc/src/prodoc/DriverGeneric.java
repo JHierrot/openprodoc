@@ -729,7 +729,7 @@ abstract public Cursor OpenCursor(Query Search) throws PDException;
  */
 private String genCursorName()
 {
-return ("Cursor"+(getOpenCur().size()*2));
+return ("Cursor"+Math.random());
 }
 ////-----------------------------------------------------------------------------------
 //private int IdentifyCursor(String CursorIdent)  throws PDException

@@ -48,8 +48,8 @@ public static final String fDESCRIP="Definition";
 /**
  *
  */
-public static final String fUSE="USE";
-public static final String fLANG="LANG";
+public static final String fUSE="TES_USE";
+public static final String fLANG="TES_LANG";
 public static final String fSCN="SCN";
 /**
  *
