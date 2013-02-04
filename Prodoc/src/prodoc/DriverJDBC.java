@@ -49,12 +49,12 @@ private Statement stmt;
  *
  */
 //static final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-static final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyyMMddHHmmss");
+final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyyMMddHHmmss");
 /**
  *
  */
 //static final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
-static final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyyMMdd");
+final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyyMMdd");
 /**
  *
  * @param pURL
@@ -687,31 +687,18 @@ for (int i = 0; i < Fields.NumAttr(); i++)
             if (D!=null && D.length()==8)
                 Attr.setValue(formatterDate.parse(D));
             }
-//        {Date d=rs.getDate(Attr.getName());
-//         if (d!=null)
-//            Attr.setValue(new java.util.Date(d.getTime()));
-//         else
-//            Attr.setValue(null);
-//        }
     else if (Attr.getType()==Attribute.tTIMESTAMP)
             {
             String D=rs.getString(Attr.getName());
             if (D!=null && D.length()==14)
                 Attr.setValue(formatterTS.parse(D));
             }
-//        {
-//        Date d=rs.getTimestamp(Attr.getName());
-//         if (d!=null)
-//            Attr.setValue(new java.util.Date(d.getTime()));
-//         else
-//            Attr.setValue(null);
-//        }
     else if (Attr.getType()==Attribute.tINTEGER)
         Attr.setValue(new Integer(rs.getInt(Attr.getName())));
     else if (Attr.getType()==Attribute.tFLOAT)
         Attr.setValue(new Float(rs.getFloat(Attr.getName())));
     else if (Attr.getType()==Attribute.tBOOLEAN)
-        Attr.setValue(new Boolean(rs.getBoolean(Attr.getName())));
+        Attr.setValue(rs.getBoolean(Attr.getName()));
     } catch(Exception ex)
         {
         PDException.GenPDException("Error_retrieving_attributes", Attr.getName()+"/"+ex.getLocalizedMessage());
