@@ -1,0 +1,35 @@
+#summary OpenProdoc in Internet
+
+= Introduction =
+
+Some references of the Document Manager OpenProdoc in Internet.
+
+*Document Management / Achives*
+
+[http://www.universoabierto.com/8215/openprodoc-es-una-herramienta-ecm-de-gestion-documental-open-source/ Universo Abierto]
+
+[http://www.rubenalcaraz.es/pinakes/software-libre/openprodoc-aplicacion-ecm-para-la-gestion-documental/#.USPdGH3xvy0 Pinakes]
+
+[http://profesionalesdecienciasdelainformacion.wordpress.com/2012/07/16/openprodoc/  Profesionales de Ciencias de la Información]
+
+[http://www.docuweb.es/2012/07/openprodoc/ DocuWeb]
+
+*Software*
+
+[http://www.ohloh.net/p/openprodoc In deep analysis of project code]
+
+[http://www.ilovefreesoftware.com/10/windows/business/content-management-system-openprodoc.html I Love Free Software Review]
+
+[http://gratis.portalprogramas.com/OpenProdoc-Portable.html Portal Programas]
+
+[http://alternativeto.net/software/openprodoc/ Alternatives to OpenProdoc]
+
+[http://www.softpedia.com/progClean/Portable-OpenProdoc-Clean-217570.html Portable OpenProdoc 0.7 - 100% Free]
+
+[http://www.softpedia.com/dyn-search.php?search_term=OpenProdoc&x=0&y=0 OpenProdoc in Softpedia]
+
+[http://www.findbestopensource.com/product/openprodoc Find best Software]
+
+[http://www.softwareseleccion.com/openprodoc-p-3150 Software Selección]
+
+[http://www.3alternatives.com/3-free-openprodoc-alternatives 3 Alternatives to OpenProdoc]
