@@ -1,4 +1,5 @@
 #summary OpenProdoc in Internet
+#labels OpenProdoc,Review,Analysis
 
 = Introduction =
 
