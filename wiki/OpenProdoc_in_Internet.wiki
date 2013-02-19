@@ -4,7 +4,7 @@
 
 Some references of the Document Manager OpenProdoc in Internet.
 
-*Document Management / Achives*
+*Document Management / Archives*
 
 [http://www.universoabierto.com/8215/openprodoc-es-una-herramienta-ecm-de-gestion-documental-open-source/ Universo Abierto]
 
