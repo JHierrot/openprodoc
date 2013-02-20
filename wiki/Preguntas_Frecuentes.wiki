@@ -1,7 +1,9 @@
 #summary Lista de Preguntas y sespuestas frecuentes sobre OpenProdoc
+
 =Preguntas frecuentes:=
 
 ==Preguntas generales:==
+
   * ¿Qué es OpenProdoc?
   * Es un software gestor documental ([http://es.wikipedia.org/wiki/Software_de_gesti%C3%B3n_documental]), es decir, un producto que permite funciones como:
     * Definir tipos de carpetas/expedientes para estructurar los documentos de acuerdo a la estructura organizativa, los procesos de la entidad, etc.
@@ -59,7 +61,7 @@
     * Rendimiento y escalabilidad. La arquitectura se OpenProdoc está diseñada pensando en la escalabilidad, con un modelo que en cierto modo puede compararse a las CPU Risc, es decir un conjunto pequeño de instrucciones muy optimizadas que, combinadas, permiten ejecutar las funciones solicitadas rápidamente. El código está construido utilizando fuertemente la herencia y el polimorfismo tanto en la lógica como el interfaz de usuario. El resultado es:
       * El "peso": El motor con toda la funcionalidad ocupa menos de 1 M, por lo que puede usarse en cualquier equipo consumiendo pocos recursos y es bastante rápido.
       * La arquitectura es muy abierta y está preparada para cloud. Realmente no existe un servidor, existe un motor que se puede desplegar en las instancias que se requiera distribuidas en N servidores. De hecho la versión portable embebe el motor, así como la BBDD HSQLDB.
-      * Velocidad: Pruebas con una aplicación desarrollada con el API del producto que inicia 10 threada atacando a un servidor local crea 1.000 carpetas e inserta 10.000 documentos, los borra (mueve a la papelera) y los purga (borrar definitivamente) en menos de 3 minutos.
+      * Velocidad: Pruebas con una aplicación desarrollada con el API del producto que inicia 10 threads atacando a un servidor local crea 1.000 carpetas e inserta 10.000 documentos, los borra (mueve a la papelera) y los purga (borrar definitivamente) en menos de 3 minutos.
       * El motor se puede embeber en cualquier producto que maneje documentos.
       * Además de almacenar en varios tipos de repositorios (hay sistemas que solo permiten almacenar en Sistema de archivos o solo como blob), puede crearse fácilmente conectores para almacenar los documentos en distintos sistemas (correo, WebDav, etc.).
     * Sencillez: Se ha intentado que el uso sea muy sencillo, pero permita a un usuario profesional sacarle partido.
@@ -73,6 +75,7 @@
       * Encriptación: Aunque con un sistema sencillo, puede encriptarse los documentos antes de almacenarse en el repositorio, proporcionando una seguridad complementaria sin software adicional.
 
 ==Funciones:==
+
   * ¿Puede definirse tipos documentales de acuerdo a mis necesidades?
   * Sí. Con el cliente Swing, que además es cliente de administración, puede definirse cualquier número de tipos documentales. Cada tipo documental se define como subtipo de uno ya existente. Por defecto existe un tipo básico de carpeta y un tipo básico de documento con un mínimo de metadatos. Todos los tipos documentales creados serán subtipos del  tipo básico o de otro subtipo. Los metadatos y comportamiento se heredan; es decir un tipo documental tiene la suma de todos los atributos de cada uno de sus antecesores, en un modelo orientado a objetos.
 
@@ -96,7 +99,7 @@
   * Sí (a partir de la versión 0.8). Puede crearse múltiples tesauros con estructurados de acuerdo a las necesidades. Cada tesauro puede utilizarse como un tesauro completo (NT, BT, RT, UF) o simplemente como una lista de materias o una lista de términos, que puede ser jerárquica. Los metadatos de los tipos documentales pueden asociarse a tesauros concretos, de forma que se elija el valor del metadato dentro de los disponibles en el tesauro y se controle la integridad. Por ejemplo puede así definirse un metadato “País” que se valide contra una lista de países o un metadato “Tema del informe” que se valide contra un tesauro de materias.
 
   * ¿Puede importarse o exportarse los Tesauros?
-  * Sí (a partir de la versión 0.8). Se utiliza el estándar SKOS-RDF. No obstante, como en cualquier “estándar”, hay que resaltar que existen diversas interpretaciones y formas de uso (http: ejemplos skos), por lo que aunque se ha hecho esfuerzos para soportar las distintas interpretaciones no puede asegurarse compatibilidad 100% con los tesauros generados fuera OpenProdoc. Si al importar un tesauro surge un problema, se trazará y registrará el error. Adicionalmente, OPD no maneja tesauros poli-jerárquicos, por lo que, aunque se importará sustituyendo la segunda relación BT por una RT, el modelo no será igual.
+  * Sí (a partir de la versión 0.8). Se utiliza el estándar SKOS-RDF. No obstante, como en cualquier “estándar”, hay que resaltar que existen diversas interpretaciones y formas de uso ([http://lab.usgin.org/book/usgin-skos-vocabulary-service-profile-home/examples-skos-concept-encoding]), por lo que aunque se ha hecho esfuerzos para soportar las distintas interpretaciones no puede asegurarse compatibilidad 100% con los tesauros generados fuera OpenProdoc. Si al importar un tesauro surge un problema, se trazará y registrará el error. Adicionalmente, OPD no maneja tesauros poli-jerárquicos, por lo que, aunque se importará sustituyendo la segunda relación BT por una RT, el modelo no será igual.
 
   * ¿Incluye funciones de BPM?
   * No. A partir de la versión 0.8 se incluyen la posibilidad de definir y asignar procesos simples (que pueden programarse), pero no BPM.
@@ -115,6 +118,7 @@
 
 
 ==Gestión de usuarios:==
+
   * ¿Qué información se necesita para crear un usuario?
   * Debe introducirse al menos:
     * el nombre corto/login,
@@ -144,6 +148,7 @@
   * Para facilitar su uso y permitir la adaptación a múltiples escenarios se ofrecen distintas formas de autenticar (comprobar identidad) a los usuarios. En una gran institución, es habitual disponer de un Ldap para centralizar  la autenticación y definición de usuarios, sin embargo para no tiene sentido exigir su instalación en una pequeña organización solo para usar OpenProdoc. En ese caso puede utilizarse la autenticación “nativa” OpenProdoc. Por otra parte cada vez es más habitual que los usuarios tengan cuenta de correo o que se disponga de servicios en la nube como GMail. En ese caso puede utilizarse autenticación contra un servidor de correo. Por otra parte, puede haberse desarrollado procesos o integración con aplicaciones que se ejecutan con usuarios genéricos (o de aplicación). En ese caso, en lugar de crear usuarios ficticios puede utilizarse un usuario de login basado en el equipo. Esta misma alternativa puede utilizarse en entornos corporativos controlados, donde el usuario del equipo está fijado por unos administradores. Otra opción adicional es que los usuarios estén dados de alta en una base de datos. En ese caso se puede elegir la validación contra la base de datos. Por último, en muchos casos se producen todos estos escenarios conjuntamente. Por ejemplo en un centro docente puede haber personal fijo empleado (que estarán dados de alta en los distintos sistemas), alumnos (que no son empleados y no tendrán usuario de ciertos sistemas pero que pueden necesitar compartir documentación y quizá tiene correo) y profesores eventuales (que pueden requerir acceso puntual).
 
 ==Seguridad:==
+
   * ¿Cuál es el modelo de seguridad de OpenProdoc?
   * El modelo se basa en el modelo habitual de ACL (Listas de Control de Acceso), es decir conjuntos de permisos, con un nombre identificativo que se asigna a los distintos elementos (documentos, carpetas, grupos, definiciones). Cada ACL contiene una lista de grupos o usuarios, indicando el permiso asignado a cada uno.
     * Ej: ACL:  Documentos privados
@@ -177,6 +182,7 @@
 
 
 ==Arquitectura:==
+
   * ¿Por qué varios tipos de repositorio?
   * Porque cada tipo tiene sus ventajas y puede utilizarse de acuerdo a las necesidades de cada proyecto, departamento o tipo documental. El almacenamiento en un sistema de archivos es el más habitual y rápido, además, si se almacena en SAN/NAS, permite el uso de múltiples servidores. El almacenamiento como blob es más lento (como pueden testificar los usuarios de algún conocido sistema), sin embargo para archivos pequeños (ej SMS o Twitter) puede ser eficaz. Por último el ftp puede utilizarse como almacenamiento más lento, para realizar copias ante desastres, etc.
 
@@ -190,6 +196,7 @@
   * Además de que permite disponer de un Gestor Documental portable, un cliente pesado es más rápido y eficaz que un cliente ligero, utiliza menos ancho de banda y permite operaciones como importar o exportar estructuras de carpetas. Aunque se puede argumentar que con AJAX y Html 5 puede conseguirse resultados similares, el desarrollo es mucho más costoso, depende de que las versiones de navegador lo soporten y el resultado no es tan cómodo. A cambio, no requiere instalación, pero en el caso de OpenProdoc, tampoco se requiere.
 
 ==Desarrollo:==
+
   * ¿Cómo puede desarrollarse con OpenProdoc?
   * Basta descargar el cliente Swing (o la versión portable) y añadir el jar incluido en la carpeta lib en el classpath del proyecto a desarrollar. Además es necesario incluir el fichero de configuración creado tras la instalación.
 
@@ -215,8 +222,9 @@
 
 
 ==Licenciamiento y soporte:==
+
   * ¿Puede utilizarse en un desarrollo o integrado en una aplicación?
   * Sí, siempre que respete la licencia (GPL3). Simplificando, puede utilizarse en otro producto de código abierto (open source). Si desea utilizarse en un proyecto comercial, es posible acordar una licencia específica, ya que OpenProdoc está planteado como un producto multilicencia.
 
   * ¿Se dispone de soporte?
-  * Por el momento, no hay soporte in situ. Sin ningún compromiso de plazo (y gratuitamente por el momento), se da soporte por medio de la página de incidencias (http: ), donde se puede abrir una incidencia que se responderá tan pronto sea posible.
+  * Por el momento, no hay soporte in situ. Sin ningún compromiso de plazo (y gratuitamente por el momento), se da soporte por medio de la página de incidencias ([https://docs.google.com/spreadsheet/viewform?formkey=dFF6ZndKWXFUQnJ0MWtVZWdUWk10X2c6MQ]), donde se puede abrir una incidencia que se responderá tan pronto sea posible.
