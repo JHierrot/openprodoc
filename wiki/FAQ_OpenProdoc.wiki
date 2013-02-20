@@ -34,7 +34,7 @@
   * Yes, although it is important to note that other products are structured differently. Some cover all the functions of the ECM world, others have strong products but they are separate for each function, some only cover their specialty (Capture, Document Management, BPM, etc..). OpenProdoc do not currently include features like BPM / Workflow and Collaboration. It has been developed with the goal of making it easy to use and effectively cover all core functions of document management without overloading it with functions used just occasionally.
 
   * Is OpenProdoc based on an existing document management product?
-  * No, all development has been done from scratch, leading to its optimised design. Only Apache libraries are used for communication and ftp file upload in the J2EE environment.
+  * No, all development has been done from scratch, leading to its optimised design. Only some Apache libraries ([http://www.apache.org/]) are used for communication and ftp file upload in the J2EE environment.
   
   * Will it work on a small or old computer?
   * The CPU and memory requirements are VERY low. It is a much optimized application and the portable version can be used without any problems with less than 1G memory.
@@ -52,7 +52,7 @@
   * Why another document manager?
   * Indeed there are many (even more than when I started development). But I think there are several shortcomings with other products. With OpenProdoc I have tried to make a product that will avoid the shortcomings of existing products as it is focused on the core functions of a document management system, avoiding functions infrequently used that overload the system. The highlights of OpenProdoc are:
     * Document Model. The OpenProdoc data model is highly optimized to avoid limitations in the model found in some products. Some of the problems that are solved in OpenProdoc are:
-    * Inheritance and Polymorphism: Many products have no inheritance or polymorphism, which is almost essential to simplify the search, support documents of various kinds or evolve classification. In a company of medium / large size is almost impossible to make a complete classification scheme, it is necessary to establish a base model and gradually modify (through subtypes). Of course the products that have a fixed structure are only applicable to limited and specific scenarios.
+    * Inheritance ([http://en.wikipedia.org/wiki/Inheritance_%28computer_science%29])and Polymorphism ([http://en.wikipedia.org/wiki/Polymorphism_%28computer_science%29]): Many products have no inheritance or polymorphism, which is almost essential to simplify the search, support documents of various kinds or evolve classification. In a company of medium / large size is almost impossible to make a complete classification scheme, it is necessary to establish a base model and gradually modify (through subtypes). Of course the products that have a fixed structure are only applicable to limited and specific scenarios.
     * Integrity: In some products, given the data model used to store the metadata, you cannot enforce relational integrity for metadata.
     * Uniqueness: Similarly, it is not always possible to define unique keys for specific metadata (eg file codes, input registers, etc.). Forcing complex developments or allowing inconsistencies.
     * Optimization: Due to the structure of some data models, you cannot create indexes to optimize queries, limiting scalability
