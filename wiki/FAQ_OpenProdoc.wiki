@@ -4,7 +4,7 @@
 ==General Questions:==
 
   * What is OpenProdoc?
-  * OpenProdoc is a document management solution (http:wiki) that enables features such as:
+  * OpenProdoc is a document management solution ([http://en.wikipedia.org/wiki/Document_management]) that enables features such as:
     * Ability to define types of folders / files to structure documents according to the organizational structure, the processes of the business, etc...
     * Define document types for each project or area
     * Store documents in a folder structure
@@ -226,5 +226,3 @@
   * Is there support?
   * Currently there is no formal support in place but there is an issues page which is currently free where you can open an incident that will responded as soon as possible.
   
-
-
