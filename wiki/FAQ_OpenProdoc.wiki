@@ -25,13 +25,13 @@
   * OpenProdoc is simple to install:
     * The portable version is distributed in a zip that can be decompressed in any folder on computer disk or a USB. It can be used in any of the supported systems (Linux, Windows, Mac).
     * The Swing version requires a database (such as MySQL, Derby, HSQLDB), the creation of a user in the database and then the installation of the OpenProdoc client.
-    * The Web client is installed like any other J2EE application (WAR) in an application server (http :). In addition, the Swing client must be installed for management functions.
+    * The Web client is installed like any other J2EE application (WAR) in an application server ([http://en.wikipedia.org/wiki/Application_server]). In addition, the Swing client must be installed for management functions.
 
   * Are all versions the same?
   * The Portable version and Swing Client versions are functionally identical. The only difference is that the portable version includes embedded a HSQLDB database server.  It doesn’t require the database server, but it only allows access by one user at a time. Multiple users can be defined and access the system one after other though. The Web version doesn’t include management functions, but the rest is the same as the other two. In all cases the engine is the same only the interface changes of course.
   
   * Does OpenProdoc include all the features of a commercial document management system?
-  * Yes, although it is important to note that other products are structured differently. Some cover all the functions of the ECM world, others have strong products but they are separate for each function, some only cover their specialty (Capture, Document Management, BPM, etc..). OpenProdoc do not currently include features like BPM / Workflow and Collaboration. It has been developed with the goal of making it easy to use and effectively cover all core functions of document management (http:wiki) without overloading it with functions used just occasionally.
+  * Yes, although it is important to note that other products are structured differently. Some cover all the functions of the ECM world, others have strong products but they are separate for each function, some only cover their specialty (Capture, Document Management, BPM, etc..). OpenProdoc do not currently include features like BPM / Workflow and Collaboration. It has been developed with the goal of making it easy to use and effectively cover all core functions of document management without overloading it with functions used just occasionally.
 
   * Is OpenProdoc based on an existing document management product?
   * No, all development has been done from scratch, leading to its optimised design. Only Apache libraries are used for communication and ftp file upload in the J2EE environment.
