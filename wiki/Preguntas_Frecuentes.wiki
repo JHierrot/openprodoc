@@ -3,7 +3,7 @@
 
 ==Preguntas generales:==
   * ¿Qué es OpenProdoc?
-  * Es un software gestor documental (http:wiki), es decir, un producto que permite funciones como:
+  * Es un software gestor documental ([http://es.wikipedia.org/wiki/Software_de_gesti%C3%B3n_documental]), es decir, un producto que permite funciones como:
     * Definir tipos de carpetas/expedientes para estructurar los documentos de acuerdo a la estructura organizativa, los procesos de la entidad, etc.
     * definir tipos de documentos para cada proyecto o área,
     * almacenar documentos en una estructura de carpetas/expedientes,
@@ -220,5 +220,3 @@
 
   * ¿Se dispone de soporte?
   * Por el momento, no hay soporte in situ. Sin ningún compromiso de plazo (y gratuitamente por el momento), se da soporte por medio de la página de incidencias (http: ), donde se puede abrir una incidencia que se responderá tan pronto sea posible.
-
-
