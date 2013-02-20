@@ -97,7 +97,7 @@
   * Yes (from version 0.8). Multiple thesauri can be created structured according to your needs. Each thesaurus can be used as a complete thesaurus (NT, BT, RT, UF) or simply as a list of contents or a list of terms, which can be hierarchical. The metadata of the types of documents can be associated with a concrete thesauri, so as to choose the value of the metadata within in the thesaurus and check integrity. For example you can define a metadata "Country" to be validated against a list of countries or a metadata "Subject of the report" is validated against a thesaurus of subjects.
 
   * Can thesauri be imported or exported?
-  * Yes (from version 0.8). It uses the standard SKOS-RDF. However, as in any "standard", it should be noted that there are various interpretations and uses (http:ejemplos skos), so although efforts have been made to support different interpretations, it cannot ensure 100% compatibility with thesauri generated outside OpenProdoc. If during the import of a thesaurus a problem arises, it will traced and log as error. Additionally, OpenProdoc don’t use poly-hierarchical thesaurus, so that as the second RT relationship is imported as BT, the model will not be equal.
+  * Yes (from version 0.8). It uses the standard SKOS-RDF. However, as in any "standard", it should be noted that there are various interpretations and uses ([http://lab.usgin.org/book/usgin-skos-vocabulary-service-profile-home/examples-skos-concept-encoding]), so although efforts have been made to support different interpretations, it cannot ensure 100% compatibility with thesauri generated outside OpenProdoc. If during the import of a thesaurus a problem arises, it will traced and log as error. Additionally, OpenProdoc don’t use poly-hierarchical thesaurus, so that as the second RT relationship is imported as BT, the model will not be equal.
 
   * Does include functions BPM?
   * No. As of version 0.8 include the ability to define and assign simple processes (which can be programmed), but not a full BPM.
@@ -224,5 +224,5 @@
   * Yes, provided it respects the license (GPL3). Simplifying, It can be used in another open source product (open source). For use in a commercial project, it is possible to agree on a specific license as OpenProdoc is a Multilicense product.
 
   * Is there support?
-  * Currently there is no formal support in place but there is an issues page which is currently free where you can open an incident that will responded as soon as possible.
+  * Currently there is no formal support in place but there is an issues page ([https://docs.google.com/spreadsheet/viewform?formkey=dFF6ZndKWXFUQnJ0MWtVZWdUWk10X2c6MQ]) which is currently free where you can open an incident that will responded as soon as possible.
   
