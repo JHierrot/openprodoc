@@ -150,6 +150,22 @@
         <servlet-name>ModThes</servlet-name>
         <servlet-class>prodocUI.servlet.ModThes</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddTerm</servlet-name>
+        <servlet-class>prodocUI.servlet.AddTerm</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ModTerm</servlet-name>
+        <servlet-class>prodocUI.servlet.ModTerm</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DelTerm</servlet-name>
+        <servlet-class>prodocUI.servlet.DelTerm</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SearchTerm</servlet-name>
+        <servlet-class>prodocServ.SearchTerm</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SParent</servlet-name>
         <url-pattern>/SParent</url-pattern>
@@ -297,6 +313,22 @@
     <servlet-mapping>
         <servlet-name>ModThes</servlet-name>
         <url-pattern>/ModThes</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddTerm</servlet-name>
+        <url-pattern>/AddTerm</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ModTerm</servlet-name>
+        <url-pattern>/ModTerm</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DelTerm</servlet-name>
+        <url-pattern>/DelTerm</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchTerm</servlet-name>
+        <url-pattern>/SearchTerm</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

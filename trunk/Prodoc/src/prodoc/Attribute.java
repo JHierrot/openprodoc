@@ -128,11 +128,11 @@ private TreeSet ValuesList=null;
 /**
  * Default formater, used to store in DDBB, export, etc
  */
-static final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 /**
  * Default formater, used to store in DDBB, export, etc
  */
-static final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
+final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
 //--------------------------------------------------------------------------
 /**
  *
