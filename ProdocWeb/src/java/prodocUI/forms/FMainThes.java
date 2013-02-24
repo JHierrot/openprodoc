@@ -70,11 +70,11 @@ MC1.add(new MenuItem(TT("Close_Window"), SExit.getUrlServlet()));
 MenuCol MC2=new MenuCol(TT("Terms"), 1);
 MainMenu.add(MC2);
 if (R.isAllowCreateThesaur())
-    MC2.add(new MenuItem(TT("Add_Term"), AddDoc.getUrlServlet(), ThesWorkArea));
+    MC2.add(new MenuItem(TT("Add_Term"), AddTerm.getUrlServlet(), ThesWorkArea));
 if (R.isAllowMaintainThesaur())
-    MC2.add(new MenuItem(TT("Update_Term"), DelDoc.getUrlServlet(), ThesWorkArea));
+    MC2.add(new MenuItem(TT("Update_Term"), ModTerm.getUrlServlet(), ThesWorkArea));
 if (R.isAllowMaintainThesaur())
-    MC2.add(new MenuItem(TT("Delete_Term"), AddDocAdv.getUrlServlet(), ThesWorkArea));
+    MC2.add(new MenuItem(TT("Delete_Term"), DelTerm.getUrlServlet(), ThesWorkArea));
 MC2.add(MenuItem.getMISeparator());
 MC2.add(new MenuItem(TT("Search_Terms"), SearchDoc.getUrlServlet(), ThesWorkArea));
 MenuCol MC3=new MenuCol(TT("Selection"), 2);

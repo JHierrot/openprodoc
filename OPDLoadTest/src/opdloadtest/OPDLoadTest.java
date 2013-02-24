@@ -207,12 +207,12 @@ for (int i = 0; i < LisOut.length; i++)
     }
 }
 //------------------------------------------------
-private static void InsertOPD(String DocType, int NumThreads, int MaxDocs)
+private static void InsertOPD(String DocType, int NumThreads, int NumDocs)
 {
 Date t1=new Date();    
 for (int i = 0; i < NumThreads; i++)
     {
-    lt[i]=new LoadTask(i, DocType, MaxDocs);   
+    lt[i]=new LoadTask(i, DocType, NumDocs);   
     lt[i].ModeIns();
     lt[i].start();
     }
@@ -238,7 +238,7 @@ private static void DeleteOPD(String DocType, int NumThreads, int NumDocs)  thro
 Date t1=new Date();    
 for (int i = 0; i < NumThreads; i++)
     {
-    lt[i]=new LoadTask(i, DocType, MaxDocs);   
+    lt[i]=new LoadTask(i, DocType, NumDocs);   
     lt[i].ModeDel();
     lt[i].start();
     }
@@ -256,7 +256,7 @@ while (!Salir)
         }
     }
 Date t2=new Date();
-System.out.println("Delete"+FileOrig+";"+DocType+";"+NumThreads+";"+MaxDocs+";"+ (t2.getTime()-t1.getTime()) );
+System.out.println("Delete"+FileOrig+";"+DocType+";"+NumThreads+";"+NumDocs+";"+ (t2.getTime()-t1.getTime()) );
 }
 //------------------------------------------------
 private static void DownOPD(String DocType, int NumThreads, int NumDocs)  throws Exception
@@ -264,7 +264,7 @@ private static void DownOPD(String DocType, int NumThreads, int NumDocs)  throws
 Date t1=new Date();    
 for (int i = 0; i < NumThreads; i++)
     {
-    lt[i]=new LoadTask(i, DocType, MaxDocs);   
+    lt[i]=new LoadTask(i, DocType, NumDocs);   
     lt[i].ModeDown();
     lt[i].start();
     }
@@ -282,7 +282,7 @@ while (!Salir)
         }
     }
 Date t2=new Date();
-System.out.println("Down"+FileOrig+";"+DocType+";"+NumThreads+";"+MaxDocs+";"+ (t2.getTime()-t1.getTime()) );
+System.out.println("Down"+FileOrig+";"+DocType+";"+NumThreads+";"+NumDocs+";"+ (t2.getTime()-t1.getTime()) );
 }
 //------------------------------------------------
 private static void PurgeOPD(String DocType, int NumThreads, int NumDocs)  throws Exception
@@ -290,7 +290,7 @@ private static void PurgeOPD(String DocType, int NumThreads, int NumDocs)  throw
 Date t1=new Date();    
 for (int i = 0; i < NumThreads; i++)
     {
-    lt[i]=new LoadTask(i, DocType, MaxDocs);   
+    lt[i]=new LoadTask(i, DocType, NumDocs);   
     lt[i].ModePurge();
     lt[i].start();
     }
@@ -308,7 +308,7 @@ while (!Salir)
         }
     }
 Date t2=new Date();
-System.out.println("Purge"+FileOrig+";"+DocType+";"+NumThreads+";"+MaxDocs+";"+ (t2.getTime()-t1.getTime()) );
+System.out.println("Purge"+FileOrig+";"+DocType+";"+NumThreads+";"+NumDocs+";"+ (t2.getTime()-t1.getTime()) );
 }
 //------------------------------------------------
 /**

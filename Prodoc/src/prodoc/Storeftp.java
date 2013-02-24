@@ -22,6 +22,7 @@ package prodoc;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 
 /**
@@ -74,6 +75,9 @@ protected void Connect() throws PDException
 try {
 ftpCon.connect(getServer());
 ftpCon.login(getUser(), getPassword());
+if (getParam()!=null && getParam().length()!=0)
+   ftpCon.changeWorkingDirectory(getParam());
+ftpCon.setFileType(FTP.BINARY_FILE_TYPE);
 } catch (Exception ex)
     {
     PDException.GenPDException("Error_connecting_to_ftp",ex.getLocalizedMessage());
@@ -105,25 +109,20 @@ ftpCon.disconnect();
  */
 protected int Insert(String Id, String Ver, InputStream Bytes) throws PDException
 {
-OutputStream fo = null;
-int Tot=0;
 try {
-fo = ftpCon.storeFileStream(GenPath(Id, Ver) +Id);
-int readed=Bytes.read(Buffer);
-while (readed!=-1)
-    {
-    fo.write(Buffer, 0, readed);
-    Tot+=readed;
-    readed=Bytes.read(Buffer);
-    }
+String NPath=GenPath(Id, Ver);
+if (!ftpCon.changeWorkingDirectory(NPath))
+    if (!ftpCon.makeDirectory(NPath)) 
+        PDException.GenPDException("Error_creating_dir_ftp",NPath);
+if (!ftpCon.storeFile(Id, Bytes))
+    PDException.GenPDException("Error_writing_file_to_ftp",Id+"/"+Ver);
 Bytes.close();
 ftpCon.completePendingCommand();
-fo.close();
-} catch (IOException ex)
+} catch (Exception ex)
     {
     PDException.GenPDException("Error_writing_file_to_ftp",Id+"/"+Ver+"="+ex.getLocalizedMessage());
     }
-return(Tot);
+return(0);
 }
 //-----------------------------------------------------------------
 /**
@@ -155,7 +154,7 @@ protected InputStream Retrieve(String Id, String Ver) throws PDException
 VerifyId(Id);
 InputStream in=null;
 try {
-ftpCon.retrieveFileStream(GenPath(Id, Ver) + Id);
+in=ftpCon.retrieveFileStream(GenPath(Id, Ver) + Id);
 } catch (Exception ex)
     {
     PDException.GenPDException("Error_retrieving_file_ftp",Id+"/"+Ver+"="+ex.getLocalizedMessage());

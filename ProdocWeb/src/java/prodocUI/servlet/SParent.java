@@ -860,7 +860,7 @@ Sess.setAttribute("SD_Rec", Rec);
  */
 static public String getVersion()
 {
-return("0.7");
+return("0.8");
 }
 //-----------------------------------------------------------------------------------------------
 /**

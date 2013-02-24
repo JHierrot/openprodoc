@@ -72,7 +72,7 @@ if (Activado)
     Result.append("<td><img src=\"").append(UrlImagArrowD).append("\" onclick=\"Ver('").append(getCSSId()).append("')\">");
     Result.append("<div id=\"").append(getCSSId()).append("P");
     Result.append("\" class=\"MultiEdit\"><table id=\"").append(getCSSId()).append("T");
-    Result.append("\"><tr><td>Field</td><td><input id=\"").append(getCSSId()).append("F");
+    Result.append("\"><tr><td></td><td><input id=\"").append(getCSSId()).append("F");
     if (getCSSClass()!=null)
         Result.append("\" class=\"").append(getCSSClass());
     Result.append("\" name=\"Entry\"></td><td><img src=\"").append(UrlImagAdd).append("\" alt=\"").append(AltImagAdd).append("\" onclick='Add(\"").append(getCSSId());
