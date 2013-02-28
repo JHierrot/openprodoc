@@ -19,8 +19,9 @@
 
 package prodocServ;
 
+import html.Element;
+import html.Table;
 import java.io.*;
-import java.util.HashSet;
 import javax.servlet.http.*;
 import prodoc.Condition;
 import prodoc.Conditions;
@@ -35,39 +36,33 @@ import prodoc.Record;
  * @author jhierrot
  * @version
  */
-public class SearchTerm extends ServParent
+public class InfoTerm extends ServParent
 {
 //-----------------------------------------------------------------------------------------------
 @Override
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {
-out.println("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-out.println("<SearchTerm>");
 HttpSession Sess=Req.getSession(true);
-String IdThes=(String)Req.getParameter("IdThes");
-String SearchTerm=(String)Req.getParameter("SearchTerm");
+String IdTerm=(String)Req.getParameter("Term");
 DriverGeneric PDSession=(DriverGeneric)Sess.getAttribute("PRODOC_SESS");
-PDThesaur Thes = new PDThesaur(PDSession);
-Cursor Child;
-if (SearchTerm==null || SearchTerm.length()==0)
+PDThesaur Term = new PDThesaur(PDSession);
+Term.Load(IdTerm);
+Table InfoTab=new Table(2, 8, 0);
+InfoTab.getCelda(1,0).AddElem(new Element(Term.getName()));
+InfoTab.getCelda(1,1).AddElem(new Element(Term.getDescription()));
+if (Term.getParentId()!=null && Term.getParentId().length()!=0)
     {
-    Child =Thes.ListNT(IdThes);
+    PDThesaur TermP = new PDThesaur(PDSession);
+    TermP.Load(Term.getParentId());
+    InfoTab.getCelda(1,3).AddElem(new Element("BT:"+TermP.getName()));
     }
-else
+if (Term.getUse()!=null && Term.getUse().length()!=0)
     {
-    Condition Cond=new Condition(PDThesaur.fNAME, Condition.cLIKE, SearchTerm);
-    Conditions Conds=new Conditions();
-    Conds.addCondition(Cond);
-    Child =Thes.Search(Conds, true, IdThes, null);
+    PDThesaur TermU = new PDThesaur(PDSession);
+    TermU.Load(Term.getUse());
+    InfoTab.getCelda(1,2).AddElem(new Element("USE:"+TermU.getName()));
     }
-Record Term=PDSession.NextRec(Child);
-while (Term!=null)
-    {
-    out.println("<Term><id>"+Term.getAttr(PDThesaur.fPDID).getValue()+"</id>");
-    out.println("<name>"+Term.getAttr(PDThesaur.fNAME).getValue()+"</name></Term>");
-    Term=PDSession.NextRec(Child);
-    }
-out.println("</SearchTerm>");
+out.println(InfoTab.ToHtml(Sess));
 }
 /** Returns a short description of the servlet.
 */

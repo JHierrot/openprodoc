@@ -39,6 +39,7 @@ private String UrlImgInfo="";
 private String UrlImagArrowD="";
 
 private String IdTes="";
+private String IdTerm="";
 
 //-----------------------------------------------------------------------------------------------    
     
@@ -91,8 +92,9 @@ Result.append("<table id=\"").append(getCSSId()).append("T1\">");
 Result.append("<tbody><tr><td></td><td><img onclick=\"NoVerInfoTerm('").append(getCSSId()).append("', '1')\" alt=\"").append(getAltImgOk()).append("\" src=\"").append(getUrlImgOk()).append("\"></td>");
 Result.append("</tr></tbody></table></div>");
 if (MensStatus!=null && Activado)
-    Result.append("<input onblur=\"this.form.Status.value=''\" onmouseout=\"this.form.Status.value=''\" onfocus=\"this.form.Status.value='").append(getMensStatus()).append("'\" onmouseover=\"this.form.Status.value='").append(getMensStatus()).append("'\" class=\"FFormInput\" value=\"\" onclick=\"VerSelThes('").append(getCSSId()).append("', '").append(getIdTes()).append("')\" readonly=\"readonly\" name=\"Attr1\" id=\"").append(getCSSId()).append("\">");
-    Result.append("<img onclick=\"VerSelThes('").append(getCSSId()).append("', '").append(getIdTes()).append("')\" src=\"").append(getUrlImagArrowD()).append("\">");
+    Result.append("<input onblur=\"this.form.Status.value=''\" onmouseout=\"this.form.Status.value=''\" onfocus=\"this.form.Status.value='").append(getMensStatus()).append("'\" onmouseover=\"this.form.Status.value='").append(getMensStatus()).append("'\" class=\"FFormInput\" onclick=\"VerSelThes('").append(getCSSId()).append("', '").append(getIdTes()).append("')\" readonly=\"readonly\" name=\"").append(getCSSId()).append("_\" id=\"").append(getCSSId()).append("_\"  value=\"").append(getValue()).append("\">");
+Result.append("<img onclick=\"VerSelThes('").append(getCSSId()).append("', '").append(getIdTes()).append("')\" src=\"").append(getUrlImagArrowD()).append("\">");
+    Result.append("<div class=\"").append(getCSSClass()).append("\" style=\"visibility: hidden;\"><input  id=\"").append(getCSSId()).append("\" name=\"").append(getCSSId()).append("\" value=\"").append(getIdTerm()).append("\"></div>");
 return(Result.toString());  
 }        
 //-----------------------------------------------------------------------------------------------    
@@ -248,4 +250,20 @@ public void setIdTes(String IdTes)
 this.IdTes = IdTes;
 }
 //-----------------------------------------------------------------------------------------------    
+
+    /**
+     * @return the IdTerm
+     */
+    public String getIdTerm()
+    {
+        return IdTerm;
+    }
+
+    /**
+     * @param IdTerm the IdTerm to set
+     */
+    public void setIdTerm(String IdTerm)
+    {
+        this.IdTerm = IdTerm;
+    }
 }
