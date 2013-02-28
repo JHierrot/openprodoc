@@ -21,17 +21,14 @@ package prodocUI.forms;
 
 
 import html.*;
-import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import prodoc.Attribute;
 import prodoc.Cursor;
 import prodoc.DriverGeneric;
-import prodoc.PDDocs;
 import prodoc.PDException;
 import prodoc.PDThesaur;
 import prodoc.Record;
 import prodocUI.servlet.SParent;
-import prodocUI.servlet.SendDoc;
 
 /**
  *
@@ -82,7 +79,7 @@ Tab.getCelda(0,4).AddElem(new Element(DatTerm.getAttr(PDThesaur.fSCN).getUserNam
 Tab.getCelda(0,4).setCSSClass("FFormulReq");
 Tab.getCelda(1,0).AddElem(new Element((String)DatTerm.getAttr(PDThesaur.fNAME).getValue()));
 Tab.getCelda(1,1).AddElem(new Element((String)DatTerm.getAttr(PDThesaur.fDESCRIP).getValue()));
-if (((String)DatTerm.getAttr(PDThesaur.fUSE).getValue())!=null)
+if (DatTerm.getAttr(PDThesaur.fUSE).getValue()!=null && ((String)DatTerm.getAttr(PDThesaur.fUSE).getValue()).length()!=0)
     {
     Term.Load((String)DatTerm.getAttr(PDThesaur.fUSE).getValue());    
     Tab.getCelda(1,2).AddElem(new Element(Term.getName()));
@@ -127,7 +124,7 @@ if (!Term.getListRT(TermAct.getPDId()).isEmpty())
         AttrD=NextTerm.getAttr(PDThesaur.fDESCRIP);
         TabRT.getCelda(1,Row).AddElem(new Element((String)AttrD.getValue()));
         AttrD=NextTerm.getAttr(PDThesaur.fUSE);
-        if (((String)AttrD.getValue())!=null)
+        if (AttrD.getValue()!=null && ((String)AttrD.getValue()).length()!=0)
             {
             Term.Load((String)AttrD.getValue());    
             TabRT.getCelda(2,Row).AddElem(new Element(Term.getName()));
@@ -175,7 +172,7 @@ if (!Term.getListUF(TermAct.getPDId()).isEmpty())
         AttrD=NextTerm.getAttr(PDThesaur.fDESCRIP);
         TabUF.getCelda(1,Row).AddElem(new Element((String)AttrD.getValue()));
         AttrD=NextTerm.getAttr(PDThesaur.fUSE);
-        if (((String)AttrD.getValue())!=null)
+        if (AttrD.getValue()!=null && ((String)AttrD.getValue()).length()!=0)
             {
             Term.Load((String)AttrD.getValue());    
             TabUF.getCelda(2,Row).AddElem(new Element(Term.getName()));
@@ -223,7 +220,7 @@ if (!Term.getListLang(TermAct.getPDId()).isEmpty())
         AttrD=NextTerm.getAttr(PDThesaur.fDESCRIP);
         TabLang.getCelda(1,Row).AddElem(new Element((String)AttrD.getValue()));
         AttrD=NextTerm.getAttr(PDThesaur.fUSE);
-        if (((String)AttrD.getValue())!=null)
+        if (AttrD.getValue()!=null && ((String)AttrD.getValue()).length()!=0)
             {
             Term.Load((String)AttrD.getValue());    
             TabLang.getCelda(2,Row).AddElem(new Element(Term.getName()));

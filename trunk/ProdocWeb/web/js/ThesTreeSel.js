@@ -302,7 +302,8 @@ if (http_con.readyState == READY_STATE_COMPLETE)
 function NoVerSelThes(layerName, Ok)
 {
 document.getElementById(layerName+"P").style.visibility="hidden";
-var Attr=document.getElementById(layerName);
+var TermTxt=document.getElementById(layerName+"_");
+var TermId=document.getElementById(layerName);
 var List_M=document.getElementById(layerName+"S");
 if (Ok=='1')
     {
@@ -310,12 +311,13 @@ if (Ok=='1')
         {
         if (List_M.options[i].selected==true)    
             {
-            Attr.value=List_M.options[i].text; 
+            TermTxt.value=List_M.options[i].text; 
+            TermId.value=List_M.options[i].value; 
             return;
             }
        }
     }
-Attr.value="";
+//TermTxt.value="";
 }
 //----------------------------------------------
 function InfoTerm(layerName)
@@ -330,25 +332,25 @@ for (i=0 ; i < List_M.length; i++)
         break;
         }
    }
-ShowInfoTerm(layerName, TermId+"_Info Detallada");  
-//var http_con=NewAjaxCon();
-//http_con.onreadystatechange = ObtainInfoTerm;
-//http_con.open('GET', 'GetInfoTerm?Term='+TermId, true);
-//http_con.send(null);
-//var ServAns="";
-//
-//function ObtainInfoTerm()
-//{
-//if (http_con.readyState == READY_STATE_COMPLETE)
-//    {
-//    if (http_con.status == 200)
-//       {
-//       ServAns=http_con.responseText;
-//       ShowInfoTerm(layerName, ServAns);
-//       http_con=null;
-//       }
-//    }
-//}
+//ShowInfoTerm(layerName, TermId+"_Info Detallada");  
+var http_con=NewAjaxCon();
+http_con.onreadystatechange = ObtainInfoTerm;
+http_con.open('GET', 'InfoTerm?Term='+TermId, true);
+http_con.send(null);
+var ServAns="";
+
+function ObtainInfoTerm()
+{
+if (http_con.readyState == READY_STATE_COMPLETE)
+    {
+    if (http_con.status == 200)
+       {
+       ServAns=http_con.responseText;
+       ShowInfoTerm(layerName, ServAns);
+       http_con=null;
+       }
+    }
+}
 }
 //------------------------------------------------------------
 function ShowInfoTerm(layerName, InfoTerm)

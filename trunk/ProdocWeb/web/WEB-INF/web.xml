@@ -166,6 +166,10 @@
         <servlet-name>SearchTerm</servlet-name>
         <servlet-class>prodocServ.SearchTerm</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>InfoTerm</servlet-name>
+        <servlet-class>prodocServ.InfoTerm</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SParent</servlet-name>
         <url-pattern>/SParent</url-pattern>
@@ -329,6 +333,10 @@
     <servlet-mapping>
         <servlet-name>SearchTerm</servlet-name>
         <url-pattern>/SearchTerm</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InfoTerm</servlet-name>
+        <url-pattern>/InfoTerm</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
