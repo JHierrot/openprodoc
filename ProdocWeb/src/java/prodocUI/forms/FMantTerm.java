@@ -21,6 +21,7 @@ package prodocUI.forms;
 
 
 import html.*;
+import java.util.HashSet;
 import javax.servlet.http.HttpServletRequest;
 import prodoc.Attribute;
 import prodoc.Cursor;
@@ -57,8 +58,8 @@ super(Req, SParent.TT(Req, "Thesaurus"), pMode, pRec);
 PDThesaur TermAct=new PDThesaur(Session);
 TermAct.Load(SParent.getActTermId(Req));
 String IdThesCont=TermAct.getIDThesaur();
-//AddJS("Types.js");
 AddJS("ThesTreeSel.js");
+AddOnLoad("init()");
 Table BorderTab=new Table(1, 3, 0);
 BorderTab.setCSSClass("FFormularios");
 BorderTab.setAlineacion(Table.CENTER);
@@ -117,7 +118,7 @@ FormTab.getCelda(2,2).AddElem(TermDef);
 
 Attr=TermRec.getAttr(PDThesaur.fUSE);
 TermUse=new FieldThesOPD(Attr.getName(), getStyle(), IdThesCont);
-TermUse.setCSSClass("MultiEdit");
+TermUse.setCSSClass("FieldThes");
 TermUse.setCSSId(Attr.getName());
 TermUse.setMensStatus(TT(Attr.getDescription()));
 if (Attr.getValue()!=null && ((String)Attr.getValue()).length()!=0)
@@ -159,28 +160,36 @@ if (pMode==DELMOD)
 Record NextTerm;
 Attribute AttrD;
 int Row=0;
-if (!TermAct.getListRT(TermAct.getPDId()).isEmpty())
+{
+Span S=new Span();
+S.setCSSClass("FFormularios");
+S.AddElem(new Element(TT("Related_Terms")));
+S.AddElem(Element.getSalto());
+FieldThesOPD TermRT=new FieldThesOPD("TermRT", getStyle(), IdThesCont);
+TermRT.setCSSClass("FieldThes");
+TermRT.setCSSClass2("FieldThes2");
+TermRT.setCSSId("TermRT");
+S.AddElem(TermRT);
+FormTab.getCelda(1,7).AddElem(S);
+Table TabRT=new Table(5,1,1);
+TabRT.setCellSpacing(0);
+TabRT.setCSSClass("ListThes");
+TabRT.setCSSId("RT_T");
+TabRT.getFila(0).setCSSClass("ListThesHead");
+NextTerm=PDThesaur.getRecordStructPDThesaur();
+AttrD=NextTerm.getAttr(PDThesaur.fNAME);
+TabRT.getCelda(0,0).AddElem(new Element(TT(AttrD.getUserName())));
+AttrD=NextTerm.getAttr(PDThesaur.fDESCRIP);
+TabRT.getCelda(1,0).AddElem(new Element(TT(AttrD.getUserName())));
+AttrD=NextTerm.getAttr(PDThesaur.fUSE);
+TabRT.getCelda(2,0).AddElem(new Element(TT(AttrD.getUserName())));
+AttrD=NextTerm.getAttr(PDThesaur.fLANG);
+TabRT.getCelda(3,0).AddElem(new Element(TT(AttrD.getUserName())));
+TabRT.getCelda(4,0).AddElem(new Element(TT("Delete")));
+HashSet Rl=TermAct.getListRT(TermAct.getPDId());
+if (!Rl.isEmpty())
     {
-    Span S=new Span();
-    S.AddElem(new Element(TT("Related_Terms")));
-    S.setCSSClass("FFormularios");
-    FormTab.getCelda(1,7).AddElem(S);
-    Table TabRT=new Table(5,1,1);
-    TabRT.setCellSpacing(0);
-    TabRT.setCSSClass("ListThes");
-    TabRT.getFila(0).setCSSClass("ListThesHead");
-    NextTerm=PDThesaur.getRecordStructPDThesaur();
-    AttrD=NextTerm.getAttr(PDThesaur.fNAME);
-    TabRT.getCelda(0,0).AddElem(new Element(TT(AttrD.getUserName())));
-    AttrD=NextTerm.getAttr(PDThesaur.fDESCRIP);
-    TabRT.getCelda(1,0).AddElem(new Element(TT(AttrD.getUserName())));
-    AttrD=NextTerm.getAttr(PDThesaur.fUSE);
-    TabRT.getCelda(2,0).AddElem(new Element(TT(AttrD.getUserName())));
-    AttrD=NextTerm.getAttr(PDThesaur.fLANG);
-    TabRT.getCelda(3,0).AddElem(new Element(TT(AttrD.getUserName())));
-    AttrD=NextTerm.getAttr(PDThesaur.fSCN);
-    TabRT.getCelda(4,0).AddElem(new Element(TT(AttrD.getUserName())));
-    Cursor ListRT=TermAct.ListRT(TermAct.getPDId());
+    Cursor ListRT=TermAct.LoadList(Rl);
     NextTerm=Session.NextRec(ListRT);
     while (NextTerm!=null)
         {
@@ -198,37 +207,47 @@ if (!TermAct.getListRT(TermAct.getPDId()).isEmpty())
         AttrD=NextTerm.getAttr(PDThesaur.fLANG);
         TabRT.getCelda(3,Row).AddElem(new Element((String)AttrD.getValue()));
         AttrD=NextTerm.getAttr(PDThesaur.fPDID);
-        TabRT.getCelda(4,Row).AddElem(new Element((String)AttrD.getValue()));
+        TabRT.getFila(Row).setCSSId(TabRT.getCSSId()+(String)AttrD.getValue());
+        TabRT.getCelda(4,Row).AddElem(new DelEntryListOPD("img/"+getStyle()+"del.png", TT("Delete"), "RT_T", (String)AttrD.getValue()));
         NextTerm=Session.NextRec(ListRT);
         }
     Session.CloseCursor(ListRT);
-    FormTab.getCelda(2,7).AddElem(TabRT);
     }
-if (!TermAct.getListUF(TermAct.getPDId()).isEmpty())
+FormTab.getCelda(2,7).AddElem(TabRT);
+}
+{
+Span S=new Span();
+S.setCSSClass("FFormularios");
+S.AddElem(new Element(TT("Used_For")));
+S.AddElem(Element.getSalto());
+FieldThesOPD TermUF=new FieldThesOPD("TermUF", getStyle(), IdThesCont);
+TermUF.setCSSClass("FieldThes");
+TermUF.setCSSClass2("FieldThes2");
+TermUF.setCSSId("TermUF");
+S.AddElem(TermUF);
+FormTab.getCelda(1,8).AddElem(S);
+Table TabUF=new Table(5,1,1);
+TabUF.setCellSpacing(0);
+TabUF.setWidth(-100);
+TabUF.setHeight(-100);
+TabUF.setCSSClass("ListThes");
+TabUF.setCSSId("UF_T");
+TabUF.getFila(0).setCSSClass("ListThesHead");
+NextTerm=PDThesaur.getRecordStructPDThesaur();
+AttrD=NextTerm.getAttr(PDThesaur.fNAME);
+TabUF.getCelda(0,0).AddElem(new Element(TT(AttrD.getUserName())));
+AttrD=NextTerm.getAttr(PDThesaur.fDESCRIP);
+TabUF.getCelda(1,0).AddElem(new Element(TT(AttrD.getUserName())));
+AttrD=NextTerm.getAttr(PDThesaur.fUSE);
+TabUF.getCelda(2,0).AddElem(new Element(TT(AttrD.getUserName())));
+AttrD=NextTerm.getAttr(PDThesaur.fLANG);
+TabUF.getCelda(3,0).AddElem(new Element(TT(AttrD.getUserName())));
+TabUF.getCelda(4,0).AddElem(new Element(TT("Delete")));
+HashSet Ul=TermAct.getListUF(TermAct.getPDId());
+if (!Ul.isEmpty())
     {
-    Span S=new Span();
-    S.AddElem(new Element(TT("Used_For")));
-    S.setCSSClass("FFormularios");
-    FormTab.getCelda(1,8).AddElem(S);
-    Table TabUF=new Table(5,1,1);
-    TabUF.setCellSpacing(0);
-    TabUF.setWidth(-100);
-    TabUF.setHeight(-100);
-    TabUF.setCSSClass("ListThes");
-    TabUF.getFila(0).setCSSClass("ListThesHead");
-    NextTerm=PDThesaur.getRecordStructPDThesaur();
-    AttrD=NextTerm.getAttr(PDThesaur.fNAME);
-    TabUF.getCelda(0,0).AddElem(new Element(TT(AttrD.getUserName())));
-    AttrD=NextTerm.getAttr(PDThesaur.fDESCRIP);
-    TabUF.getCelda(1,0).AddElem(new Element(TT(AttrD.getUserName())));
-    AttrD=NextTerm.getAttr(PDThesaur.fUSE);
-    TabUF.getCelda(2,0).AddElem(new Element(TT(AttrD.getUserName())));
-    AttrD=NextTerm.getAttr(PDThesaur.fLANG);
-    TabUF.getCelda(3,0).AddElem(new Element(TT(AttrD.getUserName())));
-    AttrD=NextTerm.getAttr(PDThesaur.fSCN);
-    TabUF.getCelda(4,0).AddElem(new Element(TT(AttrD.getUserName())));
-    Cursor ListUF=TermAct.ListUF(TermAct.getPDId());
-    Row=0;
+    Cursor ListUF=TermAct.LoadList(Ul);
+    Row=0; 
     NextTerm=Session.NextRec(ListUF);
     while (NextTerm!=null)
         {
@@ -246,36 +265,46 @@ if (!TermAct.getListUF(TermAct.getPDId()).isEmpty())
         AttrD=NextTerm.getAttr(PDThesaur.fLANG);
         TabUF.getCelda(3,Row).AddElem(new Element((String)AttrD.getValue()));
         AttrD=NextTerm.getAttr(PDThesaur.fPDID);
-        TabUF.getCelda(4,Row).AddElem(new Element((String)AttrD.getValue()));
+        TabUF.getFila(Row).setCSSId(TabUF.getCSSId()+(String)AttrD.getValue());
+        TabUF.getCelda(4,Row).AddElem(new DelEntryListOPD("img/"+getStyle()+"del.png", TT("Delete"), "UF_T", (String)AttrD.getValue()));
         NextTerm=Session.NextRec(ListUF);
         }
     Session.CloseCursor(ListUF);
-    FormTab.getCelda(2,8).AddElem(TabUF);
     }
-if (!TermAct.getListLang(TermAct.getPDId()).isEmpty())
+FormTab.getCelda(2,8).AddElem(TabUF);
+}
+{
+Span S=new Span();
+S.setCSSClass("FFormularios");
+S.AddElem(new Element(TT("Translations")));
+S.AddElem(Element.getSalto());
+FieldThesOPD TermLa=new FieldThesOPD("TermLang", getStyle(), IdThesCont);
+TermLa.setCSSClass("FieldThes");
+TermLa.setCSSClass2("FieldThes2");
+TermLa.setCSSId("TermLang");
+S.AddElem(TermLa);
+FormTab.getCelda(1,9).AddElem(S);
+Table TabLang=new Table(5,1,1);
+TabLang.setCellSpacing(0);
+TabLang.setWidth(-100);
+TabLang.setHeight(-100);
+TabLang.setCSSClass("ListThes");
+TabLang.setCSSId("Lang_T");
+TabLang.getFila(0).setCSSClass("ListThesHead");
+NextTerm=PDThesaur.getRecordStructPDThesaur();
+AttrD=NextTerm.getAttr(PDThesaur.fNAME);
+TabLang.getCelda(0,0).AddElem(new Element(TT(AttrD.getUserName())));
+AttrD=NextTerm.getAttr(PDThesaur.fDESCRIP);
+TabLang.getCelda(1,0).AddElem(new Element(TT(AttrD.getUserName())));
+AttrD=NextTerm.getAttr(PDThesaur.fUSE);
+TabLang.getCelda(2,0).AddElem(new Element(TT(AttrD.getUserName())));
+AttrD=NextTerm.getAttr(PDThesaur.fLANG);
+TabLang.getCelda(3,0).AddElem(new Element(TT(AttrD.getUserName())));
+TabLang.getCelda(4,0).AddElem(new Element(TT("Delete")));
+HashSet Ll=TermAct.getListLang(TermAct.getPDId());
+if (!Ll.isEmpty())
     {
-    Span S=new Span();
-    S.AddElem(new Element(TT("Translations")));
-    S.setCSSClass("FFormularios");
-    FormTab.getCelda(1,9).AddElem(S);
-    Table TabLang=new Table(5,1,1);
-    TabLang.setCellSpacing(0);
-    TabLang.setWidth(-100);
-    TabLang.setHeight(-100);
-    TabLang.setCSSClass("ListThes");
-    TabLang.getFila(0).setCSSClass("ListThesHead");
-    NextTerm=PDThesaur.getRecordStructPDThesaur();
-    AttrD=NextTerm.getAttr(PDThesaur.fNAME);
-    TabLang.getCelda(0,0).AddElem(new Element(TT(AttrD.getUserName())));
-    AttrD=NextTerm.getAttr(PDThesaur.fDESCRIP);
-    TabLang.getCelda(1,0).AddElem(new Element(TT(AttrD.getUserName())));
-    AttrD=NextTerm.getAttr(PDThesaur.fUSE);
-    TabLang.getCelda(2,0).AddElem(new Element(TT(AttrD.getUserName())));
-    AttrD=NextTerm.getAttr(PDThesaur.fLANG);
-    TabLang.getCelda(3,0).AddElem(new Element(TT(AttrD.getUserName())));
-    AttrD=NextTerm.getAttr(PDThesaur.fSCN);
-    TabLang.getCelda(4,0).AddElem(new Element(TT(AttrD.getUserName())));
-    Cursor ListLang=TermAct.ListLang(TermAct.getPDId());
+    Cursor ListLang=TermAct.LoadList(Ll);
     Row=0;
     NextTerm=Session.NextRec(ListLang);
     while (NextTerm!=null)
@@ -294,13 +323,14 @@ if (!TermAct.getListLang(TermAct.getPDId()).isEmpty())
         AttrD=NextTerm.getAttr(PDThesaur.fLANG);
         TabLang.getCelda(3,Row).AddElem(new Element((String)AttrD.getValue()));
         AttrD=NextTerm.getAttr(PDThesaur.fPDID);
-        TabLang.getCelda(4,Row).AddElem(new Element((String)AttrD.getValue()));
+        TabLang.getFila(Row).setCSSId(TabLang.getCSSId()+(String)AttrD.getValue());
+        TabLang.getCelda(4,Row).AddElem(new DelEntryListOPD("img/"+getStyle()+"del.png", TT("Delete"), "Lang_T", (String)AttrD.getValue()));
         NextTerm=Session.NextRec(ListLang);
         }
     Session.CloseCursor(ListLang);
-    FormTab.getCelda(2,9).AddElem(TabLang);
     }
-
+FormTab.getCelda(2,9).AddElem(TabLang);
+}
 FormTab.getCelda(2,10).AddElem(OkButton);
 FormTab.getCelda(2,10).AddElem(CancelButton);
 Form DocForm=new Form(Destination+"?Read=1","FormVal");

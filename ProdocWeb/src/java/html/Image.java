@@ -54,7 +54,6 @@ TextAlt=pTextAlt;
 public String ToHtml(HttpSession Sess)
 {
 String retValue="<img "+CalcularEstilo()+" alt=\""+TextAlt+"\" src=\""+UrlImag+"\" border=0 "+Html+" >\n";
-// String retValue="<img "+CalcularEstilo()+" alt=\""+TextAlt+"\" src=\""+UrlImag+"\" "+Html+" >\n";
 return(retValue);
 }
 //-----------------------------------------------------------------------------------------------
@@ -99,20 +98,4 @@ public void setAlineacion(int pAlineacion)
 Alineacion = pAlineacion;
 }
 //-----------------------------------------------------------------------------------------------
-/**
-* @return the CSSClass
-*/
-public String getCSSClass()
-{
-return CSSClass;
-}
-//-----------------------------------------------------------------------------------------------
-/**
-* @param CSSClass the CSSClass to set
-*/
-public void setCSSClass(String CSSClass)
-{
-this.CSSClass = CSSClass;
-}
-//-----------------------------------------------------------------------------------------------    
 }

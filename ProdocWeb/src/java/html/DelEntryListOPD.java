@@ -19,47 +19,30 @@
 
 package html;
 
-import javax.servlet.http.*;
-
 /**
  *
  * @author jhierrot
  */
-public class HiperlinkImag extends Image
+public class DelEntryListOPD extends Image
 {
-private String Url="";
-private String Texto="";
-private String CSSClass=null;
-private String Target=null;
+private String TabId="";
+private String ElementId="";
     
 /** Creates a new instance of HiperlinkImag */
-public HiperlinkImag(String pUrlImag, String pTextAlt, String pUrl, String pTexto)
+public DelEntryListOPD(String pUrlImag, String pTextAlt, String pTabId, String pElementId)
 {
 super(pUrlImag, pTextAlt);
-Url=pUrl; 
-Texto=pTexto;
+TabId=pTabId; 
+ElementId=pElementId;
 }
 //-----------------------------------------------------------------------------------------------
-public String ToHtml(HttpSession Sess)
+@Override
+protected String CalcularEstilo()
 {
-String retVal="<a href=\""+Url+ "\" ";
-if (Target!=null)
-    retVal+="target=\""+Target+ "\" ";    
-retVal+=">"+super.ToHtml(Sess)
-       +((getCSSClass()!=null)?(" class=\""+getCSSClass()+"\" "):"")
-       +((Texto!=null && Texto.length()!=0)?"&nbsp;"+Texto:"")
-       +"</a>";
-return(retVal);
-}
-//-----------------------------------------------------------------------------------------------
-public String getTarget()
-{
-return Target;
-}
-//-----------------------------------------------------------------------------------------------
-public void setTarget(String pTarget)
-{
-Target = pTarget;
+StringBuilder retVal=new StringBuilder(300);   
+retVal.append(super.CalcularEstilo()).append(" onLoad=\"AddListTerm('").append(TabId).append("','").append(ElementId).append("')\"");
+retVal.append(" onclick=\"DelListTerm('").append(TabId).append("','").append(ElementId).append("')\"");
+return(retVal.toString());
 }
 //-----------------------------------------------------------------------------------------------
     

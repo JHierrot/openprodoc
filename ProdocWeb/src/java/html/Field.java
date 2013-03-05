@@ -36,8 +36,7 @@ protected Font f=null;
 private int Width=0;
 private int Height=0;
 private String ColorBack=null;
-protected String MensStatus=null;
-private String CSSClass=null;
+protected String MensStatus="";
 
 /** Creates a new instance of Field
  * @param pNombre
@@ -188,20 +187,4 @@ public String getNombre()
 return Nombre;
 }
 //-----------------------------------------------------------------------------------------------
-/**
-* @return the CSSClass
-*/
-public String getCSSClass()
-{
-return CSSClass;
-}
-//-----------------------------------------------------------------------------------------------
-/**
-* @param CSSClass the CSSClass to set
-*/
-public void setCSSClass(String CSSClass)
-{
-this.CSSClass = CSSClass;
-}
-//-----------------------------------------------------------------------------------------------    
 }

@@ -317,6 +317,11 @@ if (Ok=='1')
             }
        }
     }
+else if (Ok=='2')
+   {
+   TermTxt.value=""; 
+   TermId.value="";       
+   }
 //TermTxt.value="";
 }
 //----------------------------------------------
@@ -364,4 +369,14 @@ function NoVerInfoTerm(layerName)
 document.getElementById(layerName+"P2").style.visibility="hidden";
 }
 //------------------------------------------------------------
+function AddListTerm(TabId, ElemId)
+{
 
+}
+//------------------------------------------------------------
+function DelListTerm(TabId, ElemId)
+{
+var RowSel=document.getElementById(TabId+ElemId);
+RowSel.parentNode.removeChild(RowSel);
+}
+//------------------------------------------------------------
