@@ -39,6 +39,8 @@ setUrlImgExit("img/"+pStyle+"Exit.gif");
 setAltImgExit("Exit");
 setUrlImgOk("img/"+pStyle+"Ok.png");
 setAltImgOk("Ok");
+setUrlImgDel("img/"+pStyle+"del.png");
+setAltImgDel("Del");
 setIdTes(TreeRef);
 }
 //-----------------------------------------------------------------------------------------------    

@@ -56,22 +56,6 @@ return("<a href=\""+Url+ "\" "+((getCSSClass()!=null)?(" class=\""+getCSSClass()
         +">"+Texto+"</a>");
 }
 //-----------------------------------------------------------------------------------------------
-/**
-* @return the CSSClass
-*/
-public String getCSSClass()
-{
-return CSSClass;
-}
-//-----------------------------------------------------------------------------------------------
-/**
-* @param CSSClass the CSSClass to set
-*/
-public void setCSSClass(String CSSClass)
-{
-this.CSSClass = CSSClass;
-}
-//-----------------------------------------------------------------------------------------------
 public String getTarget()
 {
 return Target;

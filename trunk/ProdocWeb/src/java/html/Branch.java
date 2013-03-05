@@ -46,8 +46,8 @@ Style=pStyle;
 protected String HtmlPropio(String Url, String Target, String Order, String ElemType)
 {
 StringBuilder Cad=new StringBuilder("<li id=\"");
-Cad.append(Id).append("\"><img src=\"img/"+Style+"unkown.gif\" alt=\"?\" onclick=\""+Order+"('").append(Id).append("');\" /> <a href=\"");
-Cad.append(Url).append("?"+ElemType+"=").append(Id).append("\" ").append((Target==null)?"":"target=\""+Target+"\"").append(">").append(Name).append("</a> </li>");       
+Cad.append(Id).append("\"><img src=\"img/").append(Style).append("unkown.gif\" alt=\"?\" onclick=\"").append(Order).append("('").append(Id).append("');\" /> <a href=\"");
+Cad.append(Url).append("?").append(ElemType).append("=").append(Id).append("\" ").append((Target==null)?"":"target=\""+Target+"\"").append(">").append(Name).append("</a> </li>");       
 return(Cad.toString());
 }
 //----------------------------------------------------------------------------

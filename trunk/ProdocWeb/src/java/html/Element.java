@@ -43,6 +43,8 @@ private static Element Salto2=new Element("<br><br>");
 private static Element Espacio=new Element("&nbsp;");
 private static Element Espacio2=new Element("&nbsp;&nbsp;");
 private String CSSId=null;
+private String CSSClass=null;
+
 
 //-----------------------------------------------------------------------------------------------    
 /** Creates a new instance of Element */
@@ -104,5 +106,22 @@ public String getCSSId()
 {
 return CSSId;
 }
+//-----------------------------------------------------------------------------------------------
+/**
+* @return the CSSClass
+*/
+public String getCSSClass()
+{
+return CSSClass;
+}
+//-----------------------------------------------------------------------------------------------
+/**
+* @param CSSClass the CSSClass to set
+*/
+public void setCSSClass(String CSSClass)
+{
+this.CSSClass = CSSClass;
+}
+//-----------------------------------------------------------------------------------------------
 
 }

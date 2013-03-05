@@ -36,7 +36,6 @@ private int MargenIzq=0;
 private int MargenDer=0;
 private int Width=0;
 private int Height=0;
-private String CSSClass=null;
 
 private String OnClick=null;
 
@@ -143,8 +142,8 @@ if (ColorBack!=null)
     CStyle+=" background-color: rgb("+ColorBack+"); ";
 if (CStyle.length()!=0)
     CStyle=" style=\""+CStyle+"\"";
-if (CSSClass!=null)
-    CStyle+=" class=\""+CSSClass+"\" ";
+if (getCSSClass()!=null)
+    CStyle+=" class=\""+getCSSClass()+"\" ";
 if (getCSSId()!=null)
     CStyle+=" id=\""+getCSSId()+"\" ";
 if (OnClick!=null)
@@ -162,22 +161,6 @@ public void setColorBack(String pColorBack)
 {
 ColorBack = pColorBack;
 CadHtml=null;
-}
-//-----------------------------------------------------------------------------------------------
-/**
-* @return the CSSClass
-*/
-public String getCSSClass()
-{
-return CSSClass;
-}
-//-----------------------------------------------------------------------------------------------
-/**
-* @param CSSClass the CSSClass to set
-*/
-public void setCSSClass(String CSSClass)
-{
-this.CSSClass = CSSClass;
 }
 //-----------------------------------------------------------------------------------------------
 /**
