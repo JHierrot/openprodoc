@@ -380,3 +380,49 @@ var RowSel=document.getElementById(TabId+ElemId);
 RowSel.parentNode.removeChild(RowSel);
 }
 //------------------------------------------------------------
+function UpdateTab(ElemId,TabId)
+{
+var TabSel=document.getElementById(TabId);
+var NumRows=TabSel.rows.length;
+TabSel.insertRow(NumRows);
+var NewVal=document.getElementById(ElemId).value;
+var HideField=document.getElementById("OPD_"+ElemId);
+if (HideField.value==null || HideField.value.length==0)
+    HideField.value=NewVal;
+else
+    {
+    var ListVal=HideField.value.split("|");
+    for (i=0; i<ListVal.length; i++)
+        {
+        if (ListVal[i]==NewVal)
+            return;
+        }
+    HideField.value=HideField.value+"|"+NewVal;
+    }
+ObtainNewRow(TabSel, NumRows, NewVal);
+}
+//------------------------------------------------------------
+function ObtainNewRow(TabSel, NumRows, NewVal)
+{
+var http_con=NewAjaxCon();
+http_con.onreadystatechange = ObtainNewRow2;
+http_con.open('GET', 'RowLinkedTerm?Term='+NewVal, true);
+http_con.send(null);
+var ServAns="";
+
+function ObtainNewRow2()
+{
+if (http_con.readyState == READY_STATE_COMPLETE)
+    {
+    if (http_con.status == 200)
+       {
+       TabSel.rows[NumRows].innerHTML=http_con.responseText; 
+       TabSel.rows[NumRows].id=Tabsel.id+NewVal;
+       http_con=null;
+       }
+    }
+}
+
+
+}
+//------------------------------------------------------------
