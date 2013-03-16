@@ -211,3 +211,9 @@ border-right: 2px solid black;
 border-bottom: 2px solid black;
 text-align:left;
 }
+.FieldHide
+{
+visibility:hidden;
+z-index:10;    
+width: 2px;
+}

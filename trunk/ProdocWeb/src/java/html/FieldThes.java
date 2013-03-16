@@ -87,9 +87,9 @@ Result.append("<table id=\"").append(getCSSId()).append("T1\">");
 Result.append("<tbody><tr><td></td><td><img onclick=\"NoVerInfoTerm('").append(getCSSId()).append("', '1')\" alt=\"").append(getAltImgOk()).append("\" src=\"").append(getUrlImgOk()).append("\"></td>");
 Result.append("</tr></tbody></table></div>");
 //if (MensStatus!=null && Activado)
-    Result.append("<input onblur=\"this.form.Status.value=''\" onmouseout=\"this.form.Status.value=''\" onfocus=\"this.form.Status.value='").append(getMensStatus()).append("'\" onmouseover=\"this.form.Status.value='").append(getMensStatus()).append("'\" class=\"").append(getCSSClass2()).append("\" onclick=\"VerSelThes('").append(getCSSId()).append("', '").append(getIdTes()).append("')\" readonly=\"readonly\" name=\"").append(getCSSId()).append("_\" id=\"").append(getCSSId()).append("_\"  value=\"").append(getValue()).append("\">");
+Result.append("<input onblur=\"this.form.Status.value=''\" onmouseout=\"this.form.Status.value=''\" onfocus=\"this.form.Status.value='").append(getMensStatus()).append("'\" onmouseover=\"this.form.Status.value='").append(getMensStatus()).append("'\" class=\"").append(getCSSClass2()).append("\" onclick=\"VerSelThes('").append(getCSSId()).append("', '").append(getIdTes()).append("')\" readonly=\"readonly\" name=\"").append(getCSSId()).append("_\" id=\"").append(getCSSId()).append("_\"  value=\"").append(getValue()).append("\">");
 Result.append("<img onclick=\"VerSelThes('").append(getCSSId()).append("', '").append(getIdTes()).append("')\" src=\"").append(getUrlImagArrowD()).append("\">");
-    Result.append("<div class=\"").append(getCSSClass()).append("\" style=\"visibility: hidden;\"><input  id=\"").append(getCSSId()).append("\" name=\"").append(getCSSId()).append("\" value=\"").append(getIdTerm()).append("\"></div>");
+Result.append("<div class=\"").append(getCSSClass()).append("\" style=\"visibility: hidden;\"><input  id=\"").append(getCSSId()).append("\" name=\"").append(getCSSId()).append("\" value=\"").append(getIdTerm()).append("\" ></div>");
 return(Result.toString());  
 }        
 //-----------------------------------------------------------------------------------------------    
@@ -261,52 +261,52 @@ public void setIdTerm(String IdTerm)
 this.IdTerm = IdTerm;
 }
 //-----------------------------------------------------------------------------------------------    
-
-    /**
-     * @return the CSSClass2
-     */
-    public String getCSSClass2()
-    {
-        return CSSClass2;
-    }
-
-    /**
-     * @param CSSClass2 the CSSClass2 to set
-     */
-    public void setCSSClass2(String CSSClass2)
-    {
-        this.CSSClass2 = CSSClass2;
-    }
-
-    /**
-     * @return the AltImgDel
-     */
-    public String getAltImgDel()
-    {
-        return AltImgDel;
-    }
-
-    /**
-     * @param AltImgDel the AltImgDel to set
-     */
-    public void setAltImgDel(String AltImgDel)
-    {
-        this.AltImgDel = AltImgDel;
-    }
-
-    /**
-     * @return the UrlImgDel
-     */
-    public String getUrlImgDel()
-    {
-        return UrlImgDel;
-    }
-
-    /**
-     * @param UrlImgDel the UrlImgDel to set
-     */
-    public void setUrlImgDel(String UrlImgDel)
-    {
-        this.UrlImgDel = UrlImgDel;
-    }
+/**
+ * @return the CSSClass2
+ */
+public String getCSSClass2()
+{
+return CSSClass2;
+}
+//-----------------------------------------------------------------------------------------------    
+/**
+ * @param CSSClass2 the CSSClass2 to set
+ */
+public void setCSSClass2(String CSSClass2)
+{
+this.CSSClass2 = CSSClass2;
+}
+//-----------------------------------------------------------------------------------------------    
+/**
+ * @return the AltImgDel
+ */
+public String getAltImgDel()
+{
+return AltImgDel;
+}
+//-----------------------------------------------------------------------------------------------    
+/**
+ * @param AltImgDel the AltImgDel to set
+ */
+public void setAltImgDel(String AltImgDel)
+{
+this.AltImgDel = AltImgDel;
+}
+//-----------------------------------------------------------------------------------------------    
+/**
+ * @return the UrlImgDel
+ */
+public String getUrlImgDel()
+{
+return UrlImgDel;
+}
+//-----------------------------------------------------------------------------------------------    
+/**
+ * @param UrlImgDel the UrlImgDel to set
+ */
+public void setUrlImgDel(String UrlImgDel)
+{
+this.UrlImgDel = UrlImgDel;
+}
+//-----------------------------------------------------------------------------------------------    
 }

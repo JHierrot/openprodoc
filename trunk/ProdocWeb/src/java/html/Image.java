@@ -31,8 +31,9 @@ private String UrlImag;
 private String TextAlt;
 private int Width=0;
 private int Height=0;
-private String CSSClass=null;
 private int Alineacion=-1;
+
+private String OnClk=null;
 
 //-----------------------------------------------------------------------------------------------
 /** Creates a new instance of Image
@@ -53,7 +54,7 @@ TextAlt=pTextAlt;
 @Override
 public String ToHtml(HttpSession Sess)
 {
-String retValue="<img "+CalcularEstilo()+" alt=\""+TextAlt+"\" src=\""+UrlImag+"\" border=0 "+Html+" >\n";
+String retValue="<img "+CalcularEstilo()+" alt=\""+TextAlt+"\" src=\""+UrlImag+"\" border=0 "+Html+(getOnClk()==null?"":(" onclick=\""+getOnClk()+"\" ")+" ")+" >\n";
 return(retValue);
 }
 //-----------------------------------------------------------------------------------------------
@@ -98,4 +99,22 @@ public void setAlineacion(int pAlineacion)
 Alineacion = pAlineacion;
 }
 //-----------------------------------------------------------------------------------------------
+/**
+ * @return the OnCh
+ */
+public String getOnClk()
+{
+return OnClk;
+}
+//-----------------------------------------------------------------------------------------------
+
+/**
+ * @param OnCh the OnCh to set
+ */
+public void setOnClk(String pOnClk)
+{
+OnClk = pOnClk;
+}
+//-----------------------------------------------------------------------------------------------
+
 }

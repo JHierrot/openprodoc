@@ -115,7 +115,6 @@ if (Attr.getValue()!=null)
     TermDef.setValue((String)Attr.getValue());
 FormTab.getCelda(1,2).AddElem(new Element(TT(Attr.getUserName())+":"));
 FormTab.getCelda(2,2).AddElem(TermDef);
-
 Attr=TermRec.getAttr(PDThesaur.fUSE);
 TermUse=new FieldThesOPD(Attr.getName(), getStyle(), IdThesCont);
 TermUse.setCSSClass("FieldThes");
@@ -130,7 +129,6 @@ if (Attr.getValue()!=null && ((String)Attr.getValue()).length()!=0)
     }
 FormTab.getCelda(1,3).AddElem(new Element(TT(Attr.getUserName())+":"));
 FormTab.getCelda(2,3).AddElem(TermUse);
-
 Attr=TermRec.getAttr(PDThesaur.fLANG);
 TermLang=new FieldText(Attr.getName());
 TermLang.setMaxSize(Attr.getLongStr());
@@ -170,6 +168,13 @@ TermRT.setCSSClass("FieldThes");
 TermRT.setCSSClass2("FieldThes2");
 TermRT.setCSSId("TermRT");
 S.AddElem(TermRT);
+Image Im=new Image("img/"+getStyle()+"add.png", "add");
+Im.setOnClk("UpdateTab('TermRT','RT_T')");
+S.AddElem(Im);
+Field HideMulti=new Field("OPD_TermRT");
+HideMulti.setCSSId("OPD_TermRT");
+HideMulti.setCSSClass("FieldHide");
+S.AddElem(HideMulti);
 FormTab.getCelda(1,7).AddElem(S);
 Table TabRT=new Table(5,1,1);
 TabRT.setCellSpacing(0);
@@ -225,6 +230,13 @@ TermUF.setCSSClass("FieldThes");
 TermUF.setCSSClass2("FieldThes2");
 TermUF.setCSSId("TermUF");
 S.AddElem(TermUF);
+Image Im=new Image("img/"+getStyle()+"add.png", "add");
+Im.setOnClk("UpdateTab('TermUF','UF_T')");
+S.AddElem(Im);
+Field HideMulti=new Field("OPD_TermUF");
+HideMulti.setCSSId("OPD_TermUF");
+HideMulti.setCSSClass("FieldHide");
+S.AddElem(HideMulti);
 FormTab.getCelda(1,8).AddElem(S);
 Table TabUF=new Table(5,1,1);
 TabUF.setCellSpacing(0);
@@ -283,6 +295,13 @@ TermLa.setCSSClass("FieldThes");
 TermLa.setCSSClass2("FieldThes2");
 TermLa.setCSSId("TermLang");
 S.AddElem(TermLa);
+Image Im=new Image("img/"+getStyle()+"add.png", "add");
+Im.setOnClk("UpdateTab('TermLang','Lang_T')");
+S.AddElem(Im);
+Field HideMulti=new Field("OPD_TermLang");
+HideMulti.setCSSId("OPD_TermLang");
+HideMulti.setCSSClass("FieldHide");
+S.AddElem(HideMulti);
 FormTab.getCelda(1,9).AddElem(S);
 Table TabLang=new Table(5,1,1);
 TabLang.setCellSpacing(0);
