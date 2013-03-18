@@ -171,8 +171,8 @@ S.AddElem(TermRT);
 Image Im=new Image("img/"+getStyle()+"add.png", "add");
 Im.setOnClk("UpdateTab('TermRT','RT_T')");
 S.AddElem(Im);
-Field HideMulti=new Field("OPD_TermRT");
-HideMulti.setCSSId("OPD_TermRT");
+Field HideMulti=new Field("OPD_RT_T");
+HideMulti.setCSSId("OPD_RT_T");
 HideMulti.setCSSClass("FieldHide");
 S.AddElem(HideMulti);
 FormTab.getCelda(1,7).AddElem(S);
@@ -212,6 +212,10 @@ if (!Rl.isEmpty())
         AttrD=NextTerm.getAttr(PDThesaur.fLANG);
         TabRT.getCelda(3,Row).AddElem(new Element((String)AttrD.getValue()));
         AttrD=NextTerm.getAttr(PDThesaur.fPDID);
+        if (HideMulti.getValue().length()!=0)
+            HideMulti.setValue(HideMulti.getValue()+"|"+AttrD.getValue());
+        else
+            HideMulti.setValue((String)AttrD.getValue());
         TabRT.getFila(Row).setCSSId(TabRT.getCSSId()+(String)AttrD.getValue());
         TabRT.getCelda(4,Row).AddElem(new DelEntryListOPD("img/"+getStyle()+"del.png", TT("Delete"), "RT_T", (String)AttrD.getValue()));
         NextTerm=Session.NextRec(ListRT);
@@ -219,71 +223,6 @@ if (!Rl.isEmpty())
     Session.CloseCursor(ListRT);
     }
 FormTab.getCelda(2,7).AddElem(TabRT);
-}
-{
-Span S=new Span();
-S.setCSSClass("FFormularios");
-S.AddElem(new Element(TT("Used_For")));
-S.AddElem(Element.getSalto());
-FieldThesOPD TermUF=new FieldThesOPD("TermUF", getStyle(), IdThesCont);
-TermUF.setCSSClass("FieldThes");
-TermUF.setCSSClass2("FieldThes2");
-TermUF.setCSSId("TermUF");
-S.AddElem(TermUF);
-Image Im=new Image("img/"+getStyle()+"add.png", "add");
-Im.setOnClk("UpdateTab('TermUF','UF_T')");
-S.AddElem(Im);
-Field HideMulti=new Field("OPD_TermUF");
-HideMulti.setCSSId("OPD_TermUF");
-HideMulti.setCSSClass("FieldHide");
-S.AddElem(HideMulti);
-FormTab.getCelda(1,8).AddElem(S);
-Table TabUF=new Table(5,1,1);
-TabUF.setCellSpacing(0);
-TabUF.setWidth(-100);
-TabUF.setHeight(-100);
-TabUF.setCSSClass("ListThes");
-TabUF.setCSSId("UF_T");
-TabUF.getFila(0).setCSSClass("ListThesHead");
-NextTerm=PDThesaur.getRecordStructPDThesaur();
-AttrD=NextTerm.getAttr(PDThesaur.fNAME);
-TabUF.getCelda(0,0).AddElem(new Element(TT(AttrD.getUserName())));
-AttrD=NextTerm.getAttr(PDThesaur.fDESCRIP);
-TabUF.getCelda(1,0).AddElem(new Element(TT(AttrD.getUserName())));
-AttrD=NextTerm.getAttr(PDThesaur.fUSE);
-TabUF.getCelda(2,0).AddElem(new Element(TT(AttrD.getUserName())));
-AttrD=NextTerm.getAttr(PDThesaur.fLANG);
-TabUF.getCelda(3,0).AddElem(new Element(TT(AttrD.getUserName())));
-TabUF.getCelda(4,0).AddElem(new Element(TT("Delete")));
-HashSet Ul=TermAct.getListUF(TermAct.getPDId());
-if (!Ul.isEmpty())
-    {
-    Cursor ListUF=TermAct.LoadList(Ul);
-    Row=0; 
-    NextTerm=Session.NextRec(ListUF);
-    while (NextTerm!=null)
-        {
-        TabUF.AddFila(); Row++;
-        AttrD=NextTerm.getAttr(PDThesaur.fNAME);
-        TabUF.getCelda(0,Row).AddElem(new Element((String)AttrD.getValue()));
-        AttrD=NextTerm.getAttr(PDThesaur.fDESCRIP);
-        TabUF.getCelda(1,Row).AddElem(new Element((String)AttrD.getValue()));
-        AttrD=NextTerm.getAttr(PDThesaur.fUSE);
-        if (AttrD.getValue()!=null && ((String)AttrD.getValue()).length()!=0)
-            {
-            TermAct.Load((String)AttrD.getValue());    
-            TabUF.getCelda(2,Row).AddElem(new Element(TermAct.getName()));
-            }
-        AttrD=NextTerm.getAttr(PDThesaur.fLANG);
-        TabUF.getCelda(3,Row).AddElem(new Element((String)AttrD.getValue()));
-        AttrD=NextTerm.getAttr(PDThesaur.fPDID);
-        TabUF.getFila(Row).setCSSId(TabUF.getCSSId()+(String)AttrD.getValue());
-        TabUF.getCelda(4,Row).AddElem(new DelEntryListOPD("img/"+getStyle()+"del.png", TT("Delete"), "UF_T", (String)AttrD.getValue()));
-        NextTerm=Session.NextRec(ListUF);
-        }
-    Session.CloseCursor(ListUF);
-    }
-FormTab.getCelda(2,8).AddElem(TabUF);
 }
 {
 Span S=new Span();
@@ -298,11 +237,11 @@ S.AddElem(TermLa);
 Image Im=new Image("img/"+getStyle()+"add.png", "add");
 Im.setOnClk("UpdateTab('TermLang','Lang_T')");
 S.AddElem(Im);
-Field HideMulti=new Field("OPD_TermLang");
-HideMulti.setCSSId("OPD_TermLang");
+Field HideMulti=new Field("OPD_Lang_T");
+HideMulti.setCSSId("OPD_Lang_T");
 HideMulti.setCSSClass("FieldHide");
 S.AddElem(HideMulti);
-FormTab.getCelda(1,9).AddElem(S);
+FormTab.getCelda(1,8).AddElem(S);
 Table TabLang=new Table(5,1,1);
 TabLang.setCellSpacing(0);
 TabLang.setWidth(-100);
@@ -342,13 +281,88 @@ if (!Ll.isEmpty())
         AttrD=NextTerm.getAttr(PDThesaur.fLANG);
         TabLang.getCelda(3,Row).AddElem(new Element((String)AttrD.getValue()));
         AttrD=NextTerm.getAttr(PDThesaur.fPDID);
+        if (HideMulti.getValue().length()!=0)
+            HideMulti.setValue(HideMulti.getValue()+"|"+AttrD.getValue());
+        else
+            HideMulti.setValue((String)AttrD.getValue());
         TabLang.getFila(Row).setCSSId(TabLang.getCSSId()+(String)AttrD.getValue());
         TabLang.getCelda(4,Row).AddElem(new DelEntryListOPD("img/"+getStyle()+"del.png", TT("Delete"), "Lang_T", (String)AttrD.getValue()));
         NextTerm=Session.NextRec(ListLang);
         }
     Session.CloseCursor(ListLang);
     }
-FormTab.getCelda(2,9).AddElem(TabLang);
+FormTab.getCelda(2,8).AddElem(TabLang);
+}
+{
+Span S=new Span();
+S.setCSSClass("FFormularios");
+S.AddElem(new Element(TT("Used_For")));
+S.AddElem(Element.getSalto());
+/*
+FieldThesOPD TermUF=new FieldThesOPD("TermUF", getStyle(), IdThesCont);
+TermUF.setCSSClass("FieldThes");
+TermUF.setCSSClass2("FieldThes2");
+TermUF.setCSSId("TermUF");
+S.AddElem(TermUF);
+Image Im=new Image("img/"+getStyle()+"add.png", "add");
+Im.setOnClk("UpdateTab('TermUF','UF_T')");
+S.AddElem(Im);
+Field HideMulti=new Field("OPD_UF_T");
+HideMulti.setCSSId("OPD_UF_T");
+HideMulti.setCSSClass("FieldHide");
+S.AddElem(HideMulti);
+*/
+FormTab.getCelda(1,9).AddElem(S);
+Table TabUF=new Table(5,1,1);
+TabUF.setCellSpacing(0);
+TabUF.setWidth(-100);
+TabUF.setHeight(-100);
+TabUF.setCSSClass("ListThes");
+TabUF.setCSSId("UF_T");
+TabUF.getFila(0).setCSSClass("ListThesHead");
+NextTerm=PDThesaur.getRecordStructPDThesaur();
+AttrD=NextTerm.getAttr(PDThesaur.fNAME);
+TabUF.getCelda(0,0).AddElem(new Element(TT(AttrD.getUserName())));
+AttrD=NextTerm.getAttr(PDThesaur.fDESCRIP);
+TabUF.getCelda(1,0).AddElem(new Element(TT(AttrD.getUserName())));
+AttrD=NextTerm.getAttr(PDThesaur.fUSE);
+TabUF.getCelda(2,0).AddElem(new Element(TT(AttrD.getUserName())));
+AttrD=NextTerm.getAttr(PDThesaur.fLANG);
+TabUF.getCelda(3,0).AddElem(new Element(TT(AttrD.getUserName())));
+TabUF.getCelda(4,0).AddElem(new Element(TT("Delete")));
+HashSet Ul=TermAct.getListUF(TermAct.getPDId());
+if (!Ul.isEmpty())
+    {
+    Cursor ListUF=TermAct.LoadList(Ul);
+    Row=0; 
+    NextTerm=Session.NextRec(ListUF);
+    while (NextTerm!=null)
+        {
+        TabUF.AddFila(); Row++;
+        AttrD=NextTerm.getAttr(PDThesaur.fNAME);
+        TabUF.getCelda(0,Row).AddElem(new Element((String)AttrD.getValue()));
+        AttrD=NextTerm.getAttr(PDThesaur.fDESCRIP);
+        TabUF.getCelda(1,Row).AddElem(new Element((String)AttrD.getValue()));
+        AttrD=NextTerm.getAttr(PDThesaur.fUSE);
+        if (AttrD.getValue()!=null && ((String)AttrD.getValue()).length()!=0)
+            {
+            TermAct.Load((String)AttrD.getValue());    
+            TabUF.getCelda(2,Row).AddElem(new Element(TermAct.getName()));
+            }
+        AttrD=NextTerm.getAttr(PDThesaur.fLANG);
+        TabUF.getCelda(3,Row).AddElem(new Element((String)AttrD.getValue()));
+        AttrD=NextTerm.getAttr(PDThesaur.fPDID);
+//        if (HideMulti.getValue().length()!=0)
+//            HideMulti.setValue(HideMulti.getValue()+"|"+AttrD.getValue());
+//        else
+//            HideMulti.setValue((String)AttrD.getValue());
+        TabUF.getFila(Row).setCSSId(TabUF.getCSSId()+(String)AttrD.getValue());
+//      TabUF.getCelda(4,Row).AddElem(new DelEntryListOPD("img/"+getStyle()+"del.png", TT("Delete"), "UF_T", (String)AttrD.getValue()));
+        NextTerm=Session.NextRec(ListUF);
+        }
+    Session.CloseCursor(ListUF);
+    }
+FormTab.getCelda(2,9).AddElem(TabUF);
 }
 FormTab.getCelda(2,10).AddElem(OkButton);
 FormTab.getCelda(2,10).AddElem(CancelButton);

@@ -46,6 +46,7 @@ public class RowLinkedTerm extends ServParent
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {
 HttpSession Sess=Req.getSession(true);
+// String Tab=(String)Req.getParameter("Tab");
 String SearchTerm=(String)Req.getParameter("Term");
 DriverGeneric PDSession=(DriverGeneric)Sess.getAttribute("PRODOC_SESS");
 PDThesaur Term = new PDThesaur(PDSession);

@@ -371,22 +371,11 @@ document.getElementById(layerName+"P2").style.visibility="hidden";
 //------------------------------------------------------------
 function AddListTerm(TabId, ElemId)
 {
-
-}
-//------------------------------------------------------------
-function DelListTerm(TabId, ElemId)
-{
-var RowSel=document.getElementById(TabId+ElemId);
-RowSel.parentNode.removeChild(RowSel);
-}
-//------------------------------------------------------------
-function UpdateTab(ElemId,TabId)
-{
 var TabSel=document.getElementById(TabId);
 var NumRows=TabSel.rows.length;
 TabSel.insertRow(NumRows);
 var NewVal=document.getElementById(ElemId).value;
-var HideField=document.getElementById("OPD_"+ElemId);
+var HideField=document.getElementById("OPD_"+TabId);
 if (HideField.value==null || HideField.value.length==0)
     HideField.value=NewVal;
 else
@@ -399,16 +388,57 @@ else
         }
     HideField.value=HideField.value+"|"+NewVal;
     }
-ObtainNewRow(TabSel, NumRows, NewVal);
 }
 //------------------------------------------------------------
-function ObtainNewRow(TabSel, NumRows, NewVal)
+function DelListTerm(TabId, ElemId)
+{
+var HideField=document.getElementById("OPD_"+TabId);
+if (HideField.value==null || HideField.value.length==0)
+    return;
+else
+    {
+    var ListVal=HideField.value.split("|");
+    for (i=0; i<ListVal.length; i++)
+        {
+        if (ListVal[i]==ElemId)
+            {
+            ListVal[i]="";
+            break;
+            }
+        }    
+    HideField.value=""    
+    for (i=0; i<ListVal.length; i++)
+        {
+        if (ListVal[i]=="")    
+            continue;
+        if (HideField.value=="")
+            HideField.value=ListVal[i];
+        else
+            HideField.value=HideField.value+"|"+ListVal[i];
+        }
+    }
+var RowSel=document.getElementById(TabId+ElemId);
+RowSel.parentNode.removeChild(RowSel);
+}
+//------------------------------------------------------------
+function UpdateTab(ElemId,TabId)
+{
+var NewVal=document.getElementById(ElemId).value;
+if (NewVal==null || NewVal.length==0)
+    return;
+AddListTerm(TabId, ElemId); 
+var TabSel=document.getElementById(TabId);
+var NumRows=TabSel.rows.length;
+ObtainNewRow(TabId, TabSel, NumRows-1, NewVal);
+}
+//------------------------------------------------------------
+function ObtainNewRow(TabId, TabSel, NumRow, NewVal)
 {
 var http_con=NewAjaxCon();
 http_con.onreadystatechange = ObtainNewRow2;
-http_con.open('GET', 'RowLinkedTerm?Term='+NewVal, true);
+http_con.open('GET', 'RowLinkedTerm?Term='+NewVal+"&Tab="+TabId, true);
 http_con.send(null);
-var ServAns="";
+
 
 function ObtainNewRow2()
 {
@@ -416,8 +446,8 @@ if (http_con.readyState == READY_STATE_COMPLETE)
     {
     if (http_con.status == 200)
        {
-       TabSel.rows[NumRows].innerHTML=http_con.responseText; 
-       TabSel.rows[NumRows].id=Tabsel.id+NewVal;
+       TabSel.rows[NumRow].innerHTML=http_con.responseText; 
+       TabSel.rows[NumRow].id=TabId+NewVal; 
        http_con=null;
        }
     }
