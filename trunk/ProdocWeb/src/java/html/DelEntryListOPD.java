@@ -40,7 +40,8 @@ ElementId=pElementId;
 protected String CalcularEstilo()
 {
 StringBuilder retVal=new StringBuilder(300);   
-retVal.append(super.CalcularEstilo()).append(" onLoad=\"AddListTerm('").append(TabId).append("','").append(ElementId).append("')\"");
+//retVal.append(super.CalcularEstilo()).append(" onLoad=\"AddListTerm('").append(TabId).append("','").append(ElementId).append("')\"");
+retVal.append(super.CalcularEstilo());
 retVal.append(" onclick=\"DelListTerm('").append(TabId).append("','").append(ElementId).append("')\"");
 return(retVal.toString());
 }

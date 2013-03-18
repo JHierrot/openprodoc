@@ -20,6 +20,8 @@
 package prodocUI.servlet;
 
 import java.io.PrintWriter;
+import java.util.HashSet;
+import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import prodoc.Attribute;
 import prodoc.DriverGeneric;
@@ -114,7 +116,46 @@ while (Attr!=null)
     }
 Newterm.assignValues(Rec);
 Newterm.setParentId(getActTermId(Req));
+PDSession.IniciarTrans();
 Newterm.insert();
+String RTTerms=Req.getParameter("OPD_RT_T");
+if (RTTerms!=null && RTTerms.length()!=0)
+    {
+    StringTokenizer st = new StringTokenizer(RTTerms);
+    HashSet hs=new HashSet();
+    while (st.hasMoreTokens()) 
+        {
+        hs.add(st.nextToken());   
+        }
+    Newterm.DeleteTermRT();
+    Newterm.AddRT(hs); 
+    }
+String LangTerms=Req.getParameter("OPD_Lang_T");
+if (LangTerms!=null && LangTerms.length()!=0)
+    {
+    StringTokenizer st = new StringTokenizer(LangTerms);
+    HashSet hs=new HashSet();
+    while (st.hasMoreTokens()) 
+        {
+        hs.add(st.nextToken());   
+        }
+    Newterm.DeleteTermLang();
+    Newterm.AddLang(hs); 
+    }
+String UFTerms=Req.getParameter("OPD_UF_T");
+if (UFTerms!=null && UFTerms.length()!=0)
+    {
+    String Id=Newterm.getPDId();
+    StringTokenizer st = new StringTokenizer(UFTerms);
+    while (st.hasMoreTokens()) 
+        {
+        Newterm.Load(st.nextToken());
+        Newterm.setUse(Id);
+        Newterm.update();
+        }
+    }
+PDSession.CerrarTrans();
+SParent.setActTerm(Req, Newterm.getRecord());
 return(Newterm.getPDId());
 }
 //-----------------------------------------------------------------------------------------------
