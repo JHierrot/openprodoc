@@ -76,7 +76,7 @@ if (R.isAllowMaintainThesaur())
 if (R.isAllowMaintainThesaur())
     MC2.add(new MenuItem(TT("Delete_Term"), DelTerm.getUrlServlet(), ThesWorkArea));
 MC2.add(MenuItem.getMISeparator());
-MC2.add(new MenuItem(TT("Search_Terms"), SearchDoc.getUrlServlet(), ThesWorkArea));
+MC2.add(new MenuItem(TT("Search_Terms"), SearchThes.getUrlServlet(), ThesWorkArea));
 MenuCol MC3=new MenuCol(TT("Selection"), 2);
 MainMenu.add(MC3);
 MC3.add(new MenuItem(TT("Select_Term"), SPaperBin.getUrlServlet(), ThesWorkArea));

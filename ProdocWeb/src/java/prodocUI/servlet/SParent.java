@@ -44,6 +44,7 @@ import prodocUI.forms.FLogin;
 import prodocUI.forms.FMessage;
 import prodocUI.forms.FSearchDocAdv;
 import prodocUI.forms.FSearchFoldAdv;
+import prodocUI.forms.FSearchThesAdv;
 
 
 
@@ -72,6 +73,8 @@ public final static int SEARCHDOC_FORM =2;
  * 
  */
 public final static int SEARCHFOLD_FORM=3;
+public final static int SEARCHTERM_FORM=4;
+
 
 
 /** Initializes the servlet.
@@ -483,6 +486,49 @@ return(Cond);
 }
 //--------------------------------------------------------------
 /**
+ * Creates a new condition of the attribute with the text o value of the fieldest1
+ * @param Req
+ * @param Attr
+ * @param Val
+ * @return a new condition
+ * @throws PDException
+ */
+static public Condition FillCondLike(HttpServletRequest Req, Attribute Attr, String Val) throws PDException
+{
+Condition Cond = null;
+try {
+if (Attr.getType()==Attribute.tSTRING)
+    {
+    Cond=new Condition(Attr.getName(), Condition.cLIKE, Val);
+    Attr.setValue(Val);
+    }
+else if (Attr.getType()==Attribute.tDATE)
+    {
+    Cond=new Condition(Attr.getName(), Condition.cEQUAL, getFormatterDate(Req).parse(Val));
+    Attr.setValue(getFormatterDate(Req).parse(Val));
+    }
+else if (Attr.getType()==Attribute.tTIMESTAMP)
+    {
+    Cond=new Condition(Attr.getName(), Condition.cEQUAL, getFormatterTS(Req).parse(Val));
+    Attr.setValue(getFormatterTS(Req).parse(Val));
+    }
+else if (Attr.getType()==Attribute.tBOOLEAN)
+    {
+    if (Val!=null)
+        {
+        Cond=new Condition(Attr.getName(), Condition.cEQUAL, true);
+        Attr.setValue(true);
+        }
+    }
+return(Cond);
+} catch (Exception ex)
+    {
+    PDException.GenPDException(ex.getLocalizedMessage(), Val);
+    throw new PDException(ex.getLocalizedMessage());
+    }
+}
+//--------------------------------------------------------------
+/**
  *
  * @param Req
  * @return
@@ -774,27 +820,25 @@ if (Last!=null)
     LastForm=Last;
 else
     LastForm=LISTDOC_FORM;
-if (Form==SEARCHFOLD_FORM || Form==LAST_FORM && LastForm==SEARCHFOLD_FORM)
+if (Form==SEARCHTERM_FORM || Form==LAST_FORM && LastForm==SEARCHTERM_FORM)
     {
     DriverGeneric PDSession=SParent.getSessOPD(Req);
-    PDFolders F = new PDFolders(PDSession);
-    Record Rec=F.getRecord();
+    PDThesaur T = new PDThesaur(PDSession);
+    Record Rec=T.getRecord();
     if (Results==null)
         {
-        String FType=(String)Sess.getAttribute("SD_FType");
-        if (FType!=null)
+        Conditions Cond=(Conditions)Sess.getAttribute("ST_Cond");
+        if (Cond!=null)
             {
-            Conditions Cond=(Conditions)Sess.getAttribute("SD_Cond");
-            boolean SubT=(Boolean) Sess.getAttribute("SD_SubT");
-            boolean SubF=(Boolean) Sess.getAttribute("SD_SubF");
-            String actFolderId=(String) Sess.getAttribute("SD_actFolderId");
-            Vector Ord=(Vector)Sess.getAttribute("SD_Ord");
-            Results=F.Search(FType, Cond, SubT, SubF, actFolderId, Ord);
+            boolean SubF=(Boolean) Sess.getAttribute("ST_SubT");
+            String actFolderId=(String) Sess.getAttribute("ST_actFolderId");
+            Vector Ord=(Vector)Sess.getAttribute("ST_Ord");
+            Results=T.Search(Cond, SubF, actFolderId, Ord);
             }
         } 
-    FSearchFoldAdv f=new FSearchFoldAdv(Req, FSearchFoldAdv.ADDMOD, Rec, SearchFold.getUrlServlet(), Results);
+    FSearchThesAdv f=new FSearchThesAdv(Req, FSearchThesAdv.ADDMOD, Rec, SearchThes.getUrlServlet(), Results);
     out.println(f.ToHtml(Req.getSession()));
-    Sess.setAttribute("ThesLastForm", SEARCHFOLD_FORM);
+    Sess.setAttribute("ThesLastForm", SEARCHTERM_FORM);
     return;
     }
 String TermId=Req.getParameter("ThesId");
@@ -832,6 +876,20 @@ Sess.setAttribute("SD_Rec", null);
 /**
  *
  * @param Req
+ */
+protected void CleanCondsThes(HttpServletRequest Req)
+{
+HttpSession Sess=Req.getSession(true);
+Sess.setAttribute("ST_Cond", null);
+Sess.setAttribute("ST_SubT", null);
+Sess.setAttribute("ST_actFolderId", null);
+Sess.setAttribute("ST_Ord", null);
+Sess.setAttribute("ST_Rec", null);
+}
+//-----------------------------------------------------------------------------------------------
+/**
+ *
+ * @param Req
  * @param FType
  * @param Cond
  * @param SubT
@@ -852,6 +910,27 @@ Sess.setAttribute("SD_Vers", Vers);
 Sess.setAttribute("SD_actFolderId", actFolderId);
 Sess.setAttribute("SD_Ord", Ord);
 Sess.setAttribute("SD_Rec", Rec);
+}
+//-----------------------------------------------------------------------------------------------
+/**
+ *
+ * @param Req
+ * @param Cond
+ * @param SubT
+ * @param SubF
+ * @param Vers
+ * @param actFolderId
+ * @param Ord
+ * @param Rec
+ */
+protected void SaveCondsThes(HttpServletRequest Req, Conditions Cond, boolean SubF, String actFolderId, Vector Ord, Record Rec)
+{
+HttpSession Sess=Req.getSession(true);
+Sess.setAttribute("ST_Cond", Cond);
+Sess.setAttribute("ST_SubT", SubF);
+Sess.setAttribute("ST_actFolderId", actFolderId);
+Sess.setAttribute("ST_Ord", Ord);
+Sess.setAttribute("ST_Rec", Rec);
 }
 //-----------------------------------------------------------------------------------------------
 /**

@@ -271,7 +271,7 @@ if (ThesaurStruct==null)
     R.addAttr( new Attribute(fNAME, "Term_Name","Term_Name", Attribute.tSTRING, true, null, 128, false, true, true));
     R.addAttr( new Attribute(fDESCRIP, "Definition","Definition", Attribute.tSTRING, false, null, 254, false, false, true));
     R.addAttr( new Attribute(fUSE, "USE","Use_this_term", Attribute.tSTRING, false, null, 32, false, false, true));
-    R.addAttr( new Attribute(fSCN, "Scope Note","Scope Note", Attribute.tSTRING, false, null, 254, false, false, true));
+    R.addAttr( new Attribute(fSCN, "Scope_Note","Scope_Note", Attribute.tSTRING, false, null, 254, false, false, true));
     R.addAttr( new Attribute(fLANG, "Language","Term Language", Attribute.tSTRING, false, null, 2, false, true, true));
     R.addAttr( new Attribute(fPARENTID, "Parent_Term","Parent_Term", Attribute.tSTRING, true, null, 32, false, true, false));
     R.addRecord(getRecordStructCommon());
