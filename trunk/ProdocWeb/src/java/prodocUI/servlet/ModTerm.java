@@ -99,6 +99,7 @@ if (Acept==null || Acept.length()==0)
 DriverGeneric PDSession=SParent.getSessOPD(Req);
 PDThesaur F = new PDThesaur(PDSession);
 F.Load(getActTermId(Req));
+SParent.setActTerm(Req, F.getRecord());
 Record Rec=F.getRecord();
 Rec.initList();
 Attribute Attr=Rec.nextAttr();
@@ -127,7 +128,7 @@ F.update();
 String RTTerms=Req.getParameter("OPD_RT_T");
 if (RTTerms!=null && RTTerms.length()!=0)
     {
-    StringTokenizer st = new StringTokenizer(RTTerms);
+    StringTokenizer st = new StringTokenizer(RTTerms, "|");
     HashSet hs=new HashSet();
     while (st.hasMoreTokens()) 
         {
@@ -139,7 +140,7 @@ if (RTTerms!=null && RTTerms.length()!=0)
 String LangTerms=Req.getParameter("OPD_Lang_T");
 if (LangTerms!=null && LangTerms.length()!=0)
     {
-    StringTokenizer st = new StringTokenizer(LangTerms);
+    StringTokenizer st = new StringTokenizer(LangTerms, "|");
     HashSet hs=new HashSet();
     while (st.hasMoreTokens()) 
         {
@@ -148,20 +149,19 @@ if (LangTerms!=null && LangTerms.length()!=0)
     F.DeleteTermLang();
     F.AddLang(hs); 
     }
-String UFTerms=Req.getParameter("OPD_UF_T");
-if (UFTerms!=null && UFTerms.length()!=0)
-    {
-    String Id=F.getPDId();
-    StringTokenizer st = new StringTokenizer(UFTerms);
-    while (st.hasMoreTokens()) 
-        {
-        F.Load(st.nextToken());
-        F.setUse(Id);
-        F.update();
-        }
-    }
+//String UFTerms=Req.getParameter("OPD_UF_T");
+//if (UFTerms!=null && UFTerms.length()!=0)
+//    {
+//    String Id=F.getPDId();
+//    StringTokenizer st = new StringTokenizer(UFTerms, "|");
+//    while (st.hasMoreTokens()) 
+//        {
+//        F.Load(st.nextToken());
+//        F.setUse(Id);
+//        F.update();
+//        }
+//    }
 PDSession.CerrarTrans();
-SParent.setActTerm(Req, F.getRecord());
 return(true);
 }
 //-----------------------------------------------------------------------------------------------

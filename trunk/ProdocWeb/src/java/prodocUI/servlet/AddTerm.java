@@ -118,6 +118,8 @@ Newterm.assignValues(Rec);
 Newterm.setParentId(getActTermId(Req));
 PDSession.IniciarTrans();
 Newterm.insert();
+String IdAdd=Newterm.getPDId();
+SParent.setActTerm(Req, Newterm.getRecord());
 String RTTerms=Req.getParameter("OPD_RT_T");
 if (RTTerms!=null && RTTerms.length()!=0)
     {
@@ -155,8 +157,7 @@ if (UFTerms!=null && UFTerms.length()!=0)
         }
     }
 PDSession.CerrarTrans();
-SParent.setActTerm(Req, Newterm.getRecord());
-return(Newterm.getPDId());
+return(IdAdd);
 }
 //-----------------------------------------------------------------------------------------------
 

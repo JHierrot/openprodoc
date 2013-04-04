@@ -192,3 +192,30 @@ border-style:solid;
 border-color:#000000;
 text-align:left;
 }
+.FieldThes
+{
+visibility:hidden;
+z-index:10;
+background-color:#ffffff;
+position:fixed;
+border-width:1px;
+border-style:solid;
+border-color:#000000;
+text-align:left;
+}
+.FieldThes2
+{
+font-family: Arial,Helvetica,sans-serif;
+font-size: 12px;
+width: 100px;
+border: 1px solid black;
+border-right: 2px solid black;
+border-bottom: 2px solid black;
+text-align:left;
+}
+.FieldHide
+{
+visibility:hidden;
+z-index:10;    
+width: 2px;
+}
