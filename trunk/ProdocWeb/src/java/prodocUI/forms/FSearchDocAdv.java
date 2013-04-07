@@ -87,7 +87,7 @@ FoldTitle.setMaxSize(Attr.getLongStr());
 FoldTitle.setCSSClass("FFormInput");
 FoldTitle.setMensStatus(TT(Attr.getDescription()));
 String Val=null;
-if (Rec!=null)
+if (Rec!=null && Rec.getAttr(PDDocs.fTITLE)!=null)
     {
     Val=(String)Rec.getAttr(PDDocs.fTITLE).getValue();
     if (Val!=null)
@@ -99,7 +99,7 @@ ListTip.setCSSClass("FFormInputCombo");
 ListTip.setMensStatus(TT(Attr.getDescription()));
 ListTip.AddOnChange("ListTypeDoc(this.options[this.selectedIndex].value);");
 FillTip(ListTip, false);
-if (Rec!=null)
+if (Rec!=null && Rec.getAttr(PDDocs.fDOCTYPE)!=null)
     {
     Val=(String)Rec.getAttr(PDDocs.fDOCTYPE).getValue();
     if (Val!=null)
@@ -117,7 +117,7 @@ ListACL.setMensStatus(TT(Attr.getDescription()));
 FillAcl(ListACL);
 ListACL.AddOpcion("None", "");
 ListACL.setValue("None");
-if (Rec!=null)
+if (Rec!=null  && Rec.getAttr(PDDocs.fACL)!=null)
     {
     Val=(String)Rec.getAttr(PDDocs.fACL).getValue();
     if (Val!=null)
@@ -135,7 +135,7 @@ FormTab.getCelda(1,4).AddElem(new Element(TT("Subtypes")+":"));
 FieldCheck SubTCh=new FieldCheck("Subtypes");
 SubTCh.setMensStatus(TT("When_checked_includes_subtypes_of_document_in_results"));
 SubTCh.setCSSClass("FFormInputCheck");
-if (Rec!=null)
+if (Sess.getAttribute("SD_SubT")!=null)
     {
     if ((Boolean) Sess.getAttribute("SD_SubT"))
          SubTCh.setValue("1");
@@ -145,7 +145,7 @@ FormTab.getCelda(2,4).AddElem(new Element(TT("SubFolders")+":"));
 FieldCheck SubFCh=new FieldCheck("SubFolders");
 SubFCh.setCSSClass("FFormInputCheck");
 SubFCh.setMensStatus(TT("When_checked_limits_the_search_to_actual_folder_and_subfolders"));
-if (Rec!=null)
+if (Sess.getAttribute("SD_SubF")!=null)
     {
     if ((Boolean) Sess.getAttribute("SD_SubF"))
         SubFCh.setValue("1");
@@ -156,7 +156,7 @@ FormTab.getCelda(2,4).AddElem(new Element(TT("Versions")+":"));
 FieldCheck VersCh=new FieldCheck("Versions");
 VersCh.setCSSClass("FFormInputCheck");
 VersCh.setMensStatus(TT("When_checked_includes_all_versions_of_document_in_results"));
-if (Rec!=null)
+if (Sess.getAttribute("SD_Vers")!=null)
     {
     if ((Boolean) Sess.getAttribute("SD_Vers"))
         VersCh.setValue("1");

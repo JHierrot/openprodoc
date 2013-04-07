@@ -82,7 +82,7 @@ TermName.setMaxSize(Attr.getLongStr());
 TermName.setCSSClass("FFormInput");
 TermName.setMensStatus(TT(Attr.getDescription()));
 String Val=null;
-if (Rec!=null)
+if (Rec!=null && Rec.getAttr(PDThesaur.fNAME)!=null)
     {
     Val=(String)Rec.getAttr(PDThesaur.fNAME).getValue();
     if (Val!=null)
@@ -92,7 +92,7 @@ Attr=TmpFold.getRecord().getAttr(PDThesaur.fDESCRIP);
 TermDesc=new FieldText(Attr.getName());
 TermDesc.setCSSClass("FFormInput");
 TermDesc.setMensStatus(TT(Attr.getDescription()));
-if (Rec!=null)
+if (Rec!=null && Rec.getAttr(PDThesaur.fDESCRIP)!=null)
     {
     Val=(String)Rec.getAttr(PDThesaur.fDESCRIP).getValue();
     if (Val!=null)
@@ -102,7 +102,7 @@ Attr=TmpFold.getRecord().getAttr(PDThesaur.fSCN);
 TermSCN=new FieldText(Attr.getName());
 TermSCN.setCSSClass("FFormInput");
 TermSCN.setMensStatus(TT(Attr.getDescription()));
-if (Rec!=null)
+if (Rec!=null  && Rec.getAttr(PDThesaur.fSCN)!=null)
     {
     Val=(String)Rec.getAttr(PDThesaur.fSCN).getValue();
     if (Val!=null)
@@ -120,7 +120,7 @@ FormTab.getCelda(2,4).AddElem(new Element(TT("Specific_Terms")+":"));
 FieldCheck SubFCh=new FieldCheck("SubTerms");
 SubFCh.setCSSClass("FFormInputCheck");
 SubFCh.setMensStatus(TT("When_checked_limits_the_search_to_actual_term_and_specific_terms"));
-if (Rec!=null)
+if (Sess.getAttribute("ST_SubT")!=null)
     {
     if ((Boolean) Sess.getAttribute("ST_SubT"))
         SubFCh.setValue("1");

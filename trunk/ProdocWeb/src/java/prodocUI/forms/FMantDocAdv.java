@@ -57,6 +57,7 @@ public FMantDocAdv(HttpServletRequest Req, int pMode, Record pRec, String Destin
 {
 super(Req, SParent.TT(Req, "Maintenance_Documents"), pMode, pRec);
 AddJS("Types.js");
+AddJS("ThesTreeSel.js");
 Table BorderTab=new Table(1, 5, 1);
 BorderTab.setCSSClass("FFormularios");
 BorderTab.setAlineacion(Table.CENTER);

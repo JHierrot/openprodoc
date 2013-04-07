@@ -29,8 +29,10 @@ import prodoc.Attribute;
 import prodoc.DriverGeneric;
 import prodoc.PDException;
 import prodoc.PDFolders;
+import prodoc.PDThesaur;
 import prodoc.Record;
 import prodocUI.forms.FMantFoldAdv;
+import prodocUI.servlet.SMain;
 import prodocUI.servlet.SParent;
 
 /**
@@ -118,6 +120,13 @@ for (int i = 0; i < FL.size(); i++)
         {
         FieldHtml=new FieldCheck(Attr.getName());
         }
+    else if (Attr.getType()==Attribute.tTHES)
+        {
+        FieldHtml=new FieldThesOPD(Attr.getName(), SParent.getStyle(Req), ""+Attr.getLongStr());
+        FieldHtml.setCSSId(Attr.getName());
+        FieldHtml.setCSSClass("FieldThes");
+        FieldHtml.setMensStatus(Attr.getDescription());
+        }
     else
         {
         FieldHtml=new FieldText(Attr.getName());
@@ -134,6 +143,16 @@ for (int i = 0; i < FL.size(); i++)
         FieldHtml.setMensStatus(Attr.getDescription()+" ( "+SParent.getFormatTS(Req) +" )");
         FieldHtml.setValue(SParent.FormatTS(Req, (Date)Attr.getValue()));
         FieldHtml.setCSSClass("FFormInputTS");
+        }
+    else if (Attr.getType()==Attribute.tTHES)
+        {
+        if (Attr.getValue()!=null)    
+            {
+            PDThesaur TermU=new PDThesaur(SMain.getSessOPD(Req));
+            TermU.Load((String)Attr.getValue());
+            ((FieldThesOPD)FieldHtml).setValue(TermU.getName());
+            ((FieldThesOPD)FieldHtml).setIdTerm((String)Attr.getValue());    
+            }
         }
     else
         {

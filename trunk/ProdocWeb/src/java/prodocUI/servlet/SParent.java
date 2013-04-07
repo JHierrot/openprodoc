@@ -23,6 +23,7 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Properties;
 import java.util.Vector;
 import javax.servlet.*;
@@ -75,7 +76,7 @@ public final static int SEARCHDOC_FORM =2;
 public final static int SEARCHFOLD_FORM=3;
 public final static int SEARCHTERM_FORM=4;
 
-
+public static HashSet ListThes=null;
 
 /** Initializes the servlet.
  * @param config 
@@ -411,7 +412,7 @@ if (Attr.isMultivalued())
     Attr.ClearValues();   
     Attr.Import(Val);
     }
-else if (Attr.getType()==Attribute.tSTRING)
+else if (Attr.getType()==Attribute.tSTRING || Attr.getType()==Attribute.tTHES)
     {
     Attr.setValue(Val);
     }
@@ -985,6 +986,32 @@ if (ProdocProperRef==null)
     }
 return(ProdocProperRef);
 }
-//----------------------------------------------------------        
+//----------------------------------------------------------   
+public static boolean IsThes (HttpServletRequest Req)
+{
+String Caller=Req.getRequestURI().substring(Req.getRequestURI().lastIndexOf('/')+1);
+if (getListThes().contains(Caller))
+    return (true);
+else
+    return (false);
+}
+//----------------------------------------------------------   
+private static HashSet getListThes()
+{
+if (ListThes==null)
+    {
+    ListThes=new HashSet();
+    ListThes.add(AddTerm.getUrlServlet());
+    ListThes.add(AddThes.getUrlServlet());
+    ListThes.add(DelTerm.getUrlServlet());
+    ListThes.add(DelThes.getUrlServlet());
+    ListThes.add(ModTerm.getUrlServlet());
+    ListThes.add(ModThes.getUrlServlet());
+    ListThes.add(RefreshThes.getUrlServlet());
+    ListThes.add(SearchThes.getUrlServlet());
+    }
+return(ListThes);
+}
+//----------------------------------------------------------   
 }
 
