@@ -83,7 +83,7 @@ FoldTitle.setMaxSize(Attr.getLongStr());
 FoldTitle.setCSSClass("FFormInput");
 FoldTitle.setMensStatus(TT(Attr.getDescription()));
 String Val=null;
-if (Rec!=null)
+if (Rec!=null && Rec.getAttr(PDFolders.fTITLE)!=null)
     {
     Val=(String)Rec.getAttr(PDFolders.fTITLE).getValue();
     if (Val!=null)
@@ -95,7 +95,7 @@ ListTip.setCSSClass("FFormInputCombo");
 ListTip.setMensStatus(TT(Attr.getDescription()));
 ListTip.AddOnChange("ListType(this.options[this.selectedIndex].value);");
 FillTip(ListTip, true);
-if (Rec!=null)
+if (Rec!=null && Rec.getAttr(PDFolders.fFOLDTYPE)!=null)
     {
     Val=(String)Rec.getAttr(PDFolders.fFOLDTYPE).getValue();
     if (Val!=null)
@@ -113,7 +113,7 @@ ListACL.setMensStatus(TT(Attr.getDescription()));
 FillAcl(ListACL);
 ListACL.AddOpcion("None", "");
 ListACL.setValue("None");
-if (Rec!=null)
+if (Rec!=null && Rec.getAttr(PDFolders.fACL)!=null)
     {
     Val=(String)Rec.getAttr(PDFolders.fACL).getValue();
     if (Val!=null)
@@ -131,7 +131,7 @@ FormTab.getCelda(1,4).AddElem(new Element(TT("Subtypes")+":"));
 FieldCheck SubTCh=new FieldCheck("Subtypes");
 SubTCh.setCSSClass("FFormInputCheck");
 SubTCh.setMensStatus(TT("When_checked_includes_subtypes_of_folders_in_results"));
-if (Rec!=null)
+if (Sess.getAttribute("SD_SubT")!=null)
     {
     if ((Boolean) Sess.getAttribute("SD_SubT"))
          SubTCh.setValue("1");
@@ -141,7 +141,7 @@ FormTab.getCelda(2,4).AddElem(new Element(TT("SubFolders")+":"));
 FieldCheck SubFCh=new FieldCheck("SubFolders");
 SubFCh.setCSSClass("FFormInputCheck");
 SubFCh.setMensStatus(TT("When_checked_limits_the_search_to_actual_folder_and_subfolders"));
-if (Rec!=null)
+if (Sess.getAttribute("SD_SubF")!=null)
     {
     if ((Boolean) Sess.getAttribute("SD_SubF"))
         SubFCh.setValue("1");

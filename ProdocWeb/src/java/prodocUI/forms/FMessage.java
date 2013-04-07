@@ -23,6 +23,8 @@ package prodocUI.forms;
 import html.*;
 import javax.servlet.http.HttpServletRequest;
 import prodocUI.servlet.RefreshDocs;
+import prodocUI.servlet.RefreshThes;
+import prodocUI.servlet.SParent;
 
 /**
  *
@@ -49,7 +51,11 @@ FormTab.setCSSClass("FFormularios");
 FormTab.getCelda(0,0).setWidth(-40);
 FormTab.getCelda(1,0).AddElem(new Element(Message));
 FormTab.getCelda(1,2).AddElem(AceptButton);
-Form LoginForm=new Form(RefreshDocs.getUrlServlet(),"FormVal");
+Form LoginForm;
+if (SParent.IsThes(Req))
+    LoginForm=new Form(RefreshThes.getUrlServlet(),"FormVal");
+else
+    LoginForm=new Form(RefreshDocs.getUrlServlet(),"FormVal");
 // Form LoginForm=new Form(SMain.getUrlServlet(),"FormVal");
 LoginForm.AddElem(FormTab);
 AddBody(LoginForm);
