@@ -455,7 +455,7 @@ static public Condition FillCond(HttpServletRequest Req, Attribute Attr, String 
 {
 Condition Cond = null;
 try {
-if (Attr.getType()==Attribute.tSTRING)
+if (Attr.getType()==Attribute.tSTRING || Attr.getType()==Attribute.tTHES)
     {
     Cond=new Condition(Attr.getName(), Condition.cEQUAL, Val);
     Attr.setValue(Val);

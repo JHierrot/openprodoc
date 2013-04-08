@@ -57,6 +57,7 @@ public FSearchFoldAdv(HttpServletRequest Req, int pMode, Record pRec,String Dest
 {
 super(Req, SParent.TT(Req,"Search_Folders"), pMode, pRec);
 AddJS("Types.js");
+AddJS("ThesTreeSel.js");
 HttpSession Sess=Req.getSession(true);
 Record Rec=(Record)Sess.getAttribute("SD_Rec");
 DriverGeneric PDSession=SParent.getSessOPD(Req);

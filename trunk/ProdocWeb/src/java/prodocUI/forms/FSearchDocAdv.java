@@ -61,6 +61,7 @@ public FSearchDocAdv(HttpServletRequest Req, int pMode, Record pRec,String Desti
 {
 super(Req, SParent.TT(Req,"Search_Documents"), pMode, pRec);
 AddJS("Types.js");
+AddJS("ThesTreeSel.js");
 HttpSession Sess=Req.getSession(true);
 Record Rec=(Record)Sess.getAttribute("SD_Rec");
 DriverGeneric PDSession=SParent.getSessOPD(Req);
