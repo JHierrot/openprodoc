@@ -145,25 +145,25 @@ TabDocs.getCelda(1,0).AddElem(new Element(TT(AttrD.getUserName())));
 AttrD=NextDoc.getAttr(PDThesaur.fLANG);
 TabDocs.getCelda(2,0).AddElem(new Element(TT(AttrD.getUserName())));
 String ActFold=SParent.getActFolderId(Req);
-String FoldId=null;
+String TermId=null;
 int Row=0;
 NextDoc=PDSession.NextRec(ListFold);
 while (NextDoc!=null)
     {
     TabDocs.AddFila(); Row++;
     AttrD=NextDoc.getAttr(PDThesaur.fNAME);
-    FoldId=(String)NextDoc.getAttr(PDThesaur.fPDID).getValue();
+    TermId=(String)NextDoc.getAttr(PDThesaur.fPDID).getValue();
     TabDocs.getCelda(0,Row).AddElem(new Element((String)AttrD.getValue()));
     AttrD=NextDoc.getAttr(PDThesaur.fDESCRIP);
     TabDocs.getCelda(1,Row).AddElem(new Element((String)AttrD.getValue()));
     AttrD=NextDoc.getAttr(PDThesaur.fLANG);
     TabDocs.getCelda(2,Row).AddElem(new Element((String)AttrD.getValue()));
-    if (FoldId.equals(ActFold))
+    if (TermId.equals(ActFold))
         TabDocs.getFila(Row).setCSSClass("ListFoldsSel");
     else
         TabDocs.getFila(Row).setCSSClass("ListFolds");
-    TabDocs.getFila(Row).setCSSId(FoldId);
-    TabDocs.getFila(Row).setOnClick("SelectRowFold('"+FoldId+"')");
+    TabDocs.getFila(Row).setCSSId(TermId);
+    TabDocs.getFila(Row).setOnClick("SelectRowTerm('"+TermId+"')");
     NextDoc=PDSession.NextRec(ListFold);
     }
 AddElem(TabDocs);

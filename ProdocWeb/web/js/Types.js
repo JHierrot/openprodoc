@@ -294,5 +294,18 @@ Sel.options[Sel.selectedIndex].value=NewTxt;
 Sel.options[Sel.selectedIndex].text=NewTxt;    
 }
 //------------------------------------------------------------
-
+function SelectRowTerm(DocId)
+{
+var Act=getCookie("TermId");
+if (Act!=null)
+    {
+    try {
+    document.getElementById(Act).className='ListDocs';
+    }catch (err)
+        {}
+    }
+document.cookie = "TermId="+DocId;
+document.getElementById(DocId).className='ListDocsSel';
+}
+//----------------------------------------------
 

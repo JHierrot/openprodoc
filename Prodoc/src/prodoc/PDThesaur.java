@@ -20,6 +20,7 @@
 package prodoc;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -103,6 +104,7 @@ private boolean IsRootThesaur=false;
  */
 
 static private ObjectsCache ThesaurObjectsCache = null;
+static private HashSet ExportedTerms=new HashSet(100);
 
 //-------------------------------------------------------------------------
 /**
@@ -750,8 +752,8 @@ Cursor CursorId=getDrv().OpenCursor(Q);
 Record Res=getDrv().NextRec(CursorId);
 while (Res!=null)
     {
-    String Acl=(String) Res.getAttr(fPDID).getValue();
-    Result.add(Acl);
+    String Id=(String) Res.getAttr(fPDID).getValue();
+    Result.add(Id);
     Res=getDrv().NextRec(CursorId);
     }
 getDrv().CloseCursor(CursorId);
@@ -1367,4 +1369,200 @@ public void setLang(String Lang)
 this.Lang = Lang;
 }
 //---------------------------------------------------------------------
+public void Import(int NewThesId, String Path)
+{
+HashMap ListTerms=new HashMap(1000);
+HashMap ListEquiv=new HashMap(1000);
+
+}
+//---------------------------------------------------------------------
+/**
+ * Exports a thesaurus to RDF-XML format
+ * @param ExpThesId thesaurus Id
+ * @param Path Complete name of file to export
+ * @param Root Root to be included in the RDF (i.e. :http://metadataregistry.org/uri/FTWG/ )
+ * @param MainLang Language that defines the ID of terms and "walking" of thesaur 
+ */
+public void Export(String ExpThesId, String Path, String Root, String MainLang) throws PDException
+{
+PrintWriter PW=null;     
+try {    
+PW = new PrintWriter(Path);
+PW.println(StartSKOSXML());    
+Load(ExpThesId);
+WriteThes(this, PW, Root, MainLang);
+PW.println(EndSKOSXML());  
+PW.flush();
+} catch(Exception ex)
+    {
+    ex.printStackTrace();    
+    PDException.GenPDException(ex.getLocalizedMessage(), "");
+    }
+finally
+    {
+    if (PW!=null)    
+        PW.close();        
+    }
+}
+//---------------------------------------------------------------------
+private static String StartSKOSXML()
+{
+return("<?xml version=\"1.0\" encoding = \"UTF-8\"?>"
+    +"<rdf:RDF xmlns=\"http://www.w3.org/2004/02/skos/core#\""
+    +"xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\""
+    +"xmlns:rdfs=\"http://www.w3.org/2000/01/rdf-schema#\""
+    +"xmlns:skos=\"http://www.w3.org/2004/02/skos/core#\">"
+    +"xmlns:dc=\"http://purl.org/dc/elements/1.1/\"");        
+}
+//---------------------------------------------------------------------
+private static String EndSKOSXML()
+{
+return("</rdf:RDF>");    
+}
+//---------------------------------------------------------------------
+private void WriteThes(PDThesaur Thes, PrintWriter PW, String Root, String MainLang) throws PDException
+{
+ExportedTerms.clear();    
+PW.print(StartSKOSXMLConceptSchema());    
+PW.print(Root); 
+PW.print(Thes.getIDThesaur()+"\">"); 
+PW.println("<dc:title xml:lang=\""+Thes.getLang()+"\">"+Thes.getName()+"</dc:title>");
+PW.println("<dc:creator xml:lang=\""+Thes.getLang()+"\">"+getDrv().getUser().getName()+"</dc:creator>");
+if (Thes.getDescription()!=null && Thes.getDescription().length()>0)
+    PW.println("<skos:definition xml:lang=\""+Thes.getLang()+"\">"+Thes.getDescription()+"</skos:definition>");
+if (Thes.getSCN()!=null && Thes.getSCN().length()>0)
+    PW.println("<skos:note xml:lang=\""+Thes.getLang()+"\">"+Thes.getSCN()+"</skos:note>");
+HashSet List=Thes.getListDirectDescendList(Thes.getPDId());
+HashSet ListLang=new HashSet(List);
+PDThesaur Child=new PDThesaur(this.getDrv());
+for (Iterator it = List.iterator(); it.hasNext();)
+    {
+    String Id=(String)it.next();    
+    Child.Load(Id);
+    if (!Child.Lang.equalsIgnoreCase(MainLang))
+        {
+        ListLang.remove(Id);    
+        continue;
+        }
+    PW.println("<skos:hasTopConcept rdf:resource=\""+Root+Id+"\"/>");    
+    }
+PW.println(EndSKOSXMLConceptSchema());  
+ExportedTerms.add(Thes.getPDId());
+for (Iterator it = ListLang.iterator(); it.hasNext();)
+    {
+    String Id=(String)it.next();  
+    Child.Load(Id);
+    WriteTerm(Child, PW, Root, MainLang, Thes.getPDId());    
+    }
+ExportedTerms.clear();    
+}
+//---------------------------------------------------------------------
+private static String StartSKOSXMLConceptSchema()
+{
+return("<skos:ConceptScheme rdf:about=\"");        
+}
+//---------------------------------------------------------------------
+private static String EndSKOSXMLConceptSchema()
+{
+return("</skos:ConceptScheme>");    
+}
+//---------------------------------------------------------------------
+private static String StartSKOSXMLConcept()
+{
+return("<skos:Concept rdf:about=\"");        
+}
+//---------------------------------------------------------------------
+private static String EndSKOSXMLConcept()
+{
+return("</skos:Concept>");    
+}
+//---------------------------------------------------------------------
+
+private void WriteTerm(PDThesaur Term, PrintWriter PW, String Root, String MainLang, String ThesId) throws PDException
+{
+if (ExportedTerms.contains(Term.getPDId())) 
+    return;
+PW.print(StartSKOSXMLConcept());    
+PW.print(Root); 
+PW.println(Term.getPDId()+"\" xml:lang=\""+Term.getLang()+"\">"); 
+PW.println("<skos:prefLabel xml:lang=\""+Term.getLang()+"\">"+Term.getName()+"</skos:prefLabel>");
+PW.println("<skos:inScheme rdf:resource="+Root+ThesId+"\"/>");
+if (Term.getDescription()!=null && Term.getDescription().length()>0)
+    PW.println("<skos:definition xml:lang=\""+Term.getLang()+"\">"+Term.getDescription()+"</skos:definition>");
+if (Term.getSCN()!=null && Term.getSCN().length()>0)
+    PW.println("<skos:scopeNote xml:lang=\""+Term.getLang()+"\">"+Term.getSCN()+"</skos:scopeNote>");
+if (Term.getParentId().equals(ThesId))
+    PW.println("<skos:topConceptOf rdf:resource=\""+Root+Term.getParentId()+"\"/>");    
+else
+    PW.println("<skos:broader rdf:resource=\""+Root+Term.getParentId()+"\"/>");    
+PDThesaur AuxTerm=new PDThesaur(this.getDrv());
+HashSet ListLang=Term.getListLang(Term.getPDId()); // -------------
+for (Iterator it = ListLang.iterator(); it.hasNext();)
+    {
+    String Id=(String)it.next();    
+    AuxTerm.Load(Id);
+    PW.println("<skos:prefLabel xml:lang=\""+AuxTerm.getLang()+"\">"+AuxTerm.getName()+"</skos:prefLabel>");
+    if (AuxTerm.getDescription()!=null && AuxTerm.getDescription().length()>0)
+        PW.println("<skos:definition xml:lang=\""+AuxTerm.getLang()+"\">"+AuxTerm.getDescription()+"</skos:definition>");
+    if (AuxTerm.getSCN()!=null && AuxTerm.getSCN().length()>0)
+        PW.println("<skos:scopeNote xml:lang=\""+AuxTerm.getLang()+"\">"+AuxTerm.getSCN()+"</skos:scopeNote>");
+    HashSet ListUF=Term.getListUF(AuxTerm.getPDId()); // -------------
+    PDThesaur AuxTerm2=new PDThesaur(this.getDrv());
+    for (Iterator itU = ListUF.iterator(); itU.hasNext();)
+        {
+        String IdU=(String)itU.next();    
+        AuxTerm2.Load(IdU);
+        PW.println("<skos:altLabel xml:lang=\""+AuxTerm2.getLang()+"\">"+AuxTerm2.getName()+"</skos:altLabel>");    
+        }    
+    }
+HashSet ListUF=Term.getListUF(Term.getPDId()); // -------------
+for (Iterator it = ListUF.iterator(); it.hasNext();)
+    {
+    String Id=(String)it.next();    
+    AuxTerm.Load(Id);
+    PW.println("<skos:altLabel xml:lang=\""+AuxTerm.getLang()+"\">"+AuxTerm.getName()+"</skos:altLabel>");    
+    }
+HashSet ListDChild=Term.getListDirectDescendList(Term.getPDId()); // -------------
+HashSet ListChild=new HashSet(ListDChild);
+for (Iterator it = ListDChild.iterator(); it.hasNext();)
+    {
+    String Id=(String)it.next();    
+    AuxTerm.Load(Id);
+    if (AuxTerm.Lang==null || !AuxTerm.Lang.equalsIgnoreCase(MainLang))
+        {
+        ListChild.remove(Id);    
+        continue;
+        }
+    PW.println("<skos:narrower rdf:resource=\""+Root+Id+"\"/>");    
+    }
+HashSet ListRT=Term.getListRT(Term.getPDId()); // -------------
+HashSet ListRTerms=new HashSet(ListRT);
+for (Iterator it = ListRT.iterator(); it.hasNext();)
+    {
+    String Id=(String)it.next();    
+    AuxTerm.Load(Id);
+    if (AuxTerm.Lang==null || !AuxTerm.Lang.equalsIgnoreCase(MainLang))
+        {
+        ListRTerms.remove(Id);    
+        continue;
+        }
+    PW.println("<skos:related rdf:resource=\""+Root+Id+"\"/>");    
+    }
+PW.println(EndSKOSXMLConcept());  
+ExportedTerms.add(Term.getPDId());
+for (Iterator it = ListRTerms.iterator(); it.hasNext();)
+    {
+    String Id=(String)it.next();  
+    AuxTerm.Load(Id);
+    WriteTerm(AuxTerm, PW, Root, MainLang, ThesId);    
+    }
+for (Iterator it = ListChild.iterator(); it.hasNext();)
+    {
+    String Id=(String)it.next();  
+    AuxTerm.Load(Id);
+    WriteTerm(AuxTerm, PW, Root, MainLang, ThesId);    
+    }
+}
+//---------------------------------------------------------------------
+
 }

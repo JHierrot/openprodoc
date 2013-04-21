@@ -129,6 +129,7 @@ initComponents();
         DelThesaur = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         RefreshTerm = new javax.swing.JMenuItem();
+        ExportThes = new javax.swing.JMenuItem();
         jSeparator6 = new javax.swing.JPopupMenu.Separator();
         exitMenuItem = new javax.swing.JMenuItem();
         TermMenu = new javax.swing.JMenu();
@@ -462,6 +463,17 @@ initComponents();
             }
         });
         ThesaurMenu.add(RefreshTerm);
+
+        ExportThes.setFont(getFontMenu());
+        ExportThes.setText(MainWin.DrvTT("Export_Thesaurus"));
+        ExportThes.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                ExportThesActionPerformed(evt);
+            }
+        });
+        ThesaurMenu.add(ExportThes);
         ThesaurMenu.add(jSeparator6);
 
         exitMenuItem.setFont(getFontMenu());
@@ -906,6 +918,26 @@ SF.setVisible(true);
 setTermAct(null);
     }//GEN-LAST:event_formWindowClosing
 
+    private void ExportThesActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ExportThesActionPerformed
+    {//GEN-HEADEREND:event_ExportThesActionPerformed
+try {
+   
+DialogExportThes ExpThes = new DialogExportThes(this,true);
+ExpThes.setLocationRelativeTo(null);
+ExpThes.setVisible(true);
+if (ExpThes.isCancel())
+    return;
+setCursor(MainWin.WaitCur);    
+PDThesaur Thes=new PDThesaur(Session);
+Thes.Export(ActTermId, ExpThes.SelFolder.getAbsolutePath()+File.separatorChar+ActTermId+".rdf.xml", ExpThes.getRoot(), ExpThes.getMainLang());
+setCursor(MainWin.DefCur);
+} catch (Exception ex)
+    {
+    setCursor(MainWin.DefCur);    
+    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
+    }//GEN-LAST:event_ExportThesActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem AddTerm;
     private javax.swing.JMenuItem AddThesaur;
@@ -914,6 +946,7 @@ setTermAct(null);
     private javax.swing.JLabel DescripLabel;
     private javax.swing.JTextField DescripTextField;
     private javax.swing.JSplitPane DetailsPanel;
+    private javax.swing.JMenuItem ExportThes;
     private javax.swing.JLabel LangLabel;
     private javax.swing.JTable LangTable;
     private javax.swing.JTextField LangTextField;

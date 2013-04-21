@@ -57,7 +57,7 @@ if (DatTerm==null || !((String)DatTerm.getAttr(PDThesaur.fPDID).getValue()).equa
     {
     TermAct.Load(CarpId);
     DatTerm=TermAct.getRecord();
-    SParent.setActFold(Req, DatTerm);
+    SParent.setActTerm(Req, DatTerm);
     }
 else
     TermAct.assignValues(DatTerm);
