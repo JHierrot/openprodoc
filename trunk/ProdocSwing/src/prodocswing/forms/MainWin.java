@@ -69,8 +69,8 @@ static private int ExpDocs=0;
 private PDFolders FoldAct=null;
 static private String List=PDFolders.fACL+"/"+PDFolders.fFOLDTYPE+"/"+PDFolders.fPARENTID+"/"+PDFolders.fPDID+"/"+PDFolders.fTITLE+"/"+PDFolders.fPDAUTOR+"/"+PDFolders.fPDDATE;
 static private HashSet ExecFiles=new HashSet();
-static private java.awt.Cursor DefCur=new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR);
-static private final java.awt.Cursor WaitCur=new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR);
+static protected java.awt.Cursor DefCur=new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR);
+static protected final java.awt.Cursor WaitCur=new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR);
 
 
 /**
