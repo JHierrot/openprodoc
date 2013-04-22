@@ -79,6 +79,8 @@ static private Record ThesaurStruct=null;
 static private Record ThesaurLevStruct=null;
 static private Record ThesaurRTStruct=null;
 static private Record ThesaurLangStruct=null;
+private static String SKOS_CONCEPT="skos:concept";
+private static String SKOS_CONCEPTSCHEME="skos:conceptScheme";
 /**
  *
  */
@@ -1395,7 +1397,6 @@ PW.println(EndSKOSXML());
 PW.flush();
 } catch(Exception ex)
     {
-    ex.printStackTrace();    
     PDException.GenPDException(ex.getLocalizedMessage(), "");
     }
 finally
@@ -1408,11 +1409,10 @@ finally
 private static String StartSKOSXML()
 {
 return("<?xml version=\"1.0\" encoding = \"UTF-8\"?>"
-    +"<rdf:RDF xmlns=\"http://www.w3.org/2004/02/skos/core#\""
-    +"xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\""
-    +"xmlns:rdfs=\"http://www.w3.org/2000/01/rdf-schema#\""
-    +"xmlns:skos=\"http://www.w3.org/2004/02/skos/core#\">"
-    +"xmlns:dc=\"http://purl.org/dc/elements/1.1/\"");        
+    +"<rdf:RDF "
++"xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" "
++"xmlns:skos=\"http://www.w3.org/2004/02/skos/core#\" "
++"xmlns:dc=\"http://purl.org/dc/elements/1.1#\" >");      
 }
 //---------------------------------------------------------------------
 private static String EndSKOSXML()
@@ -1482,11 +1482,13 @@ private void WriteTerm(PDThesaur Term, PrintWriter PW, String Root, String MainL
 {
 if (ExportedTerms.contains(Term.getPDId())) 
     return;
+if (Term.getUse()!=null && !Term.getUse().isEmpty())
+    return;
 PW.print(StartSKOSXMLConcept());    
 PW.print(Root); 
 PW.println(Term.getPDId()+"\" xml:lang=\""+Term.getLang()+"\">"); 
 PW.println("<skos:prefLabel xml:lang=\""+Term.getLang()+"\">"+Term.getName()+"</skos:prefLabel>");
-PW.println("<skos:inScheme rdf:resource="+Root+ThesId+"\"/>");
+PW.println("<skos:inScheme rdf:resource=\""+Root+ThesId+"\"/>");
 if (Term.getDescription()!=null && Term.getDescription().length()>0)
     PW.println("<skos:definition xml:lang=\""+Term.getLang()+"\">"+Term.getDescription()+"</skos:definition>");
 if (Term.getSCN()!=null && Term.getSCN().length()>0)
@@ -1564,5 +1566,36 @@ for (Iterator it = ListChild.iterator(); it.hasNext();)
     }
 }
 //---------------------------------------------------------------------
-
+/**
+ * Exports a thesaurus to RDF-XML format
+ * @param ExpThesId thesaurus Id
+ * @param Path Complete name of file to export
+ * @param Root Root to be included in the RDF (i.e. :http://metadataregistry.org/uri/FTWG/ )
+ * @param MainLang Language that defines the ID of terms and "walking" of thesaur 
+ */
+public int Import(String ExpThesId, File XMLFile) throws PDException
+{
+try {
+DocumentBuilder DB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+Document XMLObjects = DB.parse(XMLFile);
+NodeList OPDObjectList = XMLObjects.getElementsByTagName(PDThesaur.SKOS_CONCEPTSCHEME);
+Node OPDObject = null;
+int Tot=0;
+for (int i=0; i<OPDObjectList.getLength(); i++)
+    {
+    OPDObject = OPDObjectList.item(i);
+    }
+OPDObjectList = XMLObjects.getElementsByTagName(PDThesaur.SKOS_CONCEPT);
+for (int i=0; i<OPDObjectList.getLength(); i++)
+    {
+    OPDObject = OPDObjectList.item(i);
+    }
+return(Tot);
+} catch(Exception ex)
+    {
+    PDLog.Error(ex.getLocalizedMessage());
+    throw new PDException(ex.getLocalizedMessage());
+    }
+}
+//---------------------------------------------------------------------
 }
