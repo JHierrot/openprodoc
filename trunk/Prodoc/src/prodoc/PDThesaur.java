@@ -80,7 +80,14 @@ static private Record ThesaurLevStruct=null;
 static private Record ThesaurRTStruct=null;
 static private Record ThesaurLangStruct=null;
 private static String SKOS_CONCEPT="skos:concept";
-private static String SKOS_CONCEPTSCHEME="skos:conceptScheme";
+private static String SKOS_CONCEPTSCHEME="skos:ConceptScheme";
+private static String DC_TITLE="dc:title";
+private static String SKOS_DEFINITION="skos:definition";
+private static String SKOS_NOTE="skos:note";
+private static String SKOS_SCNNOTE="skos:scopeNote";
+private static String SKOS_TOPCONCEPT="skos:hasTopConcept";
+private static String RDF_RESOURCE="rdf:resource";
+
 /**
  *
  */
@@ -1567,33 +1574,79 @@ for (Iterator it = ListChild.iterator(); it.hasNext();)
 }
 //---------------------------------------------------------------------
 /**
- * Exports a thesaurus to RDF-XML format
- * @param ExpThesId thesaurus Id
+ * Import a thesaurus in RDF-XML format
+ * @param ImpThesId thesaurus Id
  * @param Path Complete name of file to export
  * @param Root Root to be included in the RDF (i.e. :http://metadataregistry.org/uri/FTWG/ )
  * @param MainLang Language that defines the ID of terms and "walking" of thesaur 
  */
-public int Import(String ExpThesId, File XMLFile) throws PDException
+public int Import(String ThesName, String ImpThesId, File XMLFile, String MainLang, String Root) throws PDException
 {
 try {
 DocumentBuilder DB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 Document XMLObjects = DB.parse(XMLFile);
-NodeList OPDObjectList = XMLObjects.getElementsByTagName(PDThesaur.SKOS_CONCEPTSCHEME);
-Node OPDObject = null;
+// NodeList OPDObjectList = XMLObjects.getElementsByTagName(PDThesaur.SKOS_CONCEPTSCHEME);
+Node SkosObjectConcept = null;
+Node SkosObjectSub = null;
+HashMap TermEquiv=new HashMap(500);
 int Tot=0;
-for (int i=0; i<OPDObjectList.getLength(); i++)
+PDThesaur Thes=new PDThesaur(getDrv());
+PDThesaur Term=new PDThesaur(getDrv());
+Thes.setPDId(ImpThesId);
+Thes.setName(ThesName);
+Thes.setParentId(PDThesaur.ROOTTERM);
+Thes.setLang(MainLang);
+getDrv().IniciarTrans();
+Thes.insert(); Tot++;
+NodeList ConceptObjectList = XMLObjects.getElementsByTagName("*");
+NodeList SubConceptObjectList;
+for (int NumConc=0; NumConc<ConceptObjectList.getLength(); NumConc++)
     {
-    OPDObject = OPDObjectList.item(i);
+    SkosObjectConcept = ConceptObjectList.item(NumConc);   
+    if (SkosObjectConcept.getNodeName().equalsIgnoreCase(PDThesaur.SKOS_CONCEPTSCHEME))
+        {
+        SubConceptObjectList=SkosObjectConcept.getChildNodes();
+        for (int NumNod=0; NumNod<SubConceptObjectList.getLength(); NumNod++)
+            {
+            SkosObjectSub = SubConceptObjectList.item(NumNod);
+            if (SkosObjectSub.getNodeName().equalsIgnoreCase(PDThesaur.DC_TITLE))
+                Thes.setName(SkosObjectSub.getTextContent());
+            if (SkosObjectSub.getNodeName().equalsIgnoreCase(PDThesaur.SKOS_DEFINITION))
+                Thes.setDescription(SkosObjectSub.getTextContent());
+            if (SkosObjectSub.getNodeName().equalsIgnoreCase(PDThesaur.SKOS_NOTE) || SkosObjectSub.getNodeName().equalsIgnoreCase(PDThesaur.SKOS_SCNNOTE) )
+                Thes.setSCN(SkosObjectSub.getTextContent());    
+            if (SkosObjectSub.getNodeName().equalsIgnoreCase(PDThesaur.SKOS_TOPCONCEPT))
+                {
+                Node Res=SkosObjectSub.getAttributes().getNamedItem(PDThesaur.RDF_RESOURCE); 
+                if (Res!=null && Res.getNodeValue().length()>=Root.length())  
+                    {
+                    String SourceId=Res.getNodeValue().substring(Root.length());       
+                    Term.Clear();
+                    Term.setName(SourceId); // provisional
+                    Term.setParentId(Thes.getPDId());
+                    Term.insert(); Tot++;
+                    TermEquiv.put(SourceId, Term.getPDId());
+                    }        
+                }   
+            }
+        Thes.update();
+        }
+    else if (SkosObjectConcept.getNodeName().equalsIgnoreCase(PDThesaur.SKOS_CONCEPT))
+        {
+        SubConceptObjectList=SkosObjectConcept.getChildNodes();
+        for (int NumNod=0; NumNod<SubConceptObjectList.getLength(); NumNod++)
+            {
+            SkosObjectSub = SubConceptObjectList.item(NumNod);
+            }
+        }
     }
-OPDObjectList = XMLObjects.getElementsByTagName(PDThesaur.SKOS_CONCEPT);
-for (int i=0; i<OPDObjectList.getLength(); i++)
-    {
-    OPDObject = OPDObjectList.item(i);
-    }
+getDrv().CerrarTrans();
 return(Tot);
 } catch(Exception ex)
     {
     PDLog.Error(ex.getLocalizedMessage());
+    if (getDrv().isInTransaction())
+        getDrv().AnularTrans();
     throw new PDException(ex.getLocalizedMessage());
     }
 }
