@@ -130,6 +130,7 @@ initComponents();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         RefreshTerm = new javax.swing.JMenuItem();
         ExportThes = new javax.swing.JMenuItem();
+        ImportThes = new javax.swing.JMenuItem();
         jSeparator6 = new javax.swing.JPopupMenu.Separator();
         exitMenuItem = new javax.swing.JMenuItem();
         TermMenu = new javax.swing.JMenu();
@@ -474,6 +475,17 @@ initComponents();
             }
         });
         ThesaurMenu.add(ExportThes);
+
+        ImportThes.setFont(getFontMenu());
+        ImportThes.setText(MainWin.DrvTT("Import_Thesaurus"));
+        ImportThes.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                ImportThesActionPerformed(evt);
+            }
+        });
+        ThesaurMenu.add(ImportThes);
         ThesaurMenu.add(jSeparator6);
 
         exitMenuItem.setFont(getFontMenu());
@@ -920,8 +932,7 @@ setTermAct(null);
 
     private void ExportThesActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ExportThesActionPerformed
     {//GEN-HEADEREND:event_ExportThesActionPerformed
-try {
-   
+try {   
 DialogExportThes ExpThes = new DialogExportThes(this,true);
 ExpThes.setLocationRelativeTo(null);
 ExpThes.setVisible(true);
@@ -938,6 +949,26 @@ setCursor(MainWin.DefCur);
     }
     }//GEN-LAST:event_ExportThesActionPerformed
 
+    private void ImportThesActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ImportThesActionPerformed
+    {//GEN-HEADEREND:event_ImportThesActionPerformed
+try {   
+//DialogExportThes ExpThes = new DialogExportThes(this,true);
+//ExpThes.setLocationRelativeTo(null);
+//ExpThes.setVisible(true);
+//if (ExpThes.isCancel())
+//    return;
+setCursor(MainWin.WaitCur);    
+PDThesaur Thes=new PDThesaur(Session);
+// Thes.Export(ActTermId, ExpThes.SelFolder.getAbsolutePath()+File.separatorChar+ActTermId+".rdf.xml", ExpThes.getRoot(), ExpThes.getMainLang());
+Thes.Import("EncFormats", "999", new File("/home/jhierrot/OPD/Varios/rdf/Encoding.rdf"), "en", "http://rdvocab.info/termList/encFormat/");
+setCursor(MainWin.DefCur);
+} catch (Exception ex)
+    {
+    setCursor(MainWin.DefCur);    
+    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
+    }//GEN-LAST:event_ImportThesActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem AddTerm;
     private javax.swing.JMenuItem AddThesaur;
@@ -947,6 +978,7 @@ setCursor(MainWin.DefCur);
     private javax.swing.JTextField DescripTextField;
     private javax.swing.JSplitPane DetailsPanel;
     private javax.swing.JMenuItem ExportThes;
+    private javax.swing.JMenuItem ImportThes;
     private javax.swing.JLabel LangLabel;
     private javax.swing.JTable LangTable;
     private javax.swing.JTextField LangTextField;
