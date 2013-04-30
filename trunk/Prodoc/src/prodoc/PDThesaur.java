@@ -50,14 +50,14 @@ public static final String fDESCRIP="Definition";
  *
  */
 public static final String fUSE="TES_USE";
-    /**
-     *
-     */
-    public static final String fLANG="TES_LANG";
-    /**
-     *
-     */
-    public static final String fSCN="SCN";
+/**
+ *
+ */
+public static final String fLANG="TES_LANG";
+/**
+ *
+ */
+public static final String fSCN="SCN";
 /**
  *
  */
@@ -104,6 +104,8 @@ private static String SKOS_ALTLABEL="skos:altLabel";
 private static HashMap TermEquiv=new HashMap();
 private static HashSet TermExp=new HashSet();
 private static HashMap TermCache=new HashMap();
+private static HashMap TermRT=new HashMap();
+private static HashMap TermLang=new HashMap();
 
 /**
  *
@@ -551,7 +553,7 @@ IsRootThesaur=false;
  */
 public String GenerateId()
 {
-StringBuilder genId = new StringBuilder(32);
+StringBuilder genId = new StringBuilder(29); // so it can be possible to add _XX for language during import
 genId.append(Long.toHexString(System.currentTimeMillis()));
 genId.append("-");
 genId.append(Long.toHexString(Double.doubleToLongBits(Math.random())));
@@ -1423,18 +1425,6 @@ public void setLang(String Lang)
 this.Lang = Lang;
 }
 //---------------------------------------------------------------------
-    /**
-     *
-     * @param NewThesId
-     * @param Path
-     */
-    public void Import(int NewThesId, String Path)
-{
-HashMap ListTerms=new HashMap(1000);
-HashMap ListEquiv=new HashMap(1000);
-
-}
-//---------------------------------------------------------------------
 /**
  * Exports a thesaurus to RDF-XML format
  * @param ExpThesId thesaurus Id
@@ -1644,6 +1634,8 @@ Node SkosObjectSub;
 TermEquiv.clear();
 TermExp.clear();
 TermCache.clear();
+TermRT.clear();
+TermLang.clear();
 int Tot=0;
 PDThesaur Thes=new PDThesaur(getDrv());
 PDThesaur Term=new PDThesaur(getDrv());
@@ -1892,14 +1884,22 @@ for (int NumNod=0; NumNod<SubConceptObjectList.getLength(); NumNod++)
         }
      else if (SkosObjectSub.getNodeName().equalsIgnoreCase(PDThesaur.SKOS_RELATED))
         {
-            
+        PDThesaur RelTerm=new PDThesaur(getDrv());
+        String NewId=GenerateId();
+        RelTerm.setPDId(NewId);
+        TermCache.put(NewId, RelTerm);
+        RelTerm.setName(SkosObjectSub.getTextContent());    
+        Node Res=SkosObjectSub.getAttributes().getNamedItem(PDThesaur.XML_LANG);    
+        if (Res!=null)  
+            RelTerm.setLang(Res.getNodeValue());
+        else
+            RelTerm.setLang(MainLang);
+        AddImportRT(Term.getPDId(),RelTerm.getPDId());   
         }
     else if (SkosObjectSub.getNodeName().equalsIgnoreCase(PDThesaur.SKOS_ALTLABEL))
         {
         PDThesaur UseTerm=new PDThesaur(getDrv());
         String NewId=GenerateId();
-        UseTerm.setPDId(NewId);
-        TermCache.put(NewId, UseTerm);
         UseTerm.setName(SkosObjectSub.getTextContent());    
         Node Res=SkosObjectSub.getAttributes().getNamedItem(PDThesaur.XML_LANG);    
         if (Res!=null)  
@@ -1910,12 +1910,16 @@ for (int NumNod=0; NumNod<SubConceptObjectList.getLength(); NumNod++)
             {
             UseTerm.setParentId(Term.getParentId()); 
             UseTerm.setUse(Term.getPDId());
+            NewId=GenerateId();
             }
         else
             {
-            UseTerm.setParentId(Term.getParentId()); // TODO: Search parent in lang
-            UseTerm.setUse(Term.getPDId()); // TODO: Search prefered in lang
+            UseTerm.setParentId(Term.getParentId()+"_"+UseTerm.getLang());
+            NewId=Term.getPDId()+"_"+UseTerm.getLang();
+            AddImportLang(Term.getPDId(), NewId);   
             }
+        UseTerm.setPDId(NewId);
+        TermCache.put(NewId, UseTerm);
         }
     }
 if (Term.getParentId()==null || Term.getParentId().length()==0)
@@ -1960,7 +1964,6 @@ if (Term.getParentId()!=null && !TermExp.contains(Term.getParentId()))
     return(false);
 if (Term.getUse()!=null && !TermExp.contains(Term.getUse()))
     return(false);
-// also checking other relations
 return(true);
 }
 //---------------------------------------------------------------------
@@ -1968,9 +1971,54 @@ return(true);
  * Dumps all the elements in cache doing severals loops until the list is empty 
  * or exists a deadlock by circular relations (detected by loops with zero insertions)
  */
-private void StoreCache()
+private void StoreCache() throws PDException
 {
-    throw new UnsupportedOperationException("Not yet implemented");
+boolean StoredTerm;    
+boolean SomeNotNull;    
+do {  
+StoredTerm=false;        
+SomeNotNull=false;    
+for (Iterator it = TermCache.keySet().iterator(); it.hasNext();)
+    {
+    String TermId= (String) it.next();
+    PDThesaur Term= (PDThesaur) TermCache.get(TermId);
+    if (Term!=null)
+        {
+        SomeNotNull=true;    
+        if (CanInsert(Term))    
+            {
+            Term.insert();
+            TermExp.add(Term.getPDId());
+            TermCache.put(TermId, null);
+            StoredTerm=true;
+            }
+        }
+    }
+
+} while (StoredTerm && SomeNotNull);  
+if (SomeNotNull)
+    PDExceptionFunc.GenPDException("Circular_Reference_importing_Thesaurus", fPDID);
+PDThesaur Term=new PDThesaur(getDrv());
+HashSet HSLang=new HashSet(2);
+for (Iterator it = TermLang.keySet().iterator(); it.hasNext();)
+    {
+    String TermId= (String) it.next();
+    String TermId2= (String) TermLang.get(TermId);
+    HSLang.clear();
+    HSLang.add(TermId2);
+    Term.Load(TermId);
+    Term.AddLang(HSLang);
+    }
+HashSet HSRT=new HashSet(2);
+for (Iterator it = TermRT.keySet().iterator(); it.hasNext();)
+    {
+    String TermId= (String) it.next();
+    String TermId2= (String) TermRT.get(TermId);
+    HSRT.clear();
+    HSRT.add(TermId2);
+    Term.Load(TermId);
+    Term.AddLang(HSRT);
+    }
 }
 //---------------------------------------------------------------------
 /**
@@ -1981,6 +2029,26 @@ private void StoreCache()
 private void AddTranslations(String pdId, String NewId)
 {
     throw new UnsupportedOperationException("Not yet implemented");
+}
+//---------------------------------------------------------------------
+/**
+ * Stores 2 terms as related during importation
+ * @param pdId
+ * @param pdId0 
+ */
+private void AddImportRT(String pdId, String pdId0)
+{
+TermRT.put(pdId, pdId0);
+}
+//---------------------------------------------------------------------
+/**
+ * Stores 2 terms as translation during importation
+ * @param pdId
+ * @param pdId0 
+ */
+private void AddImportLang(String pdId, String pdId0)
+{
+TermLang.put(pdId, pdId0);
 }
 //---------------------------------------------------------------------
 }
