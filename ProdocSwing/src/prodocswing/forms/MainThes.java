@@ -960,7 +960,7 @@ try {
 setCursor(MainWin.WaitCur);    
 PDThesaur Thes=new PDThesaur(Session);
 // Thes.Export(ActTermId, ExpThes.SelFolder.getAbsolutePath()+File.separatorChar+ActTermId+".rdf.xml", ExpThes.getRoot(), ExpThes.getMainLang());
-Thes.Import("EncFormats", "999", new File("/home/jhierrot/OPD/Varios/rdf/Encoding.rdf"), "en", "http://rdvocab.info/termList/encFormat/");
+Thes.Import("Alimnetación", "999", new File("c:\\DATOS\\D\\JHierro\\OPD\\30.rdf.xml"), "ES", "http://OpenProdoc.org/");
 setCursor(MainWin.DefCur);
 } catch (Exception ex)
     {
