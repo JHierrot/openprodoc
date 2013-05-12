@@ -106,6 +106,8 @@ private static HashSet TermExp=new HashSet();
 private static HashMap TermCache=new HashMap();
 private static HashMap TermRT=new HashMap();
 private static HashMap TermLang=new HashMap();
+private static HashMap SubTermByLang=new HashMap();
+private static HashSet UseTermsByLang=new HashSet();
 
 /**
  *
@@ -1487,7 +1489,7 @@ for (Iterator it = List.iterator(); it.hasNext();)
     {
     String Id=(String)it.next();    
     Child.Load(Id);
-    if (!Child.Lang.equalsIgnoreCase(MainLang))
+    if (!Child.Lang.equalsIgnoreCase(MainLang) || ( Child.getUse()!=null && Child.getUse().length()!=0))
         {
         ListLang.remove(Id);    
         continue;
@@ -1638,7 +1640,7 @@ TermRT.clear();
 TermLang.clear();
 int Tot=0;
 PDThesaur Thes=new PDThesaur(getDrv());
-PDThesaur Term=new PDThesaur(getDrv());
+PDThesaur Term;
 Thes.setPDId(ImpThesId);
 Thes.setName(ThesName);
 Thes.setParentId(PDThesaur.ROOTTERM);
@@ -1680,13 +1682,11 @@ for (int NumConc=0; NumConc<ConceptObjectList.getLength(); NumConc++)
                 Node Res=SkosObjectSub.getAttributes().getNamedItem(PDThesaur.RDF_RESOURCE); 
                 if (Res!=null && Res.getNodeValue().length()>=Root.length())  
                     {
-                    String SourceId=Res.getNodeValue().substring(Root.length());       
-                    Term.Clear();
+                    String SourceId=Res.getNodeValue().substring(Root.length()); 
+                    Term=ObtainTerm(SourceId);                    
                     Term.setName(SourceId); // provisional
                     Term.setParentId(Thes.getPDId());
-                    Term.insert(); Tot++;
-                    TermEquiv.put(SourceId, Term.getPDId());
-                    TermExp.add(Term.getPDId());
+                    StoreTerm(SourceId, Term);
                     }        
                 }   
             }
@@ -1700,7 +1700,6 @@ for (int NumConc=0; NumConc<ConceptObjectList.getLength(); NumConc++)
         Term=ObtainTerm(SourceId);
         FillTerm(Term, SkosObjectConcept, MainLang, Root, Thes);
         StoreTerm(SourceId, Term);
-        TermEquiv.put(SourceId, Term.getPDId());
         }
     }
 StoreCache();
@@ -1711,6 +1710,7 @@ return(Tot);
     PDLog.Error(ex.getLocalizedMessage());
     if (getDrv().isInTransaction())
         getDrv().AnularTrans();
+    ex.printStackTrace();
     throw new PDException(ex.getLocalizedMessage());
     }
 }
@@ -1753,16 +1753,12 @@ String NewId=(String)TermEquiv.get(SourceId);
 if (NewId==null)
     {
     Term=new PDThesaur(getDrv());
-    Term.setPDId(GenerateId());
+    NewId=GenerateId();
+    Term.setPDId(NewId);
     Term.setName(SourceId);
-    return(Term);
+    StoreTerm(SourceId, Term);
     }
-Term=(PDThesaur)TermCache.get(NewId);
-if (Term!=null)
-    return(Term);
-Term=new PDThesaur(getDrv());
-Term.Load(NewId);
-return(Term);
+return (PDThesaur)TermCache.get(NewId);
 }
 //---------------------------------------------------------------------
 /**
@@ -1777,135 +1773,133 @@ private void FillTerm(PDThesaur Term, Node SkosObjectConcept, String MainLang, S
 {
 NodeList SubConceptObjectList=SkosObjectConcept.getChildNodes();
 Node SkosObjectSub;
+SubTermByLang.clear();
+UseTermsByLang.clear();
 for (int NumNod=0; NumNod<SubConceptObjectList.getLength(); NumNod++)
     {
     SkosObjectSub = SubConceptObjectList.item(NumNod);
     if (SkosObjectSub.getNodeName().equalsIgnoreCase(PDThesaur.SKOS_PREFLABEL))
         {
         Node Res=SkosObjectSub.getAttributes().getNamedItem(PDThesaur.XML_LANG);    
-        if (Res==null)  
+        if (Res==null)
            Term.setName(SkosObjectSub.getTextContent());
         else if (Res.getNodeValue().equalsIgnoreCase(MainLang))  
            Term.setName(SkosObjectSub.getTextContent());
         else 
             {
             String SourceId=SkosObjectSub.getTextContent();  
-            String NewId=(String)TermEquiv.get(SourceId); 
             PDThesaur ChildTerm;
-            if (NewId==null)
+            String PrevLangTerm=(String)SubTermByLang.get(Res.getNodeValue());
+            if (PrevLangTerm!=null && PrevLangTerm.length()!=0)
                 {
-                ChildTerm=new PDThesaur(getDrv());
-                NewId=GenerateId();
-                ChildTerm.setPDId(NewId);
-                ChildTerm.setName(SourceId);
-                ChildTerm.setLang(Res.getNodeValue());
-                TermEquiv.put(SourceId, NewId);
-                TermCache.put(NewId, ChildTerm);
+                ChildTerm=ObtainTerm(PrevLangTerm);
                 }
             else
                 {
-                ChildTerm=(PDThesaur)TermCache.get(NewId);
-                ChildTerm.setName(SourceId);
+                ChildTerm=new PDThesaur(getDrv());
                 ChildTerm.setLang(Res.getNodeValue());
+                ChildTerm.setPDId(Term.getPDId()+"_"+ChildTerm.getLang());
+                SubTermByLang.put(ChildTerm.getLang(), SourceId);
                 }
-//            AddTranslations(Term.getPDId(), NewId);
-            AddImportLang(Term.getPDId(), NewId);
+            ChildTerm.setName(SourceId);
+            if (PrevLangTerm!=null && PrevLangTerm.length()!=0)
+                StoreTerm(PrevLangTerm, ChildTerm);
+            else
+                StoreTerm(SourceId, ChildTerm);
+            AddImportLang(Term.getPDId(), ChildTerm.getPDId());
             }
         }
     else if (SkosObjectSub.getNodeName().equalsIgnoreCase(PDThesaur.SKOS_DEFINITION))
         {
         Node Res=SkosObjectSub.getAttributes().getNamedItem(PDThesaur.XML_LANG);    
-        if (Res==null || Res.getNodeValue().equalsIgnoreCase(MainLang))  
         if (Res==null)  
            Term.setDescription(SkosObjectSub.getTextContent());
         else if (Res.getNodeValue().equalsIgnoreCase(MainLang))  
            Term.setDescription(SkosObjectSub.getTextContent());
-        else // is a translation -> a new term
+        else 
             {
             String SourceId=SkosObjectSub.getTextContent();  
-            String NewId=(String)TermEquiv.get(SourceId); 
             PDThesaur ChildTerm;
-            if (NewId==null)
+            String PrevLangTerm=(String)SubTermByLang.get(Res.getNodeValue());
+            if (PrevLangTerm!=null && PrevLangTerm.length()!=0)
                 {
-                ChildTerm=new PDThesaur(getDrv());
-                NewId=GenerateId();
-                ChildTerm.setPDId(NewId);
-                ChildTerm.setDescription(SourceId);
-                ChildTerm.setLang(Res.getNodeValue());
-                TermEquiv.put(SourceId, NewId);
-                TermCache.put(NewId, ChildTerm);
+                ChildTerm=ObtainTerm(PrevLangTerm);
                 }
             else
                 {
-                ChildTerm=(PDThesaur)TermCache.get(NewId);
-                ChildTerm.setDescription(SourceId);
+                ChildTerm=new PDThesaur(getDrv());
                 ChildTerm.setLang(Res.getNodeValue());
+                ChildTerm.setPDId(Term.getPDId()+"_"+ChildTerm.getLang());
+                SubTermByLang.put(ChildTerm.getLang(), SourceId);
                 }
-//            AddTranslations(Term.getPDId(), NewId);
-            AddImportLang(Term.getPDId(), NewId);
+            ChildTerm.setDescription(SourceId);
+            if (PrevLangTerm!=null && PrevLangTerm.length()!=0)
+                StoreTerm(PrevLangTerm, ChildTerm);
+            else
+                StoreTerm(SourceId, ChildTerm);
+            ChildTerm.setDescription(SourceId);
+            AddImportLang(Term.getPDId(), ChildTerm.getPDId());
             }
         }
     else if (SkosObjectSub.getNodeName().equalsIgnoreCase(PDThesaur.SKOS_NOTE) || SkosObjectSub.getNodeName().equalsIgnoreCase(PDThesaur.SKOS_SCNNOTE) )
         {
         Node Res=SkosObjectSub.getAttributes().getNamedItem(PDThesaur.XML_LANG);    
-        if (Res==null || Res.getNodeValue().equalsIgnoreCase(MainLang))  
+        if (Res==null)  
             Term.setSCN(SkosObjectSub.getTextContent());    
+        else if (Res.getNodeValue().equalsIgnoreCase(MainLang))  
+            Term.setSCN(SkosObjectSub.getTextContent());    
+        else
+            {
+            String SourceId=SkosObjectSub.getTextContent();  
+            PDThesaur ChildTerm;
+            String PrevLangTerm=(String)SubTermByLang.get(Res.getNodeValue());
+            if (PrevLangTerm!=null && PrevLangTerm.length()!=0)
+                {
+                ChildTerm=ObtainTerm(PrevLangTerm);
+                }
+            else
+                {
+                ChildTerm=new PDThesaur(getDrv());
+                ChildTerm.setLang(Res.getNodeValue());
+                ChildTerm.setPDId(Term.getPDId()+"_"+ChildTerm.getLang());                
+                SubTermByLang.put(ChildTerm.getLang(), SourceId);
+                }
+            ChildTerm.setSCN(SourceId);
+            if (PrevLangTerm!=null && PrevLangTerm.length()!=0)
+                StoreTerm(PrevLangTerm, ChildTerm);
+            else
+                StoreTerm(SourceId, ChildTerm);
+            ChildTerm.setDescription(SourceId);
+            AddImportLang(Term.getPDId(), ChildTerm.getPDId());
+            }
         }
     else if (SkosObjectSub.getNodeName().equalsIgnoreCase(PDThesaur.SKOS_BROADER))
         {
         Node Res=SkosObjectSub.getAttributes().getNamedItem(PDThesaur.RDF_RESOURCE); 
         String SourceId=Res.getNodeValue().substring(Root.length());   
-        String NewId=(String)TermEquiv.get(SourceId); 
-        if (NewId==null)
-            {
-            PDThesaur Parent=new PDThesaur(getDrv());
-            NewId=GenerateId();
-            Parent.setPDId(NewId);
-            TermEquiv.put(SourceId, NewId);
-            TermCache.put(NewId, Parent);
-            }
-        Term.setParentId(NewId);
+        PDThesaur ParentTerm=ObtainTerm(SourceId);                    
+        StoreTerm(SourceId, ParentTerm);
+        Term.setParentId(ParentTerm.getPDId());
         }
     else if (SkosObjectSub.getNodeName().equalsIgnoreCase(PDThesaur.SKOS_NARROWER))
         {
         Node Res=SkosObjectSub.getAttributes().getNamedItem(PDThesaur.RDF_RESOURCE); 
         String SourceId=Res.getNodeValue().substring(Root.length());   
-        String NewId=(String)TermEquiv.get(SourceId); 
-        PDThesaur ChildTerm=null;
-        if (NewId==null)
-            {
-            ChildTerm=new PDThesaur(getDrv());
-            NewId=GenerateId();
-            ChildTerm.setPDId(NewId);
-            TermEquiv.put(SourceId, NewId);
-            TermCache.put(NewId, ChildTerm);
-            }
-        else
-            Term=(PDThesaur)TermCache.get(NewId);
-        ChildTerm.setParentId(Term.getPDId());            
+        PDThesaur ChildTerm=ObtainTerm(SourceId);                    
+        ChildTerm.setParentId(Term.getPDId());
+        StoreTerm(SourceId, ChildTerm);
         }
      else if (SkosObjectSub.getNodeName().equalsIgnoreCase(PDThesaur.SKOS_RELATED))
         {
         Node Res=SkosObjectSub.getAttributes().getNamedItem(PDThesaur.RDF_RESOURCE); 
         String SourceId=Res.getNodeValue().substring(Root.length());   
-        String NewId=(String)TermEquiv.get(SourceId); 
-        PDThesaur RtTerm=null;
-        if (NewId==null)
-            {
-            RtTerm=new PDThesaur(getDrv());
-            NewId=GenerateId();
-            RtTerm.setPDId(NewId);
-            TermEquiv.put(SourceId, NewId);
-            TermCache.put(NewId, RtTerm);
-            }
-        else
-            Term=(PDThesaur)TermCache.get(NewId);
+        PDThesaur RtTerm=ObtainTerm(SourceId);                    
         AddImportRT(Term.getPDId(),RtTerm.getPDId());   
         }
     else if (SkosObjectSub.getNodeName().equalsIgnoreCase(PDThesaur.SKOS_ALTLABEL))
         {
-        PDThesaur UseTerm=new PDThesaur(getDrv());
-        String NewId=GenerateId();
+        String SourceId=SkosObjectSub.getTextContent();    
+        PDThesaur UseTerm=ObtainTerm(SourceId);     
         UseTerm.setName(SkosObjectSub.getTextContent());    
         Node Res=SkosObjectSub.getAttributes().getNamedItem(PDThesaur.XML_LANG);    
         if (Res!=null)  
@@ -1914,22 +1908,37 @@ for (int NumNod=0; NumNod<SubConceptObjectList.getLength(); NumNod++)
             UseTerm.setLang(MainLang);
         if (UseTerm.getLang().equalsIgnoreCase(MainLang))
             {
-            UseTerm.setParentId(Term.getParentId()); 
             UseTerm.setUse(Term.getPDId());
-            NewId=GenerateId();
             }
         else
             {
-            UseTerm.setParentId(Term.getParentId()+"_"+UseTerm.getLang());
-            NewId=Term.getPDId()+"_"+UseTerm.getLang();
-            AddImportLang(Term.getPDId(), NewId);   
+            UseTerm.setUse(Term.getPDId()+"_"+UseTerm.getLang());
             }
-        UseTerm.setPDId(NewId);
-        TermCache.put(NewId, UseTerm);
+        StoreTerm(SourceId, UseTerm);
+        UseTermsByLang.add(SourceId);
         }
     }
 if (Term.getParentId()==null || Term.getParentId().length()==0)
-    Term.setParentId(Thes.getPDId());
+    PDExceptionFunc.GenPDException("Term_without_BT", Term.getName());
+PDThesaur TermTemp;    
+for (Iterator it = UseTermsByLang.iterator(); it.hasNext();)
+    {
+    String Id = (String)it.next();
+    TermTemp=ObtainTerm(Id);
+    if (TermTemp.getLang().equalsIgnoreCase(MainLang)|| Term.getParentId().equals(Thes.getPDId()))
+       TermTemp.setParentId(Term.getParentId());
+    else
+       TermTemp.setParentId(Term.getParentId()+"_"+TermTemp.getLang());
+    }
+for (Iterator it = SubTermByLang.keySet().iterator(); it.hasNext();)
+    {
+    String Id = (String)SubTermByLang.get((String)it.next());
+    TermTemp=ObtainTerm(Id);
+    if (TermTemp.getLang().equalsIgnoreCase(MainLang)|| Term.getParentId().equals(Thes.getPDId()))
+       TermTemp.setParentId(Term.getParentId());
+    else
+       TermTemp.setParentId(Term.getParentId()+"_"+TermTemp.getLang());
+    }
 }
 //---------------------------------------------------------------------
 /**
@@ -1941,22 +1950,8 @@ if (Term.getParentId()==null || Term.getParentId().length()==0)
  */
 private void StoreTerm(String SourceId, PDThesaur Term) throws PDException
 {
-String NewId=(String)TermEquiv.get(SourceId); 
-if (NewId!=null)
-    {
-    if (TermExp.contains(NewId))
-        Term.update();
-    return;    // Otherwise we have updated the cache version
-    }
-if (CanInsert(Term))
-    {
-    Term.insert();
-    TermExp.add(Term.getPDId());
-    }
-else
-    {
-    TermCache.put(Term.getPDId(), Term);
-    }
+TermCache.put(Term.getPDId(), Term);
+TermEquiv.put(SourceId, Term.getPDId());
 }
 //---------------------------------------------------------------------
 /**
@@ -1981,6 +1976,8 @@ private void StoreCache() throws PDException
 {
 boolean StoredTerm;    
 boolean SomeNotNull;    
+System.out.println(TermCache.keySet());
+System.out.println(TermEquiv);
 do {  
 StoredTerm=false;        
 SomeNotNull=false;    
@@ -1993,6 +1990,8 @@ for (Iterator it = TermCache.keySet().iterator(); it.hasNext();)
         SomeNotNull=true;    
         if (CanInsert(Term))    
             {
+                                 System.out.println("TermId="+TermId);
+                                 System.out.println(Term.getRecord());
             Term.insert();
             TermExp.add(Term.getPDId());
             TermCache.put(TermId, null);
@@ -2000,7 +1999,6 @@ for (Iterator it = TermCache.keySet().iterator(); it.hasNext();)
             }
         }
     }
-
 } while (StoredTerm && SomeNotNull);  
 if (SomeNotNull)
     PDExceptionFunc.GenPDException("Circular_Reference_importing_Thesaurus", fPDID);
@@ -2025,16 +2023,6 @@ for (Iterator it = TermRT.keySet().iterator(); it.hasNext();)
     Term.Load(TermId);
     Term.AddLang(HSRT);
     }
-}
-//---------------------------------------------------------------------
-/**
- * 
- * @param pdId
- * @param NewId 
- */
-private void AddTranslations(String pdId, String NewId)
-{
-    throw new UnsupportedOperationException("Not yet implemented");
 }
 //---------------------------------------------------------------------
 /**
