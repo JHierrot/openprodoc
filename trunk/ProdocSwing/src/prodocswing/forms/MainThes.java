@@ -695,14 +695,17 @@ MTF.setVisible(true);
 if (MTF.isCancel())
     return;
 ActTermId=Term.getParentId();
+setCursor(MainWin.WaitCur);    
 Term.delete();
 TreePath ParentFold = (TreePath) TreeTerm.getSelectionPath().getParentPath();
 ExpandFold((DefaultMutableTreeNode)ParentFold.getLastPathComponent());
 TreeTerm.setSelectionPath(selectionPath.getParentPath());
 TreeFold = (DefaultMutableTreeNode) selectionPath.getParentPath().getLastPathComponent();
             setTermAct(((TreeTerm) TreeFold.getUserObject()).getTerm());
+setCursor(MainWin.DefCur);
 } catch (Exception ex)
     {
+    setCursor(MainWin.DefCur);
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
     }//GEN-LAST:event_DelThesaurActionPerformed
@@ -959,8 +962,8 @@ try {
 //    return;
 setCursor(MainWin.WaitCur);    
 PDThesaur Thes=new PDThesaur(Session);
-// Thes.Export(ActTermId, ExpThes.SelFolder.getAbsolutePath()+File.separatorChar+ActTermId+".rdf.xml", ExpThes.getRoot(), ExpThes.getMainLang());
-Thes.Import("Alimnetación", "999", new File("c:\\DATOS\\D\\JHierro\\OPD\\30.rdf.xml"), "ES", "http://OpenProdoc.org/");
+//Thes.Import("Alimentación", "99", new File("/home/jhierrot/OPD/Varios/rdf/Encoding.rdf"), "EN", "http://rdvocab.info/termList/encFormat/");
+Thes.Import("Alimentación", "99", new File("/home/jhierrot/OPD/Varios/rdf/unescothes.rdf"), "EN", "http://skos.um.es/unescothes/", true, false);
 setCursor(MainWin.DefCur);
 } catch (Exception ex)
     {

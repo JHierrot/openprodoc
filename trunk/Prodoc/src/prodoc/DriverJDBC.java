@@ -454,7 +454,7 @@ return("'"+ formatterTS.format(Fec)+"'");
  */
 protected String toString(String Val)
 {
-return("'"+Val+"'");
+return("'"+Val.replace("'", "·")+"'");
 }
 //-----------------------------------------------------------------------------------
 /**
