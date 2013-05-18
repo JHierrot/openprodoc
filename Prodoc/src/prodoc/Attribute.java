@@ -510,8 +510,8 @@ else
     {
     if (getValue()==null)
         return("");
-    if (PDLog.isDebug())
-        PDLog.Debug("Attribute.Export:"+getValue()+"-->"+FormatExport(getValue()));
+//    if (PDLog.isDebug())
+//        PDLog.Debug("Attribute.Export:"+getValue()+"-->"+FormatExport(getValue()));
     return(FormatExport(getValue()));
     }
 }
