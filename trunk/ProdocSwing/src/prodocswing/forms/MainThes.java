@@ -955,16 +955,18 @@ setCursor(MainWin.DefCur);
     private void ImportThesActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ImportThesActionPerformed
     {//GEN-HEADEREND:event_ImportThesActionPerformed
 try {   
-//DialogExportThes ExpThes = new DialogExportThes(this,true);
-//ExpThes.setLocationRelativeTo(null);
-//ExpThes.setVisible(true);
-//if (ExpThes.isCancel())
-//    return;
+DialogImportThes ImpThes = new DialogImportThes(this,true);
+ImpThes.setLocationRelativeTo(null);
+ImpThes.setVisible(true);
+if (ImpThes.isCancel())
+   return;
 setCursor(MainWin.WaitCur);    
 PDThesaur Thes=new PDThesaur(Session);
 //Thes.Import("Alimentación", "99", new File("/home/jhierrot/OPD/Varios/rdf/Encoding.rdf"), "EN", "http://rdvocab.info/termList/encFormat/");
-Thes.Import("Alimentación", "99", new File("/home/jhierrot/OPD/Varios/rdf/unescothes.rdf"), "EN", "http://skos.um.es/unescothes/", true, false);
+// Thes.Import("Alimentación", "99", new File("/home/jhierrot/OPD/Varios/rdf/unescothes.rdf"), "EN", "http://skos.um.es/unescothes/", true, false);
+Thes.Import(ImpThes.getThesName(), ImpThes.getThesNum(), new File(ImpThes.SelFolder.getAbsolutePath()), ImpThes.getMainLang(), ImpThes.getRoot(), ImpThes.isSubThesLang(), ImpThes.isTransac());
 setCursor(MainWin.DefCur);
+MainWin.Message(Thes.getImportReport());
 } catch (Exception ex)
     {
     setCursor(MainWin.DefCur);    

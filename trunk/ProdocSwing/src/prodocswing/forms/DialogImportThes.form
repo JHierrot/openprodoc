@@ -32,23 +32,25 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace pref="393" max="32767" attributes="0"/>
+              <Component id="ButtonAcept" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="ButtonCancel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="12" pref="12" max="-2" attributes="0"/>
+          </Group>
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="LabelOperation" alignment="1" max="32767" attributes="0"/>
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace pref="368" max="32767" attributes="0"/>
-                      <Component id="ButtonAcept" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="ButtonCancel" min="-2" max="-2" attributes="0"/>
-                  </Group>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="LangLabel" alignment="0" max="32767" attributes="1"/>
-                          <Component id="RootLabel" alignment="0" pref="192" max="32767" attributes="1"/>
+                          <Component id="TheNumLabel" alignment="0" max="32767" attributes="1"/>
+                          <Component id="NameLabel" alignment="0" pref="206" max="32767" attributes="1"/>
+                          <Component id="TransactLabel" alignment="0" pref="206" max="32767" attributes="1"/>
+                          <Component id="RootLabel" alignment="0" pref="206" max="32767" attributes="1"/>
                           <Component id="FilePathLabel" alignment="0" max="32767" attributes="1"/>
-                          <Component id="SubThesLabel" alignment="0" pref="192" max="32767" attributes="1"/>
-                          <Component id="TransactLabel" alignment="0" pref="192" max="32767" attributes="1"/>
+                          <Component id="LangLabel" alignment="0" max="32767" attributes="1"/>
+                          <Component id="SubThesLabel" alignment="0" pref="206" max="32767" attributes="1"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -57,16 +59,6 @@
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="ButtonSelFile" min="-2" pref="45" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="MainLangText" max="32767" attributes="0"/>
-                                      <EmptySpace min="-2" pref="349" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="RootText" min="-2" pref="417" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="TransactCB" min="-2" max="-2" attributes="0"/>
@@ -74,8 +66,20 @@
                               </Group>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="ThesNumText" min="-2" pref="66" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="RootText" alignment="1" min="-2" pref="417" max="-2" attributes="0"/>
+                                      <Component id="NameText" alignment="1" min="-2" pref="417" max="-2" attributes="0"/>
+                                      <Component id="MainLangText" alignment="0" min="-2" pref="37" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                          </Group>
                       </Group>
                   </Group>
+                  <Component id="LabelOperation" alignment="1" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -86,7 +90,17 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="LabelOperation" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="58" max="-2" attributes="0"/>
+              <EmptySpace pref="22" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="TheNumLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="ThesNumText" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="NameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="NameText" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="RootLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="RootText" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -112,7 +126,7 @@
                   <Component id="TransactCB" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="TransactLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="6" max="32767" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="ButtonAcept" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="ButtonCancel" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -134,6 +148,37 @@
         </Property>
       </Properties>
     </Component>
+    <Component class="javax.swing.JLabel" name="TheNumLabel">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="MainWin.getFontDialog()" type="code"/>
+        </Property>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="MainWin.TT(&quot;Thesaurus_Number&quot;)" type="code"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="NameLabel">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="MainWin.getFontDialog()" type="code"/>
+        </Property>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="MainWin.TT(&quot;Thesaurus_Name&quot;)" type="code"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="NameText">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="MainWin.getFontDialog()" type="code"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Unesco"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="NameTextActionPerformed"/>
+      </Events>
+    </Component>
     <Component class="javax.swing.JLabel" name="RootLabel">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -149,6 +194,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="MainWin.getFontDialog()" type="code"/>
         </Property>
+        <Property name="text" type="java.lang.String" value="http://skos.um.es/unescothes/"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="RootTextActionPerformed"/>
@@ -169,6 +215,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="MainWin.getFontDialog()" type="code"/>
         </Property>
+        <Property name="text" type="java.lang.String" value="EN"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="FilePathLabel">
@@ -177,7 +224,7 @@
           <Connection code="MainWin.getFontDialog()" type="code"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="MainWin.TT(&quot;Destination_Folder&quot;)" type="code"/>
+          <Connection code="MainWin.TT(&quot;Import_Doc&quot;)" type="code"/>
         </Property>
       </Properties>
     </Component>
@@ -186,6 +233,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="MainWin.getFontDialog()" type="code"/>
         </Property>
+        <Property name="text" type="java.lang.String" value="/home/jhierrot/OPD/Varios/rdf/unescothes.rdf"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="SubThesLabel">
@@ -194,11 +242,14 @@
           <Connection code="MainWin.getFontDialog()" type="code"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="MainWin.TT(&quot;Destination_Folder&quot;)" type="code"/>
+          <Connection code="MainWin.TT(&quot;Create_SubThes_by_Lang&quot;)" type="code"/>
         </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JCheckBox" name="SubThesCB">
+      <Properties>
+        <Property name="selected" type="boolean" value="true"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="TransactLabel">
       <Properties>
@@ -206,7 +257,7 @@
           <Connection code="MainWin.getFontDialog()" type="code"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="MainWin.TT(&quot;Destination_Folder&quot;)" type="code"/>
+          <Connection code="MainWin.TT(&quot;Transactional_Import&quot;)" type="code"/>
         </Property>
       </Properties>
     </Component>
@@ -248,6 +299,14 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ButtonAceptActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JFormattedTextField" name="ThesNumText">
+      <Properties>
+        <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
+          <Format format="########0" subtype="-1" type="0"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="99"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>
