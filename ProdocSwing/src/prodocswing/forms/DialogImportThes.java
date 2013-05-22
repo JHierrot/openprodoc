@@ -64,6 +64,9 @@ initComponents();
     {
 
         LabelOperation = new javax.swing.JLabel();
+        TheNumLabel = new javax.swing.JLabel();
+        NameLabel = new javax.swing.JLabel();
+        NameText = new javax.swing.JTextField();
         RootLabel = new javax.swing.JLabel();
         RootText = new javax.swing.JTextField();
         LangLabel = new javax.swing.JLabel();
@@ -77,6 +80,7 @@ initComponents();
         ButtonSelFile = new javax.swing.JButton();
         ButtonCancel = new javax.swing.JButton();
         ButtonAcept = new javax.swing.JButton();
+        ThesNumText = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(MainWin.TT("Export_Folders"));
@@ -94,10 +98,27 @@ initComponents();
         LabelOperation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         LabelOperation.setText(MainWin.TT("Export_Thesaurus"));
 
+        TheNumLabel.setFont(MainWin.getFontDialog());
+        TheNumLabel.setText(MainWin.TT("Thesaurus_Number"));
+
+        NameLabel.setFont(MainWin.getFontDialog());
+        NameLabel.setText(MainWin.TT("Thesaurus_Name"));
+
+        NameText.setFont(MainWin.getFontDialog());
+        NameText.setText("Unesco");
+        NameText.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                NameTextActionPerformed(evt);
+            }
+        });
+
         RootLabel.setFont(MainWin.getFontDialog());
         RootLabel.setText(MainWin.TT("Root_Text"));
 
         RootText.setFont(MainWin.getFontDialog());
+        RootText.setText("http://skos.um.es/unescothes/");
         RootText.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -110,17 +131,21 @@ initComponents();
         LangLabel.setText(MainWin.TT("Main_Language"));
 
         MainLangText.setFont(MainWin.getFontDialog());
+        MainLangText.setText("EN");
 
         FilePathLabel.setFont(MainWin.getFontDialog());
-        FilePathLabel.setText(MainWin.TT("Destination_Folder"));
+        FilePathLabel.setText(MainWin.TT("Import_Doc"));
 
         FilePathTextField.setFont(MainWin.getFontDialog());
+        FilePathTextField.setText("/home/jhierrot/OPD/Varios/rdf/unescothes.rdf");
 
         SubThesLabel.setFont(MainWin.getFontDialog());
-        SubThesLabel.setText(MainWin.TT("Destination_Folder"));
+        SubThesLabel.setText(MainWin.TT("Create_SubThes_by_Lang"));
+
+        SubThesCB.setSelected(true);
 
         TransactLabel.setFont(MainWin.getFontDialog());
-        TransactLabel.setText(MainWin.TT("Destination_Folder"));
+        TransactLabel.setText(MainWin.TT("Transactional_Import"));
 
         ButtonSelFile.setFont(MainWin.getFontDialog());
         ButtonSelFile.setText("Sel");
@@ -152,44 +177,51 @@ initComponents();
             }
         });
 
+        ThesNumText.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("########0"))));
+        ThesNumText.setText("99");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(393, Short.MAX_VALUE)
+                .addComponent(ButtonAcept)
+                .addGap(18, 18, 18)
+                .addComponent(ButtonCancel)
+                .addGap(12, 12, 12))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(LabelOperation, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 368, Short.MAX_VALUE)
-                        .addComponent(ButtonAcept)
-                        .addGap(18, 18, 18)
-                        .addComponent(ButtonCancel))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(LangLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(RootLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                            .addComponent(TheNumLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(NameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                            .addComponent(TransactLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                            .addComponent(RootLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
                             .addComponent(FilePathLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(SubThesLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
-                            .addComponent(TransactLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE))
+                            .addComponent(LangLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(SubThesLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(FilePathTextField)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(ButtonSelFile, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(MainLangText)
-                                        .addGap(349, 349, 349))
-                                    .addComponent(RootText, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(TransactCB)
                                     .addComponent(SubThesCB))
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(ThesNumText, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(RootText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(NameText, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(MainLangText, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                    .addComponent(LabelOperation, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -197,7 +229,15 @@ initComponents();
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(LabelOperation)
-                .addGap(58, 58, 58)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(TheNumLabel)
+                    .addComponent(ThesNumText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(NameLabel)
+                    .addComponent(NameText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(RootLabel)
                     .addComponent(RootText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -218,7 +258,7 @@ initComponents();
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(TransactCB)
                     .addComponent(TransactLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 6, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButtonAcept)
                     .addComponent(ButtonCancel))
@@ -265,6 +305,11 @@ Cancel=true;
     {//GEN-HEADEREND:event_RootTextActionPerformed
     }//GEN-LAST:event_RootTextActionPerformed
 
+    private void NameTextActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_NameTextActionPerformed
+    {//GEN-HEADEREND:event_NameTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_NameTextActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonAcept;
     private javax.swing.JButton ButtonCancel;
@@ -274,10 +319,14 @@ Cancel=true;
     private javax.swing.JLabel LabelOperation;
     private javax.swing.JLabel LangLabel;
     private javax.swing.JTextField MainLangText;
+    private javax.swing.JLabel NameLabel;
+    private javax.swing.JTextField NameText;
     private javax.swing.JLabel RootLabel;
     private javax.swing.JTextField RootText;
     private javax.swing.JCheckBox SubThesCB;
     private javax.swing.JLabel SubThesLabel;
+    private javax.swing.JLabel TheNumLabel;
+    private javax.swing.JFormattedTextField ThesNumText;
     private javax.swing.JCheckBox TransactCB;
     private javax.swing.JLabel TransactLabel;
     // End of variables declaration//GEN-END:variables
@@ -303,11 +352,43 @@ return MainLangText.getText().trim();
 }
 //----------------------------------------------------------------
 /**
+* @return the Root text
+*/
+public String getThesName()
+{
+return NameText.getText().trim();
+}
+//----------------------------------------------------------------
+/**
 * @return the Cancel
 */
 public boolean isCancel()
 {
 return Cancel;
+}
+//----------------------------------------------------------------
+/**
+* @return true if selected creating  sub thes by Lang.
+*/
+public boolean isSubThesLang()
+{
+return SubThesCB.isSelected();
+}
+//----------------------------------------------------------------
+/**
+* @return the Cancel
+*/
+public String getThesNum()
+{
+return this.ThesNumText.getText();
+}
+//----------------------------------------------------------------
+/**
+* @return true if selected importing in  a trasanction.
+*/
+public boolean isTransac()
+{
+return this.TransactCB.isSelected();
 }
 //----------------------------------------------------------------
 }
