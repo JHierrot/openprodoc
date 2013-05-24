@@ -966,7 +966,7 @@ PDThesaur Thes=new PDThesaur(Session);
 // Thes.Import("Alimentación", "99", new File("/home/jhierrot/OPD/Varios/rdf/unescothes.rdf"), "EN", "http://skos.um.es/unescothes/", true, false);
 Thes.Import(ImpThes.getThesName(), ImpThes.getThesNum(), new File(ImpThes.SelFolder.getAbsolutePath()), ImpThes.getMainLang(), ImpThes.getRoot(), ImpThes.isSubThesLang(), ImpThes.isTransac());
 setCursor(MainWin.DefCur);
-MainWin.Message(Thes.getImportReport());
+MainWin.Report(PDThesaur.getImportReport());
 } catch (Exception ex)
     {
     setCursor(MainWin.DefCur);    

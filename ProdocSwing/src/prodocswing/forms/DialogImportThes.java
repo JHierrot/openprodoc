@@ -83,7 +83,7 @@ initComponents();
         ThesNumText = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle(MainWin.TT("Export_Folders"));
+        setTitle(MainWin.TT("Import_Thesaurus"));
         setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter()
@@ -96,7 +96,7 @@ initComponents();
 
         LabelOperation.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
         LabelOperation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        LabelOperation.setText(MainWin.TT("Export_Thesaurus"));
+        LabelOperation.setText(MainWin.TT("Import_Thesaurus"));
 
         TheNumLabel.setFont(MainWin.getFontDialog());
         TheNumLabel.setText(MainWin.TT("Thesaurus_Number"));

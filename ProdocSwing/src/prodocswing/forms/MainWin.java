@@ -1599,6 +1599,18 @@ DI.setVisible(true);
 //---------------------------------------------------------------------
 /**
  * 
+ * @param pMessage
+ */
+static public void Report(String pMessage)
+{
+DialogReport DR=new DialogReport(null, true);
+DR.SetMessage(DrvTT(pMessage));
+DR.setLocationRelativeTo(null);
+DR.setVisible(true);
+}
+//---------------------------------------------------------------------
+/**
+ * 
  * @param pMessage to show to the user
  * @return if the user selects OK
  */
