@@ -1643,6 +1643,7 @@ synchronized public int Import(String ThesName, String ImpThesId, File XMLFile, 
 if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.Import:"+ThesName+"|"+ImpThesId+"|"+Root+"|"+MainLang+">");        
 try {
+Date t1=new Date();    
 ImportReport="";    
 DocumentBuilder DB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 Document XMLObjects = DB.parse(XMLFile);
@@ -1701,6 +1702,7 @@ for (int NumConc=0; NumConc<ConceptObjectList.getLength(); NumConc++)
                     String SourceId=Res.getNodeValue().substring(Root.length()); 
                     Term=ObtainTerm(SourceId);                    
                     Term.setName(SourceId); // provisional
+                    Term.setLang(MainLang);
                     Term.setParentId(Thes.getPDId());
                     StoreTerm(SourceId, Term);
                     }        
@@ -1716,13 +1718,14 @@ for (int NumConc=0; NumConc<ConceptObjectList.getLength(); NumConc++)
         Term=ObtainTerm(SourceId);
         FillTerm(Term, SkosObjectConcept, MainLang, Root, Thes, SubThesLang);
         StoreTerm(SourceId, Term);
+        Tot++;
         }
     }
 StoreCache();
 if (Transact)
    getDrv().CerrarTrans();
-if (PDLog.isDebug())
-    PDLog.Debug("PDThesaurs.Import:"+"<");    
+Date t2=new Date();    
+ImportReport="<html>Import Start:"+t1+"<br>Concepts= <b>"+Tot+"</b> >>> OPD Terms= <b>"+TermCache.size()+"</b><br>"+"Relations= <b>"+TermRT.size()+"</b><br><b>Warnings:</b><br>"+ImportReport+"<br>Import End:"+t2+"</html>";
 TermEquiv.clear();
 TermExp.clear();
 TermCache.clear();
@@ -1730,6 +1733,8 @@ TermRT.clear();
 TermLang.clear();
 SubTermByLang.clear();
 UseTermsByLang.clear();
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.Import:"+"<");    
 return(Tot);
 } catch(Exception ex)
     {
@@ -1803,6 +1808,7 @@ NodeList SubConceptObjectList=SkosObjectConcept.getChildNodes();
 Node SkosObjectSub;
 SubTermByLang.clear();
 UseTermsByLang.clear();
+boolean BTAsigned=(Term.getParentId()!=null);
 HashSet LangList=new HashSet();
 LangList.add(Term.getPDId());
 for (int NumNod=0; NumNod<SubConceptObjectList.getLength(); NumNod++)
@@ -1915,6 +1921,9 @@ for (int NumNod=0; NumNod<SubConceptObjectList.getLength(); NumNod++)
         PDThesaur ParentTerm=ObtainTerm(SourceId);                    
         StoreTerm(SourceId, ParentTerm);
         Term.setParentId(ParentTerm.getPDId());
+        if (BTAsigned)
+           ImportReport+="Lost PolyHierarchy="+Term.getRecord()+"<br>";
+        BTAsigned=true;    
         }
     else if (SkosObjectSub.getNodeName().equalsIgnoreCase(PDThesaur.SKOS_NARROWER))
         {
@@ -2016,6 +2025,8 @@ if (LangList.size()>1)
             }
         }
     }
+if (SubThesLang && Term.getParentId().equalsIgnoreCase(Thes.getPDId())  )               
+    Term.setParentId(ObtainSubThes(Thes.getPDId(), Term.getLang()));
 if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.FillTerm:"+Term.getPDId()+"<");        
 }
@@ -2082,10 +2093,14 @@ for (Iterator it = TermCache.keySet().iterator(); it.hasNext();)
             Term.insert();
             } catch (Exception ex)
                 {
-                if (!(Term.getUse()!=null && Term.getUse().length()!=0))
-                    PDExceptionFunc.GenPDException(ex.getLocalizedMessage(), "="+Term.getRecord() );
-                else
-                    ImportReport+=ex.getLocalizedMessage()+"="+Term.getRecord();
+                try {
+                 Term.setName("_"+Term.getName());   
+                 Term.insert();
+                 ImportReport+="Renamed="+Term.getRecord()+"<br>";
+                 } catch (Exception ex1)
+                    {
+                    PDExceptionFunc.GenPDException(ex1.getLocalizedMessage(), "="+Term.getRecord() );
+                    }
                 }
             TermExp.add(Term.getPDId());
             TermCache.put(TermId, null);
