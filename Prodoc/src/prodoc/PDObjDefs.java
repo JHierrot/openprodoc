@@ -20,6 +20,7 @@
 package prodoc;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Vector;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -533,6 +534,7 @@ getDrv().InsertRecord(getTabNameAttrs(), ConvertRec(Attr));
         getDrv().AnularTrans();
     throw Ex;
     }
+getObjCacheAtr().put(getName(), null);
 if (InTransLocal)
     getDrv().CerrarTrans();
 if (PDLog.isDebug())
@@ -581,6 +583,7 @@ Conditions CondDelAttrs=new Conditions();
 Condition CondDelAttr=new Condition(fTYPNAME, Condition.cEQUAL, getName());
 CondDelAttrs.addCondition(CondDelAttr);
 getDrv().DeleteRecord(getTabNameAttrs(), CondDelAttrs);
+getObjCacheAtr().put(getName(), null);
 }
 //-------------------------------------------------------------------------
 /**
@@ -784,6 +787,90 @@ Def.setCreated(true);
 Def.update();
 if (PDLog.isDebug())
     PDLog.Debug("PDObjDefs.CreateObjectTables<:"+Name);
+}
+//-------------------------------------------------------------------------
+public void AddObjectTables(String Name, Attribute NewAttr)  throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDObjDefs.AddObjectTables>:"+Name+"="+NewAttr);
+try { 
+PDObjDefs Def=new PDObjDefs(getDrv());
+Def.Load(Name);
+boolean isFolder=Def.getClassType().equalsIgnoreCase(PDObjDefs.CT_FOLDER);
+Record RecTab=new Record();
+Attribute PdId=new Attribute(PDDocs.fPDID, PDDocs.fPDID, "Unique_identifier", Attribute.tSTRING, true, null, 32, true, false, false);
+Attribute IdVer=PDDocs.getRecordStructPDDocs().getAttr(PDDocs.fVERSION).Copy();
+RecTab.addAttr(PdId);
+HashSet SubTypes=Def.getListSubClases(Name);
+getDrv().IniciarTrans();
+if (NewAttr.isMultivalued())
+    {
+    RecTab.addAttr(PdId);
+    if (!isFolder)
+        RecTab.addAttr(IdVer);
+    RecTab.addAttr(NewAttr.Copy()); 
+    String MultiName=genMultValNam(Def.getName(), NewAttr.getName());
+    getDrv().CreateTable(MultiName, RecTab);
+    if (isFolder)
+        getDrv().AddIntegrity(MultiName, PDFolders.fPDID, PDFolders.getTableName(), PDFolders.fPDID);
+    }
+else
+    {
+    getDrv().AlterTableAdd(Name, NewAttr);
+    if (Def.getClassType().equalsIgnoreCase(PDObjDefs.CT_DOC))
+        {
+        for (Iterator it = SubTypes.iterator(); it.hasNext();)
+            {
+            String SubName =(String)it.next();
+            getDrv().AlterTableAdd(GenVerTabName(SubName), NewAttr);
+            }
+        }
+    }
+addAtribute(NewAttr);
+getDrv().CerrarTrans();
+if (PDLog.isDebug())
+    PDLog.Debug("PDObjDefs.AddObjectTables<:"+Name);
+} catch (Exception ex)
+    {
+    getDrv().AnularTrans();  
+    PDException.GenPDException(ex.getLocalizedMessage(), Name);   
+    }
+}
+//-------------------------------------------------------------------------
+public void DelObjectTables(String Name, Attribute OldAttr)  throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDObjDefs.DelObjectTables>:"+Name+"="+OldAttr);
+try { 
+PDObjDefs Def=new PDObjDefs(getDrv());
+Def.Load(Name);
+HashSet SubTypes=Def.getListSubClases(Name);
+getDrv().IniciarTrans();
+if (OldAttr.isMultivalued())
+    {
+    getDrv().DropTable(genMultValNam(Name,OldAttr.getName()));            
+    }
+else
+    {
+    getDrv().AlterTableDel(Name, OldAttr.getName());
+    if (Def.getClassType().equalsIgnoreCase(PDObjDefs.CT_DOC))
+        {
+        for (Iterator it = SubTypes.iterator(); it.hasNext();)
+            {
+            String SubName =(String)it.next();
+            getDrv().AlterTableDel(GenVerTabName(SubName), OldAttr.getName());
+            }
+        }
+    }
+Def.delAtribute(OldAttr.getName());
+getDrv().CerrarTrans();
+if (PDLog.isDebug())
+    PDLog.Debug("PDObjDefs.DelObjectTables<:"+Name+"="+OldAttr);
+} catch (Exception ex)
+    {
+    getDrv().AnularTrans();  
+    PDException.GenPDException(ex.getLocalizedMessage(), Name);   
+    }
 }
 //-------------------------------------------------------------------------
 /**
@@ -1093,19 +1180,29 @@ return(v);
 }
 //-----------------------------------------------------------------------
 /**
- * return an  Vector of Subclases of ClassName (excluded)
+ * return an  Vector of Subclases of ClassName (Included)
  * @param ClassName Class to bew searched
- * @return return an ORDERED Vector of clases: last the first parent
+ * @return return a HashSet of all subclases clases
  * @throws PDException in any error
  */
-public Vector getListSubClases(String ClassName) throws PDException
+public HashSet getListSubClases(String ClassName) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDObjDefs.getListSubClases>:"+ClassName);
-Vector v=new Vector();
-// TODO: getListSubClases ?
-
-
+HashSet v=new HashSet();
+v.add(ClassName);
+Condition CondType=new Condition(PDObjDefs.fPARENT, Condition.cEQUAL, ClassName);
+Conditions Conds=new Conditions();
+Conds.addCondition(CondType);
+Query ListAttr=new Query(getTabName(), getRecordStruct(), Conds);
+Cursor Cur=getDrv().OpenCursor(ListAttr);
+Record r=getDrv().NextRec(Cur);
+while (r!=null)
+    {
+    v.addAll(getListSubClases((String)r.getAttr(fNAME).getValue()));
+    r=getDrv().NextRec(Cur);
+    }
+getDrv().CloseCursor(Cur);
 if (PDLog.isDebug())
     PDLog.Debug("PDObjDefs.getListSubClases<:"+v);
 return(v);

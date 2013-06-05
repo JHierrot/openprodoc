@@ -57,16 +57,6 @@ protected void DropTable(String TableName) throws PDException
 {
 throw new UnsupportedOperationException("Not supported yet.");
 }
-/**
-*
-* @param TableName
-* @param Fields New fields to add
-* @throws PDException
-*/
-protected void AlterTable(String TableName, Record Fields) throws PDException
-{
-throw new UnsupportedOperationException("Not supported yet.");
-}
 
 protected void InsertRecord(String TableName, Record Fields) throws PDException
 {
@@ -139,6 +129,18 @@ throw new UnsupportedOperationException("Not supported yet.");
      */
     @Override
     protected void AddIntegrity(String TableName1, String Field11, String Field12, String TableName2, String Field21, String Field22) throws PDException
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    protected void AlterTableAdd(String TableName, Attribute NewAttr) throws PDException
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    protected void AlterTableDel(String TableName, String OldAttr) throws PDException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }

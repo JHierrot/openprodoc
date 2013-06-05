@@ -199,12 +199,36 @@ if (PDLog.isInfo())
 /**
  *
  * @param TableName
- * @param Fields New fields to add
+ * @param NewAttr New field to add
  * @throws PDException
  */
-protected void AlterTable(String TableName, Record Fields) throws PDException
+protected void AlterTableAdd(String TableName, Attribute NewAttr) throws PDException
 {
-throw new UnsupportedOperationException("Not supported yet.");
+if (PDLog.isInfo())
+    PDLog.Info("DriverJDBC.AlterTable>:"+TableName);
+String SQL="";
+SQL="ALTER TABLE "+TableName;
+
+ExecuteSql(SQL);
+if (PDLog.isInfo())
+    PDLog.Info("DriverJDBC.AlterTable<:"+TableName);
+}
+//--------------------------------------------------------------------------
+/**
+ *
+ * @param TableName
+ * @param OldAttr old field to delete
+ * @throws PDException
+ */
+protected void AlterTableDel(String TableName, String OldAttr) throws PDException
+{
+if (PDLog.isInfo())
+    PDLog.Info("DriverJDBC.AlterTable>:"+TableName);
+String SQL="";
+SQL="ALTER TABLE "+TableName+" DROP COLUMN "+OldAttr;
+ExecuteSql(SQL);
+if (PDLog.isInfo())
+    PDLog.Info("DriverJDBC.AlterTable<:"+TableName);
 }
 
 //--------------------------------------------------------------------------

@@ -214,10 +214,18 @@ abstract protected void DropTable(String TableName) throws PDException;
 /**
  *
  * @param TableName
- * @param Fields New fields to add
+ * @param NewAttr New field to add
  * @throws PDException
  */
-abstract protected void AlterTable(String TableName, Record Fields) throws PDException;
+abstract protected void AlterTableAdd(String TableName, Attribute NewAttr) throws PDException;
+//--------------------------------------------------------------------------
+/**
+ *
+ * @param TableName
+ * @param OldAttr old field to delete
+ * @throws PDException
+ */
+abstract protected void AlterTableDel(String TableName, String OldAttr) throws PDException;
 //--------------------------------------------------------------------------
 /**
  *
