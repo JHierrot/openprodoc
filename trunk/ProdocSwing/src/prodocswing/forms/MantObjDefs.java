@@ -68,8 +68,11 @@ InheritAttrTable.setAutoCreateColumnsFromModel(true);
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
+        jSeparator2 = new javax.swing.JSeparator();
+        jSeparator3 = new javax.swing.JSeparator();
         LabelOperation = new javax.swing.JLabel();
         TypeNameLabel = new javax.swing.JLabel();
         TypeNameTextField = new javax.swing.JTextField();
@@ -102,6 +105,9 @@ InheritAttrTable.setAutoCreateColumnsFromModel(true);
         AddButtonAttr = new javax.swing.JButton();
         DelButtonAttr = new javax.swing.JButton();
         EditButtonAttr = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
+        AddButtonAttr1 = new javax.swing.JButton();
+        DelButtonAttr1 = new javax.swing.JButton();
         PanelInheritAttr = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         InheritAttrTable = new javax.swing.JTable();
@@ -115,8 +121,10 @@ InheritAttrTable.setAutoCreateColumnsFromModel(true);
         setTitle(MainWin.TT("Object_definitions_Maintenance"));
         setModal(true);
         setResizable(false);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
+        addWindowListener(new java.awt.event.WindowAdapter()
+        {
+            public void windowClosing(java.awt.event.WindowEvent evt)
+            {
                 formWindowClosing(evt);
             }
         });
@@ -129,8 +137,10 @@ InheritAttrTable.setAutoCreateColumnsFromModel(true);
         TypeNameLabel.setText("Nombre");
 
         TypeNameTextField.setFont(MainWin.getFontDialog());
-        TypeNameTextField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
+        TypeNameTextField.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyReleased(java.awt.event.KeyEvent evt)
+            {
                 TypeNameTextFieldKeyReleased(evt);
             }
         });
@@ -277,10 +287,12 @@ InheritAttrTable.setAutoCreateColumnsFromModel(true);
         jTabbedPane1.addTab(MainWin.TT(("Object_Definition")), PanelType);
 
         AttrTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object [][]
+            {
 
             },
-            new String [] {
+            new String []
+            {
 
             }
         ));
@@ -293,8 +305,10 @@ InheritAttrTable.setAutoCreateColumnsFromModel(true);
         AddButtonAttr.setFocusable(false);
         AddButtonAttr.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         AddButtonAttr.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        AddButtonAttr.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        AddButtonAttr.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 AddButtonAttrActionPerformed(evt);
             }
         });
@@ -305,8 +319,10 @@ InheritAttrTable.setAutoCreateColumnsFromModel(true);
         DelButtonAttr.setFocusable(false);
         DelButtonAttr.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         DelButtonAttr.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        DelButtonAttr.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        DelButtonAttr.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 DelButtonAttrActionPerformed(evt);
             }
         });
@@ -316,12 +332,48 @@ InheritAttrTable.setAutoCreateColumnsFromModel(true);
         EditButtonAttr.setFocusable(false);
         EditButtonAttr.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         EditButtonAttr.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        EditButtonAttr.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        EditButtonAttr.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 EditButtonAttrActionPerformed(evt);
             }
         });
         ToolBarAttr.add(EditButtonAttr);
+
+        jSeparator1.setSeparatorSize(new java.awt.Dimension(200, 10));
+        ToolBarAttr.add(jSeparator1);
+
+        AddButtonAttr1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/add.png"))); // NOI18N
+        AddButtonAttr1.setToolTipText("");
+        AddButtonAttr1.setEnabled(false);
+        AddButtonAttr1.setFocusable(false);
+        AddButtonAttr1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        AddButtonAttr1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        AddButtonAttr1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                AddButtonAttr1ActionPerformed(evt);
+            }
+        });
+        ToolBarAttr.add(AddButtonAttr1);
+
+        DelButtonAttr1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/del.png"))); // NOI18N
+        DelButtonAttr1.setToolTipText("");
+        DelButtonAttr1.setEnabled(false);
+        DelButtonAttr1.setFocusable(false);
+        DelButtonAttr1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        DelButtonAttr1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        DelButtonAttr1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        DelButtonAttr1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                DelButtonAttr1ActionPerformed(evt);
+            }
+        });
+        ToolBarAttr.add(DelButtonAttr1);
 
         javax.swing.GroupLayout PanelAttrLayout = new javax.swing.GroupLayout(PanelAttr);
         PanelAttr.setLayout(PanelAttrLayout);
@@ -343,7 +395,7 @@ InheritAttrTable.setAutoCreateColumnsFromModel(true);
                 .addContainerGap()
                 .addComponent(ToolBarAttr, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -373,7 +425,7 @@ InheritAttrTable.setAutoCreateColumnsFromModel(true);
                 .addContainerGap()
                 .addComponent(ToolBarInheAttr, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -381,32 +433,40 @@ InheritAttrTable.setAutoCreateColumnsFromModel(true);
 
         ButtonAcept.setFont(MainWin.getFontDialog());
         ButtonAcept.setText(MainWin.TT("Ok"));
-        ButtonAcept.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ButtonAcept.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ButtonAceptActionPerformed(evt);
             }
         });
 
         ButtonCancel.setFont(MainWin.getFontDialog());
         ButtonCancel.setText(MainWin.TT("Cancel"));
-        ButtonCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ButtonCancel.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ButtonCancelActionPerformed(evt);
             }
         });
 
         ButtonCreateObject.setFont(MainWin.getFontDialog());
         ButtonCreateObject.setText(MainWin.TT("Create_Object"));
-        ButtonCreateObject.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ButtonCreateObject.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ButtonCreateObjectActionPerformed(evt);
             }
         });
 
         ButtonDestroyObject.setFont(MainWin.getFontDialog());
         ButtonDestroyObject.setText(MainWin.TT("Destroy_Object"));
-        ButtonDestroyObject.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ButtonDestroyObject.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ButtonDestroyObjectActionPerformed(evt);
             }
         });
@@ -484,55 +544,7 @@ this.dispose();
 
     private void ButtonAceptActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ButtonAceptActionPerformed
     {//GEN-HEADEREND:event_ButtonAceptActionPerformed
-try {
-Attribute Attr=ObjDef.getAttr(PDObjDefs.fNAME);
-Attr.setValue(TypeNameTextField.getText());
-Attr=ObjDef.getAttr(PDObjDefs.fDESCRIPTION);
-Attr.setValue(TypeDescripTextField.getText());
-Attr=ObjDef.getAttr(PDObjDefs.fACL);
-Attr.setValue(ACLComboBox.getSelectedItem());
-Attr=ObjDef.getAttr(PDObjDefs.fPARENT);
-Attr.setValue(ParentNameTextField.getText());
-Attr=ObjDef.getAttr(PDObjDefs.fCLASSTYPE);
-Attr.setValue((String)ClassTypeComboBox.getSelectedItem());
-Attr=ObjDef.getAttr(PDObjDefs.fREPOSIT);
-Attr.setValue((String)RepositComboBox.getSelectedItem());
-Attr=ObjDef.getAttr(PDObjDefs.fACTIVE);
-Boolean Act;
-if (ActiveCheckBox.isSelected())
-    Act=    true;
-else
-    Act=    false;
-Attr.setValue(Act);
-Attr=ObjDef.getAttr(PDObjDefs.fTRACEADD);
-if (TraceAddCheckBox.isSelected())
-    Act=    true;
-else
-    Act=    false;
-Attr.setValue(Act);
-Attr=ObjDef.getAttr(PDObjDefs.fTRACEDEL);
-if (TraceDelCheckBox.isSelected())
-    Act=    true;
-else
-    Act=    false;
-Attr.setValue(Act);
-Attr=ObjDef.getAttr(PDObjDefs.fTRACEMOD); 
-if (TraceModCheckBox.isSelected())
-    Act=    true;
-else
-    Act=    false;
-Attr.setValue(Act);
-Attr=ObjDef.getAttr(PDObjDefs.fTRACEVIEW); 
-if (TraceViewCheckBox.isSelected())
-    Act=    true;
-else
-    Act=    false;
-Attr.setValue(Act);
-//if (MainWin.getSession().isInTransaction())
-//    MainWin.getSession().CerrarTrans();
-} catch (PDException ex)
-    {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
-    }
+Save();
 Cancel=false;
 this.dispose();
     }//GEN-LAST:event_ButtonAceptActionPerformed
@@ -540,19 +552,11 @@ this.dispose();
     private void formWindowClosing(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowClosing
     {//GEN-HEADEREND:event_formWindowClosing
 Cancel=true;
-//try {
-//if (MainWin.getSession().isInTransaction())
-//        MainWin.getSession().AnularTrans();
-//} catch (PDException ex)
-//    {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
-//    }
     }//GEN-LAST:event_formWindowClosing
 
     private void AddButtonAttrActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_AddButtonAttrActionPerformed
     {//GEN-HEADEREND:event_AddButtonAttrActionPerformed
 try {
-//PDObjDefs newObjDef=new PDObjDefs((MainWin.getSession()));
-//newObjDef.setName((String)ObjDef.getAttr(PDObjDefs.fNAME).getValue());
 Record r=PDObjDefs.getRecordAttrsStruct();
 MantAttr MP = new MantAttr(Fparent, true, true);
 MP.setRecord(r);
@@ -574,8 +578,6 @@ RefreshOwnAttr(TypeNameTextField.getText());
 if (AttrTable.getSelectedRow()==-1)
     return;
 try {
-//PDObjDefs newObjDef=new PDObjDefs((MainWin.getSession()));
-//newObjDef.setName((String)ObjDef.getAttr(PDObjDefs.fNAME).getValue());
 MantAttr MP = new MantAttr(Fparent, true, true);
 MP.setRecord(AttrMembers.getElement(AttrTable.convertRowIndexToModel(AttrTable.getSelectedRow())));
 MP.DelMode();
@@ -667,12 +669,64 @@ RefreshOwnAttr(TypeNameTextField.getText());
     }
     }//GEN-LAST:event_TypeNameTextFieldKeyReleased
 
+    private void AddButtonAttr1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_AddButtonAttr1ActionPerformed
+    {//GEN-HEADEREND:event_AddButtonAttr1ActionPerformed
+try {
+Record r=PDObjDefs.getRecordAttrsStruct();
+MantAttr MP = new MantAttr(Fparent, true, true);
+MP.setRecord(r);
+MP.AddMode();
+MP.setLocationRelativeTo(null);
+MP.setVisible(true);
+if (MP.isCancel())
+    return;
+getListRes().add(MP.getRecord());
+ButtonCreateObject.setEnabled(false);
+RefreshOwnAttr(TypeNameTextField.getText());
+} catch (PDException ex)
+    {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
+    }//GEN-LAST:event_AddButtonAttr1ActionPerformed
+
+    private void DelButtonAttr1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_DelButtonAttr1ActionPerformed
+    {//GEN-HEADEREND:event_DelButtonAttr1ActionPerformed
+if (AttrTable.getSelectedRow()==-1)
+    return;
+try {
+MantAttr MP = new MantAttr(Fparent, true, true);
+MP.setRecord(AttrMembers.getElement(AttrTable.convertRowIndexToModel(AttrTable.getSelectedRow())));
+MP.DelMode();
+MP.setLocationRelativeTo(null);
+MP.setVisible(true);
+if (MP.isCancel())
+    return;
+String AttrName=(String) MP.getRecord().getAttr(PDObjDefs.fATTRNAME).getValue();
+for (int i = 0; i < getListRes().size(); i++)
+    {
+    String AttrNameI=(String)((Record)getListRes().elementAt(i)).getAttr(PDObjDefs.fATTRNAME).getValue();
+    if (AttrNameI.equals(AttrName))
+       {
+       Attribute Attr=EditObjDef.ConvertRec((Record)getListRes().elementAt(i));    
+       getListRes().remove(i);  
+       EditObjDef.DelObjectTables(TypeNameTextField.getText(), Attr);
+       Save();
+       Cancel=false;
+       this.dispose();
+       break;
+       }   
+    }
+} catch (PDException ex)
+    {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
+    }//GEN-LAST:event_DelButtonAttr1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox ACLComboBox;
     private javax.swing.JLabel ACLDescripLabel;
     private javax.swing.JCheckBox ActiveCheckBox;
     private javax.swing.JLabel ActiveLabel;
     private javax.swing.JButton AddButtonAttr;
+    private javax.swing.JButton AddButtonAttr1;
     private javax.swing.JTable AttrTable;
     private javax.swing.JButton ButtonAcept;
     private javax.swing.JButton ButtonCancel;
@@ -681,6 +735,7 @@ RefreshOwnAttr(TypeNameTextField.getText());
     private javax.swing.JLabel ClasTypeDescripLabel;
     private javax.swing.JComboBox ClassTypeComboBox;
     private javax.swing.JButton DelButtonAttr;
+    private javax.swing.JButton DelButtonAttr1;
     private javax.swing.JButton EditButtonAttr;
     private javax.swing.JTable InheritAttrTable;
     private javax.swing.JLabel LabelOperation;
@@ -707,6 +762,9 @@ RefreshOwnAttr(TypeNameTextField.getText());
     private javax.swing.JTextField TypeNameTextField;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JToolBar.Separator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
     private javax.swing.JTabbedPane jTabbedPane1;
     // End of variables declaration//GEN-END:variables
 
@@ -722,6 +780,8 @@ ParentNameTextField.setEnabled(false);
 //EditButtonAttr.setEnabled(false);
 //PanelAttr.setEnabled(false);
 ButtonCreateObject.setEnabled(false);
+AddButtonAttr1.setEnabled(false);
+DelButtonAttr1.setEnabled(false);
 PanelInheritAttr.setEnabled(false);
 }
 //----------------------------------------------------------------
@@ -739,6 +799,8 @@ AddButtonAttr.setEnabled(false);
 DelButtonAttr.setEnabled(false);
 EditButtonAttr.setEnabled(false);
 ButtonCreateObject.setEnabled(false);
+AddButtonAttr1.setEnabled(false);
+DelButtonAttr1.setEnabled(false);
 }
 //----------------------------------------------------------------
 /**
@@ -750,11 +812,6 @@ LabelOperation.setText(MainWin.TT("Update_Object_definition"));
 TypeNameTextField.setEditable(false);
 ClassTypeComboBox.setEnabled(false);
 ParentNameTextField.setEditable(false);
-//try {
-//MainWin.getSession().IniciarTrans();
-//} catch (PDException ex)
-//    {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
-//    }
 }
 //----------------------------------------------------------------
 /**
@@ -766,6 +823,8 @@ LabelOperation.setText(MainWin.TT("Copy_Object_definition"));
 TypeNameTextField.setText(TypeNameTextField.getText()+"1");
 PanelAttr.setEnabled(false);
 PanelInheritAttr.setEnabled(false);
+AddButtonAttr1.setEnabled(false);
+DelButtonAttr1.setEnabled(false);
 }
 //----------------------------------------------------------------
 /**
@@ -878,6 +937,8 @@ if (Attr.getValue() != null)
     DelButtonAttr.setEnabled(!(Boolean)Attr.getValue());
     EditButtonAttr.setEnabled(!(Boolean)Attr.getValue());
     ButtonDestroyObject.setEnabled((Boolean)Attr.getValue());
+    AddButtonAttr1.setEnabled((Boolean)Attr.getValue());
+    DelButtonAttr1.setEnabled((Boolean)Attr.getValue());
     }
 else
     {
@@ -959,12 +1020,63 @@ private DefaultComboBoxModel getComboModel(String Type)
 return(ListObjects.getComboModel(Type));
 }
 //----------------------------------------------------------------
-
-    /**
-     * @return the ListRes
-     */
-    public Vector getListRes()
-    {
-        return ListRes;
+/**
+ * @return the ListRes
+ */
+public Vector getListRes()
+{
+return ListRes;
+}
+//----------------------------------------------------------------
+private void Save()
+{
+try {
+Attribute Attr=ObjDef.getAttr(PDObjDefs.fNAME);
+Attr.setValue(TypeNameTextField.getText());
+Attr=ObjDef.getAttr(PDObjDefs.fDESCRIPTION);
+Attr.setValue(TypeDescripTextField.getText());
+Attr=ObjDef.getAttr(PDObjDefs.fACL);
+Attr.setValue(ACLComboBox.getSelectedItem());
+Attr=ObjDef.getAttr(PDObjDefs.fPARENT);
+Attr.setValue(ParentNameTextField.getText());
+Attr=ObjDef.getAttr(PDObjDefs.fCLASSTYPE);
+Attr.setValue((String)ClassTypeComboBox.getSelectedItem());
+Attr=ObjDef.getAttr(PDObjDefs.fREPOSIT);
+Attr.setValue((String)RepositComboBox.getSelectedItem());
+Attr=ObjDef.getAttr(PDObjDefs.fACTIVE);
+Boolean Act;
+if (ActiveCheckBox.isSelected())
+    Act=    true;
+else
+    Act=    false;
+Attr.setValue(Act);
+Attr=ObjDef.getAttr(PDObjDefs.fTRACEADD);
+if (TraceAddCheckBox.isSelected())
+    Act=    true;
+else
+    Act=    false;
+Attr.setValue(Act);
+Attr=ObjDef.getAttr(PDObjDefs.fTRACEDEL);
+if (TraceDelCheckBox.isSelected())
+    Act=    true;
+else
+    Act=    false;
+Attr.setValue(Act);
+Attr=ObjDef.getAttr(PDObjDefs.fTRACEMOD); 
+if (TraceModCheckBox.isSelected())
+    Act=    true;
+else
+    Act=    false;
+Attr.setValue(Act);
+Attr=ObjDef.getAttr(PDObjDefs.fTRACEVIEW); 
+if (TraceViewCheckBox.isSelected())
+    Act=    true;
+else
+    Act=    false;
+Attr.setValue(Act);
+} catch (PDException ex)
+    {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
+}
+//----------------------------------------------------------------
 }
