@@ -117,33 +117,33 @@ throw new UnsupportedOperationException("Not supported yet.");
 }
 //--------------------------------------------------------------------------
 
-    /**
-     *
-     * @param TableName1
-     * @param Field11
-     * @param Field12
-     * @param TableName2
-     * @param Field21
-     * @param Field22
-     * @throws PDException
-     */
-    @Override
-    protected void AddIntegrity(String TableName1, String Field11, String Field12, String TableName2, String Field21, String Field22) throws PDException
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+/**
+ *
+ * @param TableName1
+ * @param Field11
+ * @param Field12
+ * @param TableName2
+ * @param Field21
+ * @param Field22
+ * @throws PDException
+ */
+@Override
+protected void AddIntegrity(String TableName1, String Field11, String Field12, String TableName2, String Field21, String Field22) throws PDException
+{
+    throw new UnsupportedOperationException("Not supported yet.");
+}
 
-    @Override
-    protected void AlterTableAdd(String TableName, Attribute NewAttr) throws PDException
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+@Override
+protected void AlterTableAdd(String TableName, Attribute NewAttr, boolean IsVer) throws PDException
+{
+    throw new UnsupportedOperationException("Not supported yet.");
+}
 
-    @Override
-    protected void AlterTableDel(String TableName, String OldAttr) throws PDException
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+@Override
+protected void AlterTableDel(String TableName, String OldAttr) throws PDException
+{
+    throw new UnsupportedOperationException("Not supported yet.");
+}
 
 
 }
