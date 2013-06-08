@@ -797,14 +797,12 @@ try {
 PDObjDefs Def=new PDObjDefs(getDrv());
 Def.Load(Name);
 boolean isFolder=Def.getClassType().equalsIgnoreCase(PDObjDefs.CT_FOLDER);
-Record RecTab=new Record();
-Attribute PdId=new Attribute(PDDocs.fPDID, PDDocs.fPDID, "Unique_identifier", Attribute.tSTRING, true, null, 32, true, false, false);
-Attribute IdVer=PDDocs.getRecordStructPDDocs().getAttr(PDDocs.fVERSION).Copy();
-RecTab.addAttr(PdId);
-HashSet SubTypes=Def.getListSubClases(Name);
 getDrv().IniciarTrans();
 if (NewAttr.isMultivalued())
     {
+    Record RecTab=new Record();
+    Attribute PdId=new Attribute(PDDocs.fPDID, PDDocs.fPDID, "Unique_identifier", Attribute.tSTRING, true, null, 32, true, false, false);
+    Attribute IdVer=PDDocs.getRecordStructPDDocs().getAttr(PDDocs.fVERSION).Copy();
     RecTab.addAttr(PdId);
     if (!isFolder)
         RecTab.addAttr(IdVer);
@@ -816,17 +814,18 @@ if (NewAttr.isMultivalued())
     }
 else
     {
-    getDrv().AlterTableAdd(Name, NewAttr);
+    getDrv().AlterTableAdd(Name, NewAttr, false);
     if (Def.getClassType().equalsIgnoreCase(PDObjDefs.CT_DOC))
         {
+        HashSet SubTypes=Def.getListSubClases(Name);
         for (Iterator it = SubTypes.iterator(); it.hasNext();)
             {
             String SubName =(String)it.next();
-            getDrv().AlterTableAdd(GenVerTabName(SubName), NewAttr);
+            getDrv().AlterTableAdd(GenVerTabName(SubName), NewAttr, true);
             }
         }
     }
-addAtribute(NewAttr);
+Def.addAtribute(NewAttr);
 getDrv().CerrarTrans();
 if (PDLog.isDebug())
     PDLog.Debug("PDObjDefs.AddObjectTables<:"+Name);
@@ -844,7 +843,6 @@ if (PDLog.isDebug())
 try { 
 PDObjDefs Def=new PDObjDefs(getDrv());
 Def.Load(Name);
-HashSet SubTypes=Def.getListSubClases(Name);
 getDrv().IniciarTrans();
 if (OldAttr.isMultivalued())
     {
@@ -855,6 +853,7 @@ else
     getDrv().AlterTableDel(Name, OldAttr.getName());
     if (Def.getClassType().equalsIgnoreCase(PDObjDefs.CT_DOC))
         {
+        HashSet SubTypes=Def.getListSubClases(Name);
         for (Iterator it = SubTypes.iterator(); it.hasNext();)
             {
             String SubName =(String)it.next();

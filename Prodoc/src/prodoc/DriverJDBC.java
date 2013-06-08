@@ -27,6 +27,7 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Vector;
 
 
@@ -141,21 +142,7 @@ SQL="CREATE TABLE "+TableName+"( ";
 for (int i=0; i<Fields.NumAttr(); i++)
     {
     Attribute A=Fields.nextAttr();
-    SQL+=A.getName();
-    if (A.getType()==Attribute.tINTEGER)
-        SQL+=" INTEGER ";
-    else if (A.getType()==Attribute.tBOOLEAN)
-        SQL+=" SMALLINT ";
-    else if (A.getType()==Attribute.tDATE)
-        SQL+=" CHAR(8) ";//        SQL+=" DATE ";
-    else if (A.getType()==Attribute.tTIMESTAMP)
-        SQL+=" CHAR(14) "; // SQL+=" TIMESTAMP ";
-    else if (A.getType()==Attribute.tTHES)
-        SQL+=" VARCHAR(32) ";
-    else 
-        SQL+=" VARCHAR("+ A.getLongStr()+") ";
-    if (A.isRequired())
-        SQL+=" NOT NULL ";
+    SQL+=A.getName()+GetType(A);
     if (A.isPrimKey())
         {if (ClavePrin.length()>0)
             ClavePrin+=", ";
@@ -202,14 +189,16 @@ if (PDLog.isInfo())
  * @param NewAttr New field to add
  * @throws PDException
  */
-protected void AlterTableAdd(String TableName, Attribute NewAttr) throws PDException
+protected void AlterTableAdd(String TableName, Attribute NewAttr, boolean IsVer) throws PDException
 {
 if (PDLog.isInfo())
     PDLog.Info("DriverJDBC.AlterTable>:"+TableName);
-String SQL="";
-SQL="ALTER TABLE "+TableName;
-
+String SQL="ALTER TABLE "+TableName+" ADD "+NewAttr.getName()+GetType(NewAttr);
 ExecuteSql(SQL);
+if (!IsVer && NewAttr.isUnique())
+    SQL+=" CONSTRAINT "+TableName+new Random().nextInt(9999)+" UNIQUE("+NewAttr.getName()+"), ";
+if (NewAttr.getType()==Attribute.tTHES)
+    AddIntegrity(TableName, NewAttr.getName(), PDThesaur.getTableName(), PDThesaur.fPDID);
 if (PDLog.isInfo())
     PDLog.Info("DriverJDBC.AlterTable<:"+TableName);
 }
@@ -810,4 +799,23 @@ else if (Search.getOrderList()!=null)
 return(SQL);
 }
 //-----------------------------------------------------------------------------------
+private static String GetType(Attribute A)
+{
+String SQL;
+if (A.getType()==Attribute.tINTEGER)
+    SQL=" INTEGER ";
+else if (A.getType()==Attribute.tBOOLEAN)
+    SQL=" SMALLINT ";
+else if (A.getType()==Attribute.tDATE)
+    SQL=" CHAR(8) ";//        SQL+=" DATE ";
+else if (A.getType()==Attribute.tTIMESTAMP)
+    SQL=" CHAR(14) "; // SQL+=" TIMESTAMP ";
+else if (A.getType()==Attribute.tTHES)
+    SQL=" VARCHAR(32) ";
+else 
+    SQL=" VARCHAR("+ A.getLongStr()+") ";
+if (A.isRequired())
+    SQL+=" NOT NULL ";
+return(SQL);    
+}
 }

@@ -217,7 +217,7 @@ abstract protected void DropTable(String TableName) throws PDException;
  * @param NewAttr New field to add
  * @throws PDException
  */
-abstract protected void AlterTableAdd(String TableName, Attribute NewAttr) throws PDException;
+abstract protected void AlterTableAdd(String TableName, Attribute NewAttr, boolean IsVer) throws PDException;
 //--------------------------------------------------------------------------
 /**
  *

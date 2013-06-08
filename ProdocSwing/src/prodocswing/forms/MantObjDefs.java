@@ -681,8 +681,12 @@ MP.setVisible(true);
 if (MP.isCancel())
     return;
 getListRes().add(MP.getRecord());
-ButtonCreateObject.setEnabled(false);
-RefreshOwnAttr(TypeNameTextField.getText());
+// RefreshOwnAttr(TypeNameTextField.getText());
+Attribute Attr=EditObjDef.ConvertRec(MP.getRecord());    
+EditObjDef.AddObjectTables(TypeNameTextField.getText(), Attr);
+Save();
+Cancel=false;
+this.dispose();
 } catch (PDException ex)
     {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
