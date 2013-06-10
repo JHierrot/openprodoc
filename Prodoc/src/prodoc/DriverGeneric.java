@@ -1032,13 +1032,13 @@ if (PDLog.isDebug())
 StoreGeneric st=null;
 String RepTyp=Rep.getRepType();
 if (RepTyp.equals(PDRepository.tFS))
-    st=new StoreFS(Rep.getURL(), Rep.getUser(), /*Decode*/(Rep.getPassword()), Rep.getParam());
+    st=new StoreFS(Rep.getURL(), Rep.getUser(), /*Decode*/(Rep.getPassword()), Rep.getParam(), Rep.isEncrypted());
 else if (RepTyp.equals(PDRepository.tBBDD))
-    st=new StoreDDBB(Rep.getURL(), Rep.getUser(), /*Decode*/(Rep.getPassword()), Rep.getParam());
+    st=new StoreDDBB(Rep.getURL(), Rep.getUser(), /*Decode*/(Rep.getPassword()), Rep.getParam(), Rep.isEncrypted());
 else if (RepTyp.equals(PDRepository.tFTP))
-    st=new Storeftp(Rep.getURL(), Rep.getUser(), /*Decode*/(Rep.getPassword()), Rep.getParam());
+    st=new Storeftp(Rep.getURL(), Rep.getUser(), /*Decode*/(Rep.getPassword()), Rep.getParam(), Rep.isEncrypted());
 else if (RepTyp.equals(PDRepository.tREFURL))
-    st=new StoreRefURL(Rep.getURL(), Rep.getUser(), /*Decode*/(Rep.getPassword()), Rep.getParam());
+    st=new StoreRefURL(Rep.getURL(), Rep.getUser(), /*Decode*/(Rep.getPassword()), Rep.getParam(), Rep.isEncrypted());
 else
     PDException.GenPDException("Repository_type_unsuported", RepTyp);
 if (PDLog.isDebug())

@@ -20,6 +20,7 @@
 package prodoc;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  *
@@ -37,9 +38,9 @@ public class StoreRefFS extends StoreGeneric
  * @param pPassword
  * @param pParam
  */
-protected StoreRefFS(String pServer, String pUser, String pPassword, String pParam)
+protected StoreRefFS(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt)
 {
-super(pServer, pUser, pPassword, pParam);
+super(pServer, pUser, pPassword, pParam, pEncrypt);
 }
 //-----------------------------------------------------------------
 /**
@@ -124,4 +125,10 @@ protected boolean IsRef()
 return(true);
 }
 //-----------------------------------------------------------------
+
+    @Override
+    protected int Retrieve(String Id, String Ver, OutputStream fo) throws PDException
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

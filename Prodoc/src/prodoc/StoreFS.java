@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  *
@@ -32,18 +33,20 @@ import java.io.InputStream;
 public class StoreFS extends StoreGeneric
 {
 //-----------------------------------------------------------------
-    /**
-     *
-     * @param pServer
-     * @param pUser
-     * @param pPassword
-     * @param pParam
-     */
-    protected StoreFS(String pServer, String pUser, String pPassword, String pParam)
+/**
+ *
+ * @param pServer
+ * @param pUser
+ * @param pPassword
+ * @param pParam
+ */
+protected StoreFS(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt)
 {
-super(pServer, pUser, pPassword, pParam);
+super(pServer, pUser, pPassword, pParam, pEncrypt);
 if (!getServer().substring(getServer().length()-2).equals(getSeparator()) )
     setServer(getServer()+getSeparator());
+if (isEncript())
+    setEncriptPass(pParam);
 }
 //-----------------------------------------------------------------
 /**
@@ -112,6 +115,8 @@ fo = new FileOutputStream(getPath()+ GenPath(Id, Ver) +Id+"_"+Ver);
 int readed=Bytes.read(Buffer);
 while (readed!=-1)
     {
+    if (isEncript())
+       EncriptPass(Buffer, readed);
     fo.write(Buffer, 0, readed);
     Tot+=readed;
     readed=Bytes.read(Buffer);
@@ -133,6 +138,33 @@ finally
     }
 return(Tot);
 }
+//-----------------------------------------------------------------
+protected int Retrieve(String Id, String Ver, OutputStream fo) throws PDException
+{
+int Tot=0;
+VerifyId(Id);    
+FileInputStream in=null;
+try {
+in = new FileInputStream(getPath() + GenPath(Id, Ver) + Id+"_"+Ver);
+int readed=in.read(Buffer);
+while (readed!=-1)
+    {
+    if (isEncript())
+       DecriptPass(Buffer, readed);
+    fo.write(Buffer, 0, readed);
+    Tot+=readed;
+    readed=in.read(Buffer);
+    }
+in.close();
+fo.flush();
+fo.close();
+} catch (Exception ex)
+    {
+    PDException.GenPDException("Error_retrieving_file",Id+"/"+Ver+"="+ex.getLocalizedMessage());
+    }
+return(Tot);
+}
+
 //-----------------------------------------------------------------
 /**
  *

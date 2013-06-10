@@ -959,6 +959,27 @@ FileStream=Bytes;
  */
 public void getStream(OutputStream OutBytes) throws PDException
 {
+LoadCurrent(getPDId());
+StoreGeneric Rep=getDrv().getRepository(getReposit());
+if (Rep.IsURL())
+    throw new UnsupportedOperationException("Not supported.");   
+try {    
+Rep.Connect();
+Rep.Retrieve(getPDId(), getVersion(), OutBytes);
+} catch(Exception ex)
+    {
+    Rep.Disconnect();
+    throw new PDException(ex.getLocalizedMessage());
+    }
+}
+//-------------------------------------------------------------------------
+/**
+ * "Download" a file referenced by the PDID-
+ * @param OutBytes 
+ * @throws PDException
+ *
+public void getStream(OutputStream OutBytes) throws PDException
+{
 InputStream InBytes=null;
 LoadCurrent(getPDId());
 StoreGeneric Rep=getDrv().getRepository(getReposit());
@@ -981,13 +1002,33 @@ OutBytes.close();
     Rep.Disconnect();
     throw new PDException(ex.getLocalizedMessage());
     }
-}
+}******/
 //-------------------------------------------------------------------------
 /**
  * "Download" a file referenced by the PDID-
  * @param OutBytes 
  * @throws PDException
  */
+public void getStreamVer(OutputStream OutBytes) throws PDException
+{
+LoadVersion(getPDId(), getVersion());
+StoreGeneric Rep=getDrv().getRepository(getReposit());
+if (Rep.IsURL())
+    throw new UnsupportedOperationException("Not supported.");   
+try {    
+Rep.Connect();
+Rep.Retrieve(getPDId(), getVersion(), OutBytes);
+} catch(Exception ex)
+    {
+    Rep.Disconnect();
+    throw new PDException(ex.getLocalizedMessage());
+    }
+}
+/**
+ * "Download" a file referenced by the PDID-
+ * @param OutBytes 
+ * @throws PDException
+ *
 public void getStreamVer(OutputStream OutBytes) throws PDException
 {
 InputStream InBytes=null;
@@ -1012,7 +1053,7 @@ OutBytes.close();
     Rep.Disconnect();
     throw new PDException(ex.getLocalizedMessage());
     }
-}
+}**/
 //-------------------------------------------------------------------------
 /**
  *
