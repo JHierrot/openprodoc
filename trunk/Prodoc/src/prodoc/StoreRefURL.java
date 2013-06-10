@@ -20,6 +20,7 @@
 package prodoc;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  *
@@ -37,9 +38,9 @@ public class StoreRefURL extends StoreGeneric
  * @param pPassword
  * @param pParam
  */
-protected StoreRefURL(String pServer, String pUser, String pPassword, String pParam)
+protected StoreRefURL(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt)
 {
-super(pServer, pUser, pPassword, pParam);
+super(pServer, pUser, pPassword, pParam, pEncrypt);
 }
 //-----------------------------------------------------------------
 /**
@@ -89,7 +90,6 @@ protected InputStream Retrieve(String Id, String Ver) throws PDException
 {
 throw new UnsupportedOperationException("Not supported.");
 }
-
 //-----------------------------------------------------------------
 /**
  *
@@ -146,12 +146,12 @@ protected boolean IsURL()
 return(true);
 }
 //-----------------------------------------------------------------
-    /**
-     *
-     * @param DocName
-     * @return
-     */
-    @Override
+/**
+ *
+ * @param DocName
+ * @return
+ */
+@Override
 protected String GetUrl(String DocName)
 {
 String S=getServer()+DocName;  
@@ -160,4 +160,10 @@ S=S.replace("?", "%3F");
 return(S);    
 }        
 //-----------------------------------------------------------------
+
+    @Override
+    protected int Retrieve(String Id, String Ver, OutputStream fo) throws PDException
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

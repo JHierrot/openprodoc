@@ -43,9 +43,9 @@ FTPClient ftpCon = new FTPClient();
  * @param pPassword
  * @param pParam
  */
-protected Storeftp(String pServer, String pUser, String pPassword, String pParam)
+protected Storeftp(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt)
 {
-super(pServer, pUser, pPassword, pParam);
+super(pServer, pUser, pPassword, pParam, pEncrypt);
 }
 //-----------------------------------------------------------------
 /**
@@ -177,4 +177,10 @@ protected void Rename(String Id1, String Ver1, String Id2, String Ver2) throws P
 throw new UnsupportedOperationException("Not supported yet.");
 }
 //-----------------------------------------------------------------
+
+    @Override
+    protected int Retrieve(String Id, String Ver, OutputStream fo) throws PDException
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

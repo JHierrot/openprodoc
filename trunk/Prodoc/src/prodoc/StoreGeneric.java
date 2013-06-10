@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  *
@@ -49,7 +50,8 @@ private String Param=null;
 /**
  *
  */
-private boolean Encript=false;
+private boolean Encrypt=false;
+private String EncriptPass=null;
 /**
  *
  */
@@ -66,12 +68,13 @@ protected byte Buffer[]=new byte[TAMBUFF];
  * @param pPassword
  * @param pParam
  */
-StoreGeneric(String pServer, String pUser, String pPassword, String pParam)
+StoreGeneric(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt)
 {
 Server=pServer;
 User=pUser;
 Password=pPassword;
 Param=pParam;
+Encrypt=pEncrypt;
 }
 //-------------------------------------------------------------------------
 /**
@@ -118,6 +121,14 @@ abstract protected void Delete(String Id, String Ver) throws PDException;
  * @throws PDException
  */
 abstract protected InputStream Retrieve(String Id, String Ver) throws PDException;
+/**
+ *
+ * @param Id
+ * @param Ver
+ * @return
+ * @throws PDException
+ */
+abstract protected int Retrieve(String Id, String Ver, OutputStream fo) throws PDException;
 /**
  *
  * @param Id1
@@ -198,7 +209,7 @@ this.Param = Param;
 */
 protected boolean isEncript()
 {
-return Encript;
+return Encrypt;
 }
 //-------------------------------------------------------------------------
 /**
@@ -206,7 +217,7 @@ return Encript;
 */
 protected void setEncript(boolean Encript)
 {
-this.Encript = Encript;
+this.Encrypt = Encript;
 }
 //-------------------------------------------------------------------------
 /**
@@ -370,5 +381,39 @@ throw new UnsupportedOperationException("Unsupported");
 {
 throw new UnsupportedOperationException("Unsupported");    
 }        
+//-----------------------------------------------------------------
+/**
+ * @return the EncriptPass
+ */
+protected String getEncriptPass()
+{
+return EncriptPass;
+}
+//-----------------------------------------------------------------
+/**
+ * @param EncriptPass the EncriptPass to set
+ */
+public void setEncriptPass(String EncriptPass)
+{
+this.EncriptPass = EncriptPass;
+}
+//-----------------------------------------------------------------
+protected void EncriptPass(byte[] Buffer, int readed)
+{
+byte[] Pass=EncriptPass.getBytes();    
+for (int i = 0; i < readed; i++)
+    {
+    Buffer[i] = (byte)(Buffer[i] ^ Pass[ i % Pass.length]); 
+    }
+}
+//-----------------------------------------------------------------
+protected void DecriptPass(byte[] Buffer, int readed)
+{
+byte[] Pass=EncriptPass.getBytes();    
+for (int i = 0; i < readed; i++)
+    {
+    Buffer[i] = (byte)(Buffer[i] ^ Pass[ i % Pass.length]); 
+    }
+}
 //-----------------------------------------------------------------
 }

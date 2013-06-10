@@ -20,12 +20,15 @@
 package prodoc;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.StringTokenizer;
+import javax.sql.rowset.serial.SerialBlob;
 
 /**
  *
@@ -59,11 +62,14 @@ private String Driver=null;
  * @param pPassword
  * @param pParam
  */
-protected StoreDDBB(String pServer, String pUser, String pPassword, String pParam)
+protected StoreDDBB(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt)
 {
-super(pServer, pUser, pPassword, pParam);
-setDriver(pParam);
-setTable(pParam);
+super(pServer, pUser, pPassword, pParam, pEncrypt);
+StringTokenizer st = new StringTokenizer(pParam, ";");    
+setDriver(st.nextToken());
+setTable(st.nextToken());
+if (isEncript())
+    setEncriptPass(st.nextToken());
 }
 
 //-----------------------------------------------------------------
@@ -159,7 +165,24 @@ PreparedStatement BlobStmt = con.prepareStatement(SQL);
 BlobStmt.setString(1, Id);
 BlobStmt.setString(2, Ver);
 BlobStmt.setTimestamp(3,  new Timestamp(System.currentTimeMillis()));
-BlobStmt.setBinaryStream(4, Bytes);
+// BlobStmt.setBinaryStream(4, Bytes);
+SerialBlob Bl=null;//  new SerialBlob(Buffer);
+int Tot=0;
+int readed=Bytes.read(Buffer);
+while (readed!=-1)
+    {
+    if (isEncript())
+       EncriptPass(Buffer, readed);
+    if (Bl==null)
+        Bl=new SerialBlob(Buffer);
+    else
+        Bl.setBytes(Tot, Buffer);
+    Tot+=readed;
+    readed=Bytes.read(Buffer);
+    }
+Bl.truncate(Tot);
+Bytes.close();
+BlobStmt.setBlob(4, Bl);
 BlobStmt.execute();
 con.commit();
 con.setAutoCommit(true);
@@ -215,6 +238,45 @@ PDException.GenPDException("Inexistent_content", Id+"/"+Ver);
 return(null);
 }
 //-----------------------------------------------------------------
+/**
+ *
+ * @param Id
+ * @param Ver
+ * @return
+ * @throws PDException
+ */
+protected int Retrieve(String Id, String Ver, OutputStream fo) throws PDException
+{
+VerifyId(Id);
+int Tot=0;
+try {
+String SQL = "SELECT PDCONT FROM "+getTable()+" where PDId='"+Id+"' and PDVersion='"+Ver+"'";
+PreparedStatement BlobStmt = con.prepareStatement(SQL);
+ResultSet resultSet = BlobStmt.executeQuery();
+if (resultSet.next())
+    {
+    InputStream in=resultSet.getBinaryStream(1);
+    int readed=in.read(Buffer);
+    while (readed!=-1)
+        {
+        if (isEncript())
+           DecriptPass(Buffer, readed);
+        fo.write(Buffer, 0, readed);
+        Tot+=readed;
+        readed=in.read(Buffer);
+        }
+    in.close();
+    fo.flush();
+    fo.close();
+    }
+resultSet.close();
+} catch (Exception ex)
+    {
+    PDException.GenPDException("Error_retrieving_content", ex.getLocalizedMessage());
+    }
+return(Tot);
+}
+//-----------------------------------------------------------------
 
 /**
  *
@@ -238,7 +300,8 @@ return Table;
 */
 protected void setTable(String pParam)
 {
-Table =pParam.substring(pParam.lastIndexOf(";")+1);
+// Table =pParam.substring(pParam.lastIndexOf(";")+1);
+Table =pParam;
 }
 //-----------------------------------------------------------------
 /**
@@ -246,7 +309,8 @@ Table =pParam.substring(pParam.lastIndexOf(";")+1);
 */
 protected void setDriver(String pParam)
 {
-Driver =pParam.substring(0, pParam.lastIndexOf(";"));
+// Driver =pParam.substring(0, pParam.lastIndexOf(";"));
+Driver =pParam;
 }
 //-----------------------------------------------------------------
 /**
@@ -270,5 +334,4 @@ stmt. execute(SQL);
     }
 }
 //-----------------------------------------------------------------
-
 }
