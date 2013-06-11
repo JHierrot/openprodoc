@@ -1858,12 +1858,13 @@ for (int i = getTypeDefs().size()-1; i >=0; i--)
     {
     Record TypDef=(Record)getTypeDefs().get(i);
     Record DatParc=(Record)getTypeRecs().get(i);
-    if (i!=getTypeDefs().size()-1)
+    if (i!=getTypeDefs().size()-1) // Base
         {
         DatParc.addAttr(RecTot.getAttr(fPDID));
         }
     DatParc.assign(RecTot);
-    getDrv().UpdateRecord((String)TypDef.getAttr(PDObjDefs.fNAME).getValue(), DatParc,  getConditions());
+    if (DatParc.NumAttr()>1) // PDID alone
+        getDrv().UpdateRecord((String)TypDef.getAttr(PDObjDefs.fNAME).getValue(), DatParc,  getConditions());
     }
 if (PDLog.isDebug())
     PDLog.Debug("PDDocs.updateFragments<");
