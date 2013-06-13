@@ -146,8 +146,9 @@
           <Connection code="MainWin.getFontDialog()" type="code"/>
         </Property>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="1">
+          <StringArray count="2">
             <StringItem index="0" value="Abby"/>
+            <StringItem index="1" value="Kofax"/>
           </StringArray>
         </Property>
       </Properties>

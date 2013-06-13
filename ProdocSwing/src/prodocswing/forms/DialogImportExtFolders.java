@@ -63,7 +63,8 @@ initComponents();
  */
 @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         LabelOperation = new javax.swing.JLabel();
         OrigFormatLabel = new javax.swing.JLabel();
@@ -86,8 +87,10 @@ initComponents();
         setTitle(MainWin.TT("Import_Folders"));
         setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
         setResizable(false);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
+        addWindowListener(new java.awt.event.WindowAdapter()
+        {
+            public void windowClosing(java.awt.event.WindowEvent evt)
+            {
                 formWindowClosing(evt);
             }
         });
@@ -100,7 +103,7 @@ initComponents();
         OrigFormatLabel.setText(MainWin.TT("Origin_System"));
 
         CBOrigFormat.setFont(MainWin.getFontDialog());
-        CBOrigFormat.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Abby" }));
+        CBOrigFormat.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Abby", "Kofax" }));
 
         DeleteAfterImportLab.setFont(MainWin.getFontDialog());
         DeleteAfterImportLab.setText(MainWin.TT("Delete_After_Import"));
@@ -132,24 +135,30 @@ initComponents();
 
         ButtonSelFile.setFont(MainWin.getFontDialog());
         ButtonSelFile.setText("Sel");
-        ButtonSelFile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ButtonSelFile.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ButtonSelFileActionPerformed(evt);
             }
         });
 
         ButtonAcept.setFont(MainWin.getFontDialog());
         ButtonAcept.setText(MainWin.TT("Ok"));
-        ButtonAcept.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ButtonAcept.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ButtonAceptActionPerformed(evt);
             }
         });
 
         ButtonCancel.setFont(MainWin.getFontDialog());
         ButtonCancel.setText(MainWin.TT("Cancel"));
-        ButtonCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ButtonCancel.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ButtonCancelActionPerformed(evt);
             }
         });
