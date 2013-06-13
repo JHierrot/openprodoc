@@ -2405,17 +2405,17 @@ for (int i = 0; i < childNodes.getLength(); i++)
 NewDoc.insert();
 }    
 //-------------------------------------------------------------------------
-    /**
-     *
-     * @param Sess
-     * @param XMLFile
-     * @param ParentFoldId
-     * @param DateFormat
-     * @param TimeStampFormat
-     * @return
-     * @throws PDException
-     */
-    static public File ProcessXMLAbby(DriverGeneric Sess, File XMLFile, String ParentFoldId, String DateFormat, String TimeStampFormat) throws PDException
+/**
+ *
+ * @param Sess
+ * @param XMLFile
+ * @param ParentFoldId
+ * @param DateFormat
+ * @param TimeStampFormat
+ * @return
+ * @throws PDException
+ */
+static public File ProcessXMLAbby(DriverGeneric Sess, File XMLFile, String ParentFoldId, String DateFormat, String TimeStampFormat) throws PDException
 {
 try {    
 File ImageFile=null;
@@ -2485,6 +2485,75 @@ return(ImageFile);
     PDLog.Error(ex.getLocalizedMessage());
     throw new PDException(ex.getLocalizedMessage());
     }
+}
+//-------------------------------------------------------------------------
+/**
+ *
+ * @param Sess
+ * @param TxtFile
+ * @param ParentFoldId
+ * @param DateFormat
+ * @param TimeStampFormat
+ * @return
+ * @throws PDException
+ */
+public static File ProcessXMLKofax(DriverGeneric Sess, File TxtFile, String ParentFoldId, String DateFormat, String TimeStampFormat)  throws PDException
+{
+try {    
+File ImageFile=null;
+BufferedReader Metadata = new BufferedReader(new FileReader(TxtFile));
+String DocMeta=Metadata.readLine();
+while (DocMeta!=null &&DocMeta.length()!=0)
+    {
+    String[] ListElem=DocMeta.split("\"");
+    PDDocs Doc=new PDDocs(Sess, ListElem[3]);
+    ImageFile=new File(ListElem[ListElem.length-1]);
+    Doc.setFile(ImageFile.getAbsolutePath());
+    Doc.setParentId(ParentFoldId);
+    Record Rec=Doc.getRecSum();
+    for (int i = 5; i < ListElem.length-1; i+=4)
+        {
+        String NameAttr=ListElem[i];
+        String Val=ListElem[i+2];
+        if (Rec.ContainsAttr(NameAttr))
+            {
+            int Type=Rec.getAttr(NameAttr).getType();    
+            if (Type==Attribute.tDATE)  
+                {
+                SimpleDateFormat formatterDate = new SimpleDateFormat(DateFormat);
+                Rec.getAttr(NameAttr).setValue(formatterDate.parse(Val));
+                }
+            else if (Type==Attribute.tTIMESTAMP) 
+                {
+                SimpleDateFormat formatterTS = new SimpleDateFormat(TimeStampFormat);
+                Rec.getAttr(NameAttr).setValue(formatterTS.parse(Val));
+                }
+            else
+                Rec.getAttr(NameAttr).Import(Val);
+            }
+        }
+    Doc.assignValues(Rec);
+    if (Doc.getTitle()==null)
+       Doc.setTitle(ListElem[ListElem.length-1].substring(ListElem[ListElem.length-1].lastIndexOf(File.separatorChar)));
+    Doc.insert();
+    DocMeta=Metadata.readLine();
+    }
+return(ImageFile);
+}catch(Exception ex)
+    {
+    PDLog.Error(ex.getLocalizedMessage());
+    throw new PDException(ex.getLocalizedMessage());
+    }
+/**
+ 0- "BackOfficeMejico"
+ 1- ,
+ 2- "RegisFirma"
+ 3 ,
+ 4 "BUC"
+ 5 ,
+ 6 "55139555","Cuenta","60-55139555-9","FechaR","12/06/2013","c:\CaptureSV\Export\BackOfficeMejico\RegisFirma\112\00000070.TIF"
+ * **/
+
 }
 //-------------------------------------------------------------------------
 }

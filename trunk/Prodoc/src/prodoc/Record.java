@@ -160,7 +160,7 @@ Attribute Attrdel;
 for (int i = 0; i < VAttr.size(); i++)
     {
     Attrdel = (Attribute)VAttr.get(i);
-    if (Attrdel.getName().equals(NameAttr))
+    if (Attrdel.getName().equalsIgnoreCase(NameAttr))
         return(true);
     }
 return(false);

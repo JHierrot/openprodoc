@@ -2110,19 +2110,27 @@ for (int i = 0; i < ListOrigin.length; i++)
         DirList.add(ListElement);
         continue;
         }
-    if (ListElement.getName().endsWith(".xml"))
+    if (ListElement.getName().toLowerCase().endsWith(".xml") && Format.equals("Abby"))
         {       
         ExpDocs++;
-        if (Format.equals("Abby"))
-            ImageFile=PDDocs.ProcessXMLAbby(getSession(), ListElement, NewFold.getPDId(), DateFormat, TimeStampFormat); 
-//        else
-//            kofax
+        ImageFile=PDDocs.ProcessXMLAbby(getSession(), ListElement, NewFold.getPDId(), DateFormat, TimeStampFormat); 
         if (DeleteAfter)
             {
             if (ImageFile!=null)    
                 ImageFile.delete();
             ListElement.delete();
             }
+        }
+    else if (ListElement.getName().toLowerCase().endsWith(".txt") && Format.equals("Kofax"))
+        {
+        ExpDocs++;
+        ImageFile=PDDocs.ProcessXMLKofax(getSession(), ListElement, NewFold.getPDId(), DateFormat, TimeStampFormat); 
+        if (DeleteAfter)
+            {
+            if (ImageFile!=null)    
+                ImageFile.delete();
+            ListElement.delete();
+            }        
         }
     }
 ListOrigin=null; // to help gc and save memory during recursivity
