@@ -438,7 +438,7 @@ if (UpProgram)
     F.setExecutable(true);
     F=new File("Prodoc0.8.jar");
     F.renameTo(new File("lib/Prodoc.jar"));
-    F.li
+    // TODO Delete .del temporary files
     }
 sleep(60);
 Act.setFinished(true);
