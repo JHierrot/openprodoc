@@ -194,9 +194,9 @@ protected void AlterTableAdd(String TableName, Attribute NewAttr, boolean IsVer)
 if (PDLog.isInfo())
     PDLog.Info("DriverJDBC.AlterTable>:"+TableName);
 String SQL="ALTER TABLE "+TableName+" ADD "+NewAttr.getName()+GetType(NewAttr);
-ExecuteSql(SQL);
 if (!IsVer && NewAttr.isUnique())
-    SQL+=" CONSTRAINT "+TableName+new Random().nextInt(9999)+" UNIQUE("+NewAttr.getName()+"), ";
+    SQL+=" CONSTRAINT "+TableName+new Random().nextInt(9999)+" UNIQUE("+NewAttr.getName()+") ";
+ExecuteSql(SQL);
 if (NewAttr.getType()==Attribute.tTHES)
     AddIntegrity(TableName, NewAttr.getName(), PDThesaur.getTableName(), PDThesaur.fPDID);
 if (PDLog.isInfo())
@@ -465,7 +465,7 @@ return("'"+ formatterTS.format(Fec)+"'");
  * @param Val
  * @return
  */
-protected String toString(String Val)
+static protected String toString(String Val)
 {
 return("'"+Val.replace("'", "·")+"'");
 }
@@ -475,7 +475,7 @@ return("'"+Val.replace("'", "·")+"'");
  * @param Val
  * @return
  */
-protected String toBooleanString(Boolean Val)
+static protected String toBooleanString(Boolean Val)
 {
 if (Val.booleanValue())
     return("1");
@@ -799,22 +799,43 @@ else if (Search.getOrderList()!=null)
 return(SQL);
 }
 //-----------------------------------------------------------------------------------
-private static String GetType(Attribute A)
+private String GetType(Attribute NewAttr)
 {
 String SQL;
-if (A.getType()==Attribute.tINTEGER)
+if (NewAttr.getType()==Attribute.tINTEGER)
     SQL=" INTEGER ";
-else if (A.getType()==Attribute.tBOOLEAN)
+else if (NewAttr.getType()==Attribute.tBOOLEAN)
     SQL=" SMALLINT ";
-else if (A.getType()==Attribute.tDATE)
+else if (NewAttr.getType()==Attribute.tDATE)
     SQL=" CHAR(8) ";//        SQL+=" DATE ";
-else if (A.getType()==Attribute.tTIMESTAMP)
+else if (NewAttr.getType()==Attribute.tTIMESTAMP)
     SQL=" CHAR(14) "; // SQL+=" TIMESTAMP ";
-else if (A.getType()==Attribute.tTHES)
+else if (NewAttr.getType()==Attribute.tTHES)
     SQL=" VARCHAR(32) ";
 else 
-    SQL=" VARCHAR("+ A.getLongStr()+") ";
-if (A.isRequired())
+    SQL=" VARCHAR("+ NewAttr.getLongStr()+") ";
+if (NewAttr.getValue()!=null)
+    {
+    SQL+=" DEFAULT ";
+    if (NewAttr.getType()==Attribute.tSTRING)
+        SQL+=toString((String)NewAttr.getValue());
+    else if (NewAttr.getType()==Attribute.tTHES)
+        {
+        if (NewAttr.getValue()==null || ((String)NewAttr.getValue()).length()==0)
+            SQL+="Null";
+        else
+            SQL+=toString((String)NewAttr.getValue());
+        }
+    else if (NewAttr.getType()==Attribute.tDATE)
+        SQL+=toDate((Date)NewAttr.getValue());
+    else if (NewAttr.getType()==Attribute.tTIMESTAMP)
+        SQL+=toTimeStamp((Date)NewAttr.getValue());
+    else if (NewAttr.getType()==Attribute.tBOOLEAN)
+        SQL+=toBooleanString((Boolean)NewAttr.getValue());
+    else
+        SQL+=NewAttr.getValue();
+    }
+if (NewAttr.isRequired())
     SQL+=" NOT NULL ";
 return(SQL);    
 }

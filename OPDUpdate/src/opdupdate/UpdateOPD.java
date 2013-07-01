@@ -74,8 +74,6 @@ setLocationRelativeTo(null);
         AttrTab = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         UpMetadataCB = new javax.swing.JCheckBox();
-        jLabel8 = new javax.swing.JLabel();
-        UpProgramCB = new javax.swing.JCheckBox();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         EvolTab = new javax.swing.JPanel();
@@ -95,23 +93,17 @@ setLocationRelativeTo(null);
         AttrTab.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel2.setText(TT("Update_Metadata_Structure"));
+        jLabel2.setText(TT("Incremental_Update_Metadata_Structure"));
 
         UpMetadataCB.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         UpMetadataCB.setToolTipText("Boolean value, when checked, the documents in the repository will be encrypted");
-
-        jLabel8.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel8.setText(TT("Update_Program"));
-
-        UpProgramCB.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        UpProgramCB.setToolTipText("Boolean value, when checked, the documents in the repository will be encrypted");
 
         jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
         jTextArea1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
-        jTextArea1.setText("- Before any update VERIFY that your BACKUPS are CORRECT and  UPDATED.\n- Any previous inconsistence or error during update can produce UNRECOVERABLE DATA LOST.\n-All the USERS MUST BE DISCONNECTED during update.\n\n- Antes de actualizar VERIFIQUE que sus COPIAS de SEGURIDAD están ACTUALIZADAS y son CORRECTAS.\n\n- Cualquier inconsistencia previa o error durante la actualización podría producir PERDIDA IRRECUPERABLE de DATOS.");
+        jTextArea1.setText("\n- Before any update VERIFY that your BACKUPS are CORRECT and  UPDATED.\n- Any previous inconsistence or error during update can produce UNRECOVERABLE DATA LOST.\n-All the USERS MUST BE DISCONNECTED during update.\n\n- Antes de actualizar VERIFIQUE que sus COPIAS de SEGURIDAD están ACTUALIZADAS y son CORRECTAS.\n- Cualquier inconsistencia previa o error durante la actualización podría producir PERDIDA IRRECUPERABLE de DATOS.\n-Todos los USUARIOS deben estar DEESCONECTADOS durante la actualización.\n");
         jTextArea1.setWrapStyleWord(true);
         jScrollPane2.setViewportView(jTextArea1);
 
@@ -123,15 +115,9 @@ setLocationRelativeTo(null);
                 .addContainerGap()
                 .addGroup(AttrTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(AttrTabLayout.createSequentialGroup()
-                        .addGroup(AttrTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(AttrTabLayout.createSequentialGroup()
-                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(8, 8, 8)
-                                .addComponent(UpProgramCB))
-                            .addGroup(AttrTabLayout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(8, 8, 8)
-                                .addComponent(UpMetadataCB)))
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(8, 8, 8)
+                        .addComponent(UpMetadataCB)
                         .addGap(0, 270, Short.MAX_VALUE))
                     .addComponent(jScrollPane2))
                 .addContainerGap())
@@ -143,12 +129,8 @@ setLocationRelativeTo(null);
                 .addGroup(AttrTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(UpMetadataCB))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(AttrTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(UpProgramCB))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -257,7 +239,6 @@ CreateMetadataStructure();
     CancelButton.setEnabled(true);
     return;
     }
-System.exit(0);
     }//GEN-LAST:event_AcceptButtonActionPerformed
 
 /**
@@ -282,10 +263,8 @@ java.awt.EventQueue.invokeLater(new Runnable()
     private javax.swing.JButton CancelButton;
     private javax.swing.JPanel EvolTab;
     private javax.swing.JCheckBox UpMetadataCB;
-    private javax.swing.JCheckBox UpProgramCB;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JList jList1;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -370,13 +349,12 @@ jProgressBar1.setMaximum(35);
 AcceptButton.setEnabled(false);
 CancelButton.setEnabled(false);
 repaint();
-boolean UpProgram=UpProgramCB.isSelected();
 boolean UpMetadata=UpMetadataCB.isSelected();
 Act=new ActThread();
 Act.SetParam(Trace, getListModel(), jProgressBar1, jList1);
 Act.start();
 ActInst ActI=new ActInst();
-ActI.SetParam(UpMetadata, UpProgram, Trace, this);
+ActI.SetParam(UpMetadata, Trace, this);
 ActI.start();
 }
 //--------------------------------------------------------------
@@ -392,54 +370,26 @@ return LM;
  */
 public class ActInst extends Thread
 {
-boolean UpMetadata;
-boolean UpProgram;
+boolean UpMetadataInc;
 Vector Trace;
 UpdateOPD Form;
-public void SetParam(boolean pUpMetadata, boolean pUpProgram, Vector pTrace, UpdateOPD pForm)
+public void SetParam(boolean pUpMetaInc, Vector pTrace, UpdateOPD pForm)
 {
-UpMetadata=pUpMetadata;
-UpProgram=pUpProgram;
+UpMetadataInc=pUpMetaInc;
 Trace=pTrace;
 Form=pForm;
 }
 //------------------------------------
+ @Override
 public void run()
 {
 DriverGeneric Sesion=null;
 try {
-if (UpMetadata)
-    {
-    ProdocFW.InitProdoc("PD", "Prodoc.properties");
-    Sesion=ProdocFW.getSession("PD", "Install", "Install");
-    Sesion.Update( Trace);
-    ProdocFW.freeSesion("PD", Sesion);
-    ProdocFW.ShutdownProdoc("PD");
-    }
-if (UpProgram)
-    {
-    File F=new File("Prodoc.sh");
-    if (F.exists())
-        F.renameTo(new File("Prodoc.sh."+(new Random()).nextInt()+".del"));
-    F=new File("Prodoc.bat");
-    if (F.exists())
-        F.renameTo(new File("Prodoc.bat."+(new Random()).nextInt()+".del"));
-    F=new File("Prodoc0.8.sh");
-    F.renameTo(new File("Prodoc.sh"));
-    F.setExecutable(true);
-    F=new File("Prodoc0.8.bat");
-    F.renameTo(new File("Prodoc.bat"));
-    F=new File("ProdocSwing.jar");
-    F.renameTo(new File("ProdocSwing.jar."+(new Random()).nextInt()+".del"));    
-    F=new File("lib/Prodoc.jar");
-    F.renameTo(new File("Prodoc.jar."+(new Random()).nextInt()+".del"));    
-    F=new File("ProdocSwing0.8.jar");
-    F.renameTo(new File("ProdocSwing.jar"));
-    F.setExecutable(true);
-    F=new File("Prodoc0.8.jar");
-    F.renameTo(new File("lib/Prodoc.jar"));
-    // TODO Delete .del temporary files
-    }
+ProdocFW.InitProdoc("PD", "Prodoc.properties");
+Sesion=ProdocFW.getSession("PD", "Install", "Install");
+Sesion.Update(UpMetadataInc, Trace);
+ProdocFW.freeSesion("PD", Sesion);
+ProdocFW.ShutdownProdoc("PD");
 sleep(60);
 Act.setFinished(true);
 Message(TT("OpenProdoc_Server_Updated_correctly"));

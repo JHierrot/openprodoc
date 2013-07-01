@@ -2545,9 +2545,10 @@ return(ImageFile);
     throw new PDException(ex.getLocalizedMessage());
     }
 /**
- 0- "BackOfficeMejico"
- 1- ,
- 2- "RegisFirma"
+ 0- "" 
+ 1- "BackOfficeMejico"
+ 2- ","
+ 3- "RegisFirma"
  3 ,
  4 "BUC"
  5 ,
