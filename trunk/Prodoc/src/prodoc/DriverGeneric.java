@@ -368,7 +368,7 @@ Trace.add("Message relations created");
 PDThesaur.InstallMulti(this);
 Trace.add("Thesaur relations created");
 //--- insertion of objects ----
-this.IniciarTrans();
+this.IniciarTrans(); 
 //----- Servidor ---------
 Se.setName("Prodoc");
 Se.setKey(Encode(MainKey));
@@ -531,8 +531,114 @@ Trace.add("Document elements created");
 File FileImp=new File("ex/defs.opd");
 ProcessXML(FileImp, PDFolders.ROOTFOLDER);
 TE.CreateRootThesaur();
+//----------------------
 this.CerrarTrans();
+
 Trace.add("Installation finished");
+}
+//--------------------------------------------------------------------------
+public void Update(boolean UpMetadataInc, Vector Trace)  throws PDException
+{
+PDServer Serv=new PDServer(this);
+Serv.Load("Prodoc");
+if (Serv.getVersion().equalsIgnoreCase("0.8"))
+    {
+    Trace.add("NO Update possible. Already 0.8 version");    
+    return;
+    }
+Trace.add("Update started");    
+if (Serv.getVersion().equalsIgnoreCase("0.7"))
+    {
+    PDThesaur TE=new PDThesaur(this);
+    try {
+    TE.Install();
+    Trace.add("Thesaur Table created");
+    } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
+    try {
+    PDThesaur.InstallMulti(this);
+    Trace.add("Thesaur relations created");
+    } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
+    try {
+    TE.CreateRootThesaur();
+    Trace.add("Root Term created");
+    } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
+    PDRoles Rup=new PDRoles(this);
+    Attribute Attr1=Rup.getRecordStruct().getAttr(PDRoles.fALLOWCREATETHESAUR).Copy();
+    Attr1.setValue(false);
+    try {
+    AlterTableAdd(PDRoles.getTableName(), Attr1, false);
+    Trace.add(PDRoles.fALLOWCREATETHESAUR+"created");
+    } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
+    Attribute Attr2=Rup.getRecordStruct().getAttr(PDRoles.fALLOWMAINTAINTHESAUR).Copy();
+    try {
+    Attr2.setValue(false);
+    AlterTableAdd(PDRoles.getTableName(), Attr2, false);
+    Trace.add(PDRoles.fALLOWMAINTAINTHESAUR+"created");
+    } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
+    try {
+    Record NewAdmvals=new Record();
+    Attr1.setValue(true);
+    NewAdmvals.addAttr(Attr1);
+    Attr2.setValue(true);
+    NewAdmvals.addAttr(Attr2);
+    Conditions AdmRole=new Conditions();
+    AdmRole.addCondition(new Condition(Rup.fNAME, Condition.cEQUAL, "Administrators"));
+    UpdateRecord(Rup.getTabName(), NewAdmvals, AdmRole);    
+    } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
+    try {
+    Record RecServ=new Record();    
+    Attribute RV=Serv.getRecord().getAttr(PDServer.fVERSION).Copy();
+    RV.setValue("0.8");
+    RecServ.addAttr(RV);
+    Conditions ServDef=new Conditions();
+    ServDef.addCondition(new Condition(Serv.fNAME, Condition.cEQUAL, "Prodoc"));
+    UpdateRecord(Serv.getTabName(), RecServ, ServDef);    
+    } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
+    Trace.add("Updated to 0.8");
+    }
+Trace.add("Update finished");
 }
 //--------------------------------------------------------------------------
 /**
