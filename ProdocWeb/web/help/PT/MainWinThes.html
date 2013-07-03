@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Ventana Principal Tesauros OpenProdoc</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management, Thesaurus"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+<H4>Ventana Principal Tesauros OpenProdoc</H4><hr>
+<p>La ventana de tesauros de OpenProdoc tiene 2 zonas principales:</p>
+<ul>
+    <li>El árbol de tesauros y términos a la izquierda</li>
+    <li>Zona principal a la derecha</li>
+</ul>
+<p>El árbol nos permite navegar por las distintas estructuras de información que componen el repositorio. A partir de una rama principal (<b>OPD_Thesaurus</b>) se puede abrir los distintos tesauros contenidos en el sistema, representados como elementos directamente por debajo de la rama principal. 
+    Los siguientes niveles por debajo de los tesauros son los términos de cada tesauro.</p>
+<p> Cada término contendrá los términos específicos (NT) representados como elementos contenidos en él. No se utilizan microtesauros pues siempre puede acotarse las búsquedas al conjunto de términos específicos (y así sucesivamente) del término actual.</p>
+<p>Debe tenerse en cuenta que OpenProdoc no inclue soporte de polijerarquía, por lo que cad término solo contiene un térmio genérico (BT). La representación en árbol es por tanto fidedigna</p>
+<p>El arbol de tesauros presenta iconos junto al nombre del término o tesauro el siguiente significado:</p>
+<ul>
+    <li>Icono con Interrogación <b>?</b>: Indica que aún no se ha explorado ese término. Al pulsar sobre él se consultará al repositorio y se expandirá la rama con los elementos contenidas en ella. Por defecto loss términos y tesauros se presentan en ese estado.</li>
+    <li>Icono con mas <b>+</b>: Indica que ya se ha explorado el elemento pero que está replegado. Pulsando en el icono se expandirá la rama con los términos tal como estaban antes de replegarse.</li>
+    <li>Icono con menos <b>-</b>: Indica que ya se ha explorado la rama y que está expandida y muestra elementos contenidos en ella. Pulsando en el icono se replegará la rama con todos los términos.</li>
+    <li>Icono con punto <b>.</b> o blanco: Indica que el término no tiene términos específicos.</li>
+</ul>
+<p>En el caso del cliente Swing, la apariencia es ligeramente diferente, pero el comportamiento es básicamente el mismo.</p>
+<p>Cuando se navega por el arbol de tesauros, la zona derecha contendrá a su vez dos zonas:</p>
+<ul>
+    <li>El detalle del término o tesauro actual, con todos los metadatos del mismo</li>
+    <li>La lista de términos con distintos tipos de relaciones con el término actual.</li>
+    <li>
+        <ul>
+        <li>Términos relacionados (RT)</li>
+        <li>Traducción del término en otros idiomas, es decir términos equivalentes en otros idiomas</li>
+        <li>Formas alternativas del término (UF), de los cuales el término acutal es la forma recomendada</li>
+        <li>Términos específicos (NT)</li>
+        </ul>
+    </li>
+</ul>
+<p>Siempre que se selecciona un término o tesauro pulsando sobre su nombre en el árbol, se convierten en el "tesauro actual" o el "término actual". Todas las operaciones se realizan sobre el elemento actual, por tanto, al elegir por ejemplo Término->Borrar, se borrará el término actual, y al elegir Tesauro->Modificar, se modifica el tesauro actual.</p>
+<p>En la parte superior se dispone de unos menús desplegables para realizar operaciones sobre el tesauro actual o sobre el t actual, así como otra serie de opciones. Al elegir una opción del menú, en el cliente Web aparecerá un formulario para realizar la operación en la zona derecha de la pantalla. En el caso de los clientes Swing, aparecerá una ventana emergente para realizar la operación.</p>
+<p style="text-align:center;"><img alt="Copia de pantalla MainWinThes" src="img/MainWinThes.jpg"/></p>
+<p>En la versión de cliente Swing, esa tabla de términos puede ordenarse seleccionando la cabecera de cada columna. Puede también cambiarse el tamaño de cada columna arrastrando la línea separadora de las cabeceras</p>
+
+<hr>
+<a href="ThesIndex.html">Índice Ayuda Tesauros</a>
+    </body>
+</html>
