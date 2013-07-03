@@ -105,7 +105,6 @@ initComponents();
         NameLabel.setText(MainWin.TT("Thesaurus_Name"));
 
         NameText.setFont(MainWin.getFontDialog());
-        NameText.setText("Unesco");
         NameText.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -118,7 +117,6 @@ initComponents();
         RootLabel.setText(MainWin.TT("Root_Text"));
 
         RootText.setFont(MainWin.getFontDialog());
-        RootText.setText("http://skos.um.es/unescothes/");
         RootText.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -131,21 +129,19 @@ initComponents();
         LangLabel.setText(MainWin.TT("Main_Language"));
 
         MainLangText.setFont(MainWin.getFontDialog());
-        MainLangText.setText("EN");
 
         FilePathLabel.setFont(MainWin.getFontDialog());
         FilePathLabel.setText(MainWin.TT("Import_Doc"));
 
         FilePathTextField.setFont(MainWin.getFontDialog());
-        FilePathTextField.setText("/home/jhierrot/OPD/Varios/rdf/unescothes.rdf");
 
         SubThesLabel.setFont(MainWin.getFontDialog());
         SubThesLabel.setText(MainWin.TT("Create_SubThes_by_Lang"));
 
-        SubThesCB.setSelected(true);
-
         TransactLabel.setFont(MainWin.getFontDialog());
         TransactLabel.setText(MainWin.TT("Transactional_Import"));
+
+        TransactCB.setSelected(true);
 
         ButtonSelFile.setFont(MainWin.getFontDialog());
         ButtonSelFile.setText("Sel");
@@ -178,7 +174,6 @@ initComponents();
         });
 
         ThesNumText.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("########0"))));
-        ThesNumText.setText("99");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
