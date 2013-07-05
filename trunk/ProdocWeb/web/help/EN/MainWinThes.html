@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Thesaurus Main Window OpenProdoc</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management, Thesaurus"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+<H4>Thesaurus Main Window OpenProdoc</H4><hr>
+<p>The main window OpenProdoc thesaurus has two areas:</p>
+<ul>
+    <li>The thesarus and terms tree on the left</li>
+    <li>The information area on the right</li>
+</ul>
+<p>The tree allows to browse the different information structures in the repository. Starting in the main branch (<b>OPD_Thesaurus</b>) it's possible to open the different thesaurus of the repository, showed as branches under the main branch. 
+    The next levels under the thesaurus are the terms of each thesaurus.</p>
+<p>Each term will show the narrow terms (NT) as elements under its branch. Microthesaurus are not used because it's possible to browse all the elements as a tree and also it's possible to do a search restricted to all the terms under the current term.</p>
+<p>It should be noted that OpenProdoc do not support polihierarchy, so each term only references one broad term (BT). The tree representation is therefore completely accurate</p>
+<p>The terms tree shows a structure with icons next to the term name that has the following meaning: </p>
+<ul>
+    <li>Icon with Question Mark <b>?</b>: Indicates that have not been explored that term. Clicking on it will consult the repository and expand the branch with the terms in it. By default terms are present in that state.</li>
+    <li>Icon with plus sign <b>+</b>: Indicates that has already been explored but it is a collapsed branch. Clicking the icon will expand the branch with the terms as they were before collapsing.</li>
+    <li>Icon with a minus sign <b> - </b>: Indicates that has already been explored and that the branch is expanded and shows items in it. Clicking the icon will collapse the branch with all subterms.</li>
+    <li>Dot Icon <b>.</b> or white: Indicates that the element has no narrow terms under it.</li>
+</ul>
+<p>For Swing client, the appearance is slightly different, but the behavior is basically the same.</p>
+<p>When browsing terms, the right side in turn contains two zones:</p>
+<ul>
+    <li>Details of the current thesaurus or term, with all metadata of the element.</li>
+    <li>List of term with different relations to the current term.</li>
+    <li>
+        <ul>
+        <li>related Terms (RT)</li>
+        <li>Translation of the term in other languages. That is, terms equivalent to the current term in other languages.</li>
+        <li>Alternative labels or Terms for the current term (UF). That is, terms for which the current term is the recommended form.</li>
+        <li>Narrow Terms (NT)</li>
+        </ul>
+    </li>
+</ul>
+<p>Whenever you select a thesaurus or term by clicking on its name in the tree, it becomes the "current thesaurus" or "current Term". All operations are performed on the current element, therefore, choosing Terms->Modify, will modify the current Term, and choose Thesaurus->Delete, will delete the current thesarus.</p>
+<p> Upper part has some drop down menus to perform operations on the current term or the current thesaurus as well as another set of options. When choosing a menu option, the Web client displays a form to perform the operation on the right side of the screen. Swing clients will display a popup window to perform the operation.</p>
+<p style="text-align:center;"><img alt="Screenshot MainWinThes" src="img/MainWinThes.jpg"/></p>
+<p> In the Swing client, this table can be sorted by selecting the header of each column. You can also change the size of each column by dragging the separator line headers </p>
+<hr>
+<a href="ThesIndex.html">Help Index Thesaurus</a>
+    </body>
+</html>
