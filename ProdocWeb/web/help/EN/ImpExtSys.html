@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Import from external systems</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management, Kofax Capture, Abbyy FineReader"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+<H4>Exportar e Importar Carpetas</H4>
+<hr>
+<p>This option can be used to import documents scanned and clasified in:</p>
+<ul>
+    <li>Kofax Capture</li>
+    <li>Abbyy FineReader</li>
+</ul>
+<p>The documents are to be stored in a folder structure along with its metadata and classification in their respective standard format (XML for Abbyy and csv-txtfor Kofax).
+Each folder in the file system will be created as a folder OpenProdoc, under the current folder. Documents are created according to the document type shown in the file metadata.</p>
+<p> The possible options and their effects are:</p>
+<ul>
+    <li><b>Source System</b>: Currrently, you can select Kofax Capture and Abbyy FineReader.</li>
+    <li><b>Delete after Import</b>: When checked, after the import process, all the original documents and metadata will be deleted. It is advisable to keep a copy in advance, at least until you perform your periodical OpenProdoc backup , especially if the number of documents to import is great.</li>
+    <li><b>Folder Type</b>: Openprodoc folder type to be assigned to each of the file system folders imported. The folder type must not have required metadata, as initially will be empty.</li>
+    <li><b>Date Format</b>: The date format with which you have saved the document metadata.</li>
+    <li><b>TimeStamp Format</b>: The TimeStamp format with which you have saved the document metadata.</li>
+    <li><b>Folder to be imported</b>: Indicates the file system folder from which you import the folder structure and documents.</li>
+</ul>
+<p style="text-align:center;"><img alt="Screenshot ImportExt" src="img/ImportExt.jpg"/></p>
+<p>After the Import, OPD shall summarize the number of folders containing imported documents number. If an error occurs, it will display a message with the reason for the error.</p>
+<p>At the time of import, must exist the definitions:</p>
+<ul>
+    <li><b>Folder and Document types</b>: Although not necessarily be identical, must contain at least the same metadata.</li>
+    <li><b>Mime Types</b>: Similarly must exist but does not have to match exactly the definition.</li>
+</ul>
+<hr>
+<a href="HelpIndex.html">Help Index OpenProdoc</a>
+    </body>
+</html>
