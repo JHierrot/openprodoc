@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Importar de sistemas externos</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management, Kofax Capture, Abbyy FineReader"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+<H4>Importar de sistemas externos</H4>
+<hr>
+<p>Esta opción puede utilizarse para importar documentos digitalizados, clasificados y catalogados con alguno de los sistemas siguientes:</p>
+<ul>
+    <li>Kofax Capture</li>
+    <li>Abbyy FineReader</li>
+</ul>
+<p>Los documentos se habrán almacenado en una estructura de carpetas junto con sus metadatos y clasificación con el formato estandar respectivo (XML en el caso de Abbyy y csv-txt en Kofax).
+Cada carpeta del sistema de archivos se creará como una carpeta OpenProdoc, por debajo de la carpeta actual. Los documentos se crearán de acuerdo al tipo documental indicado en el fichero de metadatos. Las opciones posibles y sus efectos son:</p>
+<ul>
+    <li><b>Sistema origen</b>: Acutlamete puede elegirse Kofax Capture y Abbyy FineReader.</li>
+    <li><b>Borrar tras importar</b>: Si se selecciona esta opción, tras finalizar la importación se borrará los documentos originales. Es recomendable guardar previamente una copia, al menos hasta que se realice la copia de seguridad periódica de OpenProdoc, especialmente si el número de documentos a importar es grande.</li>
+    <li><b>Tipo de carpeta</b>: Tipo de carpeta Openprodoc que se asignará a cada una de las carpetas del sistema de archivos importadas. El tipo de carpeta no debe tener metadatos obligatorios, pues inicialmente estarán vacios.</li>
+    <li><b>Formato de fecha</b>: El formato de fecha con el que se ha guardado los metadatos de los documentos.</li>
+    <li><b>Formato de fecha-hora</b>: El formato de fecha-hora con el que se ha guardado los metadatos de los documentos.</li>
+    <li><b>La carpeta Origen</b> Indica la carpeta del sistema de archivos a partir de la cual se recorrerá la estructura de carpetas y documentos.</li>
+</ul>
+<p style="text-align:center;"><img alt="Screenshot ImportExt" src="img/ImportExt.jpg"/></p>
+<p>Al finalizar la Importación, OPD presentará un resumen conteniendo el número de carpetas importadas y el número de documentos. Si se produce un error se presentará un mensaje con el motivo del error.</p>
+<p>En el momento de importar deben existir las definiciones de:</p>
+<ul>
+    <li><b>Tipos documentales y tipos de carpeta</b>: Aunque no necesariamente debe ser idénticos, debe contener, al menos, los mismos metadatos.</li>
+    <li><b>Tipo Mime</b>: Similarmente debe existir aunque no tiene porqué coincidir exactamente la definición.</li>
+</ul>
+<hr>
+<a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>
+    </body>
+</html>

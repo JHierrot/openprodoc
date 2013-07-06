@@ -11,7 +11,7 @@
 <H4>Mantenimiento Definiciones de Objetos</H4><hr>
 <p>Al seleccionar en el formulario de <a href="ListObjDef.html">Lista Definiciones de Objetos</a> las opciones de Alta, Baja, Modificación o Copia de Tipos de objetos aparecerá este formulario con diversos campos activados o desactivados.</p>
 <p>La información está estructurada en 3 solapas. La primera contiene la definición del tipo documental, la segunda los metadatos que se asignan a este tipo, y la tercera los metadatos que este tipo hereda de todos los antecesores.  Los metadatos totales son la suma de los específicos del tipo y de los heredados. A su vez, estos metadatos totales se transmitirán a los tipos documentales descendientes del actual.</p>
-<p>La definición del tipo consta de varias etapas. Primero deberá crearse la definición base, posteriormente puede añadirse metadatos (en la segunda solapa), y por último, una vez confirmada la definición podrá crearse el tipo en el repositorio (por medio del botón crear)para almacenar documentos de ese tipo.</p>
+<p>La definición del tipo consta de varias etapas. Primero deberá crearse la definición base, posteriormente puede añadirse metadatos (en la segunda solapa), y por último, una vez confirmada la definición podrá crearse el tipo en el repositorio (por medio del botón crear) para almacenar documentos de ese tipo.</p>
 <p>Este formulario contiene la información:</p>
 <ul>
     <li><b>Nombre identificativo</b>: Identificador del Tipo de objeto cuyo valor no puede repetirse ni cambiar una vez asignado. Puede tener una longitud máxima de 32 caracteres. (Ej. "Testamentos")</li>
@@ -24,7 +24,9 @@
     <li>Indicadores booleanos de si debe trazarse las operaciones de alta, baja, modificación y consulta</li>    
 </ul>
 <p style="text-align:center;"><img alt="Copia de pantalla MantObjDef.jpg" src="img/MantObjDef.jpg"/></p>
-<p>Para mantener la definición de un tipo documental, en la segunda solapa puede añadirse, eliminarse o modificarse la definición de los metadatos en <a href="MantAttr.html">Mantenimiento de Metadatos</a>. Una vez creado el tipo diocumental en el repositorio, NO es posible actualmente modificar la definición. </p>
+<p>Para mantener la definición de un tipo documental, en la segunda solapa puede añadirse, eliminarse o modificarse la definición de los metadatos en <a href="MantAttr.html">Mantenimiento de Metadatos</a>. 
+Una vez creado el tipo documental en el repositorio, a partir de la version OpenProdioc v 0.8 SI es posible añadir o borrar metadatos (no modificarlos). Por medio de los 2 botones situados en la parte superior derecha de la lista de atributos, puede añadirse un nuevo atributo o borrarse uno existente.
+Debe tenerse en cuenta que es una operación que no puede deshacerse y que afecta a documentos ya almacenados, por lo que debe disponerse siempre de una copia de seguridad actualizada. hay que destacar que no puede crearse nuevos metadatos con claves únicas o requeridos, pues no tendrían un valor informado </p>
 <p style="text-align:center;"><img alt="Copia de pantalla MantObjDef2.jpg" src="img/MantObjDef2.jpg"/></p>
 <p>Ver: <a href="ListObjDef.html">Lista Definiciones de Objetos</a></p>
 <hr>
