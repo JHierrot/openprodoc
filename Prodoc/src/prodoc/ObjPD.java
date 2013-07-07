@@ -441,8 +441,8 @@ static private synchronized Record CreateRecordStructCommon() throws PDException
 if (CommonStruct==null)
     {
     Record R=new Record();
-    R.addAttr( new Attribute(fPDAUTOR, "Autor", "Nombre Usuario Autor", Attribute.tSTRING, true, null, 32, false, false, false ));
-    R.addAttr( new Attribute(fPDDATE, "Fecha", "Fecha de inserción en en gestor", Attribute.tTIMESTAMP, true, null, 0, false, false, false));
+    R.addAttr( new Attribute(fPDAUTOR, "Author", "Name_of_Author", Attribute.tSTRING, true, null, 32, false, false, false ));
+    R.addAttr( new Attribute(fPDDATE, "Date", "Date_of_update_in_repository", Attribute.tTIMESTAMP, true, null, 0, false, false, false));
     return(R);
     }
 else
