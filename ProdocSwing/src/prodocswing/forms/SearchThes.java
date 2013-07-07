@@ -313,7 +313,7 @@ while (Attr!=null)
             TGroup=layout.createParallelGroup();
             ActPanel.setLayout(layout);
             }
-        JLabel Lab=new JLabel(Attr.getUserName());
+        JLabel Lab=new JLabel(MainWin.TT(Attr.getUserName()));
         Lab.setFont(MainWin.getFontDialog());
         JComboBox SelComb = new javax.swing.JComboBox();
         SelComb.setFont(MainWin.getFontDialog());

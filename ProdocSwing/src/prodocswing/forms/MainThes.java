@@ -68,6 +68,15 @@ public MainThes(java.awt.Frame parent, boolean modal, DriverGeneric Sess)
 super(parent, modal);
 Session=Sess;
 initComponents();
+try {
+Record R=PDThesaur.getRecordStructPDThesaur();
+NameLabel.setText(MainWin.TT(R.getAttr(PDThesaur.fNAME).getUserName()));
+DescripLabel.setText(MainWin.TT(R.getAttr(PDThesaur.fDESCRIP).getUserName()));
+LangLabel.setText(MainWin.TT(R.getAttr(PDThesaur.fLANG).getUserName()));
+} catch (Exception ex)
+    {
+//    MainWin.Message(ex.getLocalizedMessage());
+    }
 }
 /**
  * Creates new form MainThes
@@ -82,6 +91,15 @@ super(parent, modal);
 setIdLocalRootTerm(RootTerm);
 Session=Sess;
 initComponents();
+try {
+Record R=PDThesaur.getRecordStructPDThesaur();
+NameLabel.setText(MainWin.TT(R.getAttr(PDThesaur.fNAME).getUserName()));
+DescripLabel.setText(MainWin.TT(R.getAttr(PDThesaur.fDESCRIP).getUserName()));
+LangLabel.setText(MainWin.TT(R.getAttr(PDThesaur.fLANG).getUserName()));
+} catch (Exception ex)
+    {
+//    MainWin.Message(ex.getLocalizedMessage());
+    }
 }
 
 /**
@@ -105,10 +123,10 @@ initComponents();
         DescripTextField = new javax.swing.JTextField();
         UseLabel = new javax.swing.JLabel();
         UseTextField = new javax.swing.JTextField();
-        SCNLabel = new javax.swing.JLabel();
-        LangTextField = new javax.swing.JTextField();
-        SCNTextField = new javax.swing.JTextField();
         LangLabel = new javax.swing.JLabel();
+        LangTextField = new javax.swing.JTextField();
+        SCNLabel = new javax.swing.JLabel();
+        SCNTextField = new javax.swing.JTextField();
         Relations = new javax.swing.JTabbedPane();
         jPanelRT = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -147,6 +165,7 @@ initComponents();
         ThesaurHelp = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("OpenProdoc Thesaurus "+MainWin.getVersion());
         addWindowListener(new java.awt.event.WindowAdapter()
         {
             public void windowClosing(java.awt.event.WindowEvent evt)
@@ -210,17 +229,17 @@ initComponents();
         UseTextField.setEditable(false);
         UseTextField.setFont(MainWin.getFontDialog());
 
-        SCNLabel.setFont(MainWin.getFontDialog());
-        SCNLabel.setText("SCN");
+        LangLabel.setFont(MainWin.getFontDialog());
+        LangLabel.setText("Language");
 
         LangTextField.setEditable(false);
         LangTextField.setFont(MainWin.getFontDialog());
 
+        SCNLabel.setFont(MainWin.getFontDialog());
+        SCNLabel.setText("SCN");
+
         SCNTextField.setEditable(false);
         SCNTextField.setFont(MainWin.getFontDialog());
-
-        LangLabel.setFont(MainWin.getFontDialog());
-        LangLabel.setText("Language");
 
         javax.swing.GroupLayout TermAttrLayout = new javax.swing.GroupLayout(TermAttr);
         TermAttr.setLayout(TermAttrLayout);

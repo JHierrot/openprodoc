@@ -4,7 +4,7 @@
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
     <Property name="title" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-      <Connection code="MainWin.TT(&quot;Term_Maintenance&quot;)" type="code"/>
+      <Connection code="MainWin.TT(&quot;Thesaurus_Maintenance&quot;)" type="code"/>
     </Property>
     <Property name="resizable" type="boolean" value="false"/>
   </Properties>
