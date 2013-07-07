@@ -75,7 +75,7 @@ initComponents();
         ButtonAcept = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle(MainWin.TT("Export_Folders"));
+        setTitle(MainWin.TT("Export_Thesaurus"));
         setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter()

@@ -280,6 +280,9 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
+    <Property name="title" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+      <Connection code="&quot;OpenProdoc Thesaurus &quot;+MainWin.getVersion()" type="code"/>
+    </Property>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="menuBar" type="java.lang.String" value="menuBar"/>
@@ -505,12 +508,12 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="SCNLabel">
+                <Component class="javax.swing.JLabel" name="LangLabel">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="MainWin.getFontDialog()" type="code"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="SCN"/>
+                    <Property name="text" type="java.lang.String" value="Language"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="LangTextField">
@@ -521,20 +524,20 @@
                     </Property>
                   </Properties>
                 </Component>
+                <Component class="javax.swing.JLabel" name="SCNLabel">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                      <Connection code="MainWin.getFontDialog()" type="code"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="SCN"/>
+                  </Properties>
+                </Component>
                 <Component class="javax.swing.JTextField" name="SCNTextField">
                   <Properties>
                     <Property name="editable" type="boolean" value="false"/>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="MainWin.getFontDialog()" type="code"/>
                     </Property>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JLabel" name="LangLabel">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="MainWin.getFontDialog()" type="code"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" value="Language"/>
                   </Properties>
                 </Component>
               </SubComponents>

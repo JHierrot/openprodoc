@@ -75,7 +75,7 @@ initComponents();
         ButtonCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle(MainWin.TT("Term_Maintenance"));
+        setTitle(MainWin.TT("Thesaurus_Maintenance"));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter()
         {
