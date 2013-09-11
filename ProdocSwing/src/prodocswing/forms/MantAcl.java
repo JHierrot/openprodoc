@@ -523,8 +523,12 @@ RefreshUsers(acl.getName());
 public void AddMode()
 {
 LabelOperation.setText(MainWin.TT("Add_ACL"));
+AddButtonG.setEnabled(false);
 DelButtonG.setEnabled(false);
 EditButtonG.setEnabled(false);
+AddButtonU.setEnabled(false);
+DelButtonU.setEnabled(false);
+EditButtonU.setEnabled(false);
 }
 //----------------------------------------------------------------
 /**
@@ -535,6 +539,13 @@ public void DelMode()
 LabelOperation.setText(MainWin.TT("Delete_Acl"));
 ACLNameTextField.setEditable(false);
 ACLDescripTextField.setEditable(false);
+AddButtonG.setEnabled(false);
+DelButtonG.setEnabled(false);
+EditButtonG.setEnabled(false);
+AddButtonU.setEnabled(false);
+DelButtonU.setEnabled(false);
+EditButtonU.setEnabled(false);
+
 }
 //----------------------------------------------------------------
 /**

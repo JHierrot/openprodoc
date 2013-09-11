@@ -190,4 +190,13 @@ public void setUseTerm(PDThesaur pUseTerm)
 UseTerm = pUseTerm;
 UpdateText();
 }
+//----------------------------------------------------------------
+@Override
+public void setEnabled(boolean Ena)
+{
+DelButton.setEnabled(Ena);
+SelUseButton.setEnabled(Ena);
+USETextField.setEnabled(Ena);    
+}
+//----------------------------------------------------------------
 }

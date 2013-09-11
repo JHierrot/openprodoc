@@ -669,24 +669,26 @@ if (Attr.isMultivalued())
     {
     JTF=new MultiField(Attr.Export());
     ((MultiField)JTF).setAttr(Attr);
-    JTF.addKeyListener(
-        new java.awt.event.KeyAdapter() 
+    if (Modif && !Attr.isModifAllowed())
         {
-        public void keyTyped(java.awt.event.KeyEvent evt) 
-        {
-        ShowEditList(evt);
+        JTF.addKeyListener(
+            new java.awt.event.KeyAdapter() 
+            {
+            public void keyTyped(java.awt.event.KeyEvent evt) 
+            {
+            ShowEditList(evt);
+            }
+            } );
+        JTF.addMouseListener(
+            new java.awt.event.MouseAdapter() 
+            {
+            public void mouseClicked(java.awt.event.MouseEvent evt) 
+            {
+            ShowEditList(evt);
+            }
+            }            
+              ); 
         }
-        } );
-    JTF.addMouseListener(
-        new java.awt.event.MouseAdapter() 
-        {
-        public void mouseClicked(java.awt.event.MouseEvent evt) 
-        {
-        ShowEditList(evt);
-        }
-        }            
-          ); 
-
     }
 else if (Attr.getType()==Attribute.tSTRING)
     {
