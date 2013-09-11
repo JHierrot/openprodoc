@@ -194,8 +194,9 @@ protected void AlterTableAdd(String TableName, Attribute NewAttr, boolean IsVer)
 if (PDLog.isInfo())
     PDLog.Info("DriverJDBC.AlterTable>:"+TableName);
 String SQL="ALTER TABLE "+TableName+" ADD "+NewAttr.getName()+GetType(NewAttr);
+ExecuteSql(SQL);
 if (!IsVer && NewAttr.isUnique())
-    SQL+=" CONSTRAINT "+TableName+new Random().nextInt(9999)+" UNIQUE("+NewAttr.getName()+") ";
+    SQL="ALTER TABLE "+TableName+" ADD CONSTRAINT "+TableName+new Random().nextInt(9999)+" UNIQUE("+NewAttr.getName()+") ";
 ExecuteSql(SQL);
 if (NewAttr.getType()==Attribute.tTHES)
     AddIntegrity(TableName, NewAttr.getName(), PDThesaur.getTableName(), PDThesaur.fPDID);
