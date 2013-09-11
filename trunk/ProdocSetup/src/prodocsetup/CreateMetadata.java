@@ -36,6 +36,7 @@ import javax.swing.JList;
 import javax.swing.JProgressBar;
 import prodoc.DriverGeneric;
 import prodoc.PDException;
+import prodoc.PDLog;
 import prodoc.ProdocFW;
 
 /**
@@ -422,7 +423,6 @@ CreateMetadataStructure();
     CancelButton.setEnabled(true);
     return;
     }
-System.exit(0);
     }//GEN-LAST:event_AcceptButtonActionPerformed
 
 /**
@@ -553,12 +553,16 @@ jProgressBar1.setMaximum(35);
 AcceptButton.setEnabled(false);
 CancelButton.setEnabled(false);
 repaint();
+if (PDLog.isDebug())
+   PDLog.Debug("CreateMetadataStructure >");
 Act=new ActThread();
 Act.SetParam(Trace, getListModel(), jProgressBar1, jList1);
 Act.start();
+if (PDLog.isDebug())
+   PDLog.Debug("Act Started");
 String RootPassword=RootPasswordTF.getText().trim();
 String DefLang=LangCode.getText().trim().toUpperCase();
-if (!(DefLang.equalsIgnoreCase("ES") || DefLang.equalsIgnoreCase("EN")))
+if (!(DefLang.equalsIgnoreCase("ES") || DefLang.equalsIgnoreCase("EN") || DefLang.equalsIgnoreCase("PT")))
     throw new PDException(TT("Unsuported_Language")+":"+DefLang);
 String DefTimeFormat=TimeStampFormat.getText().trim();
 String DefDateFormat=DateFormat.getText().trim();
@@ -570,10 +574,18 @@ String RepUser=RepUserTF.getText();
 String RepPassword=RepPassTF.getText();
 String RepType=(String)RepTypeCB.getSelectedItem();
 String RepParam=RepParamTF.getText();
+if (PDLog.isDebug())
+   PDLog.Debug("Before Act Started");
 ActInst ActI=new ActInst();
 ActI.SetParam(RootPassword, DefLang, DefTimeFormat,DefDateFormat, MainKey, RepName,
         RepEncrypt, RepUrl, RepUser, RepPassword, RepType, RepParam, Trace, this);
+if (PDLog.isDebug())
+   PDLog.Debug("Act SetParam asigned");
 ActI.start();
+if (PDLog.isDebug())
+   PDLog.Debug("Act Started");
+if (PDLog.isDebug())
+   PDLog.Debug("CreateMetadataStructure <");
 }
 //--------------------------------------------------------------
 private DefaultListModel getListModel()
@@ -628,8 +640,14 @@ public void run()
 {
 DriverGeneric Sesion=null;
 try {
+if (PDLog.isDebug())
+   PDLog.Debug("Before InitProdoc");
 ProdocFW.InitProdoc("PD", "Prodoc.properties");
+if (PDLog.isDebug())
+   PDLog.Debug("Before getSession");
 Sesion=ProdocFW.getSession("PD", "Install", "Install");
+if (PDLog.isDebug())
+   PDLog.Debug("Before Install");
 Sesion.Install(RootPassword, DefLang, DefTimeFormat,DefDateFormat, MainKey, RepName,
         RepEncrypt, RepUrl, RepUser, RepPassword, RepType, RepParam, Trace);
 ProdocFW.freeSesion("PD", Sesion);
