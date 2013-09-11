@@ -214,16 +214,18 @@ initComponents();
                             .addComponent(UniqueLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(MultivalLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(LongMaxTextField)
-                            .addComponent(MultivalCheckBox)
-                            .addComponent(DescripTextField)
-                            .addComponent(TypeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(AttrNameTextField)
-                            .addComponent(ReqCheckBox)
-                            .addComponent(AttrUserNameTextField)
-                            .addComponent(AllowModCheckBox)
-                            .addComponent(UniqueCheckBox))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(TypeComboBox, 0, 370, Short.MAX_VALUE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(DescripTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
+                                .addComponent(AttrUserNameTextField, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(MultivalCheckBox, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(ReqCheckBox, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(AllowModCheckBox, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(UniqueCheckBox, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(LongMaxTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(AttrNameTextField, javax.swing.GroupLayout.Alignment.LEADING)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -598,6 +600,7 @@ if (ThesSelect==null)
             SelectedThes=new PDThesaur(MainWin.getSession());
         ThesSelect=new ThesField(this, SelectedThes, PDThesaur.ROOTTERM);
         ThesSelect.setBounds(LongMaxTextField.getBounds());
+        ThesSelect.setSize(ThesSelect.getWidth()+15, ThesSelect.getHeight()+5);
         this.add(ThesSelect);
     } catch (PDException ex)
         {
