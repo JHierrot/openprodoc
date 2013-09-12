@@ -84,7 +84,7 @@ initComponents();
         ButtonCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle(MainWin.TT("Import_Folders"));
+        setTitle(MainWin.TT("Import_External_Systems"));
         setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter()
@@ -97,7 +97,7 @@ initComponents();
 
         LabelOperation.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
         LabelOperation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        LabelOperation.setText(MainWin.TT("Import_Folders"));
+        LabelOperation.setText(MainWin.TT("Import_External_Systems"));
 
         OrigFormatLabel.setFont(MainWin.getFontDialog());
         OrigFormatLabel.setText(MainWin.TT("Origin_System"));
@@ -223,7 +223,7 @@ initComponents();
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(DateFormatTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(DateFormatLab))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(TimeStampForTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(TimeStampForLab))
@@ -236,7 +236,7 @@ initComponents();
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButtonAcept)
                     .addComponent(ButtonCancel))
-                .addGap(62, 62, 62))
+                .addGap(32, 32, 32))
         );
 
         pack();
