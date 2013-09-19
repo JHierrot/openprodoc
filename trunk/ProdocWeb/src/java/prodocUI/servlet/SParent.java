@@ -967,22 +967,23 @@ protected static String getProdocProperRef() throws Exception
 {
 if (ProdocProperRef==null)
     {
-//   String Path=System.getProperty("java.class.path");
-//   System.out.println("java.class.path="+Path);
-//    InputStream Is=ClassLoader.getSystemResourceAsStream("OPDWeb.properties"); 
-//    InputStream Is=SParent.class.getResourceAsStream("OPDWeb.properties");
-//    String Sep=System.getProperty("path.separator");
-        
-//    String PropName=System.getProperty("OPDWeb_properties");   
-//    System.out.println("OPDWeb_properties="+PropName);
+    InputStream Is=null;    
     String Path=System.getProperty("user.home");    
-    InputStream Is  = new FileInputStream(Path+File.separator+"OPDWeb.properties");
+    try {
+    Is  = new FileInputStream(Path+File.separator+"OPDWeb.properties");        
+    } catch (Exception ex)
+        {
+        Is=null;    
+        }
+    if (Is==null)
+        {
+        Path=System.getenv("OPDWeb");
+        Is  = new FileInputStream(Path+File.separator+"OPDWeb.properties");            
+        }
     Properties p= new Properties();
     p.load(Is);
     Is.close();
     ProdocProperRef=p.getProperty("OPDConfig");
-    //ProdocProperRef="e:\\Prodoc\\Varios\\Prodoc_derby.properties";
-    //ProdocProperRef="/media/Iomega/Prodoc/Varios/Prodoc_derby.properties";
     }
 return(ProdocProperRef);
 }
