@@ -196,8 +196,10 @@ if (PDLog.isInfo())
 String SQL="ALTER TABLE "+TableName+" ADD "+NewAttr.getName()+GetType(NewAttr);
 ExecuteSql(SQL);
 if (!IsVer && NewAttr.isUnique())
+    {
     SQL="ALTER TABLE "+TableName+" ADD CONSTRAINT "+TableName+new Random().nextInt(9999)+" UNIQUE("+NewAttr.getName()+") ";
-ExecuteSql(SQL);
+    ExecuteSql(SQL);
+    }
 if (NewAttr.getType()==Attribute.tTHES)
     AddIntegrity(TableName, NewAttr.getName(), PDThesaur.getTableName(), PDThesaur.fPDID);
 if (PDLog.isInfo())
