@@ -77,13 +77,14 @@ Ie.:
     com.mysql.jdbc.Driver;TableBlob</li>
 </ul> 
 <p>This proccess will create all the tables structure and elements necessary for OPD. Later, it will be possible to define new document types or folders, creating the required elements.</p>
-<h4 id="5">5 - Instalación resto de clientes</h4>
+<h4 id="5">5 - Installation of other client</h4>
 <p>
-After the creation of the core structure, it's necessary to install OPD clients for the users.
-If the access for all the users is through the Web Client, it is necessary to install the Web Client in a J2EE server. This client is deployed as a WAR application. The process for install the WAR aplication can be different for every J2EE server.
-After the installation of the War application, it's necessary to edit the configuration file: <b>Prodoc.properties</b> (that will use the Web client) with the <b>Install</b> program or copying and editing an existing properties file.<p>
-<p>As a last step, in the home directory of the user (Ie.: /home/J_Smith) with which it's executed the J2EE server it must be copied the file <b>OPDWeb.properties</b>, editing the line that contains the path to <b>Prodoc.properties</b></p>
- 
+After the creation of the core structure, it's necessary to install OPD clients for the users.</p> 
+<p>For users with Swing client, just copy the folder after the first installation. It will contains the references to the server.</p>
+<p>If the access for some the users is through the Web Client, it is necessary to install the Web Client in a J2EE server. This client is deployed as a WAR application. The process for install the WAR aplication can be different for every J2EE server.
+After the installation of the War application, it's necessary to edit the configuration file: <b>Prodoc.properties</b> (that will use the Web client) with the <b>Install</b> program or copying and editing an existing properties file.</p>
+<p>As a last step, define a system/public environment variable OPDWeb referencing the folder of the file <b>OPDWeb.properties</b> (i.e.: OPDWeb=/OpenProdoc/Web/Conf ), and edit the line that contains the absolute path to the file <b>Prodoc.properties</b></p>
+<p>Another way to configure the  J2EE application is: in the home directory of the user (Ie.: /home/J_Smith) with which it's executed the J2EE server, it must be copied the file <b>OPDWeb.properties</b>, editing the line that contains the absolute path to <b>Prodoc.properties</b></p> 
 <hr>
 <a href="HelpIndex.html">Help Index OpenProdoc</a>
     </body>
