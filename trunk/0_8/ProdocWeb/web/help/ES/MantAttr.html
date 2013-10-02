@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mantenimiento de Atributos</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+<H4>Mantenimiento de Atributos</H4><hr>
+<p>Al seleccionar en el formulario de <a href="MantObjDef.html">Mantenimiento Definiciones de Objetos</a> las opciones de Alta, Baja o Modificación Metadatos aparecerá este formulario con diversos campos activados o desactivados.</p>
+<p>Este formulario contiene la información:</p>
+<ul>
+    <li><b>Nombre identificativo</b>: Identificador del metadato cuyo valor no puede repetirse ni cambiar una vez asignado. Puede tener una longitud máxima de 32 caracteres. (Ej. "CodigoProyecto"). Es el nombre que se utiliza internamente y que deberá utilizarse al integrar por medio del API.</li>
+    <li><b>Nombre Visible</b>: Es el nombre que los usuarios verá en los distintos formularios y listados de OPD. Puede tener una longitud máxima de 32 caracteres. (Ej. "Codigo de Proyecto").</li>
+    <li><b>Descripción del atributo</b>: Descripción que permita ampliar información acerca del uso y sentido del metadato. Aparecerá como ayuda en los formularios en que aparezca el metadato. Puede tener una longitud máxima de 128 caracteres. (Ej.: "Código de Proyecto según la normativa interna XCP")</li>
+    <li><b>Tipo de Metadato </b>: El tipo de metadato puede ser: Cadena, Fecha, Fecha-Hora, entero, flotante, lógico o tesauro.</li>
+    <li><b>Longitud</b>: En caso de ser de tipo cadena, longitud máxima que admitirá el metadato.</li> 
+    <li><b>Obligatorio</b>: Valor booleano que indica si el metadato es obligatorio al introducir un documento.</li>    
+    <li><b>Único</b>: Valor booleano que indica si no puede repetirse valores para los documentos del tipo.</li>    
+    <li><b>Modificable</b>: Valor booleano que indica el metadato se puede modificar DESPUES de dar de alta el documento.</li>    
+    <li><b>Multivaluado</b>: Valor booleano que indica que puede introducirse una lista de valores en el metadato (Ej. una lista de autores o de palabras clave).</li>    
+</ul>
+<p>De acuerdo a las características indicadas de cada metadato, al insertar o modificar los documentos se exigirá el cumplimiento de las condiciones.</p>
+<p>Si se elige como tipo de metadato "tesauro", se presentará una entrada para elegir el tesauro que se debe utilizar para validar. Cuando se introduzca ese metadato en un documento o carpeta, se podrá elegir un valor de un término de ese tesauro.  El sistema mantendrá la integridad, de forma que siemrpe debe existir el término para asignarlo a un metadato, y nunca podrá borrarse el término si se ha usado para describir un documento o carpeta.</p>
+<p style="text-align:center;"><img alt="Copia de pantalla MantAttr" src="img/MantAttr.jpg"/></p>
+<p>Ver: <a href="MantObjDef.html">Mantenimiento Definiciones de Objetos</a></p>
+<hr>
+<a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>
+    </body>
+</html>
