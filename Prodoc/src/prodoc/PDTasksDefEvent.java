@@ -26,35 +26,10 @@ import java.util.Date;
  *
  * @author jhierrot
  */
-public class PDTasksDef extends ObjPD
+public class PDTasksDefEvent extends PDTasksDef
 {
-/**
- *
- */
-public static final String fNAME="Name";
-public static final String fCATEGORY="Category";
-/**
- *
- */
-public static final String fDESCRIPTION="Description";
-/**
- *
- */
-public static final String fSTARTDATE="StartDate";
-/**
- *
- */
-public static final String fTYPE="TaskType";
-public static final String fOBJTYPE="ObjType";
-public static final String fFILTER="ObjFilter";
-public static final String fPARAM="TaskParam";
-public static final String fACTIVE="Active";
-public static final String fTRANSACT="Transact";
 
-public static final String fMODEINS="INS";
-public static final String fMODEUPD="UPD";
-public static final String fMODEDEL="DEL";
-public static final String fMODETIM="TIM";
+
 
 /**
  *
@@ -80,14 +55,6 @@ private int AddDays=0;
 private int AddHours=0;
 private int AddMins=0;
 
-public static final int fTASK_EXTERNAL=0;
-public static final int fTASK_DELETEFOLD=1;
-public static final int fTASK_DELETEDOC=2;
-public static final int fTASK_PURGEDOC=3;
-public static final int fTASK_COPYDOC=4;
-public static final int fTASK_MOVEDOC=5;
-public static final int fTASK_UPDATEDOC=6;
-public static final int fTASK_UPDATEFOLD=7;
 
 private int Type=0;
 /**
@@ -108,7 +75,7 @@ static private ObjectsCache TaksDefObjectsCache = null;
  * @param Drv
  * @throws PDException
  */
-public PDTasksDef(DriverGeneric Drv)  throws PDException
+public PDTasksDefEvent(DriverGeneric Drv)  throws PDException
 {
 super(Drv);
 }
@@ -121,16 +88,7 @@ super(Drv);
 @Override
 public void assignValues(Record Rec) throws PDException
 {
-setName((String) Rec.getAttr(fNAME).getValue());
-setCategory((String) Rec.getAttr(fCATEGORY).getValue());
-setDescription((String) Rec.getAttr(fDESCRIPTION).getValue());
-setStartDate((Date) Rec.getAttr(fSTARTDATE).getValue());
-setType((Integer) Rec.getAttr(fTYPE).getValue());
-setObjType((String) Rec.getAttr(fOBJTYPE).getValue());
-setObjFilter((String) Rec.getAttr(fFILTER).getValue());
-setParam((String) Rec.getAttr(fPARAM).getValue());
-setActive((Boolean) Rec.getAttr(fACTIVE).getValue());
-setTransact((Boolean) Rec.getAttr(fTRANSACT).getValue());
+super.assignValues(Rec);    
 assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
@@ -582,55 +540,5 @@ Cursor List=null;
 // TODO: implement cursor
 return(List);
 }
-//-------------------------------------------------------------------------
-/***
-protected ArrayList getListTaskTrans(String tabName, String MODE) throws PDException
-{
-Condition CMode=new Condition(f, Condition.cEQUAL , MODE);    
-Condition CTab=new Condition(f, Condition.cEQUAL , tabName); 
-Condition CTrans=new Condition(fTRANSACT, Condition.cNE, true ); 
-Conditions c=new Conditions();
-c.addCondition(CMode);
-c.addCondition(CTab);
-c.addCondition(CTrans);
-Query LoadAct=new Query(getTabName(), getRecordStruct(), c);
-ArrayList TList=new ArrayList();    
-Cursor Cur=getDrv().OpenCursor(LoadAct);
-Record r=getDrv().NextRec(Cur);
-while (r!=null)
-    {
-    PDTasksDef t=new PDTasksDef(getDrv());   
-    t.assignValues(r);
-    TList.add(t);
-    r=getDrv().NextRec(Cur);
-    }
-getDrv().CloseCursor(Cur);
-return(TList);
-}
-//-------------------------------------------------------------------------
-
-ArrayList getListTaskNoTrans(String tabName, String MODE) throws PDException
-{
-Condition CMode=new Condition(f, Condition.cEQUAL , MODE);    
-Condition CTab=new Condition(f, Condition.cEQUAL , tabName); 
-Condition CTrans=new Condition(fTRANSACT, Condition.cNE, false ); 
-Conditions c=new Conditions();
-c.addCondition(CMode);
-c.addCondition(CTab);
-c.addCondition(CTrans);
-Query LoadAct=new Query(getTabName(), getRecordStruct(), c);
-ArrayList TList=new ArrayList();    
-Cursor Cur=getDrv().OpenCursor(LoadAct);
-Record r=getDrv().NextRec(Cur);
-while (r!=null)
-    {
-    PDTasksDef t=new PDTasksDef(getDrv());   
-    t.assignValues(r);
-    TList.add(t);
-    r=getDrv().NextRec(Cur);
-    }
-getDrv().CloseCursor(Cur);
-return(TList);
-}**/
 //-------------------------------------------------------------------------
 }

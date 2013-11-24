@@ -80,6 +80,11 @@ public PDTasks(DriverGeneric Drv)  throws PDException
 {
 super(Drv);
 }
+
+    PDTasks(DriverGeneric Drv, ObjPD aThis, PDTasksDef pdTasksDef)
+    {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
 //-------------------------------------------------------------------------
 /**
  *
@@ -432,22 +437,14 @@ this.PDId = PDId;
 }
 //-------------------------------------------------------------------------
 /*
- * Executes the Tasks connecting trought the Driver of the object
+ * Executes the Task
  */
 protected void Execute()
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDTasks.Execute>:"+PDId);  
 try {
-Cursor ObjList=PDTasksDef.GenerateList(this);   
-Record Res=getDrv().NextRec(ObjList);
-while (Res!=null)
-    {
-    String PD1=(String) Res.getAttr(fPDID).getValue();
-//    ListUF.add(PD1);
-    Res=getDrv().NextRec(ObjList);
-    }
-getDrv().CloseCursor(ObjList);
+
 } catch(Exception ex)
     {
     
