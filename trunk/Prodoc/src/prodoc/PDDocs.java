@@ -2544,17 +2544,6 @@ return(ImageFile);
     PDLog.Error(ex.getLocalizedMessage());
     throw new PDException(ex.getLocalizedMessage());
     }
-/**
- 0- "" 
- 1- "BackOfficeMejico"
- 2- ","
- 3- "RegisFirma"
- 3 ,
- 4 "BUC"
- 5 ,
- 6 "55139555","Cuenta","60-55139555-9","FechaR","12/06/2013","c:\CaptureSV\Export\BackOfficeMejico\RegisFirma\112\00000070.TIF"
- * **/
-
 }
 //-------------------------------------------------------------------------
 }
