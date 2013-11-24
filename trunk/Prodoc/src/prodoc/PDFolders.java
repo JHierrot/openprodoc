@@ -465,6 +465,8 @@ for (int i = getTypeDefs().size()-1; i >=0; i--)
 MultiInsert(getRecSum());
 if (!IsRootFolder)
     ActFoldLev();
+ExecuteTransThreads(PDTasksDef.fMODEINS);
+GenerateNoTransThreads(PDTasksDef.fMODEINS);
 getObjCache().put(getKey(), getRecord());
 } catch (PDException Ex)
     {
@@ -750,11 +752,13 @@ InTransLocal=!getDrv().isInTransaction();
 if (InTransLocal)
     getDrv().IniciarTrans();
 try {
+ExecuteTransThreads(PDTasksDef.fMODEDEL);
 DeleteFoldersInFolder();
 DeleteDocsInFolder();
 DeleteFoldLevelParents();
 MultiDelete(getPDId());
 DelFoldMetadata();
+GenerateNoTransThreads(PDTasksDef.fMODEDEL);
 getObjCache().remove(getKey());
 } catch (PDException Ex)
     {
@@ -907,6 +911,8 @@ for (int i = getTypeDefs().size()-1; i >=0; i--)
     }
 MultiDelete(this.getPDId());
 MultiInsert(R);
+ExecuteTransThreads(PDTasksDef.fMODEUPD);
+GenerateNoTransThreads(PDTasksDef.fMODEUPD);
 getObjCache().put(getKey(), getRecord());
 } catch (PDException Ex)
     {

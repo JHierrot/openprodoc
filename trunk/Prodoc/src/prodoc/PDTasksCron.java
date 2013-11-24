@@ -26,17 +26,8 @@ import java.util.Date;
  *
  * @author jhierrot
  */
-public class PDTasksDef extends ObjPD
+public class PDTasksCron extends PDTasksDef
 {
-/**
- *
- */
-public static final String fNAME="Name";
-public static final String fCATEGORY="Category";
-/**
- *
- */
-public static final String fDESCRIPTION="Description";
 /**
  *
  */
@@ -44,17 +35,13 @@ public static final String fSTARTDATE="StartDate";
 /**
  *
  */
-public static final String fTYPE="TaskType";
-public static final String fOBJTYPE="ObjType";
-public static final String fFILTER="ObjFilter";
-public static final String fPARAM="TaskParam";
-public static final String fACTIVE="Active";
-public static final String fTRANSACT="Transact";
+public static final String fNEXTDATE="NextDate";
+public static final String fADDMONTH="AddMonth";
+public static final String fADDDAYS="AddDays";
+public static final String fADDHOURS="AddHours";
+public static final String fADDMINS="AddMins";
 
-public static final String fMODEINS="INS";
-public static final String fMODEUPD="UPD";
-public static final String fMODEDEL="DEL";
-public static final String fMODETIM="TIM";
+public static final String fTASKUSER="TaskUser";
 
 /**
  *
@@ -80,15 +67,6 @@ private int AddDays=0;
 private int AddHours=0;
 private int AddMins=0;
 
-public static final int fTASK_EXTERNAL=0;
-public static final int fTASK_DELETEFOLD=1;
-public static final int fTASK_DELETEDOC=2;
-public static final int fTASK_PURGEDOC=3;
-public static final int fTASK_COPYDOC=4;
-public static final int fTASK_MOVEDOC=5;
-public static final int fTASK_UPDATEDOC=6;
-public static final int fTASK_UPDATEFOLD=7;
-
 private int Type=0;
 /**
  * Parameters to be interpreteddepending of task
@@ -108,7 +86,7 @@ static private ObjectsCache TaksDefObjectsCache = null;
  * @param Drv
  * @throws PDException
  */
-public PDTasksDef(DriverGeneric Drv)  throws PDException
+public PDTasksCron(DriverGeneric Drv)  throws PDException
 {
 super(Drv);
 }
@@ -121,16 +99,14 @@ super(Drv);
 @Override
 public void assignValues(Record Rec) throws PDException
 {
-setName((String) Rec.getAttr(fNAME).getValue());
-setCategory((String) Rec.getAttr(fCATEGORY).getValue());
-setDescription((String) Rec.getAttr(fDESCRIPTION).getValue());
+super.assignValues(Rec);    
 setStartDate((Date) Rec.getAttr(fSTARTDATE).getValue());
-setType((Integer) Rec.getAttr(fTYPE).getValue());
-setObjType((String) Rec.getAttr(fOBJTYPE).getValue());
-setObjFilter((String) Rec.getAttr(fFILTER).getValue());
-setParam((String) Rec.getAttr(fPARAM).getValue());
-setActive((Boolean) Rec.getAttr(fACTIVE).getValue());
-setTransact((Boolean) Rec.getAttr(fTRANSACT).getValue());
+setNextDate((Date) Rec.getAttr(fNEXTDATE).getValue());
+setAddMonth((Integer) Rec.getAttr(fADDMONTH).getValue());
+setAddDays((Integer) Rec.getAttr(fADDDAYS).getValue());
+setAddHours((Integer) Rec.getAttr(fADDHOURS).getValue());
+setAddMins((Integer) Rec.getAttr(fADDMINS).getValue());
+setTaskUser((String) Rec.getAttr(fTASKUSER).getValue());
 assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
@@ -147,8 +123,14 @@ Rec.getAttr(fNAME).setValue(getName());
 Rec.getAttr(fCATEGORY).setValue(getCategory());
 Rec.getAttr(fDESCRIPTION).setValue(getDescription());
 Rec.getAttr(fSTARTDATE).setValue(getStartDate());
+Rec.getAttr(fNEXTDATE).setValue(getNextDate());
+Rec.getAttr(fADDMONTH).setValue(getAddMonth());
+Rec.getAttr(fADDDAYS).setValue(getAddDays());
+Rec.getAttr(fADDHOURS).setValue(getAddHours());
+Rec.getAttr(fADDMINS).setValue(getAddMins());
 Rec.getAttr(fTYPE).setValue(getType());
 Rec.getAttr(fPARAM).setValue(getParam());
+Rec.getAttr(fTASKUSER).setValue(getTaskUser());
 Rec.getAttr(fOBJTYPE).setValue(getObjType());
 Rec.getAttr(fFILTER).setValue(getObjFilter());
 Rec.getAttr(fACTIVE).setValue(isActive());
@@ -220,10 +202,16 @@ if (TaksTypeStruct==null)
     R.addAttr( new Attribute(fCATEGORY, fCATEGORY, "Group of tasks", Attribute.tSTRING, false, null, 32, false, false, true));
     R.addAttr( new Attribute(fDESCRIPTION, fDESCRIPTION, "Description", Attribute.tSTRING, true, null, 128, false, false, true));
     R.addAttr( new Attribute(fSTARTDATE, fSTARTDATE, "Start Date of execution", Attribute.tDATE, true, null, 128, false, false, true));
+    R.addAttr( new Attribute(fNEXTDATE, fNEXTDATE, "Next Date of execution", Attribute.tDATE, true, null, 128, false, false, true));
+    R.addAttr( new Attribute(fADDMONTH, fADDMONTH, "Months to add for next execution", Attribute.tINTEGER, true, null, 128, false, false, true));
+    R.addAttr( new Attribute(fADDDAYS, fADDDAYS, "Days to add for next execution", Attribute.tINTEGER, true, null, 128, false, false, true));
+    R.addAttr( new Attribute(fADDHOURS, fADDHOURS, "Hours to add for next execution", Attribute.tINTEGER, true, null, 128, false, false, true));
+    R.addAttr( new Attribute(fADDMINS, fADDMINS, "Mins to add for next execution", Attribute.tINTEGER, true, null, 128, false, false, true));
     R.addAttr( new Attribute(fTYPE, fTYPE, "Type of Task", Attribute.tINTEGER, true, null, 128, false, false, true));
     R.addAttr( new Attribute(fOBJTYPE, fOBJTYPE, "Target Object(s)", Attribute.tSTRING, true, null, 128, false, false, true));
     R.addAttr( new Attribute(fFILTER, fFILTER, "Filter of Object(s)", Attribute.tSTRING, false, null, 254, false, false, true));
     R.addAttr( new Attribute(fPARAM, fPARAM, "Params of Task", Attribute.tSTRING, false, null, 256, false, false, true));
+    R.addAttr( new Attribute(fTASKUSER, fTASKUSER, "User for executing Task", Attribute.tSTRING, true, null, 32, false, false, true));
     R.addAttr( new Attribute(fACTIVE, fACTIVE, "Indicates if the definition is active", Attribute.tBOOLEAN, true, null, 32, false, false, true));
     R.addAttr( new Attribute(fTRANSACT, fTRANSACT, "Indicates if the task id transactional", Attribute.tBOOLEAN, true, null, 32, false, false, true));
     R.addRecord(getRecordStructCommon());
@@ -494,6 +482,7 @@ public static void StopTaskGenerator()
 */
 static protected void InstallMulti(DriverGeneric Drv) throws PDException
 {
+Drv.AddIntegrity(getTableName(), fTASKUSER, PDUser.getTableName(),PDUser.fNAME);
 }
 //-------------------------------------------------------------------------
 /**
@@ -583,54 +572,5 @@ Cursor List=null;
 return(List);
 }
 //-------------------------------------------------------------------------
-/***
-protected ArrayList getListTaskTrans(String tabName, String MODE) throws PDException
-{
-Condition CMode=new Condition(f, Condition.cEQUAL , MODE);    
-Condition CTab=new Condition(f, Condition.cEQUAL , tabName); 
-Condition CTrans=new Condition(fTRANSACT, Condition.cNE, true ); 
-Conditions c=new Conditions();
-c.addCondition(CMode);
-c.addCondition(CTab);
-c.addCondition(CTrans);
-Query LoadAct=new Query(getTabName(), getRecordStruct(), c);
-ArrayList TList=new ArrayList();    
-Cursor Cur=getDrv().OpenCursor(LoadAct);
-Record r=getDrv().NextRec(Cur);
-while (r!=null)
-    {
-    PDTasksDef t=new PDTasksDef(getDrv());   
-    t.assignValues(r);
-    TList.add(t);
-    r=getDrv().NextRec(Cur);
-    }
-getDrv().CloseCursor(Cur);
-return(TList);
-}
-//-------------------------------------------------------------------------
-
-ArrayList getListTaskNoTrans(String tabName, String MODE) throws PDException
-{
-Condition CMode=new Condition(f, Condition.cEQUAL , MODE);    
-Condition CTab=new Condition(f, Condition.cEQUAL , tabName); 
-Condition CTrans=new Condition(fTRANSACT, Condition.cNE, false ); 
-Conditions c=new Conditions();
-c.addCondition(CMode);
-c.addCondition(CTab);
-c.addCondition(CTrans);
-Query LoadAct=new Query(getTabName(), getRecordStruct(), c);
-ArrayList TList=new ArrayList();    
-Cursor Cur=getDrv().OpenCursor(LoadAct);
-Record r=getDrv().NextRec(Cur);
-while (r!=null)
-    {
-    PDTasksDef t=new PDTasksDef(getDrv());   
-    t.assignValues(r);
-    TList.add(t);
-    r=getDrv().NextRec(Cur);
-    }
-getDrv().CloseCursor(Cur);
-return(TList);
-}**/
 //-------------------------------------------------------------------------
 }
