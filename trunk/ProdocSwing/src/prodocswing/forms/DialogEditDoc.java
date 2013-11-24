@@ -669,8 +669,6 @@ if (Attr.isMultivalued())
     {
     JTF=new MultiField(Attr.Export());
     ((MultiField)JTF).setAttr(Attr);
-    if (Modif && !Attr.isModifAllowed())
-        {
         JTF.addKeyListener(
             new java.awt.event.KeyAdapter() 
             {
@@ -688,7 +686,6 @@ if (Attr.isMultivalued())
             }
             }            
               ); 
-        }
     }
 else if (Attr.getType()==Attribute.tSTRING)
     {
