@@ -1337,7 +1337,8 @@ Message(DrvTT("Imported")+" "+ExpFolds+" "+DrvTT("Folders")+" / "+ExpDocs +" "+D
 
     private void ReportBugsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ReportBugsActionPerformed
     {//GEN-HEADEREND:event_ReportBugsActionPerformed
-Execute("https://docs.google.com/spreadsheet/viewform?formkey%3DdFF6ZndKWXFUQnJ0MWtVZWdUWk10X2c6MQ");   
+// Execute("https://docs.google.com/spreadsheet/viewform?formkey%3DdFF6ZndKWXFUQnJ0MWtVZWdUWk10X2c6MQ");   
+Execute("https://docs.google.com/spreadsheet/viewform?usp=drive_web&formkey=dEpsRzZzSmlaQVZET0g2NDdsM0ZRaEE6MA#gid=0");   
     }//GEN-LAST:event_ReportBugsActionPerformed
 
     private void ViewMetadataActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ViewMetadataActionPerformed

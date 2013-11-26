@@ -119,10 +119,10 @@ public static final String fATTRUNIQUE="UniqueKey";
  *
  */
 public static final String fATTRMODALLOW="ModifAllowed";
-    /**
-     *
-     */
-    public static final String fATTRMULTIVALUED="MultiValued";
+/**
+ *
+ */
+public static final String fATTRMULTIVALUED="MultiValued";
 
 /**
  *

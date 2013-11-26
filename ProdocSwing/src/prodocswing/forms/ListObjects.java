@@ -389,6 +389,7 @@ if (!CopyModeOk())
     return;
 MainWin.getSession().IniciarTrans();
 PDObject.insert();
+PostInsert(MantForm);
 MainWin.getSession().CerrarTrans();
 RefreshTable();
 int Tot=getObjectsTable().getRowCount();
