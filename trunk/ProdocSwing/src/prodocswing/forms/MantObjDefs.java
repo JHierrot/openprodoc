@@ -784,6 +784,7 @@ ParentNameTextField.setEnabled(false);
 //EditButtonAttr.setEnabled(false);
 //PanelAttr.setEnabled(false);
 ButtonCreateObject.setEnabled(false);
+ButtonDestroyObject.setEnabled(false);
 AddButtonAttr1.setEnabled(false);
 DelButtonAttr1.setEnabled(false);
 PanelInheritAttr.setEnabled(false);
@@ -803,6 +804,7 @@ AddButtonAttr.setEnabled(false);
 DelButtonAttr.setEnabled(false);
 EditButtonAttr.setEnabled(false);
 ButtonCreateObject.setEnabled(false);
+ButtonDestroyObject.setEnabled(false);
 AddButtonAttr1.setEnabled(false);
 DelButtonAttr1.setEnabled(false);
 }
@@ -821,14 +823,19 @@ ParentNameTextField.setEditable(false);
 /**
 *
 */
-public void CopyMode()
+public void CopyMode() throws PDException
 {
 LabelOperation.setText(MainWin.TT("Copy_Object_definition"));
 TypeNameTextField.setText(TypeNameTextField.getText()+"1");
+this.RefreshOwnAttr(TypeNameTextField.getText());
 PanelAttr.setEnabled(false);
 PanelInheritAttr.setEnabled(false);
 AddButtonAttr1.setEnabled(false);
 DelButtonAttr1.setEnabled(false);
+ButtonCreateObject.setEnabled(false);
+ButtonDestroyObject.setEnabled(false);
+Attribute Attr=ObjDef.getAttr(PDObjDefs.fCREATED);
+Attr.setValue(false);
 }
 //----------------------------------------------------------------
 /**
@@ -991,7 +998,7 @@ if (    getListRes()==null)
         Record Res=MainWin.getSession().NextRec(CursorId);
         while (Res!=null)
             {
-                    getListRes().add(Res);
+            getListRes().add(Res);
             Res=MainWin.getSession().NextRec(CursorId);
             }
         MainWin.getSession().CloseCursor(CursorId);
