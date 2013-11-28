@@ -669,6 +669,8 @@ if (Attr.isMultivalued())
     {
     JTF=new MultiField(Attr.Export());
     ((MultiField)JTF).setAttr(Attr);
+    if (!(ViewMode || Modif&&!Attr.isModifAllowed()))
+        {
         JTF.addKeyListener(
             new java.awt.event.KeyAdapter() 
             {
@@ -676,7 +678,7 @@ if (Attr.isMultivalued())
             {
             ShowEditList(evt);
             }
-            } );
+            });
         JTF.addMouseListener(
             new java.awt.event.MouseAdapter() 
             {
@@ -684,8 +686,8 @@ if (Attr.isMultivalued())
             {
             ShowEditList(evt);
             }
-            }            
-              ); 
+            }); 
+        }
     }
 else if (Attr.getType()==Attribute.tSTRING)
     {
