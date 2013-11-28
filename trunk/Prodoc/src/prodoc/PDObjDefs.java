@@ -774,7 +774,9 @@ for (int i = 0; i < RecDef.NumAttr(); i++)
         RecTab.addAttr(PdId);
         if (!isFolder)
             RecTab.addAttr(IdVer);
-        RecTab.addAttr(Atr.Copy()); 
+        Attribute A=Atr.Copy();
+        A.setUnique(false); // to avoid double restriction
+        RecTab.addAttr(A); 
         String MultiName=genMultValNam(Def.getName(),Atr.getName());
         getDrv().CreateTable(MultiName, RecTab);
         if (isFolder)
@@ -806,7 +808,9 @@ if (NewAttr.isMultivalued())
     RecTab.addAttr(PdId);
     if (!isFolder)
         RecTab.addAttr(IdVer);
-    RecTab.addAttr(NewAttr.Copy()); 
+    Attribute A=NewAttr.Copy();
+    A.setUnique(false); // to avoid double restriction
+    RecTab.addAttr(A); 
     String MultiName=genMultValNam(Def.getName(), NewAttr.getName());
     getDrv().CreateTable(MultiName, RecTab);
     if (isFolder)

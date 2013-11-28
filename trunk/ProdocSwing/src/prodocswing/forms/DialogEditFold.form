@@ -161,7 +161,7 @@
                           <Component id="TitleTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="TitleLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="171" max="32767" attributes="0"/>
+                      <EmptySpace pref="178" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
