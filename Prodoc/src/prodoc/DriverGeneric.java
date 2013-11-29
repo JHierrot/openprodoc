@@ -541,6 +541,11 @@ public void Update(boolean UpMetadataInc, Vector Trace)  throws PDException
 {
 PDServer Serv=new PDServer(this);
 Serv.Load("Prodoc");
+if (Serv.getVersion().equalsIgnoreCase("0.8.1"))
+    {
+    Trace.add("NO Update possible. Already 0.8.1 version");    
+    return;
+    }
 if (Serv.getVersion().equalsIgnoreCase("0.8"))
     {
     Trace.add("NO Update possible. Already 0.8 version");    
@@ -1340,7 +1345,7 @@ if (PDLog.isDebug())
  */
 static public String getVersion()
 {
-return("0.8");
+return("0.8.1");
 }
 private static final char[] HEX_CHARS = "0123456789abcdef".toCharArray();
 //-----------------------------------------------------------------------------------

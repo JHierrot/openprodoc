@@ -426,15 +426,11 @@ else if (Attr.getType()==Attribute.tTIMESTAMP)
     if (Val.length()>0)
         Attr.setValue(getFormatterTS(Req).parse(Val));
     }
-//else if (Attr.getType()==Attribute.tBOOLEAN)
-//    {
-//    Boolean Act;
-//    if (((JCheckBox)JTF).isSelected())
-//        Act=new Boolean(true);
-//    else
-//        Act=new Boolean(false);
-//    Attr.setValue(Act);
-//    }
+else if (Attr.getType()==Attribute.tINTEGER)
+    {
+    if (Val.length()>0)
+        Attr.setValue(Integer.parseInt(Val));
+    }
 else
     Attr.setValue("Error");
 } catch (Exception ex)
@@ -940,7 +936,7 @@ Sess.setAttribute("ST_Rec", Rec);
  */
 static public String getVersion()
 {
-return("0.8");
+return("0.8.1");
 }
 //-----------------------------------------------------------------------------------------------
 /**
