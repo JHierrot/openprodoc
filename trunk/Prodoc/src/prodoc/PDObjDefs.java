@@ -1041,10 +1041,12 @@ public Cursor getListFold() throws PDException
 if (PDLog.isDebug())
     PDLog.Debug("PDObjDefs.getListFold>");
 Condition CondType=new Condition(fCLASSTYPE, Condition.cEQUAL, CT_FOLDER);
+Condition CondCreated=new Condition(fCREATED, Condition.cEQUAL, true);
 Condition CondAcl=new Condition(PDObjDefs.fACL, new HashSet(getDrv().getUser().getAclList().keySet()));
 Conditions Conds=new Conditions();
 Conds.addCondition(CondType);
 Conds.addCondition(CondAcl);
+Conds.addCondition(CondCreated);
 Query ListFold=new Query(getTabName(), getRecordStruct(), Conds, PDObjDefs.fNAME);
 Cursor Cur=getDrv().OpenCursor(ListFold);
 if (PDLog.isDebug())
@@ -1062,10 +1064,12 @@ public Cursor getListDocs() throws PDException
 if (PDLog.isDebug())
     PDLog.Debug("PDObjDefs.getListDocs>");
 Condition CondType=new Condition(fCLASSTYPE, Condition.cEQUAL, CT_DOC);
+Condition CondCreated=new Condition(fCREATED, Condition.cEQUAL, true);
 Condition CondAcl=new Condition(PDObjDefs.fACL, new HashSet(getDrv().getUser().getAclList().keySet()));
 Conditions Conds=new Conditions();
 Conds.addCondition(CondType);
 Conds.addCondition(CondAcl);
+Conds.addCondition(CondCreated);
 Query ListFold=new Query(getTabName(), getRecordStruct(), Conds, PDObjDefs.fNAME);
 Cursor Cur=getDrv().OpenCursor(ListFold);
 if (PDLog.isDebug())
