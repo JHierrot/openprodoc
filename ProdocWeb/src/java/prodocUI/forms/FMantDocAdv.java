@@ -157,7 +157,10 @@ if (pMode!=ADDMOD)
         }
     }
 Form DocForm=new Form(Destination+"?Read=1","FormVal");
-DocForm.setModoEnvioMultipart(true);
+if (pMode!=DELMOD)
+   DocForm.setModoEnvioMultipart(true);
+else
+   DocForm.setModoEnvioMultipart(false);
 BorderTab.getCelda(0,1).AddElem(FormTab);
 DocForm.AddElem(BorderTab);
 AddElem(DocForm);
