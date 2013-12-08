@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Modify Term OpenProdoc</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management, Thesaurus"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+<H4>Modify Term OpenProdoc</H4><hr>
+<br>
+<p>This form allows modify an existing term, filling its data. The identifier (PDID) will be maintained.</p>
+<p>You can fill the fields:</p>
+<ul>
+    <li><b>Name</b>: Name of the term (up to 128 characters).</li>
+    <li><b>Definition</b>: Description of the Term (up to 254 characters)</li>
+    <li><b>USE</b>: Reference to the prefered form of the term. The current Term will appear in the selected term as USED FOR (UF) and in SKOS format as altlabel.</li>
+    <li><b>Language</b>: 2 characters ISO of the language (ES, EN, PT, etc)</li>
+    <li><b>Note</b>: Scope Note of the Term (SCN) (up to 254 characters).</li>
+    <li><b>Related Terms</b>: You can asociate the current term with other existing terms, creating relations RT.</li>
+    <li><b>Equivalent Terms in other Languages</b>: Links between the current term and the equivalent terms in other languages.</li>
+</ul>    
+<p style="text-align:center;"><img alt="Screenshot ModTerm" src="img/AddTerm.png"/></p>
+<p>In order to create relations as USE, RT or translations, a form will appear for selecting the required term. The form it's different in the Siwng and Web clients.</p>
+<p>The Swing client uses a popup window, similar to the main Thesaurus window, that allows to browse by terms. When found the term, you can press the menu option "Select->Select Term". 
+It is posible to show aditional information selecting the menu option "Select->Show details".
+Also, you can show or hide the terms with any ko¡ind of relation (RT, NT, UF) selecting the menu option "Select->Show Childs". 
+You must select a term before activating any of the checks</p>
+<p style="text-align:center;"><img alt="Screenshot SelTermS" src="img/SelTermS.png"/></p>
+<p>In the web client, a popup list is showed. The list can be filtered writing any part of the name of the searched term. The lis will show all te ther containing in the name the test.
+You can select a term, delete the selection or obtain more informetion about a term using the different buttons</p>
+<p style="text-align:center;"><img alt="Screenshot SelTermW" src="img/SelTermW.png"/></p>
+<p>In the event of an error (lack of user permissions, communication error, incorrect date, etc.), the operation is canceled and the system will communicate the reason for the error.</p>
+<hr>
+<a href="ThesIndex.html">Help Index Thesaurus</a>
+    </body>
+</html>
