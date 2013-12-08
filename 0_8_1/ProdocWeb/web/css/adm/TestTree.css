@@ -1,0 +1,47 @@
+/* 
+    Document   : TestTree
+    Created on : 11-nov-2010, 20:38:31
+    Author     : jhierrot
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+/*li a {display:inline-block;}*/
+/*li a {display:block;}*/
+
+.Hided
+{
+list-style-type:none;
+display: none;
+padding-left: 1em; 
+font-family: Arial,Helvetica,sans-serif;
+font-size: 12px;
+}
+
+.Showed
+{ 
+list-style-type:none;
+padding-left: 1em;
+font-family: Arial,Helvetica,sans-serif;
+font-size: 12px;
+}
+.Selected
+{
+list-style-type:none;
+padding-left: 1em;
+background-color: blue;
+font-family: Arial,Helvetica,sans-serif;
+font-size: 12px;
+color: white;
+}
+
+#IdTreeFrame
+{
+vertical-align: top;
+background-color: #adc4e0;
+font-family: Arial,Helvetica,sans-serif;
+font-size: 12px;
+}
