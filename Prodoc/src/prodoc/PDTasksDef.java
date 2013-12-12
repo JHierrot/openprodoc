@@ -19,31 +19,15 @@
 
 package prodoc;
 
-import java.util.ArrayList;
-import java.util.Date;
-
 /**
  *
  * @author jhierrot
  */
 public class PDTasksDef extends ObjPD
 {
-/**
- *
- */
 public static final String fNAME="Name";
 public static final String fCATEGORY="Category";
-/**
- *
- */
 public static final String fDESCRIPTION="Description";
-/**
- *
- */
-public static final String fSTARTDATE="StartDate";
-/**
- *
- */
 public static final String fTYPE="TaskType";
 public static final String fOBJTYPE="ObjType";
 public static final String fFILTER="ObjFilter";
@@ -73,12 +57,6 @@ private String Description;
 /**
  *
  */
-private Date StartDate;
-private Date NextDate;
-private int AddMonth=0;
-private int AddDays=0;
-private int AddHours=0;
-private int AddMins=0;
 
 public static final int fTASK_EXTERNAL=0;
 public static final int fTASK_DELETEFOLD=1;
@@ -124,7 +102,6 @@ public void assignValues(Record Rec) throws PDException
 setName((String) Rec.getAttr(fNAME).getValue());
 setCategory((String) Rec.getAttr(fCATEGORY).getValue());
 setDescription((String) Rec.getAttr(fDESCRIPTION).getValue());
-setStartDate((Date) Rec.getAttr(fSTARTDATE).getValue());
 setType((Integer) Rec.getAttr(fTYPE).getValue());
 setObjType((String) Rec.getAttr(fOBJTYPE).getValue());
 setObjFilter((String) Rec.getAttr(fFILTER).getValue());
@@ -146,7 +123,6 @@ Record Rec=getRecordStruct();
 Rec.getAttr(fNAME).setValue(getName());
 Rec.getAttr(fCATEGORY).setValue(getCategory());
 Rec.getAttr(fDESCRIPTION).setValue(getDescription());
-Rec.getAttr(fSTARTDATE).setValue(getStartDate());
 Rec.getAttr(fTYPE).setValue(getType());
 Rec.getAttr(fPARAM).setValue(getParam());
 Rec.getAttr(fOBJTYPE).setValue(getObjType());
@@ -202,35 +178,25 @@ return ("PD_TASKSDEF");
 @Override
 Record getRecordStruct() throws PDException
 {
-if (TaksTypeStruct==null)
-    TaksTypeStruct=CreateRecordStruct();
-return(TaksTypeStruct.Copy());
+throw new PDException("PDTasksDef getRecoedStruct null");
 }
 //-------------------------------------------------------------------------
 /**
 *
 * @return
 */
-static synchronized private Record CreateRecordStruct() throws PDException
+static synchronized protected void CreateRecordStructBase(Record R) throws PDException
 {
-if (TaksTypeStruct==null)
-    {
-    Record R=new Record();
-    R.addAttr( new Attribute(fNAME, fNAME, "Name of tasks", Attribute.tSTRING, true, null, 32, true, false, false));
-    R.addAttr( new Attribute(fCATEGORY, fCATEGORY, "Group of tasks", Attribute.tSTRING, false, null, 32, false, false, true));
-    R.addAttr( new Attribute(fDESCRIPTION, fDESCRIPTION, "Description", Attribute.tSTRING, true, null, 128, false, false, true));
-    R.addAttr( new Attribute(fSTARTDATE, fSTARTDATE, "Start Date of execution", Attribute.tDATE, true, null, 128, false, false, true));
-    R.addAttr( new Attribute(fTYPE, fTYPE, "Type of Task", Attribute.tINTEGER, true, null, 128, false, false, true));
-    R.addAttr( new Attribute(fOBJTYPE, fOBJTYPE, "Target Object(s)", Attribute.tSTRING, true, null, 128, false, false, true));
-    R.addAttr( new Attribute(fFILTER, fFILTER, "Filter of Object(s)", Attribute.tSTRING, false, null, 254, false, false, true));
-    R.addAttr( new Attribute(fPARAM, fPARAM, "Params of Task", Attribute.tSTRING, false, null, 256, false, false, true));
-    R.addAttr( new Attribute(fACTIVE, fACTIVE, "Indicates if the definition is active", Attribute.tBOOLEAN, true, null, 32, false, false, true));
-    R.addAttr( new Attribute(fTRANSACT, fTRANSACT, "Indicates if the task id transactional", Attribute.tBOOLEAN, true, null, 32, false, false, true));
-    R.addRecord(getRecordStructCommon());
-    return(R);
-    }
-else
-    return(TaksTypeStruct);
+R.addAttr( new Attribute(fNAME, fNAME, "Name of tasks", Attribute.tSTRING, true, null, 32, true, false, false));
+R.addAttr( new Attribute(fCATEGORY, fCATEGORY, "Group of tasks", Attribute.tSTRING, false, null, 32, false, false, true));
+R.addAttr( new Attribute(fDESCRIPTION, fDESCRIPTION, "Description", Attribute.tSTRING, true, null, 128, false, false, true));
+R.addAttr( new Attribute(fTYPE, fTYPE, "Type of Task", Attribute.tINTEGER, true, null, 128, false, false, true));
+R.addAttr( new Attribute(fOBJTYPE, fOBJTYPE, "Target Object(s)", Attribute.tSTRING, true, null, 128, false, false, true));
+R.addAttr( new Attribute(fFILTER, fFILTER, "Filter of Object(s)", Attribute.tSTRING, false, null, 254, false, false, true));
+R.addAttr( new Attribute(fPARAM, fPARAM, "Params of Task", Attribute.tSTRING, false, null, 256, false, false, true));
+R.addAttr( new Attribute(fACTIVE, fACTIVE, "Indicates if the definition is active", Attribute.tBOOLEAN, true, null, 32, false, false, true));
+R.addAttr( new Attribute(fTRANSACT, fTRANSACT, "Indicates if the task id transactional", Attribute.tBOOLEAN, true, null, 32, false, false, true));
+R.addRecord(getRecordStructCommon());
 }
 //-------------------------------------------------------------------------
 /**
@@ -274,38 +240,6 @@ return Description;
 public void setDescription(String Description)
 {
 this.Description = Description;
-}
-//-----------------------------------------------------------------------
-/**
-* @return the StartDate
-*/
-public Date getStartDate()
-{
-return StartDate;
-}
-//-----------------------------------------------------------------------
-/**
-* @param StartDate the StartDate to set
-*/
-public void setStartDate(Date StartDate)
-{
-this.StartDate = StartDate;
-}
-//-----------------------------------------------------------------------
-/**
-* @return the NextDate
-*/
-public Date getNextDate()
-{
-return NextDate;
-}
-//-----------------------------------------------------------------------
-/**
- * @param NextDate 
- */
-public void setNextDate(Date NextDate)
-{
-this.NextDate = NextDate;
 }
 //-----------------------------------------------------------------------
 protected void VerifyAllowedIns() throws PDException
@@ -355,70 +289,6 @@ return(TaksDefObjectsCache);
 protected String getKey()
 {
 return(getName());
-}
-//-------------------------------------------------------------------------
-/**
- * @return the AddMonth
- */
-public int getAddMonth()
-{
-return AddMonth;
-}
-//-------------------------------------------------------------------------
-/**
- * @param AddMonth the AddMonth to set
- */
-public void setAddMonth(int AddMonth)
-{
-this.AddMonth = AddMonth;
-}
-//-------------------------------------------------------------------------
-/**
- * @return the AddDays
- */
-public int getAddDays()
-{
-return AddDays;
-}
-//-------------------------------------------------------------------------
-/**
- * @param AddDays the AddDays to set
- */
-public void setAddDays(int AddDays)
-{
-this.AddDays = AddDays;
-}
-//-------------------------------------------------------------------------
-/**
- * @return the AddHours
- */
-public int getAddHours()
-{
-return AddHours;
-}
-//-------------------------------------------------------------------------
-/**
- * @param AddHours the AddHours to set
- */
-public void setAddHours(int AddHours)
-{
-this.AddHours = AddHours;
-}
-//-------------------------------------------------------------------------
-/**
- * @return the AddMins
- */
-public int getAddMins()
-{
-return AddMins;
-}
-//-------------------------------------------------------------------------
-/**
- * @param AddMins the AddMins to set
- */
-public void setAddMins(int AddMins)
-{
-this.AddMins = AddMins;
 }
 //-------------------------------------------------------------------------
 /**
