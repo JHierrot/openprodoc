@@ -158,12 +158,12 @@ return(true);
 @Override
 protected void AssignLabels()
 {
-setTitle(MainWin.TT("Mantenimiento de Repositorios"));
-getAddButton().setToolTipText(MainWin.TT("Añadir Repositorios"));
-getDelButton().setToolTipText(MainWin.TT("Borrado Repositorios"));
-getEditButton().setToolTipText(MainWin.TT("Modificación de Repositorios"));
-getCopyButton().setToolTipText(MainWin.TT("Copia de Repositorios"));
-getExportButton().setToolTipText(MainWin.TT("Exportar Repositorios"));
+setTitle(MainWin.TT("Repositories_Maintenance"));
+getAddButton().setToolTipText(MainWin.TT("Add_Repository"));
+getDelButton().setToolTipText(MainWin.TT("Delete_Repository"));
+getEditButton().setToolTipText(MainWin.TT("Update_Repository"));
+getCopyButton().setToolTipText(MainWin.TT("Copy_Repository"));
+getExportButton().setToolTipText(MainWin.TT("Export_Repository"));
 getExportAllButton().setToolTipText(MainWin.TT("Export_All"));
 getImportButton().setToolTipText(MainWin.TT("Import_Repository"));
 getjLabel1().setText(MainWin.TT("Filter_Repository"));
