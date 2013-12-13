@@ -157,25 +157,6 @@ return(ListCond);
 * @return
 */
 @Override
-public String getTabName()
-{
-return (getTableName());
-}
-//-------------------------------------------------------------------------
-/**
-*
-* @return
-*/
-static public String getTableName()
-{
-return ("PD_TASKSDEF");
-}
-//-------------------------------------------------------------------------
-/**
-*
-* @return
-*/
-@Override
 Record getRecordStruct() throws PDException
 {
 throw new PDException("PDTasksDef getRecoedStruct null");
@@ -195,7 +176,7 @@ R.addAttr( new Attribute(fOBJTYPE, fOBJTYPE, "Target Object(s)", Attribute.tSTRI
 R.addAttr( new Attribute(fFILTER, fFILTER, "Filter of Object(s)", Attribute.tSTRING, false, null, 254, false, false, true));
 R.addAttr( new Attribute(fPARAM, fPARAM, "Params of Task", Attribute.tSTRING, false, null, 256, false, false, true));
 R.addAttr( new Attribute(fACTIVE, fACTIVE, "Indicates if the definition is active", Attribute.tBOOLEAN, true, null, 32, false, false, true));
-R.addAttr( new Attribute(fTRANSACT, fTRANSACT, "Indicates if the task id transactional", Attribute.tBOOLEAN, true, null, 32, false, false, true));
+R.addAttr( new Attribute(fTRANSACT, fTRANSACT, "Indicates if the task is transactional", Attribute.tBOOLEAN, true, null, 32, false, false, true));
 R.addRecord(getRecordStructCommon());
 }
 //-------------------------------------------------------------------------

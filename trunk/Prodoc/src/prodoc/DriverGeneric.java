@@ -297,7 +297,7 @@ public void Install(String RootPassword, String DefLang, String DefTimeFormat,
                     boolean RepEncrypt, String RepUrl, String RepUser,
                     String RepPassword, String RepType, String RepParam, Vector Trace) throws PDException
 {
-//-------- Tables creation ----
+//-------- Tables creation ---------------------------------------------------
 Trace.add("Starting Installation....");
 PDServer Se=new PDServer(this);
 Se.Install();
@@ -346,7 +346,13 @@ Trace.add("Message Table created");
 PDThesaur TE=new PDThesaur(this);
 TE.Install();
 Trace.add("Thesaur Table created");
-//-------- Tables creation 2 phase ----
+PDTasksDefEvent TDE=new PDTasksDefEvent(this);
+TDE.Install();
+Trace.add("PDTasksDefEvent Table created");
+PDTasksCron TDC=new PDTasksCron(this);
+TDC.Install();
+Trace.add("PDTasksCron Table created");
+//-------- Tables creation 2 phase -------------------------------------
 getUser().InstallMulti();
 Trace.add("User relations created");
 G.InstallMulti();
@@ -367,7 +373,11 @@ ME.InstallMulti();
 Trace.add("Message relations created");
 PDThesaur.InstallMulti(this);
 Trace.add("Thesaur relations created");
-//--- insertion of objects ----
+TDE.InstallMulti();
+Trace.add("PDTasksDefEvent relations created");
+TDC.InstallMulti();
+Trace.add("PDTasksCron relations created");
+//--- insertion of objects --------------------------------------------
 this.IniciarTrans(); 
 //----- Servidor ---------
 Se.setName("Prodoc");
@@ -458,7 +468,7 @@ Grp.setDescription("Users with administration rights");
 Grp.setAcl("Public");
 Grp.insert();
 Trace.add("Groups elements created");
-//---- Definitions folder -----------------
+//---- Definitions folder -----------------------
 D.setName(PDFolders.getTableName());
 D.setDescription("Base Folder");
 D.setActive(true);
@@ -473,7 +483,7 @@ for (int i = 0; i < Rec.NumAttr(); i++)
     D.addAtribute(Rec.nextAttr());
     }
 Trace.add("Definitions elements created");
-// --- Folders ---
+// --- Folders -----------------------------------------
 PDFolders.CreateBaseRootFold(this);
 PDFolders UsersFold=new PDFolders(this);
 //UsersFold.setPDId(PDFolders.USERSFOLDER);
@@ -527,7 +537,7 @@ for (int i = 0; i < RecD.NumAttr(); i++)
     D.addAtribute(RecD.nextAttr());
     }
 Trace.add("Document elements created");
-//----------------------
+//----------MIME Types -------------------------------------------
 File FileImp=new File("ex/defs.opd");
 ProcessXML(FileImp, PDFolders.ROOTFOLDER);
 TE.CreateRootThesaur();
