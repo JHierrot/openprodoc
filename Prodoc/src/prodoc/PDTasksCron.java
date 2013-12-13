@@ -106,6 +106,17 @@ return(Rec);
 *
 * @return
 */
+@Override
+public String getTabName()
+{
+return (getTableName());
+}
+//-------------------------------------------------------------------------
+
+/**
+*
+* @return
+*/
 static public String getTableName()
 {
 return ("PD_TASKSDEFCRON");

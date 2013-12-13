@@ -26,6 +26,10 @@ package prodoc;
 public class PDTasksDefEvent extends PDTasksDef
 {
 
+public static final String fEVENTYPE="EvenType";
+
+private String EvenType;
+
 /**
  *
  */
@@ -53,7 +57,7 @@ super(Drv);
 public void assignValues(Record Rec) throws PDException
 {
 super.assignValues(Rec);
-
+setEvenType((String) Rec.getAttr(fEVENTYPE).getValue());
 assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
@@ -67,9 +71,21 @@ synchronized public Record getRecord() throws PDException
 {
 Record Rec=getRecordStruct();
 Rec.addRecord(super.getRecord().Copy());
+Rec.getAttr(fEVENTYPE).setValue(getEvenType());
 return(Rec);
 }
 //-------------------------------------------------------------------------
+/**
+*
+* @return
+*/
+@Override
+public String getTabName()
+{
+return (getTableName());
+}
+//-------------------------------------------------------------------------
+
 /**
 *
 * @return
@@ -101,20 +117,11 @@ if (TaksTypeStruct==null)
     {
     Record R=new Record();
     CreateRecordStructBase(R);
+    R.addAttr( new Attribute(fEVENTYPE, fEVENTYPE, "Type of event (INS, DEL, UP..)", Attribute.tSTRING, true, null, 32, false, false, true));
     return(R);
     }
 else
     return(TaksTypeStruct);
-}
-//-------------------------------------------------------------------------
-/**
- *
- * @param Ident
- * @throws PDExceptionFunc  
- */
-protected void AsignKey(String Ident) throws PDExceptionFunc
-{
-setName(Ident);
 }
 //-------------------------------------------------------------------------
 /**
@@ -137,6 +144,22 @@ return(TaksDefObjectsCache);
 */
 static protected void InstallMulti(DriverGeneric Drv) throws PDException
 {
+}
+//-------------------------------------------------------------------------
+/**
+ * @return the EvenType
+ */
+public String getEvenType()
+{
+return EvenType;
+}
+//-------------------------------------------------------------------------
+/**
+ * @param EvenType the EvenType to set
+ */
+public void setEvenType(String EvenType)
+{
+this.EvenType = EvenType;
 }
 //-------------------------------------------------------------------------
 }

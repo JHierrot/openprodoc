@@ -156,6 +156,8 @@ SetMenu();
         ObjDefMenuItem = new javax.swing.JMenuItem();
         AuthentMenuItem = new javax.swing.JMenuItem();
         CustomMenuItem = new javax.swing.JMenuItem();
+        TaskCronMenuItem = new javax.swing.JMenuItem();
+        TaskEvenMenuItem = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
         contentsMenuItem1 = new javax.swing.JMenuItem();
         aboutMenuItem1 = new javax.swing.JMenuItem();
@@ -671,6 +673,28 @@ SetMenu();
             }
         });
         AdminMenu.add(CustomMenuItem);
+
+        TaskCronMenuItem.setFont(getFontMenu());
+        TaskCronMenuItem.setText(TT("Task_Cron"));
+        TaskCronMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                TaskCronMenuItemActionPerformed(evt);
+            }
+        });
+        AdminMenu.add(TaskCronMenuItem);
+
+        TaskEvenMenuItem.setFont(getFontMenu());
+        TaskEvenMenuItem.setText(TT("Task_Events"));
+        TaskEvenMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                TaskEvenMenuItemActionPerformed(evt);
+            }
+        });
+        AdminMenu.add(TaskEvenMenuItem);
 
         menuBar.add(AdminMenu);
 
@@ -1392,6 +1416,30 @@ MTW.setLocationRelativeTo(null);
 MTW.setVisible(true);
     }//GEN-LAST:event_ThesaurActionPerformed
 
+    private void TaskCronMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_TaskCronMenuItemActionPerformed
+    {//GEN-HEADEREND:event_TaskCronMenuItemActionPerformed
+try {
+ListTaskCron LC = new ListTaskCron(this, true, new PDTasksCron(getSession()));
+LC.setLocationRelativeTo(null);
+LC.setVisible(true);
+} catch (Exception ex)
+    {
+    Message(DrvTT(ex.getLocalizedMessage()));
+    }
+    }//GEN-LAST:event_TaskCronMenuItemActionPerformed
+
+    private void TaskEvenMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_TaskEvenMenuItemActionPerformed
+    {//GEN-HEADEREND:event_TaskEvenMenuItemActionPerformed
+try {
+ListTaskEvents LC = new ListTaskEvents(this, true, new PDTasksDefEvent(getSession()));
+LC.setLocationRelativeTo(null);
+LC.setVisible(true);
+} catch (Exception ex)
+    {
+    Message(DrvTT(ex.getLocalizedMessage()));
+    }
+    }//GEN-LAST:event_TaskEvenMenuItemActionPerformed
+
 /**
 * @param args the command line arguments
 */
@@ -1458,6 +1506,8 @@ java.awt.EventQueue.invokeLater(new Runnable()
     private javax.swing.JMenuItem SearchDocs;
     private javax.swing.JMenuItem SearchFold;
     private javax.swing.JLabel SelFolderDesc;
+    private javax.swing.JMenuItem TaskCronMenuItem;
+    private javax.swing.JMenuItem TaskEvenMenuItem;
     private javax.swing.JMenuItem Thesaur;
     private javax.swing.JTree TreeFolder;
     private javax.swing.JMenuItem UserMenuItem;
