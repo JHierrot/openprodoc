@@ -84,10 +84,16 @@
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="ButtonCancel" min="-2" max="-2" attributes="0"/>
                           </Group>
+                          <Component id="ModifyTaskCheck" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="CreateTaskCheck" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -156,7 +162,12 @@
                   <Component id="CreateThesCheck" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="ModifyThesCheck" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="14" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="CreateTaskCheck" min="-2" max="-2" attributes="0"/>
+                  <Component id="ModifyTaskCheck" alignment="0" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace pref="19" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="ButtonCancel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="ButtonAcept" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -369,6 +380,23 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JCheckBox" name="ModifyThesCheck">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="MainWin.getFontDialog()" type="code"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="MThes"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="CreateTaskCheck">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="MainWin.getFontDialog()" type="code"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="CThes"/>
+        <Property name="horizontalAlignment" type="int" value="11"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="ModifyTaskCheck">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="MainWin.getFontDialog()" type="code"/>

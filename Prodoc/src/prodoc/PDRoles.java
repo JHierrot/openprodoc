@@ -129,6 +129,14 @@ public static final String fALLOWCREATETHESAUR="AllowCreateThesaur";
  *
  */
 public static final String fALLOWMAINTAINTHESAUR="AllowMaintainThesaur";
+/**
+ *
+ */
+public static final String fALLOWCREATETASK="AllowCreateTask";
+/**
+ *
+ */
+public static final String fALLOWMAINTAINTASK="AllowMaintainTask";
 
 /**
  *
@@ -238,6 +246,14 @@ private boolean AllowCreateThesaur=false;
  *
  */
 private boolean AllowMaintainThesaur=false;
+/**
+ *
+ */
+private boolean AllowCreateTask=false;
+/**
+ *
+ */
+private boolean AllowMaintainTask=false;
 
 static private ObjectsCache RolesObjectsCache = null;
 
@@ -309,6 +325,10 @@ if (Rec.getAttr(fALLOWCREATETHESAUR).getValue()!=null)
     setAllowCreateThesaur(((Boolean)Rec.getAttr(fALLOWCREATETHESAUR).getValue()).booleanValue());
 if (Rec.getAttr(fALLOWMAINTAINTHESAUR).getValue()!=null)
     setAllowMaintainThesaur(((Boolean)Rec.getAttr(fALLOWMAINTAINTHESAUR).getValue()).booleanValue());
+if (Rec.getAttr(fALLOWCREATETASK).getValue()!=null)
+    setAllowCreateTask(((Boolean)Rec.getAttr(fALLOWCREATETASK).getValue()).booleanValue());
+if (Rec.getAttr(fALLOWMAINTAINTASK).getValue()!=null)
+    setAllowMaintainTask(((Boolean)Rec.getAttr(fALLOWMAINTAINTASK).getValue()).booleanValue());
 assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
@@ -347,6 +367,8 @@ Rec.getAttr(fALLOWCREATECUSTOM).setValue(isAllowCreateCustom());
 Rec.getAttr(fALLOWMAINTAINCUSTOM).setValue(isAllowMaintainCustom());
 Rec.getAttr(fALLOWCREATETHESAUR).setValue(isAllowCreateThesaur());
 Rec.getAttr(fALLOWMAINTAINTHESAUR).setValue(isAllowMaintainThesaur());
+Rec.getAttr(fALLOWCREATETASK).setValue(isAllowCreateTask());
+Rec.getAttr(fALLOWMAINTAINTASK).setValue(isAllowMaintainTask());
 getCommonValues(Rec);
 return(Rec);
 }
@@ -434,6 +456,8 @@ if (RolesStruct==null)
     R.addAttr( new Attribute(fALLOWMAINTAINAUTH, fALLOWMAINTAINAUTH,"When_true_the_user_can_maintain_Authenticators", Attribute.tBOOLEAN, true, null, 0, false, false, true));
     R.addAttr( new Attribute(fALLOWCREATETHESAUR,fALLOWCREATETHESAUR, "When_true_the_user_can_create_Thesaurus", Attribute.tBOOLEAN, true, null, 0, false, false, true));
     R.addAttr( new Attribute(fALLOWMAINTAINTHESAUR, fALLOWMAINTAINTHESAUR,"When_true_the_user_can_maintain_Thesaurus", Attribute.tBOOLEAN, true, null, 0, false, false, true));
+    R.addAttr( new Attribute(fALLOWCREATETASK,fALLOWCREATETASK, "When_true_the_user_can_create_Task", Attribute.tBOOLEAN, true, null, 0, false, false, true));
+    R.addAttr( new Attribute(fALLOWMAINTAINTASK, fALLOWMAINTAINTASK,"When_true_the_user_can_maintain_Task", Attribute.tBOOLEAN, true, null, 0, false, false, true));
     R.addRecord(getRecordStructCommon());
     return(R);
     }
@@ -917,4 +941,36 @@ public void setAllowMaintainThesaur(boolean AllowMaintainThesaur)
 this.AllowMaintainThesaur = AllowMaintainThesaur;
 }
 //-------------------------------------------------------------------------
+
+    /**
+     * @return the AllowCreateTask
+     */
+    public boolean isAllowCreateTask()
+    {
+        return AllowCreateTask;
+    }
+
+    /**
+     * @param AllowCreateTask the AllowCreateTask to set
+     */
+    public void setAllowCreateTask(boolean AllowCreateTask)
+    {
+        this.AllowCreateTask = AllowCreateTask;
+    }
+
+    /**
+     * @return the AllowMaintainTask
+     */
+    public boolean isAllowMaintainTask()
+    {
+        return AllowMaintainTask;
+    }
+
+    /**
+     * @param AllowMaintainTask the AllowMaintainTask to set
+     */
+    public void setAllowMaintainTask(boolean AllowMaintainTask)
+    {
+        this.AllowMaintainTask = AllowMaintainTask;
+    }
 }

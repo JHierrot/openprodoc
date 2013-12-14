@@ -83,6 +83,8 @@ initComponents();
         ModifyMimeCheck = new javax.swing.JCheckBox();
         CreateThesCheck = new javax.swing.JCheckBox();
         ModifyThesCheck = new javax.swing.JCheckBox();
+        CreateTaskCheck = new javax.swing.JCheckBox();
+        ModifyTaskCheck = new javax.swing.JCheckBox();
         ButtonAcept = new javax.swing.JButton();
         ButtonCancel = new javax.swing.JButton();
 
@@ -181,6 +183,13 @@ initComponents();
         ModifyThesCheck.setFont(MainWin.getFontDialog());
         ModifyThesCheck.setText("MThes");
 
+        CreateTaskCheck.setFont(MainWin.getFontDialog());
+        CreateTaskCheck.setText("CThes");
+        CreateTaskCheck.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+
+        ModifyTaskCheck.setFont(MainWin.getFontDialog());
+        ModifyTaskCheck.setText("MThes");
+
         ButtonAcept.setFont(MainWin.getFontDialog());
         ButtonAcept.setText(MainWin.TT("Ok"));
         ButtonAcept.addActionListener(new java.awt.event.ActionListener()
@@ -252,8 +261,13 @@ initComponents();
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(ButtonAcept)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(ButtonCancel)))))
+                                .addComponent(ButtonCancel))
+                            .addComponent(ModifyTaskCheck))))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(CreateTaskCheck)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -308,7 +322,11 @@ initComponents();
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(CreateThesCheck)
                     .addComponent(ModifyThesCheck))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(CreateTaskCheck)
+                    .addComponent(ModifyTaskCheck))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButtonCancel)
                     .addComponent(ButtonAcept))
@@ -452,6 +470,18 @@ if (ModifyThesCheck.isSelected())
 else
     Act=false;
 Attr.setValue(Act);
+Attr=Role.getAttr(PDRoles.fALLOWCREATETASK); //-----
+if (CreateTaskCheck.isSelected())
+    Act=true;
+else
+    Act=false;
+Attr.setValue(Act);
+Attr=Role.getAttr(PDRoles.fALLOWMAINTAINTASK);
+if (ModifyTaskCheck.isSelected())
+    Act=true;
+else
+    Act=false;
+Attr.setValue(Act);
 this.dispose();
 } catch (PDException ex)
     {
@@ -475,6 +505,7 @@ Cancel=true;
     private javax.swing.JCheckBox CreateObjectCheck;
     private javax.swing.JCheckBox CreateReposCheck;
     private javax.swing.JCheckBox CreateRoleCheck;
+    private javax.swing.JCheckBox CreateTaskCheck;
     private javax.swing.JCheckBox CreateThesCheck;
     private javax.swing.JCheckBox CreateUserCheck;
     private javax.swing.JLabel DescriptionLabel;
@@ -488,6 +519,7 @@ Cancel=true;
     private javax.swing.JCheckBox ModifyObjectCheck;
     private javax.swing.JCheckBox ModifyReposCheck;
     private javax.swing.JCheckBox ModifyRoleCheck;
+    private javax.swing.JCheckBox ModifyTaskCheck;
     private javax.swing.JCheckBox ModifyThesCheck;
     private javax.swing.JCheckBox ModifyUserCheck;
     private javax.swing.JTextField RoleNameTextField;
@@ -674,6 +706,16 @@ ModifyThesCheck.setText(MainWin.DrvTT(Attr.getUserName()));
 if (Attr.getValue()!=null)
     ModifyThesCheck.setSelected((Boolean)Attr.getValue());
 ModifyThesCheck.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
+Attr=Role.getAttr(PDRoles.fALLOWCREATETASK);  //--------------
+CreateTaskCheck.setText(MainWin.DrvTT(Attr.getUserName()));
+if (Attr.getValue()!=null)
+    CreateTaskCheck.setSelected((Boolean)Attr.getValue());
+CreateTaskCheck.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
+Attr=Role.getAttr(PDRoles.fALLOWMAINTAINTASK);
+ModifyTaskCheck.setText(MainWin.DrvTT(Attr.getUserName()));
+if (Attr.getValue()!=null)
+    ModifyTaskCheck.setSelected((Boolean)Attr.getValue());
+ModifyTaskCheck.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
 }
 //----------------------------------------------------------------
 /**
