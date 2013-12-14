@@ -2229,6 +2229,8 @@ ObjDefMenuItem.setVisible(R.isAllowCreateObject()  || R.isAllowMaintainObject())
 ReposMenuItem.setVisible(R.isAllowCreateRepos()  || R.isAllowMaintainRepos());
 RolMenuItem.setVisible(R.isAllowCreateRole()  || R.isAllowMaintainRole());
 UserMenuItem.setVisible(R.isAllowCreateUser()  || R.isAllowMaintainUser());
+TaskCronMenuItem.setVisible(R.isAllowCreateTask()  || R.isAllowMaintainTask());
+TaskEvenMenuItem.setVisible(R.isAllowCreateTask()  || R.isAllowMaintainTask());
 AddFold.setVisible(R.isAllowCreateFolder());
 AddFoldAdvanced.setVisible(R.isAllowCreateFolder());
 ImportFold.setVisible(R.isAllowCreateFolder());

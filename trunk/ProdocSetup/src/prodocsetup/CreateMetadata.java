@@ -549,7 +549,7 @@ Vector Trace=new Vector();
 EvolTab.setEnabled(true);
 EvolTab.setFocusable(true);
 jTabbedPane1.setSelectedComponent(EvolTab);
-jProgressBar1.setMaximum(35);
+jProgressBar1.setMaximum(45);
 AcceptButton.setEnabled(false);
 CancelButton.setEnabled(false);
 repaint();

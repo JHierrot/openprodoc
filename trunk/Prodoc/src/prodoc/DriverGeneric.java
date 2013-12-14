@@ -439,6 +439,8 @@ Ro.setAllowCreateCustom(true);
 Ro.setAllowMaintainCustom(true);
 Ro.setAllowCreateThesaur(true);
 Ro.setAllowMaintainThesaur(true);
+Ro.setAllowCreateTask(true);
+Ro.setAllowMaintainTask(true);
 Ro.insert();
 Trace.add("Roles elements created");
 // --- Acl Administrators ---
