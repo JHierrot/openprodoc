@@ -75,10 +75,22 @@ public void assignValues(Record Rec) throws PDException
 super.assignValues(Rec);    
 setStartDate((Date) Rec.getAttr(fSTARTDATE).getValue());
 setNextDate((Date) Rec.getAttr(fNEXTDATE).getValue());
-setAddMonth((Integer) Rec.getAttr(fADDMONTH).getValue());
-setAddDays((Integer) Rec.getAttr(fADDDAYS).getValue());
-setAddHours((Integer) Rec.getAttr(fADDHOURS).getValue());
-setAddMins((Integer) Rec.getAttr(fADDMINS).getValue());
+if (Rec.getAttr(fADDMONTH).getValue()==null)
+    setAddMonth(0);
+else
+    setAddMonth((Integer) Rec.getAttr(fADDMONTH).getValue());
+if (Rec.getAttr(fADDDAYS).getValue()==null)
+    setAddDays(0);
+else
+    setAddDays((Integer) Rec.getAttr(fADDDAYS).getValue());
+if (Rec.getAttr(fADDHOURS).getValue()==null)
+    setAddHours(0);
+else
+    setAddHours((Integer) Rec.getAttr(fADDHOURS).getValue());
+if (Rec.getAttr(fADDMINS).getValue()==null)
+    setAddMins(0);
+else
+    setAddMins((Integer) Rec.getAttr(fADDMINS).getValue());
 assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------

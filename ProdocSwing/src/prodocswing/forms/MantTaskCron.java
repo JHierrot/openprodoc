@@ -80,19 +80,19 @@ initComponents();
         EndDateLabel = new javax.swing.JLabel();
         EndDateTextField = new javax.swing.JFormattedTextField();
         AddMonthLabel = new javax.swing.JLabel();
-        AddMonthTextField = new javax.swing.JTextField();
+        AddMonthTextField = new javax.swing.JFormattedTextField();
         AddDayLabel = new javax.swing.JLabel();
-        AddDayTextField = new javax.swing.JTextField();
         AddHourLabel = new javax.swing.JLabel();
-        AddHourTextField = new javax.swing.JTextField();
         AddMinLabel = new javax.swing.JLabel();
-        AddMinTextField = new javax.swing.JTextField();
         ActiveLabel = new javax.swing.JLabel();
         ActiveCB = new javax.swing.JCheckBox();
         TransactLabel = new javax.swing.JLabel();
         TransactCB = new javax.swing.JCheckBox();
         ButtonAcept = new javax.swing.JButton();
         ButtonCancel = new javax.swing.JButton();
+        AddDayTextField = new javax.swing.JFormattedTextField();
+        AddHourTextField = new javax.swing.JFormattedTextField();
+        AddMinTextField = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(MainWin.TT("Repositories_Maintenance"));
@@ -173,17 +173,11 @@ initComponents();
         AddDayLabel.setFont(MainWin.getFontDialog());
         AddDayLabel.setText("jLabel1");
 
-        AddDayTextField.setFont(MainWin.getFontDialog());
-
         AddHourLabel.setFont(MainWin.getFontDialog());
         AddHourLabel.setText("jLabel1");
 
-        AddHourTextField.setFont(MainWin.getFontDialog());
-
         AddMinLabel.setFont(MainWin.getFontDialog());
         AddMinLabel.setText("jLabel1");
-
-        AddMinTextField.setFont(MainWin.getFontDialog());
 
         ActiveLabel.setFont(MainWin.getFontDialog());
         ActiveLabel.setText("jLabel1");
@@ -214,6 +208,12 @@ initComponents();
                 ButtonCancelActionPerformed(evt);
             }
         });
+
+        AddDayTextField.setFont(MainWin.getFontDialog());
+
+        AddHourTextField.setFont(MainWin.getFontDialog());
+
+        AddMinTextField.setFont(MainWin.getFontDialog());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -252,14 +252,14 @@ initComponents();
                             .addComponent(TypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(StartDateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(TransactCB)
-                            .addComponent(AddMonthTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(AddDayTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(AddMinTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(ActiveCB)
                             .addComponent(ParamTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(FilterTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(AddHourTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(EndDateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(EndDateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(AddMonthTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(AddDayTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(AddHourTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(AddMinTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(12, 12, 12)
                         .addComponent(ButtonAcept)
@@ -315,20 +315,20 @@ initComponents();
                     .addComponent(EndDateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(8, 8, 8)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(AddMinTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(AddMinLabel))
+                    .addComponent(AddMinLabel)
+                    .addComponent(AddMonthTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(AddHourTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(AddHourLabel))
+                    .addComponent(AddHourLabel)
+                    .addComponent(AddDayTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(AddDayTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(AddDayLabel))
+                    .addComponent(AddDayLabel)
+                    .addComponent(AddHourTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(AddMonthLabel)
-                    .addComponent(AddMonthTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(AddMinTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(ActiveCB)
@@ -408,13 +408,13 @@ Cancel=true;
     private javax.swing.JCheckBox ActiveCB;
     private javax.swing.JLabel ActiveLabel;
     private javax.swing.JLabel AddDayLabel;
-    private javax.swing.JTextField AddDayTextField;
+    private javax.swing.JFormattedTextField AddDayTextField;
     private javax.swing.JLabel AddHourLabel;
-    private javax.swing.JTextField AddHourTextField;
+    private javax.swing.JFormattedTextField AddHourTextField;
     private javax.swing.JLabel AddMinLabel;
-    private javax.swing.JTextField AddMinTextField;
+    private javax.swing.JFormattedTextField AddMinTextField;
     private javax.swing.JLabel AddMonthLabel;
-    private javax.swing.JTextField AddMonthTextField;
+    private javax.swing.JFormattedTextField AddMonthTextField;
     private javax.swing.JButton ButtonAcept;
     private javax.swing.JButton ButtonCancel;
     private javax.swing.JLabel CategoryLabel;
@@ -563,22 +563,30 @@ EndDateTextField.setToolTipText(MainWin.DrvTT(Attr.getDescription())  +"("+MainW
 Attr=CronTask.getAttr(PDTasksCron.fADDMONTH); //--------------------------
 AddMonthLabel.setText(MainWin.DrvTT(Attr.getUserName()));
 if (Attr.getValue()!=null)
-    AddMonthTextField.setText((String)Attr.getValue());
+    AddMonthTextField.setValue((Integer)Attr.getValue());
+else
+    AddMonthTextField.setValue((Integer)0);
 AddMonthTextField.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
 Attr=CronTask.getAttr(PDTasksCron.fADDDAYS); //--------------------------
 AddDayLabel.setText(MainWin.DrvTT(Attr.getUserName()));
 if (Attr.getValue()!=null)
-    AddDayTextField.setText((String)Attr.getValue());
+    AddDayTextField.setValue((Integer)Attr.getValue());
+else
+    AddDayTextField.setValue((Integer)0);
 AddDayTextField.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
 Attr=CronTask.getAttr(PDTasksCron.fADDHOURS); //--------------------------
 AddHourLabel.setText(MainWin.DrvTT(Attr.getUserName()));
 if (Attr.getValue()!=null)
-    AddHourTextField.setText((String)Attr.getValue());
+    AddHourTextField.setValue((Integer)Attr.getValue());
+else
+    AddHourTextField.setValue((Integer)0);    
 AddHourTextField.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
 Attr=CronTask.getAttr(PDTasksCron.fADDMINS); //--------------------------
 AddMinLabel.setText(MainWin.DrvTT(Attr.getUserName()));
 if (Attr.getValue()!=null)
-    AddMinTextField.setText((String)Attr.getValue());
+    AddMinTextField.setValue((Integer)Attr.getValue());
+else
+    AddMinTextField.setValue((Integer)0);
 AddMinTextField.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
 Attr=CronTask.getAttr(PDTasksCron.fACTIVE); //--------------------------
 ActiveLabel.setText(MainWin.DrvTT(Attr.getUserName()));
