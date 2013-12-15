@@ -64,14 +64,14 @@
                           <Component id="TypeComboBox" linkSize="1" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="StartDateTextField" linkSize="1" min="-2" pref="318" max="-2" attributes="0"/>
                           <Component id="TransactCB" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="AddMonthTextField" alignment="0" min="-2" pref="145" max="-2" attributes="0"/>
-                          <Component id="AddDayTextField" alignment="0" min="-2" pref="145" max="-2" attributes="0"/>
-                          <Component id="AddMinTextField" alignment="0" min="-2" pref="145" max="-2" attributes="0"/>
                           <Component id="ActiveCB" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="ParamTextField" linkSize="1" alignment="0" min="-2" pref="267" max="-2" attributes="0"/>
                           <Component id="FilterTextField" linkSize="1" alignment="0" min="-2" pref="267" max="-2" attributes="0"/>
-                          <Component id="AddHourTextField" alignment="0" min="-2" pref="145" max="-2" attributes="0"/>
                           <Component id="EndDateTextField" min="-2" pref="318" max="-2" attributes="0"/>
+                          <Component id="AddMonthTextField" alignment="0" min="-2" pref="104" max="-2" attributes="0"/>
+                          <Component id="AddDayTextField" min="-2" pref="104" max="-2" attributes="0"/>
+                          <Component id="AddHourTextField" min="-2" pref="104" max="-2" attributes="0"/>
+                          <Component id="AddMinTextField" min="-2" pref="104" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -137,23 +137,23 @@
               </Group>
               <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="AddMinTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="AddMinLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="AddMonthTextField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="AddHourTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="AddHourLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="AddDayTextField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="AddDayTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="AddDayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="AddHourTextField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="AddMonthLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="AddMonthTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="AddMinTextField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -353,7 +353,7 @@
         <Property name="text" type="java.lang.String" value="jLabel1"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="AddMonthTextField">
+    <Component class="javax.swing.JFormattedTextField" name="AddMonthTextField">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="MainWin.getFontDialog()" type="code"/>
@@ -368,13 +368,6 @@
         <Property name="text" type="java.lang.String" value="jLabel1"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="AddDayTextField">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="MainWin.getFontDialog()" type="code"/>
-        </Property>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JLabel" name="AddHourLabel">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -383,26 +376,12 @@
         <Property name="text" type="java.lang.String" value="jLabel1"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="AddHourTextField">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="MainWin.getFontDialog()" type="code"/>
-        </Property>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JLabel" name="AddMinLabel">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="MainWin.getFontDialog()" type="code"/>
         </Property>
         <Property name="text" type="java.lang.String" value="jLabel1"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="AddMinTextField">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="MainWin.getFontDialog()" type="code"/>
-        </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="ActiveLabel">
@@ -460,6 +439,27 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ButtonCancelActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JFormattedTextField" name="AddDayTextField">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="MainWin.getFontDialog()" type="code"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JFormattedTextField" name="AddHourTextField">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="MainWin.getFontDialog()" type="code"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JFormattedTextField" name="AddMinTextField">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="MainWin.getFontDialog()" type="code"/>
+        </Property>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

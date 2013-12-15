@@ -99,12 +99,21 @@ public void assignValues(Record Rec) throws PDException
 setName((String) Rec.getAttr(fNAME).getValue());
 setCategory((String) Rec.getAttr(fCATEGORY).getValue());
 setDescription((String) Rec.getAttr(fDESCRIPTION).getValue());
-setType((Integer) Rec.getAttr(fTYPE).getValue());
+if (Rec.getAttr(fTYPE).getValue()==null)
+    setType(0);
+else
+    setType((Integer) Rec.getAttr(fTYPE).getValue());
 setObjType((String) Rec.getAttr(fOBJTYPE).getValue());
 setObjFilter((String) Rec.getAttr(fFILTER).getValue());
 setParam((String) Rec.getAttr(fPARAM).getValue());
-setActive((Boolean) Rec.getAttr(fACTIVE).getValue());
-setTransact((Boolean) Rec.getAttr(fTRANSACT).getValue());
+if (Rec.getAttr(fACTIVE).getValue()==null)
+    setActive(true);
+else
+    setActive((Boolean) Rec.getAttr(fACTIVE).getValue());
+if (Rec.getAttr(fTRANSACT).getValue()==null)
+    setTransact(true);
+else
+    setTransact((Boolean) Rec.getAttr(fTRANSACT).getValue());
 assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
