@@ -35,9 +35,6 @@ public static final String fPARAM="TaskParam";
 public static final String fACTIVE="Active";
 public static final String fTRANSACT="Transact";
 
-public static final String fMODEINS="INS";
-public static final String fMODEUPD="UPD";
-public static final String fMODEDEL="DEL";
 public static final String fMODETIM="TIM";
 
 /**

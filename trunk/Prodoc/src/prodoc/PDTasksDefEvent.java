@@ -30,6 +30,10 @@ public static final String fEVENTYPE="EvenType";
 
 private String EvenType;
 
+public static final String fMODEINS="INS";
+public static final String fMODEUPD="UPD";
+public static final String fMODEDEL="DEL";
+
 /**
  *
  */
