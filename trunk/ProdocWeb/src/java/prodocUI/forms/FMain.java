@@ -106,7 +106,7 @@ MenuCol MC4=new MenuCol(TT("Help"), 3);
 MainMenu.add(MC4);
 MC4.add(new MenuItem(TT("Contents"), "help/"+SParent.getLang(Req)+"/MainWin.html", "_blank"));
 MC4.add(new MenuItem(TT("About"), About.getUrlServlet(), "_blank"));
-MC4.add(new MenuItem(TT("Reporting_Bugs"), "https://docs.google.com/spreadsheet/viewform?formkey=dFF6ZndKWXFUQnJ0MWtVZWdUWk10X2c6MQ", "_blank"));
+MC4.add(new MenuItem(TT("Reporting_Bugs"), "https://docs.google.com/spreadsheet/viewform?usp=drive_web&formkey=dEpsRzZzSmlaQVZET0g2NDdsM0ZRaEE6MA#gid=0", "_blank"));
 AddHead(MainMenu);
 //---- Menu -------------------------
 Table CentralArea=new Table(3,1,1);

@@ -1266,6 +1266,7 @@ while (FieldDef!=null)
     XML.append("</"+XML_Field+">");
     FieldDef=getDrv().NextRec(LstGrps);
     }
+getDrv().CloseCursor(LstGrps);
 XML.append("</"+XML_Metadata+">");
 return(XML.toString());      
 }

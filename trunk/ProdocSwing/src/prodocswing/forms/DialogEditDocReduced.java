@@ -308,6 +308,7 @@ while (Res!=null)
     VObjects.add(Attr.getValue());
     Res=Session.NextRec(CursorId);
     }
+Session.CloseCursor(CursorId);
 } catch (PDException ex)
     {
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
@@ -329,6 +330,7 @@ while (Res!=null)
     VObjects.add(Attr.getValue());
     Res=Session.NextRec(CursorId);
     }
+Session.CloseCursor(CursorId);
 } catch (PDException ex)
     {
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));

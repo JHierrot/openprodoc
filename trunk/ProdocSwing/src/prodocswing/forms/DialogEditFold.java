@@ -328,6 +328,7 @@ while (Res!=null)
     VObjects.add(Attr.getValue());
     Res=Session.NextRec(CursorId);
     }
+Session.CloseCursor(CursorId);
 } catch (PDException ex)
     {
     MainWin.Message("Error"+ex.getLocalizedMessage());

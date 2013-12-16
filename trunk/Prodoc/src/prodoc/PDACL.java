@@ -717,6 +717,7 @@ while (GrpAcl!=null)
     XML.append("</"+XML_Group+">");
     GrpAcl=getDrv().NextRec(LstGrps);
     }
+getDrv().CloseCursor(LstGrps);
 XML.append("</"+XML_GroupMembers+">");
 XML.append("<"+XML_UserMembers+">");  
 Cursor LstUsrs=ListUsers(getName());
@@ -730,6 +731,7 @@ while (UsrAcl!=null)
     XML.append("</"+XML_User+">");
     UsrAcl=getDrv().NextRec(LstUsrs);
     }
+getDrv().CloseCursor(LstUsrs);
 XML.append("</"+XML_UserMembers+">");
 return(XML.toString());    
 }
