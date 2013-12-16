@@ -19,6 +19,8 @@
 
 package prodoc;
 
+import java.util.Vector;
+
 /**
  *
  * @author jhierrot
@@ -64,6 +66,16 @@ public static final int fTASK_MOVEDOC=5;
 public static final int fTASK_UPDATEDOC=6;
 public static final int fTASK_UPDATEFOLD=7;
 
+private static final String[] LisTypeTask= {"EXTERNAL",
+                                            "DELETEFOLD",
+                                            "DELETEDOC",
+                                            "PURGEDOC",
+                                            "COPYDOC",
+                                            "MOVEDOC",
+                                            "UPDATEDOC",
+                                            "UPDATEFOLD"};
+
+        
 private int Type=0;
 /**
  * Parameters to be interpreteddepending of task
@@ -489,5 +501,10 @@ while (r!=null)
 getDrv().CloseCursor(Cur);
 return(TList);
 }**/
+//-------------------------------------------------------------------------
+static public String[] getListTypeTask()
+{
+return LisTypeTask;    
+}
 //-------------------------------------------------------------------------
 }
