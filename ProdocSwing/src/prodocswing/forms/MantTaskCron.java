@@ -374,7 +374,7 @@ Attr.setValue(CategoryTextField.getText());
 Attr = CronTask.getAttr(PDTasksCron.fDESCRIPTION);
 Attr.setValue(DescriptionTextField.getText());
 Attr = CronTask.getAttr(PDTasksCron.fTYPE);
-Attr.setValue(TypeComboBox.getSelectedItem());
+Attr.setValue(TypeComboBox.getSelectedIndex());
 Attr = CronTask.getAttr(PDTasksCron.fOBJTYPE);
 Attr.setValue(ObjTypeComboBox.getSelectedItem());
 Attr = CronTask.getAttr(PDTasksCron.fFILTER);
@@ -542,7 +542,7 @@ ParamTextField.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
 Attr=CronTask.getAttr(PDTasksCron.fTYPE); //--------------------------
 TypeLabel.setText(MainWin.DrvTT(Attr.getUserName()));
 if (Attr.getValue()!=null)
-    TypeComboBox.setSelectedItem((String)Attr.getValue());
+    TypeComboBox.setSelectedIndex((Integer)Attr.getValue());
 TypeComboBox.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
 Attr=CronTask.getAttr(PDTasksCron.fOBJTYPE); //--------------------------
 ObjTypeLabel.setText(MainWin.DrvTT(Attr.getUserName()));

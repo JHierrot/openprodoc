@@ -103,7 +103,7 @@ assignCommonValues(Rec);
 synchronized public Record getRecord() throws PDException
 {
 Record Rec=getRecordStruct();
-Rec.addRecord(super.getRecord().Copy());
+Rec.assign(super.getRecord().Copy());
 Rec.getAttr(fSTARTDATE).setValue(getStartDate());
 Rec.getAttr(fNEXTDATE).setValue(getNextDate());
 Rec.getAttr(fADDMONTH).setValue(getAddMonth());
