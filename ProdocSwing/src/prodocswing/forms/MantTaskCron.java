@@ -83,6 +83,12 @@ initComponents();
         FilterTextField = new javax.swing.JTextField();
         ParamLabel = new javax.swing.JLabel();
         ParamTextField = new javax.swing.JTextField();
+        ParamLabel2 = new javax.swing.JLabel();
+        ParamTextField2 = new javax.swing.JTextField();
+        ParamLabel3 = new javax.swing.JLabel();
+        ParamTextField3 = new javax.swing.JTextField();
+        ParamLabel4 = new javax.swing.JLabel();
+        ParamTextField4 = new javax.swing.JTextField();
         StartDateLabel = new javax.swing.JLabel();
         StartDateTextField = new javax.swing.JFormattedTextField();
         EndDateLabel = new javax.swing.JLabel();
@@ -161,6 +167,21 @@ initComponents();
 
         ParamTextField.setFont(MainWin.getFontDialog());
 
+        ParamLabel2.setFont(MainWin.getFontDialog());
+        ParamLabel2.setText("jLabel1");
+
+        ParamTextField2.setFont(MainWin.getFontDialog());
+
+        ParamLabel3.setFont(MainWin.getFontDialog());
+        ParamLabel3.setText("jLabel1");
+
+        ParamTextField3.setFont(MainWin.getFontDialog());
+
+        ParamLabel4.setFont(MainWin.getFontDialog());
+        ParamLabel4.setText("jLabel1");
+
+        ParamTextField4.setFont(MainWin.getFontDialog());
+
         StartDateLabel.setFont(MainWin.getFontDialog());
         StartDateLabel.setText("jLabel1");
 
@@ -231,23 +252,16 @@ initComponents();
                 .addGap(12, 12, 12)
                 .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(12, 12, 12))
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(CategoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(TransactLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(AddMonthLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(TaskNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(TypeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(DescriptionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(FilterLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(ActiveLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(EndDateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(StartDateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ParamLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ObjTypeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(StartDateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(AddMinLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(AddHourLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(AddDayLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -259,24 +273,43 @@ initComponents();
                         .addComponent(ButtonAcept)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(ButtonCancel))
+                    .addComponent(StartDateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ActiveCB)
+                    .addComponent(EndDateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(AddMinTextField, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(AddHourTextField, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(AddDayTextField, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(AddMonthTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(CategoryLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
+                    .addComponent(TaskNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
+                    .addComponent(TypeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
+                    .addComponent(DescriptionLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
+                    .addComponent(FilterLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
+                    .addComponent(ParamLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
+                    .addComponent(ObjTypeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
+                    .addComponent(ParamLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(ParamLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(ParamLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ParamTextField3)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(ObjTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(DescriptionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(TypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(StartDateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ActiveCB)
-                            .addComponent(ParamTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(FilterTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(EndDateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(ObjTypeComboBox, 0, 318, Short.MAX_VALUE)
+                            .addComponent(DescriptionTextField)
+                            .addComponent(TypeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(ParamTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE)
+                            .addComponent(FilterTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE)
                             .addComponent(TaskNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(CategoryTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(AddMinTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE)
-                                .addComponent(AddHourTextField, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(AddDayTextField, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(AddMonthTextField, javax.swing.GroupLayout.Alignment.LEADING)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(ParamTextField2))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(ParamTextField4))
                 .addContainerGap())
         );
 
@@ -317,7 +350,19 @@ initComponents();
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ParamTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ParamLabel))
-                .addGap(12, 12, 12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ParamTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ParamLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ParamTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ParamLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ParamTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ParamLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(StartDateLabel)
                     .addComponent(StartDateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -352,7 +397,7 @@ initComponents();
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(ButtonCancel)
                         .addComponent(ButtonAcept)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(21, 21, 21))
         );
 
         pack();
@@ -381,6 +426,12 @@ Attr = CronTask.getAttr(PDTasksCron.fFILTER);
 Attr.setValue(FilterTextField.getText());
 Attr = CronTask.getAttr(PDTasksCron.fPARAM);
 Attr.setValue(ParamTextField.getText());
+Attr = CronTask.getAttr(PDTasksCron.fPARAM2);
+Attr.setValue(ParamTextField2.getText());
+Attr = CronTask.getAttr(PDTasksCron.fPARAM3);
+Attr.setValue(ParamTextField3.getText());
+Attr = CronTask.getAttr(PDTasksCron.fPARAM4);
+Attr.setValue(ParamTextField4.getText());
 Attr = CronTask.getAttr(PDTasksCron.fSTARTDATE);
 Attr.setValue(StartDateTextField.getValue());
 Attr = CronTask.getAttr(PDTasksCron.fNEXTDATE);
@@ -440,7 +491,13 @@ Cancel=true;
     private javax.swing.JComboBox ObjTypeComboBox;
     private javax.swing.JLabel ObjTypeLabel;
     private javax.swing.JLabel ParamLabel;
+    private javax.swing.JLabel ParamLabel2;
+    private javax.swing.JLabel ParamLabel3;
+    private javax.swing.JLabel ParamLabel4;
     private javax.swing.JTextField ParamTextField;
+    private javax.swing.JTextField ParamTextField2;
+    private javax.swing.JTextField ParamTextField3;
+    private javax.swing.JTextField ParamTextField4;
     private javax.swing.JLabel StartDateLabel;
     private javax.swing.JFormattedTextField StartDateTextField;
     private javax.swing.JLabel TaskNameLabel;
@@ -539,6 +596,21 @@ ParamLabel.setText(MainWin.DrvTT(Attr.getUserName()));
 if (Attr.getValue()!=null)
     ParamTextField.setText((String)Attr.getValue());
 ParamTextField.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
+Attr=CronTask.getAttr(PDTasksCron.fPARAM2); //--------------------------
+ParamLabel2.setText(MainWin.DrvTT(Attr.getUserName()));
+if (Attr.getValue()!=null)
+    ParamTextField2.setText((String)Attr.getValue());
+ParamTextField2.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
+Attr=CronTask.getAttr(PDTasksCron.fPARAM3); //--------------------------
+ParamLabel3.setText(MainWin.DrvTT(Attr.getUserName()));
+if (Attr.getValue()!=null)
+    ParamTextField3.setText((String)Attr.getValue());
+ParamTextField3.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
+Attr=CronTask.getAttr(PDTasksCron.fPARAM4); //--------------------------
+ParamLabel4.setText(MainWin.DrvTT(Attr.getUserName()));
+if (Attr.getValue()!=null)
+    ParamTextField4.setText((String)Attr.getValue());
+ParamTextField4.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
 Attr=CronTask.getAttr(PDTasksCron.fTYPE); //--------------------------
 TypeLabel.setText(MainWin.DrvTT(Attr.getUserName()));
 if (Attr.getValue()!=null)
