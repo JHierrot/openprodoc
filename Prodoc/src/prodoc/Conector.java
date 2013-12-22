@@ -19,6 +19,7 @@
 
 package prodoc;
 
+import java.util.Hashtable;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -68,7 +69,15 @@ private String DataAccessType;
  *
  */
 private Vector ListSesion;
+/**
+ *
+ */
+private int TaskSearchFreq=0;
 
+private int TaskExecFreq=0;
+
+static private Hashtable TaskSearchList=new Hashtable();
+static private Hashtable TaskExecList=new Hashtable();  
 //--------------------------------------------------------------------------
 /**
  * reads, interpret and store the requiered elements of the configuration
@@ -92,11 +101,18 @@ if (LogProp==null || LogProp.length()==0)
     PDLog.setPropFile("log4j.properties");
 else
     PDLog.setPropFile(LogProp);
+String Temp=ProdocProperties.getProperty(ConectorName+".TaskSearchFreq");
+if (Temp!=null)
+    TaskSearchFreq=new Integer(Temp);
+Temp=ProdocProperties.getProperty(ConectorName+".TaskExecFreq");
+if (Temp!=null)
+    TaskExecFreq=new Integer(Temp);
 ListSesion=new Vector();
 for (int i = 0; i < MinPoolSize; i++)
     {
     ListSesion.add(CreateSesion());
     }
+CreateTask();
 }
 //--------------------------------------------------------------------------
 /**
@@ -172,11 +188,72 @@ public void Shutdown() throws PDException
 DriverGeneric Session;
 if (PDLog.isDebug())
     PDLog.Debug("closing_sessions_of"+":"+this.ConectorName);
+DestroyTask();
 for (int i = 0; i < ListSesion.size(); i++)
     {
      Session = (DriverGeneric) ListSesion.elementAt(i);
      Session.delete();
     }
+}
+//--------------------------------------------------------------------------
+/**
+ * Starts the search and execute tasks
+ */
+private void CreateTask()
+{
+if (TaskSearchFreq!=0)   
+    Conector.CreateSearchTask(TaskSearchFreq, ConectorName );
+if (TaskExecFreq!=0)
+    Conector.CreateExecTask(TaskExecFreq, ConectorName );
+}
+//--------------------------------------------------------------------------
+/**
+ * Stops the search and execute tasks
+ */
+private void DestroyTask()
+{
+if (TaskSearchFreq!=0)    
+    Conector.DestroySearchTask(ConectorName);
+if (TaskExecFreq!=0)
+    Conector.DestroyExecTask(ConectorName);   
+}
+//--------------------------------------------------------------------------
+/**
+ * 
+ * @param TaskSearchFreq
+ * @param ConectorName 
+ */
+private static void CreateSearchTask(int TaskSearchFreq, String ConectorName)
+{
+throw new UnsupportedOperationException("Not yet implemented");
+}
+//--------------------------------------------------------------------------
+/**
+ * 
+ * @param TaskExecFreq
+ * @param ConectorName 
+ */
+private static void CreateExecTask(int TaskExecFreq, String ConectorName)
+{
+throw new UnsupportedOperationException("Not yet implemented");
+}
+//--------------------------------------------------------------------------
+/**
+ * 
+ * @param ConectorName 
+ */
+private static void DestroySearchTask(String ConectorName)
+{
+throw new UnsupportedOperationException("Not yet implemented");
+}
+//--------------------------------------------------------------------------
+/**
+ * 
+ * @param ConectorName 
+ */
+private static void DestroyExecTask(String ConectorName)
+{
+throw new UnsupportedOperationException("Not yet implemented");
 }
 //--------------------------------------------------------------------------
 }

@@ -2425,6 +2425,7 @@ NodeList DocList = XMLObjects.getElementsByTagName("form:Documents");
 NodeList DocElem;
 NodeList SectElem;
 NodeList AttrElem;
+PDObjDefs DefTyp=new PDObjDefs(Sess);
 for (int NumDocs=0; NumDocs<DocList.getLength(); NumDocs++)
     {
     DocElem=DocList.item(NumDocs).getChildNodes(); 
@@ -2434,6 +2435,10 @@ for (int NumDocs=0; NumDocs<DocList.getLength(); NumDocs++)
             {
             String TypeName=DocElem.item(NumDoc).getNodeName();
             TypeName=TypeName.substring(1, TypeName.indexOf(":"));
+            DefTyp.Clear();
+            DefTyp.Load(TypeName);
+            if (DefTyp.getParent()==null || DefTyp.getParent().length()==0)
+                throw new PDException("Incorrect_Document_Type:"+TypeName);
             String FileName=DocElem.item(NumDoc).getAttributes().getNamedItem("addData:ImagePath").getNodeValue();    
             SectElem=DocElem.item(NumDoc).getChildNodes(); 
             for (int NumSect = 0; NumSect < SectElem.getLength(); NumSect++)
@@ -2441,7 +2446,10 @@ for (int NumDocs=0; NumDocs<DocList.getLength(); NumDocs++)
                 if (SectElem.item(NumSect).getNodeType()==Node.ELEMENT_NODE)
                     {
                     PDDocs Doc=new PDDocs(Sess, TypeName);
-                    ImageFile=new File(XMLFile.getParent()+File.separator+FileName);
+                    if (FileName.charAt(0)==File.separatorChar || FileName.contains(":") && File.separatorChar=='\\')
+                        ImageFile=new File(FileName);
+                    else
+                        ImageFile=new File(XMLFile.getParent()+File.separator+FileName);
                     Doc.setFile(ImageFile.getAbsolutePath());
                     Doc.setParentId(ParentFoldId);
                     Record Rec=Doc.getRecSum();
@@ -2503,9 +2511,14 @@ try {
 File ImageFile=null;
 BufferedReader Metadata = new BufferedReader(new FileReader(TxtFile));
 String DocMeta=Metadata.readLine();
+PDObjDefs DefTyp=new PDObjDefs(Sess);
 while (DocMeta!=null &&DocMeta.length()!=0)
     {
     String[] ListElem=DocMeta.split("\"");
+    DefTyp.Clear();
+    DefTyp.Load(ListElem[3]);
+    if (DefTyp.getParent()==null || DefTyp.getParent().length()==0)
+        throw new PDException("Incorrect_Document_Type:"+ListElem[3]);
     PDDocs Doc=new PDDocs(Sess, ListElem[3]);
     ImageFile=new File(ListElem[ListElem.length-1]);
     Doc.setFile(ImageFile.getAbsolutePath());
