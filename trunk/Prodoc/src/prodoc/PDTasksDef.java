@@ -34,6 +34,9 @@ public static final String fTYPE="TaskType";
 public static final String fOBJTYPE="ObjType";
 public static final String fFILTER="ObjFilter";
 public static final String fPARAM="TaskParam";
+public static final String fPARAM2="TaskParam2";
+public static final String fPARAM3="TaskParam3";
+public static final String fPARAM4="TaskParam4";
 public static final String fACTIVE="Active";
 public static final String fTRANSACT="Transact";
 
@@ -83,6 +86,9 @@ private int Type=0;
 private String ObjType="";
 private String ObjFilter="";
 private String Param="";
+private String Param2="";
+private String Param3="";
+private String Param4="";
 private String TaskUser="";
 private boolean Active=false;
 private boolean Transact=false;
@@ -118,6 +124,9 @@ else
 setObjType((String) Rec.getAttr(fOBJTYPE).getValue());
 setObjFilter((String) Rec.getAttr(fFILTER).getValue());
 setParam((String) Rec.getAttr(fPARAM).getValue());
+setParam2((String) Rec.getAttr(fPARAM2).getValue());
+setParam3((String) Rec.getAttr(fPARAM3).getValue());
+setParam4((String) Rec.getAttr(fPARAM4).getValue());
 if (Rec.getAttr(fACTIVE).getValue()==null)
     setActive(true);
 else
@@ -143,6 +152,9 @@ Rec.getAttr(fCATEGORY).setValue(getCategory());
 Rec.getAttr(fDESCRIPTION).setValue(getDescription());
 Rec.getAttr(fTYPE).setValue(getType());
 Rec.getAttr(fPARAM).setValue(getParam());
+Rec.getAttr(fPARAM2).setValue(getParam2());
+Rec.getAttr(fPARAM3).setValue(getParam3());
+Rec.getAttr(fPARAM4).setValue(getParam4());
 Rec.getAttr(fOBJTYPE).setValue(getObjType());
 Rec.getAttr(fFILTER).setValue(getObjFilter());
 Rec.getAttr(fACTIVE).setValue(isActive());
@@ -192,7 +204,10 @@ R.addAttr( new Attribute(fDESCRIPTION, fDESCRIPTION, "Description", Attribute.tS
 R.addAttr( new Attribute(fTYPE, fTYPE, "Type of Task", Attribute.tINTEGER, true, null, 128, false, false, true));
 R.addAttr( new Attribute(fOBJTYPE, fOBJTYPE, "Target Object(s)", Attribute.tSTRING, true, null, 128, false, false, true));
 R.addAttr( new Attribute(fFILTER, fFILTER, "Filter of Object(s)", Attribute.tSTRING, false, null, 254, false, false, true));
-R.addAttr( new Attribute(fPARAM, fPARAM, "Params of Task", Attribute.tSTRING, false, null, 256, false, false, true));
+R.addAttr( new Attribute(fPARAM, fPARAM, "Params of Task", Attribute.tSTRING, false, null, 254, false, false, true));
+R.addAttr( new Attribute(fPARAM2, fPARAM2, "Params of Task2", Attribute.tSTRING, false, null, 254, false, false, true));
+R.addAttr( new Attribute(fPARAM3, fPARAM3, "Params of Task3", Attribute.tSTRING, false, null, 254, false, false, true));
+R.addAttr( new Attribute(fPARAM4, fPARAM4, "Params of Task4", Attribute.tSTRING, false, null, 254, false, false, true));
 R.addAttr( new Attribute(fACTIVE, fACTIVE, "Indicates if the definition is active", Attribute.tBOOLEAN, true, null, 32, false, false, true));
 R.addAttr( new Attribute(fTRANSACT, fTRANSACT, "Indicates if the task is transactional", Attribute.tBOOLEAN, true, null, 32, false, false, true));
 R.addRecord(getRecordStructCommon());
@@ -507,4 +522,52 @@ static public String[] getListTypeTask()
 return LisTypeTask;    
 }
 //-------------------------------------------------------------------------
+
+    /**
+     * @return the Param2
+     */
+    public String getParam2()
+    {
+        return Param2;
+    }
+
+    /**
+     * @param Param2 the Param2 to set
+     */
+    public void setParam2(String Param2)
+    {
+        this.Param2 = Param2;
+    }
+
+    /**
+     * @return the Param3
+     */
+    public String getParam3()
+    {
+        return Param3;
+    }
+
+    /**
+     * @param Param3 the Param3 to set
+     */
+    public void setParam3(String Param3)
+    {
+        this.Param3 = Param3;
+    }
+
+    /**
+     * @return the Param4
+     */
+    public String getParam4()
+    {
+        return Param4;
+    }
+
+    /**
+     * @param Param4 the Param4 to set
+     */
+    public void setParam4(String Param4)
+    {
+        this.Param4 = Param4;
+    }
 }
