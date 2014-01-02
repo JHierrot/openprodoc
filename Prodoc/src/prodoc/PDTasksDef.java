@@ -522,52 +522,67 @@ static public String[] getListTypeTask()
 return LisTypeTask;    
 }
 //-------------------------------------------------------------------------
-
-    /**
-     * @return the Param2
-     */
-    public String getParam2()
-    {
-        return Param2;
-    }
-
-    /**
-     * @param Param2 the Param2 to set
-     */
-    public void setParam2(String Param2)
-    {
-        this.Param2 = Param2;
-    }
-
-    /**
-     * @return the Param3
-     */
-    public String getParam3()
-    {
-        return Param3;
-    }
-
-    /**
-     * @param Param3 the Param3 to set
-     */
-    public void setParam3(String Param3)
-    {
-        this.Param3 = Param3;
-    }
-
-    /**
-     * @return the Param4
-     */
-    public String getParam4()
-    {
-        return Param4;
-    }
-
-    /**
-     * @param Param4 the Param4 to set
-     */
-    public void setParam4(String Param4)
-    {
-        this.Param4 = Param4;
-    }
+/**
+ * @return the Param2
+ */
+public String getParam2()
+{
+return Param2;
+}
+//-------------------------------------------------------------------------
+/**
+ * @param Param2 the Param2 to set
+ */
+public void setParam2(String Param2)
+{
+this.Param2 = Param2;
+}
+//-------------------------------------------------------------------------
+/**
+ * @return the Param3
+ */
+public String getParam3()
+{
+return Param3;
+}
+//-------------------------------------------------------------------------
+/**
+ * @param Param3 the Param3 to set
+ */
+public void setParam3(String Param3)
+{
+this.Param3 = Param3;
+}
+//-------------------------------------------------------------------------
+/**
+ * @return the Param4
+ */
+public String getParam4()
+{
+return Param4;
+}
+//-------------------------------------------------------------------------
+/**
+ * @param Param4 the Param4 to set
+ */
+public void setParam4(String Param4)
+{
+this.Param4 = Param4;
+}
+//-------------------------------------------------------------------------
+/**
+ * 
+ * @param Conds
+ * @return 
+ */    
+public Cursor Search(Conditions Conds) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDef.Search>:"+getTabName());
+Query QBE=new Query(getTabName(), getRecordStruct(), Conds);
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDef.Search <");
+return(getDrv().OpenCursor(QBE));
+}
+//-------------------------------------------------------------------------    
 }
