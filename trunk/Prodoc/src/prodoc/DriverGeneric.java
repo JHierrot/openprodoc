@@ -352,6 +352,12 @@ Trace.add("PDTasksDefEvent Table created");
 PDTasksCron TDC=new PDTasksCron(this);
 TDC.Install();
 Trace.add("PDTasksCron Table created");
+PDTasksExec TEx=new PDTasksExec(this);
+TEx.Install();
+Trace.add("PDTasksExec Table created");
+PDTasksExecEnded TExEnd=new PDTasksExecEnded(this);
+TExEnd.Install();
+Trace.add("PDTasksExecEnded Table created");
 //-------- Tables creation 2 phase -------------------------------------
 getUser().InstallMulti();
 Trace.add("User relations created");
@@ -377,6 +383,10 @@ TDE.InstallMulti();
 Trace.add("PDTasksDefEvent relations created");
 TDC.InstallMulti();
 Trace.add("PDTasksCron relations created");
+TEx.InstallMulti();
+Trace.add("PDTasksExec relations created");
+TExEnd.InstallMulti();
+Trace.add("PDTasksExecEnded relations created");
 //--- insertion of objects --------------------------------------------
 this.IniciarTrans(); 
 //----- Servidor ---------
@@ -1357,7 +1367,7 @@ if (PDLog.isDebug())
  */
 static public String getVersion()
 {
-return("0.8.1");
+return("0.9");
 }
 private static final char[] HEX_CHARS = "0123456789abcdef".toCharArray();
 //-----------------------------------------------------------------------------------
