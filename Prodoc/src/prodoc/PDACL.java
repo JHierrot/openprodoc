@@ -789,4 +789,30 @@ for (int NumNodes = 0; NumNodes < childNodes.getLength(); NumNodes++)
     }
 }    
 //-------------------------------------------------------------------------
+/**
+ * Fills a Haskmap with all the ACL and DELETE permisions
+ * @return created Hashmap
+ */
+protected HashMap FillAclTaskUser() throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDACL.FillAclTaskUser>");
+HashMap Result=new HashMap();
+Conditions Conds=new Conditions();
+Query Q=new Query(getTabName(), getRecordStruct(), Conds);
+Cursor CursorId=getDrv().OpenCursor(Q);
+Record Res=getDrv().NextRec(CursorId);
+Integer Permision=pDELETE;
+while (Res!=null)
+    {
+    String Acl=(String) Res.getAttr(fNAME).getValue();
+    Result.put(Acl, Permision);
+    Res=getDrv().NextRec(CursorId);
+    }
+getDrv().CloseCursor(CursorId);
+if (PDLog.isDebug())
+    PDLog.Debug("PDACL.FillAclTaskUser<");
+return(Result);
+}
+//-------------------------------------------------------------------------
 }

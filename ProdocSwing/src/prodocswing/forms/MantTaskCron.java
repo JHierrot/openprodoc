@@ -432,8 +432,8 @@ Attr = CronTask.getAttr(PDTasksCron.fPARAM3);
 Attr.setValue(ParamTextField3.getText());
 Attr = CronTask.getAttr(PDTasksCron.fPARAM4);
 Attr.setValue(ParamTextField4.getText());
-Attr = CronTask.getAttr(PDTasksCron.fSTARTDATE);
-Attr.setValue(StartDateTextField.getValue());
+//Attr = CronTask.getAttr(PDTasksCron.fSTARTDATE);
+//Attr.setValue(StartDateTextField.getValue());
 Attr = CronTask.getAttr(PDTasksCron.fNEXTDATE);
 Attr.setValue(EndDateTextField.getValue());
 Attr = CronTask.getAttr(PDTasksCron.fADDMONTH);
@@ -621,19 +621,19 @@ ObjTypeLabel.setText(MainWin.DrvTT(Attr.getUserName()));
 if (Attr.getValue()!=null)
     ObjTypeComboBox.setSelectedItem((String)Attr.getValue());
 ObjTypeComboBox.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
-Attr=CronTask.getAttr(PDTasksCron.fSTARTDATE); //------------------------
-StartDateLabel.setText(MainWin.DrvTT(Attr.getUserName()));
-try {
-StartDateTextField.setFormatterFactory(MainWin.getFormFacTS());
-} catch(Exception e)
-    {
-    PDLog.Error(e.getLocalizedMessage());
-    }
-if (Attr.getValue()!=null)
-    StartDateTextField.setValue(Attr.getValue());
-else
-    StartDateTextField.setValue(new Date());
-StartDateTextField.setToolTipText(MainWin.DrvTT(Attr.getDescription())  +"("+MainWin.getFormatTS()+")");
+//Attr=CronTask.getAttr(PDTasksCron.fSTARTDATE); //------------------------
+//StartDateLabel.setText(MainWin.DrvTT(Attr.getUserName()));
+//try {
+//StartDateTextField.setFormatterFactory(MainWin.getFormFacTS());
+//} catch(Exception e)
+//    {
+//    PDLog.Error(e.getLocalizedMessage());
+//    }
+//if (Attr.getValue()!=null)
+//    StartDateTextField.setValue(Attr.getValue());
+//else
+//    StartDateTextField.setValue(new Date());
+//StartDateTextField.setToolTipText(MainWin.DrvTT(Attr.getDescription())  +"("+MainWin.getFormatTS()+")");
 Attr=CronTask.getAttr(PDTasksCron.fNEXTDATE); //--------------------------
 EndDateLabel.setText(MainWin.DrvTT(Attr.getUserName()));
 try {

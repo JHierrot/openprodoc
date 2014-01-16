@@ -28,6 +28,7 @@ import java.util.Date;
 public class PDTasksExec extends PDTasksDef
 {
 
+public static final String fPDID="PDId";
 public static final String fSTARTDATE="StartDate";
 public static final String fENDDATE="EndDate";
 public static final String fRESULT="Result";
@@ -41,6 +42,7 @@ static private Record TaksTypeStruct=null;
 /**
  *
  */
+private String PDId;
 private Date StartDate;
 private Date EndDate;
 private String Result;
@@ -68,6 +70,7 @@ super(Drv);
 public void assignValues(Record Rec) throws PDException
 {
 super.assignValues(Rec);    
+setPDId((String) Rec.getAttr(fPDID).getValue());
 setStartDate((Date) Rec.getAttr(fSTARTDATE).getValue());
 setEndDate((Date) Rec.getAttr(fENDDATE).getValue());
 setResult((String) Rec.getAttr(fRESULT).getValue());
@@ -88,6 +91,7 @@ synchronized public Record getRecord() throws PDException
 {
 Record Rec=getRecordStruct();
 Rec.assign(super.getRecord().Copy());
+Rec.getAttr(fPDID).setValue(getPDId());
 Rec.getAttr(fSTARTDATE).setValue(getStartDate());
 Rec.getAttr(fENDDATE).setValue(getEndDate());
 Rec.getAttr(fRESULT).setValue(getResult());
@@ -137,10 +141,11 @@ if (TaksTypeStruct==null)
     {
     Record R=new Record();
     CreateRecordStructBase(R);
-    R.addAttr( new Attribute(fSTARTDATE, fSTARTDATE, "Start Date of execution", Attribute.tDATE, true, null, 32, false, false, true));
-    R.addAttr( new Attribute(fENDDATE, fENDDATE, "Next Date of execution", Attribute.tDATE, true, null, 32, false, false, true));
-    R.addAttr( new Attribute(fRESULT, fRESULT, "Description of error", Attribute.tSTRING, true, null, 254, false, false, true));
-    R.addAttr( new Attribute(fENDSOK, fENDSOK, "True if the taks end correctly", Attribute.tBOOLEAN, true, null, 32, false, false, true));
+    R.addAttr( new Attribute(fPDID, fPDID, "Unique_identifier", Attribute.tSTRING, true, null, 32, true, false, false));
+    R.addAttr( new Attribute(fSTARTDATE, fSTARTDATE, "Start Date of execution", Attribute.tDATE, false, null, 32, false, false, true));
+    R.addAttr( new Attribute(fENDDATE, fENDDATE, "Next Date of execution", Attribute.tDATE, false, null, 32, false, false, true));
+    R.addAttr( new Attribute(fRESULT, fRESULT, "Description of error", Attribute.tSTRING, false, null, 254, false, false, true));
+    R.addAttr( new Attribute(fENDSOK, fENDSOK, "True if the taks end correctly", Attribute.tBOOLEAN, false, null, 32, false, false, true));
 return(R);
     }
 else
@@ -233,4 +238,42 @@ public void setEndsOk(boolean EndsOk)
 this.EndsOk = EndsOk;
 }
 //-------------------------------------------------------------------------
+
+void GenFromDef(PDTasksCron Task) throws PDException
+{
+super.assignValues(Task.getRecord());
+setPDId(GenerateId());
+}
+//-------------------------------------------------------------------------
+
+/**
+ * @return the PDId
+ */
+public String getPDId()
+{
+    return PDId;
+}
+//---------------------------------------------------------------------
+/**
+ * @param PDId the PDId to set
+ */
+public void setPDId(String PDId)
+{
+    this.PDId = PDId;
+}
+//---------------------------------------------------------------------
+/**
+ * Generates an unique identifier
+ * @return The identifier generated
+ */
+public String GenerateId()
+{
+StringBuilder genId = new StringBuilder();
+genId.append(Long.toHexString(System.currentTimeMillis()));
+genId.append("-");
+genId.append(Long.toHexString(Double.doubleToLongBits(Math.random())));
+return genId.toString();
+}
+//-------------------------------------------------------------------------
+
 }

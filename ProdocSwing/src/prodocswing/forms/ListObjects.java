@@ -29,8 +29,6 @@ import java.awt.Frame;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import prodoc.*;
 import prodocswing.PDTableModel;
@@ -784,15 +782,6 @@ for (int i = 0; i < TM.getRowCount(); i++)
     PW.print(PDObject.toXML());
     } 
 PW.print(PDObject.EndXML());    
-}
-//--------------------------------------------------------------------
-/*
- * 
- */
-private void ImporXML(byte[] b) throws Exception
-{
-String XML=new String(b, "UTF-8");  
-
 }
 //--------------------------------------------------------------------
 }
