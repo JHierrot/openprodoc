@@ -982,6 +982,15 @@ else
 if (PDLog.isDebug())
     PDLog.Debug("DriverGeneric.Assign<:"+userName);
 }
+//---------------------------------------------------------------------
+/**
+ * Protected method to create a Special taskUser
+ */
+protected void AssignTaskUser() throws PDException
+{
+User=new PDUser(this);
+User.CreateTaskUser();
+}
 //-----------------------------------------------------------------------------------
 /**
  * 

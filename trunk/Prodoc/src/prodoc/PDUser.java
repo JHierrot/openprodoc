@@ -65,6 +65,7 @@ public static final String fCUSTOM="Custom";
  *
  */
 static private Record UserStruct=null;
+
 /**
  *
  */
@@ -344,7 +345,7 @@ return(Rec);
 /**
  * 
  */
-Record getRecordStruct() throws PDException
+synchronized Record getRecordStruct() throws PDException
 {
 if (UserStruct==null)
     UserStruct=CreateRecordStruct();
@@ -589,26 +590,7 @@ Rol.Load(getRole());
     Error+=pDException.getLocalizedMessage();
     if (!UserName.equals("Install") || NumErrors<2)
         throw new PDException(Error);
-    Rol=new PDRoles(getDrv());
-    Rol.setName("Administrators");
-    Rol.setAllowCreateUser(true);
-    Rol.setAllowMaintainUser(true);
-    Rol.setAllowCreateGroup(true);
-    Rol.setAllowMaintainGroup(true);
-    Rol.setAllowCreateAcl(true);
-    Rol.setAllowMaintainAcl(true);
-    Rol.setAllowCreateRole(true);
-    Rol.setAllowMaintainRole(true);
-    Rol.setAllowCreateObject(true);
-    Rol.setAllowMaintainObject(true);
-    Rol.setAllowCreateRepos(true);
-    Rol.setAllowMaintainRepos(true);
-    Rol.setAllowCreateFolder(true);
-    Rol.setAllowMaintainFolder(true);
-    Rol.setAllowCreateDoc(true);
-    Rol.setAllowMaintainDoc(true);
-    Rol.setAllowCreateMime(true);
-    Rol.setAllowMaintainMime(true);
+    Rol=CreateSuperRol();
     }
 try {
 CustomData=new PDCustomization(getDrv());
@@ -619,6 +601,54 @@ getCustomData().Load(getCustom());
     }
 if (PDLog.isDebug())
     PDLog.Debug("PDUser.LoadAll<:"+UserName);
+}
+/**
+ * Creates rol for install o task users
+ * @param drv Session of rol
+ * @return Created Rol
+ */
+private PDRoles CreateSuperRol() throws PDException
+{
+PDRoles Rol1=new PDRoles(getDrv());
+Rol1.setName("Administrators");
+Rol1.setAllowCreateUser(true);
+Rol1.setAllowMaintainUser(true);
+Rol1.setAllowCreateGroup(true);
+Rol1.setAllowMaintainGroup(true);
+Rol1.setAllowCreateAcl(true);
+Rol1.setAllowMaintainAcl(true);
+Rol1.setAllowCreateRole(true);
+Rol1.setAllowMaintainRole(true);
+Rol1.setAllowCreateObject(true);
+Rol1.setAllowMaintainObject(true);
+Rol1.setAllowCreateRepos(true);
+Rol1.setAllowMaintainRepos(true);
+Rol1.setAllowCreateFolder(true);
+Rol1.setAllowMaintainFolder(true);
+Rol1.setAllowCreateDoc(true);
+Rol1.setAllowMaintainDoc(true);
+Rol1.setAllowCreateMime(true);
+Rol1.setAllowMaintainMime(true);
+Rol1.setAllowCreateThesaur(true);
+Rol1.setAllowMaintainThesaur(true);
+Rol1.setAllowCreateTask(true);
+Rol1.setAllowMaintainTask(true);
+return Rol1;
+}
+//-------------------------------------------------------------------------
+/**
+ * Creates special user for task
+ * @return Creates PDUser
+ */
+protected void CreateTaskUser() throws PDException
+{
+Rol=CreateSuperRol();
+PDACL A = new PDACL(getDrv());
+setAclList(A.FillAclTaskUser());
+CustomData=new PDCustomization(getDrv());
+setName("TaskUser");
+setDescription("TaskUser");
+setActive(true);
 }
 //-------------------------------------------------------------------------
 /**

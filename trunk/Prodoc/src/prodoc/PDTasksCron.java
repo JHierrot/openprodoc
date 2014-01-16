@@ -19,6 +19,7 @@
 
 package prodoc;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -28,7 +29,7 @@ import java.util.Date;
 public class PDTasksCron extends PDTasksDef
 {
 
-public static final String fSTARTDATE="StartDate";
+// public static final String fSTARTDATE="StartDate";
 public static final String fNEXTDATE="NextDate";
 public static final String fADDMONTH="AddMonth";
 public static final String fADDDAYS="AddDays";
@@ -43,7 +44,7 @@ static private Record TaksTypeStruct=null;
 /**
  *
  */
-private Date StartDate;
+// private Date StartDate;
 private Date NextDate;
 private int AddMonth=0;
 private int AddDays=0;
@@ -72,7 +73,7 @@ super(Drv);
 public void assignValues(Record Rec) throws PDException
 {
 super.assignValues(Rec);    
-setStartDate((Date) Rec.getAttr(fSTARTDATE).getValue());
+//setStartDate((Date) Rec.getAttr(fSTARTDATE).getValue());
 setNextDate((Date) Rec.getAttr(fNEXTDATE).getValue());
 if (Rec.getAttr(fADDMONTH).getValue()==null)
     setAddMonth(0);
@@ -103,7 +104,7 @@ synchronized public Record getRecord() throws PDException
 {
 Record Rec=getRecordStruct();
 Rec.assign(super.getRecord().Copy());
-Rec.getAttr(fSTARTDATE).setValue(getStartDate());
+//Rec.getAttr(fSTARTDATE).setValue(getStartDate());
 Rec.getAttr(fNEXTDATE).setValue(getNextDate());
 Rec.getAttr(fADDMONTH).setValue(getAddMonth());
 Rec.getAttr(fADDDAYS).setValue(getAddDays());
@@ -155,7 +156,7 @@ if (TaksTypeStruct==null)
     {
     Record R=new Record();
     CreateRecordStructBase(R);
-    R.addAttr( new Attribute(fSTARTDATE, fSTARTDATE, "Start Date of execution", Attribute.tDATE, true, null, 128, false, false, true));
+//     R.addAttr( new Attribute(fSTARTDATE, fSTARTDATE, "Start Date of execution", Attribute.tDATE, true, null, 128, false, false, true));
     R.addAttr( new Attribute(fNEXTDATE, fNEXTDATE, "Next Date of execution", Attribute.tDATE, true, null, 128, false, false, true));
     R.addAttr( new Attribute(fADDMONTH, fADDMONTH, "Months to add for next execution", Attribute.tINTEGER, true, null, 128, false, false, true));
     R.addAttr( new Attribute(fADDDAYS, fADDDAYS, "Days to add for next execution", Attribute.tINTEGER, true, null, 128, false, false, true));
@@ -167,22 +168,22 @@ else
     return(TaksTypeStruct);
 }
 //-------------------------------------------------------------------------
-/**
-* @return the StartDate
-*/
-public Date getStartDate()
-{
-return StartDate;
-}
-//-----------------------------------------------------------------------
-/**
-* @param StartDate the StartDate to set
-*/
-public void setStartDate(Date StartDate)
-{
-this.StartDate = StartDate;
-}
-//-----------------------------------------------------------------------
+///**
+//* @return the StartDate
+//*/
+//public Date getStartDate()
+//{
+//return StartDate;
+//}
+////-----------------------------------------------------------------------
+///**
+//* @param StartDate the StartDate to set
+//*/
+//public void setStartDate(Date StartDate)
+//{
+//this.StartDate = StartDate;
+//}
+////-----------------------------------------------------------------------
 /**
 * @return the NextDate
 */
@@ -285,5 +286,64 @@ if (TaksDefObjectsCache==null)
 return(TaksDefObjectsCache);    
 }
 //-------------------------------------------------------------------------
+/**
+ * 
+ * @param TaskCategory 
+ */
+void GenerateTaskCat(String TaskCategory) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksCron.GenerateTaskCat>:" + TaskCategory);
+Cursor CursorId=null;
+try {
+Conditions CondT=new Conditions();
+if (TaskCategory!=null && !TaskCategory.equalsIgnoreCase("*"))
+    {
+    Condition c=new Condition(fCATEGORY, Condition.cEQUAL, TaskCategory);
+    CondT.addCondition(c);
+    }
+Date Now=new Date();
+Condition c=new Condition(fNEXTDATE, Condition.cLET, Now);
+CondT.addCondition(c);
+Query QBE=new Query(getTabName(), getRecordStruct(),CondT);
+CursorId=getDrv().OpenCursor(QBE);
+Record Res=getDrv().NextRec(CursorId);
+PDTasksCron Task=new PDTasksCron(getDrv());
+PDTasksExec TaskExec=new PDTasksExec(getDrv());
+while (Res!=null)
+    {
+    Task.assignValues(Res);    
+    getDrv().IniciarTrans();
+    Task.UpdateNextDate();
+    TaskExec.GenFromDef(Task);
+    TaskExec.insert();
+    getDrv().CerrarTrans();
+    Res=getDrv().NextRec(CursorId);
+    }
+} catch (Exception ex)
+    {
+    ex.printStackTrace();    
+    if (CursorId!=null)    
+        getDrv().CloseCursor(CursorId);
+    if (getDrv().isInTransaction())
+        getDrv().AnularTrans();
+    throw new PDException(ex.getLocalizedMessage());
+    }
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksCron.GenerateTaskCat <");
+}
+//-------------------------------------------------------------------------
 
+private void UpdateNextDate() throws PDException
+{
+Calendar Next=Calendar.getInstance();
+Next.setTime(getNextDate());
+Next.add(Calendar.MONTH, getAddMonth());
+Next.add(Calendar.DAY_OF_MONTH, getAddDays());
+Next.add(Calendar.HOUR_OF_DAY, getAddHours());
+Next.add(Calendar.MINUTE, getAddMins());
+setNextDate(Next.getTime());
+this.update();
+}
+//-------------------------------------------------------------------------
 }

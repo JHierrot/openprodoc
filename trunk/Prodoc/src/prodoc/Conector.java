@@ -19,6 +19,7 @@
 
 package prodoc;
 
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.Properties;
 import java.util.Vector;
@@ -78,6 +79,7 @@ private int TaskExecFreq=0;
 
 static private Hashtable TaskSearchList=new Hashtable();
 static private Hashtable TaskExecList=new Hashtable();  
+private String TaskCategory="*";
 //--------------------------------------------------------------------------
 /**
  * reads, interpret and store the requiered elements of the configuration
@@ -107,6 +109,7 @@ if (Temp!=null)
 Temp=ProdocProperties.getProperty(ConectorName+".TaskExecFreq");
 if (Temp!=null)
     TaskExecFreq=new Integer(Temp);
+TaskCategory=ProdocProperties.getProperty(ConectorName+".TaskCategory");
 ListSesion=new Vector();
 for (int i = 0; i < MinPoolSize; i++)
     {
@@ -201,10 +204,14 @@ for (int i = 0; i < ListSesion.size(); i++)
  */
 private void CreateTask()
 {
+if (PDLog.isDebug())
+    PDLog.Debug("CreateTask >");        
 if (TaskSearchFreq!=0)   
-    Conector.CreateSearchTask(TaskSearchFreq, ConectorName );
+    CreateSearchTask(TaskSearchFreq, TaskCategory);
 if (TaskExecFreq!=0)
-    Conector.CreateExecTask(TaskExecFreq, ConectorName );
+    CreateExecTask(TaskExecFreq, TaskCategory);
+if (PDLog.isDebug())
+    PDLog.Debug("CreateTask <");        
 }
 //--------------------------------------------------------------------------
 /**
@@ -212,10 +219,14 @@ if (TaskExecFreq!=0)
  */
 private void DestroyTask()
 {
+if (PDLog.isDebug())
+    PDLog.Debug("DestroyTask >");        
 if (TaskSearchFreq!=0)    
     Conector.DestroySearchTask(ConectorName);
 if (TaskExecFreq!=0)
     Conector.DestroyExecTask(ConectorName);   
+if (PDLog.isDebug())
+    PDLog.Debug("DestroyTask <");        
 }
 //--------------------------------------------------------------------------
 /**
@@ -223,9 +234,15 @@ if (TaskExecFreq!=0)
  * @param TaskSearchFreq
  * @param ConectorName 
  */
-private static void CreateSearchTask(int TaskSearchFreq, String ConectorName)
+private void CreateSearchTask(int TaskSearchFreq, String TaskCategory)
 {
-throw new UnsupportedOperationException("Not yet implemented");
+if (TaskSearchList.contains(ConectorName))
+    return;
+if (PDLog.isDebug())
+    PDLog.Debug("CreateSearchTask: Cat="+TaskCategory+"Freq="+TaskSearchFreq);        
+TaskCreator  TaskCreatorTask=new TaskCreator(TaskSearchFreq, TaskCategory, this); 
+TaskCreatorTask.start();
+TaskSearchList.put(ConectorName, TaskCreatorTask); 
 }
 //--------------------------------------------------------------------------
 /**
@@ -233,9 +250,15 @@ throw new UnsupportedOperationException("Not yet implemented");
  * @param TaskExecFreq
  * @param ConectorName 
  */
-private static void CreateExecTask(int TaskExecFreq, String ConectorName)
+private void CreateExecTask(int TaskExecFreq, String TaskCategory)
 {
-throw new UnsupportedOperationException("Not yet implemented");
+if (TaskExecList.contains(ConectorName))
+    return;
+if (PDLog.isDebug())
+    PDLog.Debug("CreateExecTask: Cat="+TaskCategory+"Freq="+TaskSearchFreq);        
+TaskRunner  TaskRunnerTask=new TaskRunner(TaskExecFreq, TaskCategory, ConectorName); 
+TaskRunnerTask.start();
+TaskExecList.put(ConectorName, TaskRunnerTask); 
 }
 //--------------------------------------------------------------------------
 /**
@@ -244,7 +267,13 @@ throw new UnsupportedOperationException("Not yet implemented");
  */
 private static void DestroySearchTask(String ConectorName)
 {
-throw new UnsupportedOperationException("Not yet implemented");
+if (!TaskSearchList.contains(ConectorName))
+    return;
+if (PDLog.isDebug())
+    PDLog.Debug("DestroySearchTask: Con="+ConectorName);        
+TaskCreator  TaskCreatorTask=(TaskCreator)TaskSearchList.get(ConectorName); 
+TaskCreatorTask.End();
+TaskSearchList.put(ConectorName, null);
 }
 //--------------------------------------------------------------------------
 /**
@@ -253,7 +282,125 @@ throw new UnsupportedOperationException("Not yet implemented");
  */
 private static void DestroyExecTask(String ConectorName)
 {
-throw new UnsupportedOperationException("Not yet implemented");
+if (!TaskExecList.contains(ConectorName))
+    return;
+if (PDLog.isDebug())
+    PDLog.Debug("DestroyExecTask: Con="+ConectorName);        
+TaskRunner  TaskRunnerTask=(TaskRunner)TaskExecList.get(ConectorName); 
+TaskRunnerTask.End();
+TaskExecList.put(ConectorName, null);
 }
 //--------------------------------------------------------------------------
+
+
+
+
+
+
+//*******************************************************************
+static private class TaskCreator extends Thread  
+{
+static private final long SleepTime=1000; 
+private boolean Continue=true;
+private int TaskSearchFreq;
+private String TaskCategory;
+private Conector Con;
+//-------------------------------------------------
+public TaskCreator(int pTaskSearchFreq, String pTaskCategory, Conector pCon)
+{
+TaskSearchFreq=pTaskSearchFreq;   
+TaskCategory=pTaskCategory;
+Con=pCon;
+}
+//-------------------------------------------------
+public void End()
+{
+Continue=false;    
+//System.out.println("Continue:"+Continue);
+} 
+//-------------------------------------------------
+@Override 
+public void run() 
+{
+if (PDLog.isDebug())
+    PDLog.Debug("TaskCreator starts");    
+Date d1=new Date(0);   
+Date d2;   
+PDTasksCron TaskGen;
+try {
+DriverGeneric Session=Con.CreateSesion();
+Session.Lock();
+Session.AssignTaskUser();
+TaskGen=new PDTasksCron(Session);
+} catch (Exception ex)
+    {
+    ex.printStackTrace();    
+    PDLog.Error("TaskCreator error:"+ex.getLocalizedMessage());
+    return;
+    }
+while (Continue) 
+    {
+    try {  
+    d2=new Date();
+    if (PDLog.isDebug())
+        PDLog.Debug("TaskCreator run: "+d2);    
+    if (d2.getTime()-d1.getTime()>TaskSearchFreq)
+        {
+        d1=new Date();
+        TaskGen.GenerateTaskCat(TaskCategory);
+        }
+    if (PDLog.isDebug())
+        PDLog.Debug("TaskCreator ends: "+new Date());    
+    } catch (Exception e) 
+        {
+        e.printStackTrace();    
+        PDLog.Error("TaskCreator run error:"+e.getLocalizedMessage());
+        }
+    try {
+    Thread.sleep(SleepTime);
+    } catch (InterruptedException e) 
+        {
+        }
+    }
+} 
+//-------------------------------------------------
+} // **** END of task creator ***************************************
+//*******************************************************************
+static private class TaskRunner extends Thread  
+{
+static private long SleepTime=1000; 
+private boolean Continue=true;
+private int TaskExecFreq;
+private String TaskCategory;
+private String ConectorName;
+//-------------------------------------------------
+public TaskRunner(int pTaskExecFreq, String pTaskCategory, String pConectorName)
+{
+TaskExecFreq=pTaskExecFreq;   
+TaskCategory=pTaskCategory;
+ConectorName=pConectorName;
+}
+public void End()
+{
+Continue=false;    
+//System.out.println("Continue:"+Continue);
+} 
+//-------------------------------------------------
+public void run() 
+{
+while (Continue) 
+    {
+        
+    try {
+//    System.out.println("Start sleeping");            
+    Thread.sleep(SleepTime);
+//    System.out.println("End sleeping");            
+    } catch (InterruptedException e) 
+        {
+        }
+    }
+} 
+//-------------------------------------------------
+} // **** END of Task runner ***************************************
+
 }
