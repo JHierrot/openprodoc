@@ -1750,6 +1750,10 @@ if (OPDObjectType.equalsIgnoreCase(PDRoles.getTableName()))
     return(new PDRoles(this));
 if (OPDObjectType.equalsIgnoreCase(PDUser.getTableName()))
     return(new PDUser(this));
+if (OPDObjectType.equalsIgnoreCase(PDTasksDefEvent.getTableName()))
+    return(new PDTasksDefEvent(this));
+if (OPDObjectType.equalsIgnoreCase(PDTasksCron.getTableName()))
+    return(new PDTasksCron(this));
 throw new PDException("Inexistent_OPD_object_type");
 }
 //---------------------------------------------------------------------

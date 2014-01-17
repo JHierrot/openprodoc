@@ -305,6 +305,8 @@ if (TaskCategory!=null && !TaskCategory.equalsIgnoreCase("*"))
 Date Now=new Date();
 Condition c=new Condition(fNEXTDATE, Condition.cLET, Now);
 CondT.addCondition(c);
+c=new Condition(fACTIVE, Condition.cEQUAL, true);
+CondT.addCondition(c);
 Query QBE=new Query(getTabName(), getRecordStruct(),CondT);
 CursorId=getDrv().OpenCursor(QBE);
 Record Res=getDrv().NextRec(CursorId);

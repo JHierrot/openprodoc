@@ -255,8 +255,8 @@ private void CreateExecTask(int TaskExecFreq, String TaskCategory)
 if (TaskExecList.contains(ConectorName))
     return;
 if (PDLog.isDebug())
-    PDLog.Debug("CreateExecTask: Cat="+TaskCategory+"Freq="+TaskSearchFreq);        
-TaskRunner  TaskRunnerTask=new TaskRunner(TaskExecFreq, TaskCategory, ConectorName); 
+    PDLog.Debug("CreateExecTask: Cat="+TaskCategory+"Freq="+TaskExecFreq);        
+TaskRunner  TaskRunnerTask=new TaskRunner(TaskExecFreq, TaskCategory, this); 
 TaskRunnerTask.start();
 TaskExecList.put(ConectorName, TaskRunnerTask); 
 }
@@ -372,29 +372,60 @@ static private long SleepTime=1000;
 private boolean Continue=true;
 private int TaskExecFreq;
 private String TaskCategory;
-private String ConectorName;
+private Conector Con;
 //-------------------------------------------------
-public TaskRunner(int pTaskExecFreq, String pTaskCategory, String pConectorName)
+public TaskRunner(int pTaskExecFreq, String pTaskCategory, Conector pCon)
 {
 TaskExecFreq=pTaskExecFreq;   
 TaskCategory=pTaskCategory;
-ConectorName=pConectorName;
+Con=pCon;
 }
+//-------------------------------------------------
 public void End()
 {
 Continue=false;    
 //System.out.println("Continue:"+Continue);
 } 
 //-------------------------------------------------
+@Override 
 public void run() 
 {
+if (PDLog.isDebug())
+    PDLog.Debug("TaskCreator starts");    
+Date d1=new Date(0);   
+Date d2;   
+PDTasksCron TaskGen;
+try {
+DriverGeneric Session=Con.CreateSesion();
+Session.Lock();
+Session.AssignTaskUser();
+TaskGen=new PDTasksCron(Session);
+} catch (Exception ex)
+    {
+    ex.printStackTrace();    
+    PDLog.Error("TaskCreator error:"+ex.getLocalizedMessage());
+    return;
+    }
 while (Continue) 
     {
-        
+    try {  
+    d2=new Date();
+    if (PDLog.isDebug())
+        PDLog.Debug("TaskCreator run: "+d2);    
+    if (d2.getTime()-d1.getTime()>TaskExecFreq)
+        {
+        d1=new Date();
+        TaskGen.GenerateTaskCat(TaskCategory);
+        }
+    if (PDLog.isDebug())
+        PDLog.Debug("TaskCreator ends: "+new Date());    
+    } catch (Exception e) 
+        {
+        e.printStackTrace();    
+        PDLog.Error("TaskCreator run error:"+e.getLocalizedMessage());
+        }
     try {
-//    System.out.println("Start sleeping");            
     Thread.sleep(SleepTime);
-//    System.out.println("End sleeping");            
     } catch (InterruptedException e) 
         {
         }
