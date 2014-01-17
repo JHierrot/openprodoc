@@ -1479,7 +1479,7 @@ LC.setVisible(true);
     private void TaskEndedMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_TaskEndedMenuItemActionPerformed
     {//GEN-HEADEREND:event_TaskEndedMenuItemActionPerformed
 try {
-ListTask LC = new ListTask(this, true, new PDTasksExecEnded(getSession()));
+ListTaskEnded LC = new ListTaskEnded(this, true, new PDTasksExecEnded(getSession()));
 LC.setLocationRelativeTo(null);
 LC.setVisible(true);
 } catch (Exception ex)

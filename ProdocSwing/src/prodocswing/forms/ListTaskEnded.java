@@ -35,7 +35,7 @@ import prodocswing.PDTableModel;
  *
  * @author jhierrot
  */
-public class ListTask extends javax.swing.JDialog
+public class ListTaskEnded extends javax.swing.JDialog
 {
 protected ObjPD PDObject;
 protected PDTableModel UserList1 = new PDTableModel();
@@ -51,7 +51,7 @@ protected JDialog MantForm;
  * @param modal
  * @param pPDObject 
  */
-public ListTask(java.awt.Frame parent, boolean modal, ObjPD pPDObject)
+public ListTaskEnded(java.awt.Frame parent, boolean modal, ObjPD pPDObject)
 {
 super(parent, modal);
 Fparent=parent;
@@ -280,9 +280,9 @@ if (TimeStampFilter1.getText().length()!=0)
     Conditions Conds1=new Conditions();
     Conds1.setOperatorAnd(false);
     Date d1=(Date)TimeStampFilter1.getValue();
-    Condition C1=new Condition(PDTasksExec.fPDDATE, Condition.cGET , d1);  
+    Condition C1=new Condition(PDTasksExecEnded.fSTARTDATE, Condition.cGET , d1);  
     Conds1.addCondition(C1);
-    Condition C2=new Condition(PDTasksExec.fPDDATE, Condition.cGET , d1);  
+    Condition C2=new Condition(PDTasksExecEnded.fENDDATE, Condition.cGET , d1);  
     Conds1.addCondition(C2);
     Conds.addCondition(Conds1);
     }
@@ -291,9 +291,9 @@ if (TimeStampFilter2.getText().length()!=0)
     Conditions Conds1=new Conditions();
     Conds1.setOperatorAnd(false);
     Date d1=(Date)TimeStampFilter2.getValue();
-    Condition C1=new Condition(PDTasksExec.fPDDATE, Condition.cLET , d1);  
+    Condition C1=new Condition(PDTasksExecEnded.fSTARTDATE, Condition.cLET , d1);  
     Conds1.addCondition(C1);
-    Condition C2=new Condition(PDTasksExec.fPDDATE, Condition.cLET , d1);  
+    Condition C2=new Condition(PDTasksExecEnded.fENDDATE, Condition.cLET , d1);  
     Conds1.addCondition(C2);
     Conds.addCondition(Conds1);
     }
@@ -302,7 +302,7 @@ if (Conds.NumCond()==0)
     MainWin.Message(MainWin.TT("Empty_conditions"));
     return;
     }
-PDTasksExec Task=new PDTasksExec(MainWin.getSession());
+PDTasksExecEnded Task=new PDTasksExecEnded(MainWin.getSession());
 Cursor Cur=Task.Search(Conds);
 ObjectsList2.setCursor(Cur);
 getObjectsTable().setModel(ObjectsList2);
