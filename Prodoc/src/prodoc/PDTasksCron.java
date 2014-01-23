@@ -307,7 +307,7 @@ Condition c=new Condition(fNEXTDATE, Condition.cLET, Now);
 CondT.addCondition(c);
 c=new Condition(fACTIVE, Condition.cEQUAL, true);
 CondT.addCondition(c);
-Query QBE=new Query(getTabName(), getRecordStruct(),CondT);
+Query QBE=new Query(getTabName(), getRecordStruct(),CondT, fNEXTDATE);
 CursorId=getDrv().OpenCursor(QBE);
 Record Res=getDrv().NextRec(CursorId);
 PDTasksCron Task=new PDTasksCron(getDrv());
@@ -322,9 +322,9 @@ while (Res!=null)
     getDrv().CerrarTrans();
     Res=getDrv().NextRec(CursorId);
     }
+getDrv().CloseCursor(CursorId);
 } catch (Exception ex)
     {
-    ex.printStackTrace();    
     if (CursorId!=null)    
         getDrv().CloseCursor(CursorId);
     if (getDrv().isInTransaction())

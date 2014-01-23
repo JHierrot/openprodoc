@@ -60,23 +60,29 @@ private String Description;
  *
  */
 
-public static final int fTASK_EXTERNAL=0;
-public static final int fTASK_DELETEFOLD=1;
-public static final int fTASK_DELETEDOC=2;
-public static final int fTASK_PURGEDOC=3;
-public static final int fTASK_COPYDOC=4;
-public static final int fTASK_MOVEDOC=5;
-public static final int fTASK_UPDATEDOC=6;
-public static final int fTASK_UPDATEFOLD=7;
+public static final int fTASK_DELETEFOLD=0;
+public static final int fTASK_DELETEDOC=1;
+public static final int fTASK_PURGEDOC=2;
+public static final int fTASK_COPYDOC=3;
+public static final int fTASK_MOVEDOC=4;
+public static final int fTASK_UPDATEDOC=5;
+public static final int fTASK_UPDATEFOLD=6;
+public static final int fTASK_IMPORT=7;
+public static final int fTASK_EXPORT=8;
+public static final int fTASK_DELETE_OLD_FOLD=9;
+public static final int fTASK_DELETE_OLD_DOC=10;
 
-private static final String[] LisTypeTask= {"EXTERNAL",
-                                            "DELETEFOLD",
-                                            "DELETEDOC",
-                                            "PURGEDOC",
-                                            "COPYDOC",
-                                            "MOVEDOC",
-                                            "UPDATEDOC",
-                                            "UPDATEFOLD"};
+private static final String[] LisTypeTask= {"DELETE_FOLD",
+                                            "DELETE_DOC",
+                                            "PURGE_DOC",
+                                            "COPY_DOC",
+                                            "MOVE_DOC",
+                                            "UPDATE_DOC",
+                                            "UPDATE_FOLD",
+                                            "IMPORT",
+                                            "EXPORT",
+                                            "DELETE_OLD_FOLD",
+                                            "DELETE_OLD_DOC"};
 
         
 private int Type=0;
@@ -458,13 +464,6 @@ return Category;
 public void setCategory(String Category)
 {
 this.Category = Category;
-}
-//-------------------------------------------------------------------------
-protected static Cursor GenerateList(PDTasks aThis)
-{
-Cursor List=null;
-// TODO: implement cursor
-return(List);
 }
 //-------------------------------------------------------------------------
 /***

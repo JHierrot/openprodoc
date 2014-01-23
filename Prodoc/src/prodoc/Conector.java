@@ -394,12 +394,12 @@ if (PDLog.isDebug())
     PDLog.Debug("TaskCreator starts");    
 Date d1=new Date(0);   
 Date d2;   
-PDTasksCron TaskGen;
+PDTasksExec TaskRun;
 try {
 DriverGeneric Session=Con.CreateSesion();
 Session.Lock();
 Session.AssignTaskUser();
-TaskGen=new PDTasksCron(Session);
+TaskRun=new PDTasksExec(Session);
 } catch (Exception ex)
     {
     ex.printStackTrace();    
@@ -411,18 +411,18 @@ while (Continue)
     try {  
     d2=new Date();
     if (PDLog.isDebug())
-        PDLog.Debug("TaskCreator run: "+d2);    
+        PDLog.Debug("TaskRunner run: "+d2);    
     if (d2.getTime()-d1.getTime()>TaskExecFreq)
         {
         d1=new Date();
-        TaskGen.GenerateTaskCat(TaskCategory);
+        TaskRun.ExecutePendingTaskCat(TaskCategory);
         }
     if (PDLog.isDebug())
-        PDLog.Debug("TaskCreator ends: "+new Date());    
+        PDLog.Debug("TaskRunner ends: "+new Date());    
     } catch (Exception e) 
         {
         e.printStackTrace();    
-        PDLog.Error("TaskCreator run error:"+e.getLocalizedMessage());
+        PDLog.Error("TaskRunner run error:"+e.getLocalizedMessage());
         }
     try {
     Thread.sleep(SleepTime);

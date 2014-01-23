@@ -199,7 +199,4 @@ public void setEndsOk(boolean EndsOk)
 this.EndsOk = EndsOk;
 }
 //-------------------------------------------------------------------------
-
-
-
 }
