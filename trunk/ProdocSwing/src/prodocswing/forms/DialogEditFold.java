@@ -84,7 +84,8 @@ setRecord(Folder);
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         LabelOperation = new javax.swing.JLabel();
         LabelFoldType = new javax.swing.JLabel();
@@ -103,13 +104,15 @@ setRecord(Folder);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(MainWin.TT("Maintenance_Folders"));
         setResizable(false);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosed(java.awt.event.WindowEvent evt) {
+        addWindowListener(new java.awt.event.WindowAdapter()
+        {
+            public void windowClosed(java.awt.event.WindowEvent evt)
+            {
                 formWindowClosed(evt);
             }
         });
 
-        LabelOperation.setFont(new java.awt.Font("DejaVu Sans", 1, 14));
+        LabelOperation.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
         LabelOperation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         LabelOperation.setText("jLabel1");
 
@@ -118,8 +121,10 @@ setRecord(Folder);
 
         FoldTypeCB.setFont(MainWin.getFontDialog());
         FoldTypeCB.setModel(getComboModelFold());
-        FoldTypeCB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        FoldTypeCB.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 FoldTypeCBActionPerformed(evt);
             }
         });
@@ -129,7 +134,6 @@ setRecord(Folder);
 
         IdField.setEditable(false);
         IdField.setFont(MainWin.getFontDialog());
-        IdField.setEnabled(false);
 
         ACLDescripLabel.setFont(MainWin.getFontDialog());
         ACLDescripLabel.setText(MainWin.TT("Folder_ACL"));
@@ -174,23 +178,27 @@ setRecord(Folder);
                 .addGroup(AttrBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(TitleTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(TitleLabel))
-                .addContainerGap(155, Short.MAX_VALUE))
+                .addContainerGap(178, Short.MAX_VALUE))
         );
 
         Attributes.addTab(MainWin.TT("Common_Attributes"), AttrBasic);
 
         ButtonAcept.setFont(MainWin.getFontDialog());
         ButtonAcept.setText(MainWin.TT("Ok"));
-        ButtonAcept.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ButtonAcept.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ButtonAceptActionPerformed(evt);
             }
         });
 
         ButtonCancel.setFont(MainWin.getFontDialog());
         ButtonCancel.setText(MainWin.TT("Cancel"));
-        ButtonCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ButtonCancel.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ButtonCancelActionPerformed(evt);
             }
         });
@@ -199,22 +207,22 @@ setRecord(Folder);
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(288, Short.MAX_VALUE)
-                .addComponent(ButtonAcept)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(ButtonCancel)
-                .addContainerGap())
-            .addComponent(Attributes, javax.swing.GroupLayout.DEFAULT_SIZE, 514, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(LabelFoldType, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(FoldTypeCB, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addComponent(Attributes)
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(ButtonAcept)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(ButtonCancel))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(LabelFoldType, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(FoldTypeCB, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
