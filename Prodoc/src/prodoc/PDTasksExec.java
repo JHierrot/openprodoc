@@ -280,6 +280,30 @@ switch (getType())
     }
 }
 //-------------------------------------------------------------------------
+/**
+ * Executes the task defined in current object
+ */
+public Cursor GenCur()  throws PDException
+{
+switch (getType())
+    {
+    case fTASK_DELETEFOLD: return CurDeleteFold();
+    case fTASK_DELETEDOC:return CurDeleteDoc();
+    case fTASK_PURGEDOC: return CurPurgeDoc();
+    case fTASK_COPYDOC: return CurCopyDoc();
+    case fTASK_MOVEDOC: return CurMoveDoc();
+    case fTASK_UPDATEDOC: return CurUpdateDoc();
+    case fTASK_UPDATEFOLD: return CurUpdateFold();
+    case fTASK_IMPORT: return CurImport();
+    case fTASK_EXPORT: return CurExport();
+    case fTASK_DELETE_OLD_FOLD: return CurDeleteOldFold();
+    case fTASK_DELETE_OLD_DOC: return CurDeleteOldDoc();
+    default: PDExceptionFunc.GenPDException(XML_Group, ""+getType());
+        break;
+    }
+return (null);
+}
+//-------------------------------------------------------------------------
 
 private void DeleteFold() throws PDException
 {
@@ -345,22 +369,10 @@ private void DeleteOldFold() throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDTasksExec.DeleteOldFold >"+getPDId());
-boolean SubTypes=(getParam().charAt(0)=='1');
 PDFolders F=new PDFolders(this.getDrv());
-String FoldType;
-if ("*".equals(getObjType()))
-    FoldType=PDFolders.getTableName();
-else
-    FoldType=getObjType();
-Calendar Date2Del=Calendar.getInstance();
-Date2Del.setTime(new Date());
-Date2Del.add(Calendar.DAY_OF_MONTH, -Integer.parseInt(getParam2()));
-Condition c=new Condition(PDFolders.fPDDATE, Condition.cLET, Date2Del.getTime());
-Conditions Conds=new Conditions();
-Conds.addCondition(c);
 Cursor CursorId=null;
 try {
-CursorId=F.Search(FoldType,  Conds, SubTypes, true, getParam3(), null);
+CursorId=CurDeleteOldFold();
 Record Res=getDrv().NextRec(CursorId);
 while (Res!=null)
     {
@@ -382,6 +394,28 @@ getDrv().CloseCursor(CursorId);
     }
 if (PDLog.isDebug())
     PDLog.Debug("PDTasksExec.DeleteOldFold >"+getPDId());
+}
+//-------------------------------------------------------------------------
+/**
+ * Common method to simulate affected elements 
+ * @return 
+ */
+private Cursor CurDeleteOldFold() throws PDException
+{
+boolean SubTypes=(getParam().charAt(0)=='1');
+PDFolders F=new PDFolders(this.getDrv());
+String FoldType;
+if ("*".equals(getObjType()))
+    FoldType=PDFolders.getTableName();
+else
+    FoldType=getObjType();
+Calendar Date2Del=Calendar.getInstance();
+Date2Del.setTime(new Date());
+Date2Del.add(Calendar.DAY_OF_MONTH, -Integer.parseInt(getParam2()));
+Condition c=new Condition(PDFolders.fPDDATE, Condition.cLET, Date2Del.getTime());
+Conditions Conds=new Conditions();
+Conds.addCondition(c);
+return(F.Search(FoldType,  Conds, SubTypes, true, getParam3(), null))  ;
 }
 //-------------------------------------------------------------------------
 /**
@@ -432,6 +466,66 @@ getDrv().CloseCursor(CursorId);
     }
 if (PDLog.isDebug())
     PDLog.Debug("PDTasksExec.DeleteOldDoc >"+getPDId());
+}
+//-------------------------------------------------------------------------
+
+private Cursor CurDeleteFold()
+{
+    throw new UnsupportedOperationException("Not yet implemented");
+}
+//-------------------------------------------------------------------------
+
+private Cursor CurDeleteDoc()
+{
+    throw new UnsupportedOperationException("Not yet implemented");
+}
+//-------------------------------------------------------------------------
+
+private Cursor CurPurgeDoc()
+{
+    throw new UnsupportedOperationException("Not yet implemented");
+}
+//-------------------------------------------------------------------------
+
+private Cursor CurCopyDoc()
+{
+    throw new UnsupportedOperationException("Not yet implemented");
+}
+//-------------------------------------------------------------------------
+
+private Cursor CurMoveDoc()
+{
+    throw new UnsupportedOperationException("Not yet implemented");
+}
+//-------------------------------------------------------------------------
+
+private Cursor CurUpdateDoc()
+{
+    throw new UnsupportedOperationException("Not yet implemented");
+}
+//-------------------------------------------------------------------------
+
+private Cursor CurUpdateFold()
+{
+    throw new UnsupportedOperationException("Not yet implemented");
+}
+//-------------------------------------------------------------------------
+
+private Cursor CurImport()
+{
+    throw new UnsupportedOperationException("Not yet implemented");
+}
+//-------------------------------------------------------------------------
+
+private Cursor CurExport()
+{
+    throw new UnsupportedOperationException("Not yet implemented");
+}
+//-------------------------------------------------------------------------
+
+private Cursor CurDeleteOldDoc()
+{
+    throw new UnsupportedOperationException("Not yet implemented");
 }
 //-------------------------------------------------------------------------
 }
