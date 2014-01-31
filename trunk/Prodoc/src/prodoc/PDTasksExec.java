@@ -275,7 +275,7 @@ switch (getType())
         break;
     case fTASK_DELETE_OLD_DOC: DeleteOldDoc();
         break;
-    default: PDExceptionFunc.GenPDException(XML_Group, ""+getType());
+    default: PDExceptionFunc.GenPDException("Unexpected_Task", ""+getType());
         break;
     }
 }
