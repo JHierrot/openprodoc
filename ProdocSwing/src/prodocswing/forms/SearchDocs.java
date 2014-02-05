@@ -418,7 +418,12 @@ else if (Attr.getType()==Attribute.tINTEGER)
 else
      JTF=new JTextField("Error");
 //JTF.setEnabled(true);
-JTF.setToolTipText(Attr.getDescription());
+if (Attr.getType()==Attribute.tDATE )
+    JTF.setToolTipText(MainWin.DrvTT(Attr.getDescription()) +"( "+MainWin.getFormatDate()+" )");
+else if(Attr.getType() == Attribute.tTIMESTAMP)
+    JTF.setToolTipText(MainWin.DrvTT(Attr.getDescription()) +"( "+MainWin.getFormatTS()+" )");
+else
+    JTF.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
 JTF.setFont(MainWin.getFontDialog());
 return(JTF);
 }
@@ -543,7 +548,7 @@ while (Attr!=null)
                Operator=Condition.cGET;
             else if (OperText.equals("Contains"))
                Operator=Condition.cLIKE;
-            Condition c=new Condition( Attr.getName(), Operator ,Attr.getValue());
+            Condition c=new Condition( Attr, Operator);
             Conds.addCondition(c);
             }
         }

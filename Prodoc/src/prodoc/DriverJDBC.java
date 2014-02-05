@@ -571,7 +571,7 @@ if (Condit.getcType()==Condition.ctNORMAL)
              break;
         }
     Object O=Condit.getValue();
-    if (O instanceof String)
+    if (Condit.getTypeVal()==Attribute.tSTRING || O instanceof String)
         {
         String S=(String)O;    
         if (Condit.getComparation()==Condition.cLIKE && S.indexOf('%')==-1)
@@ -579,9 +579,11 @@ if (Condit.getcType()==Condition.ctNORMAL)
         else    
             SQLWhere+=toString(S);
         }
+    else if (Condit.getTypeVal()==Attribute.tTIMESTAMP)
+        SQLWhere+=toTimeStamp((Date)O);
     else if (O instanceof Date)
         SQLWhere+=toDate((Date)O);
-    else if (O instanceof Boolean)
+    else if (Condit.getTypeVal()==Attribute.tBOOLEAN || O instanceof Boolean)
         SQLWhere+=toBooleanString((Boolean)O);
     else
         SQLWhere+=O;
@@ -810,9 +812,9 @@ if (NewAttr.getType()==Attribute.tINTEGER)
 else if (NewAttr.getType()==Attribute.tBOOLEAN)
     SQL=" SMALLINT ";
 else if (NewAttr.getType()==Attribute.tDATE)
-    SQL=" CHAR(8) ";//        SQL+=" DATE ";
+    SQL=" VARCHAR(8) ";  // SQL=" CHAR(8) "; SQL+=" DATE ";
 else if (NewAttr.getType()==Attribute.tTIMESTAMP)
-    SQL=" CHAR(14) "; // SQL+=" TIMESTAMP ";
+    SQL=" VARCHAR(14) "; //SQL=" CHAR(14) "; SQL+=" TIMESTAMP ";
 else if (NewAttr.getType()==Attribute.tTHES)
     SQL=" VARCHAR(32) ";
 else 

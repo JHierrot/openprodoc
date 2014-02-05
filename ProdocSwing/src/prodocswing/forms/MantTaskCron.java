@@ -25,6 +25,7 @@
 
 package prodocswing.forms;
 
+import java.util.Date;
 import java.util.Vector;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -622,6 +623,7 @@ LU.dispose();
 public void AddMode()
 {
 LabelOperation.setText(MainWin.TT("Add_Task"));
+EndDateTextField.setValue(new Date());
 }
 //----------------------------------------------------------------
 /**
@@ -738,6 +740,8 @@ EndDateTextField.setFormatterFactory(MainWin.getFormFacTS());
     }
 if (Attr.getValue()!=null)
     EndDateTextField.setValue(Attr.getValue());
+else
+    EndDateTextField.setValue(new Date());
 EndDateTextField.setToolTipText(MainWin.DrvTT(Attr.getDescription())  +"("+MainWin.getFormatTS()+")");
 Attr=CronTask.getAttr(PDTasksCron.fADDMONTH); //--------------------------
 AddMonthLabel.setText(MainWin.DrvTT(Attr.getUserName()));

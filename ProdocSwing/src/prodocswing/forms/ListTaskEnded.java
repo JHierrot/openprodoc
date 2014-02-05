@@ -277,23 +277,33 @@ if (CategoryFilter.getText().length()!=0)
     }
 if (TimeStampFilter1.getText().length()!=0)
     {
+    Date d1=(Date)TimeStampFilter1.getValue();   
     Conditions Conds1=new Conditions();
     Conds1.setOperatorAnd(false);
-    Date d1=(Date)TimeStampFilter1.getValue();
-    Condition C1=new Condition(PDTasksExecEnded.fSTARTDATE, Condition.cGET , d1);  
+    PDTasksExecEnded T1=new PDTasksExecEnded(MainWin.getSession());
+    Attribute Attr1=T1.getRecord().getAttr(PDTasksExecEnded.fSTARTDATE);
+    Attr1.setValue(d1);        
+    Condition C1=new Condition(Attr1, Condition.cGET);  
     Conds1.addCondition(C1);
-    Condition C2=new Condition(PDTasksExecEnded.fENDDATE, Condition.cGET , d1);  
+    Attribute Attr2=T1.getRecord().getAttr(PDTasksExecEnded.fENDDATE);
+    Attr1.setValue(d1);        
+    Condition C2=new Condition(Attr2, Condition.cGET);  
     Conds1.addCondition(C2);
     Conds.addCondition(Conds1);
     }
 if (TimeStampFilter2.getText().length()!=0)
     {
+    Date d1=(Date)TimeStampFilter2.getValue();   
     Conditions Conds1=new Conditions();
     Conds1.setOperatorAnd(false);
-    Date d1=(Date)TimeStampFilter2.getValue();
-    Condition C1=new Condition(PDTasksExecEnded.fSTARTDATE, Condition.cLET , d1);  
+    PDTasksExecEnded T1=new PDTasksExecEnded(MainWin.getSession());
+    Attribute Attr1=T1.getRecord().getAttr(PDTasksExecEnded.fSTARTDATE);
+    Attr1.setValue(d1);        
+    Condition C1=new Condition(Attr1, Condition.cLET);  
     Conds1.addCondition(C1);
-    Condition C2=new Condition(PDTasksExecEnded.fENDDATE, Condition.cLET , d1);  
+    Attribute Attr2=T1.getRecord().getAttr(PDTasksExecEnded.fENDDATE);
+    Attr1.setValue(d1);        
+    Condition C2=new Condition(Attr2, Condition.cLET);  
     Conds1.addCondition(C2);
     Conds.addCondition(Conds1);
     }

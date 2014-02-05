@@ -412,7 +412,9 @@ else
 Calendar Date2Del=Calendar.getInstance();
 Date2Del.setTime(new Date());
 Date2Del.add(Calendar.DAY_OF_MONTH, -Integer.parseInt(getParam2()));
-Condition c=new Condition(PDFolders.fPDDATE, Condition.cLET, Date2Del.getTime());
+Attribute Attr=F.getRecord().getAttr(PDFolders.fPDDATE);
+Attr.setValue(Date2Del.getTime());
+Condition c=new Condition(Attr, Condition.cLET);
 Conditions Conds=new Conditions();
 Conds.addCondition(c);
 return(F.Search(FoldType,  Conds, SubTypes, true, getParam3(), null))  ;
@@ -439,7 +441,9 @@ else
 Calendar Date2Del=Calendar.getInstance();
 Date2Del.setTime(new Date());
 Date2Del.add(Calendar.DAY_OF_MONTH, -Integer.parseInt(getParam2()));
-Condition c=new Condition(PDDocs.fPDDATE, Condition.cLET, Date2Del.getTime());
+Attribute Attr=D.getRecord().getAttr(PDDocs.fPDDATE);
+Attr.setValue(Date2Del.getTime());
+Condition c=new Condition(Attr, Condition.cLET);
 Conditions Conds=new Conditions();
 Conds.addCondition(c);
 Cursor CursorId=null;

@@ -156,8 +156,7 @@ if (TaksTypeStruct==null)
     {
     Record R=new Record();
     CreateRecordStructBase(R);
-//     R.addAttr( new Attribute(fSTARTDATE, fSTARTDATE, "Start Date of execution", Attribute.tDATE, true, null, 128, false, false, true));
-    R.addAttr( new Attribute(fNEXTDATE, fNEXTDATE, "Next Date of execution", Attribute.tDATE, true, null, 128, false, false, true));
+    R.addAttr( new Attribute(fNEXTDATE, fNEXTDATE, "Next Date of execution", Attribute.tTIMESTAMP, true, null, 128, false, false, true));
     R.addAttr( new Attribute(fADDMONTH, fADDMONTH, "Months to add for next execution", Attribute.tINTEGER, true, null, 128, false, false, true));
     R.addAttr( new Attribute(fADDDAYS, fADDDAYS, "Days to add for next execution", Attribute.tINTEGER, true, null, 128, false, false, true));
     R.addAttr( new Attribute(fADDHOURS, fADDHOURS, "Hours to add for next execution", Attribute.tINTEGER, true, null, 128, false, false, true));
@@ -303,7 +302,9 @@ if (TaskCategory!=null && !TaskCategory.equalsIgnoreCase("*"))
     CondT.addCondition(c);
     }
 Date Now=new Date();
-Condition c=new Condition(fNEXTDATE, Condition.cLET, Now);
+Attribute Attr=getRecord().getAttr(fNEXTDATE);
+Attr.setValue(Now);
+Condition c=new Condition(Attr, Condition.cLET);
 CondT.addCondition(c);
 c=new Condition(fACTIVE, Condition.cEQUAL, true);
 CondT.addCondition(c);
@@ -339,7 +340,8 @@ if (PDLog.isDebug())
 private void UpdateNextDate() throws PDException
 {
 Calendar Next=Calendar.getInstance();
-Next.setTime(getNextDate());
+// Next.setTime(getNextDate());
+Next.setTime(new Date()); // if delay in execution, update to current time
 Next.add(Calendar.MONTH, getAddMonth());
 Next.add(Calendar.DAY_OF_MONTH, getAddDays());
 Next.add(Calendar.HOUR_OF_DAY, getAddHours());

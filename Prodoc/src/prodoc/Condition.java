@@ -49,6 +49,8 @@ static final int ctIN         =3;
  *
  */
 static final int cEQUALFIELDS =4;
+
+static final int cATTROPER =5;
 /**
  *
  */
@@ -103,6 +105,7 @@ private Object Value=null;
  */
 private boolean Invert=false;
 
+private int TypeVal=-1;
 //-------------------------------------------------------------------------
 /**
  *
@@ -113,6 +116,20 @@ public Condition(Attribute Attr)
 cType=ctNORMAL;
 Field=Attr.getName();
 Value=Attr.getValue();
+TypeVal=Attr.getType();
+}
+//-------------------------------------------------------------------------
+/**
+ *
+ * @param Attr
+ */
+public Condition(Attribute Attr, int pComparation)
+{
+cType=ctNORMAL;
+Field=Attr.getName();
+Value=Attr.getValue();
+Comparation=pComparation;
+TypeVal=Attr.getType();
 }
 //-------------------------------------------------------------------------
 /**
@@ -222,6 +239,14 @@ return Comparation;
 public boolean isInvert()
 {
 return Invert;
+}
+//-------------------------------------------------------------------------
+/**
+ * @return the TypeVal
+ */
+public int getTypeVal()
+{
+return TypeVal;
 }
 //-------------------------------------------------------------------------
 }
