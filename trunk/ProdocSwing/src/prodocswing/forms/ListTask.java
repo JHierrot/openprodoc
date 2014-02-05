@@ -277,25 +277,21 @@ if (CategoryFilter.getText().length()!=0)
     }
 if (TimeStampFilter1.getText().length()!=0)
     {
-    Conditions Conds1=new Conditions();
-    Conds1.setOperatorAnd(false);
-    Date d1=(Date)TimeStampFilter1.getValue();
-    Condition C1=new Condition(PDTasksExec.fPDDATE, Condition.cGET , d1);  
-    Conds1.addCondition(C1);
-    Condition C2=new Condition(PDTasksExec.fPDDATE, Condition.cGET , d1);  
-    Conds1.addCondition(C2);
-    Conds.addCondition(Conds1);
+    PDTasksExec T=new PDTasksExec(MainWin.getSession());
+    Attribute Attr=T.getRecord().getAttr(PDTasksExec.fPDDATE);
+    Date d1=(Date)TimeStampFilter1.getValue();   
+    Attr.setValue(d1);
+    Condition C1=new Condition(Attr, Condition.cGET);  
+    Conds.addCondition(C1);
     }
 if (TimeStampFilter2.getText().length()!=0)
-    {
-    Conditions Conds1=new Conditions();
-    Conds1.setOperatorAnd(false);
-    Date d1=(Date)TimeStampFilter2.getValue();
-    Condition C1=new Condition(PDTasksExec.fPDDATE, Condition.cLET , d1);  
-    Conds1.addCondition(C1);
-    Condition C2=new Condition(PDTasksExec.fPDDATE, Condition.cLET , d1);  
-    Conds1.addCondition(C2);
-    Conds.addCondition(Conds1);
+    {    
+    PDTasksExec T=new PDTasksExec(MainWin.getSession());
+    Attribute Attr=T.getRecord().getAttr(PDTasksExec.fPDDATE);
+    Date d1=(Date)TimeStampFilter2.getValue();   
+    Attr.setValue(d1);
+    Condition C1=new Condition(Attr, Condition.cLET);  
+    Conds.addCondition(C1);
     }
 if (Conds.NumCond()==0)
     {

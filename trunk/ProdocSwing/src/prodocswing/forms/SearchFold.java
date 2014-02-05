@@ -408,10 +408,13 @@ else if (Attr.getType()==Attribute.tTHES)
 else if (Attr.getType()==Attribute.tDATE)
     {
     JTF=new JFormattedTextField(MainWin.getFormatterDate());
+ //   ((JFormattedTextField)JTF).setFocusLostBehavior(JFormattedTextField.COMMIT);
     }
 else if (Attr.getType()==Attribute.tTIMESTAMP)
     {
     JTF=new JFormattedTextField(MainWin.getFormatterTS());
+//    ((JFormattedTextField)JTF).setFocusLostBehavior(JFormattedTextField.COMMIT);
+//    ((JFormattedTextField)JTF).setValue(new Date());
     }
 else if (Attr.getType()==Attribute.tBOOLEAN)
     {
@@ -424,7 +427,12 @@ else if (Attr.getType()==Attribute.tINTEGER)
 else
      JTF=new JTextField("Error");
 //JTF.setEnabled(true);
-JTF.setToolTipText(Attr.getDescription()); // TODO: Excepción al presentar campos
+if (Attr.getType()==Attribute.tDATE )
+    JTF.setToolTipText(MainWin.DrvTT(Attr.getDescription()) +"( "+MainWin.getFormatDate()+" )");
+else if(Attr.getType() == Attribute.tTIMESTAMP)
+    JTF.setToolTipText(MainWin.DrvTT(Attr.getDescription()) +"( "+MainWin.getFormatTS()+" )");
+else
+    JTF.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
 JTF.setFont(MainWin.getFontDialog());
 return(JTF);
 }
@@ -465,11 +473,13 @@ else if (Attr.getType()==Attribute.tTHES)
     }
 else if (Attr.getType()==Attribute.tDATE)
     {
-    Attr.setValue((Date)((JFormattedTextField)JTF).getValue());
+    if (((JFormattedTextField)JTF).getText().length()!=0)    
+        Attr.setValue((Date)((JFormattedTextField)JTF).getValue());
     }
 else if (Attr.getType()==Attribute.tTIMESTAMP)
     {
-    Attr.setValue((Date)((JFormattedTextField)JTF).getValue());
+    if (((JFormattedTextField)JTF).getText().length()!=0)    
+        Attr.setValue((Date)((JFormattedTextField)JTF).getValue());
     }
 else if (Attr.getType()==Attribute.tBOOLEAN)
     {
@@ -549,7 +559,7 @@ while (Attr!=null)
                Operator=Condition.cGET;
             else if (OperText.equals("Contains"))
                Operator=Condition.cLIKE;
-            Condition c=new Condition( Attr.getName(), Operator ,Attr.getValue());
+            Condition c=new Condition( Attr, Operator);
             Conds.addCondition(c);
             }
         }

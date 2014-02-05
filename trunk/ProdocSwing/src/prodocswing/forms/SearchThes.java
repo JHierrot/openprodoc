@@ -464,7 +464,7 @@ while (Attr!=null)
                Operator=Condition.cGET;
             else if (OperText.equals("Contains"))
                Operator=Condition.cLIKE;
-            Condition c=new Condition( Attr.getName(), Operator ,Attr.getValue());
+            Condition c=new Condition( Attr, Operator);
             Conds.addCondition(c);
             }
         }

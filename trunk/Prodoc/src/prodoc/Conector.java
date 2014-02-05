@@ -103,13 +103,13 @@ if (LogProp==null || LogProp.length()==0)
     PDLog.setPropFile("log4j.properties");
 else
     PDLog.setPropFile(LogProp);
+TaskCategory=ProdocProperties.getProperty(ConectorName+".TaskCategory");
 String Temp=ProdocProperties.getProperty(ConectorName+".TaskSearchFreq");
 if (Temp!=null)
     TaskSearchFreq=new Integer(Temp);
 Temp=ProdocProperties.getProperty(ConectorName+".TaskExecFreq");
 if (Temp!=null)
     TaskExecFreq=new Integer(Temp);
-TaskCategory=ProdocProperties.getProperty(ConectorName+".TaskCategory");
 ListSesion=new Vector();
 for (int i = 0; i < MinPoolSize; i++)
     {
@@ -206,6 +206,8 @@ private void CreateTask()
 {
 if (PDLog.isDebug())
     PDLog.Debug("CreateTask >");        
+if (TaskCategory==null || TaskCategory.length()==0)
+    return;
 if (TaskSearchFreq!=0)   
     CreateSearchTask(TaskSearchFreq, TaskCategory);
 if (TaskExecFreq!=0)

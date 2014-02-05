@@ -207,10 +207,10 @@ setVisible(false);
  */
 public void setParam(String Param)
 {
-if (Param.charAt(0)=='1')
-    SubTypesCheckB.setSelected(true);
-else
+if (Param==null || Param.length()==0 || Param.charAt(0)=='0')
     SubTypesCheckB.setSelected(false);
+else
+    SubTypesCheckB.setSelected(true);
 }
 //------------------------------------------------   
 /**
