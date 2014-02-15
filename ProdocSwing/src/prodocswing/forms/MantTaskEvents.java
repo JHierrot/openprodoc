@@ -328,7 +328,7 @@ MainWin.Message(MainWin.TT("Repository_Created"));
 
     private void TypeComboBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_TypeComboBoxActionPerformed
     {//GEN-HEADEREND:event_TypeComboBoxActionPerformed
-if (TypeComboBox.getSelectedItem()==PDRepository.tFS || TypeComboBox.getSelectedItem()==PDRepository.tBBDD)
+if (TypeComboBox.getSelectedItem()==PDRepository.tFS || TypeComboBox.getSelectedItem()==PDRepository.tBBDD || TypeComboBox.getSelectedItem()==PDRepository.tS3)
    EncrytCB.setEnabled(true);     
 else
    {

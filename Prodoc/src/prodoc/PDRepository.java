@@ -76,6 +76,7 @@ public static final String tFTP="FTP";
  *
  */
 public static final String tREFURL="REFURL";
+public static final String tS3="S3";
 /**
  *
  */
@@ -92,6 +93,7 @@ if (tList==null)
     tList.add(tBBDD);
     tList.add(tFTP);
     tList.add(tREFURL);
+    tList.add(tS3);
     }
 return tList;
 }

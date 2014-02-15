@@ -1181,6 +1181,8 @@ else if (RepTyp.equals(PDRepository.tFTP))
     st=new Storeftp(Rep.getURL(), Rep.getUser(), /*Decode*/(Rep.getPassword()), Rep.getParam(), Rep.isEncrypted());
 else if (RepTyp.equals(PDRepository.tREFURL))
     st=new StoreRefURL(Rep.getURL(), Rep.getUser(), /*Decode*/(Rep.getPassword()), Rep.getParam(), Rep.isEncrypted());
+else if (RepTyp.equals(PDRepository.tS3))
+    st=new StoreAmazonS3(Rep.getURL(), Rep.getUser(), /*Decode*/(Rep.getPassword()), Rep.getParam(), Rep.isEncrypted());
 else
     PDException.GenPDException("Repository_type_unsuported", RepTyp);
 if (PDLog.isDebug())

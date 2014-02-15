@@ -30,6 +30,8 @@ public class PDTasksExec extends PDTasksDef
 {
 
 public static final String fPDID="PDId";
+public static final String fNEXTDATE="NextDate";
+
 
 /**
  *
@@ -40,6 +42,7 @@ static private Record TaksTypeStruct=null;
  *
  */
 private String PDId;
+private Date NextDate;
 
 static private ObjectsCache TaksDefObjectsCache = null;
 
@@ -64,6 +67,7 @@ public void assignValues(Record Rec) throws PDException
 {
 super.assignValues(Rec);    
 setPDId((String) Rec.getAttr(fPDID).getValue());
+setNextDate((Date) Rec.getAttr(fNEXTDATE).getValue());
 assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
@@ -78,6 +82,7 @@ synchronized public Record getRecord() throws PDException
 Record Rec=getRecordStruct();
 Rec.assign(super.getRecord().Copy());
 Rec.getAttr(fPDID).setValue(getPDId());
+Rec.getAttr(fNEXTDATE).setValue(getNextDate());
 getCommonValues(Rec);
 return(Rec);
 }
@@ -124,7 +129,8 @@ if (TaksTypeStruct==null)
     Record R=new Record();
     CreateRecordStructBase(R);
     R.addAttr( new Attribute(fPDID, fPDID, "Unique_identifier", Attribute.tSTRING, true, null, 32, true, false, false));
-return(R);
+    R.addAttr( new Attribute(fNEXTDATE, fNEXTDATE, "Next Date of execution", Attribute.tTIMESTAMP, true, null, 128, false, false, true));
+    return(R);
     }
 else
     return(TaksTypeStruct);
@@ -157,6 +163,7 @@ void GenFromDef(PDTasksCron Task) throws PDException
 {
 super.assignValues(Task.getRecord());
 setPDId(GenerateId());
+setNextDate(Task.getNextDate());
 }
 //-------------------------------------------------------------------------
 
@@ -410,7 +417,7 @@ if ("*".equals(getObjType()))
 else
     FoldType=getObjType();
 Calendar Date2Del=Calendar.getInstance();
-Date2Del.setTime(new Date());
+Date2Del.setTime(getNextDate());
 Date2Del.add(Calendar.DAY_OF_MONTH, -Integer.parseInt(getParam2()));
 Attribute Attr=F.getRecord().getAttr(PDFolders.fPDDATE);
 Attr.setValue(Date2Del.getTime());
@@ -532,4 +539,20 @@ private Cursor CurDeleteOldDoc()
     throw new UnsupportedOperationException("Not yet implemented");
 }
 //-------------------------------------------------------------------------
+
+    /**
+     * @return the NextDate
+     */
+    public Date getNextDate()
+    {
+        return NextDate;
+    }
+
+    /**
+     * @param NextDate the NextDate to set
+     */
+    public void setNextDate(Date NextDate)
+    {
+        this.NextDate = NextDate;
+    }
 }
