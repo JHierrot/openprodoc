@@ -197,13 +197,8 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="MainWin.getFontDialog()" type="code"/>
         </Property>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="DDBB"/>
-            <StringItem index="1" value="FS"/>
-            <StringItem index="2" value="FTP"/>
-            <StringItem index="3" value="REFURL"/>
-          </StringArray>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="getRepTypes()" type="code"/>
         </Property>
       </Properties>
       <Events>

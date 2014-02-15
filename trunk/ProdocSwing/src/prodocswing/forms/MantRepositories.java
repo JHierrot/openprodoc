@@ -25,6 +25,9 @@
 
 package prodocswing.forms;
 
+import java.util.HashSet;
+import java.util.Vector;
+import javax.swing.DefaultComboBoxModel;
 import prodoc.Attribute;
 import prodoc.PDException;
 import prodoc.PDRepository;
@@ -109,7 +112,7 @@ initComponents();
         TypeLabel.setText("jLabel1");
 
         TypeComboBox.setFont(MainWin.getFontDialog());
-        TypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "DDBB", "FS", "FTP", "REFURL" }));
+        TypeComboBox.setModel(getRepTypes());
         TypeComboBox.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -328,7 +331,7 @@ MainWin.Message(MainWin.TT("Repository_Created"));
 
     private void TypeComboBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_TypeComboBoxActionPerformed
     {//GEN-HEADEREND:event_TypeComboBoxActionPerformed
-if (TypeComboBox.getSelectedItem()==PDRepository.tFS || TypeComboBox.getSelectedItem()==PDRepository.tBBDD)
+if (TypeComboBox.getSelectedItem()==PDRepository.tFS || TypeComboBox.getSelectedItem()==PDRepository.tBBDD || TypeComboBox.getSelectedItem()==PDRepository.tS3)
    EncrytCB.setEnabled(true);     
 else
    {
@@ -473,4 +476,8 @@ public boolean isCancel()
 return Cancel;
 }
 //----------------------------------------------------------------
+private DefaultComboBoxModel getRepTypes()
+{
+return(new DefaultComboBoxModel(new Vector(PDRepository.gettList())));
+}        
 }

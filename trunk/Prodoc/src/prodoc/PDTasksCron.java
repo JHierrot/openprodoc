@@ -340,8 +340,8 @@ if (PDLog.isDebug())
 private void UpdateNextDate() throws PDException
 {
 Calendar Next=Calendar.getInstance();
-// Next.setTime(getNextDate());
-Next.setTime(new Date()); // if delay in execution, update to current time
+Next.setTime(getNextDate());
+//Next.setTime(new Date()); // if delay in execution, update to current time
 Next.add(Calendar.MONTH, getAddMonth());
 Next.add(Calendar.DAY_OF_MONTH, getAddDays());
 Next.add(Calendar.HOUR_OF_DAY, getAddHours());
