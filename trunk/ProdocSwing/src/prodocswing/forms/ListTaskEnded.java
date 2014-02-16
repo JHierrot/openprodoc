@@ -41,11 +41,6 @@ protected ObjPD PDObject;
 protected PDTableModel UserList1 = new PDTableModel();
 protected Frame Fparent;
 
-/**
- * 
- */
-protected JDialog MantForm;
-
 /** Creates new form ListObjects
  * @param parent 
  * @param modal
@@ -61,7 +56,7 @@ ObjectsTable.setAutoCreateColumnsFromModel(true);
 PDObject = pPDObject;
 Date d2=new Date();
 TimeStampFilter2.setValue(d2);
-Date d1=new Date(d2.getTime()-60000);
+Date d1=new Date(d2.getTime()-600000);
 TimeStampFilter1.setValue(d1);
 }
 
@@ -88,7 +83,7 @@ TimeStampFilter1.setValue(d1);
         ObjectsTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("");
+        setTitle(MainWin.TT("Task_Results_List"));
         addWindowListener(new java.awt.event.WindowAdapter()
         {
             public void windowClosing(java.awt.event.WindowEvent evt)
@@ -216,15 +211,11 @@ private void formWindowClosing(java.awt.event.WindowEvent evt)//GEN-FIRST:event_
 int Pos=getObjectsTable().getSelectedRow();
 if (Pos==-1)
     return;
-MantForm.setLocationRelativeTo(null);
-MantForm.setVisible(true);
-
-int Tot=getObjectsTable().getRowCount();
-if (Tot>0)
-    {
-    int Sel=Math.min(Tot-1, Pos);
-    getObjectsTable().setRowSelectionInterval(Sel, Sel);
-    }
+MantTask MU = new MantTask(Fparent, true);
+MU.setRecord(getPDTableModel().getElement(getSelectedRow()));
+MU.setLocationRelativeTo(null);
+MU.EditMode();
+MU.setVisible(true);
     }//GEN-LAST:event_ReviewButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -277,35 +268,21 @@ if (CategoryFilter.getText().length()!=0)
     }
 if (TimeStampFilter1.getText().length()!=0)
     {
+    PDTasksExec T=new PDTasksExec(MainWin.getSession());
+    Attribute Attr=T.getRecord().getAttr(PDTasksExec.fPDDATE);
     Date d1=(Date)TimeStampFilter1.getValue();   
-    Conditions Conds1=new Conditions();
-    Conds1.setOperatorAnd(false);
-    PDTasksExecEnded T1=new PDTasksExecEnded(MainWin.getSession());
-    Attribute Attr1=T1.getRecord().getAttr(PDTasksExecEnded.fSTARTDATE);
-    Attr1.setValue(d1);        
-    Condition C1=new Condition(Attr1, Condition.cGET);  
-    Conds1.addCondition(C1);
-    Attribute Attr2=T1.getRecord().getAttr(PDTasksExecEnded.fENDDATE);
-    Attr1.setValue(d1);        
-    Condition C2=new Condition(Attr2, Condition.cGET);  
-    Conds1.addCondition(C2);
-    Conds.addCondition(Conds1);
+    Attr.setValue(d1);
+    Condition C1=new Condition(Attr, Condition.cGET);  
+    Conds.addCondition(C1);
     }
 if (TimeStampFilter2.getText().length()!=0)
-    {
+    {    
+    PDTasksExec T=new PDTasksExec(MainWin.getSession());
+    Attribute Attr=T.getRecord().getAttr(PDTasksExec.fPDDATE);
     Date d1=(Date)TimeStampFilter2.getValue();   
-    Conditions Conds1=new Conditions();
-    Conds1.setOperatorAnd(false);
-    PDTasksExecEnded T1=new PDTasksExecEnded(MainWin.getSession());
-    Attribute Attr1=T1.getRecord().getAttr(PDTasksExecEnded.fSTARTDATE);
-    Attr1.setValue(d1);        
-    Condition C1=new Condition(Attr1, Condition.cLET);  
-    Conds1.addCondition(C1);
-    Attribute Attr2=T1.getRecord().getAttr(PDTasksExecEnded.fENDDATE);
-    Attr1.setValue(d1);        
-    Condition C2=new Condition(Attr2, Condition.cLET);  
-    Conds1.addCondition(C2);
-    Conds.addCondition(Conds1);
+    Attr.setValue(d1);
+    Condition C1=new Condition(Attr, Condition.cLET);  
+    Conds.addCondition(C1);
     }
 if (Conds.NumCond()==0)
     {
