@@ -103,7 +103,7 @@ if (LogProp==null || LogProp.length()==0)
     PDLog.setPropFile("log4j.properties");
 else
     PDLog.setPropFile(LogProp);
-TaskCategory=ProdocProperties.getProperty(ConectorName+".TaskCategory");
+TaskCategory=ProdocProperties.getProperty(ConectorName+".TaskCategory").trim();
 String Temp=ProdocProperties.getProperty(ConectorName+".TaskSearchFreq");
 if (Temp!=null)
     TaskSearchFreq=new Integer(Temp);
@@ -310,6 +310,7 @@ private Conector Con;
 //-------------------------------------------------
 public TaskCreator(int pTaskSearchFreq, String pTaskCategory, Conector pCon)
 {
+setName("TaskCreator");
 TaskSearchFreq=pTaskSearchFreq;   
 TaskCategory=pTaskCategory;
 Con=pCon;
@@ -344,15 +345,15 @@ while (Continue)
     {
     try {  
     d2=new Date();
-    if (PDLog.isDebug())
-        PDLog.Debug("TaskCreator run: "+d2);    
     if (d2.getTime()-d1.getTime()>TaskSearchFreq)
         {
         d1=new Date();
+        if (PDLog.isDebug())
+            PDLog.Debug("TaskCreator run: "+d2);    
         TaskGen.GenerateTaskCat(TaskCategory);
+        if (PDLog.isDebug())
+            PDLog.Debug("TaskCreator ends: "+new Date());    
         }
-    if (PDLog.isDebug())
-        PDLog.Debug("TaskCreator ends: "+new Date());    
     } catch (Exception e) 
         {
         e.printStackTrace();    
@@ -378,6 +379,7 @@ private Conector Con;
 //-------------------------------------------------
 public TaskRunner(int pTaskExecFreq, String pTaskCategory, Conector pCon)
 {
+setName("TaskRunner");
 TaskExecFreq=pTaskExecFreq;   
 TaskCategory=pTaskCategory;
 Con=pCon;
@@ -412,15 +414,15 @@ while (Continue)
     {
     try {  
     d2=new Date();
-    if (PDLog.isDebug())
-        PDLog.Debug("TaskRunner run: "+d2);    
     if (d2.getTime()-d1.getTime()>TaskExecFreq)
         {
         d1=new Date();
+        if (PDLog.isDebug())
+            PDLog.Debug("TaskRunner run: "+d2);    
         TaskRun.ExecutePendingTaskCat(TaskCategory);
+        if (PDLog.isDebug())
+            PDLog.Debug("TaskRunner ends: "+new Date());    
         }
-    if (PDLog.isDebug())
-        PDLog.Debug("TaskRunner ends: "+new Date());    
     } catch (Exception e) 
         {
         e.printStackTrace();    

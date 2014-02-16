@@ -710,7 +710,7 @@ SetMenu();
         AdminMenu.add(TaskExecMenuItem);
 
         TaskEndedMenuItem.setFont(getFontMenu());
-        TaskEndedMenuItem.setText(TT("Task_Events"));
+        TaskEndedMenuItem.setText(TT("Ended_Tasks_Logs"));
         TaskEndedMenuItem.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)

@@ -137,8 +137,9 @@ if (TaksTypeStruct==null)
     Record R=new Record();
     CreateRecordStructBase(R);
     R.addAttr( new Attribute(fPDID, fPDID, "Unique_identifier", Attribute.tSTRING, true, null, 32, true, false, false));
-    R.addAttr( new Attribute(fSTARTDATE, fSTARTDATE, "Start Date of execution", Attribute.tTIMESTAMP, false, null, 32, false, false, true));
     R.addAttr( new Attribute(fENDDATE, fENDDATE, "Next Date of execution", Attribute.tTIMESTAMP, false, null, 32, false, false, true));
+    R.addAttr( new Attribute(fSTARTDATE, fSTARTDATE, "Start Date of execution", Attribute.tTIMESTAMP, false, null, 32, false, false, true));
+    R.addAttr( new Attribute(fNEXTDATE, fNEXTDATE, "Next Date of execution", Attribute.tTIMESTAMP, true, null, 128, false, false, true));
     R.addAttr( new Attribute(fRESULT, fRESULT, "Description of error", Attribute.tSTRING, false, null, 254, false, false, true));
     R.addAttr( new Attribute(fENDSOK, fENDSOK, "True if the taks end correctly", Attribute.tBOOLEAN, false, null, 32, false, false, true));
     return(R);

@@ -216,14 +216,13 @@ private void formWindowClosing(java.awt.event.WindowEvent evt)//GEN-FIRST:event_
 int Pos=getObjectsTable().getSelectedRow();
 if (Pos==-1)
     return;
+try {
+MantTask MU = new MantTask(Fparent, true);
+MU.setRecord(PDObject.getRecord());
 MantForm.setLocationRelativeTo(null);
 MantForm.setVisible(true);
-
-int Tot=getObjectsTable().getRowCount();
-if (Tot>0)
-    {
-    int Sel=Math.min(Tot-1, Pos);
-    getObjectsTable().setRowSelectionInterval(Sel, Sel);
+} catch (PDException ex)
+    {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
     }//GEN-LAST:event_ReviewButtonActionPerformed
 

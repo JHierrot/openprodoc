@@ -207,7 +207,7 @@ if (PDLog.isDebug())
 Cursor CursorId=null;
 try {
 Conditions CondT=new Conditions();
-if (TaskCategory!=null && !TaskCategory.equalsIgnoreCase("*"))
+if (TaskCategory!=null && !TaskCategory.equals("*"))
     {
     Condition c=new Condition(fCATEGORY, Condition.cEQUAL, TaskCategory);
     CondT.addCondition(c);
@@ -221,7 +221,9 @@ while (Res!=null)
     {
     Task.assignValues(Res);    
     getDrv().IniciarTrans();
-    TaskEnd.assignValues(Task.getRecord());
+    Record R=TaskEnd.getRecord();
+    R.assign(Task.getRecord());
+    TaskEnd.assignValues(R);
     TaskEnd.setStartDate(new Date());
     try {
     Task.Execute();
@@ -243,6 +245,7 @@ while (Res!=null)
 getDrv().CloseCursor(CursorId);
 } catch (Exception ex)
     { 
+    ex.printStackTrace();
     if (CursorId!=null)    
         getDrv().CloseCursor(CursorId);
     if (getDrv().isInTransaction())

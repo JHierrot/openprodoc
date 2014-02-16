@@ -600,7 +600,7 @@
                   <Connection code="getFontMenu()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="TT(&quot;Task_Events&quot;)" type="code"/>
+                  <Connection code="TT(&quot;Ended_Tasks_Logs&quot;)" type="code"/>
                 </Property>
               </Properties>
               <Events>
