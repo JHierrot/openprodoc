@@ -212,4 +212,16 @@ public void setEndsOk(boolean EndsOk)
 this.EndsOk = EndsOk;
 }
 //-------------------------------------------------------------------------
+/**
+ *
+ * @return
+ * @throws PDException
+ */
+protected Conditions getConditions() throws PDException
+{
+Conditions ListCond=new Conditions();
+ListCond.addCondition(new Condition(fPDID, Condition.cEQUAL, getPDId()));
+return(ListCond);
+}
+//-------------------------------------------------------------------------
 }

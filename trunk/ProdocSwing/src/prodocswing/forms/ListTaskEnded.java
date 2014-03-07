@@ -79,6 +79,7 @@ TimeStampFilter1.setValue(d1);
         ButtonFilter = new javax.swing.JButton();
         jToolBar1 = new javax.swing.JToolBar();
         ReviewButton = new javax.swing.JButton();
+        DeleteButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         ObjectsTable = new javax.swing.JTable();
 
@@ -134,6 +135,20 @@ TimeStampFilter1.setValue(d1);
             }
         });
         jToolBar1.add(ReviewButton);
+
+        DeleteButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/del.png"))); // NOI18N
+        DeleteButton.setToolTipText("");
+        DeleteButton.setFocusable(false);
+        DeleteButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        DeleteButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        DeleteButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                DeleteButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(DeleteButton);
 
         ObjectsTable.setFont(MainWin.getFontList());
         jScrollPane1.setViewportView(ObjectsTable);
@@ -218,12 +233,44 @@ MU.EditMode();
 MU.setVisible(true);
     }//GEN-LAST:event_ReviewButtonActionPerformed
 
+    private void DeleteButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_DeleteButtonActionPerformed
+    {//GEN-HEADEREND:event_DeleteButtonActionPerformed
+int Pos=getObjectsTable().getSelectedRow();
+if (Pos==-1)
+    return;
+try {
+int[] Sel=getObjectsTable().getSelectedRows();
+if (Sel.length==0)
+    return;
+PDTasksExecEnded Ts=new PDTasksExecEnded(MainWin.getSession());
+for (int i = 0; i <Sel.length; i++)
+    {
+    int RowToDel = Sel[i];
+  
+    Ts.assignValues(getPDTableModel().getElement(Sel[i]));
+    Ts.delete();
+    }
+RefreshTable();
+} catch (PDException ex)
+    {
+    if (MainWin.getSession().isInTransaction())    
+        {try{
+            MainWin.getSession().AnularTrans();
+            } catch (PDException ex1)
+            {
+            }
+        }
+    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
+    }//GEN-LAST:event_DeleteButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonFilter;
     private javax.swing.JTextField CategoryFilter;
     private javax.swing.JLabel CategoryLabel;
     private javax.swing.JLabel DateLabel1;
     private javax.swing.JLabel DateLabel2;
+    private javax.swing.JButton DeleteButton;
     private javax.swing.JTable ObjectsTable;
     private javax.swing.JButton ReviewButton;
     private javax.swing.JFormattedTextField TimeStampFilter1;

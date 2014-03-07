@@ -103,7 +103,9 @@ if (LogProp==null || LogProp.length()==0)
     PDLog.setPropFile("log4j.properties");
 else
     PDLog.setPropFile(LogProp);
-TaskCategory=ProdocProperties.getProperty(ConectorName+".TaskCategory").trim();
+TaskCategory=ProdocProperties.getProperty(ConectorName+".TaskCategory");
+if (TaskCategory!=null)
+    TaskCategory=TaskCategory.trim();
 String Temp=ProdocProperties.getProperty(ConectorName+".TaskSearchFreq");
 if (Temp!=null)
     TaskSearchFreq=new Integer(Temp);
@@ -125,6 +127,8 @@ CreateTask();
  */
 private DriverGeneric CreateSesion()  throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("Conector.CreateSesion");
 DriverGeneric NewSesion=null;
 if (DataAccessType.equals("JDBC"))
    NewSesion=new DriverJDBC(URL,PARAM, User, Password);
@@ -294,11 +298,6 @@ TaskExecList.put(ConectorName, null);
 }
 //--------------------------------------------------------------------------
 
-
-
-
-
-
 //*******************************************************************
 static private class TaskCreator extends Thread  
 {
@@ -306,14 +305,28 @@ static private final long SleepTime=1000;
 private boolean Continue=true;
 private int TaskSearchFreq;
 private String TaskCategory;
-private Conector Con;
+//private Conector Con;
+PDTasksCron TaskGen;
+
 //-------------------------------------------------
 public TaskCreator(int pTaskSearchFreq, String pTaskCategory, Conector pCon)
 {
 setName("TaskCreator");
 TaskSearchFreq=pTaskSearchFreq;   
 TaskCategory=pTaskCategory;
-Con=pCon;
+//Con=pCon;
+try {
+DriverGeneric Session=pCon.CreateSesion();
+Session.Lock();
+Session.AssignTaskUser();
+TaskGen=new PDTasksCron(Session);
+} catch (Exception ex)
+    {
+    ex.printStackTrace();    
+    PDLog.Error("TaskCreator error:"+ex.getLocalizedMessage());
+    }
+if (PDLog.isDebug())
+    PDLog.Debug("TaskCreator.TaskCreator:"+pTaskSearchFreq+"-"+pTaskCategory+"-"+pCon);
 }
 //-------------------------------------------------
 public void End()
@@ -329,18 +342,6 @@ if (PDLog.isDebug())
     PDLog.Debug("TaskCreator starts");    
 Date d1=new Date(0);   
 Date d2;   
-PDTasksCron TaskGen;
-try {
-DriverGeneric Session=Con.CreateSesion();
-Session.Lock();
-Session.AssignTaskUser();
-TaskGen=new PDTasksCron(Session);
-} catch (Exception ex)
-    {
-    ex.printStackTrace();    
-    PDLog.Error("TaskCreator error:"+ex.getLocalizedMessage());
-    return;
-    }
 while (Continue) 
     {
     try {  
@@ -375,14 +376,28 @@ static private long SleepTime=1000;
 private boolean Continue=true;
 private int TaskExecFreq;
 private String TaskCategory;
-private Conector Con;
+//private Conector Con;
+PDTasksExec TaskRun;
+
 //-------------------------------------------------
 public TaskRunner(int pTaskExecFreq, String pTaskCategory, Conector pCon)
 {
 setName("TaskRunner");
 TaskExecFreq=pTaskExecFreq;   
 TaskCategory=pTaskCategory;
-Con=pCon;
+//Con=pCon;
+try {
+DriverGeneric Session=pCon.CreateSesion();
+Session.Lock();
+Session.AssignTaskUser();
+TaskRun=new PDTasksExec(Session);
+} catch (Exception ex)
+    {
+    ex.printStackTrace();    
+    PDLog.Error("TaskCreator error:"+ex.getLocalizedMessage());
+    }
+if (PDLog.isDebug())
+    PDLog.Debug("TaskRunner.TaskRunner:"+pTaskExecFreq+"-"+pTaskCategory+"-"+pCon);
 }
 //-------------------------------------------------
 public void End()
@@ -398,18 +413,6 @@ if (PDLog.isDebug())
     PDLog.Debug("TaskCreator starts");    
 Date d1=new Date(0);   
 Date d2;   
-PDTasksExec TaskRun;
-try {
-DriverGeneric Session=Con.CreateSesion();
-Session.Lock();
-Session.AssignTaskUser();
-TaskRun=new PDTasksExec(Session);
-} catch (Exception ex)
-    {
-    ex.printStackTrace();    
-    PDLog.Error("TaskCreator error:"+ex.getLocalizedMessage());
-    return;
-    }
 while (Continue) 
     {
     try {  

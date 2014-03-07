@@ -308,9 +308,8 @@ switch (getType())
     case fTASK_EXPORT: return CurExport();
     case fTASK_DELETE_OLD_FOLD: return CurDeleteOldFold();
     case fTASK_DELETE_OLD_DOC: return CurDeleteOldDoc();
-    default: PDExceptionFunc.GenPDException(XML_Group, ""+getType());
-        break;
     }
+PDExceptionFunc.GenPDException("Undefined_task", ""+getType());
 return (null);
 }
 //-------------------------------------------------------------------------
@@ -542,20 +541,32 @@ private Cursor CurDeleteOldDoc()
     throw new UnsupportedOperationException("Not yet implemented");
 }
 //-------------------------------------------------------------------------
-
-    /**
-     * @return the NextDate
-     */
-    public Date getNextDate()
-    {
-        return NextDate;
-    }
-
-    /**
-     * @param NextDate the NextDate to set
-     */
-    public void setNextDate(Date NextDate)
-    {
-        this.NextDate = NextDate;
-    }
+/**
+ * @return the NextDate
+ */
+public Date getNextDate()
+{
+return NextDate;
+}
+//-------------------------------------------------------------------------
+/**
+ * @param NextDate the NextDate to set
+ */
+public void setNextDate(Date NextDate)
+{
+this.NextDate = NextDate;
+}
+//-------------------------------------------------------------------------
+/**
+ *
+ * @return
+ * @throws PDException
+ */
+protected Conditions getConditions() throws PDException
+{
+Conditions ListCond=new Conditions();
+ListCond.addCondition(new Condition(fPDID, Condition.cEQUAL, getPDId()));
+return(ListCond);
+}
+//-------------------------------------------------------------------------
 }
