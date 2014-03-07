@@ -988,6 +988,8 @@ if (PDLog.isDebug())
  */
 protected void AssignTaskUser() throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("DriverGeneric.AssignTaskUser");
 User=new PDUser(this);
 User.CreateTaskUser();
 }

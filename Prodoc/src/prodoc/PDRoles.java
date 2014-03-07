@@ -941,36 +941,36 @@ public void setAllowMaintainThesaur(boolean AllowMaintainThesaur)
 this.AllowMaintainThesaur = AllowMaintainThesaur;
 }
 //-------------------------------------------------------------------------
-
-    /**
-     * @return the AllowCreateTask
-     */
-    public boolean isAllowCreateTask()
-    {
-        return AllowCreateTask;
-    }
-
-    /**
-     * @param AllowCreateTask the AllowCreateTask to set
-     */
-    public void setAllowCreateTask(boolean AllowCreateTask)
-    {
-        this.AllowCreateTask = AllowCreateTask;
-    }
-
-    /**
-     * @return the AllowMaintainTask
-     */
-    public boolean isAllowMaintainTask()
-    {
-        return AllowMaintainTask;
-    }
-
-    /**
-     * @param AllowMaintainTask the AllowMaintainTask to set
-     */
-    public void setAllowMaintainTask(boolean AllowMaintainTask)
-    {
-        this.AllowMaintainTask = AllowMaintainTask;
-    }
+/**
+ * @return the AllowCreateTask
+ */
+public boolean isAllowCreateTask()
+{
+return AllowCreateTask;
+}
+//-------------------------------------------------------------------------
+/**
+ * @param AllowCreateTask the AllowCreateTask to set
+ */
+public void setAllowCreateTask(boolean AllowCreateTask)
+{
+this.AllowCreateTask = AllowCreateTask;
+}
+//-------------------------------------------------------------------------
+/**
+ * @return the AllowMaintainTask
+ */
+public boolean isAllowMaintainTask()
+{
+return AllowMaintainTask;
+}
+//-------------------------------------------------------------------------
+/**
+ * @param AllowMaintainTask the AllowMaintainTask to set
+ */
+public void setAllowMaintainTask(boolean AllowMaintainTask)
+{
+this.AllowMaintainTask = AllowMaintainTask;
+}
+//-------------------------------------------------------------------------
 }

@@ -609,6 +609,8 @@ if (PDLog.isDebug())
  */
 private PDRoles CreateSuperRol() throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("PDUser.CreateSuperRol>");        
 PDRoles Rol1=new PDRoles(getDrv());
 Rol1.setName("Administrators");
 Rol1.setAllowCreateUser(true);
@@ -633,6 +635,8 @@ Rol1.setAllowCreateThesaur(true);
 Rol1.setAllowMaintainThesaur(true);
 Rol1.setAllowCreateTask(true);
 Rol1.setAllowMaintainTask(true);
+if (PDLog.isDebug())
+    PDLog.Debug("PDUser.CreateSuperRol<");        
 return Rol1;
 }
 //-------------------------------------------------------------------------
@@ -642,6 +646,8 @@ return Rol1;
  */
 protected void CreateTaskUser() throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("PDUser.CreateTaskUser>");    
 Rol=CreateSuperRol();
 PDACL A = new PDACL(getDrv());
 setAclList(A.FillAclTaskUser());
@@ -649,6 +655,8 @@ CustomData=new PDCustomization(getDrv());
 setName("TaskUser");
 setDescription("TaskUser");
 setActive(true);
+if (PDLog.isDebug())
+    PDLog.Debug("PDUser.CreateTaskUser>");    
 }
 //-------------------------------------------------------------------------
 /**
