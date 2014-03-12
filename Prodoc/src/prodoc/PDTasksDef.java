@@ -62,21 +62,22 @@ private String Description;
 
 public static final int fTASK_DELETE_OLD_FOLD=0;
 public static final int fTASK_DELETE_OLD_DOC=1;
-public static final int fTASK_DELETEFOLD=9;
-public static final int fTASK_DELETEDOC=10;
 public static final int fTASK_PURGEDOC=2;
+
 public static final int fTASK_COPYDOC=3;
 public static final int fTASK_MOVEDOC=4;
 public static final int fTASK_UPDATEDOC=5;
 public static final int fTASK_UPDATEFOLD=6;
 public static final int fTASK_IMPORT=7;
 public static final int fTASK_EXPORT=8;
+public static final int fTASK_DELETEFOLD=9;
+public static final int fTASK_DELETEDOC=10;
 
 private static final String[] LisTypeTask= {"DELETE_OLD_FOLD",
                                             "DELETE_OLD_DOC",
+                                            "PURGE_DOC",
                                             /* "DELETE_FOLD",
                                             "DELETE_DOC",
-                                            "PURGE_DOC",
                                             "COPY_DOC",
                                             "MOVE_DOC",
                                             "UPDATE_DOC",

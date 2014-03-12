@@ -258,11 +258,16 @@ if (PDLog.isDebug())
 //-------------------------------------------------------------------------
 /**
  * Executes the task defined in current object
+ * Beware that can be VERY DANGEROUS and DELETE THOUsands OF oBJECTS
  */
-private void Execute()  throws PDException
+public void Execute()  throws PDException
 {
 switch (getType())
     {
+    case fTASK_DELETE_OLD_FOLD: DeleteOldFold();
+        break;
+    case fTASK_DELETE_OLD_DOC: DeleteOldDoc();
+        break;
     case fTASK_DELETEFOLD: DeleteFold();
         break;
     case fTASK_DELETEDOC:DeleteDoc();
@@ -281,10 +286,6 @@ switch (getType())
         break;
     case fTASK_EXPORT: Export();
         break;
-    case fTASK_DELETE_OLD_FOLD: DeleteOldFold();
-        break;
-    case fTASK_DELETE_OLD_DOC: DeleteOldDoc();
-        break;
     default: PDExceptionFunc.GenPDException("Unexpected_Task", ""+getType());
         break;
     }
@@ -297,17 +298,18 @@ public Cursor GenCur()  throws PDException
 {
 switch (getType())
     {
+    case fTASK_DELETE_OLD_FOLD: return CurDeleteOldFold();
+    case fTASK_DELETE_OLD_DOC: return CurDeleteOldDoc();
+    case fTASK_PURGEDOC: return CurPurgeDoc();
+
     case fTASK_DELETEFOLD: return CurDeleteFold();
     case fTASK_DELETEDOC:return CurDeleteDoc();
-    case fTASK_PURGEDOC: return CurPurgeDoc();
     case fTASK_COPYDOC: return CurCopyDoc();
     case fTASK_MOVEDOC: return CurMoveDoc();
     case fTASK_UPDATEDOC: return CurUpdateDoc();
     case fTASK_UPDATEFOLD: return CurUpdateFold();
     case fTASK_IMPORT: return CurImport();
     case fTASK_EXPORT: return CurExport();
-    case fTASK_DELETE_OLD_FOLD: return CurDeleteOldFold();
-    case fTASK_DELETE_OLD_DOC: return CurDeleteOldDoc();
     }
 PDExceptionFunc.GenPDException("Undefined_task", ""+getType());
 return (null);
@@ -328,7 +330,43 @@ throw new UnsupportedOperationException("Not yet implemented");
 
 private void PurgeDoc() throws PDException
 {
-throw new UnsupportedOperationException("Not yet implemented");
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksExec.PurgeDoc >"+getPDId());
+PDDocs D=new PDDocs(this.getDrv());
+Cursor CursorId=null;
+try {
+if (isTransact())  
+    getDrv().IniciarTrans();
+CursorId=this.GenCur();    
+Record Res=getDrv().NextRec(CursorId);
+String Id=null;    
+while (Res!=null)
+    {
+    try {
+    Id=(String)Res.getAttr(PDDocs.fPDID).getValue(); 
+    
+    D.Purge(getObjType(), Id); 
+    } catch (Exception ex)
+        {
+        if (isTransact())    
+            PDException.GenPDException(ex.getMessage(), Id);
+        else    
+            PDLog.Error("PDTasksExec.PurgeDoc:"+ex.getLocalizedMessage());
+
+        }
+    Res=getDrv().NextRec(CursorId);
+    }
+getDrv().CloseCursor(CursorId);
+getDrv().CerrarTrans();
+} catch (Exception ex)
+    {
+    if (CursorId!=null)    
+        getDrv().CloseCursor(CursorId);
+    getDrv().AnularTrans();
+    PDLog.Error("PDTasksExec.PurgeDoc:"+ex.getLocalizedMessage());
+    }
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksExec.PurgeDoc <"+getPDId());
 }
 //-------------------------------------------------------------------------
 
@@ -376,29 +414,47 @@ throw new UnsupportedOperationException("Not yet implemented");
  */
 private void DeleteOldFold() throws PDException
 {
-if (PDLog.isDebug())
-    PDLog.Debug("PDTasksExec.DeleteOldFold >"+getPDId());
+if (PDLog.isInfo())
+    PDLog.Info("PDTasksExec.DeleteOldFold >"+getPDId());
 PDFolders F=new PDFolders(this.getDrv());
 Cursor CursorId=null;
 try {
+if (isTransact())  
+    getDrv().IniciarTrans();
 CursorId=CurDeleteOldFold();
 Record Res=getDrv().NextRec(CursorId);
+boolean PrevDeleted;
 while (Res!=null)
     {
     F.assignValues(Res);
     try {
-    F.delete(); 
+    F.Load((String)Res.getAttr(PDFolders.fPDID ).getValue());
+    PrevDeleted=false;
     } catch (Exception ex) // control of sinultaneous delete or deleting of folders before subfolders
         {
-        PDLog.Error("PDTasksExec.DeleteOldFold:"+ex.getLocalizedMessage());
+        PrevDeleted=true;
+        }
+    if (!PrevDeleted)
+        {
+        try {
+        F.delete(); 
+        } catch (Exception ex)
+            {
+            if (isTransact())    
+                PDException.GenPDException(ex.getMessage(), F.getPDId());
+            else    
+                PDLog.Error("PDTasksExec.DeleteOldFold:"+ex.getLocalizedMessage());
+            }
         }
     Res=getDrv().NextRec(CursorId);
     }
 getDrv().CloseCursor(CursorId);
+getDrv().CerrarTrans();
 } catch (Exception ex)
     {
     if (CursorId!=null)    
         getDrv().CloseCursor(CursorId);
+    getDrv().AnularTrans();
     PDLog.Error("PDTasksExec.DeleteOldFold:"+ex.getLocalizedMessage());
     }
 if (PDLog.isDebug())
@@ -411,7 +467,11 @@ if (PDLog.isDebug())
  */
 private Cursor CurDeleteOldFold() throws PDException
 {
-boolean SubTypes=(getParam().charAt(0)=='1');
+boolean SubTypes;
+if (getParam()==null || getParam().length()==0 || getParam().charAt(0)=='0')
+    SubTypes=false;
+else
+    SubTypes=true;
 PDFolders F=new PDFolders(this.getDrv());
 String FoldType;
 if ("*".equals(getObjType()))
@@ -440,24 +500,12 @@ private void DeleteOldDoc() throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDTasksExec.DeleteOldDoc >"+getPDId());
-boolean SubTypes=(getParam().charAt(0)=='1');
 PDDocs D=new PDDocs(this.getDrv());
-String DocType;
-if ("*".equals(getObjType()))
-    DocType=PDDocs.getTableName();
-else
-    DocType=getObjType();
-Calendar Date2Del=Calendar.getInstance();
-Date2Del.setTime(new Date());
-Date2Del.add(Calendar.DAY_OF_MONTH, -Integer.parseInt(getParam2()));
-Attribute Attr=D.getRecord().getAttr(PDDocs.fPDDATE);
-Attr.setValue(Date2Del.getTime());
-Condition c=new Condition(Attr, Condition.cLET);
-Conditions Conds=new Conditions();
-Conds.addCondition(c);
 Cursor CursorId=null;
 try {
-CursorId=D.Search(DocType, Conds, SubTypes, true, false, getParam3(), null);
+if (isTransact())  
+    getDrv().IniciarTrans();
+CursorId=this.GenCur();    
 Record Res=getDrv().NextRec(CursorId);
 while (Res!=null)
     {
@@ -471,10 +519,12 @@ while (Res!=null)
     Res=getDrv().NextRec(CursorId);
     }
 getDrv().CloseCursor(CursorId);
+getDrv().CerrarTrans();
 } catch (Exception ex)
     {
     if (CursorId!=null)    
         getDrv().CloseCursor(CursorId);
+    getDrv().AnularTrans();
     PDLog.Error("PDTasksExec.DeleteOldDoc:"+ex.getLocalizedMessage());
     }
 if (PDLog.isDebug())
@@ -494,9 +544,15 @@ private Cursor CurDeleteDoc()
 }
 //-------------------------------------------------------------------------
 
-private Cursor CurPurgeDoc()
+private Cursor CurPurgeDoc() throws PDException
 {
-    throw new UnsupportedOperationException("Not yet implemented");
+String DocType;
+if ("*".equals(getObjType()))
+    DocType=PDFolders.getTableName();
+else
+    DocType=getObjType();
+PDDocs Doc=new PDDocs(this.getDrv());
+return(Doc.ListDeleted(DocType));
 }
 //-------------------------------------------------------------------------
 
@@ -536,9 +592,28 @@ private Cursor CurExport()
 }
 //-------------------------------------------------------------------------
 
-private Cursor CurDeleteOldDoc()
+private Cursor CurDeleteOldDoc() throws PDException
 {
-    throw new UnsupportedOperationException("Not yet implemented");
+boolean SubTypes;
+if (getParam()==null || getParam().length()==0 || getParam().charAt(0)=='0')
+    SubTypes=false;
+else
+    SubTypes=true;
+PDDocs Doc=new PDDocs(this.getDrv());
+String DocType;
+if ("*".equals(getObjType()))
+    DocType=PDFolders.getTableName();
+else
+    DocType=getObjType();
+Calendar Date2Del=Calendar.getInstance();
+Date2Del.setTime(getNextDate());
+Date2Del.add(Calendar.DAY_OF_MONTH, -Integer.parseInt(getParam2()));
+Attribute Attr=Doc.getRecord().getAttr(PDDocs.fPDDATE);
+Attr.setValue(Date2Del.getTime());
+Condition c=new Condition(Attr, Condition.cLET);
+Conditions Conds=new Conditions();
+Conds.addCondition(c);
+return(Doc.Search(DocType, Conds, SubTypes, true, false, getParam3(), null))  ;
 }
 //-------------------------------------------------------------------------
 /**
