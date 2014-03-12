@@ -25,10 +25,6 @@
 
 package prodocswing.forms;
 
-import java.awt.Frame;
-import java.util.Vector;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
 import javax.swing.JDialog;
 import prodoc.*;
 import prodocswing.PDTableModel;
@@ -42,12 +38,13 @@ public final class ListTaskRes extends javax.swing.JDialog
 PDTableModel AffectedFoldList = new PDTableModel();
 JDialog Fparent;
 Cursor CursorId;
-String FoldType;
 /**
  * 
  */
 protected JDialog MantForm;
 String TypeDocRestore="";
+String FoldType=null;
+String DocType=null;
 
 /** Creates new form ListObjects
  * @param parent 
@@ -146,9 +143,15 @@ public void SetCursor(Cursor pCursorId)
 CursorId=pCursorId;    
 RefreshTable();
 }
+//--------------------------------------------------------------------
 public void setFoldType(String pFoldType)
 {
 FoldType=pFoldType;    
+}
+//--------------------------------------------------------------------
+void setDocType(String pDocType)
+{
+DocType=pDocType;    
 }
 //--------------------------------------------------------------------
 /**
@@ -159,8 +162,17 @@ protected void RefreshTable()
 try {
 AffectedFoldList = new PDTableModel();
 AffectedFoldList.setDrv(MainWin.getSession());
-PDFolders FoldAf = new PDFolders(MainWin.getSession(), FoldType);
-Record Rec=FoldAf.getRecSum().CopyMono();
+Record Rec;
+if (FoldType!=null)
+    {
+    PDFolders FoldAf = new PDFolders(MainWin.getSession(), FoldType);
+    Rec=FoldAf.getRecSum().CopyMono();
+    }
+else
+    {
+    PDDocs DocAf = new PDDocs(MainWin.getSession(), DocType);
+    Rec=DocAf.getRecSum().CopyMono();
+    }
 AffectedFoldList.setListFields(Rec);
 AffectedFoldList.setCursor(CursorId);
 getObjectsTable().setModel(AffectedFoldList);

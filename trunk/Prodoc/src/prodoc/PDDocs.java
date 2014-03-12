@@ -1671,6 +1671,7 @@ ListCond.addCondition(new Condition(fPDID, Condition.cEQUAL, Id));
 if (Ver!=null)
     ListCond.addCondition(new Condition(fVERSION, Condition.cEQUAL, Ver));
 Attribute Attr=Rec.getAttr(fDOCTYPE);
+Rec.getAttr(fPDDATE).setValue(new Date());
 getDrv().UpdateRecord(getTabNameVer((String)Attr.getValue()), Rec, ListCond);
 if (PDLog.isDebug())
    PDLog.Debug("PDDocs.UpdateVersion <");

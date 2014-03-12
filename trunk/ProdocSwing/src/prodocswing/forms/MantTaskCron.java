@@ -105,14 +105,14 @@ initComponents();
         ActiveCB = new javax.swing.JCheckBox();
         TransactLabel = new javax.swing.JLabel();
         TransactCB = new javax.swing.JCheckBox();
-        ButtonTest = new javax.swing.JButton();
         ButtonEdit = new javax.swing.JButton();
+        ButtonTest = new javax.swing.JButton();
+        ButtonRun = new javax.swing.JButton();
         ButtonAcept = new javax.swing.JButton();
         ButtonCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(MainWin.TT("Programed_Task_Maintenance"));
-        setPreferredSize(new java.awt.Dimension(522, 488));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter()
         {
@@ -221,6 +221,16 @@ initComponents();
 
         TransactCB.setBorder(null);
 
+        ButtonEdit.setFont(MainWin.getFontDialog());
+        ButtonEdit.setText("Edit");
+        ButtonEdit.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                ButtonEditActionPerformed(evt);
+            }
+        });
+
         ButtonTest.setFont(MainWin.getFontDialog());
         ButtonTest.setText("Test");
         ButtonTest.addActionListener(new java.awt.event.ActionListener()
@@ -231,13 +241,13 @@ initComponents();
             }
         });
 
-        ButtonEdit.setFont(MainWin.getFontDialog());
-        ButtonEdit.setText("Edit");
-        ButtonEdit.addActionListener(new java.awt.event.ActionListener()
+        ButtonRun.setFont(MainWin.getFontDialog());
+        ButtonRun.setText("Run");
+        ButtonRun.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                ButtonEditActionPerformed(evt);
+                ButtonRunActionPerformed(evt);
             }
         });
 
@@ -289,7 +299,7 @@ initComponents();
                             .addComponent(AddDayLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(EndDateLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addGroup(layout.createSequentialGroup()
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -305,11 +315,12 @@ initComponents();
                                     .addComponent(AddMinTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE)
                                     .addComponent(AddHourTextField, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(AddDayTextField, javax.swing.GroupLayout.Alignment.LEADING))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(ButtonTest, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
+                                .addGap(33, 33, 33)
                                 .addComponent(ButtonEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(49, 49, 49))))
+                                .addGap(18, 18, 18)
+                                .addComponent(ButtonTest, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(ButtonRun, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(CategoryLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
@@ -395,7 +406,7 @@ initComponents();
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(EndDateLabel)
                     .addComponent(EndDateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -408,7 +419,11 @@ initComponents();
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(AddHourLabel)
-                            .addComponent(AddHourTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(AddHourTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(ButtonTest)
+                                .addComponent(ButtonEdit)
+                                .addComponent(ButtonRun)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(AddMinLabel)
@@ -424,14 +439,10 @@ initComponents();
                     .addGroup(layout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(ButtonTest)
-                            .addComponent(ButtonEdit))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(ButtonCancel)
                             .addComponent(ButtonAcept))
                         .addGap(2, 2, 2)))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         pack();
@@ -501,9 +512,13 @@ Cancel=true;
     private void ButtonTestActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ButtonTestActionPerformed
     {//GEN-HEADEREND:event_ButtonTestActionPerformed
 try {
+setCursor(MainWin.WaitCur);    
 ListTaskRes LMT = new ListTaskRes(this, true);
 LMT.setLocationRelativeTo(null);
-LMT.setFoldType((String) ObjTypeComboBox.getSelectedItem());
+if (TypeComboBox.getSelectedItem().equals(PDTasksDef.fTASK_DELETE_OLD_FOLD))
+    LMT.setFoldType((String) ObjTypeComboBox.getSelectedItem());
+else
+    LMT.setDocType((String) ObjTypeComboBox.getSelectedItem());
 PDTasksExec TC=new PDTasksExec(MainWin.getSession());
 TC.setObjType((String) ObjTypeComboBox.getSelectedItem());
 TC.setObjFilter(FilterTextField.getText());
@@ -515,9 +530,12 @@ TC.setNextDate((Date)EndDateTextField.getValue());
 TC.setType(TypeComboBox.getSelectedIndex());
 Cursor CursorId=TC.GenCur();
 LMT.SetCursor(CursorId);
+setCursor(MainWin.DefCur); 
+MainWin.getSession().CloseCursor(CursorId);
 LMT.setVisible(true);
 } catch (Exception ex)
     {
+    setCursor(MainWin.DefCur);    
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
 
@@ -574,6 +592,31 @@ LU.dispose();
     }
     }//GEN-LAST:event_ButtonEditActionPerformed
 
+    private void ButtonRunActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ButtonRunActionPerformed
+    {//GEN-HEADEREND:event_ButtonRunActionPerformed
+try {
+if (!MainWin.MessageQuestion(MainWin.DrvTT("Do_you_really_want_to_execute_the_task? (Beware_that_several_elements_can_be_altered_or_deleted)")))
+    return;
+setCursor(MainWin.WaitCur);    
+PDTasksExec TC=new PDTasksExec(MainWin.getSession());
+TC.setObjType((String) ObjTypeComboBox.getSelectedItem());
+TC.setObjFilter(FilterTextField.getText());
+TC.setParam(ParamTextField.getText());
+TC.setParam2(ParamTextField2.getText());
+TC.setParam3(ParamTextField3.getText());
+TC.setParam4(ParamTextField4.getText());
+TC.setNextDate((Date)EndDateTextField.getValue());
+TC.setType(TypeComboBox.getSelectedIndex());
+TC.Execute();
+setCursor(MainWin.DefCur);    
+MainWin.Message(MainWin.DrvTT("Task_ended"));
+} catch (Exception ex)
+    {
+    setCursor(MainWin.DefCur);    
+    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
+    }//GEN-LAST:event_ButtonRunActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox ActiveCB;
     private javax.swing.JLabel ActiveLabel;
@@ -588,6 +631,7 @@ LU.dispose();
     private javax.swing.JButton ButtonAcept;
     private javax.swing.JButton ButtonCancel;
     private javax.swing.JButton ButtonEdit;
+    private javax.swing.JButton ButtonRun;
     private javax.swing.JButton ButtonTest;
     private javax.swing.JLabel CategoryLabel;
     private javax.swing.JTextField CategoryTextField;
