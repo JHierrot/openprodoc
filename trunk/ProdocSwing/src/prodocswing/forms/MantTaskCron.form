@@ -184,9 +184,9 @@
                   <Component id="EndDateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="EndDateTextField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="AddMonthLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="AddMonthTextField" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -197,13 +197,15 @@
                           <Component id="AddDayTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="AddHourLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="AddHourTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Group type="103" alignment="3" groupAlignment="3" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                               <Component id="ButtonTest" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="ButtonEdit" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="ButtonRun" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="AddHourLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="AddHourTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -223,7 +225,6 @@
                       </Group>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="ButtonCancel" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="ButtonAcept" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -308,6 +309,9 @@
           <Connection code="getListTypeTask()" type="code"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TypeComboBoxActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="ObjTypeLabel">
       <Properties>
@@ -323,7 +327,7 @@
           <Connection code="MainWin.getFontDialog()" type="code"/>
         </Property>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="getListObj()" type="code"/>
+          <Connection code="getListObjFold()" type="code"/>
         </Property>
       </Properties>
       <Events>

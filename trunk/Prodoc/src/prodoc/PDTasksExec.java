@@ -29,8 +29,14 @@ import java.util.Date;
 public class PDTasksExec extends PDTasksDef
 {
 
-public static final String fPDID="PDId";
-public static final String fNEXTDATE="NextDate";
+    /**
+     *
+     */
+    public static final String fPDID="PDId";
+    /**
+     *
+     */
+    public static final String fNEXTDATE="NextDate";
 
 
 /**
@@ -259,6 +265,7 @@ if (PDLog.isDebug())
 /**
  * Executes the task defined in current object
  * Beware that can be VERY DANGEROUS and DELETE THOUsands OF oBJECTS
+ * @throws PDException 
  */
 public void Execute()  throws PDException
 {
@@ -293,6 +300,8 @@ switch (getType())
 //-------------------------------------------------------------------------
 /**
  * Executes the task defined in current object
+ * @return
+ * @throws PDException In any error 
  */
 public Cursor GenCur()  throws PDException
 {
@@ -337,14 +346,13 @@ Cursor CursorId=null;
 try {
 if (isTransact())  
     getDrv().IniciarTrans();
+String Id=null;    
 CursorId=this.GenCur();    
 Record Res=getDrv().NextRec(CursorId);
-String Id=null;    
 while (Res!=null)
     {
     try {
     Id=(String)Res.getAttr(PDDocs.fPDID).getValue(); 
-    
     D.Purge(getObjType(), Id); 
     } catch (Exception ex)
         {
@@ -552,7 +560,10 @@ if ("*".equals(getObjType()))
 else
     DocType=getObjType();
 PDDocs Doc=new PDDocs(this.getDrv());
-return(Doc.ListDeleted(DocType));
+Calendar Date2Del=Calendar.getInstance();
+Date2Del.setTime(new Date());
+Date2Del.add(Calendar.DAY_OF_MONTH, -Integer.parseInt(getParam2()));
+return(Doc.ListDeletedBefore(DocType, Date2Del.getTime()));
 }
 //-------------------------------------------------------------------------
 
