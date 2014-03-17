@@ -2085,9 +2085,9 @@ return(Cur);
 }
 //-------------------------------------------------------------------------
 /**
- *
+ * Creates a cursor with documents deleted of DocTypeName
  * @param DocTypename
- * @return
+ * @return Created Cursor
  * @throws PDException
  */
 public Cursor ListDeleted(String DocTypename) throws PDException
@@ -2104,6 +2104,26 @@ if (PDLog.isDebug())
 return(Cur);
 }
 //-------------------------------------------------------------------------
+/**
+ * Creates a cursor with documents deleted of DocTypeName
+ * @param DocTypename
+ * @return Created Cursor
+ * @throws PDException
+ */
+public Cursor ListDeletedBefore(String DocTypename, Date DateBefore) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDDocs.ListDeletedBefore>:"+DocTypename+"/"+DateBefore);
+Conditions Cond= new Conditions();
+Cond.addCondition(new Condition(fSTATUS, Condition.cEQUAL, fSTATUS_LASTDEL));
+Cond.addCondition(new Condition(fPDDATE, Condition.cLET, DateBefore));
+Cond.addCondition(new Condition(fACL, new HashSet(getDrv().getUser().getAclList().keySet())));
+Query LoadAct=new Query(getTabNameVer(DocTypename), getRecSum().CopyMono(), Cond, null);
+Cursor Cur=getDrv().OpenCursor(LoadAct);
+if (PDLog.isDebug())
+    PDLog.Debug("PDDocs.ListDeletedBefore <");
+return(Cur);
+}
 //-------------------------------------------------------------------------
 /**
  * Search for Folders returning a cursor with the results of folders with the

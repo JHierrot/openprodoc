@@ -146,12 +146,19 @@ initComponents();
 
         TypeComboBox.setFont(MainWin.getFontDialog());
         TypeComboBox.setModel(getListTypeTask());
+        TypeComboBox.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                TypeComboBoxActionPerformed(evt);
+            }
+        });
 
         ObjTypeLabel.setFont(MainWin.getFontDialog());
         ObjTypeLabel.setText("jLabel1");
 
         ObjTypeComboBox.setFont(MainWin.getFontDialog());
-        ObjTypeComboBox.setModel(getListObj());
+        ObjTypeComboBox.setModel(getListObjFold());
         ObjTypeComboBox.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -406,9 +413,9 @@ initComponents();
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(EndDateLabel)
                     .addComponent(EndDateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(AddMonthLabel)
                             .addComponent(AddMonthTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -417,13 +424,14 @@ initComponents();
                             .addComponent(AddDayLabel)
                             .addComponent(AddDayTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(AddHourLabel)
-                            .addComponent(AddHourTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(ButtonTest)
                                 .addComponent(ButtonEdit)
-                                .addComponent(ButtonRun)))
+                                .addComponent(ButtonRun))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(AddHourLabel)
+                                .addComponent(AddHourTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(AddMinLabel)
@@ -437,7 +445,6 @@ initComponents();
                             .addComponent(TransactLabel)
                             .addComponent(TransactCB)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(ButtonCancel)
                             .addComponent(ButtonAcept))
@@ -551,11 +558,11 @@ switch (TypeComboBox.getSelectedIndex())
         break;
     case PDTasksDef.fTASK_DELETE_OLD_DOC: LU = new TCDelOldDoc(this, true);
         break;
+    case PDTasksDef.fTASK_PURGEDOC: LU = new TCPurgeOldDoc(this, true);;
+        break;
   /**  case fTASK_DELETEFOLD: DeleteFold();
         break;
     case fTASK_DELETEDOC:DeleteDoc();
-        break;
-    case fTASK_PURGEDOC: PurgeDoc();
         break;
     case fTASK_COPYDOC: CopyDoc();
         break;
@@ -616,6 +623,20 @@ MainWin.Message(MainWin.DrvTT("Task_ended"));
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
     }//GEN-LAST:event_ButtonRunActionPerformed
+
+    private void TypeComboBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_TypeComboBoxActionPerformed
+    {//GEN-HEADEREND:event_TypeComboBoxActionPerformed
+switch (TypeComboBox.getSelectedIndex())
+{
+    case PDTasksDef.fTASK_DELETE_OLD_FOLD: ObjTypeComboBox.setModel(getListObjFold());  
+        break;
+    case PDTasksDef.fTASK_DELETE_OLD_DOC: ObjTypeComboBox.setModel(getListObjDoc());
+        break;
+    case PDTasksDef.fTASK_PURGEDOC: ObjTypeComboBox.setModel(getListObjDoc());
+        break;
+    default: ObjTypeComboBox.setModel(getListObjEmpty());    
+}
+    }//GEN-LAST:event_TypeComboBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox ActiveCB;
@@ -840,8 +861,29 @@ private ComboBoxModel getListTypeTask()
 return(new DefaultComboBoxModel(PDTasksDef.getListTypeTask()));
 }
 //----------------------------------------------------------------
-
-private ComboBoxModel getListObj()
+private ComboBoxModel getListObjDoc()
+{
+Vector VObjects=new Vector();
+try {
+DriverGeneric Session=MainWin.getSession();
+PDObjDefs Obj = new PDObjDefs(Session);
+Cursor CursorId = Obj.getListDocs();
+Record Res=Session.NextRec(CursorId);
+while (Res!=null)
+    {
+    Attribute Attr=Res.getAttr(PDObjDefs.fNAME);
+    VObjects.add(Attr.getValue());
+    Res=Session.NextRec(CursorId);
+    }
+Session.CloseCursor(CursorId);
+} catch (PDException ex)
+    {
+    MainWin.Message("Error"+ex.getLocalizedMessage());
+    }
+return(new DefaultComboBoxModel(VObjects));
+}
+//----------------------------------------------------------------
+private ComboBoxModel getListObjFold()
 {
 Vector VObjects=new Vector();
 try {
@@ -856,19 +898,16 @@ while (Res!=null)
     Res=Session.NextRec(CursorId);
     }
 Session.CloseCursor(CursorId);
-CursorId = Obj.getListDocs();
-Res=Session.NextRec(CursorId);
-while (Res!=null)
-    {
-    Attribute Attr=Res.getAttr(PDObjDefs.fNAME);
-    VObjects.add(Attr.getValue());
-    Res=Session.NextRec(CursorId);
-    }
-Session.CloseCursor(CursorId);
 } catch (PDException ex)
     {
     MainWin.Message("Error"+ex.getLocalizedMessage());
     }
+return(new DefaultComboBoxModel(VObjects));
+}
+//----------------------------------------------------------------
+private ComboBoxModel getListObjEmpty()
+{
+Vector VObjects=new Vector();
 return(new DefaultComboBoxModel(VObjects));
 }
 //----------------------------------------------------------------
