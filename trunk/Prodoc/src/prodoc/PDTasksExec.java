@@ -19,6 +19,7 @@
 
 package prodoc;
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -310,6 +311,8 @@ switch (getType())
     case fTASK_DELETE_OLD_FOLD: return CurDeleteOldFold();
     case fTASK_DELETE_OLD_DOC: return CurDeleteOldDoc();
     case fTASK_PURGEDOC: return CurPurgeDoc();
+    case fTASK_IMPORT: return CurImport();
+    case fTASK_EXPORT: return CurExport();
 
     case fTASK_DELETEFOLD: return CurDeleteFold();
     case fTASK_DELETEDOC:return CurDeleteDoc();
@@ -317,8 +320,6 @@ switch (getType())
     case fTASK_MOVEDOC: return CurMoveDoc();
     case fTASK_UPDATEDOC: return CurUpdateDoc();
     case fTASK_UPDATEFOLD: return CurUpdateFold();
-    case fTASK_IMPORT: return CurImport();
-    case fTASK_EXPORT: return CurExport();
     }
 PDExceptionFunc.GenPDException("Undefined_task", ""+getType());
 return (null);
@@ -410,7 +411,43 @@ throw new UnsupportedOperationException("Not yet implemented");
 
 private void Export() throws PDException
 {
-throw new UnsupportedOperationException("Not yet implemented");
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksExec.Export >"+getPDId());
+PDFolders F2Exp=new PDFolders(this.getDrv());
+Cursor CursorId=null;
+try {
+if (isTransact())  
+    getDrv().IniciarTrans();
+String Id=null;    
+//File Path=new File(getParam4());
+CursorId=this.GenCur();    
+Record Res=getDrv().NextRec(CursorId);
+while (Res!=null)
+    {
+    try {
+    F2Exp.assignValues(Res);    
+    F2Exp.ExportPath(getParam3(), getParam4());   
+    } catch (Exception ex)
+        {
+        if (isTransact())    
+            PDException.GenPDException(ex.getMessage(), Id);
+        else    
+            PDLog.Error("PDTasksExec.Export:"+ex.getLocalizedMessage());
+
+        }
+    Res=getDrv().NextRec(CursorId);
+    }
+getDrv().CloseCursor(CursorId);
+getDrv().CerrarTrans();
+} catch (Exception ex)
+    {
+    if (CursorId!=null)    
+        getDrv().CloseCursor(CursorId);
+    getDrv().AnularTrans();
+    PDLog.Error("PDTasksExec.Export:"+ex.getLocalizedMessage());
+    }
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksExec.Export <"+getPDId());
 }
 //-------------------------------------------------------------------------
 /**
@@ -597,9 +634,28 @@ private Cursor CurImport()
 }
 //-------------------------------------------------------------------------
 
-private Cursor CurExport()
+private Cursor CurExport() throws PDException
 {
-    throw new UnsupportedOperationException("Not yet implemented");
+boolean SubTypes;
+if (getParam()==null || getParam().length()==0 || getParam().charAt(0)=='0')
+    SubTypes=false;
+else
+    SubTypes=true;
+PDFolders F=new PDFolders(this.getDrv());
+String FoldType;
+if ("*".equals(getObjType()))
+    FoldType=PDFolders.getTableName();
+else
+    FoldType=getObjType();
+Calendar Date2Del=Calendar.getInstance();
+Date2Del.setTime(getNextDate());
+Date2Del.add(Calendar.DAY_OF_MONTH, -Integer.parseInt(getParam2()));
+Attribute Attr=F.getRecord().getAttr(PDFolders.fPDDATE);
+Attr.setValue(Date2Del.getTime());
+Condition c=new Condition(Attr, Condition.cGET);
+Conditions Conds=new Conditions();
+Conds.addCondition(c);
+return(F.Search(FoldType,  Conds, SubTypes, true, getParam3(), null))  ;
 }
 //-------------------------------------------------------------------------
 
