@@ -522,7 +522,8 @@ try {
 setCursor(MainWin.WaitCur);    
 ListTaskRes LMT = new ListTaskRes(this, true);
 LMT.setLocationRelativeTo(null);
-if (TypeComboBox.getSelectedItem().equals(PDTasksDef.fTASK_DELETE_OLD_FOLD))
+if (TypeComboBox.getSelectedIndex()==PDTasksDef.fTASK_DELETE_OLD_FOLD 
+   || TypeComboBox.getSelectedIndex()==PDTasksDef.fTASK_EXPORT)
     LMT.setFoldType((String) ObjTypeComboBox.getSelectedItem());
 else
     LMT.setDocType((String) ObjTypeComboBox.getSelectedItem());
@@ -560,6 +561,8 @@ switch (TypeComboBox.getSelectedIndex())
         break;
     case PDTasksDef.fTASK_PURGEDOC: LU = new TCPurgeOldDoc(this, true);;
         break;
+    case PDTasksDef.fTASK_EXPORT: LU = new TCExportNewFold(this, true);
+        break;  
   /**  case fTASK_DELETEFOLD: DeleteFold();
         break;
     case fTASK_DELETEDOC:DeleteDoc();
@@ -574,8 +577,7 @@ switch (TypeComboBox.getSelectedIndex())
         break;
     case fTASK_IMPORT: Import();
         break;
-    case fTASK_EXPORT: Export();
-        break;   */
+        */
     default: PDExceptionFunc.GenPDException("Unexpected_Task", "");
         break;
 }
@@ -633,6 +635,8 @@ switch (TypeComboBox.getSelectedIndex())
     case PDTasksDef.fTASK_DELETE_OLD_DOC: ObjTypeComboBox.setModel(getListObjDoc());
         break;
     case PDTasksDef.fTASK_PURGEDOC: ObjTypeComboBox.setModel(getListObjDoc());
+        break;
+    case PDTasksDef.fTASK_EXPORT: ObjTypeComboBox.setModel(getListObjFold());  
         break;
     default: ObjTypeComboBox.setModel(getListObjEmpty());    
 }

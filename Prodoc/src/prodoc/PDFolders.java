@@ -20,6 +20,7 @@
 package prodoc;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -1176,7 +1177,6 @@ public String CreatePath(String FoldName)  throws PDException
 {
 String Path="";
 return(Path);
-
 }
 //-------------------------------------------------------------------------
 /**
@@ -1309,15 +1309,15 @@ RFull.delRecord(getRecord());
 return(RFull.toXML()+"</ListAttr>");    
 }
 //-------------------------------------------------------------------------
-    /**
-     *
-     * @param OPDObject
-     * @param ParentFolderId
-     * @param MaintainId
-     * @return
-     * @throws PDException
-     */
-    public PDFolders ImportXMLNode(Node OPDObject, String ParentFolderId, boolean MaintainId) throws PDException
+/**
+ *
+ * @param OPDObject
+ * @param ParentFolderId
+ * @param MaintainId
+ * @return
+ * @throws PDException
+ */
+public PDFolders ImportXMLNode(Node OPDObject, String ParentFolderId, boolean MaintainId) throws PDException
 {
 NodeList childNodes = OPDObject.getChildNodes();
 PDFolders NewFold=null;
@@ -1353,7 +1353,7 @@ try {
 DocumentBuilder DB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 Document XMLObjects = DB.parse(XMLFile);
 NodeList OPDObjectList = XMLObjects.getElementsByTagName(ObjPD.XML_OPDObject);
-Node OPDObject = null;
+Node OPDObject;
 PDFolders NewFold=null;
 for (int i=0; i<OPDObjectList.getLength(); i++)
     {
@@ -1365,6 +1365,78 @@ return(NewFold); // returned LAST Folder when opd file contains several.
     {
     throw new PDException(ex.getLocalizedMessage());
     }
+}
+//---------------------------------------------------------------------
+/**
+ * Exports the 
+ * @param Path path to the place to star exporting
+ */
+void ExportPath(String IdTopLevel, String Path) throws Exception
+{
+ArrayList Family=OrderedGrandParents(getPDId());
+PDFolders Fold=new PDFolders(getDrv());
+File SOFolder;
+for (int i = Family.size()-1; i >=0; i--)
+    {
+    String Id = (String)Family.get(i);
+    if (Id.equals(IdTopLevel) || Id.equals(ROOTFOLDER))
+            continue;
+    Fold.Load(Id);
+    Path+=File.separatorChar+Fold.getTitle();
+    SOFolder=new File(Path);
+    if (!SOFolder.exists())
+        SOFolder.mkdir();
+    }
+String Destpath=Path+File.separatorChar+getTitle();    
+SOFolder=new File(Destpath);    
+if (!SOFolder.exists())
+    SOFolder.mkdir();
+PrintWriter PW = new PrintWriter(Destpath+".opd");
+PW.print(StartXML());    
+PW.print(toXML());
+PW.print(EndXML());    
+PW.flush();
+PW.close();
+ExportDocs(Destpath);
+}
+//---------------------------------------------------------------------
+/**
+ * Returns a Collection containing an ordered set of parent, from father to root.
+ * Excludeing Id
+ * @param Id Identifier of folder
+ * @return 
+ * @throws prodoc.PDException
+ */
+public ArrayList OrderedGrandParents(String Id) throws PDException
+{
+ArrayList Family=new ArrayList();
+PDFolders F=new PDFolders(getDrv());
+while (!Id.equals(PDFolders.ROOTFOLDER))
+        {
+        F.Load(Id);
+        Id=F.getParentId();
+        Family.add(Id);
+        }
+return(Family);
+}
+//---------------------------------------------------------------------
+/**
+ * Export All documents in folder
+ * @param Path OS path to export to
+ */
+public void ExportDocs(String Path) throws PDException
+{
+PDDocs Doc = new PDDocs(getDrv());    
+Cursor ListDocs=Doc.getListContainedDocs(getPDId());
+Record Res=getDrv().NextRec(ListDocs);
+PDDocs ExpDoc=new PDDocs(getDrv());
+while (Res!=null)
+    {
+    ExpDoc.assignValues(Res);    
+    ExpDoc.ExportXML(Path, false);
+    Res=getDrv().NextRec(ListDocs);
+    }
+getDrv().CloseCursor(ListDocs);
 }
 //---------------------------------------------------------------------
 }

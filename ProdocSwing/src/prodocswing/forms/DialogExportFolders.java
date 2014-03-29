@@ -27,7 +27,6 @@ package prodocswing.forms;
 
 import java.io.File;
 import javax.swing.JFileChooser;
-//import prodoc.PDFolders;
 import prodoc.Record;
 
 /**
