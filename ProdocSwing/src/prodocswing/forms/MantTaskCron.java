@@ -523,6 +523,7 @@ setCursor(MainWin.WaitCur);
 ListTaskRes LMT = new ListTaskRes(this, true);
 LMT.setLocationRelativeTo(null);
 if (TypeComboBox.getSelectedIndex()==PDTasksDef.fTASK_DELETE_OLD_FOLD 
+   || TypeComboBox.getSelectedIndex()==PDTasksDef.fTASK_IMPORT
    || TypeComboBox.getSelectedIndex()==PDTasksDef.fTASK_EXPORT)
     LMT.setFoldType((String) ObjTypeComboBox.getSelectedItem());
 else
@@ -563,6 +564,8 @@ switch (TypeComboBox.getSelectedIndex())
         break;
     case PDTasksDef.fTASK_EXPORT: LU = new TCExportNewFold(this, true);
         break;  
+    case PDTasksDef.fTASK_IMPORT: LU = new TCImportFold(this, true);
+        break;
   /**  case fTASK_DELETEFOLD: DeleteFold();
         break;
     case fTASK_DELETEDOC:DeleteDoc();
@@ -574,8 +577,6 @@ switch (TypeComboBox.getSelectedIndex())
     case fTASK_UPDATEDOC: UpdateDoc();
         break;
     case fTASK_UPDATEFOLD: UpdateFold();
-        break;
-    case fTASK_IMPORT: Import();
         break;
         */
     default: PDExceptionFunc.GenPDException("Unexpected_Task", "");
@@ -628,8 +629,9 @@ MainWin.Message(MainWin.DrvTT("Task_ended"));
 
     private void TypeComboBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_TypeComboBoxActionPerformed
     {//GEN-HEADEREND:event_TypeComboBoxActionPerformed
+ButtonTest.setEnabled(true);
 switch (TypeComboBox.getSelectedIndex())
-{
+    {
     case PDTasksDef.fTASK_DELETE_OLD_FOLD: ObjTypeComboBox.setModel(getListObjFold());  
         break;
     case PDTasksDef.fTASK_DELETE_OLD_DOC: ObjTypeComboBox.setModel(getListObjDoc());
@@ -638,8 +640,11 @@ switch (TypeComboBox.getSelectedIndex())
         break;
     case PDTasksDef.fTASK_EXPORT: ObjTypeComboBox.setModel(getListObjFold());  
         break;
+    case PDTasksDef.fTASK_IMPORT: ObjTypeComboBox.setModel(getListObjFold());  
+        ButtonTest.setEnabled(false);
+        break;
     default: ObjTypeComboBox.setModel(getListObjEmpty());    
-}
+    }
     }//GEN-LAST:event_TypeComboBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
