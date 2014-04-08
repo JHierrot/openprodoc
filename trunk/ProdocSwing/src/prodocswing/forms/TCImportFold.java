@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
- * author: Joaquin Hierro      2011
+ * author: Joaquin Hierro      2014
  * 
  */
 
@@ -25,22 +25,29 @@
 
 package prodocswing.forms;
 
-import java.io.File;
+import java.util.Vector;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
+import prodoc.Attribute;
+import prodoc.Cursor;
+import prodoc.DriverGeneric;
+import prodoc.PDException;
+import prodoc.PDObjDefs;
 import prodoc.Record;
 
 /**
  *
  * @author jhierrot
  */
-public class TCExportNewFold extends TCBase
+public class TCImportFold extends TCBase
 {
 
 /** Creates new form MantUsers
  * @param parent 
  * @param modal
  */
-public TCExportNewFold(javax.swing.JDialog parent, boolean modal)
+public TCImportFold(javax.swing.JDialog parent, boolean modal)
 {
 super(parent, modal);
 initComponents();
@@ -57,9 +64,9 @@ initComponents();
     {
 
         LabelOperation = new javax.swing.JLabel();
-        ParamLabel2 = new javax.swing.JLabel();
-        SubTypesCheckB = new javax.swing.JCheckBox();
-        ParamTextField2 = new javax.swing.JTextField();
+        SubFoldersCheckB = new javax.swing.JCheckBox();
+        ObjTypeLabel = new javax.swing.JLabel();
+        ObjTypeComboBox = new javax.swing.JComboBox();
         ParamLabel3 = new javax.swing.JLabel();
         ParamTextField3 = new javax.swing.JTextField();
         ParamLabel4 = new javax.swing.JLabel();
@@ -81,16 +88,24 @@ initComponents();
 
         LabelOperation.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
         LabelOperation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        LabelOperation.setText(MainWin.TT("Param_Export_New_Folders"));
+        LabelOperation.setText(MainWin.TT("Param_Import_Folders"));
 
-        ParamLabel2.setFont(MainWin.getFontDialog());
-        ParamLabel2.setText(MainWin.TT("Days_From_Update"));
+        SubFoldersCheckB.setFont(MainWin.getFontDialog());
+        SubFoldersCheckB.setText(MainWin.TT("SubFolders"));
+        SubFoldersCheckB.setToolTipText(MainWin.TT("When_checked_includes_subtypes_of_folders_in_results"));
 
-        SubTypesCheckB.setFont(MainWin.getFontDialog());
-        SubTypesCheckB.setText(MainWin.TT("Subtypes"));
-        SubTypesCheckB.setToolTipText(MainWin.TT("When_checked_includes_subtypes_of_folders_in_results"));
+        ObjTypeLabel.setFont(MainWin.getFontDialog());
+        ObjTypeLabel.setText(MainWin.TT("Default_Docs_Type"));
 
-        ParamTextField2.setFont(MainWin.getFontDialog());
+        ObjTypeComboBox.setFont(MainWin.getFontDialog());
+        ObjTypeComboBox.setModel(getListObjDoc());
+        ObjTypeComboBox.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                ObjTypeComboBoxActionPerformed(evt);
+            }
+        });
 
         ParamLabel3.setFont(MainWin.getFontDialog());
         ParamLabel3.setText(MainWin.TT("Parent_Folder"));
@@ -98,7 +113,7 @@ initComponents();
         ParamTextField3.setFont(MainWin.getFontDialog());
 
         ParamLabel4.setFont(MainWin.getFontDialog());
-        ParamLabel4.setText(MainWin.TT("Destination_Folder"));
+        ParamLabel4.setText(MainWin.TT("Source_Folder"));
 
         ParamTextField4.setFont(MainWin.getFontDialog());
 
@@ -139,32 +154,37 @@ initComponents();
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ParamLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(SubTypesCheckB)
-                    .addComponent(ParamLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ParamTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ParamTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(ParamLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ParamTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(ParamLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(ParamTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(ButtonSelFile, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ButtonAcept)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(ButtonCancel))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(12, 12, 12)
-                        .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(SubFoldersCheckB)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(ParamLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(ObjTypeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(ParamTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(ButtonSelFile, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ButtonAcept)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(ButtonCancel)))
+                        .addComponent(ObjTypeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -172,13 +192,13 @@ initComponents();
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(LabelOperation)
-                .addGap(18, 18, 18)
-                .addComponent(SubTypesCheckB)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(SubFoldersCheckB)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ParamLabel2)
-                    .addComponent(ParamTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(ObjTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ObjTypeLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ParamLabel3)
                     .addComponent(ParamTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -191,7 +211,7 @@ initComponents();
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButtonCancel)
                     .addComponent(ButtonAcept))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -205,8 +225,8 @@ setVisible(false);
 
     private void ButtonAceptActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ButtonAceptActionPerformed
     {//GEN-HEADEREND:event_ButtonAceptActionPerformed
-super.setParam(SubTypesCheckB.isSelected()?"1":"0");   
-super.setParam2(ParamTextField2.getText());
+super.setParam(SubFoldersCheckB.isSelected()?"1":"0");   
+super.setParam2((String)ObjTypeComboBox.getSelectedItem());
 super.setParam3(ParamTextField3.getText());
 super.setParam4(ParamTextField4.getText());
 setCancel(false);
@@ -230,29 +250,35 @@ if (returnVal == JFileChooser.APPROVE_OPTION)
     }
     }//GEN-LAST:event_ButtonSelFileActionPerformed
 
+    private void ObjTypeComboBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ObjTypeComboBoxActionPerformed
+    {//GEN-HEADEREND:event_ObjTypeComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ObjTypeComboBoxActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonAcept;
     private javax.swing.JButton ButtonCancel;
     private javax.swing.JButton ButtonSelFile;
     private javax.swing.JLabel LabelOperation;
-    private javax.swing.JLabel ParamLabel2;
+    private javax.swing.JComboBox ObjTypeComboBox;
+    private javax.swing.JLabel ObjTypeLabel;
     private javax.swing.JLabel ParamLabel3;
     private javax.swing.JLabel ParamLabel4;
-    private javax.swing.JTextField ParamTextField2;
     private javax.swing.JTextField ParamTextField3;
     private javax.swing.JTextField ParamTextField4;
-    private javax.swing.JCheckBox SubTypesCheckB;
+    private javax.swing.JCheckBox SubFoldersCheckB;
     // End of variables declaration//GEN-END:variables
 //------------------------------------------------   
 /**
  * @param Param the Param to set
  */
+@Override
 public void setParam(String Param)
 {
 if (Param==null || Param.length()==0 || Param.charAt(0)=='0')
-    SubTypesCheckB.setSelected(false);
+    SubFoldersCheckB.setSelected(false);
 else
-    SubTypesCheckB.setSelected(true);
+    SubFoldersCheckB.setSelected(true);
 }
 //------------------------------------------------   
 /**
@@ -261,7 +287,7 @@ else
 @Override
 public void setParam2(String Param)
 {
-ParamTextField2.setText(Param);
+ObjTypeComboBox.setSelectedItem(Param);
 }
 //------------------------------------------------   
 /**
@@ -280,6 +306,28 @@ ParamTextField3.setText(Param);
 public void setParam4(String Param)
 {
 ParamTextField4.setText(Param);
+}
+//----------------------------------------------------------------
+private ComboBoxModel getListObjDoc()
+{
+Vector VObjects=new Vector();
+try {
+DriverGeneric Session=MainWin.getSession();
+PDObjDefs Obj = new PDObjDefs(Session);
+Cursor CursorId = Obj.getListDocs();
+Record Res=Session.NextRec(CursorId);
+while (Res!=null)
+    {
+    Attribute Attr=Res.getAttr(PDObjDefs.fNAME);
+    VObjects.add(Attr.getValue());
+    Res=Session.NextRec(CursorId);
+    }
+Session.CloseCursor(CursorId);
+} catch (PDException ex)
+    {
+    MainWin.Message("Error"+ex.getLocalizedMessage());
+    }
+return(new DefaultComboBoxModel(VObjects));
 }
 //----------------------------------------------------------------
 }

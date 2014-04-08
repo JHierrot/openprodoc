@@ -20,6 +20,7 @@
 package prodoc;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -30,15 +31,14 @@ import java.util.Date;
 public class PDTasksExec extends PDTasksDef
 {
 
-    /**
-     *
-     */
-    public static final String fPDID="PDId";
-    /**
-     *
-     */
-    public static final String fNEXTDATE="NextDate";
-
+/**
+ *
+ */
+public static final String fPDID="PDId";
+/**
+ *
+ */
+public static final String fNEXTDATE="NextDate";
 
 /**
  *
@@ -290,7 +290,7 @@ switch (getType())
         break;
     case fTASK_UPDATEFOLD: UpdateFold();
         break;
-    case fTASK_IMPORT: Import();
+    case fTASK_IMPORT: Import(getParam2(), getParam3(), getParam4(), getParam()!=null && getParam().equals("1"));
         break;
     case fTASK_EXPORT: Export();
         break;
@@ -402,10 +402,66 @@ private void UpdateFold() throws PDException
 throw new UnsupportedOperationException("Not yet implemented");
 }
 //-------------------------------------------------------------------------
-
-private void Import() throws PDException
+/**
+ * Imports O.S. folders into OpenProdoc repository
+ * @throws PDException 
+ */
+private void Import(String DefDocType, String ParentId, String Path, boolean Recursive) throws PDException
 {
-throw new UnsupportedOperationException("Not yet implemented");
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksExec.Import >"+getPDId());
+File ImpFold=new File(Path);
+File []ListOrigin=ImpFold.listFiles();
+ArrayList DirList=new ArrayList(5);
+for (int i = 0; i < ListOrigin.length; i++) // first only folders and opd files to avouid double insert
+    {
+    File ListElement = ListOrigin[i];
+    if (ListElement==null) // deleted by double reference opd + doc
+        continue;
+    if (ListElement.isDirectory())
+        {
+        DirList.add(ListElement);
+        ListOrigin[i]=null;
+        continue;
+        }
+    if (ListElement.getName().endsWith(".opd"))
+        {
+        getDrv().ProcessXML(ListElement, ParentId);
+        int L2comp=ListElement.getName().length()-3;
+        String FileName=ListElement.getName().substring(0, L2comp);
+        for (int j = 0; j < ListOrigin.length; j++)
+            {   
+            if (ListOrigin[j]!=null && ListOrigin[j].getName().substring(0, L2comp).equals(FileName) 
+                    && !ListOrigin[j].isDirectory())
+               ListOrigin[j]=null; 
+            }
+        }
+    }
+for (File ListElement : ListOrigin)
+    {
+        if (ListElement==null) // deleted by double reference opd + doc
+            continue;
+        PDDocs NewDoc=new PDDocs(getDrv(), DefDocType);
+        NewDoc.setTitle(ListElement.getName());
+        NewDoc.setFile(ListElement.getAbsolutePath());
+        NewDoc.setDocDate(new Date(ListElement.lastModified()));
+        NewDoc.setParentId(ParentId);
+        NewDoc.insert();  
+    }
+ListOrigin=null; // to help gc and save memory during recursivity
+if (Recursive)
+    {
+    for (int i = 0; i < DirList.size(); i++)
+        {
+        File SubDir = (File) DirList.get(i);
+        PDFolders f=new PDFolders(getDrv(), getObjType());
+        f.setTitle(SubDir.getName());
+        f.insert();
+        Import(DefDocType, f.getPDId(), SubDir.getAbsolutePath(), Recursive);    
+        }
+    }
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksExec.Import <"+getPDId());
 }
 //-------------------------------------------------------------------------
 
