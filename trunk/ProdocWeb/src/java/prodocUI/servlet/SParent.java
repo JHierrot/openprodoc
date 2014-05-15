@@ -218,7 +218,7 @@ try {
  */
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {
-throw new PDException("Página Inexistente");
+throw new PDException("Wrong Address");
 }
 //-----------------------------------------------------------------------------------------------
 
@@ -458,13 +458,15 @@ if (Attr.getType()==Attribute.tSTRING || Attr.getType()==Attribute.tTHES)
     }
 else if (Attr.getType()==Attribute.tDATE)
     {
-    Cond=new Condition(Attr.getName(), Condition.cEQUAL, getFormatterDate(Req).parse(Val));
-    Attr.setValue(getFormatterDate(Req).parse(Val));
+    // Cond=new Condition(Attr.getName(), Condition.cEQUAL, getFormatterDate(Req).parse(Val));
+    Attr.setValue(getFormatterDate(Req).parse(Val));   
+    Cond=new Condition(Attr, Condition.cEQUAL);
     }
 else if (Attr.getType()==Attribute.tTIMESTAMP)
     {
-    Cond=new Condition(Attr.getName(), Condition.cEQUAL, getFormatterTS(Req).parse(Val));
+//     Cond=new Condition(Attr.getName(), Condition.cEQUAL, getFormatterTS(Req).parse(Val));
     Attr.setValue(getFormatterTS(Req).parse(Val));
+    Cond=new Condition(Attr, Condition.cEQUAL);
     }
 else if (Attr.getType()==Attribute.tBOOLEAN)
     {
@@ -501,13 +503,15 @@ if (Attr.getType()==Attribute.tSTRING)
     }
 else if (Attr.getType()==Attribute.tDATE)
     {
-    Cond=new Condition(Attr.getName(), Condition.cEQUAL, getFormatterDate(Req).parse(Val));
+//    Cond=new Condition(Attr.getName(), Condition.cEQUAL, getFormatterDate(Req).parse(Val));
     Attr.setValue(getFormatterDate(Req).parse(Val));
+    Cond=new Condition(Attr, Condition.cEQUAL);
     }
 else if (Attr.getType()==Attribute.tTIMESTAMP)
     {
-    Cond=new Condition(Attr.getName(), Condition.cEQUAL, getFormatterTS(Req).parse(Val));
+//    Cond=new Condition(Attr.getName(), Condition.cEQUAL, getFormatterTS(Req).parse(Val));
     Attr.setValue(getFormatterTS(Req).parse(Val));
+    Cond=new Condition(Attr, Condition.cEQUAL);
     }
 else if (Attr.getType()==Attribute.tBOOLEAN)
     {
@@ -936,7 +940,7 @@ Sess.setAttribute("ST_Rec", Rec);
  */
 static public String getVersion()
 {
-return("0.8.1");
+return("0.9");
 }
 //-----------------------------------------------------------------------------------------------
 /**
@@ -959,7 +963,7 @@ else
     }
 }
 //----------------------------------------------------------
-protected static String getProdocProperRef() throws Exception
+public static String getProdocProperRef() throws Exception
 {
 if (ProdocProperRef==null)
     {
