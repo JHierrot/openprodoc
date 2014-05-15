@@ -862,19 +862,24 @@ LR.setVisible(true);
 DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) evt.getPath().getLastPathComponent();
 if ( ((TreeFolder) TreeFold.getUserObject()).isExpanded())
     return;
+setCursor(WaitCur);
 ExpandFold(TreeFold);
+setCursor(DefCur);
     }//GEN-LAST:event_TreeFolderTreeExpanded
 
     private void TreeFolderValueChanged(javax.swing.event.TreeSelectionEvent evt)//GEN-FIRST:event_TreeFolderValueChanged
     {//GEN-HEADEREND:event_TreeFolderValueChanged
 try {
+setCursor(WaitCur);
 DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) evt.getPath().getLastPathComponent();
 FoldAct= ((TreeFolder) TreeFold.getUserObject()).getFold();
 SelFolderDesc.setText(HtmlDesc(FoldAct));
 ActFolderId=FoldAct.getPDId();
 RefreshDocs();
+setCursor(DefCur);
 } catch (Exception ex)
     {
+    setCursor(DefCur);
     Message(DrvTT(ex.getLocalizedMessage()));
     }
     }//GEN-LAST:event_TreeFolderValueChanged
@@ -1793,6 +1798,7 @@ return(FoldTreeModel);
 private void ExpandFold(DefaultMutableTreeNode ChildTreeFolder)
 {
 try {
+setCursor(WaitCur);
 ChildTreeFolder.removeAllChildren();
 PDFolders Fold= ((TreeFolder) ChildTreeFolder.getUserObject()).getFold();
 HashSet Child =Fold.getListDirectDescendList(Fold.getPDId());
@@ -1812,8 +1818,10 @@ for (Iterator it = Child.iterator(); it.hasNext();)
 (((TreeFolder) ChildTreeFolder.getUserObject())).setExpanded(true);
 FoldTreeModel.reload(ChildTreeFolder);
 TreeFolder.setPreferredSize(null);
+setCursor(DefCur);
 } catch (PDException ex)
     {
+    setCursor(DefCur);
     Message(DrvTT(ex.getLocalizedMessage()));
     }
 }
@@ -2157,7 +2165,12 @@ for (int i = 0; i < ListOrigin.length; i++)
             {
             if (IncludeMetadata)
                 {
+                try {
                 ExpDocs+=getSession().ProcessXML(ListElement, NewFold.getPDId());   
+                        } catch (PDException ex)
+                            {
+                            throw new PDException(ex.getLocalizedMessage()+"->"+ListElement.getAbsolutePath());
+                            }
                 }
             }
         else
@@ -2187,7 +2200,7 @@ for (int i = 0; i < DirList.size(); i++)
 private void ImportExt(PDFolders FoldAct, String OriginPath, boolean DeleteAfter, String Format, String DefFoldType, String DateFormat, String TimeStampFormat) throws PDException
 {
 PDFolders NewFold=new PDFolders(FoldAct.getDrv(), DefFoldType);   
-HashSet ChildF=NewFold.getListDirectDescendList(FoldAct.getPDId());
+//HashSet ChildF=NewFold.getListDirectDescendList(FoldAct.getPDId());
 String Name=OriginPath.substring(OriginPath.lastIndexOf(File.separatorChar)+1);
 try {
 String IdFold=NewFold.GetIdChild(FoldAct.getPDId(), Name);
@@ -2214,7 +2227,12 @@ for (int i = 0; i < ListOrigin.length; i++)
     if (ListElement.getName().toLowerCase().endsWith(".xml") && Format.equals("Abby"))
         {       
         ExpDocs++;
+        try {
         ImageFile=PDDocs.ProcessXMLAbby(getSession(), ListElement, NewFold.getPDId(), DateFormat, TimeStampFormat); 
+        } catch (PDException ex)
+            {
+            throw new PDException(ex.getLocalizedMessage()+"->"+ListElement.getAbsolutePath());
+            }
         if (DeleteAfter)
             {
             if (ImageFile!=null)    
@@ -2225,7 +2243,12 @@ for (int i = 0; i < ListOrigin.length; i++)
     else if (ListElement.getName().toLowerCase().endsWith(".txt") && Format.equals("Kofax"))
         {
         ExpDocs++;
+        try {
         ImageFile=PDDocs.ProcessXMLKofax(getSession(), ListElement, NewFold.getPDId(), DateFormat, TimeStampFormat); 
+        } catch (PDException ex)
+            {
+            throw new PDException(ex.getLocalizedMessage()+"->"+ListElement.getAbsolutePath());
+            }
         if (DeleteAfter)
             {
             if (ImageFile!=null)    
