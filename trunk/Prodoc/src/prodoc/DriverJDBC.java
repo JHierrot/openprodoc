@@ -57,12 +57,12 @@ final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyyMMddHHmmss");
 //static final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
 final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyyMMdd");
 /**
- *
- * @param pURL
- * @param pPARAM
- * @param pUser
- * @param pPassword
- * @throws PDException
+ * Constructor
+ * @param pURL Url to DDBB Server
+ * @param pPARAM 
+ * @param pUser     DDBB User
+ * @param pPassword   DDBB Password
+ * @throws PDException on error
  */
 public DriverJDBC(String pURL, String pPARAM, String pUser, String pPassword) throws PDException
 {
@@ -92,7 +92,7 @@ if (PDLog.isDebug())
 }
 //--------------------------------------------------------------------------
 /**
- * 
+ * Disconects freeing all resources
  * @throws PDException
  */
 public void delete() throws PDException
@@ -129,7 +129,12 @@ return con.isValid(1);
    }
 }
 //--------------------------------------------------------------------------
-
+/**
+ * Create a table
+ * @param TableName
+ * @param Fields
+ * @throws PDException 
+ */
 protected void CreateTable(String TableName, Record Fields) throws PDException
 {
 if (PDLog.isInfo())
@@ -172,6 +177,11 @@ if (PDLog.isInfo())
     PDLog.Info("DriverJDBC.CreateTable<:"+TableName);
 }
 //--------------------------------------------------------------------------
+/**
+ * Drops a table
+ * @param TableName
+ * @throws PDException 
+ */
 protected void DropTable(String TableName) throws PDException
 {
 if (PDLog.isInfo())
@@ -184,7 +194,7 @@ if (PDLog.isInfo())
 }
 //--------------------------------------------------------------------------
 /**
- *
+ * Modifies a table adding a field
  * @param TableName
  * @param NewAttr New field to add
  * @throws PDException
@@ -207,7 +217,7 @@ if (PDLog.isInfo())
 }
 //--------------------------------------------------------------------------
 /**
- *
+ * Modifies a table deleting a field
  * @param TableName
  * @param OldAttr old field to delete
  * @throws PDException
@@ -224,7 +234,12 @@ if (PDLog.isInfo())
 }
 
 //--------------------------------------------------------------------------
-
+/**
+ * Inserts a record/row
+ * @param TableName
+ * @param Fields
+ * @throws PDException 
+ */
 protected void InsertRecord(String TableName, Record Fields) throws PDException
 {
 if (PDLog.isDebug())
@@ -271,7 +286,12 @@ if (PDLog.isDebug())
     PDLog.Debug("DriverJDBC.InsertRecord<");
 }
 //--------------------------------------------------------------------------
-
+/**
+ * Deletes SEVERAL records acording conditions
+ * @param TableName
+ * @param DelConds
+ * @throws PDException 
+ */
 protected void DeleteRecord(String TableName, Conditions DelConds) throws PDException
 {
 if (PDLog.isDebug())
@@ -283,14 +303,18 @@ if (PDLog.isDebug())
     PDLog.Debug("DriverJDBC.DeleteRecord<");   
 }
 //--------------------------------------------------------------------------
-
+/**
+ * Update SEVERAL records acording conditions
+ * @param TableName
+ * @param NewFields
+ * @param UpConds
+ * @throws PDException 
+ */
 protected void UpdateRecord(String TableName, Record NewFields, Conditions UpConds) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("DriverJDBC.UpdateRecord>:"+TableName+"="+NewFields);
 String SQL="update "+TableName+" set ";
-String Attrs="";
-String Vals="";
 int NumAttr=NewFields.NumAttr();
 Attribute At;
 NewFields.initList();
@@ -331,7 +355,7 @@ if (PDLog.isDebug())
 }
 //--------------------------------------------------------------------------
 /**
- *
+ * Add referential integrity between two tables and one field each
  * @param TableName1
  * @param Field1
  * @param TableName2
@@ -343,8 +367,9 @@ protected void AddIntegrity(String TableName1, String Field1, String TableName2,
 String SQL="ALTER TABLE "+TableName1+" ADD FOREIGN KEY ("+Field1+") REFERENCES "+TableName2+"("+Field2+")";
 this.ExecuteSql(SQL);
 }
+//--------------------------------------------------------------------------
 /**
- *
+ * Add referential integrity between two tables and 2 fields each
  * @param TableName1
  * @param Field11 
  * @param Field12 
@@ -358,9 +383,10 @@ protected void AddIntegrity(String TableName1, String Field11, String Field12, S
 String SQL="ALTER TABLE "+TableName1+" ADD FOREIGN KEY ("+Field11+","+Field12+") REFERENCES "+TableName2+"("+Field21+","+Field22+")";
 this.ExecuteSql(SQL);
 }
-
+//-----------------------------------------------------------------------------------
 /**
- *
+ * Executes the Sql sentence  using JDBC Stament
+ * @param SQl Command SQL to run
  * @return
  */
 private boolean ExecuteSql(String SQL) throws PDException
@@ -381,8 +407,9 @@ return(true);
 }
 //-----------------------------------------------------------------------------------
 /**
- *
- * @return
+ * Executes the Sql sentence  using JDBC Stament for coomands returning resulset
+ * @param SQl Command SQL to run
+ * @return the resultset
  */
 private ResultSet RsExecuteSql(String SQL) throws PDException
 {
@@ -402,6 +429,10 @@ return stmtSQL.executeQuery(SQL);
     }
 }
 //-----------------------------------------------------------------------------------
+/**
+ * Starts a Transaction
+ * @throws PDException 
+ */
 public void IniciarTrans() throws PDException
 {
 if (PDLog.isDebug())
@@ -415,6 +446,10 @@ con.setAutoCommit(false);
 setInTransaction(true);
 }
 //-----------------------------------------------------------------------------------
+/**
+ * Ends a transaction
+ * @throws PDException 
+ */
 public void CerrarTrans() throws PDException
 {
 if (PDLog.isDebug())
@@ -429,6 +464,10 @@ setInTransaction(false);
     }
 }
 //-----------------------------------------------------------------------------------
+/**
+ * Aborts a Transaction
+ * @throws PDException 
+ */
 public void AnularTrans() throws PDException
 {
 if (PDLog.isDebug())
@@ -444,7 +483,7 @@ setInTransaction(false);
 }
 //-----------------------------------------------------------------------------------
 /**
- *
+ * Formats date for storage
  * @param Fec
  * @return
  */
@@ -454,7 +493,7 @@ return("'"+ formatterDate.format(Fec)+"'");
 }
 //-----------------------------------------------------------------------------------
 /**
- *
+ * Formats Timestamp for storage
  * @param Fec
  * @return
  */
@@ -464,7 +503,7 @@ return("'"+ formatterTS.format(Fec)+"'");
 }
 //-----------------------------------------------------------------------------------
 /**
- *
+ * Formats String for storage
  * @param Val
  * @return
  */
@@ -474,7 +513,7 @@ return("'"+Val.replace("'", "·")+"'");
 }
 //-----------------------------------------------------------------------------------
 /**
- *
+ * Formats boolean for storage
  * @param Val
  * @return
  */
@@ -487,10 +526,10 @@ else
 }
 //-----------------------------------------------------------------------------------
 /**
- *
+ * Evaluates recursively conditions creating a Where expresion
  * @param DelCons
  * @param TablesNames
- * @return
+ * @return SQL conditions for SQL where
  * @throws PDException
  */
 protected String EvalConditions(Conditions DelCons, Vector TablesNames) throws PDException
@@ -518,10 +557,10 @@ return(SQLWhere);
 }
 //-----------------------------------------------------------------------------------
 /**
- *
+ * Eval a single condition
  * @param Condit
  * @param TablesNames
- * @return
+ * @return SQL conditions for SQL where
  * @throws PDException
  */
 protected String EvalCondition(Condition Condit, Vector TablesNames) throws PDException
@@ -642,7 +681,7 @@ return(SQLWhere);
 }
 //-----------------------------------------------------------------------------------
 /**
- *
+ * Opens a cursor
  * @param Search
  * @return String identifier of the cursor
  * @throws PDException
@@ -656,6 +695,11 @@ ResultSet rs=RsExecuteSql(SQL);
 return(StoreCursor(rs, Search.getRetrieveFields()));
 }
 //-----------------------------------------------------------------------------------
+/**
+ * Close a Cursor
+ * @param CursorIdent
+ * @throws PDException 
+ */
 public void CloseCursor(Cursor CursorIdent) throws PDException
 {
 if (PDLog.isDebug())
@@ -670,6 +714,12 @@ delCursor(CursorIdent);
     }
 }
 //-----------------------------------------------------------------------------------
+/**
+ * Retrieves next record of cursor
+ * @param CursorIdent
+ * @return OPD next Record
+ * @throws PDException 
+ */
 public Record NextRec(Cursor CursorIdent) throws PDException
 {
 if (PDLog.isDebug())
@@ -712,9 +762,9 @@ for (int i = 0; i < Fields.NumAttr(); i++)
                 Attr.setValue(formatterTS.parse(D));
             }
     else if (Attr.getType()==Attribute.tINTEGER)
-        Attr.setValue(new Integer(rs.getInt(Attr.getName())));
+        Attr.setValue(rs.getInt(Attr.getName()));
     else if (Attr.getType()==Attribute.tFLOAT)
-        Attr.setValue(new Float(rs.getFloat(Attr.getName())));
+        Attr.setValue(rs.getFloat(Attr.getName()));
     else if (Attr.getType()==Attribute.tBOOLEAN)
         Attr.setValue(rs.getBoolean(Attr.getName()));
     } catch(Exception ex)
@@ -725,11 +775,10 @@ for (int i = 0; i < Fields.NumAttr(); i++)
 return(Fields.Copy());
 }
 //-----------------------------------------------------------------------------------
-
 /**
- *
+ * Evals query, creating a SQL sentence
  * @param Search
- * @return
+ * @return SQL Sentence
  * @throws PDException
  */
 private String EvalQuery(Query Search) throws PDException
@@ -804,6 +853,11 @@ else if (Search.getOrderList()!=null)
 return(SQL);
 }
 //-----------------------------------------------------------------------------------
+/**
+ * Analize Attribute Type and converts to SQL STANDARD Type
+ * @param NewAttr
+ * @return SQL Type
+ */
 private String GetType(Attribute NewAttr)
 {
 String SQL;
@@ -844,4 +898,5 @@ if (NewAttr.isRequired())
     SQL+=" NOT NULL ";
 return(SQL);    
 }
+//-----------------------------------------------------------------------------------
 }

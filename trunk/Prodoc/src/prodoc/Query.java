@@ -143,4 +143,44 @@ public Vector getOrderList()
 return OrderList;
 }
 //-------------------------------------------------------------------------
+/**
+ * Converts the Query in XML so can be reconstructed in remote
+ * @return String with the XML
+ * @throws prodoc.PDException in any error
+ */
+public String toXML() throws PDException
+{
+String XTabs;
+if (Tables!=null)
+    {
+    XTabs="";    
+    for (int i = 0; i < Tables.size(); i++)
+        {
+        XTabs+=(String)Tables.elementAt(i)+"|";
+        }
+    }
+else
+    XTabs=getTable();
+String XWhere;
+if (Where!=null)
+    XWhere=Where.toXML();
+else
+    XWhere="";
+String XOrders;
+if (OrderList!=null)
+    {
+    XOrders="<Ord>";
+    for (int i = 0; i < OrderList.size(); i++)
+        {
+        XOrders+=(String)OrderList.elementAt(i)+"|";
+        }
+    XOrders="</Ord>";
+    }
+else if (Order!=null)
+    XOrders="<Ord>Order</Ord>";
+else            
+    XOrders="";
+return("<Q><Tab>"+XTabs+"</Tab><Rec>"+RetrieveFields.toXML()+"</Rec>"+XWhere+XOrders+"</Q>");
+}
+//-------------------------------------------------------------------------
 }
