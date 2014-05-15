@@ -20,7 +20,16 @@
 
 package prodoc;
 
+import java.io.ByteArrayInputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  *
@@ -104,6 +113,10 @@ private Object Value=null;
  *
  */
 private boolean Invert=false;
+
+final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyyMMddHHmmss");
+final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyyMMdd");
+
 
 private int TypeVal=-1;
 //-------------------------------------------------------------------------
@@ -249,4 +262,75 @@ public int getTypeVal()
 return TypeVal;
 }
 //-------------------------------------------------------------------------
+/**
+ * Converts the Conditions in XML so can be reconstructed in remote
+ * @return String with the XML
+ * @throws prodoc.PDException in any error
+ */
+String toXML()
+{
+StringBuilder XML=new StringBuilder("<Cond>");
+XML.append("cType>").append(cType).append("</cType>");
+XML.append("<Field>").append(Field).append("</Field>");
+switch (cType)
+    {case ctNORMAL:
+        XML.append("<TypeVal>").append(TypeVal).append("</TypeVal>");
+        XML.append("<Comp>").append(Comparation).append("</Comp>");
+        XML.append("<Val>");
+        if (TypeVal==Attribute.tSTRING)
+            XML.append(((String)Value).replace('<', '^')); // to avoid false XML tags
+        else if (TypeVal==Attribute.tTIMESTAMP)
+            XML.append(formatterTS.format((Date)Value));
+        else if (TypeVal==Attribute.tDATE)
+            XML.append(formatterDate.format((Date)Value));
+        else if (TypeVal==Attribute.tBOOLEAN)
+            XML.append(((Boolean)Value)?"1":"0");
+        else
+            XML.append(Value);
+        XML.append("</Val>");
+        break;
+     case ctIN:
+        XML.append("<Val>|");
+        HashSet List=(HashSet)Value;
+        Object l[]=List.toArray();
+        for (Object object : l)
+            {
+            if (object instanceof String)
+                XML.append(((String)object).replace('<', '^')).append("|"); // to avoid false XML tags
+            else if (object instanceof Date)
+                XML.append(formatterDate.format((Date)object)).append("|");
+            else if (object instanceof Boolean)
+                XML.append(((Boolean)object)?"1|":"0|");
+            else
+                XML.append(object).append("|");
+            }
+        XML.append("</Val>");
+        break;
+     case cEQUALFIELDS:
+        XML.append("<Field2>").append(Value).append("</Field2>");
+        break;
+    }
+XML.append(isInvert()?"<Inv>1</Inv>":"<Inv>0</Inv>");
+XML.append("</Cond>");
+return (XML.toString());
+}
+//-------------------------------------------------------------------------
+/**
+ * Buils a Condition object from XML
+ * @param XML with a condition
+ */
+public Condition(String XML) throws Exception
+{
+DocumentBuilder DB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+Document XMLObjects = DB.parse(new ByteArrayInputStream(XML.getBytes("UTF-8")));
+NodeList OPDObjectList = XMLObjects.getElementsByTagName("Field");
+Node OPDObject = OPDObjectList.item(0);
+Field=OPDObject.getTextContent(); 
+OPDObjectList = XMLObjects.getElementsByTagName("P");
+OPDObject = OPDObjectList.item(0);
+String Pass=OPDObject.getTextContent(); 
+
+}
+//-------------------------------------------------------------------------
+
 }

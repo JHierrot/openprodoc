@@ -464,7 +464,10 @@ if (PDLog.isDebug())
     PDLog.Debug("PDTasksExec.Import <"+getPDId());
 }
 //-------------------------------------------------------------------------
-
+/**
+ * 
+ * @throws PDException 
+ */
 private void Export() throws PDException
 {
 if (PDLog.isDebug())
@@ -474,7 +477,7 @@ Cursor CursorId=null;
 try {
 if (isTransact())  
     getDrv().IniciarTrans();
-String Id=null;    
+String Id=null;      
 //File Path=new File(getParam4());
 CursorId=this.GenCur();    
 Record Res=getDrv().NextRec(CursorId);
@@ -495,7 +498,7 @@ while (Res!=null)
     }
 getDrv().CloseCursor(CursorId);
 getDrv().CerrarTrans();
-} catch (Exception ex)
+} catch (PDException ex)
     {
     if (CursorId!=null)    
         getDrv().CloseCursor(CursorId);

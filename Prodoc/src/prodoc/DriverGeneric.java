@@ -93,6 +93,24 @@ private String AppLang=null;
 private static String DefAppLang=null;
 private PDCustomization PDCust=null;
 
+static final public String S_LOGIN   ="LOGIN";
+static final public String S_LOGOUT  ="LOGOUT";
+static final public String S_SELECT  ="SELECT";
+static final public String S_CLOSECUR="CLOSECUR";
+static final public String S_NEXTREC="NEXTREC";
+static final public String S_INSERT  ="INSERT";
+static final public String S_DELETE  ="DELETE";
+static final public String S_UPDATE  ="UPDATE";
+static final public String S_CREATE  ="CREATE";
+static final public String S_DROP    ="DROP";
+static final public String S_ALTER   ="ALTER";
+static final public String S_ALTERDEL="ALTERDEL";
+static final public String S_INTEGRIT="INTEGRIT";
+static final public String S_INTEGRIT2="INTEGRIT2";
+static final public String S_INITTRANS="INITTRANS";
+static final public String S_COMMIT   ="COMMIT";
+static final public String S_CANCEL   ="CANCEL";
+
 /**
  *
  * @param pURL
@@ -956,7 +974,7 @@ abstract public Record NextRec(Cursor CursorIdent)  throws PDException;
 abstract public void CloseCursor(Cursor CursorIdent) throws PDException;
 //-----------------------------------------------------------------------------------
 /**
- *
+ * Logged user acording his authenticator
  * @param userName
  * @param Password
  * @throws PDException
@@ -1760,5 +1778,46 @@ if (OPDObjectType.equalsIgnoreCase(PDTasksCron.getTableName()))
     return(new PDTasksCron(this));
 throw new PDException("Inexistent_OPD_object_type");
 }
+//---------------------------------------------------------------------
+public String RemoteOrder(String Order, Document XMLObjects) throws PDException
+{
+String Result=null;
+boolean EndsOk=true;
+if (Order.equals(S_LOGIN))
+    {
+    
+    }
+else if (Order.equals(S_LOGOUT))
+    {
+    
+    }
+else if (Order.equals(S_SELECT))
+    {
+    
+    }
+else if (Order.equals(S_INSERT))
+    {
+    
+    }
+else if (Order.equals(S_DELETE))
+    {
+    
+    }
+else if (Order.equals(S_UPDATE))
+    {
+    
+    }
+else if (Order.equals(S_CREATE))
+    {
+    
+    }
+else if (Order.equals(S_DROP))
+    {
+    
+    }
+else 
+    return("<OPD><Result>KO</Result><Msg>Unknown Order</Msg></OPD>");
+return("<OPD><Result>OK</Result></OPD>");
+}        
 //---------------------------------------------------------------------
 }
