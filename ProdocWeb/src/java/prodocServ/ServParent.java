@@ -28,6 +28,7 @@ import prodoc.PDException;
 import prodoc.PDRepository;
 import prodoc.ProdocFW;
 import prodocUI.forms.FLogin;
+import prodocUI.servlet.SParent;
 
 
 
@@ -94,7 +95,7 @@ protected void AddLog(String Texto)
 System.out.println(this.getServletName()+":"+new Date()+"="+Texto);
 }
 //-----------------------------------------------------------------------------------------------
-protected boolean Connected(HttpServletRequest Req) throws PDException
+protected boolean Connected(HttpServletRequest Req) throws PDException, Exception
 {
 HttpSession Sess=Req.getSession(true);
 DriverGeneric D=(DriverGeneric)Sess.getAttribute("PRODOC_SESS");
@@ -106,7 +107,6 @@ if (D!=null)
 FLogin f=new FLogin(Req, "Login Prodoc", "");
 String Nombre;
 String Clave;
-// nos estamos validando en login
 Nombre=f.NomUsu.getValue(Req);
 Clave=f.Clave.getValue(Req);
 if (Nombre==null || Nombre.length()==0)
@@ -114,8 +114,7 @@ if (Nombre==null || Nombre.length()==0)
 if (Clave==null || Clave.length()==0)
     return(false);
 String DB="PD";
-ProdocFW.InitProdoc(DB, "/media/Iomega/Prodoc/Prodoc/src/prodoc/Prodoc.properties");
-////Instalar(DB);
+ProdocFW.InitProdoc(DB, SParent.getProdocProperRef());
 D=ProdocFW.getSession(DB, Nombre, Clave);
 Con=D;
 Sess.setAttribute("PRODOC_SESS", D);
@@ -124,7 +123,7 @@ return(true);
 //-----------------------------------------------------------------------------------------------
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {
-throw new PDException("Página Inexistente");
+throw new PDException("Wrong Address");
 }
 //-----------------------------------------------------------------------------------------------
 
