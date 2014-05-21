@@ -12,8 +12,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.Map;
 import java.util.Properties;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -27,6 +29,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import prodoc.DriverGeneric;
 import prodoc.PDException;
+import prodoc.PDLog;
 import prodoc.ProdocFW;
 
 
@@ -38,6 +41,8 @@ public class Oper extends HttpServlet
 {
 
 protected static String ProdocProperRef=null;
+
+private static boolean FWStartted=false;
 
 /** Initializes the servlet.
  * @param config 
@@ -58,9 +63,14 @@ super.init(config);
 protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 {
 response.setContentType("text/xml;charset=UTF-8");
-PrintWriter out = response.getWriter();
+response.setStatus(HttpServletResponse.SC_OK);
+PrintWriter out = response.getWriter();      
 try {
-if (Connected(request) || request.getParameter("Oper").equals(DriverGeneric.S_LOGIN)) 
+if (!FWStartted)    
+    StartFW();
+if (PDLog.isDebug())
+   PDLog.Debug("##########################################################################33");    
+if (Connected(request) || request.getParameter("Order").equals(DriverGeneric.S_LOGIN)) 
     {
     ProcessPage(request, out);
     }
@@ -70,10 +80,12 @@ else
     }
 } catch (Exception e)
     {
-    Answer(request, out, false, e.getMessage(), null);
     AddLog(e.getMessage());
+    Answer(request, out, false, e.getMessage(), null);
+    e.printStackTrace();
     }
 finally {
+        out.flush();
         out.close();
         }
 }
@@ -91,11 +103,18 @@ static public void Answer(HttpServletRequest Req, PrintWriter out, boolean Ok, S
 out.println("<OPD>");
 out.println("<Result>"+(Ok?"OK":"KO")+"</Result>");
 if (Message!=null && Message.length()!=0)
-    out.println("<Msg>"+Message+"</Msg>");
+    out.println("<Msg>"+Message.replace('<', '^')+"</Msg>");
 if (Data!=null && Data.length()!=0)
     out.println("<Data>"+Data+"</Data>");    
+if (PDLog.isDebug())
+    {
+    PDLog.Debug("<Result>"+(Ok?"OK":"KO")+"</Result>");
+    if (Message!=null && Message.length()!=0)
+        PDLog.Debug("<Msg>"+Message+"</Msg>");
+    if (Data!=null && Data.length()!=0)
+        PDLog.Debug("<Data>"+Data+"</Data>");    
+    }
 out.println("</OPD>");
-out.flush();
 }
 //-----------------------------------------------------------------------------------------------
 /**
@@ -106,8 +125,9 @@ out.flush();
  */
 static public void Answer(HttpServletRequest Req, PrintWriter out, String AllMessage)
 {
+if (PDLog.isDebug())
+    PDLog.Debug("AllMessage:"+AllMessage);
 out.println(AllMessage);
-out.flush();
 }
 //-----------------------------------------------------------------------------------------------
 
@@ -117,7 +137,7 @@ out.flush();
  */
 protected void AddLog(String Texto)
 {
-System.out.println(this.getServletName()+":"+new Date()+"="+Texto);
+System.out.println(">> "+this.getServletName()+":"+new Date()+"="+Texto);
 }
 //-----------------------------------------------------------------------------------------------
 /**
@@ -142,26 +162,31 @@ else
  */
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {
-String Order=Req.getParameter("Oper");   
-String Param=Req.getParameter("Param");   // TODO decode
+String Order=Req.getParameter("Order");   
+String Param=Req.getParameter("Param");   
+if (PDLog.isDebug())
+    {
+    PDLog.Debug("Order:"+Order);
+    PDLog.Debug("Param:"+Param);
+    }
 DocumentBuilder DB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 Document XMLObjects = DB.parse(new ByteArrayInputStream(Param.getBytes("UTF-8")));
-if (Req.getParameter("Oper").equals(DriverGeneric.S_LOGIN)) 
+if (Order.equals(DriverGeneric.S_LOGIN)) 
     {
     NodeList OPDObjectList = XMLObjects.getElementsByTagName("U");
     Node OPDObject = OPDObjectList.item(0);
     String User=OPDObject.getTextContent(); 
-    OPDObjectList = XMLObjects.getElementsByTagName("P");
+    OPDObjectList = XMLObjects.getElementsByTagName("C");
     OPDObject = OPDObjectList.item(0);
     String Pass=OPDObject.getTextContent(); 
-    ProdocFW.InitProdoc("PD", getProdocProperRef());
     DriverGeneric D=ProdocFW.getSession("PD", User, Pass);
     Req.getSession().setAttribute("PRODOC_SESS", D);   
     Answer(Req, out, true, null, null);
     return;    
     }
 DriverGeneric D=getSessOPD(Req);
-Answer(Req, out, D.RemoteOrder(Order, XMLObjects));
+String Results=D.RemoteOrder(Order, XMLObjects);
+Answer(Req, out, Results);
 }
 //-----------------------------------------------------------------------------------------------
 
@@ -246,7 +271,7 @@ if (ProdocProperRef==null)
     InputStream Is;    
     String Path=System.getProperty("user.home");    
     try {
-    Is  = new FileInputStream(Path+File.separator+"OPDWeb.properties");        
+    Is  = new FileInputStream(Path+File.separator+"OPDServWeb.properties");        
     } catch (FileNotFoundException ex)
         {
         Is=null;    
@@ -254,7 +279,7 @@ if (ProdocProperRef==null)
     if (Is==null)
         {
         Path=System.getenv("OPDWeb");
-        Is  = new FileInputStream(Path+File.separator+"OPDWeb.properties");            
+        Is  = new FileInputStream(Path+File.separator+"OPDServWeb.properties");            
         }
     Properties p= new Properties();
     p.load(Is);
@@ -262,6 +287,11 @@ if (ProdocProperRef==null)
     ProdocProperRef=p.getProperty("OPDConfig");
     }
 return(ProdocProperRef);
+}
+//----------------------------------------------------------   
+private void StartFW() throws Exception
+{
+ProdocFW.InitProdoc("PD", getProdocProperRef());    
 }
 //----------------------------------------------------------   
 }

@@ -380,6 +380,20 @@ for (int i = 0; i < NumAttr(); i++)
 return(S.toString());
 }
 //--------------------------------------------------------------------------
+/**
+ * Converts all the attributes of the record to XML
+ * @return the XML with the attributes.
+ * @throws PDException  
+ */
+public String toXMLt() throws PDException
+{
+StringBuilder S=new StringBuilder(500);
+initList();
+for (int i = 0; i < NumAttr(); i++)
+    S.append(nextAttr().toXMLt());
+return(S.toString());
+}
+//--------------------------------------------------------------------------
 static Record FillFromXML(Node AttrsNode, Record R) throws PDException
 {
 NodeList AttrLst = AttrsNode.getChildNodes();
@@ -391,10 +405,32 @@ for (int j = 0; j < AttrLst.getLength(); j++)
         NamedNodeMap XMLattributes = Attr.getAttributes();
         Node XMLAttrName = XMLattributes.getNamedItem("Name");
         String AttrName=XMLAttrName.getNodeValue();
-        String Value=Attr.getTextContent();        
+        String Value=Attr.getTextContent().replace('^', '<');        
         Attribute At=R.getAttr(AttrName);
         if (At!=null)
             At.Import(Value);
+        }
+    }
+return(R);
+}
+//--------------------------------------------------------------------------
+static Record CreateFromXML(Node AttrsNode, Record R) throws PDException
+{
+NodeList AttrLst = AttrsNode.getChildNodes();
+for (int j = 0; j < AttrLst.getLength(); j++)
+    {
+    Node Attr = AttrLst.item(j);
+    if (Attr.getNodeName().equalsIgnoreCase("attr"))   
+        {
+        NamedNodeMap XMLattributes = Attr.getAttributes();
+        Node XMLAttrName = XMLattributes.getNamedItem("Name");
+        String AttrName=XMLAttrName.getNodeValue();
+        XMLAttrName = XMLattributes.getNamedItem("Type");
+        int Type=Integer.parseInt(XMLAttrName.getNodeValue());
+        String Value=Attr.getTextContent().replace('^', '<'); 
+        Attribute At=new Attribute(AttrName, "", "", Type, false, null, 254, false, false, false);
+        At.Import(Value);
+        R.addAttr(At);
         }
     }
 return(R);

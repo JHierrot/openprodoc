@@ -1783,15 +1783,15 @@ public String RemoteOrder(String Order, Document XMLObjects) throws PDException
 {
 String Result=null;
 boolean EndsOk=true;
-if (Order.equals(S_LOGIN))
+if (Order.equals(S_SELECT))
+    {
+    return("<OPD><Result>OK</Result><Data>"+GenVector(XMLObjects)+"<Data></OPD>");
+    }
+else if (Order.equals(S_UPDATE))
     {
     
     }
 else if (Order.equals(S_LOGOUT))
-    {
-    
-    }
-else if (Order.equals(S_SELECT))
     {
     
     }
@@ -1800,10 +1800,6 @@ else if (Order.equals(S_INSERT))
     
     }
 else if (Order.equals(S_DELETE))
-    {
-    
-    }
-else if (Order.equals(S_UPDATE))
     {
     
     }
@@ -1819,5 +1815,25 @@ else
     return("<OPD><Result>KO</Result><Msg>Unknown Order</Msg></OPD>");
 return("<OPD><Result>OK</Result></OPD>");
 }        
+//---------------------------------------------------------------------
+/**
+ * 
+ * @param XMLObjects Query as XML
+ * @return XML with the <Data> contect
+ * @throws PDException 
+ */
+private String GenVector(Document XMLObjects) throws PDException
+{
+StringBuilder Res=new StringBuilder();
+Query Q=new Query(XMLObjects);    
+Cursor C=OpenCursor(Q);
+Record R=NextRec(C);
+while (R!=null)
+    {
+    Res.append(R.toXMLt());
+    R=NextRec(C);
+    }
+return(Res.toString());
+}
 //---------------------------------------------------------------------
 }

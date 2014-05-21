@@ -19,20 +19,21 @@
 
 package prodoc;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.CookiePolicy;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.MalformedURLException;
+import java.util.Vector;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -48,9 +49,11 @@ URL OUrl=null;
 URLConnection OUrlc=null;
 HttpURLConnection URLCon=null;
 static final String charset="UTF-8";
-OutputStream output;
+// OutputStream output;
+OutputStreamWriter output;
 private static final String NEWLINE = "\r\n";
 boolean Conected=false;
+StringBuilder Answer=new StringBuilder(3000);
 
 final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyyMMddHHmmss");
 /**
@@ -58,6 +61,7 @@ final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyyMMddHHmmss");
  */
 final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyyMMdd");
 
+DocumentBuilder DB;
 
 /**
 * 
@@ -74,7 +78,8 @@ if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.DriverRemote>:"+pURL+"/"+pUser+"/"+pPARAM);
 try {
 OUrl=new URL(pURL); 
-} catch (MalformedURLException ex)
+DB =  DocumentBuilderFactory.newInstance().newDocumentBuilder();
+} catch (Exception ex)
     {
     PDException.GenPDException("Error_connecting_trough_URL"+pURL,ex.getLocalizedMessage());
     }
@@ -98,6 +103,9 @@ if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.Assign>:"+userName);
 ReadWrite(S_LOGIN,"<OPD><U>"+userName+"</U><C>"+Password+"</C></OPD>");
 Conected=true;
+getUser().LoadAll(userName);
+getPDCust().Load(getUser().getCustom());
+setAppLang(getPDCust().getLanguage());
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.Assign<:"+userName);
 }
@@ -141,7 +149,7 @@ protected void CreateTable(String TableName, Record Fields) throws PDException
 {
 if (PDLog.isInfo())
     PDLog.Info("DriverRemote.CreateTable>:"+TableName+"/"+Fields);
-ReadWrite(S_CREATE, "<OPD><Tab>"+TableName+"</Tab><Rec>"+Fields.toXML()+"</Rec></OPD>");
+ReadWrite(S_CREATE, "<OPD><Tab>"+TableName+"</Tab><Rec>"+Fields.toXMLt()+"</Rec></OPD>");
 if (PDLog.isInfo())
     PDLog.Info("DriverRemote.CreateTable<:"+TableName);
 }
@@ -170,7 +178,7 @@ protected void AlterTableAdd(String TableName, Attribute NewAttr, boolean IsVer)
 {
 if (PDLog.isInfo())
     PDLog.Info("DriverRemote.AlterTable>:"+TableName);
-ReadWrite(S_ALTER, "<OPD><Tab>"+TableName+"</Tab><NewAttr>"+NewAttr.toXML()+"</NewAttr><IsVer>"+(IsVer?"1":"0")+"</IsVer></OPD>");
+ReadWrite(S_ALTER, "<OPD><Tab>"+TableName+"</Tab><NewAttr>"+NewAttr.toXMLt()+"</NewAttr><IsVer>"+(IsVer?"1":"0")+"</IsVer></OPD>");
 if (PDLog.isInfo())
     PDLog.Info("DriverRemote.AlterTable<:"+TableName);
 }
@@ -200,7 +208,7 @@ protected void InsertRecord(String TableName, Record Fields) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.InsertRecord>:"+TableName+"="+Fields);
-ReadWrite(S_INSERT, "<OPD><Tab>"+TableName+"</Tab><Rec>"+Fields.toXML()+"</Rec></OPD>");
+ReadWrite(S_INSERT, "<OPD><Tab>"+TableName+"</Tab><Rec>"+Fields.toXMLt()+"</Rec></OPD>");
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.InsertRecord<");
 }
@@ -231,7 +239,7 @@ protected void UpdateRecord(String TableName, Record NewFields, Conditions UpCon
 {
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.UpdateRecord>:"+TableName+"="+NewFields);
-ReadWrite(S_UPDATE, "<OPD><Tab>"+TableName+"</Tab><Rec>"+NewFields.toXML()+"</Rec><DelConds>"+UpConds.toXML()+"</DelConds></OPD>");
+ReadWrite(S_UPDATE, "<OPD><Tab>"+TableName+"</Tab><Rec>"+NewFields.toXMLt()+"</Rec><DelConds>"+UpConds.toXML()+"</DelConds></OPD>");
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.UpdateRecord<:"+TableName+"="+NewFields);
 }
@@ -334,10 +342,34 @@ public Cursor OpenCursor(Query Search) throws PDException
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.OpenCursor:"+Search);
 Cursor C=new Cursor();
-Node N=ReadWrite(S_CANCEL, "<OPD><Query>"+Search.toXML()+"</Query></OPD>");
-//C.setCursorId();
-// TODO Cursor
-return C;
+Node N=ReadWrite(S_SELECT, "<OPD><Query>"+Search.toXML()+"</Query></OPD>");
+Vector Res=new Vector();
+
+NodeList RecLst = N.getChildNodes();
+for (int i = 0; i < RecLst.getLength(); i++)
+    {
+    Node Rec = RecLst.item(i);
+    Record R=new Record();
+    NodeList AttrLst = Rec.getChildNodes();
+    for (int j = 0; j < AttrLst.getLength(); j++)
+        {
+        Node Attr = RecLst.item(j);
+        if (Attr.getNodeName().equalsIgnoreCase("attr"))   
+            {
+            NamedNodeMap XMLattributes = Attr.getAttributes();
+            Node XMLAttrName = XMLattributes.getNamedItem("Name");
+            String AttrName=XMLAttrName.getNodeValue();
+            XMLAttrName = XMLattributes.getNamedItem("Type");
+            int Type=Integer.parseInt(XMLAttrName.getNodeValue());
+            String Value=Attr.getTextContent(); 
+            Attribute At=new Attribute(AttrName, "", "", Type, false, null, 254, false, false, false);
+            At.Import(Value);
+            R.addAttr(At);
+            }
+        }
+    Res.add(R);
+    }
+return(StoreCursor(Res, Search.getRetrieveFields()));
 }
 
 //-----------------------------------------------------------------------------------
@@ -350,7 +382,9 @@ public void CloseCursor(Cursor CursorIdent) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.CloseCursor:"+CursorIdent);
-ReadWrite(S_CLOSECUR, "<OPD><CursorIdent>"+CursorIdent+"</CursorIdent></OPD>");
+((Vector)CursorIdent.getResultSet()).clear();
+CursorIdent.setResultSet(null);
+delCursor(CursorIdent);
 }
 //-----------------------------------------------------------------------------------
 /**
@@ -363,12 +397,16 @@ public Record NextRec(Cursor CursorIdent) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.NextRec:"+CursorIdent);
-Record Fields=new Record();
-Record.FillFromXML( ReadWrite(S_CLOSECUR, "<OPD><CursorIdent>"+CursorIdent+"</CursorIdent></OPD>"), Fields); 
-return(Fields);
+Vector rs=(Vector)CursorIdent.getResultSet();
+if (rs.isEmpty())
+    return(null);
+Record Fields=CursorIdent.getFieldsCur();
+Fields.assign((Record)rs.get(0));
+rs.remove(0);
+return(Fields.Copy());
 }
 //-----------------------------------------------------------------------------------
-private Node ReadWrite(String pOrder, String pParam)
+private Node ReadWrite(String pOrder, String pParam) throws PDException
 {
 Node OPDObject =null;
 try {
@@ -378,13 +416,16 @@ URLCon.setDoInput(true);
 URLCon.setRequestProperty("Accept-Charset", charset);
 URLCon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + charset);
 URLCon.setRequestMethod("POST");
-URLCon.connect();
-output = URLCon.getOutputStream();
+//URLCon.setReadTimeout(60000);
 String Param="";
 if (pParam!=null && pParam.length()!=0)
     Param="Param="+pParam; // TODO Encode
 String Order="Order="+pOrder;
-output.write((Order+"&"+Param).getBytes(charset));
+String SumPar=Order+"&"+Param;
+URLCon.setRequestProperty("Content-Length", "" + SumPar.getBytes(charset).length );
+URLCon.connect();
+output = new OutputStreamWriter(URLCon.getOutputStream());
+output.write(SumPar);
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
@@ -401,16 +442,29 @@ finally
 BufferedReader in = null;
 try {
 in = new BufferedReader( new InputStreamReader(URLCon.getInputStream()));
-String Answer="";
-while ((Answer += in.readLine()) != null)
-    ;
-DocumentBuilder DB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-Document XMLObjects = DB.parse(new ByteArrayInputStream(Answer.getBytes("UTF-8")));
-NodeList OPDObjectList = XMLObjects.getElementsByTagName("Data");
+Answer.setLength(0);
+String Line;
+while ((Line= in.readLine()) != null)
+    Answer.append(Line);
+Document XMLObjects = DB.parse(new ByteArrayInputStream(Answer.toString().getBytes("UTF-8")));
+NodeList OPDObjectList = XMLObjects.getElementsByTagName("Result");
+OPDObject = OPDObjectList.item(0);
+if (OPDObject.getTextContent().equalsIgnoreCase("KO"))
+    {
+    OPDObjectList = XMLObjects.getElementsByTagName("Msg");
+    if (OPDObjectList.getLength()>0)
+        {
+        OPDObject = OPDObjectList.item(0);
+        PDException.GenPDException("Error_Communicating_server", OPDObject.getTextContent().replace('^', '<'));
+        }
+    else
+        PDException.GenPDException("Error_Communicating_server", "");
+    }
+OPDObjectList = XMLObjects.getElementsByTagName("Data");
 OPDObject = OPDObjectList.item(0);
 } catch (Exception ex)
     {
-    ex.printStackTrace();
+    PDException.GenPDException(ex.getLocalizedMessage(), "");
     }
 finally
     {

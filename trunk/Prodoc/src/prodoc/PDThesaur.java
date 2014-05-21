@@ -27,6 +27,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import static prodoc.Attribute.StringListSeparator;
 
 /**
  * Class Thesaur for managong the thesaurus in Database
@@ -2117,7 +2118,7 @@ if (PDLog.isDebug())
     PDLog.Debug("TermLang="+TermLang);
 for (Iterator it = TermLang.iterator(); it.hasNext();)
     {
-    StringTokenizer st = new StringTokenizer((String) it.next(), "|");    
+    StringTokenizer st = new StringTokenizer((String) it.next(), StringListSeparator);    
     Term.Load(st.nextToken());
     HSLang.clear();
     HSLang.add(st.nextToken());
@@ -2128,7 +2129,7 @@ if (PDLog.isDebug())
     PDLog.Debug("TermRT="+TermRT);
 for (Iterator it = TermRT.iterator(); it.hasNext();)
     {
-    StringTokenizer st = new StringTokenizer((String) it.next(), "|");    
+    StringTokenizer st = new StringTokenizer((String) it.next(), StringListSeparator);    
     Term.Load(st.nextToken());
     HSRT.clear();
     HSRT.add(st.nextToken());
