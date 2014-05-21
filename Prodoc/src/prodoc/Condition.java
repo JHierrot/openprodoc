@@ -20,16 +20,14 @@
 
 package prodoc;
 
-import java.io.ByteArrayInputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import org.w3c.dom.Document;
+import java.util.StringTokenizer;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import static prodoc.Attribute.StringListSeparator;
 
 /**
  *
@@ -162,6 +160,14 @@ cType=ctNORMAL;
 Field=pField;
 Comparation=pComparation;
 Value=pValue;
+if (pValue instanceof String)
+    TypeVal=Attribute.tSTRING;
+else if (pValue instanceof Boolean)
+    TypeVal=Attribute.tBOOLEAN;
+else if (pValue instanceof Date)
+    TypeVal=Attribute.tDATE;
+else if (pValue instanceof Integer)
+    TypeVal=Attribute.tINTEGER;    
 }
 //-------------------------------------------------------------------------
 /**
@@ -270,7 +276,7 @@ return TypeVal;
 String toXML()
 {
 StringBuilder XML=new StringBuilder("<Cond>");
-XML.append("cType>").append(cType).append("</cType>");
+XML.append("<cType>").append(cType).append("</cType>");
 XML.append("<Field>").append(Field).append("</Field>");
 switch (cType)
     {case ctNORMAL:
@@ -296,13 +302,13 @@ switch (cType)
         for (Object object : l)
             {
             if (object instanceof String)
-                XML.append(((String)object).replace('<', '^')).append("|"); // to avoid false XML tags
+                XML.append(((String)object).replace('<', '^')).append(StringListSeparator); // to avoid false XML tags
             else if (object instanceof Date)
-                XML.append(formatterDate.format((Date)object)).append("|");
+                XML.append(formatterDate.format((Date)object)).append(StringListSeparator);
             else if (object instanceof Boolean)
                 XML.append(((Boolean)object)?"1|":"0|");
             else
-                XML.append(object).append("|");
+                XML.append(object).append(StringListSeparator);
             }
         XML.append("</Val>");
         break;
@@ -317,19 +323,99 @@ return (XML.toString());
 //-------------------------------------------------------------------------
 /**
  * Buils a Condition object from XML
- * @param XML with a condition
+ * @param XMLConds with condition
  */
-public Condition(String XML) throws Exception
+public Condition(Node XMLConds) throws PDException
 {
-DocumentBuilder DB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-Document XMLObjects = DB.parse(new ByteArrayInputStream(XML.getBytes("UTF-8")));
-NodeList OPDObjectList = XMLObjects.getElementsByTagName("Field");
-Node OPDObject = OPDObjectList.item(0);
-Field=OPDObject.getTextContent(); 
-OPDObjectList = XMLObjects.getElementsByTagName("P");
-OPDObject = OPDObjectList.item(0);
-String Pass=OPDObject.getTextContent(); 
-
+NodeList OPDObjectList = XMLConds.getChildNodes();
+for (int i=0; i<OPDObjectList.getLength(); i++)
+    {
+    Node OPDObject = OPDObjectList.item(i);
+    if (OPDObject.getNodeName().equals("cType"))
+        {
+        cType=Integer.parseInt(OPDObject.getTextContent());
+        }
+    else if (OPDObject.getNodeName().equals("Field"))
+        {
+        Field=OPDObject.getTextContent();
+        }
+    else if (OPDObject.getNodeName().equals("Field2"))
+        {
+        Value=OPDObject.getTextContent();
+        }
+    else if (OPDObject.getNodeName().equals("TypeVal"))
+        {
+        TypeVal=Integer.parseInt(OPDObject.getTextContent());
+        }
+    else if (OPDObject.getNodeName().equals("Comp"))
+        {
+        Comparation=Integer.parseInt(OPDObject.getTextContent());
+        }
+    else if (OPDObject.getNodeName().equals("Val"))
+        {
+        if (cType==ctIN)  
+            {
+            HashSet List=new HashSet();
+            StringTokenizer St=new StringTokenizer(OPDObject.getTextContent(), StringListSeparator);
+            while (St.hasMoreTokens())
+                {
+                String ValS=St.nextToken();    
+                if (TypeVal==Attribute.tSTRING)
+                    List.add(ValS.replace('^', '<')); // to avoid false XML tags
+                else if (TypeVal==Attribute.tTIMESTAMP && ValS.length()!=0)
+                    {
+                    try {
+                        List.add(formatterTS.parse(ValS));
+                    } catch (ParseException ex)
+                        {
+                        PDException.GenPDException(ex.getLocalizedMessage(), ValS) ;
+                        }
+                    }
+                else if (TypeVal==Attribute.tDATE&& ValS.length()!=0)
+                    {
+                    try {
+                        List.add(formatterDate.parse(ValS));
+                    } catch (ParseException ex)
+                        {
+                        PDException.GenPDException(ex.getLocalizedMessage(), ValS) ;
+                        }
+                    }
+                else if (TypeVal==Attribute.tBOOLEAN)
+                    List.add(ValS.equals("1"));
+                else
+                    List.add(new Integer(ValS));
+                }
+            Value=List;
+            }
+        else
+            {
+            if (TypeVal==Attribute.tSTRING)
+                Value=OPDObject.getTextContent().replace('^', '<'); // to avoid false XML tags
+            else if (TypeVal==Attribute.tTIMESTAMP && OPDObject.getTextContent().length()!=0)
+                {
+                try {
+                    Value=formatterTS.parse(OPDObject.getTextContent());
+                } catch (ParseException ex)
+                    {
+                    PDException.GenPDException(ex.getLocalizedMessage(), OPDObject.getTextContent()) ;
+                    }
+                }
+            else if (TypeVal==Attribute.tDATE&& OPDObject.getTextContent().length()!=0)
+                {
+                try {
+                    Value=formatterDate.parse(OPDObject.getTextContent());
+                } catch (ParseException ex)
+                    {
+                    PDException.GenPDException(ex.getLocalizedMessage(), OPDObject.getTextContent()) ;
+                    }
+                }
+            else if (TypeVal==Attribute.tBOOLEAN)
+                Value=OPDObject.getTextContent().equals("1");
+            else
+                Value=new Integer(OPDObject.getTextContent());
+            }
+        }
+    }
 }
 //-------------------------------------------------------------------------
 

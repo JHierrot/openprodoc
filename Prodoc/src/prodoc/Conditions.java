@@ -20,13 +20,8 @@
 
 package prodoc;
 
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -54,31 +49,10 @@ super();
 }
 //-------------------------------------------------------------------------
 /**
- * Buils a Conditions object from XML
- * @param XML with a condition
- */
-public Conditions(String XML) throws Exception
-{
-DocumentBuilder DB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-Document XMLObjects = DB.parse(new ByteArrayInputStream(XML.getBytes("UTF-8")));
-NodeList OPDObjectList = XMLObjects.getElementsByTagName("Conds");
-}
-//-------------------------------------------------------------------------
-/**
- * Buils a Conditions object from XML
- * @param Conds with XML conditions
- * @throws java.lang.Exception
- */
-public Conditions(Node Conds) throws Exception
-{
-
-}
-//-------------------------------------------------------------------------
-/**
  *
  * @param Cond
  */
-public void addCondition(Condition Cond)
+public final void addCondition(Condition Cond)
 {
 CondList.add(Cond);
 }
@@ -87,7 +61,7 @@ CondList.add(Cond);
  *
  * @param ListCond
  */
-public void addCondition(Conditions ListCond)
+public final void addCondition(Conditions ListCond)
 {
 CondList.add(ListCond);
 }
@@ -122,7 +96,7 @@ return OperatorAnd;
 /**
 * @param OperatorAnd the OperatorAnd to set
 */
-public void setOperatorAnd(boolean OperatorAnd)
+public final void setOperatorAnd(boolean OperatorAnd)
 {
 this.OperatorAnd = OperatorAnd;
 }
@@ -175,6 +149,32 @@ for (Object CondList1 : CondList)
     }
 XML.append("</Conds>");
 return (XML.toString());
+}
+//-------------------------------------------------------------------------
+/**
+ * Buils a Conditions object from XML
+ * @param XMLConds with XML conditions
+ * @throws PDException
+ */
+public Conditions(Node XMLConds) throws PDException
+{
+NodeList OPDObjectList = XMLConds.getChildNodes();
+for (int i=0; i<OPDObjectList.getLength(); i++)
+    {   
+    Node OPDObject = OPDObjectList.item(i);
+    if (OPDObject.getNodeName().equals("And"))
+        {
+        setOperatorAnd(OPDObject.getTextContent().equals("1"));
+        }
+    else if (OPDObject.getNodeName().equals("Cond"))
+        {
+        addCondition(new Condition(OPDObject));
+        }
+    else if (OPDObject.getNodeName().equals("Conds"))
+        {
+        addCondition(new Conditions(OPDObject));
+        }
+    }
 }
 //-------------------------------------------------------------------------
 }

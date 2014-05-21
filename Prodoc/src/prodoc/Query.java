@@ -19,7 +19,12 @@
 
 package prodoc;
 
+import java.util.StringTokenizer;
 import java.util.Vector;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import static prodoc.Attribute.StringListSeparator;
 
 /**
  *
@@ -156,7 +161,7 @@ if (Tables!=null)
     XTabs="";    
     for (int i = 0; i < Tables.size(); i++)
         {
-        XTabs+=(String)Tables.elementAt(i)+"|";
+        XTabs+=(String)Tables.elementAt(i)+StringListSeparator;
         }
     }
 else
@@ -172,7 +177,7 @@ if (OrderList!=null)
     XOrders="<Ord>";
     for (int i = 0; i < OrderList.size(); i++)
         {
-        XOrders+=(String)OrderList.elementAt(i)+"|";
+        XOrders+=(String)OrderList.elementAt(i)+StringListSeparator;
         }
     XOrders="</Ord>";
     }
@@ -180,7 +185,53 @@ else if (Order!=null)
     XOrders="<Ord>Order</Ord>";
 else            
     XOrders="";
-return("<Q><Tab>"+XTabs+"</Tab><Rec>"+RetrieveFields.toXML()+"</Rec>"+XWhere+XOrders+"</Q>");
+return("<Q><Tab>"+XTabs+"</Tab><Rec>"+RetrieveFields.toXMLt()+"</Rec>"+XWhere+XOrders+"</Q>");
+}
+//-------------------------------------------------------------------------
+public Query(Document XMLObjects) throws PDException
+{
+NodeList OPDObjectList = XMLObjects.getElementsByTagName("Tab");
+Node OPDObject = OPDObjectList.item(0);
+String Tabs=OPDObject.getTextContent();
+if (Tabs.contains(StringListSeparator))
+    {
+    StringTokenizer St=new StringTokenizer(Tabs, StringListSeparator);
+    Tables=new Vector();
+    while (St.hasMoreTokens())
+        {
+        Tables.add(St.nextToken());
+        }
+    }
+else
+    {
+    Table=Tabs;
+    }
+OPDObjectList = XMLObjects.getElementsByTagName("Rec");
+OPDObject = OPDObjectList.item(0);
+RetrieveFields=new Record();
+Record.FillFromXML(OPDObject, RetrieveFields);
+OPDObjectList = XMLObjects.getElementsByTagName("Conds");
+if (OPDObjectList.getLength()>0)
+    {
+    OPDObject = OPDObjectList.item(0);
+    Where=new Conditions(OPDObject);
+    }
+OPDObjectList = XMLObjects.getElementsByTagName("Ord");
+if (OPDObjectList.getLength()>0)
+    {
+    OPDObject = OPDObjectList.item(0);
+    String Ord=OPDObject.getTextContent();
+    OrderList=null;
+    if (Ord.contains(StringListSeparator))
+        {
+        StringTokenizer St=new StringTokenizer(Ord, StringListSeparator);
+        OrderList=new Vector();
+        while (St.hasMoreTokens())
+            {
+            OrderList.add(St.nextToken());
+            }
+        }
+    }
 }
 //-------------------------------------------------------------------------
 }

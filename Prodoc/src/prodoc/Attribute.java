@@ -542,7 +542,7 @@ else
 private Object FormatImport(String Val) throws PDException
 {
 if (getType()==Attribute.tSTRING)
-    return(Val);
+    return(Val.replace('<', '^'));
 else if (getType()==Attribute.tTHES)
     return(Val);
 else if (getType()==Attribute.tINTEGER)
@@ -661,9 +661,27 @@ else
  */
 public String toXML() throws PDException
 {
-StringBuilder S=new StringBuilder(300);
+StringBuilder S=new StringBuilder(200);
 S.append("<"+ObjPD.XML_Attr+" Name=\"");
 S.append(getName());
+S.append("\">");
+S.append(Export());
+S.append("</"+ObjPD.XML_Attr+">\n");
+return(S.toString());
+}
+//--------------------------------------------------------------------------
+/**
+ * Converts name and value of the attribute to XML
+ * @return the XML with the elements Name, Type and value.
+ * @throws PDException
+ */
+public String toXMLt() throws PDException
+{
+StringBuilder S=new StringBuilder(200);
+S.append("<"+ObjPD.XML_Attr+" Name=\"");
+S.append(getName());
+S.append("\" Type=\"");
+S.append(getType());
 S.append("\">");
 S.append(Export());
 S.append("</"+ObjPD.XML_Attr+">\n");
