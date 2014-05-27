@@ -546,7 +546,7 @@ if (getType()==Attribute.tSTRING)
 else if (getType()==Attribute.tTHES)
     return(Val);
 else if (getType()==Attribute.tINTEGER)
-    return(new Integer(Integer.parseInt(Val)));
+    return(Integer.parseInt(Val));
 else if (getType()==Attribute.tBOOLEAN)
     {
     if (Val.equals("1"))

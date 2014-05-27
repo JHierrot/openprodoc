@@ -1785,7 +1785,7 @@ String Result=null;
 boolean EndsOk=true;
 if (Order.equals(S_SELECT))
     {
-    return("<OPD><Result>OK</Result><Data>"+GenVector(XMLObjects)+"<Data></OPD>");
+    return("<OPD><Result>OK</Result><Data>"+GenVector(XMLObjects)+"</Data></OPD>");
     }
 else if (Order.equals(S_UPDATE))
     {
