@@ -69,7 +69,14 @@ try {
 if (!FWStartted)    
     StartFW();
 if (PDLog.isDebug())
-   PDLog.Debug("##########################################################################33");    
+   PDLog.Debug("##########################################################################");   
+if (request.getParameter("Order")==null)
+    {
+    Answer(request, out, "<OPD><Result>KO</Result><Msg>Disconnected</Msg></OPD>");
+    out.flush();
+    out.close();
+    return;
+    }
 if (Connected(request) || request.getParameter("Order").equals(DriverGeneric.S_LOGIN)) 
     {
     ProcessPage(request, out);
@@ -108,7 +115,7 @@ if (Data!=null && Data.length()!=0)
     out.println("<Data>"+Data+"</Data>");    
 if (PDLog.isDebug())
     {
-    PDLog.Debug("<Result>"+(Ok?"OK":"KO")+"</Result>");
+    PDLog.Debug("Answer:<Result>"+(Ok?"OK":"KO")+"</Result>");
     if (Message!=null && Message.length()!=0)
         PDLog.Debug("<Msg>"+Message+"</Msg>");
     if (Data!=null && Data.length()!=0)
@@ -126,7 +133,7 @@ out.println("</OPD>");
 static public void Answer(HttpServletRequest Req, PrintWriter out, String AllMessage)
 {
 if (PDLog.isDebug())
-    PDLog.Debug("AllMessage:"+AllMessage);
+    PDLog.Debug("Answer:"+AllMessage);
 out.println(AllMessage);
 }
 //-----------------------------------------------------------------------------------------------

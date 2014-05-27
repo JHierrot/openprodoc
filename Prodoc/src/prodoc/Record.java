@@ -112,6 +112,42 @@ return(true);
 //--------------------------------------------------------------------------
 /**
  *
+ * @param rec
+ * @return
+ * @throws PDException
+ */
+protected boolean assignSimil(Record rec) throws PDException
+{
+Attribute AttrOrig;
+Attribute AttrDest;
+rec.initList();
+for (int i = 0; i < rec.NumAttr(); i++)
+    {
+    AttrOrig=rec.nextAttr();
+    AttrDest=getAttr(AttrOrig.getName());
+    if (AttrDest!=null)
+        {
+        if (AttrDest.isMultivalued()) 
+            {
+            if (AttrDest!=AttrOrig) // to avoid problems when using the same record
+                {
+                AttrDest.ClearValues();
+                TreeSet V=AttrOrig.getValuesList();    
+                for (Iterator it = V.iterator(); it.hasNext();)
+                    {
+                    AttrDest.AddValue(it.next());                    
+                    }
+                }
+            }
+        else
+            AttrDest.setValue(AttrOrig.getValue());
+        }
+    }
+return(true);
+}
+//--------------------------------------------------------------------------
+/**
+ *
  * @param newAttr
  * @throws PDException
  */
@@ -388,9 +424,11 @@ return(S.toString());
 public String toXMLt() throws PDException
 {
 StringBuilder S=new StringBuilder(500);
+S.append("<Rec>");
 initList();
 for (int i = 0; i < NumAttr(); i++)
     S.append(nextAttr().toXMLt());
+S.append("</Rec>");
 return(S.toString());
 }
 //--------------------------------------------------------------------------
@@ -414,8 +452,9 @@ for (int j = 0; j < AttrLst.getLength(); j++)
 return(R);
 }
 //--------------------------------------------------------------------------
-static Record CreateFromXML(Node AttrsNode, Record R) throws PDException
+static Record CreateFromXML(Node AttrsNode) throws PDException
 {
+Record R=new Record();    
 NodeList AttrLst = AttrsNode.getChildNodes();
 for (int j = 0; j < AttrLst.getLength(); j++)
     {
@@ -429,7 +468,8 @@ for (int j = 0; j < AttrLst.getLength(); j++)
         int Type=Integer.parseInt(XMLAttrName.getNodeValue());
         String Value=Attr.getTextContent().replace('^', '<'); 
         Attribute At=new Attribute(AttrName, "", "", Type, false, null, 254, false, false, false);
-        At.Import(Value);
+        if (Value.length()!=0)
+            At.Import(Value);
         R.addAttr(At);
         }
     }

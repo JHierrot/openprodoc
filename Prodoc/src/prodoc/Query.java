@@ -185,7 +185,7 @@ else if (Order!=null)
     XOrders="<Ord>Order</Ord>";
 else            
     XOrders="";
-return("<Q><Tab>"+XTabs+"</Tab><Rec>"+RetrieveFields.toXMLt()+"</Rec>"+XWhere+XOrders+"</Q>");
+return("<Q><Tab>"+XTabs+"</Tab>"+RetrieveFields.toXMLt()+XWhere+XOrders+"</Q>");
 }
 //-------------------------------------------------------------------------
 public Query(Document XMLObjects) throws PDException
@@ -208,8 +208,7 @@ else
     }
 OPDObjectList = XMLObjects.getElementsByTagName("Rec");
 OPDObject = OPDObjectList.item(0);
-RetrieveFields=new Record();
-Record.FillFromXML(OPDObject, RetrieveFields);
+RetrieveFields=Record.CreateFromXML(OPDObject);
 OPDObjectList = XMLObjects.getElementsByTagName("Conds");
 if (OPDObjectList.getLength()>0)
     {

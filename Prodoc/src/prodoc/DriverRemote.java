@@ -344,29 +344,29 @@ if (PDLog.isDebug())
 Cursor C=new Cursor();
 Node N=ReadWrite(S_SELECT, "<OPD><Query>"+Search.toXML()+"</Query></OPD>");
 Vector Res=new Vector();
-
 NodeList RecLst = N.getChildNodes();
 for (int i = 0; i < RecLst.getLength(); i++)
     {
     Node Rec = RecLst.item(i);
     Record R=new Record();
-    NodeList AttrLst = Rec.getChildNodes();
-    for (int j = 0; j < AttrLst.getLength(); j++)
-        {
-        Node Attr = RecLst.item(j);
-        if (Attr.getNodeName().equalsIgnoreCase("attr"))   
-            {
-            NamedNodeMap XMLattributes = Attr.getAttributes();
-            Node XMLAttrName = XMLattributes.getNamedItem("Name");
-            String AttrName=XMLAttrName.getNodeValue();
-            XMLAttrName = XMLattributes.getNamedItem("Type");
-            int Type=Integer.parseInt(XMLAttrName.getNodeValue());
-            String Value=Attr.getTextContent(); 
-            Attribute At=new Attribute(AttrName, "", "", Type, false, null, 254, false, false, false);
-            At.Import(Value);
-            R.addAttr(At);
-            }
-        }
+    R=Record.CreateFromXML(Rec);
+//    NodeList AttrLst = Rec.getChildNodes();
+//    for (int j = 0; j < AttrLst.getLength(); j++)
+//        {
+//        Node Attr = RecLst.item(j);
+//        if (Attr.getNodeName().equalsIgnoreCase("attr"))   
+//            {
+//            NamedNodeMap XMLattributes = Attr.getAttributes();
+//            Node XMLAttrName = XMLattributes.getNamedItem("Name");
+//            String AttrName=XMLAttrName.getNodeValue();
+//            XMLAttrName = XMLattributes.getNamedItem("Type");
+//            int Type=Integer.parseInt(XMLAttrName.getNodeValue());
+//            String Value=Attr.getTextContent(); 
+//            Attribute At=new Attribute(AttrName, "", "", Type, false, null, 254, false, false, false);
+//            At.Import(Value);
+//            R.addAttr(At);
+//            }
+//        }
     Res.add(R);
     }
 return(StoreCursor(Res, Search.getRetrieveFields()));
@@ -401,7 +401,7 @@ Vector rs=(Vector)CursorIdent.getResultSet();
 if (rs.isEmpty())
     return(null);
 Record Fields=CursorIdent.getFieldsCur();
-Fields.assign((Record)rs.get(0));
+Fields.assignSimil((Record)rs.get(0)); // description and other elemens from atribute not transmitted by performance
 rs.remove(0);
 return(Fields.Copy());
 }
@@ -455,10 +455,10 @@ if (OPDObject.getTextContent().equalsIgnoreCase("KO"))
     if (OPDObjectList.getLength()>0)
         {
         OPDObject = OPDObjectList.item(0);
-        PDException.GenPDException("Error_Communicating_server", OPDObject.getTextContent().replace('^', '<'));
+        PDException.GenPDException("Server_Error", OPDObject.getTextContent().replace('^', '<'));
         }
     else
-        PDException.GenPDException("Error_Communicating_server", "");
+        PDException.GenPDException("Server_Error", "");
     }
 OPDObjectList = XMLObjects.getElementsByTagName("Data");
 OPDObject = OPDObjectList.item(0);

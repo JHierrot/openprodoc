@@ -331,32 +331,37 @@ NodeList OPDObjectList = XMLConds.getChildNodes();
 for (int i=0; i<OPDObjectList.getLength(); i++)
     {
     Node OPDObject = OPDObjectList.item(i);
-    if (OPDObject.getNodeName().equals("cType"))
+    String NodeName=OPDObject.getNodeName();
+    String Cont=OPDObject.getTextContent();
+    if (NodeName.equals("cType"))
         {
-        cType=Integer.parseInt(OPDObject.getTextContent());
+        cType=Integer.parseInt(Cont);
         }
-    else if (OPDObject.getNodeName().equals("Field"))
+    else if (NodeName.equals("Field"))
         {
-        Field=OPDObject.getTextContent();
+        Field=Cont;
         }
-    else if (OPDObject.getNodeName().equals("Field2"))
+    else if (NodeName.equals("Field2"))
         {
-        Value=OPDObject.getTextContent();
+        Value=Cont;
         }
-    else if (OPDObject.getNodeName().equals("TypeVal"))
+    else if (NodeName.equals("TypeVal"))
         {
-        TypeVal=Integer.parseInt(OPDObject.getTextContent());
+        TypeVal=Integer.parseInt(Cont);
         }
-    else if (OPDObject.getNodeName().equals("Comp"))
+    else if (NodeName.equals("Comp"))
         {
-        Comparation=Integer.parseInt(OPDObject.getTextContent());
+        Comparation=Integer.parseInt(Cont);
         }
-    else if (OPDObject.getNodeName().equals("Val"))
+    else if (NodeName.equals("Val"))
         {
         if (cType==ctIN)  
             {
             HashSet List=new HashSet();
-            StringTokenizer St=new StringTokenizer(OPDObject.getTextContent(), StringListSeparator);
+            Comparation=cINList;
+            if (TypeVal<0)
+                TypeVal=Attribute.tSTRING;
+            StringTokenizer St=new StringTokenizer(Cont, StringListSeparator);
             while (St.hasMoreTokens())
                 {
                 String ValS=St.nextToken();    
@@ -390,29 +395,29 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
         else
             {
             if (TypeVal==Attribute.tSTRING)
-                Value=OPDObject.getTextContent().replace('^', '<'); // to avoid false XML tags
-            else if (TypeVal==Attribute.tTIMESTAMP && OPDObject.getTextContent().length()!=0)
+                Value=Cont.replace('^', '<'); // to avoid false XML tags
+            else if (TypeVal==Attribute.tTIMESTAMP && Cont.length()!=0)
                 {
                 try {
-                    Value=formatterTS.parse(OPDObject.getTextContent());
+                    Value=formatterTS.parse(Cont);
                 } catch (ParseException ex)
                     {
-                    PDException.GenPDException(ex.getLocalizedMessage(), OPDObject.getTextContent()) ;
+                    PDException.GenPDException(ex.getLocalizedMessage(), Cont) ;
                     }
                 }
-            else if (TypeVal==Attribute.tDATE&& OPDObject.getTextContent().length()!=0)
+            else if (TypeVal==Attribute.tDATE&& Cont.length()!=0)
                 {
                 try {
-                    Value=formatterDate.parse(OPDObject.getTextContent());
+                    Value=formatterDate.parse(Cont);
                 } catch (ParseException ex)
                     {
-                    PDException.GenPDException(ex.getLocalizedMessage(), OPDObject.getTextContent()) ;
+                    PDException.GenPDException(ex.getLocalizedMessage(), Cont) ;
                     }
                 }
             else if (TypeVal==Attribute.tBOOLEAN)
                 Value=OPDObject.getTextContent().equals("1");
             else
-                Value=new Integer(OPDObject.getTextContent());
+                Value=new Integer(Cont);
             }
         }
     }
