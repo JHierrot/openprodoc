@@ -12,10 +12,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.Date;
-import java.util.Map;
 import java.util.Properties;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -28,6 +26,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import prodoc.DriverGeneric;
+import prodoc.DriverRemote;
 import prodoc.PDException;
 import prodoc.PDLog;
 import prodoc.ProdocFW;
@@ -67,17 +66,20 @@ response.setStatus(HttpServletResponse.SC_OK);
 PrintWriter out = response.getWriter();      
 try {
 if (!FWStartted)    
+    {
     StartFW();
+    FWStartted=true;
+    }
 if (PDLog.isDebug())
    PDLog.Debug("##########################################################################");   
-if (request.getParameter("Order")==null)
+if (request.getParameter(DriverRemote.ORDER)==null)
     {
     Answer(request, out, "<OPD><Result>KO</Result><Msg>Disconnected</Msg></OPD>");
     out.flush();
     out.close();
     return;
     }
-if (Connected(request) || request.getParameter("Order").equals(DriverGeneric.S_LOGIN)) 
+if (Connected(request) || request.getParameter(DriverRemote.ORDER).equals(DriverGeneric.S_LOGIN)) 
     {
     ProcessPage(request, out);
     }
@@ -169,8 +171,8 @@ else
  */
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {
-String Order=Req.getParameter("Order");   
-String Param=Req.getParameter("Param");   
+String Order=Req.getParameter(DriverRemote.ORDER);   
+String Param=Req.getParameter(DriverRemote.PARAM);   
 if (PDLog.isDebug())
     {
     PDLog.Debug("Order:"+Order);

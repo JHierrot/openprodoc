@@ -542,7 +542,7 @@ else
 private Object FormatImport(String Val) throws PDException
 {
 if (getType()==Attribute.tSTRING)
-    return(Val.replace('<', '^'));
+    return(DriverRemote.Codif(Val));
 else if (getType()==Attribute.tTHES)
     return(Val);
 else if (getType()==Attribute.tINTEGER)
