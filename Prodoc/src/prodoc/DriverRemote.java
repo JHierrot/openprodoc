@@ -33,7 +33,6 @@ import java.util.Vector;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -52,6 +51,8 @@ static final String charset="UTF-8";
 // OutputStream output;
 OutputStreamWriter output;
 private static final String NEWLINE = "\r\n";
+public static final String ORDER="Order";
+public static final String PARAM="Param";
 boolean Conected=false;
 StringBuilder Answer=new StringBuilder(3000);
 
@@ -208,7 +209,7 @@ protected void InsertRecord(String TableName, Record Fields) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.InsertRecord>:"+TableName+"="+Fields);
-ReadWrite(S_INSERT, "<OPD><Tab>"+TableName+"</Tab><Rec>"+Fields.toXMLt()+"</Rec></OPD>");
+ReadWrite(S_INSERT, "<OPD><Tab>"+TableName+"</Tab>"+Fields.toXMLt()+"</OPD>");
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.InsertRecord<");
 }
@@ -409,6 +410,11 @@ return(Fields.Copy());
 private Node ReadWrite(String pOrder, String pParam) throws PDException
 {
 Node OPDObject =null;
+if (PDLog.isDebug())
+    {
+    PDLog.Debug("ReadWrite: Order:"+pOrder);
+    PDLog.Debug("Param:"+pParam);
+    }
 try {
 URLCon=(HttpURLConnection) OUrl.openConnection();
 URLCon.setDoOutput(true);
@@ -419,8 +425,8 @@ URLCon.setRequestMethod("POST");
 //URLCon.setReadTimeout(60000);
 String Param="";
 if (pParam!=null && pParam.length()!=0)
-    Param="Param="+pParam; // TODO Encode
-String Order="Order="+pOrder;
+    Param=PARAM+"="+pParam; // TODO Encode
+String Order=ORDER+"="+pOrder;
 String SumPar=Order+"&"+Param;
 URLCon.setRequestProperty("Content-Length", "" + SumPar.getBytes(charset).length );
 URLCon.connect();
@@ -455,7 +461,7 @@ if (OPDObject.getTextContent().equalsIgnoreCase("KO"))
     if (OPDObjectList.getLength()>0)
         {
         OPDObject = OPDObjectList.item(0);
-        PDException.GenPDException("Server_Error", OPDObject.getTextContent().replace('^', '<'));
+        PDException.GenPDException("Server_Error", DriverRemote.DeCodif(OPDObject.getTextContent()));
         }
     else
         PDException.GenPDException("Server_Error", "");
@@ -481,5 +487,15 @@ finally
     }
 return(OPDObject);
 }
+//-----------------------------------------------------------------   
+static public String Codif(String Text)
+{
+return(Text.replace('<', '^').replace("%", "¡1").replace("&", "¡2"));
+}    
+//-----------------------------------------------------------------   
+static public String DeCodif(String Text)
+{
+return(Text.replace('^', '<').replace("¡1", "%").replace("¡2","&"));
+}    
 //-----------------------------------------------------------------   
 }

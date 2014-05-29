@@ -1797,11 +1797,11 @@ else if (Order.equals(S_LOGOUT))
     }
 else if (Order.equals(S_INSERT))
     {
-    
+    return("<OPD><Result>OK</Result><Data>"+InsertRecord(XMLObjects)+"</Data></OPD>");
     }
 else if (Order.equals(S_DELETE))
     {
-    
+    return("<OPD><Result>OK</Result><Data>"+DeleteRecord(XMLObjects)+"</Data></OPD>");    
     }
 else if (Order.equals(S_CREATE))
     {
@@ -1811,13 +1811,25 @@ else if (Order.equals(S_DROP))
     {
     
     }
+else if (Order.equals(S_INITTRANS))
+    {
+    IniciarTrans();
+    }
+else if (Order.equals(S_COMMIT))
+    {
+    CerrarTrans();
+    }
+else if (Order.equals(S_CANCEL))
+    {
+    AnularTrans();
+    }
 else 
     return("<OPD><Result>KO</Result><Msg>Unknown Order</Msg></OPD>");
 return("<OPD><Result>OK</Result></OPD>");
 }        
 //---------------------------------------------------------------------
 /**
- * 
+ * Opens a Cursor y generates a "Vector" with all the results
  * @param XMLObjects Query as XML
  * @return XML with the <Data> contect
  * @throws PDException 
@@ -1834,6 +1846,31 @@ while (R!=null)
     R=NextRec(C);
     }
 return(Res.toString());
+}
+//---------------------------------------------------------------------
+
+private String InsertRecord(Document XMLObjects) throws PDException
+{
+NodeList OPDObjectList = XMLObjects.getElementsByTagName("Tab");
+Node OPDObject = OPDObjectList.item(0);
+String Tab=OPDObject.getTextContent();
+OPDObjectList = XMLObjects.getElementsByTagName("Rec");
+OPDObject = OPDObjectList.item(0);
+Record R=Record.CreateFromXML(OPDObject);
+InsertRecord(Tab, R);
+return("");
+}
+//---------------------------------------------------------------------
+private String DeleteRecord(Document XMLObjects) throws PDException
+{
+NodeList OPDObjectList = XMLObjects.getElementsByTagName("Tab");
+Node OPDObject = OPDObjectList.item(0);
+String Tab=OPDObject.getTextContent();
+OPDObjectList = XMLObjects.getElementsByTagName("DelConds");
+OPDObject = OPDObjectList.item(0);
+Conditions C= new Conditions(OPDObject);
+DeleteRecord(Tab, C);
+return("");
 }
 //---------------------------------------------------------------------
 }

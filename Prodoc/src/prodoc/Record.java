@@ -443,7 +443,7 @@ for (int j = 0; j < AttrLst.getLength(); j++)
         NamedNodeMap XMLattributes = Attr.getAttributes();
         Node XMLAttrName = XMLattributes.getNamedItem("Name");
         String AttrName=XMLAttrName.getNodeValue();
-        String Value=Attr.getTextContent().replace('^', '<');        
+        String Value=DriverRemote.DeCodif(Attr.getTextContent());        
         Attribute At=R.getAttr(AttrName);
         if (At!=null)
             At.Import(Value);
@@ -466,7 +466,7 @@ for (int j = 0; j < AttrLst.getLength(); j++)
         String AttrName=XMLAttrName.getNodeValue();
         XMLAttrName = XMLattributes.getNamedItem("Type");
         int Type=Integer.parseInt(XMLAttrName.getNodeValue());
-        String Value=Attr.getTextContent().replace('^', '<'); 
+        String Value=DriverRemote.DeCodif(Attr.getTextContent()); 
         Attribute At=new Attribute(AttrName, "", "", Type, false, null, 254, false, false, false);
         if (Value.length()!=0)
             At.Import(Value);
