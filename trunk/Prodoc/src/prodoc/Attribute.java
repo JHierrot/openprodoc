@@ -25,6 +25,9 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  *
@@ -182,7 +185,7 @@ setMultivalued(pMultivalued);
  */
 public Attribute(String pName, String pUserName, String pDescription, int pType,
                 boolean pRequired, Object pValue, int pLongStr,
-                boolean pPrimKey, boolean pUnique, boolean pModifAllowed)  throws PDException
+                boolean pPrimKey, boolean pUnique, boolean pModifAllowed) throws PDException
 {
 setName(pName);
 setUserName(pUserName);
@@ -194,6 +197,37 @@ setValue(pValue);
 setPrimKey(pPrimKey);
 setUnique(pUnique);
 setModifAllowed(pModifAllowed);
+}
+//--------------------------------------------------------------------------
+public Attribute(Node OPDObject) throws PDException
+{
+NodeList OPDObjectList = OPDObject.getChildNodes();
+for (int i = 0; i < OPDObjectList.getLength(); i++)
+    {
+    Node AttrPart = OPDObjectList.item(i);        
+    if (AttrPart.getNodeName().equals("Name"))
+        setName(AttrPart.getTextContent());
+    else if (AttrPart.getNodeName().equals("UserName"))
+        setUserName(AttrPart.getTextContent());
+    else if (AttrPart.getNodeName().equals("Descrip"))
+        setDescription(AttrPart.getTextContent());
+    else if (AttrPart.getNodeName().equals("Type"))
+        setType(Integer.parseInt(AttrPart.getTextContent()));
+    else if (AttrPart.getNodeName().equals("Req"))
+        setRequired(AttrPart.getTextContent().equals("1"));
+    else if (AttrPart.getNodeName().equals("LongStr"))
+        setLongStr(Integer.parseInt(AttrPart.getTextContent()));
+    else if (AttrPart.getNodeName().equals("Value"))
+        Import(AttrPart.getTextContent());
+    else if (AttrPart.getNodeName().equals("PrimKey"))
+        setPrimKey(AttrPart.getTextContent().equals("1"));
+    else if (AttrPart.getNodeName().equals("UniKey"))
+        setUnique(AttrPart.getTextContent().equals("1"));
+    else if (AttrPart.getNodeName().equals("ModAllow"))
+        setModifAllowed(AttrPart.getTextContent().equals("1"));
+    else if (AttrPart.getNodeName().equals("Multi"))
+        setMultivalued(AttrPart.getTextContent().equals("1"));
+    }
 }
 //--------------------------------------------------------------------------
 /**
@@ -591,13 +625,9 @@ if (isMultivalued())
         {
         AddValue(FormatImport(St.nextToken()));
         }
-//    if (PDLog.isDebug())
-//        PDLog.Debug("Attribute.Import:"+Val+"-->"+Export());
     }   
 else
     {
-//    if (PDLog.isDebug())
-//        PDLog.Debug("Attribute.Import:"+Val+"-->"+FormatImport(Val));
     setValue(FormatImport(Val));    
     }
 }
@@ -709,7 +739,7 @@ S.append("<Type>");
 S.append(getType());
 S.append("</Type>");
 S.append("<Req>");
-S.append(isRequired());
+S.append(isRequired()?"1":"0");
 S.append("</Req>");
 S.append("<LongStr>");
 S.append(getLongStr());
@@ -718,16 +748,16 @@ S.append("<Value>");
 S.append(Export());
 S.append("</Value>");
 S.append("<PrimKey>");
-S.append(isPrimKey());
+S.append(isPrimKey()?"1":"0");
 S.append("</PrimKey>");
 S.append("<UniKey>");
-S.append(isUnique());
+S.append(isUnique()?"1":"0");
 S.append("</UniKey>");
 S.append("<ModAllow>");
-S.append(isModifAllowed());
+S.append(isModifAllowed()?"1":"0");
 S.append("</ModAllow>");
 S.append("<Multi>");
-S.append(isMultivalued());
+S.append(isMultivalued()?"1":"0");
 S.append("</Multi>");
 S.append("</attr>\n");
 return(S.toString());

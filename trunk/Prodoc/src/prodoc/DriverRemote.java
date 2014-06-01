@@ -48,7 +48,6 @@ URL OUrl=null;
 URLConnection OUrlc=null;
 HttpURLConnection URLCon=null;
 static final String charset="UTF-8";
-// OutputStream output;
 OutputStreamWriter output;
 private static final String NEWLINE = "\r\n";
 public static final String ORDER="Order";
@@ -62,7 +61,7 @@ final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyyMMddHHmmss");
  */
 final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyyMMdd");
 
-DocumentBuilder DB;
+DocumentBuilder DB=null;
 
 /**
 * 
@@ -150,7 +149,7 @@ protected void CreateTable(String TableName, Record Fields) throws PDException
 {
 if (PDLog.isInfo())
     PDLog.Info("DriverRemote.CreateTable>:"+TableName+"/"+Fields);
-ReadWrite(S_CREATE, "<OPD><Tab>"+TableName+"</Tab><Rec>"+Fields.toXMLt()+"</Rec></OPD>");
+ReadWrite(S_CREATE, "<OPD><Tab>"+TableName+"</Tab>"+Fields.toXMLt()+"</OPD>");
 if (PDLog.isInfo())
     PDLog.Info("DriverRemote.CreateTable<:"+TableName);
 }
@@ -179,7 +178,7 @@ protected void AlterTableAdd(String TableName, Attribute NewAttr, boolean IsVer)
 {
 if (PDLog.isInfo())
     PDLog.Info("DriverRemote.AlterTable>:"+TableName);
-ReadWrite(S_ALTER, "<OPD><Tab>"+TableName+"</Tab><NewAttr>"+NewAttr.toXMLt()+"</NewAttr><IsVer>"+(IsVer?"1":"0")+"</IsVer></OPD>");
+ReadWrite(S_ALTER, "<OPD><Tab>"+TableName+"</Tab>"+NewAttr.toXMLFull()+"<IsVer>"+(IsVer?"1":"0")+"</IsVer></OPD>");
 if (PDLog.isInfo())
     PDLog.Info("DriverRemote.AlterTable<:"+TableName);
 }
@@ -240,7 +239,7 @@ protected void UpdateRecord(String TableName, Record NewFields, Conditions UpCon
 {
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.UpdateRecord>:"+TableName+"="+NewFields);
-ReadWrite(S_UPDATE, "<OPD><Tab>"+TableName+"</Tab><Rec>"+NewFields.toXMLt()+"</Rec><DelConds>"+UpConds.toXML()+"</DelConds></OPD>");
+ReadWrite(S_UPDATE, "<OPD><Tab>"+TableName+"</Tab>"+NewFields.toXMLt()+"<UpConds>"+UpConds.toXML()+"</UpConds></OPD>");
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.UpdateRecord<:"+TableName+"="+NewFields);
 }
@@ -498,4 +497,30 @@ static public String DeCodif(String Text)
 return(Text.replace('^', '<').replace("¡1", "%").replace("¡2","&"));
 }    
 //-----------------------------------------------------------------   
+/**
+ * Allows to decide how to download file
+ * @return true ir Driver is remote
+ */
+protected boolean IsRemote()
+{
+return(true);
+}
+//---------------------------------------------------------------------
+/**
+ *
+ * @param RepName
+ * @return
+ * @throws PDException
+ */
+protected StoreGeneric getRepository(String RepName) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("DriverRemote.getRepository>:"+RepName);
+PDRepository RepDesc=new PDRepository(this);
+RepDesc.Load(RepName);
+StoreGeneric Rep=new StoreRem(RepDesc.getURL(), RepDesc.getUser(), RepDesc.getPassword(), RepDesc.getParam(), RepDesc.isEncrypted(), OUrl, DB );
+return(Rep);
+}
+//-----------------------------------------------------------------------------------
+
 }

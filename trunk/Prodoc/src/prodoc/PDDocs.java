@@ -811,7 +811,7 @@ else
 StoreGeneric Rep=getDrv().getRepository(d.getReposit());
 if (Rep.IsURL())
     throw new UnsupportedOperationException("Not supported.");   
-Rep.Connect();
+//Rep.Connect();
 File NewF=new File(FolderPath);
 if (!Overwrite && NewF.exists())
     return(FolderPath);
@@ -837,7 +837,7 @@ OutCont.close();
     {
     throw new PDException(ex.getLocalizedMessage());
     }
-Rep.Disconnect();
+//Rep.Disconnect();
 return(FolderPath);
 }
 //-------------------------------------------------------------------------
@@ -972,37 +972,6 @@ Rep.Retrieve(getPDId(), getVersion(), OutBytes);
     throw new PDException(ex.getLocalizedMessage());
     }
 }
-//-------------------------------------------------------------------------
-/**
- * "Download" a file referenced by the PDID-
- * @param OutBytes 
- * @throws PDException
- *
-public void getStream(OutputStream OutBytes) throws PDException
-{
-InputStream InBytes=null;
-LoadCurrent(getPDId());
-StoreGeneric Rep=getDrv().getRepository(getReposit());
-if (Rep.IsURL())
-    throw new UnsupportedOperationException("Not supported.");   
-Rep.Connect();
-InBytes=Rep.Retrieve(getPDId(), getVersion());
-byte[] buffer = new byte[BUFFSIZE];
-int bytesLeidos;
-try {
-while ((bytesLeidos = InBytes.read(buffer,0,BUFFSIZE)) != -1)
-    {
-    OutBytes.write(buffer,0,bytesLeidos);
-    }
-InBytes.close();
-OutBytes.flush();
-OutBytes.close();
-} catch(Exception ex)
-    {
-    Rep.Disconnect();
-    throw new PDException(ex.getLocalizedMessage());
-    }
-}******/
 //-------------------------------------------------------------------------
 /**
  * "Download" a file referenced by the PDID-
