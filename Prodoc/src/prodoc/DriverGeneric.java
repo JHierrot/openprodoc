@@ -93,23 +93,25 @@ private String AppLang=null;
 private static String DefAppLang=null;
 private PDCustomization PDCust=null;
 
-static final public String S_LOGIN   ="LOGIN";
-static final public String S_LOGOUT  ="LOGOUT";
-static final public String S_SELECT  ="SELECT";
-static final public String S_CLOSECUR="CLOSECUR";
-static final public String S_NEXTREC="NEXTREC";
-static final public String S_INSERT  ="INSERT";
-static final public String S_DELETE  ="DELETE";
-static final public String S_UPDATE  ="UPDATE";
-static final public String S_CREATE  ="CREATE";
-static final public String S_DROP    ="DROP";
-static final public String S_ALTER   ="ALTER";
-static final public String S_ALTERDEL="ALTERDEL";
-static final public String S_INTEGRIT="INTEGRIT";
-static final public String S_INTEGRIT2="INTEGRIT2";
-static final public String S_INITTRANS="INITTRANS";
-static final public String S_COMMIT   ="COMMIT";
-static final public String S_CANCEL   ="CANCEL";
+static final public String S_LOGIN   ="LOGIN";  // Ok
+static final public String S_LOGOUT  ="LOGOUT"; // Ok
+static final public String S_SELECT  ="SELECT";  // Ok
+static final public String S_INSERT  ="INSERT";  // Ok
+static final public String S_DELETE  ="DELETE";   // Ok
+static final public String S_UPDATE  ="UPDATE";   // Ok
+static final public String S_CREATE  ="CREATE";    // Ok
+static final public String S_DROP    ="DROP";     // Ok
+static final public String S_ALTER   ="ALTER";    // Ok
+static final public String S_ALTERDEL="ALTERDEL";   // Ok
+static final public String S_INTEGRIT="INTEGRIT";  // Ok
+static final public String S_INTEGRIT2="INTEGRIT2";  // Ok
+static final public String S_INITTRANS="INITTRANS";  // Ok
+static final public String S_COMMIT   ="COMMIT";    // Ok
+static final public String S_CANCEL   ="CANCEL";    // Ok
+
+static final public String S_DELFILE   ="DELFILE";    
+static final public String S_RENFILE   ="RENFILE";    
+static final public String S_RETRIEVEFILE   ="RETRIEVEFILE";    
 
 /**
  *
@@ -1787,13 +1789,17 @@ if (Order.equals(S_SELECT))
     {
     return("<OPD><Result>OK</Result><Data>"+GenVector(XMLObjects)+"</Data></OPD>");
     }
+//else if (Order.equals(S_DELFILE))
+//    {
+////    return("<OPD><Result>OK</Result><Data>"+UpdateRecord(XMLObjects)+"</Data></OPD>");    
+//    }
+//else if (Order.equals(S_RENFILE))
+//    {
+////    return("<OPD><Result>OK</Result><Data>"+UpdateRecord(XMLObjects)+"</Data></OPD>");    
+//    }
 else if (Order.equals(S_UPDATE))
     {
-    
-    }
-else if (Order.equals(S_LOGOUT))
-    {
-    
+    return("<OPD><Result>OK</Result><Data>"+UpdateRecord(XMLObjects)+"</Data></OPD>");    
     }
 else if (Order.equals(S_INSERT))
     {
@@ -1805,11 +1811,27 @@ else if (Order.equals(S_DELETE))
     }
 else if (Order.equals(S_CREATE))
     {
-    
+    return("<OPD><Result>OK</Result><Data>"+CreateTable(XMLObjects)+"</Data></OPD>");    
     }
 else if (Order.equals(S_DROP))
     {
-    
+    return("<OPD><Result>OK</Result><Data>"+DropTable(XMLObjects)+"</Data></OPD>");        
+    }
+else if (Order.equals(S_ALTER))
+    {
+    return("<OPD><Result>OK</Result><Data>"+AlterTableAdd(XMLObjects)+"</Data></OPD>");            
+    }
+else if (Order.equals(S_ALTERDEL))
+    {
+    return("<OPD><Result>OK</Result><Data>"+AlterTableDel(XMLObjects)+"</Data></OPD>");                
+    }
+else if (Order.equals(S_INTEGRIT))
+    {
+    return("<OPD><Result>OK</Result><Data>"+AddIntegrity(XMLObjects)+"</Data></OPD>");                    
+    }
+else if (Order.equals(S_INTEGRIT2))
+    {
+    return("<OPD><Result>OK</Result><Data>"+AddIntegrity2(XMLObjects)+"</Data></OPD>");                    
     }
 else if (Order.equals(S_INITTRANS))
     {
@@ -1848,7 +1870,12 @@ while (R!=null)
 return(Res.toString());
 }
 //---------------------------------------------------------------------
-
+/**
+ * 
+ * @param XMLObjects
+ * @return
+ * @throws PDException 
+ */
 private String InsertRecord(Document XMLObjects) throws PDException
 {
 NodeList OPDObjectList = XMLObjects.getElementsByTagName("Tab");
@@ -1861,6 +1888,12 @@ InsertRecord(Tab, R);
 return("");
 }
 //---------------------------------------------------------------------
+/**
+ * 
+ * @param XMLObjects
+ * @return
+ * @throws PDException 
+ */
 private String DeleteRecord(Document XMLObjects) throws PDException
 {
 NodeList OPDObjectList = XMLObjects.getElementsByTagName("Tab");
@@ -1871,6 +1904,136 @@ OPDObject = OPDObjectList.item(0);
 Conditions C= new Conditions(OPDObject);
 DeleteRecord(Tab, C);
 return("");
+}
+//---------------------------------------------------------------------
+/**
+ * 
+ * @param XMLObjects
+ * @return
+ * @throws PDException 
+ */
+private String UpdateRecord(Document XMLObjects) throws PDException
+{
+NodeList OPDObjectList = XMLObjects.getElementsByTagName("Tab");
+Node OPDObject = OPDObjectList.item(0);
+String Tab=OPDObject.getTextContent();
+OPDObjectList = XMLObjects.getElementsByTagName("Rec");
+OPDObject = OPDObjectList.item(0);
+Record R=Record.CreateFromXML(OPDObject);
+OPDObjectList = XMLObjects.getElementsByTagName("UpConds");
+OPDObject = OPDObjectList.item(0);
+Conditions C= new Conditions(OPDObject);
+UpdateRecord(Tab, R, C);
+return("");
+}
+//---------------------------------------------------------------------
+
+private String CreateTable(Document XMLObjects) throws PDException
+{
+NodeList OPDObjectList = XMLObjects.getElementsByTagName("Tab");
+Node OPDObject = OPDObjectList.item(0);
+String Tab=OPDObject.getTextContent();
+OPDObjectList = XMLObjects.getElementsByTagName("Rec");
+OPDObject = OPDObjectList.item(0);
+Record R=Record.CreateFromXML(OPDObject);
+CreateTable(Tab, R);
+return("");
+}
+//---------------------------------------------------------------------
+
+private String DropTable(Document XMLObjects) throws PDException
+{
+NodeList OPDObjectList = XMLObjects.getElementsByTagName("Tab");
+Node OPDObject = OPDObjectList.item(0);
+String Tab=OPDObject.getTextContent();
+DropTable(Tab);
+return("");
+}
+//---------------------------------------------------------------------
+
+private String AlterTableAdd(Document XMLObjects) throws PDException
+{
+NodeList OPDObjectList = XMLObjects.getElementsByTagName("Tab");
+Node OPDObject = OPDObjectList.item(0);
+String Tab=OPDObject.getTextContent();
+OPDObjectList = XMLObjects.getElementsByTagName("attr");
+OPDObject = OPDObjectList.item(0);
+Attribute A=new Attribute(OPDObject);
+OPDObjectList = XMLObjects.getElementsByTagName("IsVer");
+OPDObject = OPDObjectList.item(0);
+String IsVer=OPDObject.getTextContent();
+AlterTableAdd(Tab, A, IsVer.equals("1"));
+return("");
+}
+//---------------------------------------------------------------------
+private String AlterTableDel(Document XMLObjects) throws PDException
+{
+NodeList OPDObjectList = XMLObjects.getElementsByTagName("Tab");
+Node OPDObject = OPDObjectList.item(0);
+String Tab=OPDObject.getTextContent();
+OPDObjectList = XMLObjects.getElementsByTagName("OldAttr");
+OPDObject = OPDObjectList.item(0);
+String OldAttr=OPDObject.getTextContent();
+AlterTableDel(Tab, OldAttr);
+return("");
+}
+//---------------------------------------------------------------------
+/**
+ * 
+ * @param XMLObjects
+ * @return
+ * @throws PDException 
+ */
+private String AddIntegrity(Document XMLObjects) throws PDException
+{
+NodeList OPDObjectList = XMLObjects.getElementsByTagName("Tab1");
+Node OPDObject = OPDObjectList.item(0);
+String Tab1=OPDObject.getTextContent();
+OPDObjectList = XMLObjects.getElementsByTagName("Field1");
+OPDObject = OPDObjectList.item(0);
+String Field1=OPDObject.getTextContent();
+OPDObjectList = XMLObjects.getElementsByTagName("Tab2");
+OPDObject = OPDObjectList.item(0);
+String Tab2=OPDObject.getTextContent();
+OPDObjectList = XMLObjects.getElementsByTagName("Field2");
+OPDObject = OPDObjectList.item(0);
+String Field2=OPDObject.getTextContent();
+AddIntegrity(Tab1, Field1, Tab2, Field2);
+return("");
+}
+//---------------------------------------------------------------------
+// <Tab1>"+TableName1+"</Tab1><Field11>"+Field11+"</Field11><Field12>"+Field12+"</Field12><Tab2>"+TableName2+"</Tab2><Field21>"+Field21+"</Field21><Field22>"+Field22+"</Field22></OPD>");
+private String AddIntegrity2(Document XMLObjects) throws PDException
+{
+NodeList OPDObjectList = XMLObjects.getElementsByTagName("Tab1");
+Node OPDObject = OPDObjectList.item(0);
+String Tab1=OPDObject.getTextContent();
+OPDObjectList = XMLObjects.getElementsByTagName("Field11");
+OPDObject = OPDObjectList.item(0);
+String Field11=OPDObject.getTextContent();
+OPDObjectList = XMLObjects.getElementsByTagName("Field12");
+OPDObject = OPDObjectList.item(0);
+String Field12=OPDObject.getTextContent();
+OPDObjectList = XMLObjects.getElementsByTagName("Tab2");
+OPDObject = OPDObjectList.item(0);
+String Tab2=OPDObject.getTextContent();
+OPDObjectList = XMLObjects.getElementsByTagName("Field21");
+OPDObject = OPDObjectList.item(0);
+String Field21=OPDObject.getTextContent();
+OPDObjectList = XMLObjects.getElementsByTagName("Field22");
+OPDObject = OPDObjectList.item(0);
+String Field22=OPDObject.getTextContent();
+AddIntegrity(Tab1, Field11,Field12, Tab2, Field21, Field22);
+return("");
+}
+//---------------------------------------------------------------------
+/**
+ * Allows to decide how to download file
+ * @return true ir Driver is remote
+ */
+protected boolean IsRemote()
+{
+return(false);
 }
 //---------------------------------------------------------------------
 }

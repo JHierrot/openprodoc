@@ -17,9 +17,11 @@ import java.util.Date;
 import java.util.Properties;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
@@ -27,8 +29,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import prodoc.DriverGeneric;
 import prodoc.DriverRemote;
+import prodoc.PDDocs;
 import prodoc.PDException;
 import prodoc.PDLog;
+import prodoc.PDMimeType;
 import prodoc.ProdocFW;
 
 
@@ -63,7 +67,6 @@ protected void processRequest(HttpServletRequest request, HttpServletResponse re
 {
 response.setContentType("text/xml;charset=UTF-8");
 response.setStatus(HttpServletResponse.SC_OK);
-PrintWriter out = response.getWriter();      
 try {
 if (!FWStartted)    
     {
@@ -74,29 +77,40 @@ if (PDLog.isDebug())
    PDLog.Debug("##########################################################################");   
 if (request.getParameter(DriverRemote.ORDER)==null)
     {
+    PrintWriter out = response.getWriter();      
     Answer(request, out, "<OPD><Result>KO</Result><Msg>Disconnected</Msg></OPD>");
     out.flush();
     out.close();
     return;
     }
+if (Connected(request) && request.getParameter(DriverRemote.ORDER).equals(DriverGeneric.S_RETRIEVEFILE)) 
+    {
+    SendFile(request, response);
+    return;
+    }
 if (Connected(request) || request.getParameter(DriverRemote.ORDER).equals(DriverGeneric.S_LOGIN)) 
     {
+    PrintWriter out = response.getWriter();      
     ProcessPage(request, out);
+    out.flush();
+    out.close();
     }
 else
     {
+    PrintWriter out = response.getWriter();      
     Answer(request, out, false, "<OPD><Result>KO</Result><Msg>Disconnected</Msg></OPD>", null);
+    out.flush();
+    out.close();
     }
 } catch (Exception e)
     {
+    PrintWriter out = response.getWriter();      
     AddLog(e.getMessage());
     Answer(request, out, false, e.getMessage(), null);
     e.printStackTrace();
+    out.flush();
+    out.close();
     }
-finally {
-        out.flush();
-        out.close();
-        }
 }
 //-----------------------------------------------------------------------------------------------
 /**
@@ -190,6 +204,12 @@ if (Order.equals(DriverGeneric.S_LOGIN))
     String Pass=OPDObject.getTextContent(); 
     DriverGeneric D=ProdocFW.getSession("PD", User, Pass);
     Req.getSession().setAttribute("PRODOC_SESS", D);   
+    Answer(Req, out, true, null, null);
+    return;    
+    }
+else if (Order.equals(DriverGeneric.S_LOGOUT)) 
+    {
+    Req.getSession().setAttribute("PRODOC_SESS", null);   
     Answer(Req, out, true, null, null);
     return;    
     }
@@ -301,6 +321,45 @@ return(ProdocProperRef);
 private void StartFW() throws Exception
 {
 ProdocFW.InitProdoc("PD", getProdocProperRef());    
+}
+//----------------------------------------------------------   
+
+private void SendFile(HttpServletRequest Req, HttpServletResponse response) throws Exception
+{
+String Param=Req.getParameter(DriverRemote.PARAM);   
+if (PDLog.isDebug())
+    PDLog.Debug("SendFile Param:"+Param);
+DocumentBuilder DB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+Document XMLObjects = DB.parse(new ByteArrayInputStream(Param.getBytes("UTF-8")));
+NodeList OPDObjectList = XMLObjects.getElementsByTagName("Id");
+Node OPDObject = OPDObjectList.item(0);
+String Id=OPDObject.getTextContent();
+OPDObjectList = XMLObjects.getElementsByTagName("Ver");
+OPDObject = OPDObjectList.item(0);
+String Ver=OPDObject.getTextContent();
+
+
+PDDocs doc=new PDDocs(getSessOPD(Req));
+doc.setPDId(Id);
+if (Ver!=null && Ver.length()!=0)
+    doc.LoadVersion(Id, Ver);
+else
+    doc.LoadCurrent(Id);
+ServletOutputStream out=response.getOutputStream();
+PDMimeType mt=new PDMimeType(getSessOPD(Req));
+mt.Load(doc.getMimeType());
+response.setContentType(mt.getMimeCode());
+response.setHeader("Content-disposition", "inline; filename=" + doc.getName());
+try {
+if (Ver!=null && Ver.length()!=0)
+    doc.getStreamVer(out);
+else
+    doc.getStream(out);
+} catch (Exception e)
+    {
+    out.close();
+    throw e;
+    }
 }
 //----------------------------------------------------------   
 }
