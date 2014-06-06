@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -21,9 +24,11 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -74,7 +79,12 @@ if (!FWStartted)
     FWStartted=true;
     }
 if (PDLog.isDebug())
-   PDLog.Debug("##########################################################################");   
+   PDLog.Debug("##########################################################################");  
+if (Connected(request) && request.getContentType().contains("multipart"))
+    {
+    InsFile(request, response);
+    return;    
+    }
 if (request.getParameter(DriverRemote.ORDER)==null)
     {
     PrintWriter out = response.getWriter();      
@@ -83,12 +93,18 @@ if (request.getParameter(DriverRemote.ORDER)==null)
     out.close();
     return;
     }
-if (Connected(request) && request.getParameter(DriverRemote.ORDER).equals(DriverGeneric.S_RETRIEVEFILE)) 
+String Order=request.getParameter(DriverRemote.ORDER);   
+if (Connected(request) && Order.equals(DriverGeneric.S_RETRIEVEFILE)) 
     {
     SendFile(request, response);
     return;
     }
-if (Connected(request) || request.getParameter(DriverRemote.ORDER).equals(DriverGeneric.S_LOGIN)) 
+//if (Connected(request) && Order.equals(DriverGeneric.S_INSFILE)) 
+//    {
+//    InsFile(request, response);
+//    return;    
+//    }
+if (Connected(request) || Order.equals(DriverGeneric.S_LOGIN)) 
     {
     PrintWriter out = response.getWriter();      
     ProcessPage(request, out);
@@ -189,6 +205,7 @@ String Order=Req.getParameter(DriverRemote.ORDER);
 String Param=Req.getParameter(DriverRemote.PARAM);   
 if (PDLog.isDebug())
     {
+    PDLog.Debug("From:"+Req.getRemoteHost()+"/"+Req.getRemoteHost()+":"+Req.getRemoteUser());
     PDLog.Debug("Order:"+Order);
     PDLog.Debug("Param:"+Param);
     }
@@ -337,8 +354,6 @@ String Id=OPDObject.getTextContent();
 OPDObjectList = XMLObjects.getElementsByTagName("Ver");
 OPDObject = OPDObjectList.item(0);
 String Ver=OPDObject.getTextContent();
-
-
 PDDocs doc=new PDDocs(getSessOPD(Req));
 doc.setPDId(Id);
 if (Ver!=null && Ver.length()!=0)
@@ -360,6 +375,44 @@ else
     out.close();
     throw e;
     }
+}
+//----------------------------------------------------------   
+/**
+ * 
+ * @param request
+ * @param response 
+ */
+private void InsFile(HttpServletRequest Req, HttpServletResponse response) throws Exception
+{
+String FileName=null;
+InputStream FileData=null;
+HashMap ListFields=new HashMap();
+DiskFileItemFactory factory = new DiskFileItemFactory();
+factory.setSizeThreshold(1000000);
+ServletFileUpload upload = new ServletFileUpload(factory);
+boolean isMultipart = ServletFileUpload.isMultipartContent(Req);
+List items = upload.parseRequest(Req);
+Iterator iter = items.iterator();
+while (iter.hasNext())
+    {
+    FileItem item = (FileItem) iter.next();
+    if (item.isFormField())
+        ListFields.put(item.getFieldName(), item.getString());
+    else 
+        {
+        FileName=item.getName();
+        FileData=item.getInputStream();
+        }
+    }
+DriverGeneric PDSession=getSessOPD(Req);
+String Param=(String) ListFields.get("Param");
+String Id=(String) ListFields.get("Id");
+String Ver=(String) ListFields.get("Ver");
+PDSession.InsertFile(Id, Ver, FileData);
+PrintWriter out = response.getWriter(); 
+Answer(Req, out, true, null, null);
+out.flush();
+out.close();
 }
 //----------------------------------------------------------   
 }
