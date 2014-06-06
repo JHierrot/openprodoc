@@ -21,6 +21,7 @@ package prodoc;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -29,6 +30,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Arrays;
 import javax.xml.parsers.DocumentBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -46,6 +48,7 @@ HttpURLConnection URLCon=null;
 OutputStreamWriter output;
 StringBuilder Answer=new StringBuilder(300);
 DocumentBuilder DB=null;
+final static String NEWLINE="\r\n";
 
 //-----------------------------------------------------------------
 /**
@@ -55,10 +58,11 @@ DocumentBuilder DB=null;
  * @param pPassword
  * @param pParam
  */
-protected StoreRem(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt, URL pOUrl, DocumentBuilder pDB)
+protected StoreRem(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt, URL pOUrl, HttpURLConnection pURLCon, DocumentBuilder pDB)
 {
 super(pServer, pUser, pPassword, pParam, pEncrypt);
 OUrl=pOUrl;
+URLCon=pURLCon;
 DB=pDB;
 }
 
@@ -103,43 +107,175 @@ protected void Disconnect() throws PDException
  * @return
  * @throws PDException
  */
-protected int Insert(String Id, String Ver, InputStream Bytes) throws PDException
+protected int Insert0(String Id, String Ver, InputStream Bytes) throws PDException
 {
 VerifyId(Id);
+int Tot=0;
 try {
-//con.setAutoCommit(false);
-//String SQL = "INSERT INTO "+getTable()+" (PDId, PDVersion, PDDATE, PDCONT) VALUES (?, ?, ?, ?)";
-//PreparedStatement BlobStmt = con.prepareStatement(SQL);
-//BlobStmt.setString(1, Id);
-//BlobStmt.setString(2, Ver);
-//BlobStmt.setTimestamp(3,  new Timestamp(System.currentTimeMillis()));
-//// BlobStmt.setBinaryStream(4, Bytes);
-//SerialBlob Bl=null;//  new SerialBlob(Buffer);
-//int Tot=0;
-//int readed=Bytes.read(Buffer);
-//while (readed!=-1)
-//    {
-//    if (isEncript())
-//       EncriptPass(Buffer, readed);
-//    if (Bl==null)
-//        Bl=new SerialBlob(Buffer);
-//    else
-//        Bl.setBytes(Tot, Buffer);
-//    Tot+=readed;
-//    readed=Bytes.read(Buffer);
-//    }
-//Bl.truncate(Tot);
-//Bytes.close();
-//BlobStmt.setBlob(4, Bl);
-//BlobStmt.execute();
-//con.commit();
-//con.setAutoCommit(true);
-//Bytes.close();
+URLCon=(HttpURLConnection) OUrl.openConnection();
+URLCon.setDoOutput(true);
+URLCon.setDoInput(true);
+//URLCon.setRequestProperty("Accept-Charset", DriverRemote.charset);
+String BoundString="----------------------"+Long.toString(System.currentTimeMillis(), 16)+"";
+URLCon.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BoundString);
+URLCon.setRequestMethod("POST");
+//URLCon.setReadTimeout(60000);
+URLCon.connect();
+DataOutputStream outputD = new DataOutputStream(URLCon.getOutputStream());
+outputD.writeBytes((BoundString+NEWLINE));
+outputD.writeBytes(("Content-Disposition: form-data; name=\"Order\"\r\n\r\n"+DriverRemote.S_INSFILE+NEWLINE));
+outputD.writeBytes((BoundString+NEWLINE));
+outputD.writeBytes(("Content-Disposition: form-data; name=\"Id\"\r\n\r\n"+Id+NEWLINE));
+outputD.writeBytes((BoundString+NEWLINE));
+outputD.writeBytes(("Content-Disposition: form-data; name=\"Ver\"\r\n\r\n"+Ver+NEWLINE));
+outputD.writeBytes((BoundString+NEWLINE));
+outputD.writeBytes(("Content-Disposition: form-data; name=\"FileUploaded\"; filename=\""+Id+"."+Ver+"\"\r\n\r\n"));
+if (PDLog.isDebug())
+    {  
+    PDLog.Debug(BoundString+NEWLINE);
+    PDLog.Debug("Content-Disposition: form-data; name=\"Order\"\r\n\r\n"+DriverRemote.S_INSFILE+NEWLINE);
+    PDLog.Debug(BoundString+NEWLINE);
+    PDLog.Debug("Content-Disposition: form-data; name=\"Id\"\r\n\r\n"+Id+NEWLINE);
+    PDLog.Debug(BoundString+NEWLINE);
+    PDLog.Debug("Content-Disposition: form-data; name=\"Ver\"\r\n\r\n"+Ver+NEWLINE);
+    PDLog.Debug(BoundString+NEWLINE);
+    PDLog.Debug("Content-Disposition: form-data; name=\"FileUploaded\"; filename=\""+Id+"."+Ver+"\"\r\n\r\n");
+    }
+int readed=Bytes.read(Buffer);
+while (readed!=-1)
+    {
+    outputD.write( Buffer, 0, readed);
+    if (PDLog.isDebug())
+       PDLog.Debug(Arrays.toString(Buffer));
+    Tot+=readed;
+    readed=Bytes.read(Buffer);
+    }
+outputD.writeBytes(NEWLINE+BoundString+"--"+NEWLINE);
+if (PDLog.isDebug())
+   PDLog.Debug(NEWLINE+BoundString+"--"+NEWLINE);
+outputD.flush();
+outputD.close();
+BufferedReader in = null;
+try {
+in = new BufferedReader( new InputStreamReader(URLCon.getInputStream()));
+Answer.setLength(0);
+String Line;
+while ((Line= in.readLine()) != null)
+    Answer.append(Line);
+Document XMLObjects = DB.parse(new ByteArrayInputStream(Answer.toString().getBytes("UTF-8")));
+NodeList OPDObjectList = XMLObjects.getElementsByTagName("Result");
+Node OPDObject = OPDObjectList.item(0);
+if (OPDObject.getTextContent().equalsIgnoreCase("KO"))
+    {
+    OPDObjectList = XMLObjects.getElementsByTagName("Msg");
+    if (OPDObjectList.getLength()>0)
+        {
+        OPDObject = OPDObjectList.item(0);
+        PDException.GenPDException("Server_Error", DriverRemote.DeCodif(OPDObject.getTextContent()));
+        }
+    else
+        PDException.GenPDException("Server_Error", "");
+    }
+OPDObjectList = XMLObjects.getElementsByTagName("Data");
+OPDObject = OPDObjectList.item(0);
+} catch (Exception ex)
+    {
+    PDException.GenPDException(ex.getLocalizedMessage(), "");
+    }
+finally
+    {
+    if (in!=null)
+        {
+        try{
+        in.close();
+        } catch (IOException ex)
+            {
+            ex.printStackTrace();
+            }
+        }
+    URLCon.disconnect();
+    }
 } catch (Exception ex)
     {
     PDException.GenPDException("Error_inserting_content",ex.getLocalizedMessage());
     }
-return (-1); 
+return (Tot); 
+}
+//-----------------------------------------------------------------
+/**
+ * 
+ * @param Id
+ * @param Ver
+ * @param Bytes
+ * @return
+ * @throws PDException
+ */
+protected int Insert(String Id, String Ver, InputStream Bytes) throws PDException
+{
+VerifyId(Id);
+int Tot=0;
+try {
+String boundary = MultiPartFormOutputStream.createBoundary();
+URLCon=(HttpURLConnection) OUrl.openConnection();
+URLCon.setDoOutput(true);
+URLCon.setDoInput(true);
+URLCon.setRequestProperty("Accept", "*/*");
+URLCon.setRequestProperty("Content-Type", 
+ MultiPartFormOutputStream.getContentType(boundary));
+// set some other request headers...
+URLCon.setRequestProperty("Connection", "Keep-Alive");
+URLCon.setRequestProperty("Cache-Control", "no-cache");
+MultiPartFormOutputStream MPOut = new MultiPartFormOutputStream(URLCon.getOutputStream(), boundary);
+MPOut.writeField("Order", DriverRemote.S_INSFILE);
+MPOut.writeField("Id", Id);
+MPOut.writeField("Ver", Ver);
+MPOut.writeFile("FileUploaded", null, Id+"."+Ver, Bytes);
+MPOut.close();
+BufferedReader in = null;
+try {
+in = new BufferedReader( new InputStreamReader(URLCon.getInputStream()));
+Answer.setLength(0);
+String Line;
+while ((Line= in.readLine()) != null)
+    Answer.append(Line);
+Document XMLObjects = DB.parse(new ByteArrayInputStream(Answer.toString().getBytes("UTF-8")));
+NodeList OPDObjectList = XMLObjects.getElementsByTagName("Result");
+Node OPDObject = OPDObjectList.item(0);
+if (OPDObject.getTextContent().equalsIgnoreCase("KO"))
+    {
+    OPDObjectList = XMLObjects.getElementsByTagName("Msg");
+    if (OPDObjectList.getLength()>0)
+        {
+        OPDObject = OPDObjectList.item(0);
+        PDException.GenPDException("Server_Error", DriverRemote.DeCodif(OPDObject.getTextContent()));
+        }
+    else
+        PDException.GenPDException("Server_Error", "");
+    }
+OPDObjectList = XMLObjects.getElementsByTagName("Data");
+OPDObject = OPDObjectList.item(0);
+} catch (Exception ex)
+    {
+    PDException.GenPDException(ex.getLocalizedMessage(), "");
+    }
+finally
+    {
+    if (in!=null)
+        {
+        try{
+        in.close();
+        } catch (IOException ex)
+            {
+            ex.printStackTrace();
+            }
+        }
+    URLCon.disconnect();
+    }
+} catch (Exception ex)
+    {
+    PDException.GenPDException("Error_inserting_content",ex.getLocalizedMessage());
+    }
+return (Tot); 
 }
 //-----------------------------------------------------------------
 /**
@@ -152,12 +288,7 @@ protected void Delete(String Id, String Ver) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("StoreRem.Delete:"+Id+"/"+Ver);
-try {
-ReadWrite(DriverGeneric.S_DELFILE, "<OPD></OPD>");
-} catch (Exception ex)
-    {
-    PDException.GenPDException("Error_deleting",ex.getLocalizedMessage());
-    }
+ReadWrite(DriverGeneric.S_DELFILE, "<OPD><Id>"+Id+"</Id><Ver>"+Ver+"</Ver></OPD>");
 }
 //-----------------------------------------------------------------
 /**
@@ -170,15 +301,36 @@ ReadWrite(DriverGeneric.S_DELFILE, "<OPD></OPD>");
 protected InputStream Retrieve(String Id, String Ver) throws PDException
 {
 VerifyId(Id);
+VerifyId(Id);
+int Tot=0;
+if (PDLog.isDebug())
+    PDLog.Debug("Retrieve: "+Id+"/"+Ver);
 try {
-//String SQL = "SELECT PDCONT FROM "+getTable()+" where PDId='"+Id+"' and PDVersion='"+Ver+"'";
-//PreparedStatement BlobStmt = con.prepareStatement(SQL);
-//ResultSet resultSet = BlobStmt.executeQuery();
-//while (resultSet.next())
-//    {
-//    return (resultSet.getBinaryStream(1));
-//    }
-//PDException.GenPDException("Inexistent_content", Id+"/"+Ver);
+URLCon=(HttpURLConnection) OUrl.openConnection();
+URLCon.setDoOutput(true);
+URLCon.setDoInput(true);
+URLCon.setRequestProperty("Accept-Charset", DriverRemote.charset);
+URLCon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + DriverRemote.charset);
+URLCon.setRequestMethod("POST");
+//URLCon.setReadTimeout(60000);
+String SumPar=DriverRemote.ORDER+"="+DriverRemote.S_RETRIEVEFILE+"&"+DriverRemote.PARAM+"=<OPD><Id>"+Id+"</Id><Ver>"+Ver+"</Ver></OPD>";
+URLCon.setRequestProperty("Content-Length", "" + SumPar.getBytes(DriverRemote.charset).length );
+URLCon.connect();
+output = new OutputStreamWriter(URLCon.getOutputStream());
+output.write(SumPar);
+output.close(); 
+} catch (Exception Ex)
+    {
+     try { 
+     output.close(); 
+     } catch (IOException ex) 
+        {
+        ex.printStackTrace();
+        } 
+    PDException.GenPDException("Error_retrieving_content", Ex.getLocalizedMessage());
+    } 
+try {
+return(URLCon.getInputStream());
 } catch (Exception ex)
     {
     PDException.GenPDException("Error_retrieving_content", ex.getLocalizedMessage());
@@ -213,19 +365,17 @@ URLCon.setRequestProperty("Content-Length", "" + SumPar.getBytes(DriverRemote.ch
 URLCon.connect();
 output = new OutputStreamWriter(URLCon.getOutputStream());
 output.write(SumPar);
+output.close(); 
 } catch (Exception Ex)
-    {
-    Ex.printStackTrace();
-    } 
-finally 
     {
      try { 
      output.close(); 
      } catch (IOException ex) 
         {
         ex.printStackTrace();
-        }
-    }
+        } 
+    PDException.GenPDException("Error_retrieving_content", Ex.getLocalizedMessage());
+    } 
 InputStream in=null;
 try {
 in=URLCon.getInputStream();
@@ -253,27 +403,6 @@ finally
         }
     URLCon.disconnect();
     }
-   
-//String SQL = "SELECT PDCONT FROM "+getTable()+" where PDId='"+Id+"' and PDVersion='"+Ver+"'";
-//PreparedStatement BlobStmt = con.prepareStatement(SQL);
-//ResultSet resultSet = BlobStmt.executeQuery();
-//if (resultSet.next())
-//    {
-//    InputStream in=resultSet.getBinaryStream(1);
-//    int readed=in.read(Buffer);
-//    while (readed!=-1)
-//        {
-//        if (isEncript())
-//           DecriptPass(Buffer, readed);
-//        fo.write(Buffer, 0, readed);
-//        Tot+=readed;
-//        readed=in.read(Buffer);
-//        }
-//    in.close();
-//    fo.flush();
-//    fo.close();
-//    }
-//resultSet.close();
 return(Tot);
 }
 //-----------------------------------------------------------------
@@ -289,12 +418,7 @@ return(Tot);
 protected void Rename(String Id1, String Ver1, String Id2, String Ver2) throws PDException
 {
 VerifyId(Id1);
-try {
-ReadWrite(DriverGeneric.S_RENFILE, "<OPD></OPD>");
-} catch (Exception ex)
-    {
-    PDException.GenPDException("Error_renaming_content:",ex.getLocalizedMessage());
-    }
+ReadWrite(DriverGeneric.S_RENFILE, "<OPD><Id1>"+Id1+"</Id1><Ver1>"+Ver1+"</Ver1><Id2>"+Id2+"</Id2><Ver2>"+Ver2+"</Ver2></OPD>");
 }
 //-----------------------------------------------------------------
 private Node ReadWrite(String pOrder, String pParam) throws PDException

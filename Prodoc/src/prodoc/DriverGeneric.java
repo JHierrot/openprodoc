@@ -112,6 +112,7 @@ static final public String S_CANCEL   ="CANCEL";    // Ok
 static final public String S_DELFILE   ="DELFILE";    
 static final public String S_RENFILE   ="RENFILE";    
 static final public String S_RETRIEVEFILE   ="RETRIEVEFILE";    
+static final public String S_INSFILE   ="INSFILE";    
 
 /**
  *
@@ -1789,14 +1790,14 @@ if (Order.equals(S_SELECT))
     {
     return("<OPD><Result>OK</Result><Data>"+GenVector(XMLObjects)+"</Data></OPD>");
     }
-//else if (Order.equals(S_DELFILE))
-//    {
-////    return("<OPD><Result>OK</Result><Data>"+UpdateRecord(XMLObjects)+"</Data></OPD>");    
-//    }
-//else if (Order.equals(S_RENFILE))
-//    {
-////    return("<OPD><Result>OK</Result><Data>"+UpdateRecord(XMLObjects)+"</Data></OPD>");    
-//    }
+else if (Order.equals(S_DELFILE))
+    {
+    return("<OPD><Result>OK</Result><Data>"+DeleteFile(XMLObjects)+"</Data></OPD>");    
+    }
+else if (Order.equals(S_RENFILE))
+    {
+    return("<OPD><Result>OK</Result><Data>"+RenameFile(XMLObjects)+"</Data></OPD>");    
+    }
 else if (Order.equals(S_UPDATE))
     {
     return("<OPD><Result>OK</Result><Data>"+UpdateRecord(XMLObjects)+"</Data></OPD>");    
@@ -2002,7 +2003,12 @@ AddIntegrity(Tab1, Field1, Tab2, Field2);
 return("");
 }
 //---------------------------------------------------------------------
-// <Tab1>"+TableName1+"</Tab1><Field11>"+Field11+"</Field11><Field12>"+Field12+"</Field12><Tab2>"+TableName2+"</Tab2><Field21>"+Field21+"</Field21><Field22>"+Field22+"</Field22></OPD>");
+/**
+ * 
+ * @param XMLObjects
+ * @return
+ * @throws PDException 
+ */
 private String AddIntegrity2(Document XMLObjects) throws PDException
 {
 NodeList OPDObjectList = XMLObjects.getElementsByTagName("Tab1");
@@ -2034,6 +2040,83 @@ return("");
 protected boolean IsRemote()
 {
 return(false);
+}
+//---------------------------------------------------------------------
+/**
+ * 
+ * @param XMLObjects
+ * @return 
+ */
+private String DeleteFile(Document XMLObjects) throws PDException
+{
+NodeList OPDObjectList = XMLObjects.getElementsByTagName("Id");
+Node OPDObject = OPDObjectList.item(0);
+String Id=OPDObject.getTextContent();
+OPDObjectList = XMLObjects.getElementsByTagName("Ver");
+OPDObject = OPDObjectList.item(0);
+String Ver=OPDObject.getTextContent();
+if (PDLog.isDebug())
+    PDLog.Debug("DriverGeneric.DeleteFile:"+Id+"/"+Ver);    
+PDDocs doc=new PDDocs(this);
+doc.setPDId(Id);
+doc.LoadVersion(Id, Ver);
+StoreGeneric Rep=getRepository(doc.getReposit());
+if (!Rep.IsRef())
+    {
+    Rep.Connect();
+    Rep.Delete(Id, Ver);
+    Rep.Disconnect();
+    }
+return("");
+}
+//---------------------------------------------------------------------
+/**
+ * 
+ * @param XMLObjects
+ * @return 
+ */
+private String RenameFile(Document XMLObjects) throws PDException
+{
+NodeList OPDObjectList = XMLObjects.getElementsByTagName("Id1");
+Node OPDObject = OPDObjectList.item(0);
+String Id1=OPDObject.getTextContent();
+OPDObjectList = XMLObjects.getElementsByTagName("Ver1");
+OPDObject = OPDObjectList.item(0);
+String Ver1=OPDObject.getTextContent();
+OPDObjectList = XMLObjects.getElementsByTagName("Id2");
+OPDObject = OPDObjectList.item(0);
+String Id2=OPDObject.getTextContent();
+OPDObjectList = XMLObjects.getElementsByTagName("Ver2");
+OPDObject = OPDObjectList.item(0);
+String Ver2=OPDObject.getTextContent();
+if (PDLog.isDebug())
+    PDLog.Debug("DriverGeneric.RenameFile:"+Id1+"/"+Ver1+"->"+Id2+"/"+Ver2);    
+PDDocs doc=new PDDocs(this);
+doc.setPDId(Id1);
+doc.LoadVersion(Id1, Ver1);
+StoreGeneric Rep=getRepository(doc.getReposit());
+if (!Rep.IsRef())
+    {
+    Rep.Connect();
+    Rep.Rename(Id1, Ver1, Id2, Ver2);
+    Rep.Disconnect();
+    }
+return("");
+}
+//---------------------------------------------------------------------
+/**
+ * 
+ * @param Id
+ * @param Ver
+ * @param FileData
+ * @throws PDException 
+ */
+public void InsertFile(String Id, String Ver, InputStream FileData) throws PDException
+{
+PDDocs Doc=new PDDocs(this);
+Doc.Load(Id);
+StoreGeneric St=getRepository(Doc.getReposit());
+St.Insert(Id, Ver, FileData);
 }
 //---------------------------------------------------------------------
 }

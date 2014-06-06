@@ -350,23 +350,6 @@ for (int i = 0; i < RecLst.getLength(); i++)
     Node Rec = RecLst.item(i);
     Record R=new Record();
     R=Record.CreateFromXML(Rec);
-//    NodeList AttrLst = Rec.getChildNodes();
-//    for (int j = 0; j < AttrLst.getLength(); j++)
-//        {
-//        Node Attr = RecLst.item(j);
-//        if (Attr.getNodeName().equalsIgnoreCase("attr"))   
-//            {
-//            NamedNodeMap XMLattributes = Attr.getAttributes();
-//            Node XMLAttrName = XMLattributes.getNamedItem("Name");
-//            String AttrName=XMLAttrName.getNodeValue();
-//            XMLAttrName = XMLattributes.getNamedItem("Type");
-//            int Type=Integer.parseInt(XMLAttrName.getNodeValue());
-//            String Value=Attr.getTextContent(); 
-//            Attribute At=new Attribute(AttrName, "", "", Type, false, null, 254, false, false, false);
-//            At.Import(Value);
-//            R.addAttr(At);
-//            }
-//        }
     Res.add(R);
     }
 return(StoreCursor(Res, Search.getRetrieveFields()));
@@ -411,7 +394,7 @@ private Node ReadWrite(String pOrder, String pParam) throws PDException
 Node OPDObject =null;
 if (PDLog.isDebug())
     {
-    PDLog.Debug("ReadWrite: Order:"+pOrder);
+    PDLog.Debug("DriverRemote. ReadWrite: Order:"+pOrder);
     PDLog.Debug("Param:"+pParam);
     }
 try {
@@ -518,7 +501,7 @@ if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.getRepository>:"+RepName);
 PDRepository RepDesc=new PDRepository(this);
 RepDesc.Load(RepName);
-StoreGeneric Rep=new StoreRem(RepDesc.getURL(), RepDesc.getUser(), RepDesc.getPassword(), RepDesc.getParam(), RepDesc.isEncrypted(), OUrl, DB );
+StoreGeneric Rep=new StoreRem(RepDesc.getURL(), RepDesc.getUser(), RepDesc.getPassword(), RepDesc.getParam(), RepDesc.isEncrypted(), OUrl, URLCon, DB );
 return(Rep);
 }
 //-----------------------------------------------------------------------------------
