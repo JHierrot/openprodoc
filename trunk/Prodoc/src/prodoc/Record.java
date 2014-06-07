@@ -432,6 +432,26 @@ S.append("</Rec>");
 return(S.toString());
 }
 //--------------------------------------------------------------------------
+/**
+ * Converts all the attributes of the record to XML
+ * @return the XML with the attributes.
+ * @throws PDException  
+ */
+public String toXMLtNotNull() throws PDException
+{
+StringBuilder S=new StringBuilder(500);
+S.append("<Rec>");
+initList();
+for (int i = 0; i < NumAttr(); i++)
+    {
+    Attribute At=nextAttr(); 
+    if (At.getValue()!=null)
+        S.append(At.toXMLt());
+    }
+S.append("</Rec>");
+return(S.toString());
+}
+//--------------------------------------------------------------------------
 static Record FillFromXML(Node AttrsNode, Record R) throws PDException
 {
 NodeList AttrLst = AttrsNode.getChildNodes();
@@ -468,7 +488,7 @@ for (int j = 0; j < AttrLst.getLength(); j++)
         int Type=Integer.parseInt(XMLAttrName.getNodeValue());
         String Value=DriverRemote.DeCodif(Attr.getTextContent()); 
         Attribute At=new Attribute(AttrName, "", "", Type, false, null, 254, false, false, false);
-        if (Value.length()!=0)
+        if (Type==Attribute.tSTRING || Value.length()!=0)
             At.Import(Value);
         R.addAttr(At);
         }
