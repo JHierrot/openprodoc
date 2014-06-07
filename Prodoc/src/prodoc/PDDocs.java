@@ -1410,7 +1410,7 @@ if (!getDrv().getUser().getAclList().containsKey(ActACL))
     PDExceptionFunc.GenPDException("User_without_permissions_over_document",Ident);
     }
 Attribute UsuBloq=r.getAttr(fLOCKEDBY);
-if (UsuBloq.getValue()!=null && ((String)UsuBloq.getValue()).equalsIgnoreCase(getDrv().getUser().getName()))
+if (UsuBloq.getValue()!=null && ((String)UsuBloq.getValue()).length()!=0 && ((String)UsuBloq.getValue()).equalsIgnoreCase(getDrv().getUser().getName()))
     {// locked by actual user, return in-edition metadata
 //    LoadAct=new Query(getTabNameVer(), getRecordStruct(), getConditions(), null);
     Conditions Cond=getConditions();

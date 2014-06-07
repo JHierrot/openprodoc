@@ -239,7 +239,7 @@ protected void UpdateRecord(String TableName, Record NewFields, Conditions UpCon
 {
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.UpdateRecord>:"+TableName+"="+NewFields);
-ReadWrite(S_UPDATE, "<OPD><Tab>"+TableName+"</Tab>"+NewFields.toXMLt()+"<UpConds>"+UpConds.toXML()+"</UpConds></OPD>");
+ReadWrite(S_UPDATE, "<OPD><Tab>"+TableName+"</Tab>"+NewFields.toXMLtNotNull()+"<UpConds>"+UpConds.toXML()+"</UpConds></OPD>");
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.UpdateRecord<:"+TableName+"="+NewFields);
 }
