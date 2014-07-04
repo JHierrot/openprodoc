@@ -108,6 +108,7 @@ static final public String S_INTEGRIT2="INTEGRIT2";  // Ok
 static final public String S_INITTRANS="INITTRANS";  // Ok
 static final public String S_COMMIT   ="COMMIT";    // Ok
 static final public String S_CANCEL   ="CANCEL";    // Ok
+static final public String S_UNLOCK   ="UNLOCK"; // Ok
 
 static final public String S_DELFILE   ="DELFILE";    
 static final public String S_RENFILE   ="RENFILE";    
@@ -2118,5 +2119,16 @@ Doc.Load(Id);
 StoreGeneric St=getRepository(Doc.getReposit());
 St.Insert(Id, Ver, FileData);
 }
+//-----------------------------------------------------------------   
+static public String Codif(String Text)
+{
+return(Text.replace('<', '^').replace("%", "¡1").replace("&", "¡2"));
+}    
+//-----------------------------------------------------------------   
+static public String DeCodif(String Text)
+{
+return(Text.replace('^', '<').replace("¡1", "%").replace("¡2","&"));
+}    
 //---------------------------------------------------------------------
+
 }

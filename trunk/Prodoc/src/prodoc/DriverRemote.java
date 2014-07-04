@@ -19,19 +19,27 @@
 
 package prodoc;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.net.CookiePolicy;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.apache.http.Consts;
+import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.config.ConnectionConfig;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -43,17 +51,24 @@ import org.w3c.dom.NodeList;
  */
 public class DriverRemote  extends DriverGeneric
 {
+//URL OUrl=null;
+//URLConnection OUrlc=null;
+//HttpURLConnection URLCon=null;
 
-URL OUrl=null;
-URLConnection OUrlc=null;
-HttpURLConnection URLCon=null;
+static private PoolingHttpClientConnectionManager cm=null;
+private CloseableHttpClient httpclient;
+private HttpContext context;
+private HttpPost UrlPost;
+
 static final String charset="UTF-8";
 OutputStreamWriter output;
-private static final String NEWLINE = "\r\n";
+//private static final String NEWLINE = "\r\n";
 public static final String ORDER="Order";
 public static final String PARAM="Param";
 boolean Conected=false;
 StringBuilder Answer=new StringBuilder(3000);
+//private List<String> cookies =null;
+//private String SessionID =null;
 
 final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyyMMddHHmmss");
 /**
@@ -77,15 +92,18 @@ super(pURL, pPARAM, pUser, pPassword);
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.DriverRemote>:"+pURL+"/"+pUser+"/"+pPARAM);
 try {
-OUrl=new URL(pURL); 
+//OUrl=new URL(pURL); 
+httpclient=GetHttpClient();
+UrlPost = new HttpPost(pURL);
+context = new BasicHttpContext();
 DB =  DocumentBuilderFactory.newInstance().newDocumentBuilder();
 } catch (Exception ex)
     {
     PDException.GenPDException("Error_connecting_trough_URL"+pURL,ex.getLocalizedMessage());
     }
-java.net.CookieManager cm = new java.net.CookieManager();
-cm.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
-java.net.CookieHandler.setDefault(cm);
+//java.net.CookieManager cm = new java.net.CookieManager();
+//cm.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+//java.net.CookieHandler.setDefault(cm);
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.DriverRemote<");
 }
@@ -120,11 +138,12 @@ public void delete() throws PDException
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.delete>:"+getURL());
 try {
-OUrl=null;
+httpclient.close();
+httpclient=null;
 Conected=false;
 } catch (Exception ex)
     {
-    PDException.GenPDException("Error_closing_JDBC_connection",ex.getLocalizedMessage());
+    PDException.GenPDException("Error_closing_remote_connection",ex.getLocalizedMessage());
     }
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.delete<:"+getURL());
@@ -389,52 +408,30 @@ rs.remove(0);
 return(Fields.Copy());
 }
 //-----------------------------------------------------------------------------------
+/**
+ * Communicates to the OpenProdoc Server by http sending instructionss
+ * @param pOrder Order to execute
+ * @param pParam Parameters of the order (can be empty or null depending on order
+ * @return an xml node extracted form XML answer.
+ * @throws PDException in any error
+ */
 private Node ReadWrite(String pOrder, String pParam) throws PDException
 {
-Node OPDObject =null;
+Node OPDObject=null;
+CloseableHttpResponse response2 = null;
 if (PDLog.isDebug())
     {
     PDLog.Debug("DriverRemote. ReadWrite: Order:"+pOrder);
     PDLog.Debug("Param:"+pParam);
     }
 try {
-URLCon=(HttpURLConnection) OUrl.openConnection();
-URLCon.setDoOutput(true);
-URLCon.setDoInput(true);
-URLCon.setRequestProperty("Accept-Charset", charset);
-URLCon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + charset);
-URLCon.setRequestMethod("POST");
-//URLCon.setReadTimeout(60000);
-String Param="";
-if (pParam!=null && pParam.length()!=0)
-    Param=PARAM+"="+pParam; // TODO Encode
-String Order=ORDER+"="+pOrder;
-String SumPar=Order+"&"+Param;
-URLCon.setRequestProperty("Content-Length", "" + SumPar.getBytes(charset).length );
-URLCon.connect();
-output = new OutputStreamWriter(URLCon.getOutputStream());
-output.write(SumPar);
-} catch (Exception Ex)
-    {
-    Ex.printStackTrace();
-    } 
-finally 
-    {
-     try { 
-     output.close(); 
-     } catch (IOException ex) 
-        {
-        ex.printStackTrace();
-        }
-    }
-BufferedReader in = null;
-try {
-in = new BufferedReader( new InputStreamReader(URLCon.getInputStream()));
-Answer.setLength(0);
-String Line;
-while ((Line= in.readLine()) != null)
-    Answer.append(Line);
-Document XMLObjects = DB.parse(new ByteArrayInputStream(Answer.toString().getBytes("UTF-8")));
+List <NameValuePair> nvps = new ArrayList <NameValuePair>();
+nvps.add(new BasicNameValuePair(ORDER, pOrder));
+nvps.add(new BasicNameValuePair(PARAM, pParam));
+UrlPost.setEntity(new UrlEncodedFormEntity(nvps));
+response2 = httpclient.execute(UrlPost, context);
+HttpEntity Resp=response2.getEntity();
+Document XMLObjects = DB.parse(Resp.getContent());
 NodeList OPDObjectList = XMLObjects.getElementsByTagName("Result");
 OPDObject = OPDObjectList.item(0);
 if (OPDObject.getTextContent().equalsIgnoreCase("KO"))
@@ -443,7 +440,7 @@ if (OPDObject.getTextContent().equalsIgnoreCase("KO"))
     if (OPDObjectList.getLength()>0)
         {
         OPDObject = OPDObjectList.item(0);
-        PDException.GenPDException("Server_Error", DriverRemote.DeCodif(OPDObject.getTextContent()));
+        PDException.GenPDException("Server_Error", DriverGeneric.DeCodif(OPDObject.getTextContent()));
         }
     else
         PDException.GenPDException("Server_Error", "");
@@ -456,29 +453,16 @@ OPDObject = OPDObjectList.item(0);
     }
 finally
     {
-    if (in!=null)
-        {
-        try{
-        in.close();
-        } catch (IOException ex)
+    if (response2!=null)    
+        try {
+            response2.close();
+        } catch (IOException ex) 
             {
-            ex.printStackTrace();
+            PDException.GenPDException(ex.getLocalizedMessage(), "");
             }
-        }
-    URLCon.disconnect();
     }
 return(OPDObject);
 }
-//-----------------------------------------------------------------   
-static public String Codif(String Text)
-{
-return(Text.replace('<', '^').replace("%", "¡1").replace("&", "¡2"));
-}    
-//-----------------------------------------------------------------   
-static public String DeCodif(String Text)
-{
-return(Text.replace('^', '<').replace("¡1", "%").replace("¡2","&"));
-}    
 //-----------------------------------------------------------------   
 /**
  * Allows to decide how to download file
@@ -501,9 +485,153 @@ if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.getRepository>:"+RepName);
 PDRepository RepDesc=new PDRepository(this);
 RepDesc.Load(RepName);
-StoreGeneric Rep=new StoreRem(RepDesc.getURL(), RepDesc.getUser(), RepDesc.getPassword(), RepDesc.getParam(), RepDesc.isEncrypted(), OUrl, URLCon, DB );
+StoreGeneric Rep=new StoreRem(RepDesc.getURL(), RepDesc.getUser(), RepDesc.getPassword(), RepDesc.getParam(), RepDesc.isEncrypted(), UrlPost, httpclient, context, DB );
 return(Rep);
 }
 //-----------------------------------------------------------------------------------
+/**
+ * 
+ * @throws PDException 
+ */
+void Logout() throws PDException
+{
+if (PDLog.isDebug()) 
+    PDLog.Debug("DriverRemote.Logout");
+try {
+ReadWrite(S_LOGOUT, "<OPD></OPD>");
+} catch (Exception ex)
+    {
+    PDException.GenPDException("Error_in_Logout",ex.getLocalizedMessage());
+    }
+}
+//-----------------------------------------------------------------------------------
+/**
+ *
+ */
+@Override
+public void UnLock()
+{
+if (PDLog.isDebug()) 
+    PDLog.Debug("DriverRemote.UnLock");
+try {
+ReadWrite(S_UNLOCK, "<OPD></OPD>");
+super.UnLock();
+} catch (Exception ex)
+    {
+    PDLog.Error(ex.getLocalizedMessage());
+    }
+}
+//-----------------------------------------------------------------------------------
+//private Node ReadWrite(String pOrder, String pParam) throws PDException
+//{
+//Node OPDObject =null;
+//if (PDLog.isDebug())
+//    {
+//    PDLog.Debug("DriverRemote. ReadWrite: Order:"+pOrder);
+//    PDLog.Debug("Param:"+pParam);
+//    }
+//try {
+//URLCon=(HttpURLConnection) OUrl.openConnection();
+//URLCon.setDoOutput(true);
+//URLCon.setDoInput(true);
+//URLCon.setRequestProperty("Accept-Charset", charset);
+//URLCon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + charset);
+//if (SessionID!=null)
+//    {
+//    URLCon.addRequestProperty("Cookie", "JSESSIONID="+SessionID);
+//    }
+//URLCon.setUseCaches(false);
+//URLCon.setDefaultUseCaches(false);
+//URLCon.setRequestMethod("POST");
+////URLCon.setReadTimeout(60000);
+//String Param="";
+//if (pParam!=null && pParam.length()!=0)
+//    Param=PARAM+"="+pParam; // TODO Encode
+//String Order=ORDER+"="+pOrder;
+//String SumPar=Order+"&"+Param;
+//URLCon.setRequestProperty("Content-Length", "" + SumPar.getBytes(charset).length );
+//URLCon.connect();
+//output = new OutputStreamWriter(URLCon.getOutputStream());
+//output.write(SumPar);
+//} catch (Exception Ex)
+//    {
+//    Ex.printStackTrace();
+//    } 
+//finally 
+//    {
+//     try { 
+//     output.close(); 
+//     } catch (IOException ex) 
+//        {
+//        ex.printStackTrace();
+//        }
+//    }
+//BufferedReader in = null;
+//try {
+//in = new BufferedReader( new InputStreamReader(URLCon.getInputStream()));
+//Answer.setLength(0);
+//String Line;
+//while ((Line= in.readLine()) != null)
+//    Answer.append(Line);
+//String wholeCookie = URLCon.getHeaderField("Set-Cookie");  
+//if(wholeCookie != null) 
+//  SessionID = wholeCookie.split(";")[0].split("JSESSIONID=")[1];  
+//Document XMLObjects = DB.parse(new ByteArrayInputStream(Answer.toString().getBytes("UTF-8")));
+//NodeList OPDObjectList = XMLObjects.getElementsByTagName("Result");
+//OPDObject = OPDObjectList.item(0);
+//if (OPDObject.getTextContent().equalsIgnoreCase("KO"))
+//    {
+//    OPDObjectList = XMLObjects.getElementsByTagName("Msg");
+//    if (OPDObjectList.getLength()>0)
+//        {
+//        OPDObject = OPDObjectList.item(0);
+//        PDException.GenPDException("Server_Error", DriverRemote.DeCodif(OPDObject.getTextContent()));
+//        }
+//    else
+//        PDException.GenPDException("Server_Error", "");
+//    }
+//OPDObjectList = XMLObjects.getElementsByTagName("Data");
+//OPDObject = OPDObjectList.item(0);
+//} catch (Exception ex)
+//    {
+//    PDException.GenPDException(ex.getLocalizedMessage(), "");
+//    }
+//finally
+//    {
+//    if (in!=null)
+//        {
+//        try{
+//        in.close();
+//        } catch (IOException ex)
+//            {
+//            ex.printStackTrace();
+//            }
+//        }
+//    URLCon.disconnect();
+//    }
+//return(OPDObject);
+//}
+////-----------------------------------------------------------------   
+
+private CloseableHttpClient GetHttpClient()
+{
+//CloseableHttpClient httpclient = HttpClients.custom()
+//                .setConnectionManager(GenPool())
+//                .build();    
+CloseableHttpClient httpclient = HttpClients.createDefault();
+return(httpclient);
+}
+
+static synchronized private PoolingHttpClientConnectionManager GenPool()
+{
+if (cm==null)
+    {
+    cm = new PoolingHttpClientConnectionManager();
+    cm.setMaxTotal(100);
+    ConnectionConfig connectionConfig = ConnectionConfig.custom().setCharset(Consts.UTF_8).build();
+    cm.setDefaultConnectionConfig(connectionConfig);
+    }
+return(cm);
+}   
 
 }

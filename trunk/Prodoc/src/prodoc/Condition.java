@@ -284,7 +284,7 @@ switch (cType)
         XML.append("<Comp>").append(Comparation).append("</Comp>");
         XML.append("<Val>");
         if (TypeVal==Attribute.tSTRING)
-            XML.append(DriverRemote.Codif((String)Value)); // to avoid false XML tags
+            XML.append(DriverGeneric.Codif((String)Value)); // to avoid false XML tags
         else if (TypeVal==Attribute.tTIMESTAMP)
             XML.append(formatterTS.format((Date)Value));
         else if (TypeVal==Attribute.tDATE)
@@ -302,7 +302,7 @@ switch (cType)
         for (Object object : l)
             {
             if (object instanceof String)
-                XML.append(DriverRemote.Codif((String)object)).append(StringListSeparator); // to avoid false XML tags
+                XML.append(DriverGeneric.Codif((String)object)).append(StringListSeparator); // to avoid false XML tags
             else if (object instanceof Date)
                 XML.append(formatterDate.format((Date)object)).append(StringListSeparator);
             else if (object instanceof Boolean)
@@ -366,7 +366,7 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
                 {
                 String ValS=St.nextToken();    
                 if (TypeVal==Attribute.tSTRING)
-                    List.add(DriverRemote.DeCodif(ValS)); // to avoid false XML tags
+                    List.add(DriverGeneric.DeCodif(ValS)); // to avoid false XML tags
                 else if (TypeVal==Attribute.tTIMESTAMP && ValS.length()!=0)
                     {
                     try {
@@ -395,7 +395,7 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
         else
             {
             if (TypeVal==Attribute.tSTRING)
-                Value=DriverRemote.DeCodif(Cont); // to avoid false XML tags
+                Value=DriverGeneric.DeCodif(Cont); // to avoid false XML tags
             else if (TypeVal==Attribute.tTIMESTAMP && Cont.length()!=0)
                 {
                 try {

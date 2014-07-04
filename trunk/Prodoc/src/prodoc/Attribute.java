@@ -576,7 +576,7 @@ else
 private Object FormatImport(String Val) throws PDException
 {
 if (getType()==Attribute.tSTRING)
-    return(DriverRemote.Codif(Val));
+    return(DriverGeneric.Codif(Val));
 else if (getType()==Attribute.tTHES)
     return(Val);
 else if (getType()==Attribute.tINTEGER)
