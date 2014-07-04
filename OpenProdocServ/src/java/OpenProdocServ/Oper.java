@@ -89,7 +89,7 @@ if (request.getParameter(DriverRemote.ORDER)==null)
     {
     PrintWriter out = response.getWriter();      
     Answer(request, out, "<OPD><Result>KO</Result><Msg>Disconnected</Msg></OPD>");
-    out.flush();
+//    out.flush();
     out.close();
     return;
     }
@@ -108,14 +108,14 @@ if (Connected(request) || Order.equals(DriverGeneric.S_LOGIN))
     {
     PrintWriter out = response.getWriter();      
     ProcessPage(request, out);
-    out.flush();
+//    out.flush();
     out.close();
     }
 else
     {
     PrintWriter out = response.getWriter();      
     Answer(request, out, false, "<OPD><Result>KO</Result><Msg>Disconnected</Msg></OPD>", null);
-    out.flush();
+//    out.flush();
     out.close();
     }
 } catch (Exception e)
@@ -124,7 +124,7 @@ else
     AddLog(e.getMessage());
     Answer(request, out, false, e.getMessage(), null);
     e.printStackTrace();
-    out.flush();
+//    out.flush();
     out.close();
     }
 }
@@ -224,8 +224,9 @@ if (Order.equals(DriverGeneric.S_LOGIN))
     Answer(Req, out, true, null, null);
     return;    
     }
-else if (Order.equals(DriverGeneric.S_LOGOUT)) 
+else if (Order.equals(DriverGeneric.S_UNLOCK)) 
     {
+    getSessOPD(Req).UnLock();
     Req.getSession().setAttribute("PRODOC_SESS", null);   
     Answer(Req, out, true, null, null);
     return;    
@@ -411,7 +412,7 @@ String Ver=(String) ListFields.get("Ver");
 PDSession.InsertFile(Id, Ver, FileData);
 PrintWriter out = response.getWriter(); 
 Answer(Req, out, true, null, null);
-out.flush();
+//out.flush();
 out.close();
 }
 //----------------------------------------------------------   
