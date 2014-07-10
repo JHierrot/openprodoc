@@ -139,6 +139,7 @@ HttpEntity reqEntity = MultipartEntityBuilder.create()
 UrlPost.setEntity(reqEntity);
 response2 = httpclient.execute(UrlPost, context);
 HttpEntity Resp=response2.getEntity();
+Bytes.close();
 Document XMLObjects = DB.parse(Resp.getContent());
 NodeList OPDObjectList = XMLObjects.getElementsByTagName("Result");
 OPDObject = OPDObjectList.item(0);
@@ -159,6 +160,7 @@ if (OPDObject.getTextContent().equalsIgnoreCase("KO"))
     }
 finally
     {
+    DB.reset();
     if (response2!=null)    
         try {
             response2.close();
