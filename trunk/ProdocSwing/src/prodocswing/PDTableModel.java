@@ -37,8 +37,10 @@ private Record ListFields = null;
 private Cursor CursorId = null;
 private int NumRows=0;
 private Vector ListRes=new Vector();
-private SimpleDateFormat formatterTS = MainWin.getFormatterTS();
-private SimpleDateFormat formatterDate = MainWin.getFormatterDate();
+//private SimpleDateFormat formatterTS = MainWin.getFormatterTS();
+//private SimpleDateFormat formatterDate = MainWin.getFormatterDate();
+static private SimpleDateFormat formatterTS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+static private SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
 
 //-------------------------------------------------------------
 /**
