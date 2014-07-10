@@ -1741,6 +1741,7 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
         Tot++;
         }
     }
+DB.reset();
 return(Tot);
 }catch(Exception ex)
     {
@@ -1869,6 +1870,7 @@ while (R!=null)
     Res.append(R.toXMLt());
     R=NextRec(C);
     }
+delCursor(C);
 return(Res.toString());
 }
 //---------------------------------------------------------------------

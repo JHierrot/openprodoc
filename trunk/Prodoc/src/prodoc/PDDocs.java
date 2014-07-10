@@ -966,6 +966,8 @@ if (Rep.IsURL())
 try {    
 Rep.Connect();
 Rep.Retrieve(getPDId(), getVersion(), OutBytes);
+Rep.Disconnect();
+Rep=null;
 } catch(Exception ex)
     {
     Rep.Disconnect();
@@ -2477,6 +2479,7 @@ for (int NumDocs=0; NumDocs<DocList.getLength(); NumDocs++)
             }
         }
     }
+DB.reset();
 return(ImageFile);
 }catch(Exception ex)
     {

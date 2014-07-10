@@ -1360,6 +1360,7 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
     OPDObject = OPDObjectList.item(i);
     NewFold=ImportXMLNode(OPDObject, ParentFolderId, false);
     }
+DB.reset();
 return(NewFold); // returned LAST Folder when opd file contains several.
 }catch(Exception ex)
     {

@@ -234,6 +234,8 @@ else if (Order.equals(DriverGeneric.S_UNLOCK))
 DriverGeneric D=getSessOPD(Req);
 String Results=D.RemoteOrder(Order, XMLObjects);
 Answer(Req, out, Results);
+XMLObjects=null;
+DB.reset();
 }
 //-----------------------------------------------------------------------------------------------
 
@@ -355,6 +357,7 @@ String Id=OPDObject.getTextContent();
 OPDObjectList = XMLObjects.getElementsByTagName("Ver");
 OPDObject = OPDObjectList.item(0);
 String Ver=OPDObject.getTextContent();
+DB.reset();
 PDDocs doc=new PDDocs(getSessOPD(Req));
 doc.setPDId(Id);
 if (Ver!=null && Ver.length()!=0)
@@ -376,6 +379,7 @@ else
     out.close();
     throw e;
     }
+out.close();
 }
 //----------------------------------------------------------   
 /**
@@ -385,13 +389,15 @@ else
  */
 private void InsFile(HttpServletRequest Req, HttpServletResponse response) throws Exception
 {
-String FileName=null;
+//String FileName=null;
+FileItem ItemFile=null;    
 InputStream FileData=null;
 HashMap ListFields=new HashMap();
 DiskFileItemFactory factory = new DiskFileItemFactory();
-factory.setSizeThreshold(1000000);
+factory.setSizeThreshold(10000);
+//factory.setSizeThreshold(1000000);
 ServletFileUpload upload = new ServletFileUpload(factory);
-boolean isMultipart = ServletFileUpload.isMultipartContent(Req);
+//boolean isMultipart = ServletFileUpload.isMultipartContent(Req);
 List items = upload.parseRequest(Req);
 Iterator iter = items.iterator();
 while (iter.hasNext())
@@ -401,18 +407,23 @@ while (iter.hasNext())
         ListFields.put(item.getFieldName(), item.getString());
     else 
         {
-        FileName=item.getName();
+//        FileName=item.getName();
         FileData=item.getInputStream();
+        ItemFile=item;
         }
     }
 DriverGeneric PDSession=getSessOPD(Req);
-String Param=(String) ListFields.get("Param");
+//String Param=(String) ListFields.get("Param");
 String Id=(String) ListFields.get("Id");
 String Ver=(String) ListFields.get("Ver");
 PDSession.InsertFile(Id, Ver, FileData);
+if (FileData!=null)
+    FileData.close();
+if (ItemFile!=null)
+    ItemFile.delete();
+items.clear(); // to help and speed gc
 PrintWriter out = response.getWriter(); 
 Answer(Req, out, true, null, null);
-//out.flush();
 out.close();
 }
 //----------------------------------------------------------   

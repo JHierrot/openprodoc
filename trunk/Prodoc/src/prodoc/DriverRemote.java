@@ -101,9 +101,6 @@ DB =  DocumentBuilderFactory.newInstance().newDocumentBuilder();
     {
     PDException.GenPDException("Error_connecting_trough_URL"+pURL,ex.getLocalizedMessage());
     }
-//java.net.CookieManager cm = new java.net.CookieManager();
-//cm.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
-//java.net.CookieHandler.setDefault(cm);
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.DriverRemote<");
 }
@@ -461,6 +458,7 @@ finally
             PDException.GenPDException(ex.getLocalizedMessage(), "");
             }
     }
+DB.reset();
 return(OPDObject);
 }
 //-----------------------------------------------------------------   
