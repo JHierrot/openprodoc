@@ -20,15 +20,17 @@
 package prodoc;
 
 /**
- *
+ * 
  * @author jhierrot
  */
 public class PDTasksDefEvent extends PDTasksDef
 {
 
 public static final String fEVENTYPE="EvenType";
+public static final String fEVENORDER="EvenOrder";
 
 private String EvenType;
+private int EvenOrder;
 
 public static final String fMODEINS="INS";
 public static final String fMODEUPD="UPD";
@@ -62,6 +64,10 @@ public void assignValues(Record Rec) throws PDException
 {
 super.assignValues(Rec);
 setEvenType((String) Rec.getAttr(fEVENTYPE).getValue());
+if (Rec.getAttr(fEVENORDER).getValue()==null)
+    setEvenOrder(1);
+else    
+    setEvenOrder((Integer) Rec.getAttr(fEVENORDER).getValue());
 assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
@@ -74,8 +80,10 @@ assignCommonValues(Rec);
 synchronized public Record getRecord() throws PDException
 {
 Record Rec=getRecordStruct();
-Rec.addRecord(super.getRecord().Copy());
+Rec.assign(super.getRecord().Copy());
 Rec.getAttr(fEVENTYPE).setValue(getEvenType());
+Rec.getAttr(fEVENORDER).setValue(getEvenOrder());
+getCommonValues(Rec);
 return(Rec);
 }
 //-------------------------------------------------------------------------
@@ -121,7 +129,9 @@ if (TaksTypeStruct==null)
     {
     Record R=new Record();
     CreateRecordStructBase(R);
-    R.addAttr( new Attribute(fEVENTYPE, fEVENTYPE, "Type of event (INS, DEL, UP..)", Attribute.tSTRING, true, null, 32, false, false, true));
+    R.getAttr(fOBJTYPE).setUnique(true);  // DocType+EventType+Order=unique
+    R.addAttr( new Attribute(fEVENTYPE, fEVENTYPE, "Type of event (INS, DEL, UP..)", Attribute.tSTRING, true, null, 32, false, true, true));
+    R.addAttr( new Attribute(fEVENORDER, fEVENORDER, "Order of Execution after event", Attribute.tINTEGER, true, null, 8, false, true, true));
     return(R);
     }
 else
@@ -164,6 +174,22 @@ return EvenType;
 public void setEvenType(String EvenType)
 {
 this.EvenType = EvenType;
+}
+//-------------------------------------------------------------------------
+/**
+* @return the EvenOrder
+*/
+public int getEvenOrder()
+{
+return EvenOrder;
+}
+//-------------------------------------------------------------------------
+/**
+* @param EvenOrder the EvenOrder to set
+*/
+public void setEvenOrder(int EvenOrder)
+{
+this.EvenOrder = EvenOrder;
 }
 //-------------------------------------------------------------------------
 }
