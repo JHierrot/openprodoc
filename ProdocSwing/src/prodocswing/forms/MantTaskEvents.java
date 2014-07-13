@@ -25,9 +25,20 @@
 
 package prodocswing.forms;
 
+import java.util.Date;
+import java.util.Vector;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import prodoc.Attribute;
+import prodoc.Cursor;
+import prodoc.DriverGeneric;
 import prodoc.PDException;
-import prodoc.PDRepository;
+import prodoc.PDExceptionFunc;
+import prodoc.PDLog;
+import prodoc.PDObjDefs;
+import prodoc.PDTasksDefEvent;
+import prodoc.PDTasksDef;
+import prodoc.PDTasksExec;
 import prodoc.Record;
 
 /**
@@ -36,7 +47,7 @@ import prodoc.Record;
  */
 public class MantTaskEvents extends javax.swing.JDialog
 {
-private Record Reposit;
+private Record EventTask;
 private boolean Cancel;
 
 /** Creates new form MantUsers
@@ -60,28 +71,40 @@ initComponents();
     {
 
         LabelOperation = new javax.swing.JLabel();
-        RepNameLabel = new javax.swing.JLabel();
-        RepNameTextField = new javax.swing.JTextField();
+        TaskNameLabel = new javax.swing.JLabel();
+        TaskNameTextField = new javax.swing.JTextField();
         DescriptionLabel = new javax.swing.JLabel();
         DescriptionTextField = new javax.swing.JTextField();
+        CategoryLabel = new javax.swing.JLabel();
+        CategoryTextField = new javax.swing.JTextField();
         TypeLabel = new javax.swing.JLabel();
         TypeComboBox = new javax.swing.JComboBox();
-        URLLabel = new javax.swing.JLabel();
-        URLTextField = new javax.swing.JTextField();
+        ObjTypeLabel = new javax.swing.JLabel();
+        ObjTypeComboBox = new javax.swing.JComboBox();
+        FilterLabel = new javax.swing.JLabel();
+        FilterTextField = new javax.swing.JTextField();
         ParamLabel = new javax.swing.JLabel();
         ParamTextField = new javax.swing.JTextField();
-        UsrLabel = new javax.swing.JLabel();
-        UsrTextField = new javax.swing.JTextField();
-        PasswordLabel = new javax.swing.JLabel();
-        PasswordTextField = new javax.swing.JTextField();
-        EncryptedLabel = new javax.swing.JLabel();
-        EncrytCB = new javax.swing.JCheckBox();
+        ParamLabel2 = new javax.swing.JLabel();
+        ParamTextField2 = new javax.swing.JTextField();
+        ParamLabel3 = new javax.swing.JLabel();
+        ParamTextField3 = new javax.swing.JTextField();
+        ParamLabel4 = new javax.swing.JLabel();
+        ParamTextField4 = new javax.swing.JTextField();
+        EventTypeLabel = new javax.swing.JLabel();
+        EventTypeComboBox = new javax.swing.JComboBox();
+        EventOrderLabel = new javax.swing.JLabel();
+        EventOrderTextField = new javax.swing.JFormattedTextField();
+        ActiveLabel = new javax.swing.JLabel();
+        ActiveCB = new javax.swing.JCheckBox();
+        TransactLabel = new javax.swing.JLabel();
+        TransactCB = new javax.swing.JCheckBox();
         ButtonAcept = new javax.swing.JButton();
         ButtonCancel = new javax.swing.JButton();
-        ButtonCreateRep = new javax.swing.JButton();
+        ButtonEdit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle(MainWin.TT("Repositories_Maintenance"));
+        setTitle(MainWin.TT("Programed_Task_Maintenance"));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter()
         {
@@ -95,21 +118,26 @@ initComponents();
         LabelOperation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         LabelOperation.setText("jLabel1");
 
-        RepNameLabel.setFont(MainWin.getFontDialog());
-        RepNameLabel.setText("jLabel1");
+        TaskNameLabel.setFont(MainWin.getFontDialog());
+        TaskNameLabel.setText("jLabel1");
 
-        RepNameTextField.setFont(MainWin.getFontDialog());
+        TaskNameTextField.setFont(MainWin.getFontDialog());
 
         DescriptionLabel.setFont(MainWin.getFontDialog());
         DescriptionLabel.setText("jLabel1");
 
         DescriptionTextField.setFont(MainWin.getFontDialog());
 
+        CategoryLabel.setFont(MainWin.getFontDialog());
+        CategoryLabel.setText("jLabel1");
+
+        CategoryTextField.setFont(MainWin.getFontDialog());
+
         TypeLabel.setFont(MainWin.getFontDialog());
         TypeLabel.setText("jLabel1");
 
         TypeComboBox.setFont(MainWin.getFontDialog());
-        TypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "DDBB", "FS", "FTP", "REFURL" }));
+        TypeComboBox.setModel(getListTypeTask());
         TypeComboBox.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -118,30 +146,71 @@ initComponents();
             }
         });
 
-        URLLabel.setFont(MainWin.getFontDialog());
-        URLLabel.setText("jLabel1");
+        ObjTypeLabel.setFont(MainWin.getFontDialog());
+        ObjTypeLabel.setText("jLabel1");
 
-        URLTextField.setFont(MainWin.getFontDialog());
+        ObjTypeComboBox.setFont(MainWin.getFontDialog());
+        ObjTypeComboBox.setModel(getListObjFold());
+        ObjTypeComboBox.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                ObjTypeComboBoxActionPerformed(evt);
+            }
+        });
+
+        FilterLabel.setFont(MainWin.getFontDialog());
+        FilterLabel.setText("jLabel1");
+
+        FilterTextField.setFont(MainWin.getFontDialog());
 
         ParamLabel.setFont(MainWin.getFontDialog());
         ParamLabel.setText("jLabel1");
 
         ParamTextField.setFont(MainWin.getFontDialog());
 
-        UsrLabel.setFont(MainWin.getFontDialog());
-        UsrLabel.setText("jLabel1");
+        ParamLabel2.setFont(MainWin.getFontDialog());
+        ParamLabel2.setText("jLabel1");
 
-        UsrTextField.setFont(MainWin.getFontDialog());
+        ParamTextField2.setFont(MainWin.getFontDialog());
 
-        PasswordLabel.setFont(MainWin.getFontDialog());
-        PasswordLabel.setText("jLabel1");
+        ParamLabel3.setFont(MainWin.getFontDialog());
+        ParamLabel3.setText("jLabel1");
 
-        PasswordTextField.setFont(MainWin.getFontDialog());
+        ParamTextField3.setFont(MainWin.getFontDialog());
 
-        EncryptedLabel.setFont(MainWin.getFontDialog());
-        EncryptedLabel.setText("jLabel1");
+        ParamLabel4.setFont(MainWin.getFontDialog());
+        ParamLabel4.setText("jLabel1");
 
-        EncrytCB.setBorder(null);
+        ParamTextField4.setFont(MainWin.getFontDialog());
+
+        EventTypeLabel.setFont(MainWin.getFontDialog());
+        EventTypeLabel.setText("jLabel1");
+
+        EventTypeComboBox.setFont(MainWin.getFontDialog());
+        EventTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "INS", "UPD", "DEL" }));
+        EventTypeComboBox.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                EventTypeComboBoxActionPerformed(evt);
+            }
+        });
+
+        EventOrderLabel.setFont(MainWin.getFontDialog());
+        EventOrderLabel.setText("jLabel1");
+
+        EventOrderTextField.setFont(MainWin.getFontDialog());
+
+        ActiveLabel.setFont(MainWin.getFontDialog());
+        ActiveLabel.setText("jLabel1");
+
+        ActiveCB.setBorder(null);
+
+        TransactLabel.setFont(MainWin.getFontDialog());
+        TransactLabel.setText("jLabel1");
+
+        TransactCB.setBorder(null);
 
         ButtonAcept.setFont(MainWin.getFontDialog());
         ButtonAcept.setText(MainWin.TT("Ok"));
@@ -163,13 +232,13 @@ initComponents();
             }
         });
 
-        ButtonCreateRep.setFont(MainWin.getFontDialog());
-        ButtonCreateRep.setText(MainWin.TT("Create_Repository"));
-        ButtonCreateRep.addActionListener(new java.awt.event.ActionListener()
+        ButtonEdit.setFont(MainWin.getFontDialog());
+        ButtonEdit.setText("Edit");
+        ButtonEdit.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                ButtonCreateRepActionPerformed(evt);
+                ButtonEditActionPerformed(evt);
             }
         });
 
@@ -178,53 +247,67 @@ initComponents();
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(12, 12, 12))
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(TransactLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(TransactCB))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(ParamLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ParamTextField))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(CategoryLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
+                            .addComponent(TaskNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
+                            .addComponent(TypeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
+                            .addComponent(DescriptionLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
+                            .addComponent(FilterLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
+                            .addComponent(ObjTypeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
+                            .addComponent(ParamLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(ParamLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(ParamLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ParamTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ObjTypeComboBox, 0, 326, Short.MAX_VALUE)
+                            .addComponent(DescriptionTextField)
+                            .addComponent(TypeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(FilterTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
+                            .addComponent(TaskNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(CategoryTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ParamTextField2)
+                            .addComponent(ParamTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(EventTypeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(EventOrderLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ActiveLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(ActiveCB)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(ButtonEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(EventOrderTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(EventTypeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(ButtonAcept)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(ButtonCancel)
-                        .addGap(12, 12, 12)
-                        .addComponent(ButtonCreateRep))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(TypeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(DescriptionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(ParamLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(RepNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(URLLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(UsrLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(TypeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(ParamTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(UsrTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(URLTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(DescriptionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(RepNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(EncryptedLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(PasswordLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(EncrytCB)
-                            .addComponent(PasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(ButtonCancel)))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {DescriptionTextField, ParamTextField, PasswordTextField, RepNameTextField, TypeComboBox, URLTextField, UsrTextField});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {DescriptionTextField, FilterTextField, ObjTypeComboBox, ParamTextField, ParamTextField2, ParamTextField3, ParamTextField4, TypeComboBox});
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {DescriptionLabel, ParamLabel, PasswordLabel, RepNameLabel, TypeLabel, URLLabel, UsrLabel});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {ActiveLabel, CategoryLabel, DescriptionLabel, EventOrderLabel, EventTypeLabel, FilterLabel, ObjTypeLabel, ParamLabel, TaskNameLabel, TransactLabel, TypeLabel});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -233,42 +316,68 @@ initComponents();
                 .addComponent(LabelOperation)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(RepNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(RepNameLabel))
+                    .addComponent(TaskNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TaskNameLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(DescriptionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(DescriptionLabel))
-                .addGap(7, 7, 7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(CategoryTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CategoryLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(TypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(TypeLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(URLTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(URLLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(ObjTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ObjTypeLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(FilterTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(FilterLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ParamTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ParamLabel))
-                .addGap(12, 12, 12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(UsrTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(UsrLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(PasswordLabel)
-                    .addComponent(PasswordTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(EncrytCB)
-                    .addComponent(EncryptedLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+                    .addComponent(ParamLabel2)
+                    .addComponent(ParamTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ButtonCreateRep)
+                    .addComponent(ParamLabel3)
+                    .addComponent(ParamTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ParamLabel4)
+                    .addComponent(ParamTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(EventTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(EventTypeLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(EventOrderTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(EventOrderLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(ActiveCB)
+                            .addComponent(ActiveLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(TransactCB)
+                            .addComponent(TransactLabel)))
+                    .addComponent(ButtonEdit))
+                .addGap(26, 26, 26)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButtonCancel)
                     .addComponent(ButtonAcept))
-                .addContainerGap())
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         pack();
@@ -283,22 +392,34 @@ this.dispose();
     private void ButtonAceptActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ButtonAceptActionPerformed
     {//GEN-HEADEREND:event_ButtonAceptActionPerformed
 try {
-Attribute Attr = Reposit.getAttr(PDRepository.fNAME);
-Attr.setValue(RepNameTextField.getText());
-Attr = Reposit.getAttr(PDRepository.fDESCRIPTION);
+Attribute Attr = EventTask.getAttr(PDTasksDefEvent.fNAME);
+Attr.setValue(TaskNameTextField.getText());
+Attr = EventTask.getAttr(PDTasksDefEvent.fCATEGORY);
+Attr.setValue(CategoryTextField.getText());
+Attr = EventTask.getAttr(PDTasksDefEvent.fDESCRIPTION);
 Attr.setValue(DescriptionTextField.getText());
-Attr = Reposit.getAttr(PDRepository.fREPTYPE);
-Attr.setValue(TypeComboBox.getSelectedItem());
-Attr = Reposit.getAttr(PDRepository.fURL);
-Attr.setValue(URLTextField.getText());
-Attr = Reposit.getAttr(PDRepository.fPARAM);
+Attr = EventTask.getAttr(PDTasksDefEvent.fTYPE);
+Attr.setValue(TypeComboBox.getSelectedIndex());
+Attr = EventTask.getAttr(PDTasksDefEvent.fOBJTYPE);
+Attr.setValue(ObjTypeComboBox.getSelectedItem());
+Attr = EventTask.getAttr(PDTasksDefEvent.fFILTER);
+Attr.setValue(FilterTextField.getText());
+Attr = EventTask.getAttr(PDTasksDefEvent.fPARAM);
 Attr.setValue(ParamTextField.getText());
-Attr = Reposit.getAttr(PDRepository.fUSERNAME);
-Attr.setValue(UsrTextField.getText());
-Attr = Reposit.getAttr(PDRepository.fPASSWORD);
-Attr.setValue(PasswordTextField.getText());
-Attr = Reposit.getAttr(PDRepository.fENCRYPT);
-Attr.setValue(EncrytCB.isEnabled());
+Attr = EventTask.getAttr(PDTasksDefEvent.fPARAM2);
+Attr.setValue(ParamTextField2.getText());
+Attr = EventTask.getAttr(PDTasksDefEvent.fPARAM3);
+Attr.setValue(ParamTextField3.getText());
+Attr = EventTask.getAttr(PDTasksDefEvent.fPARAM4);
+Attr.setValue(ParamTextField4.getText());
+Attr = EventTask.getAttr(PDTasksDefEvent.fEVENTYPE);
+Attr.setValue((String)EventTypeComboBox.getSelectedItem());
+Attr = EventTask.getAttr(PDTasksDefEvent.fEVENORDER);
+Attr.setValue(Integer.parseInt(EventOrderTextField.getText()));
+Attr = EventTask.getAttr(PDTasksDefEvent.fACTIVE);
+Attr.setValue(ActiveCB.isSelected());
+Attr = EventTask.getAttr(PDTasksDefEvent.fTRANSACT);
+Attr.setValue(TransactCB.isSelected());
 Cancel = false;
 this.dispose();
 } catch (PDException ex)
@@ -312,52 +433,118 @@ this.dispose();
 Cancel=true;
     }//GEN-LAST:event_formWindowClosing
 
-    private void ButtonCreateRepActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ButtonCreateRepActionPerformed
-    {//GEN-HEADEREND:event_ButtonCreateRepActionPerformed
-try {
-PDRepository Rep = new PDRepository(MainWin.getSession());
-Rep.assignValues(Reposit);
-MainWin.getSession().CreateRep(Rep);
-} catch (PDException ex)
-    {
-    MainWin.Message(MainWin.TT("Error_creating_Repository")+":"+MainWin.DrvTT(ex.getLocalizedMessage()));
-    return;
-    }
-MainWin.Message(MainWin.TT("Repository_Created"));
-    }//GEN-LAST:event_ButtonCreateRepActionPerformed
+    private void ObjTypeComboBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ObjTypeComboBoxActionPerformed
+    {//GEN-HEADEREND:event_ObjTypeComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ObjTypeComboBoxActionPerformed
 
     private void TypeComboBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_TypeComboBoxActionPerformed
     {//GEN-HEADEREND:event_TypeComboBoxActionPerformed
-if (TypeComboBox.getSelectedItem()==PDRepository.tFS || TypeComboBox.getSelectedItem()==PDRepository.tBBDD || TypeComboBox.getSelectedItem()==PDRepository.tS3)
-   EncrytCB.setEnabled(true);     
-else
-   {
-   EncrytCB.setEnabled(false);     
-   EncrytCB.setSelected(false);     
-   }
+switch (TypeComboBox.getSelectedIndex())
+    {
+    case PDTasksDef.fTASK_DELETE_OLD_FOLD: ObjTypeComboBox.setModel(getListObjFold());  
+        break;
+    case PDTasksDef.fTASK_DELETE_OLD_DOC: ObjTypeComboBox.setModel(getListObjDoc());
+        break;
+    case PDTasksDef.fTASK_PURGEDOC: ObjTypeComboBox.setModel(getListObjDoc());
+        break;
+    case PDTasksDef.fTASK_EXPORT: ObjTypeComboBox.setModel(getListObjFold());  
+        break;
+    default: ObjTypeComboBox.setModel(getListObjEmpty());    
+    }
     }//GEN-LAST:event_TypeComboBoxActionPerformed
 
+    private void EventTypeComboBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_EventTypeComboBoxActionPerformed
+    {//GEN-HEADEREND:event_EventTypeComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_EventTypeComboBoxActionPerformed
+
+    private void ButtonEditActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ButtonEditActionPerformed
+    {//GEN-HEADEREND:event_ButtonEditActionPerformed
+        try
+        {
+            TCBase LU=null;
+            switch (TypeComboBox.getSelectedIndex())
+            {
+                case PDTasksDef.fTASK_DELETE_OLD_FOLD: LU = new TCDelOldFold(this, true);
+                break;
+                case PDTasksDef.fTASK_DELETE_OLD_DOC: LU = new TCDelOldDoc(this, true);
+                break;
+                case PDTasksDef.fTASK_PURGEDOC: LU = new TCPurgeOldDoc(this, true);;
+                break;
+                case PDTasksDef.fTASK_EXPORT: LU = new TCExportNewFold(this, true);
+                break;
+                case PDTasksDef.fTASK_IMPORT: LU = new TCImportFold(this, true);
+                break;
+                /**  case fTASK_DELETEFOLD: DeleteFold();
+                break;
+                case fTASK_DELETEDOC:DeleteDoc();
+                break;
+                case fTASK_COPYDOC: CopyDoc();
+                break;
+                case fTASK_MOVEDOC: MoveDoc();
+                break;
+                case fTASK_UPDATEDOC: UpdateDoc();
+                break;
+                case fTASK_UPDATEFOLD: UpdateFold();
+                break;
+                */
+                default: PDExceptionFunc.GenPDException("Unexpected_Task", "");
+                break;
+            }
+            LU.setParam(ParamTextField.getText());
+            LU.setParam2(ParamTextField2.getText());
+            LU.setParam3(ParamTextField3.getText());
+            LU.setParam4(ParamTextField4.getText());
+            LU.setLocationRelativeTo(null);
+            LU.setVisible(true);
+            if (!LU.isCancel())
+            {
+                ParamTextField.setText(LU.getParam());
+                ParamTextField2.setText(LU.getParam2());
+                ParamTextField3.setText(LU.getParam3());
+                ParamTextField4.setText(LU.getParam4());
+            }
+            LU.dispose();
+        } catch (Exception ex)
+        {
+            MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+        }
+    }//GEN-LAST:event_ButtonEditActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox ActiveCB;
+    private javax.swing.JLabel ActiveLabel;
     private javax.swing.JButton ButtonAcept;
     private javax.swing.JButton ButtonCancel;
-    private javax.swing.JButton ButtonCreateRep;
+    private javax.swing.JButton ButtonEdit;
+    private javax.swing.JLabel CategoryLabel;
+    private javax.swing.JTextField CategoryTextField;
     private javax.swing.JLabel DescriptionLabel;
     private javax.swing.JTextField DescriptionTextField;
-    private javax.swing.JLabel EncryptedLabel;
-    private javax.swing.JCheckBox EncrytCB;
+    private javax.swing.JLabel EventOrderLabel;
+    private javax.swing.JFormattedTextField EventOrderTextField;
+    private javax.swing.JComboBox EventTypeComboBox;
+    private javax.swing.JLabel EventTypeLabel;
+    private javax.swing.JLabel FilterLabel;
+    private javax.swing.JTextField FilterTextField;
     private javax.swing.JLabel LabelOperation;
+    private javax.swing.JComboBox ObjTypeComboBox;
+    private javax.swing.JLabel ObjTypeLabel;
     private javax.swing.JLabel ParamLabel;
+    private javax.swing.JLabel ParamLabel2;
+    private javax.swing.JLabel ParamLabel3;
+    private javax.swing.JLabel ParamLabel4;
     private javax.swing.JTextField ParamTextField;
-    private javax.swing.JLabel PasswordLabel;
-    private javax.swing.JTextField PasswordTextField;
-    private javax.swing.JLabel RepNameLabel;
-    private javax.swing.JTextField RepNameTextField;
+    private javax.swing.JTextField ParamTextField2;
+    private javax.swing.JTextField ParamTextField3;
+    private javax.swing.JTextField ParamTextField4;
+    private javax.swing.JLabel TaskNameLabel;
+    private javax.swing.JTextField TaskNameTextField;
+    private javax.swing.JCheckBox TransactCB;
+    private javax.swing.JLabel TransactLabel;
     private javax.swing.JComboBox TypeComboBox;
     private javax.swing.JLabel TypeLabel;
-    private javax.swing.JLabel URLLabel;
-    private javax.swing.JTextField URLTextField;
-    private javax.swing.JLabel UsrLabel;
-    private javax.swing.JTextField UsrTextField;
     // End of variables declaration//GEN-END:variables
 
 /**
@@ -365,8 +552,7 @@ else
 */
 public void AddMode()
 {
-LabelOperation.setText(MainWin.TT("Add_Repository"));
-ButtonCreateRep.setEnabled(false);
+LabelOperation.setText(MainWin.TT("Add_Task"));
 }
 //----------------------------------------------------------------
 /**
@@ -374,16 +560,21 @@ ButtonCreateRep.setEnabled(false);
 */
 public void DelMode()
 {
-LabelOperation.setText(MainWin.TT("Delete_Repository"));
-RepNameTextField.setEditable(false);
+LabelOperation.setText(MainWin.TT("Delete_Task"));
+TaskNameTextField.setEditable(false);
+CategoryTextField.setEditable(false);
 DescriptionTextField.setEditable(false);
-URLTextField.setEditable(false);
+FilterTextField.setEditable(false);
 ParamTextField.setEditable(false);
-UsrTextField.setEditable(false);
-TypeComboBox.setEnabled(false);
-PasswordTextField.setEditable(false);
-ButtonCreateRep.setEnabled(false);
-EncrytCB.setEnabled(false);
+ParamTextField2.setEditable(false);
+ParamTextField3.setEditable(false);
+ParamTextField4.setEditable(false);
+TypeComboBox.setEditable(false);
+ObjTypeComboBox.setEditable(false);
+EventTypeComboBox.setEditable(false);
+EventOrderTextField.setEditable(false);
+ActiveCB.setEnabled(false);
+TransactCB.setEnabled(false);
 }
 //----------------------------------------------------------------
 /**
@@ -391,12 +582,7 @@ EncrytCB.setEnabled(false);
 */
 public void EditMode()
 {
-LabelOperation.setText(MainWin.TT("Update_Repository"));
-RepNameTextField.setEditable(false);
-URLTextField.setEditable(false);
-ParamTextField.setEditable(false);
-TypeComboBox.setEnabled(false);
-EncrytCB.setEnabled(false);
+LabelOperation.setText(MainWin.TT("Update_Task"));
 }
 //----------------------------------------------------------------
 /**
@@ -404,9 +590,8 @@ EncrytCB.setEnabled(false);
 */
 public void CopyMode()
 {
-LabelOperation.setText(MainWin.TT("Copy_Repository"));
-RepNameTextField.setText(RepNameTextField.getText()+"1");
-ButtonCreateRep.setEnabled(false);
+LabelOperation.setText(MainWin.TT("Copy_Task"));
+TaskNameTextField.setText(TaskNameTextField.getText()+"1");
 }
 //----------------------------------------------------------------
 /**
@@ -414,7 +599,7 @@ ButtonCreateRep.setEnabled(false);
 */
 public Record getRecord()
 {
-return Reposit;
+return EventTask;
 }
 //----------------------------------------------------------------
 /**
@@ -422,47 +607,77 @@ return Reposit;
 */
 public void setRecord(Record pReposit)
 {
-Reposit = pReposit;
-Attribute Attr=Reposit.getAttr(PDRepository.fNAME); //-------------------------
-RepNameLabel.setText(MainWin.DrvTT(Attr.getUserName()));
+EventTask = pReposit;
+Attribute Attr=EventTask.getAttr(PDTasksDefEvent.fNAME); //-------------------------
+TaskNameLabel.setText(MainWin.DrvTT(Attr.getUserName()));
 if (Attr.getValue()!=null)
-    RepNameTextField.setText((String)Attr.getValue());
-RepNameTextField.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
-Attr=Reposit.getAttr(PDRepository.fDESCRIPTION);//--------------------------
+    TaskNameTextField.setText((String)Attr.getValue());
+TaskNameTextField.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
+Attr=EventTask.getAttr(PDTasksDefEvent.fCATEGORY);//--------------------------
+CategoryLabel.setText(MainWin.DrvTT(Attr.getUserName()));
+if (Attr.getValue()!=null)
+    CategoryTextField.setText((String)Attr.getValue());
+CategoryTextField.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
+Attr=EventTask.getAttr(PDTasksDefEvent.fDESCRIPTION);//--------------------------
 DescriptionLabel.setText(MainWin.DrvTT(Attr.getUserName()));
 if (Attr.getValue()!=null)
     DescriptionTextField.setText((String)Attr.getValue());
 DescriptionTextField.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
-Attr=Reposit.getAttr(PDRepository.fURL); //--------------------------
-URLLabel.setText(MainWin.DrvTT(Attr.getUserName()));
+Attr=EventTask.getAttr(PDTasksDefEvent.fFILTER); //--------------------------
+FilterLabel.setText(MainWin.DrvTT(Attr.getUserName()));
 if (Attr.getValue()!=null)
-    URLTextField.setText((String)Attr.getValue());
-URLTextField.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
-Attr=Reposit.getAttr(PDRepository.fPARAM); //--------------------------
+    FilterTextField.setText((String)Attr.getValue());
+FilterTextField.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
+Attr=EventTask.getAttr(PDTasksDefEvent.fPARAM); //--------------------------
 ParamLabel.setText(MainWin.DrvTT(Attr.getUserName()));
 if (Attr.getValue()!=null)
     ParamTextField.setText((String)Attr.getValue());
 ParamTextField.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
-Attr=Reposit.getAttr(PDRepository.fREPTYPE); //--------------------------
+Attr=EventTask.getAttr(PDTasksDefEvent.fPARAM2); //--------------------------
+ParamLabel2.setText(MainWin.DrvTT(Attr.getUserName()));
+if (Attr.getValue()!=null)
+    ParamTextField2.setText((String)Attr.getValue());
+ParamTextField2.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
+Attr=EventTask.getAttr(PDTasksDefEvent.fPARAM3); //--------------------------
+ParamLabel3.setText(MainWin.DrvTT(Attr.getUserName()));
+if (Attr.getValue()!=null)
+    ParamTextField3.setText((String)Attr.getValue());
+ParamTextField3.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
+Attr=EventTask.getAttr(PDTasksDefEvent.fPARAM4); //--------------------------
+ParamLabel4.setText(MainWin.DrvTT(Attr.getUserName()));
+if (Attr.getValue()!=null)
+    ParamTextField4.setText((String)Attr.getValue());
+ParamTextField4.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
+Attr=EventTask.getAttr(PDTasksDefEvent.fTYPE); //--------------------------
 TypeLabel.setText(MainWin.DrvTT(Attr.getUserName()));
 if (Attr.getValue()!=null)
-    TypeComboBox.setSelectedItem((String)Attr.getValue());
+    TypeComboBox.setSelectedIndex((Integer)Attr.getValue());
 TypeComboBox.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
-Attr=Reposit.getAttr(PDRepository.fUSERNAME); //------------------------
-UsrLabel.setText(MainWin.DrvTT(Attr.getUserName()));
+Attr=EventTask.getAttr(PDTasksDefEvent.fOBJTYPE); //--------------------------
+ObjTypeLabel.setText(MainWin.DrvTT(Attr.getUserName()));
 if (Attr.getValue()!=null)
-    UsrTextField.setText((String)Attr.getValue());
-UsrTextField.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
-Attr=Reposit.getAttr(PDRepository.fPASSWORD); //--------------------------
-PasswordLabel.setText(MainWin.DrvTT(Attr.getUserName()));
+    ObjTypeComboBox.setSelectedItem((String)Attr.getValue());
+ObjTypeComboBox.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
+Attr=EventTask.getAttr(PDTasksDefEvent.fEVENTYPE); //--------------------------
+EventTypeLabel.setText(MainWin.DrvTT(Attr.getUserName()));
 if (Attr.getValue()!=null)
-    PasswordTextField.setText((String)Attr.getValue());
-PasswordTextField.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
-Attr=Reposit.getAttr(PDRepository.fENCRYPT); //--------------------------
-EncryptedLabel.setText(MainWin.DrvTT(Attr.getUserName()));
+    EventTypeComboBox.setSelectedItem((String)Attr.getValue());
+EventTypeComboBox.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
+Attr=EventTask.getAttr(PDTasksDefEvent.fEVENORDER); //--------------------------
+EventOrderLabel.setText(MainWin.DrvTT(Attr.getUserName()));
 if (Attr.getValue()!=null)
-    EncrytCB.setSelected((Boolean)Attr.getValue());
-EncrytCB.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
+    EventOrderTextField.setText(""+Attr.getValue());
+EventOrderTextField.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
+Attr=EventTask.getAttr(PDTasksDefEvent.fACTIVE); //--------------------------
+ActiveLabel.setText(MainWin.DrvTT(Attr.getUserName()));
+if (Attr.getValue()!=null)
+    ActiveCB.setSelected((Boolean)Attr.getValue());
+ActiveCB.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
+Attr=EventTask.getAttr(PDTasksDefEvent.fTRANSACT); //--------------------------
+TransactLabel.setText(MainWin.DrvTT(Attr.getUserName()));
+if (Attr.getValue()!=null)
+    TransactCB.setSelected((Boolean)Attr.getValue());
+TransactCB.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
 }
 //----------------------------------------------------------------
 /**
@@ -471,6 +686,62 @@ EncrytCB.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
 public boolean isCancel()
 {
 return Cancel;
+}
+//----------------------------------------------------------------
+
+private ComboBoxModel getListTypeTask()
+{
+return(new DefaultComboBoxModel(PDTasksDef.getListTypeTask()));
+}
+//----------------------------------------------------------------
+private ComboBoxModel getListObjDoc()
+{
+Vector VObjects=new Vector();
+try {
+DriverGeneric Session=MainWin.getSession();
+PDObjDefs Obj = new PDObjDefs(Session);
+Cursor CursorId = Obj.getListDocs();
+Record Res=Session.NextRec(CursorId);
+while (Res!=null)
+    {
+    Attribute Attr=Res.getAttr(PDObjDefs.fNAME);
+    VObjects.add(Attr.getValue());
+    Res=Session.NextRec(CursorId);
+    }
+Session.CloseCursor(CursorId);
+} catch (PDException ex)
+    {
+    MainWin.Message("Error"+ex.getLocalizedMessage());
+    }
+return(new DefaultComboBoxModel(VObjects));
+}
+//----------------------------------------------------------------
+private ComboBoxModel getListObjFold()
+{
+Vector VObjects=new Vector();
+try {
+DriverGeneric Session=MainWin.getSession();
+PDObjDefs Obj = new PDObjDefs(Session);
+Cursor CursorId = Obj.getListFold();
+Record Res=Session.NextRec(CursorId);
+while (Res!=null)
+    {
+    Attribute Attr=Res.getAttr(PDObjDefs.fNAME);
+    VObjects.add(Attr.getValue());
+    Res=Session.NextRec(CursorId);
+    }
+Session.CloseCursor(CursorId);
+} catch (PDException ex)
+    {
+    MainWin.Message("Error"+ex.getLocalizedMessage());
+    }
+return(new DefaultComboBoxModel(VObjects));
+}
+//----------------------------------------------------------------
+private ComboBoxModel getListObjEmpty()
+{
+Vector VObjects=new Vector();
+return(new DefaultComboBoxModel(VObjects));
 }
 //----------------------------------------------------------------
 }

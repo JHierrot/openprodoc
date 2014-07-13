@@ -25,7 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- *
+ * Class responsible of actual execution of pending task
  * @author jhierrot
  */
 public class PDTasksExec extends PDTasksDef

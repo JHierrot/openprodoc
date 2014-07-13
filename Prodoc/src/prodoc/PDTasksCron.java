@@ -23,7 +23,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- *
+ * Class for maintaining table with definition of task started by cron/programing
+ * and of generating "orders of execution"
  * @author jhierrot
  */
 public class PDTasksCron extends PDTasksDef
@@ -167,22 +168,6 @@ else
     return(TaksTypeStruct);
 }
 //-------------------------------------------------------------------------
-///**
-//* @return the StartDate
-//*/
-//public Date getStartDate()
-//{
-//return StartDate;
-//}
-////-----------------------------------------------------------------------
-///**
-//* @param StartDate the StartDate to set
-//*/
-//public void setStartDate(Date StartDate)
-//{
-//this.StartDate = StartDate;
-//}
-////-----------------------------------------------------------------------
 /**
 * @return the NextDate
 */
@@ -341,7 +326,6 @@ private void UpdateNextDate() throws PDException
 {
 Calendar Next=Calendar.getInstance();
 Next.setTime(getNextDate());
-//Next.setTime(new Date()); // if delay in execution, update to current time
 Next.add(Calendar.MONTH, getAddMonth());
 Next.add(Calendar.DAY_OF_MONTH, getAddDays());
 Next.add(Calendar.HOUR_OF_DAY, getAddHours());

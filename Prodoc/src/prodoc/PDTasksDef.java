@@ -22,7 +22,7 @@ package prodoc;
 import java.util.Vector;
 
 /**
- *
+ * Base class with common definitions
  * @author jhierrot
  */
 public class PDTasksDef extends ObjPD
