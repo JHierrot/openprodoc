@@ -617,7 +617,7 @@ for (int i = 0; i < getTypeRecs().size(); i++)
 RecSum.getAttr(fFOLDTYPE).setValue(getFolderType());
 }
 //-------------------------------------------------------------------------
-/** Return an ordered list of
+/** Return an ordered list of types
  * @return the TypeDefs
  * @throws PDException
 */
@@ -1440,4 +1440,35 @@ while (Res!=null)
 getDrv().CloseCursor(ListDocs);
 }
 //---------------------------------------------------------------------
+/** Executes all the transactional defined threads
+ * 
+ */
+protected void ExecuteTransThreads(String MODE) throws PDException
+{
+ArrayList L =getDrv().getFoldTransThreads(this.getFolderType(), MODE); 
+PDTasksDefEvent T;
+for (int i = 0; i < L.size(); i++)
+    {
+    T = (PDTasksDefEvent)L.get(i);
+    T.Execute(this);
+    }  
+}
+//---------------------------------------------------------------------
+/** Generates all the NO transactional defined threads
+ * 
+ */
+protected void GenerateNoTransThreads(String MODE) throws PDException
+{
+ArrayList L =getDrv().getFoldNoTransThreads(this.getFolderType(), MODE); 
+PDTasksDefEvent T;
+PDTasksExec TE;
+for (int i = 0; i < L.size(); i++)
+    {
+    T = (PDTasksDefEvent)L.get(i);
+    TE=new PDTasksExec(getDrv());
+    TE.GenFromDef(T, this);
+    TE.insert();
+    }
+}
+//-------------------------------------------------------------------------
 }

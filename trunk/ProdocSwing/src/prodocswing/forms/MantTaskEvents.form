@@ -262,7 +262,7 @@
           <Connection code="MainWin.getFontDialog()" type="code"/>
         </Property>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="getListTypeTask()" type="code"/>
+          <Connection code="getListTypeEventTask()" type="code"/>
         </Property>
       </Properties>
       <Events>
@@ -286,9 +286,6 @@
           <Connection code="getListObjFold()" type="code"/>
         </Property>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ObjTypeComboBoxActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="FilterLabel">
       <Properties>
@@ -386,9 +383,6 @@
           </StringArray>
         </Property>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="EventTypeComboBoxActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="EventOrderLabel">
       <Properties>

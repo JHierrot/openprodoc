@@ -115,6 +115,8 @@ static final public String S_RENFILE   ="RENFILE";
 static final public String S_RETRIEVEFILE   ="RETRIEVEFILE";    
 static final public String S_INSFILE   ="INSFILE";    
 
+private TreeMap AllTaskTrans=null;
+private TreeMap AllTaskNoTrans=null;
 /**
  *
  * @param pURL
@@ -1870,6 +1872,7 @@ while (R!=null)
     Res.append(R.toXMLt());
     R=NextRec(C);
     }
+CloseCursor(C);
 delCursor(C);
 return(Res.toString());
 }
@@ -2131,6 +2134,92 @@ static public String DeCodif(String Text)
 {
 return(Text.replace('^', '<').replace("¡1", "%").replace("¡2","&"));
 }    
+//---------------------------------------------------------------------
+/**
+ * Returns a list of Transactional tasks ORDERED for selected fold type AND operation
+ *    including parent Fold types
+ * @param folderType Folder type
+ * @param MODE  Kind of operation (INS, DEL, UP)
+ * @return a list that can be empty
+ * @throws prodoc.PDException in any error
+ */
+protected ArrayList getFoldTransThreads(String folderType, String MODE) throws PDException
+{
+ArrayList TotalTask=new ArrayList();    
+PDFolders f=new PDFolders(this,folderType);
+ArrayList TypList=f.getTypeDefs();
+for (int i = TypList.size()-1; i >=0 ; i--)
+    {
+    String TypName=(String)((Record)TypList.get(i)).getAttr(PDObjDefs.fNAME).getValue();
+    for (Iterator it = getAllTaskTrans().subMap(TypName+"/"+MODE, TypName+"/"+MODE+"999999").values().iterator(); it.hasNext();)
+        TotalTask.add(it.next());
+    }
+return TotalTask;
+}
+//---------------------------------------------------------------------
+/**
+ * Returns a list of Transactional tasks ORDERED for selected fold type AND operation
+ *    including parent types
+ * @param folderType Folder type
+ * @param MODE  Kind of operation (INS, DEL, UP)
+ * @return a list that can be empty
+ */
+protected ArrayList getFoldNoTransThreads(String folderType, String MODE) throws PDException
+{
+ArrayList TotalTask=new ArrayList();    
+PDFolders f=new PDFolders(this,folderType);
+ArrayList TypList=f.getTypeDefs();
+for (int i = TypList.size()-1; i >=0 ; i--)
+    {
+    String TypName=(String)((Record)TypList.get(i)).getAttr(PDObjDefs.fNAME).getValue();
+    for (Iterator it = getAllTaskNoTrans().subMap(TypName+"/"+MODE, TypName+"/"+MODE+"999999").values().iterator(); it.hasNext();)
+        TotalTask.add(it.next());
+    }
+return TotalTask;
+}
+//---------------------------------------------------------------------
+/**
+* @return the AllTaskTrans
+*/
+private TreeMap getAllTaskTrans() throws PDException
+{
+if (AllTaskTrans==null)    
+    LoadAllTaks();
+return AllTaskTrans;
+}
+//---------------------------------------------------------------------
+/**
+* @return the AllTaskTrans
+*/
+private TreeMap getAllTaskNoTrans() throws PDException
+{
+if (AllTaskNoTrans==null)    
+    LoadAllTaks();
+return AllTaskNoTrans;
+}
+//---------------------------------------------------------------------
+/**
+ * Loads AllTaskNoTrans and AllTaskTrans the first time
+ */
+private void LoadAllTaks() throws PDException
+{
+AllTaskTrans=new TreeMap();
+AllTaskNoTrans=new TreeMap();
+PDTasksDefEvent TE=new PDTasksDefEvent(this);
+Cursor C=TE.SearchLike("");
+Record R=NextRec(C);
+while (R!=null)
+    {
+    PDTasksDefEvent TDE=new PDTasksDefEvent(this);  
+    TDE.assignValues(R);
+    if (TDE.isTransact())
+        AllTaskTrans.put(TDE.getObjType()+"/"+TDE.getEvenType()+("0000"+TDE.getEvenOrder()).substring(0, 5), TDE);
+    else
+        AllTaskNoTrans.put(TDE.getObjType()+"/"+TDE.getEvenType()+("0000"+TDE.getEvenOrder()).substring(0, 5), TDE);
+    R=NextRec(C);
+    }
+CloseCursor(C);
+}
 //---------------------------------------------------------------------
 
 }
