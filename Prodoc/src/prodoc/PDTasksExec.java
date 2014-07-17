@@ -770,4 +770,9 @@ ListCond.addCondition(new Condition(fPDID, Condition.cEQUAL, getPDId()));
 return(ListCond);
 }
 //-------------------------------------------------------------------------
+
+    void GenFromDef(PDTasksDefEvent T, PDFolders aThis)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

@@ -88,6 +88,8 @@ private static final String[] LisTypeTask= {"DELETE_OLD_FOLD",
                                             "EXPORT" */
                                             };
 
+
+
         
 private int Type=0;
 /**

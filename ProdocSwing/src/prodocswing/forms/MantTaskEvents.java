@@ -25,7 +25,6 @@
 
 package prodocswing.forms;
 
-import java.util.Date;
 import java.util.Vector;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -34,11 +33,9 @@ import prodoc.Cursor;
 import prodoc.DriverGeneric;
 import prodoc.PDException;
 import prodoc.PDExceptionFunc;
-import prodoc.PDLog;
 import prodoc.PDObjDefs;
 import prodoc.PDTasksDefEvent;
 import prodoc.PDTasksDef;
-import prodoc.PDTasksExec;
 import prodoc.Record;
 
 /**
@@ -137,7 +134,7 @@ initComponents();
         TypeLabel.setText("jLabel1");
 
         TypeComboBox.setFont(MainWin.getFontDialog());
-        TypeComboBox.setModel(getListTypeTask());
+        TypeComboBox.setModel(getListTypeEventTask());
         TypeComboBox.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -151,13 +148,6 @@ initComponents();
 
         ObjTypeComboBox.setFont(MainWin.getFontDialog());
         ObjTypeComboBox.setModel(getListObjFold());
-        ObjTypeComboBox.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                ObjTypeComboBoxActionPerformed(evt);
-            }
-        });
 
         FilterLabel.setFont(MainWin.getFontDialog());
         FilterLabel.setText("jLabel1");
@@ -189,13 +179,6 @@ initComponents();
 
         EventTypeComboBox.setFont(MainWin.getFontDialog());
         EventTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "INS", "UPD", "DEL" }));
-        EventTypeComboBox.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                EventTypeComboBoxActionPerformed(evt);
-            }
-        });
 
         EventOrderLabel.setFont(MainWin.getFontDialog());
         EventOrderLabel.setText("jLabel1");
@@ -399,7 +382,7 @@ Attr.setValue(CategoryTextField.getText());
 Attr = EventTask.getAttr(PDTasksDefEvent.fDESCRIPTION);
 Attr.setValue(DescriptionTextField.getText());
 Attr = EventTask.getAttr(PDTasksDefEvent.fTYPE);
-Attr.setValue(TypeComboBox.getSelectedIndex());
+Attr.setValue(TypeComboBox.getSelectedIndex()+100);
 Attr = EventTask.getAttr(PDTasksDefEvent.fOBJTYPE);
 Attr.setValue(ObjTypeComboBox.getSelectedItem());
 Attr = EventTask.getAttr(PDTasksDefEvent.fFILTER);
@@ -433,32 +416,6 @@ this.dispose();
 Cancel=true;
     }//GEN-LAST:event_formWindowClosing
 
-    private void ObjTypeComboBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ObjTypeComboBoxActionPerformed
-    {//GEN-HEADEREND:event_ObjTypeComboBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ObjTypeComboBoxActionPerformed
-
-    private void TypeComboBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_TypeComboBoxActionPerformed
-    {//GEN-HEADEREND:event_TypeComboBoxActionPerformed
-switch (TypeComboBox.getSelectedIndex())
-    {
-    case PDTasksDef.fTASK_DELETE_OLD_FOLD: ObjTypeComboBox.setModel(getListObjFold());  
-        break;
-    case PDTasksDef.fTASK_DELETE_OLD_DOC: ObjTypeComboBox.setModel(getListObjDoc());
-        break;
-    case PDTasksDef.fTASK_PURGEDOC: ObjTypeComboBox.setModel(getListObjDoc());
-        break;
-    case PDTasksDef.fTASK_EXPORT: ObjTypeComboBox.setModel(getListObjFold());  
-        break;
-    default: ObjTypeComboBox.setModel(getListObjEmpty());    
-    }
-    }//GEN-LAST:event_TypeComboBoxActionPerformed
-
-    private void EventTypeComboBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_EventTypeComboBoxActionPerformed
-    {//GEN-HEADEREND:event_EventTypeComboBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_EventTypeComboBoxActionPerformed
-
     private void ButtonEditActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ButtonEditActionPerformed
     {//GEN-HEADEREND:event_ButtonEditActionPerformed
         try
@@ -466,29 +423,16 @@ switch (TypeComboBox.getSelectedIndex())
             TCBase LU=null;
             switch (TypeComboBox.getSelectedIndex())
             {
-                case PDTasksDef.fTASK_DELETE_OLD_FOLD: LU = new TCDelOldFold(this, true);
+                case PDTasksDefEvent.fTASKEVENT_UPDATE_DOC : LU = new TCEUpdate(this, true);
                 break;
-                case PDTasksDef.fTASK_DELETE_OLD_DOC: LU = new TCDelOldDoc(this, true);
+                case PDTasksDefEvent.fTASKEVENT_UPDATE_FOLD : LU = new TCEUpdate(this, true);
                 break;
-                case PDTasksDef.fTASK_PURGEDOC: LU = new TCPurgeOldDoc(this, true);;
+                case PDTasksDefEvent.fTASKEVENT_COPY_DOC: LU = new TCDelOldDoc(this, true);
                 break;
-                case PDTasksDef.fTASK_EXPORT: LU = new TCExportNewFold(this, true);
+                case PDTasksDefEvent.fTASKEVENT_COPY_FOLD: LU = new TCDelOldDoc(this, true);
                 break;
-                case PDTasksDef.fTASK_IMPORT: LU = new TCImportFold(this, true);
+                case PDTasksDefEvent.fTASKEVENT_EXPORT_DOC: LU = new TCPurgeOldDoc(this, true);;
                 break;
-                /**  case fTASK_DELETEFOLD: DeleteFold();
-                break;
-                case fTASK_DELETEDOC:DeleteDoc();
-                break;
-                case fTASK_COPYDOC: CopyDoc();
-                break;
-                case fTASK_MOVEDOC: MoveDoc();
-                break;
-                case fTASK_UPDATEDOC: UpdateDoc();
-                break;
-                case fTASK_UPDATEFOLD: UpdateFold();
-                break;
-                */
                 default: PDExceptionFunc.GenPDException("Unexpected_Task", "");
                 break;
             }
@@ -506,11 +450,20 @@ switch (TypeComboBox.getSelectedIndex())
                 ParamTextField4.setText(LU.getParam4());
             }
             LU.dispose();
-        } catch (Exception ex)
-        {
+        } catch (PDExceptionFunc ex)
+            {
             MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
-        }
+            }
     }//GEN-LAST:event_ButtonEditActionPerformed
+
+    private void TypeComboBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_TypeComboBoxActionPerformed
+    {//GEN-HEADEREND:event_TypeComboBoxActionPerformed
+int T=TypeComboBox.getSelectedIndex()+100;
+if (T==PDTasksDefEvent.fTASKEVENT_UPDATE_FOLD || T==PDTasksDefEvent.fTASKEVENT_COPY_FOLD)
+    ObjTypeComboBox.setModel(getListObjFold());
+else
+    ObjTypeComboBox.setModel(getListObjDoc());
+    }//GEN-LAST:event_TypeComboBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox ActiveCB;
@@ -651,7 +604,7 @@ ParamTextField4.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
 Attr=EventTask.getAttr(PDTasksDefEvent.fTYPE); //--------------------------
 TypeLabel.setText(MainWin.DrvTT(Attr.getUserName()));
 if (Attr.getValue()!=null)
-    TypeComboBox.setSelectedIndex((Integer)Attr.getValue());
+    TypeComboBox.setSelectedIndex((Integer)Attr.getValue()-100);
 TypeComboBox.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
 Attr=EventTask.getAttr(PDTasksDefEvent.fOBJTYPE); //--------------------------
 ObjTypeLabel.setText(MainWin.DrvTT(Attr.getUserName()));
@@ -689,9 +642,9 @@ return Cancel;
 }
 //----------------------------------------------------------------
 
-private ComboBoxModel getListTypeTask()
+private ComboBoxModel getListTypeEventTask()
 {
-return(new DefaultComboBoxModel(PDTasksDef.getListTypeTask()));
+return(new DefaultComboBoxModel(PDTasksDefEvent.getListTypeEventTask()));
 }
 //----------------------------------------------------------------
 private ComboBoxModel getListObjDoc()
@@ -735,12 +688,6 @@ Session.CloseCursor(CursorId);
     {
     MainWin.Message("Error"+ex.getLocalizedMessage());
     }
-return(new DefaultComboBoxModel(VObjects));
-}
-//----------------------------------------------------------------
-private ComboBoxModel getListObjEmpty()
-{
-Vector VObjects=new Vector();
 return(new DefaultComboBoxModel(VObjects));
 }
 //----------------------------------------------------------------

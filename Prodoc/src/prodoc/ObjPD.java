@@ -646,40 +646,5 @@ for (int i=0; i<Name.length(); i++)
     }
 return(Name);
 }
-//-------------------------------------------------------------------------
-/** Executes all the transactional defined threads
- * 
- */
-protected void ExecuteTransThreads(String MODE) throws PDException
-{
-//PDTasksDef T=new PDTasksDef(Drv);
-//ArrayList TL=T.getListTaskTrans(this.getTabName(), MODE);
-//if (TL.isEmpty())
-//    return;
-//PDTasks Ti;
-//for (int i = 0; i < TL.size(); i++)
-//    {
-//    Ti=new PDTasks(Drv, this, (PDTasksDef) TL.get(i));
-//    Ti.Execute();    
-//    }
-}
 //---------------------------------------------------------------------
-/** Generates all the NO transactional defined threads
- * 
- */
-protected void GenerateNoTransThreads(String MODE) throws PDException
-{
-//PDTasksDef T=new PDTasksDef(Drv);
-//ArrayList TL=T.getListTaskNoTrans(this.getTabName(), MODE);
-//if (TL.isEmpty())
-//    return;
-//PDTasks Ti;
-//for (int i = 0; i < TL.size(); i++)
-//    {
-//    Ti=new PDTasks(Drv, this, (PDTasksDef) TL.get(i));
-//    Ti.insert();    
-//    }
-}
-//---------------------------------------------------------------------
-
 }

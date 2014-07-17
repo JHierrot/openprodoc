@@ -36,6 +36,18 @@ public static final String fMODEINS="INS";
 public static final String fMODEUPD="UPD";
 public static final String fMODEDEL="DEL";
 
+public static final int fTASKEVENT_UPDATE_DOC =100;
+public static final int fTASKEVENT_UPDATE_FOLD=101;
+public static final int fTASKEVENT_COPY_DOC   =102;
+public static final int fTASKEVENT_COPY_FOLD  =103;
+public static final int fTASKEVENT_EXPORT_DOC =104;
+
+private static final String[] LisTypeEventTask= {"UPDATE_DOC",
+                                                 "UPDATE_FOLD",
+                                                 "COPY_DOC",
+                                                 "COPY_FOLD",
+                                                 "EXPORT_DOC"
+                                                 };
 /**
  *
  */
@@ -192,4 +204,22 @@ public void setEvenOrder(int EvenOrder)
 this.EvenOrder = EvenOrder;
 }
 //-------------------------------------------------------------------------
+static public String[] getListTypeEventTask()
+{
+return LisTypeEventTask;    
+}
+//-------------------------------------------------------------------------
+void Execute(PDFolders aThis)
+{
+throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+}
+//-------------------------------------------------------------------------
+static boolean isFolder(int TaskType)
+{
+if (TaskType==fTASKEVENT_UPDATE_FOLD || TaskType==fTASKEVENT_COPY_FOLD)
+    return(true);
+else
+    return(false);
+}
+//-------------------------------------------------------------------------    
 }
