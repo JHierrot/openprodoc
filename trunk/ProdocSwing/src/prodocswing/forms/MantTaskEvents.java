@@ -382,7 +382,7 @@ Attr.setValue(CategoryTextField.getText());
 Attr = EventTask.getAttr(PDTasksDefEvent.fDESCRIPTION);
 Attr.setValue(DescriptionTextField.getText());
 Attr = EventTask.getAttr(PDTasksDefEvent.fTYPE);
-Attr.setValue(TypeComboBox.getSelectedIndex()+100);
+Attr.setValue(TypeComboBox.getSelectedIndex()+PDTasksDefEvent.STARTNUM);
 Attr = EventTask.getAttr(PDTasksDefEvent.fOBJTYPE);
 Attr.setValue(ObjTypeComboBox.getSelectedItem());
 Attr = EventTask.getAttr(PDTasksDefEvent.fFILTER);
@@ -418,47 +418,46 @@ Cancel=true;
 
     private void ButtonEditActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ButtonEditActionPerformed
     {//GEN-HEADEREND:event_ButtonEditActionPerformed
-        try
-        {
-            TCBase LU=null;
-            switch (TypeComboBox.getSelectedIndex())
-            {
-                case PDTasksDefEvent.fTASKEVENT_UPDATE_DOC : LU = new TCEUpdate(this, true);
-                break;
-                case PDTasksDefEvent.fTASKEVENT_UPDATE_FOLD : LU = new TCEUpdate(this, true);
-                break;
-                case PDTasksDefEvent.fTASKEVENT_COPY_DOC: LU = new TCDelOldDoc(this, true);
-                break;
-                case PDTasksDefEvent.fTASKEVENT_COPY_FOLD: LU = new TCDelOldDoc(this, true);
-                break;
-                case PDTasksDefEvent.fTASKEVENT_EXPORT_DOC: LU = new TCPurgeOldDoc(this, true);;
-                break;
-                default: PDExceptionFunc.GenPDException("Unexpected_Task", "");
-                break;
-            }
-            LU.setParam(ParamTextField.getText());
-            LU.setParam2(ParamTextField2.getText());
-            LU.setParam3(ParamTextField3.getText());
-            LU.setParam4(ParamTextField4.getText());
-            LU.setLocationRelativeTo(null);
-            LU.setVisible(true);
-            if (!LU.isCancel())
-            {
-                ParamTextField.setText(LU.getParam());
-                ParamTextField2.setText(LU.getParam2());
-                ParamTextField3.setText(LU.getParam3());
-                ParamTextField4.setText(LU.getParam4());
-            }
-            LU.dispose();
-        } catch (PDExceptionFunc ex)
-            {
-            MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
-            }
+try {
+TCBase LU=null;
+switch (TypeComboBox.getSelectedIndex()+ PDTasksDefEvent.STARTNUM)
+    {
+    case PDTasksDefEvent.fTASKEVENT_UPDATE_DOC : LU = new TCEUpdate(this, true);
+    break;
+    case PDTasksDefEvent.fTASKEVENT_UPDATE_FOLD : LU = new TCEUpdate(this, true);
+    break;
+    case PDTasksDefEvent.fTASKEVENT_COPY_DOC: LU = new TCDelOldDoc(this, true);
+    break;
+    case PDTasksDefEvent.fTASKEVENT_COPY_FOLD: LU = new TCDelOldDoc(this, true);
+    break;
+    case PDTasksDefEvent.fTASKEVENT_EXPORT_DOC: LU = new TCPurgeOldDoc(this, true);;
+    break;
+    default: PDExceptionFunc.GenPDException("Unexpected_Task", "");
+    break;
+    }
+LU.setParam(ParamTextField.getText());
+LU.setParam2(ParamTextField2.getText());
+LU.setParam3(ParamTextField3.getText());
+LU.setParam4(ParamTextField4.getText());
+LU.setLocationRelativeTo(null);
+LU.setVisible(true);
+if (!LU.isCancel())
+    {
+    ParamTextField.setText(LU.getParam());
+    ParamTextField2.setText(LU.getParam2());
+    ParamTextField3.setText(LU.getParam3());
+    ParamTextField4.setText(LU.getParam4());
+    }
+LU.dispose();
+} catch (PDExceptionFunc ex)
+    {
+    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
     }//GEN-LAST:event_ButtonEditActionPerformed
 
     private void TypeComboBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_TypeComboBoxActionPerformed
     {//GEN-HEADEREND:event_TypeComboBoxActionPerformed
-int T=TypeComboBox.getSelectedIndex()+100;
+int T=TypeComboBox.getSelectedIndex()+PDTasksDefEvent.STARTNUM;
 if (T==PDTasksDefEvent.fTASKEVENT_UPDATE_FOLD || T==PDTasksDefEvent.fTASKEVENT_COPY_FOLD)
     ObjTypeComboBox.setModel(getListObjFold());
 else
@@ -604,7 +603,7 @@ ParamTextField4.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
 Attr=EventTask.getAttr(PDTasksDefEvent.fTYPE); //--------------------------
 TypeLabel.setText(MainWin.DrvTT(Attr.getUserName()));
 if (Attr.getValue()!=null)
-    TypeComboBox.setSelectedIndex((Integer)Attr.getValue()-100);
+    TypeComboBox.setSelectedIndex((Integer)Attr.getValue()-PDTasksDefEvent.STARTNUM);
 TypeComboBox.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
 Attr=EventTask.getAttr(PDTasksDefEvent.fOBJTYPE); //--------------------------
 ObjTypeLabel.setText(MainWin.DrvTT(Attr.getUserName()));

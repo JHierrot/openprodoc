@@ -452,24 +452,25 @@ else
         }
     }
 AddLogFields();
-for (int i = getTypeDefs().size()-1; i >=0; i--)
-    {
-    Record TypDef=(Record)getTypeDefs().get(i);
-    Record DatParc=(Record)getTypeRecs().get(i);
-    if (i!=getTypeDefs().size()-1)
-        {
-        DatParc.addAttr(getRecSum().getAttr(fPDID));
-        }
-    DatParc.assign(getRecSum().CopyMono());
-    getDrv().InsertRecord((String)TypDef.getAttr(PDObjDefs.fNAME).getValue(), DatParc);
-    }
+MonoInsert();
+//for (int i = getTypeDefs().size()-1; i >=0; i--)
+//    {
+//    Record TypDef=(Record)getTypeDefs().get(i);
+//    Record DatParc=(Record)getTypeRecs().get(i);
+//    if (i!=getTypeDefs().size()-1)
+//        {
+//        DatParc.addAttr(getRecSum().getAttr(fPDID));
+//        }
+//    DatParc.assign(getRecSum().CopyMono());
+//    getDrv().InsertRecord((String)TypDef.getAttr(PDObjDefs.fNAME).getValue(), DatParc);
+//    }
 MultiInsert(getRecSum());
 if (!IsRootFolder)
     ActFoldLev();
 ExecuteTransThreads(PDTasksDefEvent.fMODEINS);
 GenerateNoTransThreads(PDTasksDefEvent.fMODEINS);
 getObjCache().put(getKey(), getRecord());
-} catch (PDException Ex)
+} catch (Exception Ex)
     {
     getDrv().AnularTrans();
     PDException.GenPDException("Error_creating_folder",Ex.getLocalizedMessage());
@@ -481,11 +482,30 @@ if (PDLog.isDebug())
 }
 //-------------------------------------------------------------------------
 /**
+ * Insert in all the tables the monovalued atributes
+ * @throws PDException in any error
+ */
+protected void MonoInsert()  throws PDException
+{
+for (int i = getTypeDefs().size()-1; i >=0; i--)
+    {
+    Record TypDef=(Record)getTypeDefs().get(i);
+    Record DatParc=((Record)getTypeRecs().get(i)).CopyMono();
+    if (i!=getTypeDefs().size()-1)
+        {
+        DatParc.addAttr(getRecSum().getAttr(fPDID));
+        }
+    DatParc.assign(getRecSum().CopyMono());
+    getDrv().InsertRecord((String)TypDef.getAttr(PDObjDefs.fNAME).getValue(), DatParc);
+    }
+}
+//-------------------------------------------------------------------------
+/**
  * Inserts all the multivalued attributed during the Insert
  * @param Rec Record with the sum of attributes
  * @throws PDException in any error
  */
-private void MultiInsert(Record Rec) throws PDException
+protected void MultiInsert(Record Rec) throws PDException
 {
 Record TypDef;    
 String MultiName;
@@ -896,20 +916,7 @@ AddLogFields();
 Record R=getRecord().Copy();
 R.delAttr(fPARENTID);
 R.delAttr(fFOLDTYPE);
-for (int i = getTypeDefs().size()-1; i >=0; i--)
-    {
-    Record TypDef=(Record)getTypeDefs().get(i);
-    Record DatParc=(Record)getTypeRecs().get(i);
-    if (i!=getTypeDefs().size()-1)
-        {
-        DatParc.addAttr(getRecSum().getAttr(fPDID));
-        }
-    DatParc.assign(this.getRecSum());
-    if (PDLog.isDebug())
-        PDLog.Debug("PDFolders.update2:"+(String)TypDef.getAttr(PDObjDefs.fNAME).getValue()+ ">"+DatParc);
-    if (DatParc.NumAttrFilled()>1) // Id + some value
-        getDrv().UpdateRecord((String)TypDef.getAttr(PDObjDefs.fNAME).getValue(), DatParc, getConditionsMaint());
-    }
+MonoUpdate();
 MultiDelete(this.getPDId());
 MultiInsert(R);
 ExecuteTransThreads(PDTasksDefEvent.fMODEUPD);
@@ -922,6 +929,29 @@ getObjCache().put(getKey(), getRecord());
     }
 if (InTransLocal)
     getDrv().CerrarTrans();
+}
+//-------------------------------------------------------------------------
+/**
+ * Updates all the record of minovalued attributes
+ * @throws PDException in any error
+ */
+protected void MonoUpdate()  throws PDException
+{
+for (int i = getTypeDefs().size()-1; i >=0; i--)
+    {
+    Record TypDef=(Record)getTypeDefs().get(i);
+    Record DatParc=(Record)getTypeRecs().get(i);
+    if (i!=getTypeDefs().size()-1)
+        {
+        if (DatParc.getAttr(fPDID)==null)    
+            DatParc.addAttr(getRecSum().getAttr(fPDID));
+        }
+    DatParc.assign(this.getRecSum());
+    if (PDLog.isDebug())
+        PDLog.Debug("PDFolders.update2:"+(String)TypDef.getAttr(PDObjDefs.fNAME).getValue()+ ">"+DatParc);
+    if (DatParc.NumAttrFilled()>1) // Id + some value
+        getDrv().UpdateRecord((String)TypDef.getAttr(PDObjDefs.fNAME).getValue(), DatParc, getConditionsMaint());
+    }
 }
 //-------------------------------------------------------------------------
 /**

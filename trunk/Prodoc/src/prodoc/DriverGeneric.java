@@ -2212,10 +2212,13 @@ while (R!=null)
     {
     PDTasksDefEvent TDE=new PDTasksDefEvent(this);  
     TDE.assignValues(R);
-    if (TDE.isTransact())
-        AllTaskTrans.put(TDE.getObjType()+"/"+TDE.getEvenType()+("0000"+TDE.getEvenOrder()).substring(0, 5), TDE);
-    else
-        AllTaskNoTrans.put(TDE.getObjType()+"/"+TDE.getEvenType()+("0000"+TDE.getEvenOrder()).substring(0, 5), TDE);
+    if (TDE.isActive())
+        {
+        if (TDE.isTransact())
+            AllTaskTrans.put(TDE.getObjType()+"/"+TDE.getEvenType()+("0000"+TDE.getEvenOrder()).substring(0, 5), TDE);
+        else
+            AllTaskNoTrans.put(TDE.getObjType()+"/"+TDE.getEvenType()+("0000"+TDE.getEvenOrder()).substring(0, 5), TDE);
+        }
     R=NextRec(C);
     }
 CloseCursor(C);
