@@ -56,52 +56,55 @@ private String PDAutor;
  */
 static private Record CommonStruct=null;
 
-    /**
-     *
-     */
-    static public final String XML_ListAttr="ListAttr";
-    /**
-     *
-     */
-    static public final String XML_OPDObject="OPDObject";
-    /**
-     *
-     */
-    static public final String XML_OPDList="OPDList";
-    /**
-     *
-     */
-    static public final String XML_GroupMembers="GroupMembers";
-    /**
-     *
-     */
-    static public final String XML_UserMembers="UserMembers";
-    /**
-     *
-     */
-    static public final String XML_Group="Group";
-    /**
-     *
-     */
-    static public final String XML_User="User";
-    /**
-     *
-     */
-    static public final String XML_Metadata="Metadata";
-    /**
-     *
-     */
-    static public final String XML_Field="Field";
-    /**
-     *
-     */
-    static public final String XML_Attr="Attr";
+/**
+ *
+ */
+static public final String XML_ListAttr="ListAttr";
+/**
+ *
+ */
+static public final String XML_OPDObject="OPDObject";
+/**
+ *
+ */
+static public final String XML_OPDList="OPDList";
+/**
+ *
+ */
+static public final String XML_GroupMembers="GroupMembers";
+/**
+ *
+ */
+static public final String XML_UserMembers="UserMembers";
+/**
+ *
+ */
+static public final String XML_Group="Group";
+/**
+ *
+ */
+static public final String XML_User="User";
+/**
+ *
+ */
+static public final String XML_Metadata="Metadata";
+/**
+ *
+ */
+static public final String XML_Field="Field";
+/**
+ *
+ */
+static public final String XML_Attr="Attr";
 
-    /**
-     *
-     */
-    static public final String AllowedChars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789";
-
+/**
+ *
+ */
+static public final String AllowedChars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789";
+// Ctes for evaluating syntax of tasks of updating
+static public final char SYN_SEP='#';
+static public final char SYN_ADD='+';
+static public final char SYN_DEL='+';
 //-------------------------------------------------------------------------
 /**
  *
@@ -645,6 +648,82 @@ for (int i=0; i<Name.length(); i++)
        PDExceptionFunc.GenPDException("Character_not_included_in_the_allowed_set",AllowedChars);
     }
 return(Name);
+}
+//---------------------------------------------------------------------
+/**
+ * Updates fields. Syntax:
+ * Field1=Field2;
+ * Field1=Field1+Field2;
+ * @param param Expresión to use
+ * @param r Record
+ * @return Updates record
+ */
+protected Record Update(String param, Record r) throws PDException
+{
+if (param==null || param.length()==0)    
+    return(r);
+String DestAttr=param.substring(0, param.indexOf('='));
+if (DestAttr.equalsIgnoreCase(PDDocs.fDOCTYPE) || DestAttr.equalsIgnoreCase(PDDocs.fPDID) 
+    || DestAttr.equalsIgnoreCase(PDDocs.fREPOSIT) || DestAttr.equalsIgnoreCase(PDDocs.fVERSION)
+    || DestAttr.equalsIgnoreCase(PDDocs.fLOCKEDBY) || DestAttr.equalsIgnoreCase(PDDocs.fPDAUTOR)
+    || DestAttr.equalsIgnoreCase(PDDocs.fPDDATE) || DestAttr.equalsIgnoreCase(PDDocs.fSTATUS))
+    PDExceptionFunc.GenPDException("Attribute_not_allowed_to_change", DestAttr);
+Attribute Att=r.getAttr(DestAttr);
+String NewExp=param.substring(param.indexOf('=')+1);
+ArrayList<String> ListElem=new ArrayList<String>(NewExp.length()/4);
+String Current="";
+boolean Constant=false;
+for (int i = 0; i < NewExp.length(); i++)
+    {
+    char c=NewExp.charAt(i);
+    if (c!=SYN_SEP && c!=SYN_ADD && c!=SYN_DEL)  
+        Current+=c;
+    else if (c==SYN_ADD || c==SYN_DEL)
+        {
+        ListElem.add(Current);
+        Current="";
+        ListElem.add(""+c);
+        }
+    else if (c==SYN_SEP)
+        {
+        Current+=c;
+        if (Constant)
+            ListElem.add(Current);
+        Constant=!Constant;
+        }
+    }
+if (Current.length()!=0)
+    {
+    ListElem.add(Current);
+    Current="";
+    }
+String TotalVal="";
+String NewVal="";
+Attribute Attr1=null;
+for (int i = 0; i < ListElem.size(); i++)
+    {
+    if (i % 2 == 0) // Field 
+        {
+        String Elem = ListElem.get(i);
+        if (Elem.charAt(0)==SYN_SEP)
+            NewVal=Elem.substring(1, Elem.length()-1);
+        else 
+            {
+            Attr1=r.getAttr(Elem);
+            NewVal=Attr1.Export();
+            }       
+        if (Current.equals(""))
+            TotalVal=NewVal;
+        else if (Current.charAt(0)==SYN_ADD)
+            TotalVal+=NewVal;
+        }
+    else
+        {
+        Current=ListElem.get(i);
+        }
+    }
+r.getAttr(DestAttr).setValue(TotalVal);
+return(r);
 }
 //---------------------------------------------------------------------
 }

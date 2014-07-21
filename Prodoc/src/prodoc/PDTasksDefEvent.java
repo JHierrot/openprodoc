@@ -36,11 +36,14 @@ public static final String fMODEINS="INS";
 public static final String fMODEUPD="UPD";
 public static final String fMODEDEL="DEL";
 
-public static final int fTASKEVENT_UPDATE_DOC =100;
-public static final int fTASKEVENT_UPDATE_FOLD=101;
-public static final int fTASKEVENT_COPY_DOC   =102;
-public static final int fTASKEVENT_COPY_FOLD  =103;
-public static final int fTASKEVENT_EXPORT_DOC =104;
+public static final int STARTNUM=200;
+
+
+public static final int fTASKEVENT_UPDATE_DOC =STARTNUM+0;
+public static final int fTASKEVENT_UPDATE_FOLD=STARTNUM+1;
+public static final int fTASKEVENT_COPY_DOC   =STARTNUM+2;
+public static final int fTASKEVENT_COPY_FOLD  =STARTNUM+3;
+public static final int fTASKEVENT_EXPORT_DOC =STARTNUM+4;
 
 private static final String[] LisTypeEventTask= {"UPDATE_DOC",
                                                  "UPDATE_FOLD",
@@ -209,9 +212,18 @@ static public String[] getListTypeEventTask()
 return LisTypeEventTask;    
 }
 //-------------------------------------------------------------------------
-void Execute(PDFolders aThis)
+protected void Execute(PDFolders Fold) throws PDException
 {
-throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+switch (this.getType())
+    {case fTASKEVENT_UPDATE_FOLD:
+        ExecuteUpdFold(Fold);
+        break;
+     case fTASKEVENT_COPY_FOLD:
+        break;
+     default:
+         PDException.GenPDException("Unexpected_Task", "Type"+getType());
+         break;
+    }
 }
 //-------------------------------------------------------------------------
 static boolean isFolder(int TaskType)
@@ -220,6 +232,26 @@ if (TaskType==fTASKEVENT_UPDATE_FOLD || TaskType==fTASKEVENT_COPY_FOLD)
     return(true);
 else
     return(false);
+}
+//-------------------------------------------------------------------------    
+/**
+ * Updates Attributes of a Folder
+ * @param Fold Folder to Update
+ */
+private void ExecuteUpdFold(PDFolders Fold) throws PDException
+{
+//PDFolders Fold=new PDFolders(getDrv(), pFold.getFolderType());
+//Record r=Fold.LoadFull(pFold.getPDId());
+Record r=Fold.getRecSum();
+r=Update(getParam(), r);
+if (getParam2()!=null && getParam2().length()!=0)
+    r=Update(getParam2(), r);
+if (getParam3()!=null && getParam2().length()!=0)
+    r=Update(getParam3(), r);
+if (getParam4()!=null && getParam2().length()!=0)
+    r=Update(getParam4(), r);
+Fold.assignValues(r);
+Fold.MonoUpdate();
 }
 //-------------------------------------------------------------------------    
 }
