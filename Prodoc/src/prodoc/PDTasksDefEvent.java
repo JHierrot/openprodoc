@@ -44,12 +44,14 @@ public static final int fTASKEVENT_UPDATE_FOLD=STARTNUM+1;
 public static final int fTASKEVENT_COPY_DOC   =STARTNUM+2;
 public static final int fTASKEVENT_COPY_FOLD  =STARTNUM+3;
 public static final int fTASKEVENT_EXPORT_DOC =STARTNUM+4;
+public static final int fTASKEVENT_EXPORT_FOLD=STARTNUM+5;
 
 private static final String[] LisTypeEventTask= {"UPDATE_DOC",
                                                  "UPDATE_FOLD",
                                                  "COPY_DOC",
                                                  "COPY_FOLD",
-                                                 "EXPORT_DOC"
+                                                 "EXPORT_DOC",
+                                                 "EXPORT_FOLD"
                                                  };
 /**
  *
@@ -219,6 +221,7 @@ switch (this.getType())
         ExecuteUpdFold(Fold);
         break;
      case fTASKEVENT_COPY_FOLD:
+        ExecuteCopyFold(Fold);
         break;
      default:
          PDException.GenPDException("Unexpected_Task", "Type"+getType());
@@ -237,6 +240,7 @@ else
 /**
  * Updates Attributes of a Folder
  * @param Fold Folder to Update
+ * @throws PDException in any error
  */
 private void ExecuteUpdFold(PDFolders Fold) throws PDException
 {
@@ -252,6 +256,22 @@ if (getParam4()!=null && getParam2().length()!=0)
     r=Update(getParam4(), r);
 Fold.assignValues(r);
 Fold.MonoUpdate();
+}
+//-------------------------------------------------------------------------    
+/**
+ * Copy a fold in destination folder 
+ * @param Fold Folder to be copied
+ * @throws PDException in any error
+ */
+private void ExecuteCopyFold(PDFolders Fold) throws PDException
+{
+if (getParam().equals(Fold.getParentId())) // to avoid "recursivity"
+    return;
+PDFolders f=new PDFolders(Fold.getDrv(), Fold.getFolderType());
+f.assignValues(Fold.getRecSum());
+f.setPDId(null);
+f.setParentId(getParam());
+f.insert();
 }
 //-------------------------------------------------------------------------    
 }

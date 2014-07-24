@@ -680,15 +680,21 @@ for (int i = 0; i < NewExp.length(); i++)
         Current+=c;
     else if (c==SYN_ADD || c==SYN_DEL)
         {
-        ListElem.add(Current);
-        Current="";
+        if (Current.length()!=0)    
+            {
+            ListElem.add(Current);
+            Current="";
+            }
         ListElem.add(""+c);
         }
     else if (c==SYN_SEP)
         {
         Current+=c;
         if (Constant)
+            {
             ListElem.add(Current);
+            Current="";
+            }
         Constant=!Constant;
         }
     }

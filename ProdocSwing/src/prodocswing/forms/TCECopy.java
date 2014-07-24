@@ -29,14 +29,14 @@ package prodocswing.forms;
  *
  * @author jhierrot
  */
-public class TCEUpdate extends TCBase
+public class TCECopy extends TCBase
 {
 
 /** Creates new form MantUsers
  * @param parent 
  * @param modal
  */
-public TCEUpdate(javax.swing.JDialog parent, boolean modal)
+public TCECopy(javax.swing.JDialog parent, boolean modal)
 {
 super(parent, modal);
 initComponents();
@@ -55,12 +55,6 @@ initComponents();
         LabelOperation = new javax.swing.JLabel();
         ParamLabel1 = new javax.swing.JLabel();
         ParamTextField1 = new javax.swing.JTextField();
-        ParamLabel2 = new javax.swing.JLabel();
-        ParamTextField2 = new javax.swing.JTextField();
-        ParamLabel3 = new javax.swing.JLabel();
-        ParamTextField3 = new javax.swing.JTextField();
-        ParamLabel4 = new javax.swing.JLabel();
-        ParamTextField4 = new javax.swing.JTextField();
         ButtonAcept = new javax.swing.JButton();
         ButtonCancel = new javax.swing.JButton();
 
@@ -77,27 +71,12 @@ initComponents();
 
         LabelOperation.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
         LabelOperation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        LabelOperation.setText(MainWin.TT("Param_Update_Atributes"));
+        LabelOperation.setText(MainWin.TT("Param_Copy"));
 
         ParamLabel1.setFont(MainWin.getFontDialog());
-        ParamLabel1.setText((MainWin.TT("Attribute")+" 1"));
+        ParamLabel1.setText(MainWin.TT("Parent_Folder"));
 
         ParamTextField1.setFont(MainWin.getFontDialog());
-
-        ParamLabel2.setFont(MainWin.getFontDialog());
-        ParamLabel2.setText((MainWin.TT("Attribute")+" 2"));
-
-        ParamTextField2.setFont(MainWin.getFontDialog());
-
-        ParamLabel3.setFont(MainWin.getFontDialog());
-        ParamLabel3.setText((MainWin.TT("Attribute")+" 3"));
-
-        ParamTextField3.setFont(MainWin.getFontDialog());
-
-        ParamLabel4.setFont(MainWin.getFontDialog());
-        ParamLabel4.setText((MainWin.TT("Attribute")+" 4"));
-
-        ParamTextField4.setFont(MainWin.getFontDialog());
 
         ButtonAcept.setFont(MainWin.getFontDialog());
         ButtonAcept.setText(MainWin.TT("Ok"));
@@ -129,34 +108,15 @@ initComponents();
                 .addGap(12, 12, 12))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(ParamLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(ButtonAcept)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(ButtonCancel)
-                        .addContainerGap(24, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(ParamTextField3)
-                        .addGap(12, 12, 12))))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(ParamLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ParamTextField1)
+                .addComponent(ParamTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(ParamLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(ButtonAcept)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ParamTextField2)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(ParamLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ParamTextField4)
+                .addComponent(ButtonCancel)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -168,23 +128,11 @@ initComponents();
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ParamTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ParamLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ParamLabel2)
-                    .addComponent(ParamTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ParamLabel3)
-                    .addComponent(ParamTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ParamLabel4)
-                    .addComponent(ParamTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButtonCancel)
                     .addComponent(ButtonAcept))
-                .addGap(24, 24, 24))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         pack();
@@ -199,9 +147,6 @@ setVisible(false);
     private void ButtonAceptActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ButtonAceptActionPerformed
     {//GEN-HEADEREND:event_ButtonAceptActionPerformed
 super.setParam(ParamTextField1.getText());   
-super.setParam2(ParamTextField2.getText());
-super.setParam3(ParamTextField3.getText());
-super.setParam4(ParamTextField4.getText());
 setCancel(false);
 setVisible(false);
     }//GEN-LAST:event_ButtonAceptActionPerformed
@@ -217,13 +162,7 @@ setVisible(false);
     private javax.swing.JButton ButtonCancel;
     private javax.swing.JLabel LabelOperation;
     private javax.swing.JLabel ParamLabel1;
-    private javax.swing.JLabel ParamLabel2;
-    private javax.swing.JLabel ParamLabel3;
-    private javax.swing.JLabel ParamLabel4;
     private javax.swing.JTextField ParamTextField1;
-    private javax.swing.JTextField ParamTextField2;
-    private javax.swing.JTextField ParamTextField3;
-    private javax.swing.JTextField ParamTextField4;
     // End of variables declaration//GEN-END:variables
 //------------------------------------------------   
 /**
@@ -232,33 +171,6 @@ setVisible(false);
 public void setParam(String Param)
 {
 ParamTextField1.setText(Param);
-}
-//------------------------------------------------   
-/**
- * @param Param the Param to set
- */
-@Override
-public void setParam2(String Param)
-{
-ParamTextField2.setText(Param);
-}
-//------------------------------------------------   
-/**
- * @param Param the Param to set
- */
-@Override
-public void setParam3(String Param)
-{
-ParamTextField3.setText(Param);
-}
-//----------------------------------------------------------------
-/**
- * @param Param the Param to set
- */
-@Override
-public void setParam4(String Param)
-{
-ParamTextField4.setText(Param);
 }
 //----------------------------------------------------------------
 }

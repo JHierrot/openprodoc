@@ -2143,7 +2143,7 @@ return(Text.replace('^', '<').replace("¡1", "%").replace("¡2","&"));
  * @return a list that can be empty
  * @throws prodoc.PDException in any error
  */
-protected ArrayList getFoldTransThreads(String folderType, String MODE) throws PDException
+protected ArrayList<PDTasksDefEvent> getFoldTransThreads(String folderType, String MODE) throws PDException
 {
 ArrayList TotalTask=new ArrayList();    
 PDFolders f=new PDFolders(this,folderType);
