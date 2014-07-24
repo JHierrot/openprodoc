@@ -35,7 +35,6 @@ import prodoc.PDException;
 import prodoc.PDExceptionFunc;
 import prodoc.PDObjDefs;
 import prodoc.PDTasksDefEvent;
-import prodoc.PDTasksDef;
 import prodoc.Record;
 
 /**
@@ -101,7 +100,7 @@ initComponents();
         ButtonEdit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle(MainWin.TT("Programed_Task_Maintenance"));
+        setTitle(MainWin.TT("Event_Task_Maintenance"));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter()
         {
@@ -426,9 +425,9 @@ switch (TypeComboBox.getSelectedIndex()+ PDTasksDefEvent.STARTNUM)
     break;
     case PDTasksDefEvent.fTASKEVENT_UPDATE_FOLD : LU = new TCEUpdate(this, true);
     break;
-    case PDTasksDefEvent.fTASKEVENT_COPY_DOC: LU = new TCDelOldDoc(this, true);
+    case PDTasksDefEvent.fTASKEVENT_COPY_DOC: LU = new TCECopy(this, true);
     break;
-    case PDTasksDefEvent.fTASKEVENT_COPY_FOLD: LU = new TCDelOldDoc(this, true);
+    case PDTasksDefEvent.fTASKEVENT_COPY_FOLD: LU = new TCECopy(this, true);
     break;
     case PDTasksDefEvent.fTASKEVENT_EXPORT_DOC: LU = new TCPurgeOldDoc(this, true);;
     break;
@@ -602,7 +601,7 @@ if (Attr.getValue()!=null)
 ParamTextField4.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
 Attr=EventTask.getAttr(PDTasksDefEvent.fTYPE); //--------------------------
 TypeLabel.setText(MainWin.DrvTT(Attr.getUserName()));
-if (Attr.getValue()!=null)
+if (Attr.getValue()!=null && (Integer)Attr.getValue()>=PDTasksDefEvent.STARTNUM)
     TypeComboBox.setSelectedIndex((Integer)Attr.getValue()-PDTasksDefEvent.STARTNUM);
 TypeComboBox.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
 Attr=EventTask.getAttr(PDTasksDefEvent.fOBJTYPE); //--------------------------

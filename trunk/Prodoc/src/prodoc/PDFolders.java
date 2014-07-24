@@ -1475,13 +1475,11 @@ getDrv().CloseCursor(ListDocs);
  */
 protected void ExecuteTransThreads(String MODE) throws PDException
 {
-ArrayList L =getDrv().getFoldTransThreads(this.getFolderType(), MODE); 
-PDTasksDefEvent T;
-for (int i = 0; i < L.size(); i++)
-    {
-    T = (PDTasksDefEvent)L.get(i);
-    T.Execute(this);
-    }  
+ArrayList<PDTasksDefEvent> L =getDrv().getFoldTransThreads(this.getFolderType(), MODE); 
+if (!L.isEmpty())
+    LoadFull(getPDId());
+for (PDTasksDefEvent L1 : L)
+    L1.Execute(this);
 }
 //---------------------------------------------------------------------
 /** Generates all the NO transactional defined threads
