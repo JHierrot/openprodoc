@@ -590,7 +590,8 @@ Attr.setValue(Date2Del.getTime());
 Condition c=new Condition(Attr, Condition.cLET);
 Conditions Conds=new Conditions();
 Conds.addCondition(c);
-return(F.Search(FoldType,  Conds, SubTypes, true, getParam3(), null))  ;
+String IdAct=F.getIdPath(getParam3());
+return(F.Search(FoldType,  Conds, SubTypes, true, IdAct, null))  ;
 }
 //-------------------------------------------------------------------------
 /**
@@ -714,7 +715,8 @@ Attr.setValue(Date2Del.getTime());
 Condition c=new Condition(Attr, Condition.cGET);
 Conditions Conds=new Conditions();
 Conds.addCondition(c);
-return(F.Search(FoldType,  Conds, SubTypes, true, getParam3(), null))  ;
+String IdAct=F.getIdPath(getParam3());
+return(F.Search(FoldType,  Conds, SubTypes, true, IdAct, null))  ;
 }
 //-------------------------------------------------------------------------
 
@@ -739,7 +741,9 @@ Attr.setValue(Date2Del.getTime());
 Condition c=new Condition(Attr, Condition.cLET);
 Conditions Conds=new Conditions();
 Conds.addCondition(c);
-return(Doc.Search(DocType, Conds, SubTypes, true, false, getParam3(), null))  ;
+PDFolders F=new PDFolders(getDrv());
+String IdAct=F.getIdPath(getParam3());
+return(Doc.Search(DocType, Conds, SubTypes, true, false, IdAct, null))  ;
 }
 //-------------------------------------------------------------------------
 /**

@@ -59,8 +59,8 @@ initComponents();
         ParamTextField2 = new javax.swing.JTextField();
         ParamLabel3 = new javax.swing.JLabel();
         ParamTextField3 = new javax.swing.JTextField();
-        ParamLabel4 = new javax.swing.JLabel();
-        ParamTextField4 = new javax.swing.JTextField();
+        FolderLabel = new javax.swing.JLabel();
+        FolderTextField = new javax.swing.JTextField();
         ButtonAcept = new javax.swing.JButton();
         ButtonCancel = new javax.swing.JButton();
 
@@ -94,10 +94,10 @@ initComponents();
 
         ParamTextField3.setFont(MainWin.getFontDialog());
 
-        ParamLabel4.setFont(MainWin.getFontDialog());
-        ParamLabel4.setText((MainWin.TT("Attribute")+" 4"));
+        FolderLabel.setFont(MainWin.getFontDialog());
+        FolderLabel.setText((MainWin.TT("Folder")));
 
-        ParamTextField4.setFont(MainWin.getFontDialog());
+        FolderTextField.setFont(MainWin.getFontDialog());
 
         ButtonAcept.setFont(MainWin.getFontDialog());
         ButtonAcept.setText(MainWin.TT("Ok"));
@@ -136,7 +136,7 @@ initComponents();
                         .addComponent(ButtonAcept)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(ButtonCancel)
-                        .addContainerGap(24, Short.MAX_VALUE))
+                        .addContainerGap(29, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(ParamTextField3)
                         .addGap(12, 12, 12))))
@@ -154,9 +154,9 @@ initComponents();
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(ParamLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(FolderLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ParamTextField4)
+                .addComponent(FolderTextField)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -178,9 +178,9 @@ initComponents();
                     .addComponent(ParamTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ParamLabel4)
-                    .addComponent(ParamTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                    .addComponent(FolderLabel)
+                    .addComponent(FolderTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButtonCancel)
                     .addComponent(ButtonAcept))
@@ -201,7 +201,7 @@ setVisible(false);
 super.setParam(ParamTextField1.getText());   
 super.setParam2(ParamTextField2.getText());
 super.setParam3(ParamTextField3.getText());
-super.setParam4(ParamTextField4.getText());
+super.setParam4(FolderTextField.getText());
 setCancel(false);
 setVisible(false);
     }//GEN-LAST:event_ButtonAceptActionPerformed
@@ -215,15 +215,15 @@ setVisible(false);
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonAcept;
     private javax.swing.JButton ButtonCancel;
+    private javax.swing.JLabel FolderLabel;
+    private javax.swing.JTextField FolderTextField;
     private javax.swing.JLabel LabelOperation;
     private javax.swing.JLabel ParamLabel1;
     private javax.swing.JLabel ParamLabel2;
     private javax.swing.JLabel ParamLabel3;
-    private javax.swing.JLabel ParamLabel4;
     private javax.swing.JTextField ParamTextField1;
     private javax.swing.JTextField ParamTextField2;
     private javax.swing.JTextField ParamTextField3;
-    private javax.swing.JTextField ParamTextField4;
     // End of variables declaration//GEN-END:variables
 //------------------------------------------------   
 /**
@@ -258,7 +258,7 @@ ParamTextField3.setText(Param);
 @Override
 public void setParam4(String Param)
 {
-ParamTextField4.setText(Param);
+FolderTextField.setText(Param);
 }
 //----------------------------------------------------------------
 }
