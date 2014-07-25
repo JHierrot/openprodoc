@@ -244,16 +244,15 @@ else
  */
 private void ExecuteUpdFold(PDFolders Fold) throws PDException
 {
-//PDFolders Fold=new PDFolders(getDrv(), pFold.getFolderType());
-//Record r=Fold.LoadFull(pFold.getPDId());
+String IdUnder=Fold.getIdPath(getParam4());
+if (!Fold.IsUnder(IdUnder))    
+   return; 
 Record r=Fold.getRecSum();
 r=Update(getParam(), r);
 if (getParam2()!=null && getParam2().length()!=0)
     r=Update(getParam2(), r);
 if (getParam3()!=null && getParam2().length()!=0)
     r=Update(getParam3(), r);
-if (getParam4()!=null && getParam2().length()!=0)
-    r=Update(getParam4(), r);
 Fold.assignValues(r);
 Fold.MonoUpdate();
 }
@@ -267,6 +266,9 @@ private void ExecuteCopyFold(PDFolders Fold) throws PDException
 {
 if (getParam().equals(Fold.getParentId())) // to avoid "recursivity"
     return;
+String IdUnder=Fold.getIdPath(getParam2());
+if (!Fold.IsUnder(IdUnder))    
+   return; 
 PDFolders f=new PDFolders(Fold.getDrv(), Fold.getFolderType());
 f.assignValues(Fold.getRecSum());
 f.setPDId(null);

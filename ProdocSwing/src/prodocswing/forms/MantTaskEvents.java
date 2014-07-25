@@ -431,6 +431,8 @@ switch (TypeComboBox.getSelectedIndex()+ PDTasksDefEvent.STARTNUM)
     break;
     case PDTasksDefEvent.fTASKEVENT_EXPORT_DOC: LU = new TCPurgeOldDoc(this, true);;
     break;
+    case PDTasksDefEvent.fTASKEVENT_EXPORT_FOLD: LU = new TCPurgeOldDoc(this, true);;
+    break;
     default: PDExceptionFunc.GenPDException("Unexpected_Task", "");
     break;
     }

@@ -428,8 +428,8 @@ if (getPDId()==null || getPDId().length()==0)
     setPDId(GenerateId());
 else if (!IsRootFolder && getParentId().equalsIgnoreCase(getPDId()) && !getPDId().equalsIgnoreCase(ROOTFOLDER))
        PDException.GenPDException("Parent_folder_equals_to_actual_folder", getParentId());
-if (PDLog.isDebug())
-    PDLog.Debug("PDFolders.insert:"+getPDId());
+if (PDLog.isInfo())
+    PDLog.Info("PDFolders.insert:"+getPDId());
 if (IsRootFolder)
     {
     setParentId(ROOTFOLDER);
@@ -765,7 +765,7 @@ return RecSum;
 public void delete() throws PDException
 {
 if (PDLog.isInfo())
-    PDLog.Debug("PDFolders.delete>:"+getPDId());
+    PDLog.Info("PDFolders.delete>:"+getPDId());
 boolean InTransLocal;
 Load(getPDId());
 VerifyAllowedDel();
@@ -904,8 +904,8 @@ getDrv().DeleteRecord(getTableNameFoldLev(), Conds);
 @Override
 public void update()  throws PDException
 {
-if (PDLog.isDebug())
-    PDLog.Debug("PDFolders.update:"+getPDId());
+if (PDLog.isInfo())
+    PDLog.Info("PDFolders.update:"+getPDId());
 boolean InTransLocal;
 VerifyAllowedUpd();
 InTransLocal=!getDrv().isInTransaction();
@@ -1193,8 +1193,35 @@ return((String)A.getValue());
  */
 public String getIdPath(String FoldName)  throws PDException
 {
-String Id="";
+String Id=PDFolders.ROOTFOLDER;
+PDFolders F=new PDFolders(getDrv());
+String[] Folders = FoldName.split("/");
+for (int i = 0; i < Folders.length; i++)
+    {
+    String FoldN = Folders[i];
+    if (FoldN.length()!=0)
+        Id=F.GetIdChild(Id, FoldN);
+    }
 return(Id);
+}
+//-------------------------------------------------------------------------
+/**
+ * From a Id generates the "path" as a Filesystem
+ * @param Id PDID of child folder
+ * @return the String representig the complete path excludig rootfolder
+ * @throws PDException if the folder doesn't exist or the user it'snt allowed
+ */
+public String getPathId(String Id) throws PDException
+{
+String CompPath="";    
+PDFolders F=new PDFolders(getDrv());
+while (!Id.equals(PDFolders.ROOTFOLDER))
+        {
+        F.Load(Id);
+        Id=F.getParentId();
+        CompPath="/"+F.getTitle();
+        }
+return(CompPath);
 }
 //-------------------------------------------------------------------------
 /**
@@ -1483,7 +1510,8 @@ for (PDTasksDefEvent L1 : L)
 }
 //---------------------------------------------------------------------
 /** Generates all the NO transactional defined threads
- * 
+ * @param MODE Kind of operation (INSert, UPDater, DELete)
+ * @throws prodoc.PDException in any error
  */
 protected void GenerateNoTransThreads(String MODE) throws PDException
 {
@@ -1498,5 +1526,26 @@ for (int i = 0; i < L.size(); i++)
     TE.insert();
     }
 }
+//-------------------------------------------------------------------------
+/**
+ * Return true if the current folder Object is under ParentId
+ * @param ParentId PDID of poytential ancestor
+ * @return true if the current folder Object is under ParentId
+ * @throws PDException in any error
+ */
+public boolean IsUnder(String ParentId) throws PDException
+{
+boolean Is;    
+Condition CondParents=new Condition( fGRANTPARENTID, Condition.cEQUAL, ParentId);
+Condition CondThis=new Condition( fPDID, Condition.cEQUAL, getPDId());
+Conditions Conds=new Conditions();
+Conds.addCondition(CondParents);
+Conds.addCondition(CondThis);
+Query Q=new Query(getTableNameFoldLev(), getRecordStructPDFolderLev(), Conds);
+Cursor CursorId=getDrv().OpenCursor(Q);
+Is=(getDrv().NextRec(CursorId)!=null);
+getDrv().CloseCursor(CursorId); 
+return(Is);
+}   
 //-------------------------------------------------------------------------
 }
