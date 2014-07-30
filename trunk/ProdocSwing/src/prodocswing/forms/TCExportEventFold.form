@@ -52,7 +52,6 @@
                       <Component id="ParamLabel" min="-2" pref="152" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="ParamTextField" min="-2" pref="292" max="-2" attributes="0"/>
-                      <EmptySpace pref="57" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="ParamLabel2" min="-2" pref="152" max="-2" attributes="0"/>

@@ -429,9 +429,9 @@ switch (TypeComboBox.getSelectedIndex()+ PDTasksDefEvent.STARTNUM)
     break;
     case PDTasksDefEvent.fTASKEVENT_COPY_FOLD: LU = new TCECopy(this, true);
     break;
-    case PDTasksDefEvent.fTASKEVENT_EXPORT_DOC: LU = new TCPurgeOldDoc(this, true);;
+    case PDTasksDefEvent.fTASKEVENT_EXPORT_DOC: LU = new TCExportEventFold(this, true);;
     break;
-    case PDTasksDefEvent.fTASKEVENT_EXPORT_FOLD: LU = new TCPurgeOldDoc(this, true);;
+    case PDTasksDefEvent.fTASKEVENT_EXPORT_FOLD: LU = new TCExportEventFold(this, true);;
     break;
     default: PDExceptionFunc.GenPDException("Unexpected_Task", "");
     break;
@@ -459,7 +459,8 @@ LU.dispose();
     private void TypeComboBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_TypeComboBoxActionPerformed
     {//GEN-HEADEREND:event_TypeComboBoxActionPerformed
 int T=TypeComboBox.getSelectedIndex()+PDTasksDefEvent.STARTNUM;
-if (T==PDTasksDefEvent.fTASKEVENT_UPDATE_FOLD || T==PDTasksDefEvent.fTASKEVENT_COPY_FOLD)
+if (T==PDTasksDefEvent.fTASKEVENT_UPDATE_FOLD || T==PDTasksDefEvent.fTASKEVENT_COPY_FOLD 
+    || T==PDTasksDefEvent.fTASKEVENT_EXPORT_FOLD)
     ObjTypeComboBox.setModel(getListObjFold());
 else
     ObjTypeComboBox.setModel(getListObjDoc());
