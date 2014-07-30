@@ -223,6 +223,9 @@ switch (this.getType())
      case fTASKEVENT_COPY_FOLD:
         ExecuteCopyFold(Fold);
         break;
+     case fTASKEVENT_EXPORT_FOLD:
+        ExecuteExportFold(Fold);
+        break;
      default:
          PDException.GenPDException("Unexpected_Task", "Type"+getType());
          break;
@@ -274,6 +277,24 @@ f.assignValues(Fold.getRecSum());
 f.setPDId(null);
 f.setParentId(getParam());
 f.insert();
+}
+//-------------------------------------------------------------------------    
+/**
+ * Export a fold in destination folder 
+ * @param Fold Folder to be exported
+ * @throws PDException in any error
+ */
+private void ExecuteExportFold(PDFolders Fold) throws PDException
+{
+String IdUnder=Fold.getIdPath(getParam());
+if (!Fold.IsUnder(IdUnder))    
+   return; 
+try {
+Fold.ExportPath(Fold.getPDId(), getParam2());
+} catch (Exception ex)
+    {
+    PDException.GenPDException("Error_Exporting_Folder", ex.getLocalizedMessage());
+    }
 }
 //-------------------------------------------------------------------------    
 }

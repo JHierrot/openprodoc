@@ -181,8 +181,8 @@ setVisible(false);
 
     private void ButtonAceptActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ButtonAceptActionPerformed
     {//GEN-HEADEREND:event_ButtonAceptActionPerformed
-super.setParam3(ParamTextField.getText());
-super.setParam4(ParamTextField2.getText());
+super.setParam(ParamTextField.getText());
+super.setParam2(ParamTextField2.getText());
 setCancel(false);
 setVisible(false);
     }//GEN-LAST:event_ButtonAceptActionPerformed

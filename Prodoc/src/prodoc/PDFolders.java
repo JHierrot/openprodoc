@@ -919,9 +919,9 @@ R.delAttr(fFOLDTYPE);
 MonoUpdate();
 MultiDelete(this.getPDId());
 MultiInsert(R);
+getObjCache().put(getKey(), getRecord());
 ExecuteTransThreads(PDTasksDefEvent.fMODEUPD);
 GenerateNoTransThreads(PDTasksDefEvent.fMODEUPD);
-getObjCache().put(getKey(), getRecord());
 } catch (PDException Ex)
     {
     getDrv().AnularTrans();
