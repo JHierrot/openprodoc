@@ -267,7 +267,7 @@ Fold.MonoUpdate();
  */
 private void ExecuteCopyFold(PDFolders Fold) throws PDException
 {
-if (getParam().equals(Fold.getParentId())) // to avoid "recursivity"
+if (Fold.getIdPath(getParam()).equals(Fold.getParentId())) // to avoid "recursivity"
     return;
 String IdUnder=Fold.getIdPath(getParam2());
 if (!Fold.IsUnder(IdUnder))    
@@ -275,7 +275,7 @@ if (!Fold.IsUnder(IdUnder))
 PDFolders f=new PDFolders(Fold.getDrv(), Fold.getFolderType());
 f.assignValues(Fold.getRecSum());
 f.setPDId(null);
-f.setParentId(getParam());
+f.setParentId(Fold.getIdPath(getParam()));
 f.insert();
 }
 //-------------------------------------------------------------------------    

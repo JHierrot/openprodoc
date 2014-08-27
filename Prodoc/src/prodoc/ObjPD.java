@@ -432,7 +432,7 @@ if (CommonStruct==null)
     {
     CommonStruct=CreateRecordStructCommon();
     }
-return(CommonStruct);
+return(CommonStruct.Copy());
 }
 //-------------------------------------------------------------------------
 /**
