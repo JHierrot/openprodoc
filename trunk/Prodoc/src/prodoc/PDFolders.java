@@ -1523,6 +1523,7 @@ for (int i = 0; i < L.size(); i++)
     T = (PDTasksDefEvent)L.get(i);
     TE=new PDTasksExec(getDrv());
     TE.GenFromDef(T, this);
+    TE.setNextDate(new Date());
     TE.insert();
     }
 }

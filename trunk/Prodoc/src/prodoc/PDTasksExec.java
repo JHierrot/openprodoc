@@ -23,6 +23,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import static prodoc.PDTasksDefEvent.fTASKEVENT_COPY_FOLD;
+import static prodoc.PDTasksDefEvent.fTASKEVENT_EXPORT_FOLD;
+import static prodoc.PDTasksDefEvent.fTASKEVENT_UPDATE_FOLD;
 
 /**
  * Class responsible of actual execution of pending task
@@ -294,6 +297,16 @@ switch (getType())
         break;
     case fTASK_EXPORT: Export();
         break;
+    case fTASKEVENT_UPDATE_FOLD:
+        ExecuteUpdFold();
+        break;
+    case fTASKEVENT_COPY_FOLD:
+        ExecuteCopyFold();
+        break;
+    case fTASKEVENT_EXPORT_FOLD:
+        ExecuteExportFold();
+        break;
+    
     default: PDExceptionFunc.GenPDException("Unexpected_Task", ""+getType());
         break;
     }
@@ -763,8 +776,8 @@ this.NextDate = NextDate;
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
+ * Generates the default conditions that is PDID=current PDID
+ * @return Conditions containing 1 condition
  * @throws PDException
  */
 protected Conditions getConditions() throws PDException
@@ -774,9 +787,68 @@ ListCond.addCondition(new Condition(fPDID, Condition.cEQUAL, getPDId()));
 return(ListCond);
 }
 //-------------------------------------------------------------------------
+/**
+ * Generates a Task from the definition and the actual Folder
+ * @param pTask Taks definition
+ * @param pFold Folder
+ */
+void GenFromDef(PDTasksDefEvent pTask, PDFolders pFold) throws PDException
+{
+super.assignValues(pTask.getRecord());
+setPDId(GenerateId());
+this.setObjFilter(pFold.getPDId());
+this.setObjType(pFold.getFolderType());
+}
+//-------------------------------------------------------------------------
 
-    void GenFromDef(PDTasksDefEvent T, PDFolders aThis)
+private void ExecuteUpdFold() throws PDException
+{
+PDFolders Fold=new PDFolders(this.getDrv(), getObjType());
+Fold.LoadFull(getObjFilter());
+String IdUnder=Fold.getIdPath(getParam4());
+if (!Fold.IsUnder(IdUnder))    
+   return; 
+Record r=Fold.getRecSum();
+r=Update(getParam(), r);
+if (getParam2()!=null && getParam2().length()!=0)
+    r=Update(getParam2(), r);
+if (getParam3()!=null && getParam2().length()!=0)
+    r=Update(getParam3(), r);
+Fold.assignValues(r);
+Fold.MonoUpdate();
+}
+//-------------------------------------------------------------------------
+
+private void ExecuteCopyFold() throws PDException
+{
+PDFolders Fold=new PDFolders(this.getDrv(), getObjType());
+Fold.LoadFull(getObjFilter());
+if (Fold.getIdPath(getParam()).equals(Fold.getParentId())) // to avoid "recursivity"
+    return;
+String IdUnder=Fold.getIdPath(getParam2());
+if (!Fold.IsUnder(IdUnder))    
+   return; 
+PDFolders f=new PDFolders(Fold.getDrv(), Fold.getFolderType());
+f.assignValues(Fold.getRecSum());
+f.setPDId(null);
+f.setParentId(Fold.getIdPath(getParam()));
+f.insert();
+}
+//-------------------------------------------------------------------------
+
+private void ExecuteExportFold() throws PDException
+{
+PDFolders Fold=new PDFolders(this.getDrv(), getObjType());
+Fold.LoadFull(getObjFilter());
+String IdUnder=Fold.getIdPath(getParam());
+if (!Fold.IsUnder(IdUnder))    
+   return; 
+try {
+Fold.ExportPath(Fold.getPDId(), getParam2());
+} catch (Exception ex)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    PDException.GenPDException("Error_Exporting_Folder", ex.getLocalizedMessage());
     }
+}
+//-------------------------------------------------------------------------
 }

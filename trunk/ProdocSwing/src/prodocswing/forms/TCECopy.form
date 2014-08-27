@@ -37,7 +37,7 @@
           </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="ParamLabel1" min="-2" pref="152" max="-2" attributes="0"/>
+              <Component id="ParamLabel2" min="-2" pref="152" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="ParamTextField1" pref="290" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
@@ -51,7 +51,7 @@
           </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="ParamLabel2" min="-2" pref="152" max="-2" attributes="0"/>
+              <Component id="ParamLabel1" min="-2" pref="152" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="ParamTextField2" pref="290" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
@@ -66,12 +66,12 @@
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="ParamTextField1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="ParamLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="ParamLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="ParamTextField2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="ParamLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="ParamLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
