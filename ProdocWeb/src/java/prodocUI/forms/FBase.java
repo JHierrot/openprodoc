@@ -21,6 +21,8 @@ package prodocUI.forms;
 
 import html.*;
 import javax.servlet.http.HttpServletRequest;
+import prodocUI.servlet.SMain;
+import prodocUI.servlet.SParent;
 
 /**
  *
@@ -38,15 +40,13 @@ private Table PageHead;
  * @param pCabecera
  */
 public FBase(HttpServletRequest Req, String pTitulo, String pCabecera)
-{
-super(Req, pTitulo, pCabecera);
+{ 
+super(Req, pTitulo+SParent.getSessName(Req), pCabecera);
 AddCSS("prodoc.css");
 PageTab=new Table(1, 5, 0);
 PageTab.setWidth(-100);
 PageTab.setCellSpacing(0);
 PageTab.getFila(0).setCSSClass("UDFrames");
-//PageTab.getFila(1).setHeight(16);
-//PageTab.getFila(3).setHeight(16);
 PageTab.getFila(4).setCSSClass("UDFrames");
 PageTab.getFila(4).setHeight(10);
 AddElem(PageTab);
@@ -54,7 +54,6 @@ PageHead=new Table(3, 1, 0);
 PageHead.setWidth(-100);
 PageHead.getCelda(2,0).AddElem(new Image("img/"+getStyle()+"Logo48.jpg", "Logo OpenProdoc"));
 PageHead.getCelda(0,0).setWidth(400);
-//PageHead.getCelda(2,0).setWidth(-35);
 PageHead.getCelda(2,0).setAlineacion(RIGHT);
 PageHead.getCelda(1,0).setAlineacion(CENTER);
 Paragraph p=new Paragraph();

@@ -89,6 +89,10 @@ TreeFolder.setPreferredSize(null);
 DocsTable.setAutoCreateRowSorter(true);
 DocsTable.setAutoCreateColumnsFromModel(true);
 SetMenu();
+try {
+setTitle(getTitle()+" @"+getSession().getUser().getName()+"("+getSession().getUser().getDescription()+")");
+} catch (Exception ex)
+    {}
 }
 
     /** This method is called from within the constructor to
@@ -1501,9 +1505,6 @@ public static void main(String args[])
 String PropertiesFile;    
 if (args.length==0)    
     PropertiesFile="Prodoc.properties";
-//    PropertiesFile="e:\\Prodoc\\Varios\\Prodoc_derby.properties";
-//    PropertiesFile="/media/Iomega/Prodoc/ProdocInstall/dist/Prodoc.properties";
-//    PropertiesFile="/media/Iomega/Prodoc/Varios/Prodoc_derby.properties";
 else
     PropertiesFile=args[0];
 if (!Connect(PropertiesFile))

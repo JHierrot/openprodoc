@@ -30,6 +30,7 @@ import prodocUI.forms.FMain;
  */
 public class SMain extends SParent
 {
+
 //-----------------------------------------------------------------------------------------------
 /**
  *
