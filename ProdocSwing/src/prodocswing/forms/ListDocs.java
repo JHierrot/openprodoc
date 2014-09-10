@@ -25,7 +25,9 @@
 
 package prodocswing.forms;
 
+import java.io.PrintWriter;
 import javax.swing.JDialog;
+import prodoc.Attribute;
 import prodoc.Cursor;
 import prodoc.PDDocs;
 import prodoc.PDException;
@@ -66,7 +68,8 @@ ObjectsTable.setAutoCreateColumnsFromModel(true);
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         ObjectsTable = new javax.swing.JTable();
@@ -76,20 +79,25 @@ ObjectsTable.setAutoCreateColumnsFromModel(true);
         CheckoutButton = new javax.swing.JButton();
         CheckinButton = new javax.swing.JButton();
         CancelCheckoutButton = new javax.swing.JButton();
+        ExpCSV = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(MainWin.TT("Search_Documents"));
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
+        addWindowListener(new java.awt.event.WindowAdapter()
+        {
+            public void windowClosing(java.awt.event.WindowEvent evt)
+            {
                 formWindowClosing(evt);
             }
         });
 
         ObjectsTable.setAutoCreateRowSorter(true);
         ObjectsTable.setFont(MainWin.getFontList());
-        ObjectsTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        ObjectsTable.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 ObjectsTableMouseClicked(evt);
             }
         });
@@ -102,8 +110,10 @@ ObjectsTable.setAutoCreateColumnsFromModel(true);
         ModButton.setFocusable(false);
         ModButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         ModButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        ModButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ModButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ModButtonActionPerformed(evt);
             }
         });
@@ -114,8 +124,10 @@ ObjectsTable.setAutoCreateColumnsFromModel(true);
         DelButton.setFocusable(false);
         DelButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         DelButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        DelButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        DelButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 DelButtonActionPerformed(evt);
             }
         });
@@ -126,8 +138,10 @@ ObjectsTable.setAutoCreateColumnsFromModel(true);
         CheckoutButton.setFocusable(false);
         CheckoutButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         CheckoutButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        CheckoutButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        CheckoutButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 CheckoutButtonActionPerformed(evt);
             }
         });
@@ -138,8 +152,10 @@ ObjectsTable.setAutoCreateColumnsFromModel(true);
         CheckinButton.setFocusable(false);
         CheckinButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         CheckinButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        CheckinButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        CheckinButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 CheckinButtonActionPerformed(evt);
             }
         });
@@ -150,12 +166,28 @@ ObjectsTable.setAutoCreateColumnsFromModel(true);
         CancelCheckoutButton.setFocusable(false);
         CancelCheckoutButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         CancelCheckoutButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        CancelCheckoutButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        CancelCheckoutButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 CancelCheckoutButtonActionPerformed(evt);
             }
         });
         jToolBar1.add(CancelCheckoutButton);
+
+        ExpCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/expCSV.png"))); // NOI18N
+        ExpCSV.setToolTipText("");
+        ExpCSV.setFocusable(false);
+        ExpCSV.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        ExpCSV.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        ExpCSV.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                ExpCSVActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(ExpCSV);
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText(MainWin.TT("Search_Results"));
@@ -318,11 +350,33 @@ MainWin.Execute(FileName);
     }
     }//GEN-LAST:event_ObjectsTableMouseClicked
 
+    private void ExpCSVActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ExpCSVActionPerformed
+    {//GEN-HEADEREND:event_ExpCSVActionPerformed
+        String FileName=MainWin.SelectDestination("List_Docs.csv", "csv", true);
+        if (FileName.length()==0)
+        return;
+        PrintWriter PW =null;
+        try
+        {
+            PW = new PrintWriter(FileName);
+            ExportAllCSV(PW);
+            PW.flush();
+            PW.close();
+        } catch (Exception ex)
+        {
+            if (PW!=null)
+            PW.close();
+            MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+        }
+
+    }//GEN-LAST:event_ExpCSVActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CancelCheckoutButton;
     private javax.swing.JButton CheckinButton;
     private javax.swing.JButton CheckoutButton;
     private javax.swing.JButton DelButton;
+    private javax.swing.JButton ExpCSV;
     private javax.swing.JButton ModButton;
     private javax.swing.JTable ObjectsTable;
     private javax.swing.JLabel jLabel1;
@@ -386,5 +440,42 @@ DocType=pDocType;
 RetrievedDocsCur=C;
 }
 //----------------------------------------------------------------
+/**
+ * Exports all the elements to CSV
+ * @param PW Destination of the CSV text
+ * @throws Exception in any error
+ */
+private void ExportAllCSV(PrintWriter PW) throws Exception
+{
+PDTableModel TM = (PDTableModel) getObjectsTable().getModel();
+boolean HeaderWrite=false;
+for (int NumRow = 0; NumRow < TM.getRowCount(); NumRow++)
+    {
+    Record r=TM.getElement(NumRow);
+    if (!HeaderWrite)
+        {
+        r.initList();
+        for (int NumAt = 0; NumAt < r.NumAttr(); NumAt++)
+            {    
+            Attribute At=r.nextAttr(); 
+            PW.print(At.getName());
+            if (NumAt<r.NumAttr()-1)
+               PW.print(";");
+            }
+        PW.println("");
+        HeaderWrite=true;
+        }
+    r.initList();
+    for (int NumAt = 0; NumAt < r.NumAttr(); NumAt++)
+        {
+        Attribute At=r.nextAttr(); 
+        PW.print(At.ToCSV());
+        if (NumAt<r.NumAttr()-1)
+           PW.print(";");
+        }
+    PW.println("");
+    }    
+}
+//--------------------------------------------------------------------
 
 }

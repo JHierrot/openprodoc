@@ -919,9 +919,9 @@ R.delAttr(fFOLDTYPE);
 MonoUpdate();
 MultiDelete(this.getPDId());
 MultiInsert(R);
-getObjCache().put(getKey(), getRecord());
 ExecuteTransThreads(PDTasksDefEvent.fMODEUPD);
 GenerateNoTransThreads(PDTasksDefEvent.fMODEUPD);
+getObjCache().put(getKey(), getRecord());
 } catch (PDException Ex)
     {
     getDrv().AnularTrans();
@@ -932,7 +932,7 @@ if (InTransLocal)
 }
 //-------------------------------------------------------------------------
 /**
- * Updates all the record of minovalued attributes
+ * Updates all the record of monovalued attributes
  * @throws PDException in any error
  */
 protected void MonoUpdate()  throws PDException
@@ -1500,7 +1500,7 @@ getDrv().CloseCursor(ListDocs);
 /** Executes all the transactional defined threads
  * 
  */
-protected void ExecuteTransThreads(String MODE) throws PDException
+private void ExecuteTransThreads(String MODE) throws PDException
 {
 ArrayList<PDTasksDefEvent> L =getDrv().getFoldTransThreads(this.getFolderType(), MODE); 
 if (!L.isEmpty())
@@ -1513,7 +1513,7 @@ for (PDTasksDefEvent L1 : L)
  * @param MODE Kind of operation (INSert, UPDater, DELete)
  * @throws prodoc.PDException in any error
  */
-protected void GenerateNoTransThreads(String MODE) throws PDException
+private void GenerateNoTransThreads(String MODE) throws PDException
 {
 ArrayList L =getDrv().getFoldNoTransThreads(this.getFolderType(), MODE); 
 PDTasksDefEvent T;

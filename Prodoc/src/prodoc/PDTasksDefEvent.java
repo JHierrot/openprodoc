@@ -19,6 +19,8 @@
 
 package prodoc;
 
+import java.io.File;
+
 /**
  * 
  * @author jhierrot
@@ -232,6 +234,25 @@ switch (this.getType())
     }
 }
 //-------------------------------------------------------------------------
+protected void Execute(PDDocs Doc) throws PDException
+{
+switch (this.getType())
+    {
+    case fTASKEVENT_UPDATE_DOC:
+        ExecuteUpdDoc(Doc);
+        break;
+     case fTASKEVENT_COPY_DOC:
+        ExecuteCopyDoc(Doc);
+        break;
+     case fTASKEVENT_EXPORT_DOC:
+        ExecuteExportDoc(Doc);
+        break;
+     default:
+         PDException.GenPDException("Unexpected_Task", "Type"+getType());
+         break;
+    }
+}
+//-------------------------------------------------------------------------
 static boolean isFolder(int TaskType)
 {
 if (TaskType==fTASKEVENT_UPDATE_FOLD || TaskType==fTASKEVENT_COPY_FOLD)
@@ -295,6 +316,79 @@ Fold.ExportPath(Fold.getPDId(), getParam2());
     {
     PDException.GenPDException("Error_Exporting_Folder", ex.getLocalizedMessage());
     }
+}
+//-------------------------------------------------------------------------    
+/**
+ * Updates Doc metadata
+ * @param Doc Current Doc
+ * @throws PDException in any error
+ */
+private void ExecuteUpdDoc(PDDocs Doc) throws PDException
+{
+PDFolders Fold=new PDFolders(getDrv());
+String IdUnder=Fold.getIdPath(getParam4());
+Fold.setPDId(Doc.getParentId());
+if (!Fold.IsUnder(IdUnder))    
+   return; 
+Record r=Doc.getRecSum();
+r=Update(getParam(), r);
+if (getParam2()!=null && getParam2().length()!=0)
+    r=Update(getParam2(), r);
+if (getParam3()!=null && getParam2().length()!=0)
+    r=Update(getParam3(), r);
+Doc.assignValues(r);
+Doc.updateFragments(r, Doc.getPDId());
+Doc.UpdateVersion(Doc.getPDId(), Doc.getVersion(), r);
+}
+//-------------------------------------------------------------------------  
+/**
+ * Creates a copy of the doc
+ * @param Doc Current Doc
+ * @throws PDException in any error
+ */
+private void ExecuteCopyDoc(PDDocs Doc) throws PDException
+{
+PDFolders Fold=new PDFolders(getDrv());
+String IdUnder=Fold.getIdPath(getParam2());
+Fold.setPDId(Doc.getParentId());
+if (!Fold.IsUnder(IdUnder))    
+   return;     
+String FName=null;    
+PDDocs NewDoc=new PDDocs(getDrv(), Doc.getDocType());
+NewDoc.assignValues(Doc.getRecSum());
+NewDoc.setPDId(Doc.GenerateId());
+try {
+FName=Doc.getFile(System.getProperty("java.io.tmpdir"));
+NewDoc.setFile(FName);
+NewDoc.setParentId(Fold.getIdPath(getParam()));
+NewDoc.insert();
+} catch (PDException Ex)
+    {
+    PDException.GenPDException(Ex.getLocalizedMessage(), FName);
+    }
+finally {
+    if (FName!=null)
+        {
+        File f=new File(FName);
+        if (f.exists())
+            f.delete();
+        }
+    }
+}
+//-------------------------------------------------------------------------   
+/**
+ * Implements the event Export a document 
+ * @param Doc Document to be exported
+ * @throws PDException in any error
+ */
+private void ExecuteExportDoc(PDDocs Doc) throws PDException
+{
+PDFolders Fold=new PDFolders(getDrv());
+String IdUnder=Fold.getIdPath(getParam());
+Fold.setPDId(Doc.getParentId());
+if (!Fold.IsUnder(IdUnder))    
+   return;  
+Doc.ExportXML(getParam(), true);
 }
 //-------------------------------------------------------------------------    
 }

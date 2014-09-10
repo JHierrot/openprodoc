@@ -26,6 +26,7 @@
 package prodocswing.forms;
 
 import java.awt.Frame;
+import java.io.PrintWriter;
 import java.util.Date;
 import javax.swing.*;
 import prodoc.*;
@@ -84,11 +85,11 @@ TimeStampFilter1.setValue(d1);
         ButtonFilter = new javax.swing.JButton();
         jToolBar1 = new javax.swing.JToolBar();
         ReviewButton = new javax.swing.JButton();
+        ExpCSV = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         ObjectsTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("");
         addWindowListener(new java.awt.event.WindowAdapter()
         {
             public void windowClosing(java.awt.event.WindowEvent evt)
@@ -139,6 +140,20 @@ TimeStampFilter1.setValue(d1);
             }
         });
         jToolBar1.add(ReviewButton);
+
+        ExpCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/expCSV.png"))); // NOI18N
+        ExpCSV.setToolTipText("");
+        ExpCSV.setFocusable(false);
+        ExpCSV.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        ExpCSV.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        ExpCSV.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                ExpCSVActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(ExpCSV);
 
         ObjectsTable.setFont(MainWin.getFontList());
         jScrollPane1.setViewportView(ObjectsTable);
@@ -226,12 +241,34 @@ MantForm.setVisible(true);
     }
     }//GEN-LAST:event_ReviewButtonActionPerformed
 
+    private void ExpCSVActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ExpCSVActionPerformed
+    {//GEN-HEADEREND:event_ExpCSVActionPerformed
+        String FileName=MainWin.SelectDestination("List_"+PDObject.getTabName()+".csv", "csv", true);
+        if (FileName.length()==0)
+        return;
+        PrintWriter PW =null;
+        try
+        {
+            PW = new PrintWriter(FileName);
+            ExportAllCSV(PW);
+            PW.flush();
+            PW.close();
+        } catch (Exception ex)
+        {
+            if (PW!=null)
+            PW.close();
+            MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+        }
+
+    }//GEN-LAST:event_ExpCSVActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonFilter;
     private javax.swing.JTextField CategoryFilter;
     private javax.swing.JLabel CategoryLabel;
     private javax.swing.JLabel DateLabel1;
     private javax.swing.JLabel DateLabel2;
+    private javax.swing.JButton ExpCSV;
     private javax.swing.JTable ObjectsTable;
     private javax.swing.JButton ReviewButton;
     private javax.swing.JFormattedTextField TimeStampFilter1;
@@ -315,4 +352,42 @@ protected javax.swing.JTable getObjectsTable()
 return ObjectsTable;
 }
 //--------------------------------------------------------------------
+/**
+ * Exports all the elements to CSV
+ * @param PW Destination of the CSV text
+ * @throws Exception in any error
+ */
+private void ExportAllCSV(PrintWriter PW) throws Exception
+{
+PDTableModel TM = (PDTableModel) getObjectsTable().getModel();
+boolean HeaderWrite=false;
+for (int NumRow = 0; NumRow < TM.getRowCount(); NumRow++)
+    {
+    Record r=TM.getElement(NumRow);
+    if (!HeaderWrite)
+        {
+        r.initList();
+        for (int NumAt = 0; NumAt < r.NumAttr(); NumAt++)
+            {    
+            Attribute At=r.nextAttr(); 
+            PW.print(At.getName());
+            if (NumAt<r.NumAttr()-1)
+               PW.print(";");
+            }
+        PW.println("");
+        HeaderWrite=true;
+        }
+    r.initList();
+    for (int NumAt = 0; NumAt < r.NumAttr(); NumAt++)
+        {
+        Attribute At=r.nextAttr(); 
+        PW.print(At.ToCSV());
+        if (NumAt<r.NumAttr()-1)
+           PW.print(";");
+        }
+    PW.println("");
+    }    
+}
+//--------------------------------------------------------------------
+
 }
