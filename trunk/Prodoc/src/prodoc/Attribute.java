@@ -847,4 +847,18 @@ if (ValuesList!=null)
     ValuesList.clear();
 }        
 //--------------------------------------------------------------------------
+/**
+ * Returns tghe Value formated for CSV export
+ * @return String with value formated
+ */
+public String ToCSV()
+{
+if (getValue()==null)
+    return("");    
+if (getType()==Attribute.tSTRING)    
+    return("\""+FormatExport(getValue())+"\"");
+else
+    return(FormatExport(getValue()));
+}
+//--------------------------------------------------------------------------
 }

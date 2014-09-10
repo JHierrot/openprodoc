@@ -800,7 +800,19 @@ this.setObjFilter(pFold.getPDId());
 this.setObjType(pFold.getFolderType());
 }
 //-------------------------------------------------------------------------
-
+/**
+ * Generates a Task from the definition and the actual Folder
+ * @param pTask Taks definition
+ * @param pDoc Folder
+ */
+void GenFromDef(PDTasksDefEvent pTask, PDDocs pDoc) throws PDException
+{
+super.assignValues(pTask.getRecord());
+setPDId(GenerateId());
+this.setObjFilter(pDoc.getPDId());
+this.setObjType(pDoc.getDocType());
+}
+//-------------------------------------------------------------------------
 private void ExecuteUpdFold() throws PDException
 {
 PDFolders Fold=new PDFolders(this.getDrv(), getObjType());

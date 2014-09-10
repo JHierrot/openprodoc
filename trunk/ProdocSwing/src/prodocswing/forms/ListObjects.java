@@ -77,7 +77,8 @@ AssignLabels();
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         ObjectsTable = new javax.swing.JTable();
@@ -89,19 +90,28 @@ AssignLabels();
         ExportButton = new javax.swing.JButton();
         ExportAllButton = new javax.swing.JButton();
         ImportButton = new javax.swing.JButton();
+        ExpCSV = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         UserFilter = new javax.swing.JTextField();
         ButtonFilter = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("");
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
+        addWindowListener(new java.awt.event.WindowAdapter()
+        {
+            public void windowClosing(java.awt.event.WindowEvent evt)
+            {
                 formWindowClosing(evt);
             }
         });
 
         ObjectsTable.setFont(MainWin.getFontList());
+        ObjectsTable.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                ObjectsTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(ObjectsTable);
 
         jToolBar1.setRollover(true);
@@ -111,8 +121,10 @@ AssignLabels();
         AddButton.setFocusable(false);
         AddButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         AddButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        AddButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        AddButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 AddButtonActionPerformed(evt);
             }
         });
@@ -123,8 +135,10 @@ AssignLabels();
         DelButton.setFocusable(false);
         DelButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         DelButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        DelButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        DelButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 DelButtonActionPerformed(evt);
             }
         });
@@ -135,8 +149,10 @@ AssignLabels();
         EditButton.setFocusable(false);
         EditButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         EditButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        EditButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        EditButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 EditButtonActionPerformed(evt);
             }
         });
@@ -147,8 +163,10 @@ AssignLabels();
         CopyButton.setFocusable(false);
         CopyButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         CopyButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        CopyButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        CopyButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 CopyButtonActionPerformed(evt);
             }
         });
@@ -159,8 +177,10 @@ AssignLabels();
         ExportButton.setFocusable(false);
         ExportButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         ExportButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        ExportButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ExportButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ExportButtonActionPerformed(evt);
             }
         });
@@ -171,8 +191,10 @@ AssignLabels();
         ExportAllButton.setFocusable(false);
         ExportAllButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         ExportAllButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        ExportAllButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ExportAllButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ExportAllButtonActionPerformed(evt);
             }
         });
@@ -183,12 +205,28 @@ AssignLabels();
         ImportButton.setFocusable(false);
         ImportButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         ImportButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        ImportButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ImportButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ImportButtonActionPerformed(evt);
             }
         });
         jToolBar1.add(ImportButton);
+
+        ExpCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/expCSV.png"))); // NOI18N
+        ExpCSV.setToolTipText("");
+        ExpCSV.setFocusable(false);
+        ExpCSV.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        ExpCSV.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        ExpCSV.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                ExpCSVActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(ExpCSV);
 
         jLabel1.setFont(MainWin.getFontDialog());
         jLabel1.setText(MainWin.TT("Filter"));
@@ -199,8 +237,10 @@ AssignLabels();
 
         ButtonFilter.setFont(MainWin.getFontDialog());
         ButtonFilter.setText(MainWin.TT("Ok"));
-        ButtonFilter.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ButtonFilter.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ButtonFilterActionPerformed(evt);
             }
         });
@@ -209,18 +249,20 @@ AssignLabels();
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 650, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(4, 4, 4)
-                .addComponent(UserFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ButtonFilter)
-                .addContainerGap(59, Short.MAX_VALUE))
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 641, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 623, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(4, 4, 4)
+                        .addComponent(UserFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ButtonFilter)
+                        .addGap(0, 56, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 632, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -477,12 +519,78 @@ PW.close();
     }
 }//GEN-LAST:event_ExportAllButtonActionPerformed
 
+    private void ObjectsTableMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_ObjectsTableMouseClicked
+    {//GEN-HEADEREND:event_ObjectsTableMouseClicked
+if (evt.getClickCount()<2)
+    return;
+int Pos=getObjectsTable().getSelectedRow();
+if (Pos==-1)
+    return;
+try {
+MantForm=EditMode();
+MantForm.setLocationRelativeTo(null);
+} catch (PDException ex)
+    {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
+while (true)
+    {
+    try {
+    MantForm.setVisible(true);
+    if (!EditModeOk())
+        return;
+    MainWin.getSession().IniciarTrans();
+    PDObject.update();
+    PostEdit(MantForm);
+    MainWin.getSession().CerrarTrans();
+    RefreshTable();
+    int Tot=getObjectsTable().getRowCount();
+    if (Tot>0)
+        {
+        int Sel=Math.min(Tot-1, Pos);
+        getObjectsTable().setRowSelectionInterval(Sel, Sel);
+        }
+    return; 
+   } catch (PDException ex)
+        {
+        if (MainWin.getSession().isInTransaction())    
+            {try{
+             MainWin.getSession().AnularTrans();
+                } catch (PDException ex1)
+                {
+                }
+            }
+        MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+        }
+    }
+    }//GEN-LAST:event_ObjectsTableMouseClicked
+
+    private void ExpCSVActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ExpCSVActionPerformed
+    {//GEN-HEADEREND:event_ExpCSVActionPerformed
+String FileName=MainWin.SelectDestination("List_"+PDObject.getTabName()+".csv", "csv", true);
+if (FileName.length()==0)
+    return;
+PrintWriter PW =null;
+try{
+PW = new PrintWriter(FileName);
+ExportAllCSV(PW);
+PW.flush();
+PW.close();
+} catch (Exception ex)
+    {
+    if (PW!=null)
+        PW.close();
+    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
+        
+    }//GEN-LAST:event_ExpCSVActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddButton;
     private javax.swing.JButton ButtonFilter;
     private javax.swing.JButton CopyButton;
     private javax.swing.JButton DelButton;
     private javax.swing.JButton EditButton;
+    private javax.swing.JButton ExpCSV;
     private javax.swing.JButton ExportAllButton;
     private javax.swing.JButton ExportButton;
     private javax.swing.JButton ImportButton;
@@ -767,9 +875,9 @@ PW.print(PDObject.EndXML());
 }    
 //--------------------------------------------------------------------
 /**
- * Exports all the eleemnts to xml.
+ * Exports all the elements to xml.
  * @param PW file to write the XML
- * @throws Exception  
+ * @throws Exception  in any error 
  */
 private void ExportAllXML(PrintWriter PW) throws Exception
 {
@@ -782,6 +890,43 @@ for (int i = 0; i < TM.getRowCount(); i++)
     PW.print(PDObject.toXML());
     } 
 PW.print(PDObject.EndXML());    
+}
+//--------------------------------------------------------------------
+/**
+ * Exports all the elements to CSV
+ * @param PW Destination of the CSV text
+ * @throws Exception in any error
+ */
+private void ExportAllCSV(PrintWriter PW) throws Exception
+{
+PDTableModel TM = (PDTableModel) getObjectsTable().getModel();
+boolean HeaderWrite=false;
+for (int NumRow = 0; NumRow < TM.getRowCount(); NumRow++)
+    {
+    Record r=TM.getElement(NumRow);
+    if (!HeaderWrite)
+        {
+        r.initList();
+        for (int NumAt = 0; NumAt < r.NumAttr(); NumAt++)
+            {    
+            Attribute At=r.nextAttr(); 
+            PW.print(At.getName());
+            if (NumAt<r.NumAttr()-1)
+               PW.print(";");
+            }
+        PW.println("");
+        HeaderWrite=true;
+        }
+    r.initList();
+    for (int NumAt = 0; NumAt < r.NumAttr(); NumAt++)
+        {
+        Attribute At=r.nextAttr(); 
+        PW.print(At.ToCSV());
+        if (NumAt<r.NumAttr()-1)
+           PW.print(";");
+        }
+    PW.println("");
+    }    
 }
 //--------------------------------------------------------------------
 }

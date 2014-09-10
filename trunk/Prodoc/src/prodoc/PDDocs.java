@@ -1068,6 +1068,8 @@ UpdateVersion(Id, getDrv().getUser().getName(), RecTot);
 MultiDelete(Id, getDrv().getUser().getName());
 MultiInsert(RecTot);
 getObjCache().remove(getKey());
+ExecuteTransThreads(PDTasksDefEvent.fMODEUPD);
+GenerateNoTransThreads(PDTasksDefEvent.fMODEUPD);
 } catch (PDException Ex)
     {
     getDrv().AnularTrans();
@@ -1291,8 +1293,10 @@ if (!Rep.IsRef())
         Rep.Insert(PDId, getVersion(), FilePath);
     Rep.Disconnect();
    }
+ExecuteTransThreads(PDTasksDefEvent.fMODEINS);
 FilePath=null;
 FileStream=null;
+GenerateNoTransThreads(PDTasksDefEvent.fMODEINS);
 getObjCache().put(getKey(), getRecord());
 } catch (Exception Ex)
     {
@@ -1630,7 +1634,7 @@ Version = pVersion;
  * @param Rec Complete Record of metadata to Update
  * @throws PDException
  */
-private void UpdateVersion(String Id, String Ver, Record Rec) throws PDException
+protected void UpdateVersion(String Id, String Ver, Record Rec) throws PDException
 {
 // Not using getConditionsVer() because version pased  as parameter (User lock sometimes)
 if (PDLog.isDebug())
@@ -1822,7 +1826,7 @@ if (PDLog.isDebug())
  * @param Id
  * @throws PDException
  */
-private void updateFragments(Record RecTot, String Id) throws PDException
+protected void updateFragments(Record RecTot, String Id) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDDocs.updateFragments>:"+RecTot+"-"+Id);
@@ -1866,6 +1870,7 @@ if (!getDrv().getUser().getAclList().containsKey(getACL()))
 Integer Perm=(Integer)getDrv().getUser().getAclList().get(getACL());
 if (Perm.intValue()<PDACL.pDELETE)
     PDExceptionFunc.GenPDException("User_without_permissions_over_document",getPDId());
+ExecuteTransThreads(PDTasksDefEvent.fMODEDEL);
 String Vers=getVersion();
 Record R =getRecordStruct();
 Attribute Attr=R.getAttr(fDOCTYPE);
@@ -1876,6 +1881,7 @@ UpdateVersion(Id, null, R);
 Attr.setValue(fSTATUS_LASTDEL); // actual version muts be indicated
 UpdateVersion(Id, Vers, R);
 DeleteFragments(TypeDefs, Id);
+GenerateNoTransThreads(PDTasksDefEvent.fMODEDEL);
 getObjCache().remove(getKey());
 } catch (Exception Ex)
     {
@@ -2552,4 +2558,36 @@ return(ImageFile);
     }
 }
 //-------------------------------------------------------------------------
+/** Executes all the transactional defined threads
+ * 
+ * @param MODE
+ * @throws prodoc.PDException
+ */
+private void ExecuteTransThreads(String MODE) throws PDException
+{
+ArrayList<PDTasksDefEvent> L =getDrv().getDocTransThreads(this.getDocType(), MODE); 
+if (!L.isEmpty())
+    LoadFull(getPDId());
+for (PDTasksDefEvent L1 : L)
+    L1.Execute(this);
+}
+//---------------------------------------------------------------------
+/** Generates all the NO transactional defined threads
+ * @param MODE Kind of operation (INSert, UPDater, DELete)
+ * @throws prodoc.PDException in any error
+ */
+private void GenerateNoTransThreads(String MODE) throws PDException
+{
+ArrayList<PDTasksDefEvent> L =getDrv().getDocNoTransThreads(this.getDocType(), MODE); 
+PDTasksDefEvent T;
+PDTasksExec TE;
+for (PDTasksDefEvent L1 : L)
+    {
+    TE=new PDTasksExec(getDrv());
+    TE.GenFromDef(L1, this);
+    TE.setNextDate(new Date());
+    TE.insert();
+    }
+}
+//---------------------------------------------------------------------
 }

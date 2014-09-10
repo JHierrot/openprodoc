@@ -1731,16 +1731,15 @@ return (DI.getReturnStatus()==DialogInfoQuestion.RET_OK);
 }
 //---------------------------------------------------------------------
 /**
- * 
- * @param RecomFileName
- * @param Ext
- * @param Save
+ * Returns the path of a selected file.
+ * @param RecomFileName default name
+ * @param Ext Default extension for the type
+ * @param Save indicates if selecting an existing file or destination for saving a new one.
  * @return
  */
 static public String SelectDestination(String RecomFileName, String Ext, boolean Save)
 {
 JFileChooser fc = new JFileChooser();
-//fc.setDialogTitle("Seleccionar Archivo");
 if (Ext!=null)
     fc.setFileFilter(new FileNameExtensionFilter("file "+Ext, Ext));
 if (RecomFileName!=null)
@@ -1892,7 +1891,6 @@ try {
 static protected int Execute(String Doc)
 {
 try {
-//String Order="";
 String Orders[]= {"xdg-open", Doc};
 String OS=System.getProperty("os.name");
 if (OS.contains("Win"))

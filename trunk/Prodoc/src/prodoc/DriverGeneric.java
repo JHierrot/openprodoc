@@ -2225,4 +2225,14 @@ CloseCursor(C);
 }
 //---------------------------------------------------------------------
 
+    ArrayList<PDTasksDefEvent> getDocTransThreads(String docType, String MODE)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    ArrayList getDocNoTransThreads(String docType, String MODE)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }
