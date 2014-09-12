@@ -36,6 +36,7 @@ import prodoc.PDException;
 import prodoc.PDLog;
 import prodoc.PDObjDefs;
 import prodoc.PDTasksDef;
+import prodoc.PDTasksDefEvent;
 import prodoc.PDTasksExecEnded;
 import prodoc.Record;
 
@@ -507,7 +508,12 @@ ParamTextField4.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
 Attr=CronTask.getAttr(PDTasksExecEnded.fTYPE); //--------------------------
 TypeLabel.setText(MainWin.DrvTT(Attr.getUserName()));
 if (Attr.getValue()!=null)
-    TypeComboBox.setSelectedIndex((Integer)Attr.getValue());
+    {
+    int CurVal=(Integer)Attr.getValue();
+    if (CurVal>PDTasksDef.fTASK_MAXCRON)
+        CurVal=CurVal-PDTasksDefEvent.STARTNUM+PDTasksDef.fTASK_MAXCRON;
+    TypeComboBox.setSelectedIndex(CurVal);
+    }
 TypeComboBox.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
 Attr=CronTask.getAttr(PDTasksExecEnded.fOBJTYPE); //--------------------------
 ObjTypeLabel.setText(MainWin.DrvTT(Attr.getUserName()));
@@ -586,7 +592,7 @@ return Cancel;
 
 private ComboBoxModel getListTypeTask()
 {
-return(new DefaultComboBoxModel(PDTasksDef.getListTypeTask()));
+return(new DefaultComboBoxModel(PDTasksDef.getListAllTypeTask()));
 }
 //----------------------------------------------------------------
 

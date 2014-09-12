@@ -66,12 +66,8 @@ public static final int fTASK_PURGEDOC=2;
 public static final int fTASK_IMPORT=3;
 public static final int fTASK_EXPORT=4;
 
-public static final int fTASK_COPYDOC=5;
-public static final int fTASK_MOVEDOC=6;
-public static final int fTASK_UPDATEDOC=7;
-public static final int fTASK_UPDATEFOLD=8;
-public static final int fTASK_DELETEFOLD=9;
-public static final int fTASK_DELETEDOC=10;
+
+public static final int fTASK_MAXCRON=5;
 
 private static final String[] LisTypeTask= {"DELETE_OLD_FOLD",
                                             "DELETE_OLD_DOC",
@@ -88,7 +84,7 @@ private static final String[] LisTypeTask= {"DELETE_OLD_FOLD",
                                             "EXPORT" */
                                             };
 
-
+private static String[] AllLisTypeTask=null;
 
         
 private int Type=0;
@@ -522,9 +518,28 @@ getDrv().CloseCursor(Cur);
 return(TList);
 }**/
 //-------------------------------------------------------------------------
+/**
+ * Returns an array with Text for all the Types of CRON Task
+ * @return an array with Text for all the Types of CRON Task
+ */
 static public String[] getListTypeTask()
 {
 return LisTypeTask;    
+}
+//-------------------------------------------------------------------------
+/**
+ * Returns an array with Text for all the Types of Tasks (CRON + EVENT
+ * @return 
+ */
+public static String[] getListAllTypeTask()
+{
+if (AllLisTypeTask==null) 
+    {
+    AllLisTypeTask=new String[LisTypeTask.length+PDTasksDefEvent.getListTypeEventTask().length];
+    System.arraycopy(LisTypeTask, 0, AllLisTypeTask, 0, LisTypeTask.length);
+    System.arraycopy(PDTasksDefEvent.getListTypeEventTask(), 0, AllLisTypeTask, LisTypeTask.length, PDTasksDefEvent.getListTypeEventTask().length);
+    }
+return(AllLisTypeTask);
 }
 //-------------------------------------------------------------------------
 /**

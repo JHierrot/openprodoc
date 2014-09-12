@@ -279,19 +279,7 @@ switch (getType())
         break;
     case fTASK_DELETE_OLD_DOC: DeleteOldDoc();
         break;
-    case fTASK_DELETEFOLD: DeleteFold();
-        break;
-    case fTASK_DELETEDOC:DeleteDoc();
-        break;
     case fTASK_PURGEDOC: PurgeDoc();
-        break;
-    case fTASK_COPYDOC: CopyDoc();
-        break;
-    case fTASK_MOVEDOC: MoveDoc();
-        break;
-    case fTASK_UPDATEDOC: UpdateDoc();
-        break;
-    case fTASK_UPDATEFOLD: UpdateFold();
         break;
     case fTASK_IMPORT: Import(getParam2(), getParam3(), getParam4(), getParam()!=null && getParam().equals("1"));
         break;
@@ -324,30 +312,11 @@ switch (getType())
     case fTASK_DELETE_OLD_FOLD: return CurDeleteOldFold();
     case fTASK_DELETE_OLD_DOC: return CurDeleteOldDoc();
     case fTASK_PURGEDOC: return CurPurgeDoc();
-    case fTASK_IMPORT: return CurImport();
+//    case fTASK_IMPORT: return CurImport(); No sense
     case fTASK_EXPORT: return CurExport();
-
-    case fTASK_DELETEFOLD: return CurDeleteFold();
-    case fTASK_DELETEDOC:return CurDeleteDoc();
-    case fTASK_COPYDOC: return CurCopyDoc();
-    case fTASK_MOVEDOC: return CurMoveDoc();
-    case fTASK_UPDATEDOC: return CurUpdateDoc();
-    case fTASK_UPDATEFOLD: return CurUpdateFold();
     }
 PDExceptionFunc.GenPDException("Undefined_task", ""+getType());
 return (null);
-}
-//-------------------------------------------------------------------------
-
-private void DeleteFold() throws PDException
-{
-throw new UnsupportedOperationException("Not yet implemented");
-}
-//-------------------------------------------------------------------------
-
-private void DeleteDoc() throws PDException
-{
-throw new UnsupportedOperationException("Not yet implemented");
 }
 //-------------------------------------------------------------------------
 
@@ -389,30 +358,6 @@ getDrv().CerrarTrans();
     }
 if (PDLog.isDebug())
     PDLog.Debug("PDTasksExec.PurgeDoc <"+getPDId());
-}
-//-------------------------------------------------------------------------
-
-private void CopyDoc() throws PDException
-{
-throw new UnsupportedOperationException("Not yet implemented");
-}
-//-------------------------------------------------------------------------
-
-private void MoveDoc() throws PDException
-{
-throw new UnsupportedOperationException("Not yet implemented");
-}
-//-------------------------------------------------------------------------
-
-private void UpdateDoc() throws PDException
-{
-throw new UnsupportedOperationException("Not yet implemented");
-}
-//-------------------------------------------------------------------------
-
-private void UpdateFold() throws PDException
-{
-throw new UnsupportedOperationException("Not yet implemented");
 }
 //-------------------------------------------------------------------------
 /**
@@ -649,19 +594,6 @@ if (PDLog.isDebug())
     PDLog.Debug("PDTasksExec.DeleteOldDoc >"+getPDId());
 }
 //-------------------------------------------------------------------------
-
-private Cursor CurDeleteFold()
-{
-    throw new UnsupportedOperationException("Not yet implemented");
-}
-//-------------------------------------------------------------------------
-
-private Cursor CurDeleteDoc()
-{
-    throw new UnsupportedOperationException("Not yet implemented");
-}
-//-------------------------------------------------------------------------
-
 private Cursor CurPurgeDoc() throws PDException
 {
 String DocType;
@@ -676,37 +608,6 @@ Date2Del.add(Calendar.DAY_OF_MONTH, -Integer.parseInt(getParam2()));
 return(Doc.ListDeletedBefore(DocType, Date2Del.getTime()));
 }
 //-------------------------------------------------------------------------
-
-private Cursor CurCopyDoc()
-{
-    throw new UnsupportedOperationException("Not yet implemented");
-}
-//-------------------------------------------------------------------------
-
-private Cursor CurMoveDoc()
-{
-    throw new UnsupportedOperationException("Not yet implemented");
-}
-//-------------------------------------------------------------------------
-
-private Cursor CurUpdateDoc()
-{
-    throw new UnsupportedOperationException("Not yet implemented");
-}
-//-------------------------------------------------------------------------
-
-private Cursor CurUpdateFold()
-{
-    throw new UnsupportedOperationException("Not yet implemented");
-}
-//-------------------------------------------------------------------------
-
-private Cursor CurImport()
-{
-    throw new UnsupportedOperationException("Not yet implemented");
-}
-//-------------------------------------------------------------------------
-
 private Cursor CurExport() throws PDException
 {
 boolean SubTypes;
