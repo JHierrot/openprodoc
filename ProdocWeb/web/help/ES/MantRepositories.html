@@ -19,13 +19,14 @@
         <li><b>FS</b>: FileSystem. almacenamiento en una carpeta de sistema accesible para los clientes Web o Swing.</li>
         <li><b>BBDD</b>: Base de Datos. Almacenamiento en una tabla como atributo BLOB. Recomendable para archivos pequeños o tipos documentales con pocos ejemplares.</li>
         <li><b>FTP</b>: Almacenamiento en un servidor ftp. Recomendable para tipos documentales con poco acceso.</li>
+        <li><b>S3</b>: Almacenamiento en la nube de Amazon S3. Permite almacenar información en todo el mundo con seguridad y con la velocidad y costes contratados.</li>
         <li><b>REFURL</b>: Referencia a documentos/páginas existente en Internet/Intranet. Permite clasificar y catalogar documentos de interés sin tenerlos localmente almacenados.(Los documentos no se borran al borrar el registro)</li>
         </ul>
     </li>  
-    <li><b>URL o referencia al repositorio</b>:La URI o URL que referencia al repositorio. Para FS será un path accesible al ordenador u ordenadores que lo utilicen, en el caso de base de datos será una url JDBC; en el caso de ftp, un nombre o dirección ip.</li>    
+    <li><b>URL o referencia al repositorio</b>:La URI o URL que referencia al repositorio. Para FS será un path accesible al ordenador u ordenadores que lo utilicen, en el caso de base de datos será una url JDBC; en el caso de ftp, un nombre o dirección ip.Para S3, el nombre del "bucket".</li>    
     <li><b>Parámetros adicionales del repositorio</b>: En el caso de BBDD, el parámetro adicional es:"driver;nombre_tabla". El resto no requieren parámetros.</li>    
-    <li><b>Usuario de conexión al repositorio</b>: Usuario necesario para conectarse al servidor remoto, no en FS.</li>    
-    <li><b>Password de conexión al repositorio</b>: clave de acceso necesaria para conectarse al servidor remoto, no en FS.</li>    
+    <li><b>Usuario de conexión al repositorio</b>: Usuario necesario para conectarse al servidor remoto, no en FS. Para S3 el "Access Key Id".</li>    
+    <li><b>Password de conexión al repositorio</b>: clave de acceso necesaria para conectarse al servidor remoto, no en FS. Para S3 el "Secret Access Key".</li>    
     <li><b>Indicador de si el repositorio está encriptado</b>: Si esta opción está marcada, los documentos se encriptan al almacenarse y se desencriptan al recuperar. Esto asegura que aunque alguien tenga acceso a los documentos, solo sean accesibles a traves de OPD. Hay que tener en cuenta esto introduce una pequeña sobrecarga y que no se utiliza un sistema de encriptación muy sofisticado, por lo que si hay documentación muy confidencial debe evaluarse el uso de medidas adicionales.</li>    
 </ul>
 <p style="text-align:center;"><img alt="Copia de pantalla MantRepositories" src="img/MantRepositories.jpg"/></p>
