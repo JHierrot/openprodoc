@@ -19,13 +19,14 @@
     <li><b>FS</b>: FileSystem. Storage system in a folder accessible to Swing or Web clients.</li>
     <li><b>BBDD</b>: Data Base. Storage in a table as BLOB attribute. Recommended for small files or types of documents with low volume.</li>
     <li><b>FTP</b>: Storage on an ftp server. Recommended for types of documents with limited access.</li>
+    <li><b>S3</b>: Cloud Storage on Amazon S3. Sharing information around the world with security and the speed and costs selected..</li>
     <li><b>REFURL</b>: Reference to documents/pages existing in Internet/Intranet. Allows to classify and catalog documents of interest without having them stored locally. (The documents are not deleted when you delete the record)</li>
         </ul>
     </li>  
-    <li><b>URL or reference to the Repository</b>:The URI or URL that references the repository. For FS will be a path accessible to the computer or computers that use it, in the case of database will be a JDBC url, in the case of FTP, name or ip address.</li>    
+    <li><b>URL or reference to the Repository</b>:The URI or URL that references the repository. For FS will be a path accessible to the computer or computers that use it, in the case of database will be a JDBC url, in the case of FTP, name or ip address. For S3, the bucket name.</li>    
     <li><b>Additional parameters of the Repository (specific for every type)</b>: In the case of databases, the additional parameter is "driver; table_name". The rest does not require parameters.</li>    
-    <li><b>Repository User.</b>: User required to connect to remote server, not required for FS.</li>    
-    <li><b>Repository Password</b>: Password required to connect to remote server, not required for FS.</li>    
+    <li><b>Repository User.</b>: User required to connect to remote server, not required for FS. For S3 the "Access Key Id".</li>    
+    <li><b>Repository Password</b>: Password required to connect to remote server, not required for FS. For S3 the "Secret Access Key".</li>    
     <li><b>Flag indicating whether the repository is encrypted</b>: If this option is checked, documents will be encrypted when stored and decrypted when recover. This ensures that even if someone has access to documents through the disc, the documents are readable only through OPD. Keep in mind that this process introduces a small overhead and OPD do not use a sophisticated encryption system, so if there are highly confidential documents should be evaluated using additional measures.</li>    
 </ul>
 <p style="text-align:center;"><img alt="Screenshot MantRepositories" src="img/MantRepositories.jpg"/></p>

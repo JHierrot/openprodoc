@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Lista Tareas Programadas</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+<H4>Lista Tareas Programadas</H4><hr>
+<p>Al seleccionar la opción de administrar Tareas Programadas, aparecerá la pantalla de listado de Tareas Programadas. Esta pantalla permite realizar el mantenimiento y definición de Tareas Programadas.</p>
+<h5>Tareas programadas</h5>
+<p>OPD incluye la posibilidad de definir tareas programadas para realizar diversas operaciones de mantenimiento e integración.</p>
+<p>No existe límite al número de tareas que puede definirse, aunque debe tenerse en cuenta el tiempo de ejecución de cada una de ellas, ya que si se definen demasiadas tareas demasiado complejas, podría ocurrir que no hubieran acabado algunas cuando debe empezarse de nuevo con ellas. Si es necesario puede configurarse el sistema para que distintos grupos de tareas se ejecuten en distintos ordenadores, permitiendo paralelizar el trabajo y escalar el sistema. Para ello las tareas tiene un atributo categoría, que permite agruparlas, de forma que en cada equipo puede ejecutarse todas las tareas programadas de una categoría concreta. Puede indicarse que un equipo ejecute todas las tareas de todas las categorías.</p>
+<p>Puede definirse diversas tareas del mismo tipo pero con parámetros diferentes (por ejemplo puede programarse la exportación de una estructura de carpetas/expedientes con una frecuencia y la exportación de otra estructura con otra frecuencia y otro destino).</p>
+<p>Para cada tarea definida, además de los parámetros propios de la tarea, se indica la frecuencia de ejecución y la fecha-hora de la próxima ejecución. De esta forma puede programarse la ejecución, por ejemplo cada 7 días, empezando a partir del sábado a las 23:00, o cada hora, empezando a las 9:00.</p>
+<p>La ejecución de tareas implica 2 pasos. Cuando llega el día y hora de ejecución de una tarea, se genera una “orden de trabajo” de ejecución de esa tarea (una “fotocopia” de la tarea) por parte del ordenador encargado de generar esa categoría de tareas (o de todas). Esa orden de trabajo a su vez se encola y se llevará a cabo cuando el ordenador(es) encargado(s) de ejecutar finalicen las tareas anteriores. Por tanto la orden se crea en el momento exacto y con los parámetros adecuados, aunque pueda ejecutarse con un ligero retraso. Incluso en caso de algún tipo de incidente, podría no llegar a ejecutarse en su momento. Pero la “orden de trabajo” aparece y queda constancia de estar pendiente. Cuando el componente encargado de ejecutar las tareas se reactive, ejecutará todas las pendientes.  Similarmente ocurre con las “órdenes de trabajo”, se generarán todas las que debían haberse generado incluso si no está encendido el ordenador encargado. Por ejemplo, si el ordenador encargado de generar tareas estuviera apagado durante 2 horas, al encenderse generará todas las tareas que debían haberse generado en ese tiempo, no solo las “nuevas”.</p>
+<p>La lista de tareas oendientes de ejecutar puede verse en <a href="ListTaskPending.html">Lista de Tareas Pendientes</a> y la lista de tareas ya terminadas en <a href="ListTaskEnded.html">Lista de Tareas Finalizadas</a>. Es responsabilidad del administrador eliminar la información de las tareas completadas para evitar un crecimiento excesivo de las tablas de base de datos y una reducción del rendimiento.</p>
+<h5>Escalabilidad</h5>
+<p>El sistema descrito es totalmente escalable. En el caso más simple, un solo ordenador puede encargarse de generar y ejecutar las tareas; en un caso complejo, 1 o 2 ordenadores podrían encargarse de generar las órdenes a partir de las tareas y varios de ejecutarlas, cada uno con una categoría asignada, para facilitar el reparto del trabajo.</p>
+<h5>Transaccionalidad</h5>
+<p>Puede indicarse que la ejecución de tareas sea transaccional, Es decir que las tareas se realicen sobre todos los objetos afectados (eje, todos los documentos de una carpeta) y si falla cualquier de ellos se anula toda la operación, manteniendo la coherencia, Si no es transaccional, la operación se relizará sobre algunos y podrá fallar en otros.</p>
+<h5>Activación</h5>
+<p>Las tareas puedan activarse y desactivarse, de forma que pueden estar totalmente definidas y probadas pero no se ejecutan hasta que sea necesario, volviendo a desactivarse cuando se requiera. La activación controla la generación de las “órdenes de trabajo”, es decir si una tarea está desactivada,</p>
+<h5>Interfaz de usuario</h5>
+<p>Para filtrar las Tareas Programadas que se desea revisar, basta introducir parte del nombre en el cuadro de texto y pulsar el botón. La lista de Tareas Programadas que cumplen las condiciones aparecerá en la tabla de resultados. Si se pulsa el botón sin introducir ningún valor se visualizará todos los elementos sobre los que tenga permiso el usuario.La tabla de resultados muestra los datos:</p>
+<ul>
+    <li>Nombre identificativo de la tarea</li>
+    <li>Descripción de la tarea</li>
+    <li>Categoría de la tarea</li>
+    <li>Tipo de Tarea</li>    
+    <li>Tipo de objeto (Carpetas o Documentos) sobre los que se aplicará la tarea</li>    
+    <li>Filtro de los objetos (siempre *)</li>    
+    <li>Parámetros de la tarea. Dependen del tipo de tarea.</li>    
+    <li>Fecha hora de la próxima ejecución de la tarea</li>    
+    <li>Meses a esperar entre ejecuciones (puede ser cero)</li>    
+    <li>Días a esperar entre ejecuciones (puede ser cero)</li>    
+    <li>Horas a esperar entre ejecuciones (puede ser cero)</li>    
+    <li>Minutos a esperar entre ejecuciones (puede ser cero)</li>    
+    <li>Indicador de si la tarea está activa (y por tanto se ejecutará) o no.</li>    
+    <li>Indicador de si la tarea es transaccional (y por tanto se ejecutará para todos los objetos afectados  solo para algunos) o no.</li>    
+    <li>Nombre del último usuario que modificó la tarea</li>
+    <li>Fecha y hora de la última modificación</li>
+</ul>
+<p style="text-align:center;"><img alt="Copia de pantalla Lista Tareas Programadas" src="img/ListTaskCron.jpg"/></p>
+<p>Esa tabla de resultados puede ordenarse seleccionando la cabecera de cada columna. Puede también cambiarse el tamaño de cada columna arrastrando la línea separadora de las cabeceras</p>
+<p>Sobre la tabla de resultados se dispone de varios botones que permiten realizar operaciones sobre el elemento seleccionado. Las operaciones disponibles son:</p>
+<ul>
+    <li> <img alt="button image" src="img/add.png"/>   Añadir un nuevo elemento</li>
+    <li> <img alt="button image" src="img/del.png"/>   Eliminar el elemento seleccionado (Siempre que no se esté utilizando)</li>
+    <li> <img alt="button image" src="img/edit.png"/>   Modificar el elemento seleccionado</li>
+    <li> <img alt="button image" src="img/copy.png"/>   Crear un nuevo elemento como copia del elemento seleccionado</li>
+    <li> <img alt="button image" src="img/export.png"/>   Exportar el elemento seleccionado</li>
+    <li> <img alt="button image" src="img/export_all.png"/>   Exportar todos los elementos listados</li>
+    <li> <img alt="button image" src="img/import.png"/>   Importar desde archivo uno o más elementos previamente guardados</li>
+    <li> <img alt="button image" src="img/expCSV.png"/>   Exportar todos los elementos listados en formato CSV, para su importación en Hojas de Cálculo o BBDD</li>
+</ul>
+<p>Debe tenerse en cuenta al exportar e importar que algunos elementos pueden tener dependencia de otros, por lo que debe exportarse todos los elementos relacionados y en el momento de importarse hacerlo en el orden adecuado</p>
+<p>En caso de producirse un error (carencia de permisos del usuario, incoherencia de los datos, etc), la operación se cancela y se comunicará al usuario el motivo del error.</p>
+<p>Ver: <a href="MantTaskCron.html">Mantenimiento Tareas Programadas</a>, <a href="ListTaskPending.html">Lista de Tareas Pendientes</a> y <a href="ListTaskEnded.html">Lista de Tareas Finalizadas</a></p>
+<hr>
+<a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>
+    </body>
+</html>

@@ -15,6 +15,7 @@
     <li><b>FS</b>: FileSystem. Storage system in a folder accessible to Swing or Web clients.</li>
     <li><b>BBDD</b>: Data Base. Storage in a table as BLOB attribute. Recommended for small files or types of documents with low volume.</li>
     <li><b>FTP</b>: Storage on an ftp server. Recommended for types of documents with limited access.</li>
+    <li><b>S3</b>: Cloud Storage on Amazon S3. Sharing information around the world with security and the speed and costs selected..</li>
     <li><b>REFURL</b>: Reference to documents/pages existing in Internet/Intranet. Allows to classify and catalog documents of interest without having them stored locally. (The documents are not deleted when you delete the record)</li>
 </ul>
 <p>When you define or create the repositories, you can encrypt them, so that even if a user to access the file system or database, can not view the documents unless is through OPD.</p>
@@ -25,7 +26,7 @@
     <li>Kind of Repository</li>    
     <li>URL or reference to the Repository</li>    
     <li>Additional parameters of the Repository (specific for every type)</li>    
-    <li>Repository User. User with permissions on the repository to store or delete documents. Required for ftp or BLOB)</li>    
+    <li>Repository User. User with permissions on the repository to store or delete documents. Required for ftp, BLOB or S3)</li>    
     <li>Repository Password</li>    
     <li>Flag indicating whether the repository is encrypted</li>    
     <li>Name of last user who modified the Repository</li>
@@ -35,13 +36,14 @@
 <p>This results table can be sorted by selecting the header of each column. You can also change the size of each column by dragging the separator line in the headers.</p>
 <p>Above the table of results there are several buttons for performing operations on the selected item. The available operations are:</p>
 <ul>
-    <li>Add a new element</li>
-    <li>Delete the selected element (if it is not used in some document or folder)</li>
-    <li>Modify the selected element</li>
-    <li>Create a new item as a copy of the selected item</li>
-    <li>Export the selected item</li>
-    <li>Export all items listed</li>
-    <li>Import from file one or more previously saved items</li>
+    <li> <img alt="button image" src="img/add.png"/>   Add a new element</li>
+    <li> <img alt="button image" src="img/del.png"/>   Delete the selected element (if it is not used in some document or folder)</li>
+    <li> <img alt="button image" src="img/edit.png"/>   Modify the selected element</li>
+    <li> <img alt="button image" src="img/copy.png"/>   Create a new item as a copy of the selected item</li>
+    <li> <img alt="button image" src="img/export.png"/>  Export the selected item</li>
+    <li> <img alt="button image" src="img/export_all.png"/>   Export all items listed</li>
+    <li> <img alt="button image" src="img/import.png"/>   Import from file one or more previously saved items</li>
+    <li> <img alt="button image" src="img/expCSV.png"/>   Export all items listed in CSV format so it can be imported in Databases or Spreadsheet</li>
 </ul>
 <p>It should be noted on export and import, that some elements may have dependency on others, so you must export all related and imported at the time of it in the proper order.</p>
 <p>In the event of an error (lack of user permissions, data inconsistency, etc.), the operation is canceled and will present the reason for the error to the user.</p>
