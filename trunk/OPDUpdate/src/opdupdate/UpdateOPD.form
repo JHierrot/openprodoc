@@ -10,6 +10,7 @@
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
@@ -69,7 +70,7 @@
       <Properties>
         <Property name="horizontalAlignment" type="int" value="0"/>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="TT(&quot;Prodoc_Metadata_Creation&quot;)" type="code"/>
+          <Connection code="TT(&quot;Prodoc_Update&quot;)" type="code"/>
         </Property>
       </Properties>
     </Component>
@@ -99,13 +100,13 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jScrollPane2" pref="533" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
-                              <Component id="jLabel2" min="-2" pref="234" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                               <Component id="UpMetadataCB" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="270" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jLabel2" min="-2" pref="354" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="jScrollPane2" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -161,7 +162,7 @@
                     </Property>
                     <Property name="lineWrap" type="boolean" value="true"/>
                     <Property name="rows" type="int" value="5"/>
-                    <Property name="text" type="java.lang.String" value="&#xa;- Before any update VERIFY that your BACKUPS are CORRECT and  UPDATED.&#xa;- Any previous inconsistence or error during update can produce UNRECOVERABLE DATA LOST.&#xa;-All the USERS MUST BE DISCONNECTED during update.&#xa;&#xa;- Antes de actualizar VERIFIQUE que sus COPIAS de SEGURIDAD est&#xe1;n ACTUALIZADAS y son CORRECTAS.&#xa;- Cualquier inconsistencia previa o error durante la actualizaci&#xf3;n podr&#xed;a producir PERDIDA IRRECUPERABLE de DATOS.&#xa;-Todos los USUARIOS deben estar DEESCONECTADOS durante la actualizaci&#xf3;n.&#xa;"/>
+                    <Property name="text" type="java.lang.String" value="&#xa;- Before any update VERIFY that your BACKUPS are CORRECT and  UPDATED.&#xa;- Any previous inconsistence or error during update can produce UNRECOVERABLE DATA LOST.&#xa;-All the USERS MUST BE DISCONNECTED during update.&#xa;&#xa;- Antes de actualizar VERIFIQUE que sus COPIAS de SEGURIDAD est&#xe1;n ACTUALIZADAS y son CORRECTAS.&#xa;- Cualquier inconsistencia previa o error durante la actualizaci&#xf3;n podr&#xed;a producir PERDIDA IRRECUPERABLE de DATOS.&#xa;-Todos los USUARIOS deben estar DESCONECTADOS durante la actualizaci&#xf3;n.&#xa;"/>
                     <Property name="wrapStyleWord" type="boolean" value="true"/>
                   </Properties>
                 </Component>

@@ -1284,7 +1284,7 @@ Ab.dispose();
 
     private void contentsMenuItem1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_contentsMenuItem1ActionPerformed
     {//GEN-HEADEREND:event_contentsMenuItem1ActionPerformed
-Execute("doc"+OSSep()+getLang()+OSSep()+"MainWin.html");   
+Execute("doc"+OSSep()+DriverGeneric.getHelpLang(getLang())+OSSep()+"MainWin.html");   
     }//GEN-LAST:event_contentsMenuItem1ActionPerformed
 
     private void DocsTableMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_DocsTableMouseClicked
@@ -2076,7 +2076,7 @@ return(Tmp);
  */
 static public String getVersion()
 {
-return("0.9");  
+return("1.0");  
 }
 //---------------------------------------------------------------------
 
@@ -2257,10 +2257,10 @@ for (int i = 0; i < ListOrigin.length; i++)
         }
     }
 ListOrigin=null; // to help gc and save memory during recursivity
-for (int i = 0; i < DirList.size(); i++)
+for (Object DirList1 : DirList)
     {
-    File SubDir = (File) DirList.get(i);
-    ImportExt(NewFold, SubDir.getAbsolutePath(), DeleteAfter, Format, DefFoldType, DateFormat, TimeStampFormat);    
+    File SubDir = (File) DirList1;
+    ImportExt(NewFold, SubDir.getAbsolutePath(), DeleteAfter, Format, DefFoldType, DateFormat, TimeStampFormat);
     if (DeleteAfter)
         SubDir.delete();
     }

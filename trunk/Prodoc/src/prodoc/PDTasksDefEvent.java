@@ -389,6 +389,7 @@ Fold.setPDId(Doc.getParentId());
 if (!Fold.IsUnder(IdUnder))    
    return;  
 Doc.ExportXML(getParam(), true);
+Doc.getFile(getParam());
 }
 //-------------------------------------------------------------------------    
 }

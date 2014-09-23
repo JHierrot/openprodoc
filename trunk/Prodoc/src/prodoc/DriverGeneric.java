@@ -587,19 +587,15 @@ public void Update(boolean UpMetadataInc, Vector Trace)  throws PDException
 {
 PDServer Serv=new PDServer(this);
 Serv.Load("Prodoc");
-if (Serv.getVersion().equalsIgnoreCase("0.8.1"))
+if (Serv.getVersion().equalsIgnoreCase("1.0"))
     {
-    Trace.add("NO Update possible. Already 0.8.1 version");    
-    return;
-    }
-if (Serv.getVersion().equalsIgnoreCase("0.8"))
-    {
-    Trace.add("NO Update possible. Already 0.8 version");    
+    Trace.add("NO Update possible. Already 1.0 version");    
     return;
     }
 Trace.add("Update started");    
-if (Serv.getVersion().equalsIgnoreCase("0.7"))
+if (Serv.getVersion().equalsIgnoreCase("0.7")) //******************************
     {
+    // -- Adding Thesaurus tables -----------------------------------------    
     PDThesaur TE=new PDThesaur(this);
     try {
     TE.Install();
@@ -631,6 +627,7 @@ if (Serv.getVersion().equalsIgnoreCase("0.7"))
         else
             Trace.add(pDException.getLocalizedMessage());            
         }
+    // -- Adding new Roles attributes -------------------------------------    
     PDRoles Rup=new PDRoles(this);
     Attribute Attr1=Rup.getRecordStruct().getAttr(PDRoles.fALLOWCREATETHESAUR).Copy();
     Attr1.setValue(false);
@@ -656,6 +653,7 @@ if (Serv.getVersion().equalsIgnoreCase("0.7"))
         else
             Trace.add(pDException.getLocalizedMessage());            
         }
+    // -- Updating administrators Roles granting new attributes ----------------    
     try {
     Record NewAdmvals=new Record();
     Attr1.setValue(true);
@@ -672,6 +670,7 @@ if (Serv.getVersion().equalsIgnoreCase("0.7"))
         else
             Trace.add(pDException.getLocalizedMessage());            
         }
+    // -- Updating Repository version ------------------------------------------    
     try {
     Record RecServ=new Record();    
     Attribute RV=Serv.getRecord().getAttr(PDServer.fVERSION).Copy();
@@ -687,7 +686,119 @@ if (Serv.getVersion().equalsIgnoreCase("0.7"))
         else
             Trace.add(pDException.getLocalizedMessage());            
         }
+    //--- Update ended ----
     Trace.add("Updated to 0.8");
+    }
+Serv.Load("Prodoc"); 
+if (Serv.getVersion().equalsIgnoreCase("0.8")  //*****************************
+    || Serv.getVersion().equalsIgnoreCase("0.8.1"))
+    {
+    // -- Adding Task tables ----------------------------------    
+    PDTasksCron TC=new PDTasksCron(this);
+    try {
+    TC.Install();
+    Trace.add("TasksCron Table created");
+    } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
+    PDTasksDefEvent TE=new PDTasksDefEvent(this);
+    try {
+    TE.Install();
+    Trace.add("Tasks Event Table created");
+    } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
+    PDTasksExec TExec=new PDTasksExec(this);
+    try {
+    TExec.Install();
+    Trace.add("Tasks Pending Table created");
+    } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
+    PDTasksExecEnded TExecEnd=new PDTasksExecEnded(this);
+    try {
+    TExecEnd.Install();
+    Trace.add("Tasks Ended Table created");
+    } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
+    // -- Adding new Roles attributes -----------------------------    
+    PDRoles Rup=new PDRoles(this);
+    Attribute Attr1=Rup.getRecordStruct().getAttr(PDRoles.fALLOWCREATETASK).Copy();
+    Attr1.setValue(false);
+    try {
+    AlterTableAdd(PDRoles.getTableName(), Attr1, false);
+    Trace.add(PDRoles.fALLOWCREATETASK+"created");
+    } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
+    Attribute Attr2=Rup.getRecordStruct().getAttr(PDRoles.fALLOWMAINTAINTASK).Copy();
+    try {
+    Attr2.setValue(false);
+    AlterTableAdd(PDRoles.getTableName(), Attr2, false);
+    Trace.add(PDRoles.fALLOWMAINTAINTASK+"created");
+    } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
+    // -- Updating administrators Roles granting new attributes -----    
+    try {
+    Record NewAdmvals=new Record();
+    Attr1.setValue(true);
+    NewAdmvals.addAttr(Attr1);
+    Attr2.setValue(true);
+    NewAdmvals.addAttr(Attr2);
+    Conditions AdmRole=new Conditions();
+    AdmRole.addCondition(new Condition(Rup.fNAME, Condition.cEQUAL, "Administrators"));
+    UpdateRecord(Rup.getTabName(), NewAdmvals, AdmRole);    
+    } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
+    // -- Updating Repository version -----    
+    try {
+    Record RecServ=new Record();    
+    Attribute RV=Serv.getRecord().getAttr(PDServer.fVERSION).Copy();
+    RV.setValue("1.0");
+    RecServ.addAttr(RV);
+    Conditions ServDef=new Conditions();
+    ServDef.addCondition(new Condition(PDServer.fNAME, Condition.cEQUAL, "Prodoc"));
+    UpdateRecord(Serv.getTabName(), RecServ, ServDef);    
+    } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
+    //--- Update ended ----
+    Trace.add("Updated to 1.0");    
     }
 Trace.add("Update finished");
 }
@@ -1404,7 +1515,7 @@ if (PDLog.isDebug())
  */
 static public String getVersion()
 {
-return("0.9");
+return("1.0");
 }
 private static final char[] HEX_CHARS = "0123456789abcdef".toCharArray();
 //-----------------------------------------------------------------------------------
@@ -2158,7 +2269,7 @@ return TotalTask;
 }
 //---------------------------------------------------------------------
 /**
- * Returns a list of Transactional tasks ORDERED for selected fold type AND operation
+ * Returns a list of Non Transactional tasks ORDERED for selected fold type AND operation
  *    including parent types
  * @param folderType Folder type
  * @param MODE  Kind of operation (INS, DEL, UP)
@@ -2224,15 +2335,55 @@ while (R!=null)
 CloseCursor(C);
 }
 //---------------------------------------------------------------------
+/**
+ * Returns a list of Transactional tasks ORDERED for selected Doc type AND operation
+ *    including parent types
+ * @param docType Doc type
+ * @param MODE  Kind of operation (INS, DEL, UP)
+ * @return a list that can be empty
+ */
 
-    ArrayList<PDTasksDefEvent> getDocTransThreads(String docType, String MODE)
+ protected ArrayList<PDTasksDefEvent> getDocTransThreads(String docType, String MODE)  throws PDException
+{
+ArrayList TotalTask=new ArrayList();    
+PDDocs D=new PDDocs(this,docType);
+ArrayList TypList=D.getTypeDefs();
+for (int i = TypList.size()-1; i >=0 ; i--)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    String TypName=(String)((Record)TypList.get(i)).getAttr(PDObjDefs.fNAME).getValue();
+    for (Iterator it = getAllTaskTrans().subMap(TypName+"/"+MODE, TypName+"/"+MODE+"999999").values().iterator(); it.hasNext();)
+        TotalTask.add(it.next());
     }
-
-    ArrayList getDocNoTransThreads(String docType, String MODE)
+return TotalTask;
+}
+//---------------------------------------------------------------------
+/**
+ * Returns a list of Non Transactional tasks ORDERED for selected DOC type AND operation
+ *    including parent types
+ * @param docType Doc type
+ * @param MODE  Kind of operation (INS, DEL, UP)
+ * @return a list that can be empty
+ */
+ protected ArrayList getDocNoTransThreads(String docType, String MODE) throws PDException
+{
+ArrayList TotalTask=new ArrayList();    
+PDDocs D=new PDDocs(this,docType);
+ArrayList TypList=D.getTypeDefs();
+for (int i = TypList.size()-1; i >=0 ; i--)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    String TypName=(String)((Record)TypList.get(i)).getAttr(PDObjDefs.fNAME).getValue();
+    for (Iterator it = getAllTaskNoTrans().subMap(TypName+"/"+MODE, TypName+"/"+MODE+"999999").values().iterator(); it.hasNext();)
+        TotalTask.add(it.next());
     }
-
+return TotalTask;
+}
+//---------------------------------------------------------------------
+static public String getHelpLang(String UserLang)
+{
+if (UserLang.equalsIgnoreCase("ES") || UserLang.equalsIgnoreCase("PT") || UserLang.equalsIgnoreCase("CA") )    
+    return("ES");
+else
+    return("EN");
+}
+//---------------------------------------------------------------------
 }

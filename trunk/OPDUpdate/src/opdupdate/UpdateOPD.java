@@ -88,7 +88,7 @@ setLocationRelativeTo(null);
         setResizable(false);
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText(TT("Prodoc_Metadata_Creation"));
+        jLabel1.setText(TT("Prodoc_Update"));
 
         AttrTab.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
@@ -103,7 +103,7 @@ setLocationRelativeTo(null);
         jTextArea1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
-        jTextArea1.setText("\n- Before any update VERIFY that your BACKUPS are CORRECT and  UPDATED.\n- Any previous inconsistence or error during update can produce UNRECOVERABLE DATA LOST.\n-All the USERS MUST BE DISCONNECTED during update.\n\n- Antes de actualizar VERIFIQUE que sus COPIAS de SEGURIDAD están ACTUALIZADAS y son CORRECTAS.\n- Cualquier inconsistencia previa o error durante la actualización podría producir PERDIDA IRRECUPERABLE de DATOS.\n-Todos los USUARIOS deben estar DEESCONECTADOS durante la actualización.\n");
+        jTextArea1.setText("\n- Before any update VERIFY that your BACKUPS are CORRECT and  UPDATED.\n- Any previous inconsistence or error during update can produce UNRECOVERABLE DATA LOST.\n-All the USERS MUST BE DISCONNECTED during update.\n\n- Antes de actualizar VERIFIQUE que sus COPIAS de SEGURIDAD están ACTUALIZADAS y son CORRECTAS.\n- Cualquier inconsistencia previa o error durante la actualización podría producir PERDIDA IRRECUPERABLE de DATOS.\n-Todos los USUARIOS deben estar DESCONECTADOS durante la actualización.\n");
         jTextArea1.setWrapStyleWord(true);
         jScrollPane2.setViewportView(jTextArea1);
 
@@ -114,12 +114,12 @@ setLocationRelativeTo(null);
             .addGroup(AttrTabLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(AttrTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
                     .addGroup(AttrTabLayout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(8, 8, 8)
                         .addComponent(UpMetadataCB)
-                        .addGap(0, 270, Short.MAX_VALUE))
-                    .addComponent(jScrollPane2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         AttrTabLayout.setVerticalGroup(
