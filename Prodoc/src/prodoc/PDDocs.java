@@ -1868,7 +1868,7 @@ LoadFull(Id);
 if (!getDrv().getUser().getAclList().containsKey(getACL()))
     PDExceptionFunc.GenPDException("User_without_permissions_over_document",getPDId());
 Integer Perm=(Integer)getDrv().getUser().getAclList().get(getACL());
-if (Perm.intValue()<PDACL.pDELETE)
+if (Perm<PDACL.pDELETE)
     PDExceptionFunc.GenPDException("User_without_permissions_over_document",getPDId());
 ExecuteTransThreads(PDTasksDefEvent.fMODEDEL);
 String Vers=getVersion();
@@ -1878,7 +1878,8 @@ Attr.setValue(getDocType());
 Attr=R.getAttr(fSTATUS);
 Attr.setValue(fSTATUS_DEL);
 UpdateVersion(Id, null, R);
-Attr.setValue(fSTATUS_LASTDEL); // actual version muts be indicated
+Attr.setValue(fSTATUS_LASTDEL); // actual version must be indicated
+AddLogFields(); // for tracing delete
 UpdateVersion(Id, Vers, R);
 DeleteFragments(TypeDefs, Id);
 GenerateNoTransThreads(PDTasksDefEvent.fMODEDEL);
