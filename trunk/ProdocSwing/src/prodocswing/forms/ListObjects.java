@@ -49,6 +49,7 @@ static private DefaultComboBoxModel CBMACL=null;
 static private DefaultComboBoxModel CBMReposit=null;
 static private DefaultComboBoxModel CBMAuthenticators=null;
 static private DefaultComboBoxModel CBMCustomizers=null;
+private boolean Filled=false;
 /**
  * 
  */
@@ -118,6 +119,7 @@ AssignLabels();
 
         AddButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/add.png"))); // NOI18N
         AddButton.setToolTipText("");
+        AddButton.setEnabled(false);
         AddButton.setFocusable(false);
         AddButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         AddButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -132,6 +134,7 @@ AssignLabels();
 
         DelButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/del.png"))); // NOI18N
         DelButton.setToolTipText("");
+        DelButton.setEnabled(false);
         DelButton.setFocusable(false);
         DelButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         DelButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -146,6 +149,7 @@ AssignLabels();
 
         EditButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/edit.png"))); // NOI18N
         EditButton.setToolTipText("");
+        EditButton.setEnabled(false);
         EditButton.setFocusable(false);
         EditButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         EditButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -160,6 +164,7 @@ AssignLabels();
 
         CopyButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/copy.png"))); // NOI18N
         CopyButton.setToolTipText("");
+        CopyButton.setEnabled(false);
         CopyButton.setFocusable(false);
         CopyButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         CopyButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -174,6 +179,7 @@ AssignLabels();
 
         ExportButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/export.png"))); // NOI18N
         ExportButton.setToolTipText("");
+        ExportButton.setEnabled(false);
         ExportButton.setFocusable(false);
         ExportButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         ExportButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -188,6 +194,7 @@ AssignLabels();
 
         ExportAllButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/export_all.png"))); // NOI18N
         ExportAllButton.setToolTipText("");
+        ExportAllButton.setEnabled(false);
         ExportAllButton.setFocusable(false);
         ExportAllButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         ExportAllButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -202,6 +209,7 @@ AssignLabels();
 
         ImportButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/import.png"))); // NOI18N
         ImportButton.setToolTipText("");
+        ImportButton.setEnabled(false);
         ImportButton.setFocusable(false);
         ImportButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         ImportButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -216,6 +224,7 @@ AssignLabels();
 
         ExpCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/expCSV.png"))); // NOI18N
         ExpCSV.setToolTipText("");
+        ExpCSV.setEnabled(false);
         ExpCSV.setFocusable(false);
         ExpCSV.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         ExpCSV.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -820,7 +829,7 @@ protected JTextField getUserFilter()
 { return UserFilter ;}
 //--------------------------------------------------------------------
 /**
- * 
+ * Do a query, filling with the results the grid.
  */
 protected void RefreshTable()
 {
@@ -830,6 +839,18 @@ ObjectsList2.setDrv(MainWin.getSession());
 ObjectsList2.setListFields(PDObject.getRecord());
 ObjectsList2.setCursor(PDObject.SearchLike(UserFilter.getText()));
 getObjectsTable().setModel(ObjectsList2);
+if (!Filled) // first time
+    {
+    AddButton.setEnabled(true);
+    EditButton.setEnabled(true);
+    CopyButton.setEnabled(true);
+    DelButton.setEnabled(true);
+    ImportButton.setEnabled(true);
+    ExportButton.setEnabled(true);
+    ExportAllButton.setEnabled(true);
+    ExpCSV.setEnabled(true);
+    Filled=true;
+    }
 } catch (PDException ex)
     {
     MainWin.Message(MainWin.TT("Error_assigning_columns_to_table")+":"+MainWin.DrvTT(ex.getLocalizedMessage()));
