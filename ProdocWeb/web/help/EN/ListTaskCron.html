@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>>Scheduled Tasks List</title>
+        <title>Scheduled Tasks List</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management"/>
         <meta name="author" content="Joaquin Hierro" />
@@ -10,28 +10,41 @@
     <body>
 <H4>Scheduled Tasks List</H4><hr>
 <p>By selecting the option to manage Scheduled Tasks, will appear the form "list of Scheduled Tasks". This form allows you to maintain and define the Scheduled Tasks.</p>
-<h5>Tareas programadas</h5>
-<p>OPD incluye la posibilidad de definir tareas programadas para realizar diversas operaciones de mantenimiento e integración.</p>
-<p>No existe límite al número de tareas que puede definirse, aunque debe tenerse en cuenta el tiempo de ejecución de cada una de ellas, ya que si se definen demasiadas tareas demasiado complejas, podría ocurrir que no hubieran acabado algunas cuando debe empezarse de nuevo con ellas. Si es necesario puede configurarse el sistema para que distintos grupos de tareas se ejecuten en distintos ordenadores, permitiendo paralelizar el trabajo y escalar el sistema. Para ello las tareas tiene un atributo categoría, que permite agruparlas, de forma que en cada equipo puede ejecutarse todas las tareas programadas de una categoría concreta. Puede indicarse que un equipo ejecute todas las tareas de todas las categorías.</p>
-<p>Puede definirse diversas tareas del mismo tipo pero con parámetros diferentes (por ejemplo puede programarse la exportación de una estructura de carpetas/expedientes con una frecuencia y la exportación de otra estructura con otra frecuencia y otro destino).</p>
-<p>Para cada tarea definida, además de los parámetros propios de la tarea, se indica la frecuencia de ejecución y la fecha-hora de la próxima ejecución. De esta forma puede programarse la ejecución, por ejemplo cada 7 días, empezando a partir del sábado a las 23:00, o cada hora, empezando a las 9:00.</p>
-<p>La ejecución de tareas implica 2 pasos. Cuando llega el día y hora de ejecución de una tarea, se genera una “orden de trabajo” de ejecución de esa tarea (una “fotocopia” de la tarea) por parte del ordenador encargado de generar esa categoría de tareas (o de todas). Esa orden de trabajo a su vez se encola y se llevará a cabo cuando el ordenador(es) encargado(s) de ejecutar finalicen las tareas anteriores. Por tanto la orden se crea en el momento exacto y con los parámetros adecuados, aunque pueda ejecutarse con un ligero retraso. Incluso en caso de algún tipo de incidente, podría no llegar a ejecutarse en su momento. Pero la “orden de trabajo” aparece y queda constancia de estar pendiente. Cuando el componente encargado de ejecutar las tareas se reactive, ejecutará todas las pendientes.  Similarmente ocurre con las “órdenes de trabajo”, se generarán todas las que debían haberse generado incluso si no está encendido el ordenador encargado. Por ejemplo, si el ordenador encargado de generar tareas estuviera apagado durante 2 horas, al encenderse generará todas las tareas que debían haberse generado en ese tiempo, no solo las “nuevas”.</p>
-<h5>Escalabilidad</h5>
-<p>El sistema descrito es totalmente escalable. En el caso más simple, un solo ordenador puede encargarse de generar y ejecutar las tareas; en un caso complejo, 1 o 2 ordenadores podrían encargarse de generar las órdenes a partir de las tareas y varios de ejecutarlas, cada uno con una categoría asignada, para facilitar el reparto del trabajo.</p>
-<h5>Activación</h5>
-<p>Las tareas puedan activarse y desactivarse, de forma que pueden estar totalmente definidas y probadas pero no se ejecutan hasta que sea necesario, volviendo a desactivarse cuando se requiera. La activación controla la generación de las “órdenes de trabajo”, es decir si una tarea está desactivada,</p>
-
-
-<p>At the time of storing the document should be set its MIME type, so that browsers and other programs can handle and open the file correctly. Documentation and lists of mime types can be found at: <a href="http://en.wikipedia.org/wiki/Internet_media_type" target="_blank">Wikipedia</a> or <a href="http://www.iana.org/assignments/media-types/index.html" target="_blank">IANA MIME Media Types</a></p>
-<p>To filter the Mime Type or list of Mime Types you want to review, just enter part of the name in the text box and press "ok". The list of Mime Types that meet the conditions will be shown on the results table. Pressing the button without entering any value you see all the elements on which the user has permission. The results table shows the data:</p>
+<h5>Scheduled Tasks</h5>
+<p>OPD includes the possibility of defining scheduled tasks to perform various maintenance and integration tasks.</p>
+<p>There is no limit to the number of tasks that can be defined, but must be considered the execution time of each of them, because if too many or too complex tasks are defined, it may happen that some had not finished when it should begin again with them. If necessary, the system can be configured so that  different groups of tasks run on different computers, allowing the work to be parallelized and to scale the system. Each task has an attribute named  "category", which allows to group them, so that each computer can run all scheduled tasks in a particular category. It should be noted that also a computer alone can run all tasks of any category.</p>
+<p>You can define different tasks of the same type but with different parameters (eg you can program the export of a folder structure / records with a frequency and the export of another structure with another frequency and destinations).</p>
+<p>For each defined task, in addition to the specific parameters of the task kind, it is indicated the execution frequency and date-time of the next run . That way, it can be programmed, for example every 7 days, starting from Saturday at 23:00, or every hour, beginning at 9:00.</p>
+<p>The task execution involves two steps. When the day and time of execution of a task is reached, a "work order" of the task (a "photocopy" of the task)  is generated by the computer in charge of generating the task category (or all) . That "work order" in turn is queued and will be executed when the computer (s) responsible of the execution of the tasks ends the previous tasks. </p>
+<p>So the order is created at the right time and with the right parameters, but can be run with a slight delay. Even if by some sort of incident, I could not get to run at the time, the "work order" is recorded to be pending. When the component responsible for executing tasks becomes active, it will process all the pending work orders. </p>
+<p>The list of pending task can be reviewed in <a href="ListTaskPending.html">List of pending task</a> and the list of ended tasks in <a href="ListTaskEnded.html">List of ended tasks</a>. It is the responsibility of the administrator to delete the information from the completed tasks to prevent excessive growth of database tables and reduce performance..</p>
+<h5>Scalability</h5>
+<p>The system has big scalability. In a small system, one computer can generate and run all the tasks; in a big system, 1 or 2 computers can generate the "work orders" from the task and several computers run the generated "work orders", each one "specialized" in a category.</p>
+<h5>Transactionality</h5>
+<p>It's possible to define the tasks as transactional.That is, the task will be executed over all the affected objects (i.e.: all the documents in a folder) and if any one fails, the operation is canceled for all the objects, so the system maintains the coherence. If the task is not transactional, the operation is performed on some objects and may fail in others.</p>
+<h5>Activation</h5>
+<p>Tasks can be turned on and off, so that they can be fully defined and tested but not executed until needed. They can again be turned off when required. Activation controls the generation of the "work order", ie if a task is off, no "work orders" are generated.</p>
+<h5>User Interface</h5>
+<p>To filter the Task or list of Tasks you want to review, just enter part of the name in the text box and press "ok". The list of Tasks that meet the conditions will be shown on the results table. Pressing the button without entering any value you see all the elements on which the user has permission. The results table shows the data:</p>
 <ul>
-    <li>Identification name</li>
-    <li>Description of the Mime Type</li>
-    <li>Usual extension of the files</li>    
-    <li>Name of last user who modified the Mime Type</li>
+    <li>Name of the Task</li>
+    <li>Description of the Task</li>
+    <li>Category of the Task</li>
+    <li>Kind of Taks</li>    
+    <li>Object type (one of Folder or Document types) that apply the task</li>    
+    <li>Object filter(always *)</li>    
+    <li>Parameters of the task. Depend on task type.</li>    
+    <li>Date and time of next execution</li>    
+    <li>Months between execution (it can be 0)</li>    
+    <li>Days between execution (it can be 0)</li>    
+    <li>Hours between execution (it can be 0)</li>    
+    <li>Minutes between execution (it can be 0)</li>    
+    <li>Flag indicating whether the task is active</li>   
+    <li>Flag indicating whether the task is transactional</li>   
+    <li>Name of last user who modified the Task definition</li>
     <li>Date and time of last modification</li>
 </ul>
-<p style="text-align:center;"><img alt="Screenshot ListMimeTypes" src="img/ListMimeTypes.jpg"/></p>
+<p style="text-align:center;"><img alt="Screenshot of Scheduled Tasks list" src="img/ListTaskCron.jpg"/></p>
 <p>This results table can be sorted by selecting the header of each column. You can also change the size of each column by dragging the separator line in the headers.</p>
 <p>Above the table of results there are several buttons for performing operations on the selected item. The available operations are:</p>
 <ul>
@@ -46,7 +59,7 @@
 </ul>
 <p>It should be noted on export and import, that some elements may have dependency on others, so you must export all related and imported at the time of it in the proper order.</p>
 <p>In the event of an error (lack of user permissions, data inconsistency, etc.), the operation is canceled and will present the reason for the error to the user.</p>
-<p>View: <a href="MantMimeTypes.html">Mime Types Maintenance</a> and <a href="ListObjDef.html">Object Definitions List</a></p>
+<p>View <a href="MantTaskCron.html">Scheduled Tasks Maintenance</a>, <a href="ListTaskPending.html">Panding Tasks List</a> y <a href="ListTaskEnded.html">Ended Tasks List</a></p>
 <hr>
 <a href="HelpIndex.html">Help Index OpenProdoc</a>
     </body>

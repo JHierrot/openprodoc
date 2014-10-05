@@ -1,81 +1,85 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Mantenimiento Tareas Programadas</title>
+        <title>Scheduled Tasks Maintenance</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management"/>
         <meta name="author" content="Joaquin Hierro" />
         <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
     </head>
     <body>
-<H4>Mantenimiento Tareas Programadas</H4><hr>
-<p>Al seleccionar en el formulario de <a href="ListTaskCron.html">Lista Tareas Programadas</a> las opciones de Alta, Baja, Modificación o Copia aparecerá este formulario con diversos campos activados o desactivados.</p>
-<p>Este formulario contiene la información:</p>
+<H4>Scheduled Tasks Maintenance</H4><hr>
+<p>When selected in the form <a href="ListTaskCron.html">Scheduled Tasks List</a> one of the options to add, delete, modify or copy the task, will appear this form with different fields on or off.</p>
+<p>This form contains the information:</p>
 <ul>
-    <li><b>Nombre identificativo</b>: Identificador de la tarea cuyo valor no puede repetirse ni cambiar una vez asignado. . Puede tener una longitud máxima de 32 caracteres. (Ej. "ExportExpAlumnos")</li>
-    <li><b>Descripción de la tarea</b>: Descripción que permita interpretar el tipo de archivos incluidos. Puede tener una longitud máxima de 128 caracteres. (Ej.: "Exportación Expedientes Alumnos Licenciados")</li>
-    <li><b>Categoría de la tarea</b>: Texto de hasta 32 caracteres que permite agrupar las tareas para su clasificación y ejecución separada.</li>
-    <li><b>Tipo de Tarea</b>: El tipo de tarea programaa a ejecutar. Puede ser:
+    <li><b>Task Name</b>: Task system identifier whose value can not be repeated or changed once assigned. Itcan have a maximum length of 32 characters. (I.e. "Purge_HR_Exp")</li>
+    <li><b>Task Description</b>: Description for understanding the task. It can have a maximum length of 128 characters. (Eg "Purge Human Resources Files")</li>
+    <li><b>Task Category</b>: Text for grouping and clasifying tasks. It can have a maximum length of 32 characters.</li>
+    <li><b>Kind of Task</b>: Kind of Task. It can be:
         <ul>
-        <li>"DELETE_OLD_FOLD": Borra todas las carpetas (y los elementos contenidos en ellas) con una antiguedad dada,</li>
-        <li>"DELETE_OLD_DOC": Borra (mueve a la papelera) todos los documentos con una antiguedad dada</li>
-        <li>"PURGE_DOC": Elimina de la papelera todos los elementos con una antiguedad dada.</li>
-        <li>"IMPORT": Importa automáticamente documentos desde un sistema de archivos,</li>
-        <li>"EXPORT": Exporta documentos y carpetas creados recientemente hacia un sistema de archivos.</li>
+        <li>"DELETE_OLD_FOLD": Deletes the folders (and all the objects contained in them) with a specified age,</li>
+        <li>"DELETE_OLD_DOC": Deletes (move to trash bin) all the documents with a specified age,</li>
+        <li>"PURGE_DOC": Purges/Deletes from the paper bin all the documents with an specified age.</li>
+        <li>"IMPORT": Imports automatically from a filesystem,</li>
+        <li>"EXPORT": Exports automatically from OpenProdoc to a filesystem,</li>
         </ul>
     </li>    
-    <li><b>Tipo de objeto</b> (Carpetas o Documentos) sobre los que se aplicará la tarea. Dependiendo de otros parámetros, podrá aplicarse tambien a subtipos.</li>    
-    <li><b>Filtro de los objetos</b> En esta versión debe ser siempre *.</li>    
-    <li><b>Parámetros de la tarea</b>. Dependen del tipo de tarea. Con el botón de "Edit" se presenta un formulario de ayuda:
+    <li><b>Object type</b> (one of Folder or Document types) that apply the task.</li>    
+    <li><b>Object filter</b> always * in this version</li>    
+    <li><b>Parameters of the task</b>. Depend on task type. The "Edit" button shows a form different depending on task type for easier entry. The meaning of the parameters is:
         <ul>
         <li>"DELETE_OLD_FOLD": 
             <ul>
-                <li>Param1: Indicador booleano (0/1) que indica si la tarea a plica a los subtipos o solo al tipo de carpeta indicado (Ej: "0").</li>
-                <li>Param2: Número de dias a mantener las carpetas.(Ej: para mantener 10 años indicar "3650")</li>
-                <li>Param3: Carpeta raiz sobre la que se aplicará la regla. Aplicará a todas las carpetas contenidas en esta a cualquier nivel. No es necesario incluior "Rootfolder"(Ej."/Expedientes/Compras").</li>
+                <li>Param1: Boolean value (0/1) indicating whether the task applies to subtypes or only the type assigned (I.e. "0").</li>
+                <li>Param2: Number of days to maintain the folders.(I.e.: For deleting folders older than ten years: "3650")</li>
+                <li>Param3: Root folder for the task. All the folder of the specified type under this folder (in any level) will be deleted. Don't include "Rootfolder"(I.e."/Administration/HR").</li>
             </ul>
         </li>
         <li>"DELETE_OLD_DOC":             
             <ul>
-                <li>Param1: Indicador booleano (0/1) que indica si la tarea a plica a los subtipos o solo al tipo de documento indicado (Ej: "0").</li>
-                <li>Param2: Número de dias a mantener loss documentos.(Ej: para mantener 10 años indicar "3650")</li>
-                <li>Param3: Carpeta raiz sobre la que se aplicará la regla. Aplicará a todas las carpetas contenidas en esta a cualquier nivel. No es necesario incluior "Rootfolder"(Ej."/Expedientes/Compras").</li>
+                <li>Param1: Boolean value (0/1) indicating whether the task applies to subtypes or only the type assigned I.e.Ej: "0").</li>
+                <li>Param2: Number of days to maintain the documents.(I.e.: For deleting documents older than ten years: "3650")</li>
+                <li>Param3: Root folder for the task. All the documents of the specified type under this folder (in any level) will be deleted. Don't include "Rootfolder"(I.e."/Administration/HR").</li>
             </ul>
         </li>
         <li>"PURGE_DOC": 
             <ul>
-                <li>Param1: Número de dias a mantener loss documentos.(Ej: para mantener 10 años indicar "3650")</li>
+                <li>Param1: Number of days to maintain the documents.(I.e.: For deleting documents older than ten years: "3650")</li>
             </ul>
         </li>
         <li>"IMPORT":
             <ul>
-                <li>Param1: Indicador booleano (0/1) que indica si debe recorrerse recursivamente todas las carpetas contenidas en la carpeta origen (Ej: "0").</li>
-                <li>Param2: Tipo Documental a asignar a los documentos importados.(Ej: "Informe")</li>
-                <li>Param3: Carpeta destino en OpenProdoc en la que se creará la estructura de carpetas y documentos. No es necesario incluior "Rootfolder"(Ej."/Expedientes/Compras").</li>
-                <li>Param4: Carpeta origen desde la que se importará. (Ej."c:\CarpetaImportación").</li>
+                <li>Param1: Boolean value (0/1) indicating whether the task should travel recursively by all the folders conatined int the source folder (I.e.: "0").</li>
+                <li>Param2: Document Type to by asigned to the imported documents.(I.e.: "FinantialReport")</li>
+                <li>Param3: Target folder in OpenProdoc where all the external structure of folders and documents will be recreated. You don't need to include "Rootfolder"(I.e.."/Administration/HR").</li>
+                <li>Param4: Source folder from which all the structure will be imported. (I.e."c:\ImporFolder").</li>
             </ul>
         </li>
         <li>"EXPORT":            
             <ul>
-                <li>Param1: Indicador booleano (0/1) que indica si debe recorrerse recursivamente todas las carpetas contenidas en la carpeta origen (Ej: "0").</li>
-                <li>Param2: Número de dias desde la actualización.(Ej: para exportar los documentos creado en la última semana s indicar "7")</li>
-                <li>Param3: Carpeta origen en OpenProdoc desde la que se exportará la estructura de carpetas y documentos. No es necesario incluior "Rootfolder"(Ej."/Expedientes/Compras").</li>
-                <li>Param4: Carpeta destino a la que se exportará. (Ej."/tmp/Novedades").</li>
+                <li>Param1: Boolean value (0/1) indicating whether the task should travel recursively by all the folders conatined int the source folder (I.e.: "0").</li>
+                <li>Param2: Number of days from updatinf.(I.e. For exporting the documents inserted during the last week: "7")</li>
+                <li>Param3: Source folder in OpenProdoc from which all the structure of folders and documents will be exported. You don't need to include "Rootfolder"(I.e.."/Administration/HR").</li>
+                <li>Param4: Target folder where all the structure will be exported. (I.e.."/tmp/NewDocuments").</li>
             </ul>
         </li>
         </ul>
     </li>    
-    <li><b>Fecha hora</b>: En la que se programa la próxima ejecución de la tarea.</li>    
-    <li><b>Meses</b> a esperar entre ejecuciones (puede ser cero)</li>    
-    <li><b>Días</b> a esperar entre ejecuciones (puede ser cero)</li>    
-    <li><b>Horas</b> a esperar entre ejecuciones (puede ser cero)</li>    
-    <li><b>Minutos</b> a esperar entre ejecuciones (puede ser cero)</li>    
-    <li><b>Activo</b>: Indicador de si la tarea está activa (y por tanto se ejecutará) o no.</li>    
-    <li><b>Transaccionalidad</b>: Indicador de si la tarea es transaccional (y por tanto se ejecutará para todos los objetos afectados  solo para algunos) o no.</li>    
+    <li><b>Date and time</b>: Date and time of next execution (generation) of the task.</li>    
+    <li><b>Months</b> Months between execution (it can be 0)</li>    
+    <li><b>Days</b> Days between execution (it can be 0)</li>    
+    <li><b>Hours</b> Hours between execution (it can be 0)</li>    
+    <li><b>Minutes</b> Minutes between execution (it can be 0, but at least one in Months, Days, Hours or Minutes MUST be not cero)</li>    
+    <li><b>Active</b>: Flag indicating whether the task is active (and will be executed) or not.</li>    
+    <li><b>Transaccionality</b>: Flag indicating whether the task is transactional (and affect to all the objects or none) or not.</li>    
 </ul>
-<p style="text-align:center;"><img alt="Copia de pantalla MantTaskCron" src="img/MantTaskCron.jpg"/></p>
-<p>Ver: <a href="ListTaskCron.html">Lista Tareas Programadas</a></p>
+<p>This form includes two additional buttons:<b>Test</b> y <b>Run</b>.</p> 
+<p>Selecting <b>Test</b> OPD runs a search for the elements that fill the criteria specified (Document type, folders, dates,. ) and shows a list with the elements found so you can check that the criteria is correct and returns the expected set of documents or folders.
+This search doesn't apply to operations as import that don't manage existing objects in the repository.</p>
+<p>Selecting <b>Run</b> you RUN the task only once with the defined criteria, so beware that you can delete or modify thousands of elements.</p> 
+<p style="text-align:center;"><img alt="Screenshot MantTaskCron" src="img/MantTaskCron.jpg"/></p>
+<p>View: <a href="ListTaskCron.html">Scheduled Tasks List</a></p>
 <hr>
-<a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>
+<a href="HelpIndex.html">Help Index OpenProdoc</a>
     </body>
 </html>

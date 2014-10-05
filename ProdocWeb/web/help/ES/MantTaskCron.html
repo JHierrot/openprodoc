@@ -15,7 +15,7 @@
     <li><b>Nombre identificativo</b>: Identificador de la tarea cuyo valor no puede repetirse ni cambiar una vez asignado. . Puede tener una longitud máxima de 32 caracteres. (Ej. "ExportExpAlumnos")</li>
     <li><b>Descripción de la tarea</b>: Descripción que permita interpretar el tipo de archivos incluidos. Puede tener una longitud máxima de 128 caracteres. (Ej.: "Exportación Expedientes Alumnos Licenciados")</li>
     <li><b>Categoría de la tarea</b>: Texto de hasta 32 caracteres que permite agrupar las tareas para su clasificación y ejecución separada.</li>
-    <li><b>Tipo de Tarea</b>: El tipo de tarea programaa a ejecutar. Puede ser:
+    <li><b>Tipo de Tarea</b>: El tipo de tarea programada a ejecutar. Puede ser:
         <ul>
         <li>"DELETE_OLD_FOLD": Borra todas las carpetas (y los elementos contenidos en ellas) con una antiguedad dada,</li>
         <li>"DELETE_OLD_DOC": Borra (mueve a la papelera) todos los documentos con una antiguedad dada</li>
@@ -30,28 +30,28 @@
         <ul>
         <li>"DELETE_OLD_FOLD": 
             <ul>
-                <li>Param1: Indicador booleano (0/1) que indica si la tarea a plica a los subtipos o solo al tipo de carpeta indicado (Ej: "0").</li>
+                <li>Param1: Indicador booleano (0/1) que indica si la tarea aplica a los subtipos o solo al tipo de carpeta indicado (Ej: "0").</li>
                 <li>Param2: Número de dias a mantener las carpetas.(Ej: para mantener 10 años indicar "3650")</li>
                 <li>Param3: Carpeta raiz sobre la que se aplicará la regla. Aplicará a todas las carpetas contenidas en esta a cualquier nivel. No es necesario incluior "Rootfolder"(Ej."/Expedientes/Compras").</li>
             </ul>
         </li>
         <li>"DELETE_OLD_DOC":             
             <ul>
-                <li>Param1: Indicador booleano (0/1) que indica si la tarea a plica a los subtipos o solo al tipo de documento indicado (Ej: "0").</li>
-                <li>Param2: Número de dias a mantener loss documentos.(Ej: para mantener 10 años indicar "3650")</li>
-                <li>Param3: Carpeta raiz sobre la que se aplicará la regla. Aplicará a todas las carpetas contenidas en esta a cualquier nivel. No es necesario incluior "Rootfolder"(Ej."/Expedientes/Compras").</li>
+                <li>Param1: Indicador booleano (0/1) que indica si la tarea aplica a los subtipos o solo al tipo de documento indicado (Ej: "0").</li>
+                <li>Param2: Número de dias a mantener los documentos.(Ej: para mantener 10 años indicar "3650")</li>
+                <li>Param3: Carpeta raiz sobre la que se aplicará la regla. Aplicará a todas las carpetas contenidas en esta a cualquier nivel. No es necesario incluir "Rootfolder"(Ej."/Expedientes/Compras").</li>
             </ul>
         </li>
         <li>"PURGE_DOC": 
             <ul>
-                <li>Param1: Número de dias a mantener loss documentos.(Ej: para mantener 10 años indicar "3650")</li>
+                <li>Param1: Número de dias a mantener los documentos.(Ej: para mantener 10 años indicar "3650")</li>
             </ul>
         </li>
         <li>"IMPORT":
             <ul>
                 <li>Param1: Indicador booleano (0/1) que indica si debe recorrerse recursivamente todas las carpetas contenidas en la carpeta origen (Ej: "0").</li>
                 <li>Param2: Tipo Documental a asignar a los documentos importados.(Ej: "Informe")</li>
-                <li>Param3: Carpeta destino en OpenProdoc en la que se creará la estructura de carpetas y documentos. No es necesario incluior "Rootfolder"(Ej."/Expedientes/Compras").</li>
+                <li>Param3: Carpeta destino en OpenProdoc en la que se creará la estructura de carpetas y documentos. No es necesario incluir "Rootfolder"(Ej."/Expedientes/Compras").</li>
                 <li>Param4: Carpeta origen desde la que se importará. (Ej."c:\CarpetaImportación").</li>
             </ul>
         </li>
@@ -59,7 +59,7 @@
             <ul>
                 <li>Param1: Indicador booleano (0/1) que indica si debe recorrerse recursivamente todas las carpetas contenidas en la carpeta origen (Ej: "0").</li>
                 <li>Param2: Número de dias desde la actualización.(Ej: para exportar los documentos creado en la última semana s indicar "7")</li>
-                <li>Param3: Carpeta origen en OpenProdoc desde la que se exportará la estructura de carpetas y documentos. No es necesario incluior "Rootfolder"(Ej."/Expedientes/Compras").</li>
+                <li>Param3: Carpeta origen en OpenProdoc desde la que se exportará la estructura de carpetas y documentos. No es necesario incluir "Rootfolder"(Ej."/Expedientes/Compras").</li>
                 <li>Param4: Carpeta destino a la que se exportará. (Ej."/tmp/Novedades").</li>
             </ul>
         </li>
@@ -73,6 +73,10 @@
     <li><b>Activo</b>: Indicador de si la tarea está activa (y por tanto se ejecutará) o no.</li>    
     <li><b>Transaccionalidad</b>: Indicador de si la tarea es transaccional (y por tanto se ejecutará para todos los objetos afectados  solo para algunos) o no.</li>    
 </ul>
+<p>Este formulario contiene dos botones adicionales: <b>Test</b> y <b>Run</b>.</p> 
+<p>Eligiendo <b>Test</b> se realiza una búsqueda siguiendo los criterios introducidos (tipo de objeto, carpeta padre, fechas, etc) y muestra los elementos sobre los que se aplicaría la tarea, para poder comprobar si los criterios introducidos son correctos y afectarían a los documentos adecuados.
+Esta búsqueda no aplica si se trata de operaciones como importar, ya que no hay ningún objetos en el repositorio que cumplan esa condición.</p>
+<p>Eligiendo <b>Run</b> se EJECUTA REALMENTE la tarea una sola vez, de acuerdo a los criterios definidos en ese momento. Debe verificarse los valores con cuidado ya que puede afectarse a miles de elementos.</p> 
 <p style="text-align:center;"><img alt="Copia de pantalla MantTaskCron" src="img/MantTaskCron.jpg"/></p>
 <p>Ver: <a href="ListTaskCron.html">Lista Tareas Programadas</a></p>
 <hr>

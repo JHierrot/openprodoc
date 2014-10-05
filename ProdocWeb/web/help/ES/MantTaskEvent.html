@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mantenimiento Tareas de Eventos</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+<H4>Mantenimiento Tareas de Eventos</H4><hr>
+<p>Al seleccionar en el formulario de <a href="ListTaskEvent.html">Lista Tareas de Eventos</a> las opciones de Alta, Baja, Modificación o Copia aparecerá este formulario con diversos campos activados o desactivados.</p>
+<p>Este formulario contiene la información:</p>
+<ul>
+    <li><b>Nombre identificativo</b>: Identificador de la tarea cuyo valor no puede repetirse ni cambiar una vez asignado. . Puede tener una longitud máxima de 32 caracteres. (Ej. "CopiaExpAlumno")</li>
+    <li><b>Descripción de la tarea</b>: Descripción que permita interpretar el tipo de archivos incluidos. Puede tener una longitud máxima de 128 caracteres. (Ej.: "Copia Expediente Alumno Borrado")</li>
+    <li><b>Categoría de la tarea</b>: Texto de hasta 32 caracteres que permite agrupar las tareas para su clasificación y ejecución separada.</li>
+    <li><b>Tipo de Tarea</b>: El tipo de tarea asociada a evento a ejecutar. Puede ser:
+        <ul>
+        <li>"UPDATE_FOLD": Actualiza los metadatos de una carpeta,</li>
+        <li>"UPDATE_DOC": Actualiza los metadatos de un documento</li>
+        <li>"COPY_FOLD": Crea una copia de la carpeta.</li>
+        <li>"COPY_DOC": Crea una copia del documento.</li>
+        <li>"EXPORT_FOLD": Exporta una carpeta.</li>
+        <li>"EXPORT_DOC":  Exporta un documento.</li>
+        </ul>
+    </li>    
+    <li><b>Tipo de objeto</b> (Carpetas o Documentos) sobre los que se aplicará la tarea. Dependiendo de otros parámetros, podrá aplicarse tambien a subtipos.</li>    
+    <li><b>Filtro de los objetos</b> En esta versión debe ser siempre *.</li>    
+    <li><b>Parámetros de la tarea</b>. Dependen del tipo de tarea. Con el botón de "Edit" se presenta un formulario de ayuda:
+        <ul>
+        <li>"UPDATE_FOLD": 
+            <ul>
+                <li>Param1: Atributo1: Expresión para calcular el valor de un atributo. Consiste en un nombre de atributo+ "=" + una secuencia de nombres de atributos o literales (enmarcadas por '#'). Solo aplica a metadatos de tipo texto. (Ej: "Attr1=Attr1+#=#+Attr2", "Title=#Titulo:#+Title" )</li>
+                <li>Param2: Atributo2: Expresión para calcular el valor de un atributo. Puede estar vacio. Se aplicará DESPUES de asignar valor al atributo anterior.</li>
+                <li>Param3: Atributo3: Expresión para calcular el valor de un atributo. Puede estar vacio. Se aplicará DESPUES de asignar valor al atributo anterior.</li>
+                <li>Param4: Carpeta raiz sobre la que se aplicará la regla. Aplicará a todas las carpetas contenidas en esta a cualquier nivel. No es necesario incluir "Rootfolder"(Ej."/Expedientes/Compras").</li>
+            </ul>
+        </li>
+        <li>"UPDATE_DOC":             
+            <ul>
+                <li>Param1: Atributo1: Expresión para calcular el valor de un atributo. Consiste en un nombre de atributo+ "=" + una secuencia de nombres de atributos o literales (enmarcadas por '#'). Solo aplica a metadatos de tipo texto. (Ej: "Attr1=Attr1+#=#+Attr2", "Title=#Titulo:#+Title" )</li>
+                <li>Param2: Atributo2: Expresión para calcular el valor de un atributo. Puede estar vacio. Se aplicará DESPUES de asignar valor al atributo anterior.</li>
+                <li>Param3: Atributo3: Expresión para calcular el valor de un atributo. Puede estar vacio. Se aplicará DESPUES de asignar valor al atributo anterior.</li>
+                <li>Param4: Carpeta raiz sobre la que se aplicará la regla. Aplicará a todas las carpetas contenidas en esta a cualquier nivel. No es necesario incluir "Rootfolder"(Ej."/Expedientes/Compras").</li>
+            </ul>
+        </li>
+        <li>"COPY_FOLD": 
+            <ul>
+                <li>Param1: Carpeta destino en OpenProdoc en la que se copiará cualquier carpeta (solo la carpeta, no contenido) bajo la carpeta origen cuando se produzca el evento definido. No es necesario incluir "Rootfolder"(Ej."/CopiaExpedientes/Compras").</li>
+                <li>Param2: Carpeta raiz en OpenProdoc sobre la que se aplicará la regla. Aplicará a todas las carpetas contenidas en esta a cualquier nivel. No es necesario incluir "Rootfolder"(Ej."/Expedientes/Compras").</li>
+            </ul>
+        </li>
+        <li>"COPY_DOC":
+            <ul>
+                <li>Param1: Carpeta destino en OpenProdoc en la que se copiará cualquier documento bajo la carpeta origen cuando se produzca el evento definido. No es necesario incluir "Rootfolder"(Ej."/CopiaExpedientes/Compras").</li>
+                <li>Param2: Carpeta raiz en OpenProdoc sobre la que se aplicará la regla. Aplicará a todas las carpetas contenidas en esta a cualquier nivel. No es necesario incluir "Rootfolder"(Ej."/Expedientes/Compras").</li>
+            </ul>
+        </li>
+        <li>"EXPORT_FOLD":            
+            <ul>
+                <li>Param1: Carpeta origen en OpenProdoc desde la que se exportará las carpetas.Aplicará a todas las carpetas contenidas en esta a cualquier nivel. No es necesario incluir "Rootfolder"(Ej."/Expedientes/Compras").</li>
+                <li>Param2: Carpeta destino a la que se exportará. (Ej."/tmp/Novedades").</li>
+            </ul>
+        </li>
+        <li>"EXPORT_DOC":            
+            <ul>
+                <li>Param1: Carpeta origen en OpenProdoc desde la que se exportará los documentos.Aplicará a todas las carpetas contenidas en esta a cualquier nivel. No es necesario incluir "Rootfolder"(Ej."/Expedientes/Compras").</li>
+                <li>Param2: Carpeta destino a la que se exportará. (Ej."/tmp/Novedades").</li>
+            </ul>
+        </li>
+        </ul>
+    </li>    
+    <li><b>Tipo de evento</b> a procesar (INSert, DELete, UPDate)</li>    
+    <li><b>Orden de ejecución</b> del evento dentro de la lista de eventos asociados. No necesitan ser números consecutivos.</li>    
+    <li><b>Activo</b>: Indicador de si la tarea está activa (y por tanto se ejecutará) o no.</li>    
+    <li><b>Transaccionalidad</b>: Indicador de si la tarea es transaccional (y por tanto se ejecutará para todos los objetos afectados  solo para algunos) o no.</li>    
+</ul>
+<p style="text-align:center;"><img alt="Copia de pantalla MantTaskEvent" src="img/MantTaskEvent.jpg"/></p>
+<p>Ver: <a href="ListTaskEvent.html">Lista Tareas de Eventos</a></p>
+<hr>
+<a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>
+    </body>
+</html>
