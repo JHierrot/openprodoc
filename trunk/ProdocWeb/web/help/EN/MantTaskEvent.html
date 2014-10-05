@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Events Tasks Maintenance</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+<H4>Events Tasks Maintenance</H4><hr>
+<p>When selected in the form <a href="ListTaskEvent.html">Events Tasks List</a> one of the options to add, delete, modify or copy the task, will appear this form with different fields on or off.</p>
+<p>This form contains the information:</p>
+<ul>
+    <li><b>Task Name</b>: Task system identifier whose value can not be repeated or changed once assigned. Itcan have a maximum length of 32 characters. (I.e. "StudentCaesCopy")</li>
+    <li><b>Task Description</b>: Description for understanding the task. It can have a maximum length of 128 characters. (Eg "Copy the complete case of the student")</li>
+    <li><b>Task Category</b>: Text for grouping and clasifying tasks. It can have a maximum length of 32 characters.</li>
+    <li><b>Kind of Task</b>: Kind of Task. It can be:
+        <ul>
+        <li>"UPDATE_FOLD": Update the metadata of the folder,</li>
+        <li>"UPDATE_DOC": Update the metadata of the document,</li>
+        <li>"COPY_FOLD": Creates a copy of the folder</li>
+        <li>"COPY_DOC": Creates a copy of the document.</li>
+        <li>"EXPORT_FOLD": Exports the folder.</li>
+        <li>"EXPORT_DOC": Exports the document.</li>
+        </ul>
+    </li>    
+    <li><b>Object type</b> (one of Folder or Document types) that apply the task.</li>    
+    <li><b>Object filter</b> always * in this version</li>    
+    <li><b>Parameters of the task</b>. Depend on task type. The "Edit" button shows a form different depending on task type for easier entry. The meaning of the parameters is:
+        <ul>
+        <li>"UPDATE_FOLD": 
+            <ul>
+                <li>Param1: Atributo1: Expression to calculate the value of an attribute. It consists of an attribute name + "=" + a sequence of attribute names or literals (framed by '#'). Only applies to text metadata type.(i.e.: "Attr1=Attr1+#=#+Attr2", "Title=#The title:#+Title" )</li>
+                <li>Param2: Atributo2: Expression to calculate the value of an attribute. It can be empty. it will be calculate AFTER the previous expresion.</li>
+                <li>Param3: Atributo3: Expression to calculate the value of an attribute. It can be empty. it will be calculate AFTER the previous expresion.</li>
+                <li>Param4: Root folder for the task. All the folders of the specified type under this folder (in any level) will be processed. Don't include "Rootfolder"(I.e."/Administration/HR").</li>
+            </ul>
+        </li>
+        <li>"UPDATE_DOC":             
+            <ul>
+                <li>Param1: Atributo1: Expression to calculate the value of an attribute. It consists of an attribute name + "=" + a sequence of attribute names or literals (framed by '#'). Only applies to text metadata type.(i.e.: "Attr1=Attr1+#=#+Attr2", "Title=#The title:#+Title" )</li>
+                <li>Param2: Atributo2: Expression to calculate the value of an attribute. It can be empty. it will be calculate AFTER the previous expresion.</li>
+                <li>Param3: Atributo3: Expression to calculate the value of an attribute. It can be empty. it will be calculate AFTER the previous expresion.</li>
+                <li>Param4: Root folder for the task. All the documents of the specified type under this folder (in any level) will be processed. Don't include "Rootfolder"(I.e."/Administration/HR").</li>
+            </ul>
+        </li>
+        <li>"COPY_FOLD": 
+            <ul>
+                <li>Param1: Target folder in OpenProdoc where all the folders will be copied. You don't need to include "Rootfolder"(I.e.."/Administration/HR").</li>
+                <li>Param2: Root folder for the task. All the folders of the specified type under this folder (in any level) will be processed. Don't include "Rootfolder"(I.e."/Administration/HR").</li>
+            </ul>
+        </li>
+        <li>"COPY_DOC":
+            <ul>
+                <li>Param1: Target folder in OpenProdoc where all the documents will be copied. You don't need to include "Rootfolder"(I.e.."/Administration/HR").</li>
+                <li>Param2: Root folder for the task. All the documents of the specified type under this folder (in any level) will be processed. Don't include "Rootfolder"(I.e."/Administration/HR").</li>
+            </ul>
+        </li>
+        <li>"EXPORT_FOLD":            
+            <ul>
+                <li>Param1: Source folder in OpenProdoc.All the folders of the specified type under this folder (in any level) will be processed.. You don't need to include "Rootfolder"(I.e.."/Administration/HR").</li>
+                <li>Param2: Target folder in filesystem where all the elements will be exported. (I.e.."/tmp/NewDocuments").</li>
+            </ul>
+        </li>
+        <li>"EXPORT_DOC":            
+            <ul>
+                <li>Param1: Source folder in OpenProdoc.All the folders of the specified type under this folder (in any level) will be processed.. You don't need to include "Rootfolder"(I.e.."/Administration/HR").</li>
+                <li>Param2: Target folder in filesystem where all the elements will be exported. (I.e.."/tmp/NewDocuments").</li>
+            </ul>
+        </li>
+        </ul>
+    </li>    
+    <li><b>Kind of Event</b> to process (INSert, DELete, UPDate)</li>    
+    <li><b>Execution order</b> of the task between all the task related to the event and document type. Do not have to be consecutive (that is can be 1,2,3 or 2, 15, 17)</li>    
+    <li><b>Active</b>: Flag indicating whether the task is active (and will be executed) or not.</li>    
+    <li><b>Transaccionality</b>: Flag indicating whether the task is transactional (and affect to all the objects or none) or not.</li>    
+</ul>
+<p style="text-align:center;"><img alt="Copia de pantalla MantTaskEvent" src="img/MantTaskEvent.jpg"/></p>
+<p>Ver: <a href="ListTaskEvent.html">Lista Tareas de Eventos</a></p>
+<hr>
+<a href="HelpIndex.html">Help Index OpenProdoc</a>
+    </body>
+</html>
