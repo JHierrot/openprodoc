@@ -167,6 +167,13 @@ TimeStampFilter1.setValue(d1);
         jToolBar1.add(ExpCSV);
 
         ObjectsTable.setFont(MainWin.getFontList());
+        ObjectsTable.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                ObjectsTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(ObjectsTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -300,6 +307,24 @@ RefreshTable();
         }
 
     }//GEN-LAST:event_ExpCSVActionPerformed
+
+    private void ObjectsTableMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_ObjectsTableMouseClicked
+    {//GEN-HEADEREND:event_ObjectsTableMouseClicked
+if (evt.getClickCount()<2)
+    return;
+int Pos=getObjectsTable().getSelectedRow();
+if (Pos==-1)
+    return;
+try {
+MantTaskPend MU = new MantTaskPend(Fparent, true);
+MU.setRecord(getPDTableModel().getElement(getSelectedRow()));
+MU.EditMode();
+MU.setLocationRelativeTo(null);
+MU.setVisible(true);
+} catch (Exception ex)
+    {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
+    }//GEN-LAST:event_ObjectsTableMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonFilter;

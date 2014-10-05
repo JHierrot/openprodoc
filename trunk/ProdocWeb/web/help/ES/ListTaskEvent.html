@@ -16,7 +16,7 @@ Esas tareas se desatarán cuando se produzca un evento de un tipo dado para una 
 Los eventos a los que pueden asociarse tareas son la creación de un objeto, su modificación y su borrado. Por ejemplo puede definirse un evento que se produzca siempre que se inserte un documento de tipo “Informe de Viabilidad”, u otro evento siempre que se borre una carpeta de tipo “Expediente Médico”. En modo transaccional, el evento de inserción y actualización se produce inmediatamente DESPUÉS de la inserción o actualización, mientras que el evento de borrado se produce inmediatamente ANTES del borrado.</p>
 <p>Estos eventos aplican a un tipo documental y todos sus subtipos. Primero se ejecutan las tareas asociadas al tipo padre, según el orden definido. Después se continuan ejecutando las tareas para los subtipos, según el orden de "descendencia", y dentro de cada tipo, por orden de secuencia.
 Para cada tipo documental y evento las tareas deben definirse con orden de ejecución por medio de un número de secuencia (que no tiene que ser consecutivo). Por ejemplo, si se ha definido tres tareas asociadas a la inserción de un documento de un tipo concreto, con los nombres y secuencias siguientes: “Tarea A” (3), “Tarea B” (5),  “Tarea C” (2). Las tareas se ejecutaran en el orden C, A, B.</p>
-<p>La lista de tareas pendientes de ejecutar puede verse en <a href="ListTaskPending.html">Lista de Tareas Pendientes</a> y la lista de tareas ya terminadas en <a href="ListTaskEnded.html">Lista de Tareas Finalizadas</a>. Es responsabilidad del administrador eliminar la información de las tareas completadas para evitar un crecimiento excesivo de las tablas de base de datos y una reducción del rendimiento.</p>
+<p>La lista de tareas pendientes de ejecutar puede verse en <a href="ListTaskPend.html">Lista de Tareas Pendientes</a> y la lista de tareas ya terminadas en <a href="ListTaskEnded.html">Lista de Tareas Finalizadas</a>. Es responsabilidad del administrador eliminar la información de las tareas completadas para evitar un crecimiento excesivo de las tablas de base de datos y una reducción del rendimiento.</p>
 <h5>Escalabilidad</h5>
 <p>El sistema descrito es totalmente escalable. En el caso más simple, un solo ordenador puede encargarse de generar y ejecutar las tareas; en un caso complejo, 1 o 2 ordenadores podrían encargarse de generar las órdenes a partir de las tareas y varios de ejecutarlas, cada uno con una categoría asignada, para facilitar el reparto del trabajo.</p>
 <h5>Transaccionalidad</h5>
@@ -57,7 +57,7 @@ Si la tarea es transaccional, se ejecutará en el mismo equipo en que se produce
 </ul>
 <p>Debe tenerse en cuenta al exportar e importar que algunos elementos pueden tener dependencia de otros, por lo que debe exportarse todos los elementos relacionados y en el momento de importarse hacerlo en el orden adecuado</p>
 <p>En caso de producirse un error (carencia de permisos del usuario, incoherencia de los datos, etc), la operación se cancela y se comunicará al usuario el motivo del error.</p>
-<p>Ver: <a href="MantTaskEvent.html">Mantenimiento Tareas de Eventos</a>, <a href="ListTaskPending.html">Lista de Tareas Pendientes</a> y <a href="ListTaskEnded.html">Lista de Tareas Finalizadas</a></p>
+<p>Ver: <a href="MantTaskEvent.html">Mantenimiento Tareas de Eventos</a>, <a href="ListTaskPend.html">Lista de Tareas Pendientes</a> y <a href="ListTaskEnded.html">Lista de Tareas Finalizadas</a></p>
 <hr>
 <a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>
     </body>

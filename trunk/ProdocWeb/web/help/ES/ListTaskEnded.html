@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Lista Tareas Pendientes</title>
+        <title>Lista Tareas Finalizadas</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management"/>
         <meta name="author" content="Joaquin Hierro" />
         <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
     </head>
     <body>
-<H4>Lista Tareas Pendientes</H4><hr>
-<p>Al seleccionar la opción de administrar Tareas Pendientes, aparecerá lesta pantalla que permite visualizar el listado de Tareas Pendientes.</p>
-<p>Para filtrar las Tareas Pendientes que se desea revisar, debe introducirse una categoría y un rango de fecha hora (por defecto aparece un rango de los últimos minutos, que puede modificarse) y pulsar el botón. La lista de Tareas Pendientes que cumplen las condiciones aparecerá en la tabla de resultados. La tabla de resultados muestra los datos:</p>
+<H4>Lista Tareas Finalizadas</H4><hr>
+<p>Al seleccionar la opción de administrar Tareas Finalizadas, aparecerá lesta pantalla que permite visualizar el listado de Tareas Finalizadas.</p>
+<p>Para filtrar las Tareas Finalizadas que se desea revisar, debe introducirse una categoría y un rango de fecha hora (por defecto aparece un rango de los últimos minutos, que puede modificarse) y pulsar el botón. La lista de Tareas Pendientes que cumplen las condiciones aparecerá en la tabla de resultados. La tabla de resultados muestra los datos:</p>
 <ul>
     <li>Identificador único de la tarea pendiente ("orden de trabajo")</li>
     <li>Nombre identificativo de la tarea</li>
@@ -26,15 +26,16 @@
     <li>Nombre del último usuario que modificó la tarea</li>
     <li>Fecha y hora de la última modificación</li>
 </ul>
-<p style="text-align:center;"><img alt="Copia de pantalla Lista Tareas Pendientes" src="img/ListTaskPend.jpg"/></p>
+<p style="text-align:center;"><img alt="Copia de pantalla Lista Tareas Finalizadas" src="img/ListTaskEnded.jpg"/></p>
 <p>Esa tabla de resultados puede ordenarse seleccionando la cabecera de cada columna. Puede también cambiarse el tamaño de cada columna arrastrando la línea separadora de las cabeceras</p>
 <p>Sobre la tabla de resultados se dispone de varios botones que permiten realizar operaciones sobre el elemento seleccionado. Las operaciones disponibles son:</p>
 <ul>
     <li> <img alt="button image" src="img/edit.png"/>   Visualizar el elemento seleccionado</li>
+    <li> <img alt="button image" src="img/del.png"/>   Eliminar el elemento seleccionado (Siempre que no se esté utilizando)</li>
     <li> <img alt="button image" src="img/expCSV.png"/>   Exportar todos los elementos listados en formato CSV, para su importación en Hojas de Cálculo o BBDD</li>
 </ul>
 <p>En caso de producirse un error (carencia de permisos del usuario, incoherencia de los datos, etc), la operación se cancela y se comunicará al usuario el motivo del error.</p>
-<p>Ver: <a href="ListTaskCron.html">Lista de Tareas Programadas</a>, <a href="ListTaskEvent.html">Lista de Tareas de Eventos</a> y <a href="ListTaskEnded.html">Lista de Tareas Finalizadas</a></p>
+<p>Ver: <a href="ListTaskCron.html">Lista de Tareas Programadas</a>, <a href="ListTaskEvent.html">Lista de Tareas de Eventos</a> y <a href="ListTaskPend.html">Lista de Tareas Pendientes</a></p>
 <hr>
 <a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>
     </body>

@@ -16,7 +16,7 @@ These tasks will be triggered when an event of a specified kind occurs in an obj
 The events that can be associated tasks are object creation, modification and deletion. For example you can define an event that occurs when a document of type "Feasibility Report" is created, or other event whenever a folder type "Medical Record" is deleted. In transaction mode, the insert and update event occurs immediately AFTER the insert or update, while the delete event is started immediately BEFORE deleted.</p>
 <p>These events apply to a document type and all its subtypes. First the tasks associated to the parent type are executed. Then continue running tasks for subtypes according to the order of "inheritance", and within each type, in order of sequence. 
 For each event and document type should be defined execution order by a sequence number (which need not be consecutive). For example, if you defined three tasks related to the insertion of a document of a particular type, with the names and following sequences: "Task A" (3) "Task B" (5), "Task C" (2 ). Tasks are executed in the order C, A, B.</p>
-<p>The list of pending task can be reviewed in <a href="ListTaskPending.html">List of pending task</a> and the list of ended tasks in <a href="ListTaskEnded.html">List of ended tasks</a>. It is the responsibility of the administrator to delete the information from the completed tasks to prevent excessive growth of database tables and reduce performance.</p>
+<p>The list of pending task can be reviewed in <a href="ListTaskPend.html">List of pending task</a> and the list of ended tasks in <a href="ListTaskEnded.html">List of ended tasks</a>. It is the responsibility of the administrator to delete the information from the completed tasks to prevent excessive growth of database tables and reduce performance.</p>
 <h5>Scalability</h5>
 <p>The system has big scalability. In a small system, one computer can generate and run all the tasks; in a big system, 1 or 2 computers can generate the "work orders" from the task and several computers run the generated "work orders", each one "specialized" in a category.</p>
 <h5>Transactionality</h5>
@@ -57,7 +57,7 @@ If the task is transactional, it will run on the same computer on which the even
 </ul>
 <p>It should be noted on export and import, that some elements may have dependency on others, so you must export all related and imported at the time of it in the proper order.</p>
 <p>In the event of an error (lack of user permissions, data inconsistency, etc.), the operation is canceled and will present the reason for the error to the user.</p>
-<p>View <a href="MantTaskEvent.html">Event Tasks Maintenance</a>, <a href="ListTaskPending.html">Panding Tasks List</a> y <a href="ListTaskEnded.html">Ended Tasks List</a></p>
+<p>View <a href="MantTaskEvent.html">Event Tasks Maintenance</a>, <a href="ListTaskPend.html">Panding Tasks List</a> y <a href="ListTaskEnded.html">Ended Tasks List</a></p>
 <hr>
 <a href="HelpIndex.html">Help Index OpenProdoc</a>
     </body>
