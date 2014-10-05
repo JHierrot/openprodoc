@@ -168,7 +168,11 @@ if (TaksDefObjectsCache==null)
 return(TaksDefObjectsCache);    
 }
 //-------------------------------------------------------------------------
-
+/**
+ * Generates a programed task from a definition
+ * @param Task Definition of the task
+ * @throws PDException in any error
+ */
 void GenFromDef(PDTasksCron Task) throws PDException
 {
 super.assignValues(Task.getRecord());
@@ -176,7 +180,6 @@ setPDId(GenerateId());
 setNextDate(Task.getNextDate());
 }
 //-------------------------------------------------------------------------
-
 /**
  * @return the PDId
  */
@@ -225,10 +228,17 @@ if (TaskCategory!=null && !TaskCategory.equals("*"))
 Query QBE=new Query(getTabName(), getRecordStruct(),CondT, fPDID);
 CursorId=getDrv().OpenCursor(QBE);
 Record Res=getDrv().NextRec(CursorId);
-PDTasksExec Task=new PDTasksExec(getDrv());
-PDTasksExecEnded TaskEnd=new PDTasksExecEnded(getDrv());
+ArrayList<Record> LT=new ArrayList<Record>();
 while (Res!=null)
     {
+    LT.add(Res);
+    Res=getDrv().NextRec(CursorId);
+    }      
+PDTasksExec Task=new PDTasksExec(getDrv());
+PDTasksExecEnded TaskEnd=new PDTasksExecEnded(getDrv());
+for (int i = 0; i < LT.size(); i++)
+    {
+    Res = LT.get(i);
     Task.assignValues(Res);    
     getDrv().IniciarTrans();
     Record R=TaskEnd.getRecord();
@@ -250,7 +260,6 @@ while (Res!=null)
     TaskEnd.insert();
     Task.delete();    
     getDrv().CerrarTrans();
-    Res=getDrv().NextRec(CursorId);
     }
 getDrv().CloseCursor(CursorId);
 } catch (Exception ex)

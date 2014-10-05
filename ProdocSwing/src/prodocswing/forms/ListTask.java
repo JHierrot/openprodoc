@@ -42,10 +42,6 @@ protected ObjPD PDObject;
 protected PDTableModel UserList1 = new PDTableModel();
 protected Frame Fparent;
 
-/**
- * 
- */
-protected JDialog MantForm;
 
 /** Creates new form ListObjects
  * @param parent 
@@ -90,6 +86,7 @@ TimeStampFilter1.setValue(d1);
         ObjectsTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle(MainWin.TT("Pending_Task_List"));
         addWindowListener(new java.awt.event.WindowAdapter()
         {
             public void windowClosing(java.awt.event.WindowEvent evt)
@@ -156,6 +153,13 @@ TimeStampFilter1.setValue(d1);
         jToolBar1.add(ExpCSV);
 
         ObjectsTable.setFont(MainWin.getFontList());
+        ObjectsTable.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                ObjectsTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(ObjectsTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -232,11 +236,12 @@ int Pos=getObjectsTable().getSelectedRow();
 if (Pos==-1)
     return;
 try {
-MantTask MU = new MantTask(Fparent, true);
-MU.setRecord(PDObject.getRecord());
-MantForm.setLocationRelativeTo(null);
-MantForm.setVisible(true);
-} catch (PDException ex)
+MantTaskPend MU = new MantTaskPend(Fparent, true);
+MU.setRecord(getPDTableModel().getElement(getSelectedRow()));
+MU.EditMode();
+MU.setLocationRelativeTo(null);
+MU.setVisible(true);
+} catch (Exception ex)
     {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
     }//GEN-LAST:event_ReviewButtonActionPerformed
@@ -261,6 +266,25 @@ MantForm.setVisible(true);
         }
 
     }//GEN-LAST:event_ExpCSVActionPerformed
+
+    private void ObjectsTableMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_ObjectsTableMouseClicked
+    {//GEN-HEADEREND:event_ObjectsTableMouseClicked
+if (evt.getClickCount()<2)
+    return;
+int Pos=getObjectsTable().getSelectedRow();
+if (Pos==-1)
+    return;
+try {
+MantTaskPend MU = new MantTaskPend(Fparent, true);
+MU.setRecord(getPDTableModel().getElement(getSelectedRow()));
+MU.EditMode();
+MU.setLocationRelativeTo(null);
+MU.setVisible(true);
+} catch (Exception ex)
+    {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
+
+    }//GEN-LAST:event_ObjectsTableMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonFilter;

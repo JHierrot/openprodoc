@@ -271,8 +271,8 @@ return(TaksDefObjectsCache);
 }
 //-------------------------------------------------------------------------
 /**
- * 
- * @param TaskCategory 
+ * Generates all the task of a category
+ * @param TaskCategory Name of category (all if parameter is * or empty)
  */
 void GenerateTaskCat(String TaskCategory) throws PDException
 {
@@ -281,7 +281,7 @@ if (PDLog.isDebug())
 Cursor CursorId=null;
 try {
 Conditions CondT=new Conditions();
-if (TaskCategory!=null && !TaskCategory.equalsIgnoreCase("*"))
+if (TaskCategory!=null && TaskCategory.length()!=0  && !TaskCategory.equalsIgnoreCase("*"))
     {
     Condition c=new Condition(fCATEGORY, Condition.cEQUAL, TaskCategory);
     CondT.addCondition(c);

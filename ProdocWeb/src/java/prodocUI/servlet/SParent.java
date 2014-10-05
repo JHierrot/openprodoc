@@ -352,14 +352,28 @@ try {
 return formatterDate;
 }
 //---------------------------------------------------------------------
-/**
- * @param Req 
- * @return the formatterDate
+/** Returns a String with 2 characters code of language for the user sesion
+ * @param Req httprequest of the page
+ * @return the Language for the user sesion
  */
 public static String getLang(HttpServletRequest Req)
 {
 try {
     return(getSessOPD(Req).getPDCust().getLanguage());
+} catch (PDException ex)
+    {
+    return("EN");
+    }
+}
+//---------------------------------------------------------------------
+/** Returns a String with 2 characters code of HELP language for the user sesion
+ * @param Req httprequest of the page
+ * @return the HELP Language for the user sesion
+ */
+public static String getHelpLang(HttpServletRequest Req)
+{
+try {
+    return(DriverGeneric.getHelpLang(getSessOPD(Req).getPDCust().getLanguage()));
 } catch (PDException ex)
     {
     return("EN");
