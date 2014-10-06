@@ -10,6 +10,7 @@
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
   <Events>
     <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowClosing"/>
@@ -34,93 +35,77 @@
               <Component id="LabelOperation" max="32767" attributes="0"/>
               <EmptySpace min="12" pref="12" max="-2" attributes="0"/>
           </Group>
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="ParamLabel" linkSize="2" max="32767" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="ParamTextField" linkSize="1" max="32767" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-          </Group>
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" alignment="0" groupAlignment="1" attributes="0">
-                              <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                                  <Component id="TransactLabel" linkSize="2" alignment="0" min="-2" pref="89" max="-2" attributes="0"/>
-                                  <Component id="ActiveLabel" linkSize="2" alignment="0" min="-2" pref="89" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="AddMinLabel" linkSize="2" min="-2" pref="89" max="-2" attributes="0"/>
+                  <Component id="ParamLabel" linkSize="2" alignment="0" max="32767" attributes="0"/>
+                  <Group type="103" alignment="0" groupAlignment="0" attributes="0">
+                      <Group type="103" alignment="0" groupAlignment="1" attributes="0">
+                          <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                              <Component id="TransactLabel" linkSize="2" alignment="0" min="-2" pref="89" max="-2" attributes="0"/>
+                              <Component id="ActiveLabel" linkSize="2" alignment="0" min="-2" pref="89" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="AddHourLabel" linkSize="2" alignment="0" min="-2" pref="89" max="-2" attributes="0"/>
-                          <Component id="AddDayLabel" linkSize="2" alignment="0" min="-2" pref="89" max="-2" attributes="0"/>
-                          <Component id="EndDateLabel" linkSize="2" alignment="1" min="-2" pref="89" max="-2" attributes="0"/>
+                          <Component id="AddMinLabel" linkSize="2" min="-2" pref="89" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="AddHourLabel" linkSize="2" alignment="0" min="-2" pref="89" max="-2" attributes="0"/>
+                      <Component id="AddDayLabel" linkSize="2" alignment="0" min="-2" pref="89" max="-2" attributes="0"/>
+                      <Component id="EndDateLabel" linkSize="2" alignment="1" min="-2" pref="89" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="CategoryLabel" linkSize="2" alignment="0" pref="152" max="32767" attributes="0"/>
+                      <Component id="TaskNameLabel" linkSize="2" alignment="0" pref="152" max="32767" attributes="0"/>
+                      <Component id="TypeLabel" linkSize="2" alignment="0" pref="152" max="32767" attributes="0"/>
+                      <Component id="DescriptionLabel" linkSize="2" alignment="0" pref="152" max="32767" attributes="0"/>
+                      <Component id="FilterLabel" linkSize="2" alignment="0" pref="152" max="32767" attributes="0"/>
+                      <Component id="ObjTypeLabel" linkSize="2" alignment="0" pref="152" max="32767" attributes="0"/>
+                      <Component id="ParamLabel2" alignment="0" max="32767" attributes="0"/>
+                      <Component id="ParamLabel3" alignment="0" max="32767" attributes="0"/>
+                      <Component id="ParamLabel4" alignment="0" max="32767" attributes="0"/>
+                  </Group>
+                  <Component id="AddMonthLabel" linkSize="2" alignment="0" min="-2" pref="89" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="ParamTextField3" linkSize="1" alignment="0" min="-2" pref="326" max="-2" attributes="0"/>
+                  <Component id="ParamTextField4" linkSize="1" alignment="0" min="-2" pref="326" max="-2" attributes="0"/>
+                  <Component id="EndDateTextField" linkSize="1" alignment="0" min="-2" pref="318" max="-2" attributes="0"/>
+                  <Component id="TaskNameTextField" alignment="0" min="-2" pref="141" max="-2" attributes="0"/>
+                  <Component id="AddMonthTextField" linkSize="3" alignment="0" min="-2" pref="62" max="-2" attributes="0"/>
+                  <Component id="DescriptionTextField" linkSize="1" alignment="0" max="32767" attributes="0"/>
+                  <Component id="AddDayTextField" linkSize="3" alignment="0" max="32767" attributes="0"/>
+                  <Component id="CategoryTextField" alignment="0" min="-2" pref="140" max="-2" attributes="0"/>
+                  <Component id="TypeComboBox" linkSize="1" alignment="0" max="32767" attributes="0"/>
+                  <Component id="ObjTypeComboBox" linkSize="1" alignment="0" pref="326" max="32767" attributes="0"/>
+                  <Component id="FilterTextField" linkSize="1" alignment="0" pref="326" max="32767" attributes="0"/>
+                  <Component id="ParamTextField" linkSize="1" alignment="0" max="32767" attributes="0"/>
+                  <Component id="ParamTextField2" linkSize="1" alignment="0" max="32767" attributes="0"/>
+                  <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" alignment="0" groupAlignment="1" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="ActiveCB" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="TransactCB" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace min="-2" pref="71" max="-2" attributes="0"/>
-                                  <Component id="ButtonAcept" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="ButtonCancel" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="EndDateTextField" linkSize="1" min="-2" pref="318" max="-2" attributes="0"/>
+                          <Component id="AddHourTextField" linkSize="3" alignment="0" max="32767" attributes="0"/>
+                          <Component id="AddMinTextField" linkSize="3" alignment="0" pref="62" max="32767" attributes="0"/>
+                          <Component id="ActiveCB" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="TransactCB" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="ButtonAcept" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="ButtonCancel" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="AddMinTextField" linkSize="3" alignment="0" pref="62" max="32767" attributes="0"/>
-                                  <Component id="AddHourTextField" linkSize="3" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="AddDayTextField" linkSize="3" alignment="0" max="32767" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace max="32767" attributes="0"/>
                               <Component id="ButtonEdit" min="-2" pref="63" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="ButtonTest" min="-2" pref="63" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="ButtonRun" min="-2" pref="63" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="CategoryLabel" linkSize="2" alignment="0" pref="152" max="32767" attributes="0"/>
-                          <Component id="TaskNameLabel" linkSize="2" alignment="0" pref="152" max="32767" attributes="0"/>
-                          <Component id="TypeLabel" linkSize="2" alignment="0" pref="152" max="32767" attributes="0"/>
-                          <Component id="DescriptionLabel" linkSize="2" alignment="0" pref="152" max="32767" attributes="0"/>
-                          <Component id="FilterLabel" linkSize="2" alignment="0" pref="152" max="32767" attributes="0"/>
-                          <Component id="ObjTypeLabel" linkSize="2" alignment="0" pref="152" max="32767" attributes="0"/>
-                          <Component id="ParamLabel2" alignment="0" max="32767" attributes="0"/>
-                          <Component id="ParamLabel3" alignment="0" max="32767" attributes="0"/>
-                          <Component id="ParamLabel4" alignment="0" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="ParamTextField3" linkSize="1" min="-2" pref="326" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="ObjTypeComboBox" linkSize="1" alignment="0" pref="326" max="32767" attributes="0"/>
-                              <Component id="DescriptionTextField" linkSize="1" alignment="0" max="32767" attributes="0"/>
-                              <Component id="TypeComboBox" linkSize="1" alignment="0" max="32767" attributes="0"/>
-                              <Component id="FilterTextField" linkSize="1" alignment="0" pref="326" max="32767" attributes="0"/>
-                              <Component id="TaskNameTextField" alignment="0" min="-2" pref="141" max="-2" attributes="0"/>
-                              <Component id="CategoryTextField" alignment="0" min="-2" pref="140" max="-2" attributes="0"/>
-                              <Component id="ParamTextField2" linkSize="1" alignment="0" max="32767" attributes="0"/>
-                          </Group>
-                          <Component id="ParamTextField4" linkSize="1" min="-2" pref="326" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="AddMonthLabel" linkSize="2" min="-2" pref="89" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="AddMonthTextField" linkSize="3" min="-2" pref="62" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="20" max="32767" attributes="0"/>
+              <EmptySpace pref="25" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -185,35 +170,33 @@
                   <Component id="EndDateTextField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="AddMonthLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="AddMonthTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="AddDayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="AddDayTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="AddMonthLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="AddMonthTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="AddDayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="AddDayTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                          <Component id="AddHourLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="AddHourTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" alignment="3" groupAlignment="3" attributes="0">
                               <Component id="ButtonTest" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="ButtonEdit" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="ButtonRun" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="AddHourLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="AddHourTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="AddMinLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="AddMinTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="ActiveLabel" min="-2" max="-2" attributes="0"/>
                           <Component id="ActiveCB" min="-2" max="-2" attributes="0"/>
@@ -224,15 +207,15 @@
                           <Component id="TransactCB" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <Group type="102" alignment="1" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="-2" pref="67" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="ButtonCancel" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="ButtonAcept" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="14" max="32767" attributes="0"/>
+              <EmptySpace pref="20" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
