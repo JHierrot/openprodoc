@@ -294,6 +294,8 @@ switch (getType())
         break;
     case fTASK_EXPORT: Export();
         break;
+    case fTASK_DOCSREPORT: DocsReport();
+        break;
     case fTASKEVENT_UPDATE_FOLD:
         ExecuteUpdFold();
         break;
@@ -321,8 +323,8 @@ switch (getType())
     case fTASK_DELETE_OLD_FOLD: return CurDeleteOldFold();
     case fTASK_DELETE_OLD_DOC: return CurDeleteOldDoc();
     case fTASK_PURGEDOC: return CurPurgeDoc();
-//    case fTASK_IMPORT: return CurImport(); No sense
     case fTASK_EXPORT: return CurExport();
+    case fTASK_DOCSREPORT: return CurDocsReport();
     }
 PDExceptionFunc.GenPDException("Undefined_task", ""+getType());
 return (null);
@@ -669,6 +671,13 @@ String IdAct=F.getIdPath(getParam3());
 return(Doc.Search(DocType, Conds, SubTypes, true, false, IdAct, null))  ;
 }
 //-------------------------------------------------------------------------
+
+private Cursor CurDocsReport() throws PDException
+{
+throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+}
+//-------------------------------------------------------------------------
+
 /**
  * @return the NextDate
  */
@@ -723,6 +732,10 @@ this.setObjFilter(pDoc.getPDId());
 this.setObjType(pDoc.getDocType());
 }
 //-------------------------------------------------------------------------
+/**
+ * 
+ * @throws PDException 
+ */
 private void ExecuteUpdFold() throws PDException
 {
 PDFolders Fold=new PDFolders(this.getDrv(), getObjType());
@@ -740,7 +753,10 @@ Fold.assignValues(r);
 Fold.MonoUpdate();
 }
 //-------------------------------------------------------------------------
-
+/**
+ * 
+ * @throws PDException 
+ */
 private void ExecuteCopyFold() throws PDException
 {
 PDFolders Fold=new PDFolders(this.getDrv(), getObjType());
@@ -757,7 +773,10 @@ f.setParentId(Fold.getIdPath(getParam()));
 f.insert();
 }
 //-------------------------------------------------------------------------
-
+/**
+ * 
+ * @throws PDException 
+ */
 private void ExecuteExportFold() throws PDException
 {
 PDFolders Fold=new PDFolders(this.getDrv(), getObjType());
@@ -773,4 +792,12 @@ Fold.ExportPath(Fold.getPDId(), getParam2());
     }
 }
 //-------------------------------------------------------------------------
+/**
+ * 
+ * @throws PDException 
+ */
+private void DocsReport() throws PDException
+{
+throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+}
 }

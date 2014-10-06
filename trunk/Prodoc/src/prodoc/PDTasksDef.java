@@ -65,6 +65,7 @@ public static final int fTASK_DELETE_OLD_DOC=1;
 public static final int fTASK_PURGEDOC=2;
 public static final int fTASK_IMPORT=3;
 public static final int fTASK_EXPORT=4;
+public static final int fTASK_DOCSREPORT=5;
 
 
 public static final int fTASK_MAXCRON=5;
@@ -73,15 +74,8 @@ private static final String[] LisTypeTask= {"DELETE_OLD_FOLD",
                                             "DELETE_OLD_DOC",
                                             "PURGE_DOC",
                                             "IMPORT",
-                                            "EXPORT"
-                                            /* "DELETE_FOLD",
-                                            "DELETE_DOC",
-                                            "COPY_DOC",
-                                            "MOVE_DOC",
-                                            "UPDATE_DOC",
-                                            "UPDATE_FOLD",
-                                            "IMPORT",
-                                            "EXPORT" */
+                                            "EXPORT",
+                                            "DOCSREPORT"
                                             };
 
 private static String[] AllLisTypeTask=null;
