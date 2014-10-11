@@ -20,9 +20,11 @@
 package prodoc;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.StringTokenizer;
 import static prodoc.PDTasksDefEvent.fTASKEVENT_COPY_FOLD;
 import static prodoc.PDTasksDefEvent.fTASKEVENT_EXPORT_FOLD;
 import static prodoc.PDTasksDefEvent.fTASKEVENT_UPDATE_FOLD;
@@ -296,6 +298,8 @@ switch (getType())
         break;
     case fTASK_DOCSREPORT: DocsReport();
         break;
+    case fTASK_FOLDSREPORT: FoldsReport();
+        break;
     case fTASKEVENT_UPDATE_FOLD:
         ExecuteUpdFold();
         break;
@@ -325,6 +329,7 @@ switch (getType())
     case fTASK_PURGEDOC: return CurPurgeDoc();
     case fTASK_EXPORT: return CurExport();
     case fTASK_DOCSREPORT: return CurDocsReport();
+    case fTASK_FOLDSREPORT: return CurFoldsReport();
     }
 PDExceptionFunc.GenPDException("Undefined_task", ""+getType());
 return (null);
@@ -671,13 +676,99 @@ String IdAct=F.getIdPath(getParam3());
 return(Doc.Search(DocType, Conds, SubTypes, true, false, IdAct, null))  ;
 }
 //-------------------------------------------------------------------------
-
+/**
+ * Search for the documents included in the report condition and creates a cursor
+ * @return the cursor with documents
+ * @throws PDException in any error
+ */
 private Cursor CurDocsReport() throws PDException
 {
-throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+boolean SubTypes;
+if (getParam()==null || getParam().length()==0 || getParam().charAt(0)=='0')
+    SubTypes=false;
+else
+    SubTypes=true;
+PDDocs Doc=new PDDocs(this.getDrv());
+String DocType;
+if ("*".equals(getObjType()))
+    DocType=PDFolders.getTableName();
+else
+    DocType=getObjType();
+Calendar Date2Del=Calendar.getInstance();
+Date2Del.setTime(getNextDate());
+String FirstDay="0";
+String LastDay="0";
+StringTokenizer St=new StringTokenizer(getParam2(), Attribute.StringListSeparator);
+try {
+FirstDay=St.nextToken();
+LastDay=St.nextToken();
+} catch (Exception ex)
+    { // no values or correct values introduced yet
+    }
+Date2Del.add(Calendar.DAY_OF_MONTH, -Integer.parseInt(FirstDay));
+Attribute Attr=Doc.getRecord().getAttr(PDDocs.fPDDATE);
+Attr.setValue(Date2Del.getTime());
+Condition c=new Condition(Attr, Condition.cGET);
+Conditions Conds=new Conditions();
+Conds.addCondition(c);
+Date2Del.setTime(getNextDate());
+Date2Del.add(Calendar.DAY_OF_MONTH, -Integer.parseInt(LastDay));
+Attribute Attr2=Doc.getRecord().getAttr(PDDocs.fPDDATE).Copy();
+Attr2.setValue(Date2Del.getTime());
+Condition c2=new Condition(Attr2, Condition.cLET);
+Conds.addCondition(c2);
+PDFolders F=new PDFolders(getDrv());
+String IdAct=F.getIdPath(getParam4());
+return(Doc.Search(DocType, Conds, SubTypes, true, false, IdAct, null))  ;
 }
 //-------------------------------------------------------------------------
-
+/**
+ * Search for the folders included in the report condition and creates a cursor
+ * @return the cursor with folders
+ * @throws PDException in any error
+ */
+//-------------------------------------------------------------------------
+private Cursor CurFoldsReport() throws PDException
+{
+boolean SubTypes;
+if (getParam()==null || getParam().length()==0 || getParam().charAt(0)=='0')
+    SubTypes=false;
+else
+    SubTypes=true;
+PDFolders Fold=new PDFolders(this.getDrv());
+String FoldType;
+if ("*".equals(getObjType()))
+    FoldType=PDFolders.getTableName();
+else
+    FoldType=getObjType();
+Calendar Date2Del=Calendar.getInstance();
+Date2Del.setTime(getNextDate());
+String FirstDay="0";
+String LastDay="0";
+StringTokenizer St=new StringTokenizer(getParam2(), Attribute.StringListSeparator);
+try {
+FirstDay=St.nextToken();
+LastDay=St.nextToken();
+} catch (Exception ex)
+    { // no values or correct values introduced yet
+    }
+Date2Del.add(Calendar.DAY_OF_MONTH, -Integer.parseInt(FirstDay));
+Attribute Attr=Fold.getRecord().getAttr(PDDocs.fPDDATE);
+Attr.setValue(Date2Del.getTime());
+Condition c=new Condition(Attr, Condition.cGET);
+Conditions Conds=new Conditions();
+Conds.addCondition(c);
+Date2Del.setTime(getNextDate());
+Date2Del.add(Calendar.DAY_OF_MONTH, -Integer.parseInt(LastDay));
+Attribute Attr2=Fold.getRecord().getAttr(PDDocs.fPDDATE).Copy();
+Attr2.setValue(Date2Del.getTime());
+Condition c2=new Condition(Attr2, Condition.cLET);
+Conds.addCondition(c2);
+PDFolders F=new PDFolders(getDrv());
+String IdAct=F.getIdPath(getParam4());
+return(Fold.Search(FoldType, Conds, SubTypes, true, IdAct, null));
+}
+//-------------------------------------------------------------------------
 /**
  * @return the NextDate
  */
@@ -793,11 +884,151 @@ Fold.ExportPath(Fold.getPDId(), getParam2());
 }
 //-------------------------------------------------------------------------
 /**
- * 
- * @throws PDException 
+ * Generates a document html with the document included in the conditioos of the task
+ * and stores in personal folder of the users of the groups
+ * @throws PDException in any error
  */
 private void DocsReport() throws PDException
 {
-throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksExec.DocsReport >"+getPDId());
+PDDocs D=new PDDocs(this.getDrv());
+Cursor CursorId=null;
+Cursor CurUsers=null;
+PrintWriter FRepDoc = null;
+File f=null;
+String TempName;
+try {
+TempName = System.getProperty("java.io.tmpdir");
+if (!TempName. endsWith(File.separator))
+    TempName+=File.separator;
+TempName+=getName()+".html";
+FRepDoc = new PrintWriter(TempName, "UTF-8");
+FRepDoc.println("<!DOCTYPE html>\n" +
+"<html>\n" +
+"    <head>\n" +
+"        <title>OpenProdoc:"+getName()+"</title>\n" +
+"        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n" +
+"    </head>\n" +
+"    <body>");
+FRepDoc.println("<H4>"+getDescription()+" "+new Date()+"</H4><hr>");
+CursorId=this.GenCur();    
+Record Res=getDrv().NextRec(CursorId);
+while (Res!=null)
+    {
+    D.assignValues(Res);
+    D.LoadFull(D.getPDId());
+    FRepDoc.println(D.toHtml());
+    Res=getDrv().NextRec(CursorId);
+    }
+getDrv().CloseCursor(CursorId);
+FRepDoc.println("<hr></body>\n" +
+"</html>");
+FRepDoc.close();
+PDGroups g=new PDGroups(getDrv());
+CurUsers=g.ListUsers(getParam3());
+Record r=getDrv().NextRec(CurUsers);
+while (r!=null)
+    {
+    Attribute Attr=r.getAttr(PDGroups.fUSERNAME);
+    PDDocs DocNews=new PDDocs(getDrv());
+    DocNews.setTitle(this.getDescription());
+    DocNews.setDocDate(new Date());
+    DocNews.setFile(TempName);
+    DocNews.setParentId(PDFolders.USERSFOLDER+"/"+Attr.getValue());
+    DocNews.insert();
+    r=getDrv().NextRec(CurUsers);
+    }
+f=new File(TempName);
+f.delete();
+} catch (Exception ex)
+    {
+    if (CursorId!=null)    
+        getDrv().CloseCursor(CursorId);
+    if (CurUsers!=null)    
+        getDrv().CloseCursor(CurUsers);
+    if (FRepDoc!=null)
+        FRepDoc.close();
+    if (f!=null && f.exists())
+        f.delete();
+    PDException.GenPDException("PDTasksExec.DocsReport:",ex.getLocalizedMessage());
+    }
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksExec.DocsReport >"+getPDId());
 }
+//-------------------------------------------------------------------------
+/**
+ * Generates a document html with the document included in the conditioos of the task
+ * and stores in personal folder of the users of the groups
+ * @throws PDException in any error
+ */
+private void FoldsReport() throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksExec.FoldsReport >"+getPDId());
+PDFolders Fold=new PDFolders(this.getDrv());
+Cursor CursorId=null;
+Cursor CurUsers=null;
+PrintWriter FRepDoc = null;
+File f=null;
+String TempName;
+try {
+TempName = System.getProperty("java.io.tmpdir");
+if (!TempName. endsWith(File.separator))
+    TempName+=File.separator;
+TempName+=getName()+".html";
+FRepDoc = new PrintWriter(TempName, "UTF-8");
+FRepDoc.println("<!DOCTYPE html>\n" +
+"<html>\n" +
+"    <head>\n" +
+"        <title>OpenProdoc:"+getName()+"</title>\n" +
+"        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n" +
+"    </head>\n" +
+"    <body>");
+FRepDoc.println("<H4>"+getDescription()+" "+new Date()+"</H4><hr>");
+CursorId=this.GenCur();    
+Record Res=getDrv().NextRec(CursorId);
+while (Res!=null)
+    {
+    Fold.assignValues(Res);
+    Fold.LoadFull(Fold.getPDId());
+    FRepDoc.println(Fold.toHtml());
+    Res=getDrv().NextRec(CursorId);
+    }
+getDrv().CloseCursor(CursorId);
+FRepDoc.println("<hr></body>\n" +
+"</html>");
+FRepDoc.close();
+PDGroups g=new PDGroups(getDrv());
+CurUsers=g.ListUsers(getParam3());
+Record r=getDrv().NextRec(CurUsers);
+while (r!=null)
+    {
+    Attribute Attr=r.getAttr(PDGroups.fUSERNAME);
+    PDDocs DocNews=new PDDocs(getDrv());
+    DocNews.setTitle(this.getDescription());
+    DocNews.setDocDate(new Date());
+    DocNews.setFile(TempName);
+    DocNews.setParentId(PDFolders.USERSFOLDER+"/"+Attr.getValue());
+    DocNews.insert();
+    r=getDrv().NextRec(CurUsers);
+    }
+f=new File(TempName);
+f.delete();
+} catch (Exception ex)
+    {
+    if (CursorId!=null)    
+        getDrv().CloseCursor(CursorId);
+    if (CurUsers!=null)    
+        getDrv().CloseCursor(CurUsers);
+    if (FRepDoc!=null)
+        FRepDoc.close();
+    if (f!=null && f.exists())
+        f.delete();
+    PDException.GenPDException("PDTasksExec.FoldsReport:",ex.getLocalizedMessage());
+    }
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksExec.FoldsReport >"+getPDId());
+}
+//-------------------------------------------------------------------------
 }

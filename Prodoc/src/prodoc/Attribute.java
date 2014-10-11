@@ -25,7 +25,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -122,7 +121,7 @@ static final String Attribute_is_not_Multivalued="Attribute_is_not_Multivalued";
  */
 static final String Incorrect_attribute_length="Incorrect_attribute_length";
 static final char ListSeparator='|';
-static final String StringListSeparator="|";
+static public final String StringListSeparator="|";
 
 /**
  * 
@@ -536,8 +535,6 @@ if (isMultivalued())
         Object Val = it.next();
         Tot.append(FormatExport(Val));
         }
-//    if (PDLog.isDebug())
-//        PDLog.Debug("Attribute.Export:"+getValue()+"-->"+Tot.toString());
     return(Tot.toString());
     }
 else
