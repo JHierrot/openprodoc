@@ -179,16 +179,17 @@
                   <Component id="AddDayLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="AddDayTextField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="AddHourLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="AddHourTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Group type="103" alignment="3" groupAlignment="3" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                               <Component id="ButtonTest" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="ButtonEdit" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="ButtonRun" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="AddHourLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="AddHourTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>

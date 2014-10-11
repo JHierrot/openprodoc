@@ -33,14 +33,14 @@ import prodoc.Attribute;
  *
  * @author jhierrot
  */
-public class TCDocsReport extends TCBase
+public class TCFoldsReport extends TCBase
 {
 
 /** Creates new form MantUsers
  * @param parent 
  * @param modal
  */
-public TCDocsReport(javax.swing.JDialog parent, boolean modal)
+public TCFoldsReport(javax.swing.JDialog parent, boolean modal)
 {
 super(parent, modal);
 initComponents();
@@ -82,7 +82,7 @@ initComponents();
 
         LabelOperation.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
         LabelOperation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        LabelOperation.setText(MainWin.TT("Param_Report_Documents"));
+        LabelOperation.setText(MainWin.TT("Param_Report_Folders"));
 
         SubTypesCheckB.setFont(MainWin.getFontDialog());
         SubTypesCheckB.setText(MainWin.TT("Subtypes"));

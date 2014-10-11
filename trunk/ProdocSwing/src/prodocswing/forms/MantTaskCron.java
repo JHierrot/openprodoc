@@ -411,16 +411,16 @@ initComponents();
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(AddDayLabel)
                     .addComponent(AddDayTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(AddHourLabel)
-                            .addComponent(AddHourTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(ButtonTest)
                                 .addComponent(ButtonEdit)
-                                .addComponent(ButtonRun)))
+                                .addComponent(ButtonRun))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(AddHourLabel)
+                                .addComponent(AddHourTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(9, 9, 9)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(AddMinLabel)
@@ -513,7 +513,8 @@ ListTaskRes LMT = new ListTaskRes(this, true);
 LMT.setLocationRelativeTo(null);
 if (TypeComboBox.getSelectedIndex()==PDTasksDef.fTASK_DELETE_OLD_FOLD 
    || TypeComboBox.getSelectedIndex()==PDTasksDef.fTASK_IMPORT
-   || TypeComboBox.getSelectedIndex()==PDTasksDef.fTASK_EXPORT)
+   || TypeComboBox.getSelectedIndex()==PDTasksDef.fTASK_EXPORT
+   || TypeComboBox.getSelectedIndex()==PDTasksDef.fTASK_FOLDSREPORT)
     LMT.setFoldType((String) ObjTypeComboBox.getSelectedItem());
 else
     LMT.setDocType((String) ObjTypeComboBox.getSelectedItem());
@@ -557,6 +558,8 @@ switch (TypeComboBox.getSelectedIndex())
         break;
     case PDTasksDef.fTASK_DOCSREPORT: LU = new TCDocsReport(this, true);
         break;
+    case PDTasksDef.fTASK_FOLDSREPORT: LU = new TCFoldsReport(this, true);
+        break;
     default: PDExceptionFunc.GenPDException("Unexpected_Task", "");
         break;
 }
@@ -587,6 +590,8 @@ if (!MainWin.MessageQuestion(MainWin.DrvTT("Do_you_really_want_to_execute_the_ta
     return;
 setCursor(MainWin.WaitCur);    
 PDTasksExec TC=new PDTasksExec(MainWin.getSession());
+TC.setName(TaskNameTextField.getText());
+TC.setDescription(this.DescriptionTextField.getText());
 TC.setObjType((String) ObjTypeComboBox.getSelectedItem());
 TC.setObjFilter(FilterTextField.getText());
 TC.setParam(ParamTextField.getText());
@@ -622,6 +627,8 @@ switch (TypeComboBox.getSelectedIndex())
         ButtonTest.setEnabled(false);
         break;
     case PDTasksDef.fTASK_DOCSREPORT: ObjTypeComboBox.setModel(getListObjDoc());
+        break;
+    case PDTasksDef.fTASK_FOLDSREPORT: ObjTypeComboBox.setModel(getListObjFold());
         break;
     default: ObjTypeComboBox.setModel(getListObjEmpty());    
     }

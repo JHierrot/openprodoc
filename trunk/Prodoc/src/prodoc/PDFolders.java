@@ -1549,4 +1549,36 @@ getDrv().CloseCursor(CursorId);
 return(Is);
 }   
 //-------------------------------------------------------------------------
+/**
+ * Returns all the data of the doc as html
+ * @return String with the html
+ * @throws prodoc.PDException in any error
+ */
+public String toHtml() throws PDException
+{
+StringBuilder SHtml=new StringBuilder("<p>");
+Record R=getRecSum();
+R.initList();
+Attribute Attr;
+PDFolders f=new PDFolders(getDrv());
+for (int i = 0; i < R.NumAttr(); i++)
+    {
+    Attr=R.nextAttr();
+    if (Attr.getName().equals(PDDocs.fPARENTID))
+        SHtml.append("<b>").append(Attr.getUserName()).append(":</b>").append(f.getPathId((String)Attr.getValue())).append("<br>");
+    else if (Attr.getName().equals(PDDocs.fSTATUS))
+          ;
+    else if (Attr.getName().equals(PDDocs.fLOCKEDBY))
+        {
+        if (Attr.getValue()!=null)
+            SHtml.append("<b>").append(Attr.getUserName()).append(":</b>").append(Attr.Export()).append("<br>");
+        }
+    else
+        SHtml.append("<b>").append(Attr.getUserName()).append(":</b>").append(Attr.Export()).append("<br>");
+    }
+SHtml.append("</p>");
+return(SHtml.toString());
+}
+//---------------------------------------------------------------------
+
 }

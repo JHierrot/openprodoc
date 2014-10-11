@@ -71,7 +71,7 @@ static private String List=PDFolders.fACL+"/"+PDFolders.fFOLDTYPE+"/"+PDFolders.
 static private HashSet ExecFiles=new HashSet();
 static protected java.awt.Cursor DefCur=new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR);
 static protected final java.awt.Cursor WaitCur=new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR);
-
+static private final char DC=34;
 
 /**
 * @return the Session
@@ -1897,7 +1897,7 @@ if (OS.contains("Win"))
     Orders[0]="explorer";
 else if (OS.contains("OS X") || OS.contains("Mac"))
     Orders[0]="open";
-Runtime.getRuntime().exec(Orders);
+ Process exec = Runtime.getRuntime().exec(Orders);
 } catch (Exception ex)
     {
     Message(ex.getLocalizedMessage());

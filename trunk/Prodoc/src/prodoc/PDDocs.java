@@ -805,9 +805,9 @@ if (d.getName()==null || d.getName().length()==0)
     d.setName(getPDId()+"."+MT.getMimeCode());    
     }
 if (FolderPath.charAt(FolderPath.length()-1)!=File.separatorChar)
-    FolderPath+=File.separatorChar+getPDId()+d.getVersion()+d.getName();
+    FolderPath+=File.separatorChar+getPDId()+d.getVersion().replace(' ', '_')+d.getName().replace(' ', '_');
 else
-    FolderPath+=getPDId()+d.getVersion()+d.getName();
+    FolderPath+=getPDId()+d.getVersion().replace(' ', '_')+d.getName().replace(' ', '_');
 StoreGeneric Rep=getDrv().getRepository(d.getReposit());
 if (Rep.IsURL())
     throw new UnsupportedOperationException("Not supported.");   
@@ -866,9 +866,9 @@ public String getFileVerOpt(String FolderPath, String Ver, boolean Overwrite) th
 PDDocs d=new PDDocs(getDrv());
 d.LoadVersion(getPDId(), Ver);
 if (FolderPath.charAt(FolderPath.length()-1)!=File.separatorChar)
-    FolderPath+=File.separatorChar+getPDId()+d.getVersion()+d.getName();
+    FolderPath+=File.separatorChar+getPDId()+d.getVersion().replace(' ', '_')+d.getName().replace(' ', '_');
 else
-    FolderPath+=getPDId()+d.getVersion()+d.getName();
+    FolderPath+=getPDId()+d.getVersion().replace(' ', '_')+d.getName().replace(' ', '_');
 StoreGeneric Rep=getDrv().getRepository(d.getReposit());
 if (Rep.IsURL())
     throw new UnsupportedOperationException("Not supported.");   
@@ -2589,6 +2589,37 @@ for (PDTasksDefEvent L1 : L)
     TE.setNextDate(new Date());
     TE.insert();
     }
+}
+//---------------------------------------------------------------------
+/**
+ * Returns all the data of the doc as html
+ * @return String with the html
+ * @throws prodoc.PDException in any error
+ */
+public String toHtml() throws PDException
+{
+StringBuilder SHtml=new StringBuilder("<p>");
+Record R=getRecSum();
+R.initList();
+Attribute Attr;
+PDFolders f=new PDFolders(getDrv());
+for (int i = 0; i < R.NumAttr(); i++)
+    {
+    Attr=R.nextAttr();
+    if (Attr.getName().equals(PDDocs.fPARENTID))
+        SHtml.append("<b>").append(Attr.getUserName()).append(":</b>").append(f.getPathId((String)Attr.getValue())).append("<br>");
+    else if (Attr.getName().equals(PDDocs.fSTATUS))
+          ;
+    else if (Attr.getName().equals(PDDocs.fLOCKEDBY))
+        {
+        if (Attr.getValue()!=null)
+            SHtml.append("<b>").append(Attr.getUserName()).append(":</b>").append(Attr.Export()).append("<br>");
+        }
+    else
+        SHtml.append("<b>").append(Attr.getUserName()).append(":</b>").append(Attr.Export()).append("<br>");
+    }
+SHtml.append("</p>");
+return(SHtml.toString());
 }
 //---------------------------------------------------------------------
 }

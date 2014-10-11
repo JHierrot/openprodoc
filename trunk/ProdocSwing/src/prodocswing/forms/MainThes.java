@@ -743,7 +743,7 @@ this.dispose();
 
     private void ThesaurHelpActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ThesaurHelpActionPerformed
     {//GEN-HEADEREND:event_ThesaurHelpActionPerformed
-MainWin.Execute("doc"+MainWin.OSSep()+MainWin.getLang()+MainWin.OSSep()+"ThesaurWin.html");
+MainWin.Execute("doc"+MainWin.OSSep()+DriverGeneric.getHelpLang(MainWin.getLang())+MainWin.OSSep()+"ThesaurWin.html");
     }//GEN-LAST:event_ThesaurHelpActionPerformed
 
     private void TreeTermTreeExpanded(javax.swing.event.TreeExpansionEvent evt)//GEN-FIRST:event_TreeTermTreeExpanded
