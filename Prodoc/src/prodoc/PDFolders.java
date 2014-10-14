@@ -1064,7 +1064,6 @@ if (getTypeDefs().size()>1)
     Query LoadAct=new Query(ListTabs, Rec, Conds, null);
     Cursor Cur=getDrv().OpenCursor(LoadAct);
     r=getDrv().NextRec(Cur);
-    getDrv().CloseCursor(Cur);
     if (r!=null)
         {
         MultiLoad(r);    
@@ -1219,7 +1218,7 @@ while (!Id.equals(PDFolders.ROOTFOLDER))
         {
         F.Load(Id);
         Id=F.getParentId();
-        CompPath="/"+F.getTitle();
+        CompPath="/"+F.getTitle()+CompPath;
         }
 return(CompPath);
 }
@@ -1536,6 +1535,8 @@ for (int i = 0; i < L.size(); i++)
  */
 public boolean IsUnder(String ParentId) throws PDException
 {
+if (ParentId.equals(getPDId()))  // optimization
+    return (true);
 boolean Is;    
 Condition CondParents=new Condition( fGRANTPARENTID, Condition.cEQUAL, ParentId);
 Condition CondThis=new Condition( fPDID, Condition.cEQUAL, getPDId());

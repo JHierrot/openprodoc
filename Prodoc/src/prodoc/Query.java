@@ -182,7 +182,7 @@ if (OrderList!=null)
     XOrders="</Ord>";
     }
 else if (Order!=null)
-    XOrders="<Ord>Order</Ord>";
+    XOrders="<Ord>"+Order+"</Ord>";
 else            
     XOrders="";
 return("<Q><Tab>"+XTabs+"</Tab>"+RetrieveFields.toXMLt()+XWhere+XOrders+"</Q>");
@@ -230,6 +230,8 @@ if (OPDObjectList.getLength()>0)
             OrderList.add(St.nextToken());
             }
         }
+    else
+        Order=Ord;
     }
 }
 //-------------------------------------------------------------------------

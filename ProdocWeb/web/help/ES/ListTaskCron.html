@@ -23,7 +23,16 @@
 <p>Puede indicarse que la ejecución de tareas sea transaccional, Es decir que las tareas se realicen sobre todos los objetos afectados (eje, todos los documentos de una carpeta) y si falla cualquier de ellos se anula toda la operación, manteniendo la coherencia, Si no es transaccional, la operación se realizará sobre algunos y podrá fallar en otros.</p>
 <h5>Activación</h5>
 <p>Las tareas pueden activarse y desactivarse, de forma que pueden estar totalmente definidas y probadas pero no se ejecutan hasta que sea necesario, volviendo a desactivarse cuando se requiera. La activación controla la generación de las “órdenes de trabajo”, es decir si una tarea está desactivada, no se generan "órdenes de trabajo".</p>
-<h5>Interfaz de usuario</h5>
+<h5>Configuración</h5>
+<p>Para activar la generación de tareas programadas y la ejecución de tareas (programas o asociadas a eventos) debe editarse el fichero de configuración <b>Prodoc.properties</b> de los equipos en los que se pretenda generar o ejecutar tareas. Los parámetros disponibles son:</p>
+<ul>
+    <li><b>TaskCategory:</b> Indica los tipos de categoría que se tratarán en este equipo. Puede utilizarse el valor '*' para indicar que deben tratarse todos. (Ej: TaskCategory=*  ,  TaskCategory=System). </li>
+    <li><b>TaskSearchFreq:</b> Indica a la frecuencia (cada cuantos milisegundos) con que se revisará la lista de tareas programadas para generar las "órdenes de trabajo". Si no aparece (está comentado), NO se <b>Generarán</b> tareas en este equipo.</li>
+    <li><b>TaskExecFreq:</b> Indica a la frecuencia (cada cuantos milisegundos) con que se revisará la lista de tareas pendientes ejecutar las "órdenes de trabajo". Si no aparece (está comentado), NO se <b>Ejecutarán</b> tareas en este equipo.</li>
+</ul>
+<p>Debe ajustarse con cuidado el reparto de tareas. Si varios equipos se les asigna todas las tareas (o el mismo tipo) y la frecuencia de muestreo es alta, pueden llegar a ejecutar la misma tarea simultaneamente, duplicando el resultado o fallando. Si se asigna a varios la misma tarea, los tiempos de muestreo deben ser muy diferentes y estar espaciados. En el caso más sencillo puede tenerse un solo equipo para la ejecucińo de tareas, o uno para cada categoria de tarea.</p>
+<p>Similarmente, debe ajustarse con cuidado los tiempos. Si se muestrea con mucha frecuencia, la ejecución se ajustará al segundo o minuto exacto pero se sobrecarga el sistema. Salvo que sea imprescindible, es mejor muestrear con poca frecuencia, aunque se corra el riesgo de retrasar la operación algunos minutos.</p>
+<h5>Interfaz de usuario</H5>
 <p>Para filtrar las Tareas Programadas que se desea revisar, basta introducir parte del nombre en el cuadro de texto y pulsar el botón. La lista de Tareas Programadas que cumplen las condiciones aparecerá en la tabla de resultados. Si se pulsa el botón sin introducir ningún valor se visualizará todos los elementos sobre los que tenga permiso el usuario.La tabla de resultados muestra los datos:</p>
 <ul>
     <li>Nombre identificativo de la tarea</li>

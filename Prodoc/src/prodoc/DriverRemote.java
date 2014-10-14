@@ -364,11 +364,32 @@ NodeList RecLst = N.getChildNodes();
 for (int i = 0; i < RecLst.getLength(); i++)
     {
     Node Rec = RecLst.item(i);
-    Record R=new Record();
+    Record R;
     R=Record.CreateFromXML(Rec);
+    R.initList();
+    for (int j = 0; j < R.NumAttr(); j++)
+        {
+        Attribute Attr=R.nextAttr();
+        if (Attr.getName().contains("."+PDDocs.fVERSION))
+            Attr.setName(PDDocs.fVERSION);
+        else
+        if (Attr.getName().contains("."+PDDocs.fPDID))
+            Attr.setName(PDDocs.fPDID);
+        }
     Res.add(R);
     }
-return(StoreCursor(Res, Search.getRetrieveFields()));
+Record RF=Search.getRetrieveFields();
+RF.initList();
+for (int j = 0; j < RF.NumAttr(); j++)
+    {
+    Attribute Attr=RF.nextAttr();
+    if (Attr.getName().contains("."+PDDocs.fVERSION))
+        Attr.setName(PDDocs.fVERSION);
+    else
+    if (Attr.getName().contains("."+PDDocs.fPDID))
+        Attr.setName(PDDocs.fPDID);
+    }
+return(StoreCursor(Res, RF));
 }
 
 //-----------------------------------------------------------------------------------

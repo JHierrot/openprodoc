@@ -178,6 +178,10 @@
         <servlet-name>SearchThes</servlet-name>
         <servlet-class>prodocUI.servlet.SearchThes</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Oper</servlet-name>
+        <servlet-class>prodocServ.Oper</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SParent</servlet-name>
         <url-pattern>/SParent</url-pattern>
@@ -353,6 +357,10 @@
     <servlet-mapping>
         <servlet-name>SearchThes</servlet-name>
         <url-pattern>/SearchThes</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Oper</servlet-name>
+        <url-pattern>/Oper</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
