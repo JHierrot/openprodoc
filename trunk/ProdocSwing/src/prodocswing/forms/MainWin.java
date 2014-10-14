@@ -942,10 +942,12 @@ DialogEditFold DEF = new DialogEditFold(this, true);
 DEF.setLocationRelativeTo(null);
 DEF.AddMode();
 DEF.setAcl(FoldAct.getACL());
+PDFolders Fold=new PDFolders(Session);
+DEF.setParentPath(Fold.getPathId(FoldAct.getPDId()));
 DEF.setVisible(true);
 if (DEF.isCancel())
     return;
-PDFolders Fold=new PDFolders(Session);
+Fold=new PDFolders(Session);
 Fold.assignValues(DEF.getRecord());
 Fold.setParentId(ActFolderId);
 Fold.insert();
@@ -1023,6 +1025,8 @@ try {
 Doc = new PDDocs(getSession());
 MD.setRecord(Doc.getRecSum());
 MD.AddMode();
+PDFolders Fold=new PDFolders(Session);
+MD.setParentPath(Fold.getPathId(FoldAct.getPDId()));
 MD.setLocationRelativeTo(null);
 } catch (Exception ex)
     {
@@ -1085,6 +1089,7 @@ PDFolders Fold= ((TreeFolder) TreeFold.getUserObject()).getFold();
 Doc.setACL(Fold.getACL());
 MD.setRecord(Doc.getRecSum());
 MD.AddMode();
+MD.setParentPath(Fold.getPathId(FoldAct.getPDId()));
 MD.setLocationRelativeTo(null);
 } catch (Exception ex)
     {
@@ -1897,7 +1902,7 @@ if (OS.contains("Win"))
     Orders[0]="explorer";
 else if (OS.contains("OS X") || OS.contains("Mac"))
     Orders[0]="open";
- Process exec = Runtime.getRuntime().exec(Orders);
+Runtime.getRuntime().exec(Orders);
 } catch (Exception ex)
     {
     Message(ex.getLocalizedMessage());

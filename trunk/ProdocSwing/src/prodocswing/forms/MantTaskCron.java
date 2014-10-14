@@ -537,7 +537,6 @@ LMT.setVisible(true);
     setCursor(MainWin.DefCur);    
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
     }
-
     }//GEN-LAST:event_ButtonTestActionPerformed
 
     private void ButtonEditActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ButtonEditActionPerformed

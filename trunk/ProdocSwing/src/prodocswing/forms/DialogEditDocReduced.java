@@ -53,7 +53,6 @@ public class DialogEditDocReduced extends javax.swing.JDialog
 private Record EditedDoc;
 private boolean Cancel;
 private boolean Modif=false;
-private boolean SetRecordDocChanged=false;
 private Vector InputFields=new Vector();
 private HashSet AttrExcluded=new HashSet();
 /**
@@ -78,7 +77,8 @@ initComponents();
  */
 @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         LabelOperation = new javax.swing.JLabel();
         TitleLabel = new javax.swing.JLabel();
@@ -92,18 +92,21 @@ initComponents();
         ButtonSelFile = new javax.swing.JButton();
         ButtonCancel = new javax.swing.JButton();
         ButtonAcept = new javax.swing.JButton();
+        PathTextField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(MainWin.TT("Maintenance_Documents"));
         setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
         setResizable(false);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
+        addWindowListener(new java.awt.event.WindowAdapter()
+        {
+            public void windowClosing(java.awt.event.WindowEvent evt)
+            {
                 formWindowClosing(evt);
             }
         });
 
-        LabelOperation.setFont(new java.awt.Font("DejaVu Sans", 1, 14));
+        LabelOperation.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
         LabelOperation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         LabelOperation.setText("jLabel1");
 
@@ -132,27 +135,36 @@ initComponents();
 
         ButtonSelFile.setFont(MainWin.getFontDialog());
         ButtonSelFile.setText("Sel");
-        ButtonSelFile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ButtonSelFile.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ButtonSelFileActionPerformed(evt);
             }
         });
 
         ButtonCancel.setFont(MainWin.getFontDialog());
         ButtonCancel.setText(MainWin.TT("Cancel"));
-        ButtonCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ButtonCancel.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ButtonCancelActionPerformed(evt);
             }
         });
 
         ButtonAcept.setFont(MainWin.getFontDialog());
         ButtonAcept.setText(MainWin.TT("Ok"));
-        ButtonAcept.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ButtonAcept.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ButtonAceptActionPerformed(evt);
             }
         });
+
+        PathTextField.setEditable(false);
+        PathTextField.setFont(MainWin.getFontDialog());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -162,39 +174,44 @@ initComponents();
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE)
+                        .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE)
                         .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(NameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-                            .addComponent(DateLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-                            .addComponent(FilePathLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-                            .addComponent(TitleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(NameTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addComponent(FilePathTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(ButtonSelFile, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(DateTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
-                            .addComponent(TitleTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(ButtonAcept)
-                                .addGap(18, 18, 18)
-                                .addComponent(ButtonCancel)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(PathTextField, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(FilePathLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                                    .addComponent(TitleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(DateLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(NameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(NameTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGap(1, 1, 1)
+                                        .addComponent(FilePathTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(ButtonSelFile, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(TitleTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(ButtonAcept)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(ButtonCancel))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(DateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE)))))
                         .addGap(20, 20, 20))))
         );
-
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {DateLabel, FilePathLabel, NameLabel, TitleLabel});
-
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(LabelOperation)
                 .addGap(30, 30, 30)
+                .addComponent(PathTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(TitleTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(TitleLabel))
@@ -211,11 +228,11 @@ initComponents();
                     .addComponent(FilePathTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(FilePathLabel)
                     .addComponent(ButtonSelFile))
-                .addGap(63, 63, 63)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButtonAcept)
                     .addComponent(ButtonCancel))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
@@ -276,69 +293,12 @@ Cancel=true;
     private javax.swing.JLabel LabelOperation;
     private javax.swing.JLabel NameLabel;
     private javax.swing.JTextField NameTextField;
+    private javax.swing.JTextField PathTextField;
     private javax.swing.JLabel TitleLabel;
     private javax.swing.JTextField TitleTextField;
     // End of variables declaration//GEN-END:variables
 
 //----------------------------------------------------------------
-/**
- * Obtains a list of ACL
- * @return a DefaultComboModel with names of ACL
- */
-private DefaultComboBoxModel getComboModel()
-{
-return(ListObjects.getComboModel("ACL"));
-}
-//----------------------------------------------------------------
-/**
- * Obtains a list of clases of type folder allowed to the user
- * @return a DefaultComboModel with names of classes of folder
- */
-private DefaultComboBoxModel getComboModelFold()
-{
-Vector VObjects=new Vector();
-try {
-DriverGeneric Session=MainWin.getSession();
-PDObjDefs Obj = new PDObjDefs(Session);
-Cursor CursorId = Obj.getListDocs();
-Record Res=Session.NextRec(CursorId);
-while (Res!=null)
-    {
-    Attribute Attr=Res.getAttr(PDObjDefs.fNAME);
-    VObjects.add(Attr.getValue());
-    Res=Session.NextRec(CursorId);
-    }
-Session.CloseCursor(CursorId);
-} catch (PDException ex)
-    {
-    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
-    }
-return(new DefaultComboBoxModel(VObjects));
-}
-//----------------------------------------------------------------
-private ComboBoxModel getComboMimeFold()
-{
-Vector VObjects=new Vector();
-try {
-DriverGeneric Session=MainWin.getSession();
-PDMimeType Obj = new PDMimeType(Session);
-Cursor CursorId = Obj.getAll();
-Record Res=Session.NextRec(CursorId);
-while (Res!=null)
-    {
-    Attribute Attr=Res.getAttr(PDObjDefs.fNAME);
-    VObjects.add(Attr.getValue());
-    Res=Session.NextRec(CursorId);
-    }
-Session.CloseCursor(CursorId);
-} catch (PDException ex)
-    {
-    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
-    }
-return(new DefaultComboBoxModel(VObjects));
-}
-//----------------------------------------------------------------
-
 /**
  * sets the Form in mode Add
  * Disabling fields and changint literals
@@ -367,7 +327,6 @@ public void DelMode()
 LabelOperation.setText(MainWin.TT("Delete_Document"));
 TitleTextField.setEnabled(false);
 DateTextField.setEnabled(false);
-//MimeTypeCB.setEnabled(false);
 ButtonSelFile.setEnabled(false);
 FilePathTextField.setEnabled(false);
 }
@@ -388,7 +347,6 @@ public void setRecord(Record pFolder)
 EditedDoc = pFolder;
 AttrExcluded.clear();
 Attribute Attr;
-SetRecordDocChanged=true;
 Attr=EditedDoc.getAttr(PDDocs.fTITLE); //-----------------------------
 AttrExcluded.add(PDDocs.fTITLE);
 //TitleLabel.setText(MainWin.DrvTT(Attr.getUserName()));
@@ -416,11 +374,6 @@ if (Attr.getValue()!=null)
 DateTextField.setToolTipText(MainWin.DrvTT(Attr.getDescription())  +"("+MainWin.getFormatDate()+")");
 Attr=EditedDoc.getAttr(PDDocs.fMIMETYPE); //-----------------------------
 AttrExcluded.add(PDDocs.fMIMETYPE);
-//MimeLabel.setText(MainWin.DrvTT(Attr.getUserName()));
-//if (Attr.getValue()!=null)
-//    MimeTypeCB.setSelectedItem((String)Attr.getValue());
-//MimeTypeCB.setToolTipText(MainWin.DrvTT(Attr.getDescription()));
-SetRecordDocChanged=false;
 if (!Modif)
     {
     AttrExcluded.add(ObjPD.fPDDATE);
@@ -442,4 +395,13 @@ public boolean isCancel()
 return Cancel;
 }
 //----------------------------------------------------------------
+/**
+ * Assigns the path of parent folder to be show
+ * @param ActFolderPath path of parent folder
+ */
+void setParentPath(String ActFolderPath)
+{
+PathTextField.setText(ActFolderPath);
+}
+//--------------------------------------------------------------
 }

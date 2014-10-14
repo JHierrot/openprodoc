@@ -98,6 +98,7 @@ setRecord(Folder);
         ACLComboBox = new javax.swing.JComboBox();
         TitleLabel = new javax.swing.JLabel();
         TitleTextField = new javax.swing.JTextField();
+        PathTextField = new javax.swing.JTextField();
         ButtonAcept = new javax.swing.JButton();
         ButtonCancel = new javax.swing.JButton();
 
@@ -146,6 +147,9 @@ setRecord(Folder);
 
         TitleTextField.setFont(MainWin.getFontDialog());
 
+        PathTextField.setEditable(false);
+        PathTextField.setFont(MainWin.getFontDialog());
+
         javax.swing.GroupLayout AttrBasicLayout = new javax.swing.GroupLayout(AttrBasic);
         AttrBasic.setLayout(AttrBasicLayout);
         AttrBasicLayout.setHorizontalGroup(
@@ -153,20 +157,25 @@ setRecord(Folder);
             .addGroup(AttrBasicLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(AttrBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ACLDescripLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
-                    .addComponent(TitleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
-                    .addComponent(IdLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(AttrBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(TitleTextField)
-                    .addComponent(IdField)
-                    .addComponent(ACLComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(AttrBasicLayout.createSequentialGroup()
+                        .addGroup(AttrBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ACLDescripLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
+                            .addComponent(TitleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
+                            .addComponent(IdLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(AttrBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(TitleTextField)
+                            .addComponent(IdField)
+                            .addComponent(ACLComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(PathTextField))
                 .addContainerGap())
         );
         AttrBasicLayout.setVerticalGroup(
             AttrBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(AttrBasicLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
+                .addGap(26, 26, 26)
+                .addComponent(PathTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(AttrBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(IdField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(IdLabel))
@@ -178,7 +187,7 @@ setRecord(Folder);
                 .addGroup(AttrBasicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(TitleTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(TitleLabel))
-                .addContainerGap(178, Short.MAX_VALUE))
+                .addContainerGap(139, Short.MAX_VALUE))
         );
 
         Attributes.addTab(MainWin.TT("Common_Attributes"), AttrBasic);
@@ -304,6 +313,7 @@ if (!SetRecordFolderChanged)
     private javax.swing.JLabel IdLabel;
     private javax.swing.JLabel LabelFoldType;
     private javax.swing.JLabel LabelOperation;
+    private javax.swing.JTextField PathTextField;
     private javax.swing.JLabel TitleLabel;
     private javax.swing.JTextField TitleTextField;
     // End of variables declaration//GEN-END:variables
@@ -679,6 +689,15 @@ else
 public void setAcl(String Acl)
 {
 ACLComboBox.setSelectedItem(Acl);
+}
+//--------------------------------------------------------------
+/**
+ * Assigns the path of parent folder to be show
+ * @param ActFolderPath path of parent folder
+ */
+void setParentPath(String ActFolderPath)
+{
+PathTextField.setText(ActFolderPath);
 }
 //--------------------------------------------------------------
 //=========================================

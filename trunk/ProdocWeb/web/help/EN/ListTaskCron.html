@@ -24,6 +24,17 @@
 <p>It's possible to define the tasks as transactional.That is, the task will be executed over all the affected objects (i.e.: all the documents in a folder) and if any one fails, the operation is canceled for all the objects, so the system maintains the coherence. If the task is not transactional, the operation is performed on some objects and may fail in others.</p>
 <h5>Activation</h5>
 <p>Tasks can be turned on and off, so that they can be fully defined and tested but not executed until needed. They can again be turned off when required. Activation controls the generation of the "work order", ie if a task is off, no "work orders" are generated.</p>
+
+<h5>Configuration</h5>
+<p>To enable the generation of scheduled tasks and task execution (programs or associated events) must edit the configuration file <b> Prodoc.properties </b> of the computers on which it is intended to build or run tasks. The available parameters are:To enable the generation of scheduled tasks and execution of tasks (schedulled or associated to events), you  must edit the configuration file <b>Prodoc.properties </b> of the computers on which it is intended to generate or run tasks. The available parameters are:</p>
+<ul>
+    <li><b>TaskCategory:</b> Indicates the types of categories to be processed in this computer. The value '*' can be used to indicate that all should be treated. (Ej: TaskCategory=*  ,  TaskCategory=System). </li>
+    <li><b>TaskSearchFreq:</b> Indicate the frequency (in milliseconds) that the list of scheduled tasks will be revised to generate the "work order". If not defined (or commented), No tasks will be <b>Generated</b>  on this computer.</li>
+    <li><b>TaskExecFreq:</b> Indicate the frequency (in milliseconds) that the list of pending tasks will be revised to execute the "work order". If not defined (or commented), No tasks will be <b>Executed</b>  on this computer..</li>
+</ul>
+<p>It must be carefully adjusted the distribution of tasks. If multiple computers are assigned all tasks (or the same type) and the sampling frequency is high, they can run the same task simultaneously, doubling the result or failing. If you assign the same task to several computers, the sampling times should be very different and be spaced. In the simplest case it can be a single computer for execution of all tasks, or one for each category of task.</p>
+<p>Similarly, it should be carefully adjusted the sampling frequency. When sampling a lot, the execution will conform to the exact programed minute or second but the system is overloaded. Unless it is essential, it is better to sample with low frequency, although you risk delaying to running of the task a few minutes.</p>
+
 <h5>User Interface</h5>
 <p>To filter the Task or list of Tasks you want to review, just enter part of the name in the text box and press "ok". The list of Tasks that meet the conditions will be shown on the results table. Pressing the button without entering any value you see all the elements on which the user has permission. The results table shows the data:</p>
 <ul>

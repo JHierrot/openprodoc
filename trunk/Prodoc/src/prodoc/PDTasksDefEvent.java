@@ -47,13 +47,15 @@ public static final int fTASKEVENT_COPY_DOC   =STARTNUM+2;
 public static final int fTASKEVENT_COPY_FOLD  =STARTNUM+3;
 public static final int fTASKEVENT_EXPORT_DOC =STARTNUM+4;
 public static final int fTASKEVENT_EXPORT_FOLD=STARTNUM+5;
+public static final int fTASKEVENT_CONVERT_DOC=STARTNUM+6;
 
 private static final String[] LisTypeEventTask= {"UPDATE_DOC",
                                                  "UPDATE_FOLD",
                                                  "COPY_DOC",
                                                  "COPY_FOLD",
                                                  "EXPORT_DOC",
-                                                 "EXPORT_FOLD"
+                                                 "EXPORT_FOLD",
+                                                 "CONVERT_DOC"
                                                  };
 /**
  *
@@ -247,6 +249,9 @@ switch (this.getType())
      case fTASKEVENT_EXPORT_DOC:
         ExecuteExportDoc(Doc);
         break;
+     case fTASKEVENT_CONVERT_DOC:
+        ExecuteConvertDoc(Doc);
+        break;
      default:
          PDException.GenPDException("Unexpected_Task", "Type"+getType());
          break;
@@ -392,4 +397,54 @@ Doc.ExportXML(getParam(), true);
 Doc.getFile(getParam());
 }
 //-------------------------------------------------------------------------    
+
+private void ExecuteConvertDoc(PDDocs Doc) throws PDException
+{
+PDFolders Fold=new PDFolders(getDrv());
+String IdUnder=Fold.getIdPath(getParam2());
+Fold.setPDId(Doc.getParentId());
+if (!Fold.IsUnder(IdUnder))    
+   return;     
+String FName=null;    
+String DestName=null;
+PDDocs NewDoc=new PDDocs(getDrv(), Doc.getDocType());
+NewDoc.assignValues(Doc.getRecSum());
+NewDoc.setPDId(Doc.GenerateId());
+try {
+FName=Doc.getFile(System.getProperty("java.io.tmpdir"));
+String Order=getParam3();
+Order=Order.replace("@1", FName);
+DestName=FName.substring(0, FName.lastIndexOf('.')+1)+getParam4();
+Order=Order.replace("@2", DestName);
+Process Proc=Runtime.getRuntime().exec(Order);
+File f=new File(DestName);
+for (int i = 0; i < 20; i++)
+    {
+    Thread.sleep(1000);  
+    if (!Proc.isAlive())
+        break;
+    }
+NewDoc.setFile(DestName);
+NewDoc.setParentId(Fold.getIdPath(getParam()));
+NewDoc.insert();
+} catch (Exception Ex)
+    {
+    PDException.GenPDException(Ex.getLocalizedMessage(), FName);
+    }
+finally 
+{
+if (FName!=null)
+    {
+    File f=new File(FName);
+    if (f.exists())
+        f.delete();
+    }
+if (DestName!=null)
+    {
+    File f=new File(DestName);
+    if (f.exists())
+        f.delete();
+    }
+}
+}
 }
