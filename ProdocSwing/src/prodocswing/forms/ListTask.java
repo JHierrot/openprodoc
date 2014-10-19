@@ -58,7 +58,7 @@ ObjectsTable.setAutoCreateColumnsFromModel(true);
 PDObject = pPDObject;
 Date d2=new Date();
 TimeStampFilter2.setValue(d2);
-Date d1=new Date(d2.getTime()-60000);
+Date d1=new Date(d2.getTime()-600000);
 TimeStampFilter1.setValue(d1);
 }
 
