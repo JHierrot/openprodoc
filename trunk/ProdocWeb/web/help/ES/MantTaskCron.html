@@ -22,6 +22,8 @@
         <li>"PURGE_DOC": Elimina de la papelera todos los elementos con una antiguedad dada.</li>
         <li>"IMPORT": Importa automáticamente documentos desde un sistema de archivos,</li>
         <li>"EXPORT": Exporta documentos y carpetas creados recientemente hacia un sistema de archivos.</li>
+        <li>"DOCSREPORT": Genera un informe de los documentos  de un tipo (y subtipos) contenidos en una estructura de carpetas y genera un informe como documento html que almacena en la carpeta de cada usuario.</li>
+        <li>"FOLDSREPORT": Genera un informe de las carpetas/expedientes de un tipo (y subtipos) contenidos en una estructura de carpetas y genera un informe como documento html que almacena en la carpeta de cada usuario.</li>
         </ul>
     </li>    
     <li><b>Tipo de objeto</b> (Carpetas o Documentos) sobre los que se aplicará la tarea. Dependiendo de otros parámetros, podrá aplicarse tambien a subtipos.</li>    
@@ -61,6 +63,22 @@
                 <li>Param2: Número de dias desde la actualización.(Ej: para exportar los documentos creado en la última semana s indicar "7")</li>
                 <li>Param3: Carpeta origen en OpenProdoc desde la que se exportará la estructura de carpetas y documentos. No es necesario incluir "Rootfolder"(Ej."/Expedientes/Compras").</li>
                 <li>Param4: Carpeta destino a la que se exportará. (Ej."/tmp/Novedades").</li>
+            </ul>
+        </li>
+        <li>"DOCSREPORT":            
+            <ul>
+                <li>Param1: Indicador booleano (0/1) que indica si debe recorrerse recursivamente todas las carpetas contenidas en la carpeta origen (Ej: "0").</li>
+                <li>Param2: Rango de dias desde la actualización.(Ej: para informe los documentos creados hace 3 semanas "21|14")</li>
+                <li>Param3: Grupo de usuarios al que se remitirá el informe como documento html (Ej: "Suscritores"). No se incluye subgrupos para la notificación del informe</li>
+                <li>Param3: Carpeta origen en OpenProdoc sobre la que se analiza las novedades. No es necesario incluir "Rootfolder"(Ej."/Expedientes/Compras").</li>
+            </ul>
+        </li>
+        <li>"FOLDSREPORT":            
+            <ul>
+                <li>Param1: Indicador booleano (0/1) que indica si debe recorrerse recursivamente todas las carpetas contenidas en la carpeta origen (Ej: "0").</li>
+                <li>Param2: Rango de dias desde la actualización.(Ej: para informe los expedientes creados hace 3 semanas "21|14")</li>
+                <li>Param3: Grupo de usuarios al que se remitirá el informe como documento html (Ej: "Suscritores"). No se incluye subgrupos para la notificación del informe</li>
+                <li>Param3: Carpeta origen en OpenProdoc sobre la que se analiza las novedades. No es necesario incluir "Rootfolder"(Ej."/Expedientes/Compras").</li>
             </ul>
         </li>
         </ul>

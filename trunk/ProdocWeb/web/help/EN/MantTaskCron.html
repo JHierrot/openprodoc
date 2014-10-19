@@ -22,6 +22,8 @@
         <li>"PURGE_DOC": Purges/Deletes from the paper bin all the documents with an specified age.</li>
         <li>"IMPORT": Imports automatically from a filesystem,</li>
         <li>"EXPORT": Exports automatically from OpenProdoc to a filesystem,</li>
+        <li>"DOCSREPORT": Creates a report about documents of a document type (and subtypes) updated under a folder estructure and saves the report as document html in the home folder of each user of defined group.</li>
+        <li>"FOLDSREPORT": Creates a report about folders of a folder type (and subtypes) updated under a folder estructure and saves the report as document html in the home folder of each user of defined group.</li>
         </ul>
     </li>    
     <li><b>Object type</b> (one of Folder or Document types) that apply the task.</li>    
@@ -58,9 +60,25 @@
         <li>"EXPORT":            
             <ul>
                 <li>Param1: Boolean value (0/1) indicating whether the task should travel recursively by all the folders conatined int the source folder (I.e.: "0").</li>
-                <li>Param2: Number of days from updatinf.(I.e. For exporting the documents inserted during the last week: "7")</li>
+                <li>Param2: Number of days from updating.(I.e. For exporting the documents inserted during the last week: "7")</li>
                 <li>Param3: Source folder in OpenProdoc from which all the structure of folders and documents will be exported. You don't need to include "Rootfolder"(I.e.."/Administration/HR").</li>
                 <li>Param4: Target folder where all the structure will be exported. (I.e.."/tmp/NewDocuments").</li>
+            </ul>
+        </li>
+        <li>"DOCSREPORT":            
+            <ul>
+                <li>Param1: Boolean value (0/1) indicating whether the task should travel recursively by all the folders conatined int the source folder (I.e.: "0").</li>
+                <li>Param2: Range of days .(I.e. For reporting the documents updated three weeks ago: "21|14")</li>
+                <li>Param3: Group of users who will receive the document with the report of new documents (i.e. 2"Suscriptors"). The subgroups will be ignored.</li>
+                <li>Param4: Source folder in OpenProdoc. The documents updated under this structure will be inclued in report. You don't need to include "Rootfolder"(I.e.."/Administration/HR").</li>
+            </ul>
+        </li>
+        <li>"FOLDSREPORT":            
+            <ul>
+                <li>Param1: Boolean value (0/1) indicating whether the task should travel recursively by all the folders conatined int the source folder (I.e.: "0").</li>
+                <li>Param2: Range of days .(I.e. For reporting the documents updated three weeks ago: "21|14")</li>
+                <li>Param3: Group of users who will receive the document with the report of new documents (i.e. 2"Suscriptors"). The subgroups will be ignored.</li>
+                <li>Param4: Source folder in OpenProdoc. The documents updated under this structure will be inclued in report. You don't need to include "Rootfolder"(I.e.."/Administration/HR").</li>
             </ul>
         </li>
         </ul>

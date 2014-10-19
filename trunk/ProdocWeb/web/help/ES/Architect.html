@@ -10,13 +10,14 @@
     <body>
 <H4>Arquitectura OpenProdoc</H4>
 <hr>
-<p>La arquitectura de OpenProdoc de basa en un conector-núcleo que realiza todas las funciones. </p>
-<p style="text-align:center;"><img alt="Esquema del núclo OpenProdocCore" src="img/Architecture0.png"/></p>
-<p>Este núcleo puede desplegarse embebido en una aplicación Java estandar (como en el caso del cliente OpenProdoc Pesado eu OpenProdoc Portable).
-Puede tambien desplegarse en una aplicaciónm J2EE (como es el caso del cliente Web OPD).</p>
-<p style="text-align:center;"><img alt="Esquema del núclo OpenProdocCore" src="img/Architecture1.png"/></p>
-
-
+<p>La arquitectura de OpenProdoc se basa en un componente-núcleo que realiza todas las funciones. </p>
+<p style="text-align:center;"><img alt="Esquema del núcleo OpenProdoc" src="img/Architecture0.png"/></p>
+<p>Este núcleo puede desplegarse embebido en una aplicación Java estandar (como en el caso del cliente OpenProdoc Pesado o la versión OpenProdoc Portable).
+Puede tambien desplegarse en una aplicación J2EE (como es el caso del cliente Web OPD).</p>
+<p style="text-align:center;"><img alt="Esquema del núcleo OpenProdoc" src="img/Architecture1.png"/></p>
+<p>Existe un conector remoto que permite conectar el core OpenProdoc con el servidor Web por medio de REST/http. 
+    Esta alternativa, aunque reduce el rendimiento, aumenta la seguridad y facilita la administración, al estar centralizado en un servidor (o granja de servidores). </p>
+<p style="text-align:center;"><img alt="Conexión remota" src="img/Architecture2.png"/></p>
 <hr>
 <a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>
     </body>
