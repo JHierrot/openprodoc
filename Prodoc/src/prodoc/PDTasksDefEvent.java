@@ -398,6 +398,7 @@ Doc.getFile(getParam());
 }
 //-------------------------------------------------------------------------    
 
+@SuppressWarnings("SleepWhileInLoop")
 private void ExecuteConvertDoc(PDDocs Doc) throws PDException
 {
 PDFolders Fold=new PDFolders(getDrv());
@@ -424,6 +425,8 @@ for (int i = 0; i < 20; i++)
     if (!Proc.isAlive())
         break;
     }
+NewDoc.setName("");
+NewDoc.setMimeType(null);
 NewDoc.setFile(DestName);
 NewDoc.setParentId(Fold.getIdPath(getParam()));
 NewDoc.insert();
