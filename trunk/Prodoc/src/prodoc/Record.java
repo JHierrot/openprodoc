@@ -1,20 +1,20 @@
 /*
  * OpenProdoc
- * 
+ *
  * See the help doc files distributed with
  * this work for additional information regarding copyright ownership.
  * Joaquin Hierro licenses this file to You under:
- * 
+ *
  * License GNU GPL v3 http://www.gnu.org/licenses/gpl.html
- * 
+ *
  * you may not use this file except in compliance with the License.  
  * Unless agreed to in writing, software is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * author: Joaquin Hierro      2011
- * 
+ *
  */
 
 package prodoc;
@@ -43,7 +43,7 @@ private ArrayList VAttr=new ArrayList();
 private int Pos;
 //--------------------------------------------------------------------------
 /**
- * 
+ *
  */
 public void Clear()
 {
@@ -91,7 +91,7 @@ for (int i = 0; i < rec.NumAttr(); i++)
     AttrDest=getAttr(AttrOrig.getName());
     if (AttrDest!=null && AttrDest.equalDef(AttrOrig))
         {
-        if (AttrDest.isMultivalued()) 
+        if (AttrDest.isMultivalued())
             {
             if (AttrDest!=AttrOrig) // to avoid problems when using the same record
                 {
@@ -127,7 +127,7 @@ for (int i = 0; i < rec.NumAttr(); i++)
     AttrDest=getAttr(AttrOrig.getName());
     if (AttrDest!=null)
         {
-        if (AttrDest.isMultivalued()) 
+        if (AttrDest.isMultivalued())
             {
             if (AttrDest!=AttrOrig) // to avoid problems when using the same record
                 {
@@ -293,9 +293,9 @@ else
 }
 //--------------------------------------------------------------------------
 /**
- * 
+ *
  * @return
- * @throws PDException 
+ * @throws PDException
  */
 synchronized public Record Copy() throws PDException
 {
@@ -360,7 +360,7 @@ return(S);
 }
 //--------------------------------------------------------------------------
 /**
- * 
+ *
  * @param newRec
  * @throws PDException
  */
@@ -376,7 +376,7 @@ for (int i = 0; i < newRec.NumAttr(); i++)
 }
 //--------------------------------------------------------------------------
 /**
- * 
+ *
  * @param substRec
  * @throws PDException
  */
@@ -444,7 +444,7 @@ S.append("<Rec>");
 initList();
 for (int i = 0; i < NumAttr(); i++)
     {
-    Attribute At=nextAttr(); 
+    Attribute At=nextAttr();
     if (At.getValue()!=null)
         S.append(At.toXMLt());
     }
@@ -458,7 +458,7 @@ NodeList AttrLst = AttrsNode.getChildNodes();
 for (int j = 0; j < AttrLst.getLength(); j++)
     {
     Node Attr = AttrLst.item(j);
-    if (Attr.getNodeName().equalsIgnoreCase("attr"))   
+    if (Attr.getNodeName().equalsIgnoreCase("attr"))  
         {
         NamedNodeMap XMLattributes = Attr.getAttributes();
         Node XMLAttrName = XMLattributes.getNamedItem("Name");
@@ -479,14 +479,14 @@ NodeList AttrLst = AttrsNode.getChildNodes();
 for (int j = 0; j < AttrLst.getLength(); j++)
     {
     Node Attr = AttrLst.item(j);
-    if (Attr.getNodeName().equalsIgnoreCase("attr"))   
+    if (Attr.getNodeName().equalsIgnoreCase("attr"))  
         {
         NamedNodeMap XMLattributes = Attr.getAttributes();
         Node XMLAttrName = XMLattributes.getNamedItem("Name");
         String AttrName=XMLAttrName.getNodeValue();
         XMLAttrName = XMLattributes.getNamedItem("Type");
         int Type=Integer.parseInt(XMLAttrName.getNodeValue());
-        String Value=DriverGeneric.DeCodif(Attr.getTextContent()); 
+        String Value=DriverGeneric.DeCodif(Attr.getTextContent());
         Attribute At=new Attribute(AttrName, "", "", Type, false, null, 254, false, false, false);
         if (Type==Attribute.tSTRING || Value.length()!=0)
             At.Import(Value);
