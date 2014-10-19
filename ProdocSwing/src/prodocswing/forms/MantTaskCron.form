@@ -86,21 +86,19 @@
                           <Component id="ActiveCB" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="TransactCB" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
                           <Group type="102" attributes="0">
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="ButtonAcept" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="ButtonCancel" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
                               <Component id="ButtonEdit" min="-2" pref="63" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="ButtonTest" min="-2" pref="63" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="ButtonRun" min="-2" pref="63" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -181,18 +179,12 @@
               </Group>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                              <Component id="ButtonTest" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="ButtonEdit" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="ButtonRun" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="AddHourLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="AddHourTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                      <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="AddHourTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="AddHourLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="AddMinLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="AddMinTextField" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -209,14 +201,20 @@
                       </Group>
                   </Group>
                   <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="67" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="ButtonTest" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="ButtonEdit" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="ButtonRun" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="ButtonCancel" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="ButtonAcept" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace pref="20" max="32767" attributes="0"/>
+              <EmptySpace pref="22" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
