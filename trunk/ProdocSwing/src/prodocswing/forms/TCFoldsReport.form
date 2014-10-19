@@ -80,20 +80,18 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="SubTypesCheckB" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="ParamLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="FirstDateTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="ParamLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="LastDateTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="GroupLabel" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Component id="GroupComboBox" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="ParamLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="FirstDateTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="ParamLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="LastDateTextField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="17" max="32767" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="GroupLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="GroupComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace pref="14" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="ParamLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="OPDPathTextField" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -173,7 +171,7 @@
           <Connection code="MainWin.getFontDialog()" type="code"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="MainWin.TT(&quot;Parent_Folder&quot;)" type="code"/>
+          <Connection code="MainWin.TT(&quot;Group&quot;)" type="code"/>
         </Property>
       </Properties>
     </Component>
