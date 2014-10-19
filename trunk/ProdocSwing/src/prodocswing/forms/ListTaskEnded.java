@@ -82,6 +82,7 @@ TimeStampFilter1.setValue(d1);
         ReviewButton = new javax.swing.JButton();
         DeleteButton = new javax.swing.JButton();
         ExpCSV = new javax.swing.JButton();
+        ReLaunch = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         ObjectsTable = new javax.swing.JTable();
 
@@ -125,7 +126,7 @@ TimeStampFilter1.setValue(d1);
         jToolBar1.setRollover(true);
 
         ReviewButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/edit.png"))); // NOI18N
-        ReviewButton.setToolTipText("");
+        ReviewButton.setToolTipText("View");
         ReviewButton.setFocusable(false);
         ReviewButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         ReviewButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -139,7 +140,7 @@ TimeStampFilter1.setValue(d1);
         jToolBar1.add(ReviewButton);
 
         DeleteButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/del.png"))); // NOI18N
-        DeleteButton.setToolTipText("");
+        DeleteButton.setToolTipText("Delete");
         DeleteButton.setFocusable(false);
         DeleteButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         DeleteButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -153,7 +154,7 @@ TimeStampFilter1.setValue(d1);
         jToolBar1.add(DeleteButton);
 
         ExpCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/expCSV.png"))); // NOI18N
-        ExpCSV.setToolTipText("");
+        ExpCSV.setToolTipText("Export CSV");
         ExpCSV.setFocusable(false);
         ExpCSV.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         ExpCSV.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -165,6 +166,20 @@ TimeStampFilter1.setValue(d1);
             }
         });
         jToolBar1.add(ExpCSV);
+
+        ReLaunch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/copy.png"))); // NOI18N
+        ReLaunch.setToolTipText("ReLaunch");
+        ReLaunch.setFocusable(false);
+        ReLaunch.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        ReLaunch.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        ReLaunch.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                ReLaunchActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(ReLaunch);
 
         ObjectsTable.setFont(MainWin.getFontList());
         ObjectsTable.addMouseListener(new java.awt.event.MouseAdapter()
@@ -326,6 +341,19 @@ MU.setVisible(true);
     }
     }//GEN-LAST:event_ObjectsTableMouseClicked
 
+    private void ReLaunchActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ReLaunchActionPerformed
+    {//GEN-HEADEREND:event_ReLaunchActionPerformed
+try {
+PDTasksExec TE=new PDTasksExec(MainWin.getSession());
+TE.assignValues(getPDTableModel().getElement(getSelectedRow()));  
+TE.setPDId(TE.GenerateId());  //avoid repeating Id
+TE.setNextDate(new Date());
+TE.insert();
+} catch (Exception ex)
+    {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
+    }//GEN-LAST:event_ReLaunchActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonFilter;
     private javax.swing.JTextField CategoryFilter;
@@ -335,6 +363,7 @@ MU.setVisible(true);
     private javax.swing.JButton DeleteButton;
     private javax.swing.JButton ExpCSV;
     private javax.swing.JTable ObjectsTable;
+    private javax.swing.JButton ReLaunch;
     private javax.swing.JButton ReviewButton;
     private javax.swing.JFormattedTextField TimeStampFilter1;
     private javax.swing.JFormattedTextField TimeStampFilter2;
