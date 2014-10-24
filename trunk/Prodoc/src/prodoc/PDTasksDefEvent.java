@@ -397,7 +397,11 @@ Doc.ExportXML(getParam(), true);
 Doc.getFile(getParam());
 }
 //-------------------------------------------------------------------------    
-
+/**
+ * 
+ * @param Doc
+ * @throws PDException 
+ */
 @SuppressWarnings("SleepWhileInLoop")
 private void ExecuteConvertDoc(PDDocs Doc) throws PDException
 {
@@ -450,4 +454,27 @@ if (DestName!=null)
     }
 }
 }
+//-------------------------------------------------------------------------
+@Override
+protected void VerifyAllowedIns() throws PDException
+{
+if (!getDrv().getUser().getName().equals("Install"))    
+    if (!getDrv().getUser().getRol().isAllowCreateTask())
+       PDExceptionFunc.GenPDException("Operation_do_not_allowed",getName());
+}
+//-------------------------------------------------------------------------
+@Override
+protected void VerifyAllowedDel() throws PDException
+{
+if (!getDrv().getUser().getRol().isAllowMaintainTask() )
+   PDExceptionFunc.GenPDException("Operation_do_not_allowed",getName());
+}
+//-------------------------------------------------------------------------
+@Override
+protected void VerifyAllowedUpd() throws PDException
+{
+if (!getDrv().getUser().getRol().isAllowMaintainTask() )
+   PDExceptionFunc.GenPDException("Operation_do_not_allowed",getName());
+}
+//-------------------------------------------------------------------------
 }

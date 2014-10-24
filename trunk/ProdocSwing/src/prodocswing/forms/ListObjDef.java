@@ -81,7 +81,10 @@ return(true);
 protected JDialog DelMode() throws PDException
 {
 MantObjDefs MU = new MantObjDefs(Fparent, true);
-MU.setRecord(getPDTableModel().getElement(getSelectedRow()));
+Record r=getPDTableModel().getElement(getSelectedRow());
+if ((Boolean)r.getAttr(PDObjDefs.fCREATED).getValue())
+    PDExceptionFunc.GenPDException(MainWin.DrvTT("Destroy_object_before_deleting_definition"), null);
+MU.setRecord(r);
 MU.DelMode();
 return(MU);
 }
