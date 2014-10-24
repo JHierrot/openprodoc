@@ -1382,7 +1382,7 @@ ImpFold.setVisible(true);
 if (ImpFold.isCancel())
     return;
 setCursor(WaitCur);
-Import(FoldAct, ImpFold.SelFolder.getAbsolutePath(), ImpFold.IsOneLevel(), ImpFold.IncludeMetadata(), ImpFold.IncludeDocs(), ImpFold.FoldType(), ImpFold.DocType());
+Import(FoldAct, ImpFold.SelFolder.getAbsolutePath(), ImpFold.IsOneLevel(), ImpFold.IncludeMetadata(), ImpFold.IncludeDocs(), ImpFold.FoldType(), ImpFold.DocType(), ImpFold.IsStrict());
 TreePath ActualPath = TreeFolder.getSelectionPath();
 DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) ActualPath.getLastPathComponent();
 ExpandFold(TreeFold);
@@ -2136,19 +2136,34 @@ if (!IsOneLevel)
     }    
 }
 //---------------------------------------------------------------------
-private void Import(PDFolders FoldAct, String OriginPath, boolean IsOneLevel, boolean IncludeMetadata, boolean IncludeDocs, String FoldType, String DocType) throws PDException
+private void Import(PDFolders FoldAct, String OriginPath, boolean IsOneLevel, boolean IncludeMetadata, boolean IncludeDocs, String FoldType, String DocType, boolean Strict) throws PDException
 {
-PDFolders NewFold=new PDFolders(FoldAct.getDrv(), FoldType);    
-if (IncludeMetadata)   
-    {
-    NewFold=NewFold.ProcessXML(new File(OriginPath+".opd"), FoldAct.getPDId()); 
-    }   
-else
+PDFolders NewFold=new PDFolders(FoldAct.getDrv(), FoldType); 
+boolean FoldExist=false;
+if (!Strict)
     {
     String Name=OriginPath.substring(OriginPath.lastIndexOf(File.separatorChar)+1);
-    NewFold.setTitle(Name);
-    NewFold.setParentId(FoldAct.getPDId());   
-    NewFold.insert();
+    try {
+    String IdFold=NewFold.GetIdChild(FoldAct.getPDId(), Name);
+    NewFold.Load(IdFold);
+    FoldExist=true;
+    } catch( PDException ex)
+        { // don't exits
+        }
+    }
+if (Strict || (!Strict && !FoldExist))
+    {
+    if (IncludeMetadata)   
+        {
+        NewFold=NewFold.ProcessXML(new File(OriginPath+".opd"), FoldAct.getPDId()); 
+        }   
+    else
+        {
+        String Name=OriginPath.substring(OriginPath.lastIndexOf(File.separatorChar)+1);
+        NewFold.setTitle(Name);
+        NewFold.setParentId(FoldAct.getPDId());   
+        NewFold.insert();
+        }
     }
 ExpFolds++;
 File ImpFold=new File(OriginPath);
@@ -2196,7 +2211,7 @@ ListOrigin=null; // to help gc and save memory during recursivity
 for (int i = 0; i < DirList.size(); i++)
     {
     File SubDir = (File) DirList.get(i);
-    Import(NewFold, SubDir.getAbsolutePath(), IsOneLevel, IncludeMetadata, IncludeDocs, FoldType, DocType);    
+    Import(NewFold, SubDir.getAbsolutePath(), IsOneLevel, IncludeMetadata, IncludeDocs, FoldType, DocType, Strict);    
     }
 }
 //---------------------------------------------------------------------

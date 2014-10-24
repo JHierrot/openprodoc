@@ -584,7 +584,8 @@ LU.dispose();
     private void ButtonRunActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ButtonRunActionPerformed
     {//GEN-HEADEREND:event_ButtonRunActionPerformed
 try {
-if (!MainWin.MessageQuestion(MainWin.DrvTT("Do_you_really_want_to_execute_the_task? (Beware_that_several_elements_can_be_altered_or_deleted)")))
+if (!MainWin.MessageQuestion(MainWin.DrvTT("Do_you_really_want_to_execute_the_task")+"? ("
+            +MainWin.DrvTT("Beware_that_several_elements_can_be_altered_or_deleted")+")"))
     return;
 setCursor(MainWin.WaitCur);    
 PDTasksExec TC=new PDTasksExec(MainWin.getSession());

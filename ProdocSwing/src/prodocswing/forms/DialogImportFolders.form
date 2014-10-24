@@ -13,6 +13,7 @@
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
   <Events>
     <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowClosing"/>
@@ -32,49 +33,48 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace pref="17" max="32767" attributes="0"/>
-              <Component id="LabelOperation" pref="572" max="32767" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="1" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="IncMetadata" linkSize="2" alignment="0" max="32767" attributes="1"/>
-                  <Component id="IncDocs" linkSize="2" alignment="0" min="-2" max="-2" attributes="1"/>
-                  <Component id="OneLevel" linkSize="2" alignment="0" max="32767" attributes="1"/>
-                  <Component id="LabelDocType" linkSize="2" alignment="0" min="-2" pref="217" max="-2" attributes="0"/>
-                  <Component id="LabelFoldType1" linkSize="2" alignment="0" max="32767" attributes="1"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="CBOneLevel" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Group type="103" alignment="0" groupAlignment="0" attributes="0">
-                      <Component id="CBIncMetadata" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="CBIncDocs" alignment="1" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Component id="DocTypeCB" alignment="0" pref="340" max="32767" attributes="1"/>
-                  <Component id="FoldTypeCB" alignment="0" max="32767" attributes="1"/>
-              </Group>
-              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="ButtonAcept" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="ButtonCancel" min="-2" max="-2" attributes="0"/>
+                      <Component id="LabelOperation" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="FilePathLabel" pref="217" max="32767" attributes="1"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="FilePathTextField" min="-2" pref="283" max="-2" attributes="1"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="ButtonSelFile" min="-2" pref="45" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <Component id="ButtonAcept" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="ButtonCancel" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="IncMetadata" linkSize="2" alignment="0" max="32767" attributes="1"/>
+                                  <Component id="IncDocs" linkSize="2" alignment="0" min="-2" max="-2" attributes="1"/>
+                                  <Component id="OneLevel" linkSize="2" alignment="0" max="32767" attributes="1"/>
+                                  <Component id="LabelDocType" linkSize="2" alignment="0" min="-2" pref="217" max="-2" attributes="0"/>
+                                  <Component id="LabelFoldType1" linkSize="2" alignment="0" max="32767" attributes="1"/>
+                                  <Component id="StrictLabel" alignment="1" max="32767" attributes="1"/>
+                                  <Component id="FilePathLabel" alignment="1" max="32767" attributes="1"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="FilePathTextField" alignment="0" min="-2" pref="283" max="-2" attributes="1"/>
+                                  <Component id="FoldTypeCB" alignment="0" max="32767" attributes="1"/>
+                                  <Component id="CBStrict" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="CBOneLevel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="CBIncMetadata" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="CBIncDocs" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="DocTypeCB" alignment="0" max="32767" attributes="1"/>
+                              </Group>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="ButtonSelFile" min="-2" pref="26" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -93,12 +93,12 @@
                   <Component id="CBIncMetadata" alignment="2" min="-2" max="-2" attributes="0"/>
                   <Component id="IncMetadata" alignment="2" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="unrelated" max="32767" attributes="0"/>
-              <Group type="103" groupAlignment="2" attributes="0">
-                  <Component id="IncDocs" alignment="2" min="-2" max="-2" attributes="0"/>
-                  <Component id="CBIncDocs" alignment="2" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="6" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="IncDocs" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="CBIncDocs" alignment="1" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="LabelDocType" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="DocTypeCB" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -109,17 +109,24 @@
                   <Component id="FoldTypeCB" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="FilePathTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="FilePathLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="ButtonSelFile" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="ButtonSelFile" pref="0" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="FilePathTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="FilePathLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="StrictLabel" min="-2" max="-2" attributes="0"/>
+                  <Component id="CBStrict" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="ButtonAcept" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="ButtonCancel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -192,6 +199,26 @@
         </Property>
       </Properties>
     </Component>
+    <Component class="javax.swing.JLabel" name="LabelFoldType1">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="MainWin.getFontDialog()" type="code"/>
+        </Property>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="MainWin.TT(&quot;Folder_Type&quot;)" type="code"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="FoldTypeCB">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="MainWin.getFontDialog()" type="code"/>
+        </Property>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="getComboModelFold()" type="code"/>
+        </Property>
+      </Properties>
+    </Component>
     <Component class="javax.swing.JLabel" name="FilePathLabel">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -220,6 +247,21 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ButtonSelFileActionPerformed"/>
       </Events>
     </Component>
+    <Component class="javax.swing.JLabel" name="StrictLabel">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="MainWin.getFontDialog()" type="code"/>
+        </Property>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="MainWin.TT(&quot;Strict&quot;)" type="code"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="CBStrict">
+      <Properties>
+        <Property name="selected" type="boolean" value="true"/>
+      </Properties>
+    </Component>
     <Component class="javax.swing.JButton" name="ButtonCancel">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -245,26 +287,6 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ButtonAceptActionPerformed"/>
       </Events>
-    </Component>
-    <Component class="javax.swing.JComboBox" name="FoldTypeCB">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="MainWin.getFontDialog()" type="code"/>
-        </Property>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="getComboModelFold()" type="code"/>
-        </Property>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="LabelFoldType1">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="MainWin.getFontDialog()" type="code"/>
-        </Property>
-        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="MainWin.TT(&quot;Folder_Type&quot;)" type="code"/>
-        </Property>
-      </Properties>
     </Component>
   </SubComponents>
 </Form>
