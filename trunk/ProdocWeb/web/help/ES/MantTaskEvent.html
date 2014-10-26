@@ -23,6 +23,7 @@
         <li>"COPY_DOC": Crea una copia del documento.</li>
         <li>"EXPORT_FOLD": Exporta una carpeta.</li>
         <li>"EXPORT_DOC":  Exporta un documento.</li>
+        <li>"CONVERT_DOC":  Convierte un documento utilizando un conversor externo. Puede utilizarse programas como <a href="http://imagemagick.org/">ImageMagick</a> (Windows, Linux, Mac) o <a href="http://www.irfanview.com/">Irfanview</a>(Windows incluyendo visualización)  </li>
         </ul>
     </li>    
     <li><b>Tipo de objeto</b> (Carpetas o Documentos) sobre los que se aplicará la tarea. Dependiendo de otros parámetros, podrá aplicarse tambien a subtipos.</li>    
@@ -67,6 +68,16 @@
             <ul>
                 <li>Param1: Carpeta origen en OpenProdoc desde la que se exportará los documentos.Aplicará a todas las carpetas contenidas en esta a cualquier nivel. No es necesario incluir "Rootfolder"(Ej."/Expedientes/Compras").</li>
                 <li>Param2: Carpeta destino a la que se exportará. (Ej."/tmp/Novedades").</li>
+            </ul>
+        </li>
+        <li>"CONVERT_DOC":            
+            <ul>
+                <li>Param1: Carpeta destino en OpenProdoc en la que se insertará el documento convertido cuando se produzca el evento definido. No es necesario incluir "Rootfolder"(Ej."/CopiaExpedientes/Compras").</li>
+                <li>Param2: Carpeta raiz en OpenProdoc sobre la que se aplicará la regla. Aplicará a todas las carpetas contenidas en esta a cualquier nivel. No es necesario incluir "Rootfolder"(Ej."/Expedientes/Compras").</li>
+                <li>Param3: Orden del sistema operativo que realizará la conversión. Depende de los programas instalados. 
+                    Por ejemplo para convertir usando ImageMagick se escribiría: "convert @1 @2". OPD descargará el documento y lo transmitirá en posición @1; como @2 transmitirá el mismo documento pero sustituyendo la extensión por la nueva extensión (Param4). 
+                    El documento resultante de la conversión se insertará con los mismos metadatos en la carpeta destino en OPD (Param1)</li>
+                <li>Param4: Extensión del archivo destino tras la conversión. Se sumará al nombre destino @2 al invocar la orden.(Ej. "png")</li>
             </ul>
         </li>
         </ul>
