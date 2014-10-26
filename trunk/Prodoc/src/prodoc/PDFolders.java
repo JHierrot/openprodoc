@@ -491,7 +491,8 @@ for (int i = getTypeDefs().size()-1; i >=0; i--)
     {
     Record TypDef=(Record)getTypeDefs().get(i);
     Record DatParc=((Record)getTypeRecs().get(i)).CopyMono();
-    if (i!=getTypeDefs().size()-1)
+//    if (i!=getTypeDefs().size()-1)
+    if (!DatParc.ContainsAttr(fPDID))
         {
         DatParc.addAttr(getRecSum().getAttr(fPDID));
         }

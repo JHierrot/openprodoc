@@ -1301,6 +1301,8 @@ getObjCache().put(getKey(), getRecord());
 } catch (Exception Ex)
     {
     getDrv().AnularTrans();
+    if (PDLog.isDebug())
+        Ex.printStackTrace();
     PDException.GenPDException("Error_inserting_Document", Ex.getLocalizedMessage());
     }
 if (InTransLocal)
@@ -1769,6 +1771,8 @@ getObjCache().put(getKey(), getRecord());
 } catch (Exception Ex)
     {
     getDrv().AnularTrans();
+    if (PDLog.isDebug())
+        Ex.printStackTrace();
     PDExceptionFunc.GenPDException("Error_updating_Document",Ex.getLocalizedMessage());
     }
 if (InTransLocal)
@@ -1834,7 +1838,8 @@ for (int i = getTypeDefs().size()-1; i >=0; i--)
     {
     Record TypDef=(Record)getTypeDefs().get(i);
     Record DatParc=(Record)getTypeRecs().get(i);
-    if (i!=getTypeDefs().size()-1) // Base
+//    if (i!=getTypeDefs().size()-1) // Base
+    if (!DatParc.ContainsAttr(fPDID))
         {
         DatParc.addAttr(RecTot.getAttr(fPDID));
         }
@@ -1887,6 +1892,8 @@ getObjCache().remove(getKey());
 } catch (Exception Ex)
     {
     getDrv().AnularTrans();
+    if (PDLog.isDebug())
+        Ex.printStackTrace();    
     PDException.GenPDException("Error_deleting_Document",Ex.getLocalizedMessage());
     }
 if (InTransLocal)

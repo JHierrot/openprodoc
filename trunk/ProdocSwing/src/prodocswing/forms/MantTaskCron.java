@@ -717,6 +717,7 @@ TransactCB.setEnabled(false);
 public void EditMode()
 {
 LabelOperation.setText(MainWin.TT("Update_Task"));
+TaskNameTextField.setEditable(false);
 }
 //----------------------------------------------------------------
 /**

@@ -220,6 +220,8 @@ return LisTypeEventTask;
 //-------------------------------------------------------------------------
 protected void Execute(PDFolders Fold) throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDefEvent.Execute-Fold>:"+Fold.getPDId()+"/"+Fold.getTitle());                                
 switch (this.getType())
     {case fTASKEVENT_UPDATE_FOLD:
         ExecuteUpdFold(Fold);
@@ -234,10 +236,14 @@ switch (this.getType())
          PDException.GenPDException("Unexpected_Task", "Type"+getType());
          break;
     }
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDefEvent.Execute-Fold<");                                
 }
 //-------------------------------------------------------------------------
 protected void Execute(PDDocs Doc) throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDefEvent.Execute-Doc>:"+Doc.getPDId()+"/"+Doc.getTitle());                            
 switch (this.getType())
     {
     case fTASKEVENT_UPDATE_DOC:
@@ -256,6 +262,8 @@ switch (this.getType())
          PDException.GenPDException("Unexpected_Task", "Type"+getType());
          break;
     }
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDefEvent.Execute-Doc<");                            
 }
 //-------------------------------------------------------------------------
 static boolean isFolder(int TaskType)
@@ -273,6 +281,8 @@ else
  */
 private void ExecuteUpdFold(PDFolders Fold) throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDefEvent.ExecuteUpdFold>:"+Fold.getPDId()+"/"+Fold.getTitle());    
 String IdUnder=Fold.getIdPath(getParam4());
 if (!Fold.IsUnder(IdUnder))    
    return; 
@@ -284,6 +294,8 @@ if (getParam3()!=null && getParam2().length()!=0)
     r=Update(getParam3(), r);
 Fold.assignValues(r);
 Fold.MonoUpdate();
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDefEvent.ExecuteUpdFold<");    
 }
 //-------------------------------------------------------------------------    
 /**
@@ -293,6 +305,8 @@ Fold.MonoUpdate();
  */
 private void ExecuteCopyFold(PDFolders Fold) throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDefEvent.ExecuteCopyFold>:"+Fold.getPDId()+"/"+Fold.getTitle());        
 if (Fold.getIdPath(getParam()).equals(Fold.getParentId())) // to avoid "recursivity"
     return;
 String IdUnder=Fold.getIdPath(getParam2());
@@ -303,6 +317,8 @@ f.assignValues(Fold.getRecSum());
 f.setPDId(null);
 f.setParentId(Fold.getIdPath(getParam()));
 f.insert();
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDefEvent.ExecuteCopyFold<");    
 }
 //-------------------------------------------------------------------------    
 /**
@@ -312,6 +328,8 @@ f.insert();
  */
 private void ExecuteExportFold(PDFolders Fold) throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDefEvent.ExecuteExportFold>:"+Fold.getPDId()+"/"+Fold.getTitle());    
 String IdUnder=Fold.getIdPath(getParam());
 if (!Fold.IsUnder(IdUnder))    
    return; 
@@ -321,6 +339,8 @@ Fold.ExportPath(Fold.getPDId(), getParam2());
     {
     PDException.GenPDException("Error_Exporting_Folder", ex.getLocalizedMessage());
     }
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDefEvent.ExecuteExportFold<");    
 }
 //-------------------------------------------------------------------------    
 /**
@@ -330,6 +350,8 @@ Fold.ExportPath(Fold.getPDId(), getParam2());
  */
 private void ExecuteUpdDoc(PDDocs Doc) throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDefEvent.ExecuteUpdDoc>:"+Doc.getPDId()+"/"+Doc.getTitle());            
 PDFolders Fold=new PDFolders(getDrv());
 String IdUnder=Fold.getIdPath(getParam4());
 Fold.setPDId(Doc.getParentId());
@@ -344,6 +366,8 @@ if (getParam3()!=null && getParam2().length()!=0)
 Doc.assignValues(r);
 Doc.updateFragments(r, Doc.getPDId());
 Doc.UpdateVersion(Doc.getPDId(), Doc.getVersion(), r);
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDefEvent.ExecuteUpdDoc<");            
 }
 //-------------------------------------------------------------------------  
 /**
@@ -353,6 +377,8 @@ Doc.UpdateVersion(Doc.getPDId(), Doc.getVersion(), r);
  */
 private void ExecuteCopyDoc(PDDocs Doc) throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDefEvent.ExecuteCopyDoc>:"+Doc.getPDId()+"/"+Doc.getTitle());                
 PDFolders Fold=new PDFolders(getDrv());
 String IdUnder=Fold.getIdPath(getParam2());
 Fold.setPDId(Doc.getParentId());
@@ -379,6 +405,8 @@ finally {
             f.delete();
         }
     }
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDefEvent.ExecuteCopyDoc<");                
 }
 //-------------------------------------------------------------------------   
 /**
@@ -388,13 +416,17 @@ finally {
  */
 private void ExecuteExportDoc(PDDocs Doc) throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDefEvent.ExecuteExportDoc>:"+Doc.getPDId()+"/"+Doc.getTitle());                    
 PDFolders Fold=new PDFolders(getDrv());
 String IdUnder=Fold.getIdPath(getParam());
 Fold.setPDId(Doc.getParentId());
 if (!Fold.IsUnder(IdUnder))    
    return;  
-Doc.ExportXML(getParam(), true);
-Doc.getFile(getParam());
+Doc.ExportXML(getParam2(), true);
+Doc.getFile(getParam2());
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDefEvent.ExecuteExportDoc<");                    
 }
 //-------------------------------------------------------------------------    
 /**
@@ -405,6 +437,8 @@ Doc.getFile(getParam());
 @SuppressWarnings("SleepWhileInLoop")
 private void ExecuteConvertDoc(PDDocs Doc) throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDefEvent.ExecuteConvertDoc>:"+Doc.getPDId()+"/"+Doc.getTitle());                        
 PDFolders Fold=new PDFolders(getDrv());
 String IdUnder=Fold.getIdPath(getParam2());
 Fold.setPDId(Doc.getParentId());
@@ -453,6 +487,8 @@ if (DestName!=null)
         f.delete();
     }
 }
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDefEvent.ExecuteConvertDoc<");                        
 }
 //-------------------------------------------------------------------------
 @Override
