@@ -2398,7 +2398,7 @@ return TotalTask;
 //---------------------------------------------------------------------
 static public String getHelpLang(String UserLang)
 {
-if (UserLang.equalsIgnoreCase("ES") || UserLang.equalsIgnoreCase("PT") || UserLang.equalsIgnoreCase("CA") )    
+if (UserLang.equalsIgnoreCase("ES") || UserLang.equalsIgnoreCase("PT") || UserLang.equalsIgnoreCase("CT") )    
     return("ES");
 else
     return("EN");
