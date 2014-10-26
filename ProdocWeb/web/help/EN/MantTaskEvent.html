@@ -23,6 +23,7 @@
         <li>"COPY_DOC": Creates a copy of the document.</li>
         <li>"EXPORT_FOLD": Exports the folder.</li>
         <li>"EXPORT_DOC": Exports the document.</li>
+        <li>"CONVERT_DOC": Converts a document using an external conversor. You can use programs as <a href="http://imagemagick.org/">ImageMagick</a> (Windows, Linux, Mac) or <a href="http://www.irfanview.com/">Irfanview</a> (Windows including a viewer)  </li>
         </ul>
     </li>    
     <li><b>Object type</b> (one of Folder or Document types) that apply the task.</li>    
@@ -69,6 +70,17 @@
                 <li>Param2: Target folder in filesystem where all the elements will be exported. (I.e.."/tmp/NewDocuments").</li>
             </ul>
         </li>
+        <li>"CONVERT_DOC":            
+            <ul>
+                <li>Param1: Target folder in OpenProdoc where all the converted documents will be inserted with the same metadata than original onea. You don't need to include "Rootfolder"(I.e.."/Administration/HR").</li>
+                <li>Param2: Source folder in OpenProdoc.All the folders of the specified type under this folder (in any level) will be processed.. You don't need to include "Rootfolder"(I.e.."/Administration/HR").</li>
+                <li>Param3: Shell order for calling the conversion. Depends on the installed program(s). 
+                    In example to convert using ImageMagick would be written : "convert @1 @2". OPD will download the document and will pass as @1; as @2 will transmit the same document but replacing the extension by the new extension (Param4).
+                    The product of the conversion will be inserted with the same metadata into the destination folder in OPD (Param1)</li>
+                <li>Param4: File Extension destination after conversion. It will add the destination name @2 when invoking the command.(i.e.: "png")</li>
+            </ul>
+        </li>
+        
         </ul>
     </li>    
     <li><b>Kind of Event</b> to process (INSert, DELete, UPDate)</li>    
