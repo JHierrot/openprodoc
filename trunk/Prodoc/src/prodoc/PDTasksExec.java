@@ -1145,10 +1145,18 @@ DestName=FName.substring(0, FName.lastIndexOf('.')+1)+getParam4();
 Order=Order.replace("@2", DestName);
 Process Proc=Runtime.getRuntime().exec(Order);
 File f=new File(DestName);
+int Res;
 for (int i = 0; i < 20; i++)
     {
-    Thread.sleep(1000);  
-    if (!Proc.isAlive())
+    Thread.sleep(1000); 
+    try {
+    Res=Proc.exitValue();
+    } catch (IllegalThreadStateException e)
+        {
+        Res=-1111;
+        }
+//    if (!Proc.isAlive())  // deprecated in some versions
+    if (Res!=1111)
         break;
     }
 NewDoc.setName("");

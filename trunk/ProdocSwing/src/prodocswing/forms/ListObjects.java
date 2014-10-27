@@ -304,6 +304,8 @@ if (Tot>0)
     private void AddButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_AddButtonActionPerformed
     {//GEN-HEADEREND:event_AddButtonActionPerformed
 int Pos=getObjectsTable().getSelectedRow();
+if (Pos<0)
+    Pos=0;
 try {
 PDObject.Clear();
 MantForm=AddMode();
