@@ -1146,7 +1146,7 @@ Order=Order.replace("@2", DestName);
 Process Proc=Runtime.getRuntime().exec(Order);
 File f=new File(DestName);
 int Res;
-for (int i = 0; i < 20; i++)
+for (int i = 0; i < 30; i++)
     {
     Thread.sleep(1000); 
     try {
@@ -1155,7 +1155,7 @@ for (int i = 0; i < 20; i++)
         {
         Res=-1111;
         }
-//    if (!Proc.isAlive())  // deprecated in some versions
+//    if (!Proc.isAlive())  // deprecated in some Java versions
     if (Res!=1111)
         break;
     }

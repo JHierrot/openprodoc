@@ -22,6 +22,7 @@ package prodocswing.forms;
 import java.awt.Font;
 import java.awt.Image;
 import java.io.File;
+import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Vector;
@@ -981,11 +982,18 @@ if (ImpThes.isCancel())
    return;
 setCursor(MainWin.WaitCur);    
 PDThesaur Thes=new PDThesaur(Session);
-//Thes.Import("Alimentación", "99", new File("/home/jhierrot/OPD/Varios/rdf/Encoding.rdf"), "EN", "http://rdvocab.info/termList/encFormat/");
-// Thes.Import("Alimentación", "99", new File("/home/jhierrot/OPD/Varios/rdf/unescothes.rdf"), "EN", "http://skos.um.es/unescothes/", true, false);
 Thes.Import(ImpThes.getThesName(), ImpThes.getThesNum(), new File(ImpThes.SelFolder.getAbsolutePath()), ImpThes.getMainLang(), ImpThes.getRoot(), ImpThes.isSubThesLang(), ImpThes.isTransac());
 setCursor(MainWin.DefCur);
-MainWin.Report(PDThesaur.getImportReport());
+//MainWin.Report(PDThesaur.getImportReport());
+String TempName = System.getProperty("java.io.tmpdir");
+if (!TempName. endsWith(File.separator))
+    TempName+=File.separator;
+TempName+="ImportThes.html";
+PrintWriter FRepDoc = new PrintWriter(TempName, "UTF-8");
+FRepDoc.println(PDThesaur.getImportReport());
+FRepDoc.close();
+MainWin.Execute(TempName);
+MainWin.Message(MainWin.DrvTT("Task_ended"));
 } catch (Exception ex)
     {
     setCursor(MainWin.DefCur);    
