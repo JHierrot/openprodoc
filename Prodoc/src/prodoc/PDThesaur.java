@@ -1727,7 +1727,7 @@ StoreCache();
 if (Transact)
    getDrv().CerrarTrans();
 Date t2=new Date();    
-ImportReport="<html>Import Start:"+t1+"<br>Concepts= <b>"+Tot+"</b> >>> OPD Terms= <b>"+TermCache.size()+"</b><br>"+"Relations= <b>"+TermRT.size()+"</b><br><b>Warnings:</b><br>"+ImportReport+"<br>Import End:"+t2+"</html>";
+ImportReport="<html><body>Import Start:"+t1+"<br>Concepts= <b>"+Tot+"</b> >>> OPD Terms= <b>"+TermCache.size()+"</b><br>"+"Relations= <b>"+TermRT.size()+"</b><br><b>Warnings:</b><br>"+ImportReport+"<br>Import End:"+t2+"</body></html>";
 TermEquiv.clear();
 TermExp.clear();
 TermCache.clear();
