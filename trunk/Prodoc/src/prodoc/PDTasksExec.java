@@ -318,7 +318,6 @@ switch (getType())
         break;
      case fTASKEVENT_CONVERT_DOC: ExecuteConvertDoc();
         break;
-    
     default: PDExceptionFunc.GenPDException("Unexpected_Task", ""+getType());
         break;
     }
@@ -1187,5 +1186,60 @@ if (PDLog.isDebug())
     PDLog.Debug("PDTasksExec.ExecuteConvertDoc<");                        
 }
 //-------------------------------------------------------------------------
-
+/**
+ * Checks that the document meets the requirements for creating a non trabns taks
+ * @param Doc Doc to check
+ * @return true when de doc meets req.
+ */
+boolean MeetsReq(PDDocs Doc) throws PDException
+{
+PDFolders Fold=new PDFolders(getDrv());
+String IdUnder=PDFolders.ROOTFOLDER;
+switch (getType())
+    {
+    case fTASKEVENT_UPDATE_DOC:
+        IdUnder=Fold.getIdPath(getParam4());
+        break;
+     case fTASKEVENT_COPY_DOC:
+        IdUnder=Fold.getIdPath(getParam2());
+        break;
+     case fTASKEVENT_EXPORT_DOC:
+        IdUnder=Fold.getIdPath(getParam());
+        break;
+     case fTASKEVENT_CONVERT_DOC:
+        IdUnder=Fold.getIdPath(getParam2());
+        break;
+    }
+Fold.setPDId(Doc.getParentId());
+if (!Fold.IsUnder(IdUnder))    
+   return(false); 
+return(true);
+}
+//-------------------------------------------------------------------------
+/**
+ * Checks that the folder meets the requirements for creating a non trabns taks
+ * @param Fold Fold to check
+ * @return true when de fold meets req.
+ */
+boolean MeetsReq(PDFolders FoldE)  throws PDException
+{
+PDFolders Fold=new PDFolders(getDrv());
+String IdUnder=PDFolders.ROOTFOLDER;    
+switch (getType())
+    {
+    case fTASKEVENT_UPDATE_FOLD:
+        IdUnder=Fold.getIdPath(getParam4());
+        break;
+    case fTASKEVENT_COPY_FOLD:
+        IdUnder=Fold.getIdPath(getParam2());
+        break;
+    case fTASKEVENT_EXPORT_FOLD:
+        IdUnder=Fold.getIdPath(getParam());
+        break;
+    }
+if (!FoldE.IsUnder(IdUnder))    
+   return(false); 
+return(true);
+}
+//-------------------------------------------------------------------------
 }
