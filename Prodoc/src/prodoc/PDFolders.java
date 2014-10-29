@@ -1515,14 +1515,15 @@ for (PDTasksDefEvent L1 : L)
  */
 private void GenerateNoTransThreads(String MODE) throws PDException
 {
-ArrayList L =getDrv().getFoldNoTransThreads(this.getFolderType(), MODE); 
+ArrayList<PDTasksDefEvent> L =getDrv().getFoldNoTransThreads(this.getFolderType(), MODE); 
 PDTasksDefEvent T;
 PDTasksExec TE;
-for (int i = 0; i < L.size(); i++)
+for (PDTasksDefEvent L1 : L)
     {
-    T = (PDTasksDefEvent)L.get(i);
     TE=new PDTasksExec(getDrv());
-    TE.GenFromDef(T, this);
+    TE.GenFromDef(L1, this);
+    if (!TE.MeetsReq(this)) // under folder or future checks
+        continue;
     TE.setNextDate(new Date());
     TE.insert();
     }

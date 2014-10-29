@@ -2593,6 +2593,8 @@ for (PDTasksDefEvent L1 : L)
     {
     TE=new PDTasksExec(getDrv());
     TE.GenFromDef(L1, this);
+    if (!TE.MeetsReq(this)) // under folder or future checks
+        continue;
     TE.setNextDate(new Date());
     TE.insert();
     }
