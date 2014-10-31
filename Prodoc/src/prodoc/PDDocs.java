@@ -2012,9 +2012,13 @@ while (Rec!=null)
     if (!Rep.IsRef())
         {
         Rep.Connect();
-        Rep.Delete(Id, Ver2Del);
+        if (Rep instanceof StoreRem)
+            ((StoreRem)Rep).Delete((String)Rec.getAttr(fREPOSIT).getValue(), Id, Ver2Del);
+        else    
+            Rep.Delete(Id, Ver2Del);
         Rep.Disconnect();
         }
+    
     DeleteVersion(DocTypename, Id, Ver2Del);
     Rec=getDrv().NextRec(Cur);
     }

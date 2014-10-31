@@ -402,7 +402,8 @@ public void CloseCursor(Cursor CursorIdent) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.CloseCursor:"+CursorIdent);
-((Vector)CursorIdent.getResultSet()).clear();
+if (CursorIdent.getResultSet()!=null)
+    ((Vector)CursorIdent.getResultSet()).clear();
 CursorIdent.setResultSet(null);
 delCursor(CursorIdent);
 }

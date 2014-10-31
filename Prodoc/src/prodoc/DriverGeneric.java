@@ -1072,7 +1072,8 @@ return(CursorIdent.getResultSet());
  */
 protected void delCursor(Cursor CursorIdent) throws PDException
 {
-getOpenCur().remove(CursorIdent.getCursorId());
+if (getOpenCur().containsKey(CursorIdent.getCursorId()))    
+   getOpenCur().remove(CursorIdent.getCursorId());
 }
 //-----------------------------------------------------------------------------------
 /**
@@ -2190,12 +2191,12 @@ String Id=OPDObject.getTextContent();
 OPDObjectList = XMLObjects.getElementsByTagName("Ver");
 OPDObject = OPDObjectList.item(0);
 String Ver=OPDObject.getTextContent();
+OPDObjectList = XMLObjects.getElementsByTagName("Rep");
+OPDObject = OPDObjectList.item(0);
+String RepName=OPDObject.getTextContent();
 if (PDLog.isDebug())
     PDLog.Debug("DriverGeneric.DeleteFile:"+Id+"/"+Ver);    
-PDDocs doc=new PDDocs(this);
-doc.setPDId(Id);
-doc.LoadVersion(Id, Ver);
-StoreGeneric Rep=getRepository(doc.getReposit());
+StoreGeneric Rep=getRepository(RepName);
 if (!Rep.IsRef())
     {
     Rep.Connect();
