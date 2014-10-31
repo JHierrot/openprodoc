@@ -189,6 +189,19 @@ ReadWrite(DriverGeneric.S_DELFILE, "<OPD><Id>"+Id+"</Id><Ver>"+Ver+"</Ver></OPD>
  *
  * @param Id
  * @param Ver
+ * @throws PDException
+ */
+protected void Delete(String Reposit, String Id, String Ver) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("StoreRem.Delete:"+Id+"/"+Ver);
+ReadWrite(DriverGeneric.S_DELFILE, "<OPD><Rep>"+Reposit+"</Rep><Id>"+Id+"</Id><Ver>"+Ver+"</Ver></OPD>");
+}
+//-----------------------------------------------------------------
+/**
+ *
+ * @param Id
+ * @param Ver
  * @return
  * @throws PDException
  */
@@ -325,6 +338,8 @@ OPDObjectList = XMLObjects.getElementsByTagName("Data");
 OPDObject = OPDObjectList.item(0);
 } catch (Exception ex)
     {
+    if (PDLog.isDebug())
+        ex.printStackTrace();
     PDException.GenPDException(ex.getLocalizedMessage(), "");
     }
 finally

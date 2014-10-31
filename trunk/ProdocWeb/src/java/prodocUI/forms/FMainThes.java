@@ -64,8 +64,6 @@ if (R.isAllowMaintainThesaur())
 if (R.isAllowMaintainThesaur())
     MC1.add(new MenuItem(TT("Delete_Thesaurus"), DelThes.getUrlServlet(), ThesWorkArea));
 MC1.add(MenuItem.getMISeparator());
-MC1.add(new MenuItem(TT("Refresh"), AddFoldAdv.getUrlServlet(), ThesWorkArea));
-MC1.add(MenuItem.getMISeparator());
 MC1.add(new MenuItem(TT("Close_Window"), SExit.getUrlServlet()));
 MenuCol MC2=new MenuCol(TT("Terms"), 1);
 MainMenu.add(MC2);
@@ -77,14 +75,9 @@ if (R.isAllowMaintainThesaur())
     MC2.add(new MenuItem(TT("Delete_Term"), DelTerm.getUrlServlet(), ThesWorkArea));
 MC2.add(MenuItem.getMISeparator());
 MC2.add(new MenuItem(TT("Search_Terms"), SearchThes.getUrlServlet(), ThesWorkArea));
-//MenuCol MC3=new MenuCol(TT("Selection"), 2);
-//MainMenu.add(MC3);
-//MC3.add(new MenuItem(TT("Select_Term"), SPaperBin.getUrlServlet(), ThesWorkArea));
-//MC3.add(new MenuItem(TT("Show_details"), SPassChange.getUrlServlet(), ThesWorkArea));
-//MC3.add(new MenuItem(TT("Show_Childs"), SMainThes.getUrlServlet(), "WorkArea"));
 MenuCol MC4=new MenuCol(TT("Help"), 2);
 MainMenu.add(MC4);
-MC4.add(new MenuItem(TT("Thesaurus_MainWin"), "help/"+SParent.getLang(Req)+"/MainWinThes.html", "_blank"));
+MC4.add(new MenuItem(TT("Thesaurus_MainWin"), "help/"+SParent.getHelpLang(Req)+"/MainWinThes.html", "_blank"));
 AddHead(MainMenu);
 //---- Menu -------------------------
 Table CentralArea=new Table(3,1,1);
