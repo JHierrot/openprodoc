@@ -8,8 +8,13 @@ Debido a la nuevas normas de Google Code, las nuevas descargas est√°n en esta p√
 
 = Downloads / Descargas =
 
-https://ssl.gstatic.com/codesite/ph/images/dl_arrow.gif
+*Version 1.0 Nov 2014*
 
+|| Module || Version || Size|| 
+||OPDPortable 0.8.1.zip||OpenProdocD Portable multiplatform 1.0|| 13.4 MB|| 	 
+||OPD_Install 0.8.1.zip||OpenProdoc Installation, Client and Administration 1.0||8.9 MB||  	 
+|| OPD_Web 0.8.1.zip ||OpenProdoc Web client 1.0||8.9 MB|| 	 
+|| OPD_Update 0.8.1.zip||Update from 0.7,0.8, 0.8.1 to  1.0||2.3MB|| 
 
 *Old Downloads / Antiguas Descargas*
 
