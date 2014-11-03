@@ -699,8 +699,8 @@ Cursor CursorId=getDrv().OpenCursor(Q);
 Record Res=getDrv().NextRec(CursorId);
 while (Res!=null)
     {
-    String Acl=(String) Res.getAttr(fGRANTPARENTID).getValue();
-    Result.add(Acl);
+    String FId=(String) Res.getAttr(fGRANTPARENTID).getValue();
+    Result.add(FId);
     Res=getDrv().NextRec(CursorId);
     }
 getDrv().CloseCursor(CursorId);
@@ -728,8 +728,8 @@ Cursor CursorId=getDrv().OpenCursor(Q);
 Record Res=getDrv().NextRec(CursorId);
 while (Res!=null)
     {
-    String Acl=(String) Res.getAttr(fPDID).getValue();
-    Result.add(Acl);
+    String FId=(String) Res.getAttr(fPDID).getValue();
+    Result.add(FId);
     Res=getDrv().NextRec(CursorId);
     }
 getDrv().CloseCursor(CursorId);
@@ -834,17 +834,25 @@ if (PDLog.isDebug())
 Conditions Conds=new Conditions();
 Condition CondChilds=new Condition(PDDocs.fPARENTID, Condition.cEQUAL, getPDId());
 Conds.addCondition(CondChilds);
-Query Q=new Query(PDDocs.getTableName(), PDDocs.getRecordStructPDDocs(), Conds);   
+Record r=new Record();
+r.addAttr(PDDocs.getRecordStructPDDocs().getAttr(PDDocs.fPDID));
+Query Q=new Query(PDDocs.getTableName(), r, Conds);   
 Cursor ListDocsContained=getDrv().OpenCursor(Q);
 Record NextDoc=getDrv().NextRec(ListDocsContained);
 PDDocs Doc2del=new PDDocs(getDrv());
+try {
 while (NextDoc!=null)
     {
-    Doc2del.assignValues(NextDoc);  
+    Doc2del.setPDId((String)NextDoc.getAttr(PDDocs.fPDID).getValue()); 
     Doc2del.delete();
     NextDoc=getDrv().NextRec(ListDocsContained);
     }
 getDrv().CloseCursor(ListDocsContained);
+} catch (PDException ex)
+    {
+    getDrv().CloseCursor(ListDocsContained);
+    throw ex;
+    }
 }
 //-------------------------------------------------------------------------
 /**
@@ -858,17 +866,25 @@ if (PDLog.isDebug())
 Conditions Conds=new Conditions();
 Condition CondChilds=new Condition(PDFolders.fPARENTID, Condition.cEQUAL, getPDId());
 Conds.addCondition(CondChilds);
-Query Q=new Query(PDFolders.getTableName(), PDFolders.getRecordStructPDFolder(), Conds);   
+Record r=new Record();
+r.addAttr(PDFolders.getRecordStructPDFolder().getAttr(PDFolders.fPDID));
+Query Q=new Query(PDFolders.getTableName(), r, Conds);   
 Cursor ListFoldersContained=getDrv().OpenCursor(Q);
 Record NextFold=getDrv().NextRec(ListFoldersContained);
 PDFolders Fold2del=new PDFolders(getDrv());
+try {
 while (NextFold!=null)
     {
-    Fold2del.assignValues(NextFold);  
+    Fold2del.setPDId((String)NextFold.getAttr(PDFolders.fPDID).getValue());
     Fold2del.delete();
     NextFold=getDrv().NextRec(ListFoldersContained);
     }
 getDrv().CloseCursor(ListFoldersContained);
+} catch (PDException ex)
+    {
+    getDrv().CloseCursor(ListFoldersContained);
+    throw ex;
+    }
 }
 //-------------------------------------------------------------------------
 private void DelFoldMetadata() throws PDException
@@ -994,13 +1010,15 @@ Condition CondAcl=new Condition(PDFolders.fACL, new HashSet(getDrv().getUser().g
 Conditions Conds=new Conditions();
 Conds.addCondition(CondParents);
 Conds.addCondition(CondAcl);
-Query Q=new Query(getTabName(), getRecordStructPDFolder(), Conds, fTITLE);
+Record r=new Record();
+r.addAttr(PDFolders.getRecordStructPDFolder().getAttr(PDFolders.fPDID));
+Query Q=new Query(getTabName(), r, Conds, fTITLE);
 Cursor CursorId=getDrv().OpenCursor(Q);
 Record Res=getDrv().NextRec(CursorId);
 while (Res!=null)
     {
-    String Acl=(String) Res.getAttr(fPDID).getValue();
-    Result.add(Acl);
+    String FId=(String) Res.getAttr(fPDID).getValue();
+    Result.add(FId);
     Res=getDrv().NextRec(CursorId);
     }
 getDrv().CloseCursor(CursorId);
