@@ -16,6 +16,12 @@ Debido a la nuevas normas de Google Code, las nuevas descargas est√°n en esta p√
 || [http://goo.gl/lw5a1Y OPD_Web 1.0.zip] ||OpenProdoc Web client 1.0||8.9 MB|| 	 
 || [http://goo.gl/ncKK21 OPD_Update 1.0.zip]||Update from 0.7,0.8, 0.8.1 to  1.0||2.3MB|| 
 
+|| Documents / Documentos ||
+|| [http://goo.gl/ykFsUj OpenProDoc_Overview.pdf] ||
+|| [http://goo.gl/KFCNg9 OpenProDoc_Vision_General.pdf] ||
+|| [http://goo.gl/ZyChAe OpenProdoc_Load_Test.pdf] ||
+|| [http://goo.gl/GsAKSt Modelado interno de Metadatos en productos ECM.pdf] ||
+
 *Old Downloads / Antiguas Descargas*
 
 [https://code.google.com/p/openprodoc/downloads/list]
