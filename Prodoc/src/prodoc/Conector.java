@@ -88,14 +88,14 @@ private String TaskCategory="*";
 Conector(String pConectorName, Properties ProdocProperties) throws PDException
 {
 ConectorName=pConectorName;
-DataAccessType=ProdocProperties.getProperty(ConectorName+".DATA_TYPE");
+DataAccessType=ProdocProperties.getProperty(ConectorName+".DATA_TYPE").trim();
 MinPoolSize=new Integer(ProdocProperties.getProperty(ConectorName+".DATA_MIN")).intValue();
 MaxPoolSize=new Integer(ProdocProperties.getProperty(ConectorName+".DATA_MAX")).intValue();
 TimeOutPool=new Integer(ProdocProperties.getProperty(ConectorName+".DATA_TIMEOUT")).intValue();
-User=ProdocProperties.getProperty(ConectorName+".DATA_USER");
-Password=ProdocProperties.getProperty(ConectorName+".DATA_PASSWORD");
-URL=ProdocProperties.getProperty(ConectorName+".DATA_URL");
-PARAM=ProdocProperties.getProperty(ConectorName+".DATA_PARAM");
+User=ProdocProperties.getProperty(ConectorName+".DATA_USER").trim();
+Password=ProdocProperties.getProperty(ConectorName+".DATA_PASSWORD").trim();
+URL=ProdocProperties.getProperty(ConectorName+".DATA_URL").trim();
+PARAM=ProdocProperties.getProperty(ConectorName+".DATA_PARAM").trim();
 int LogLevel=new Integer(ProdocProperties.getProperty("TRACELEVEL")).intValue();
 PDLog.setLevel(LogLevel);
 String LogProp=ProdocProperties.getProperty("TRACECONF");
