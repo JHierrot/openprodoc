@@ -17,10 +17,10 @@ Debido a la nuevas normas de Google Code, las nuevas descargas est√°n en esta p√
 || [http://goo.gl/ncKK21 OPD_Update 1.0.zip] || Update from 0.7,0.8, 0.8.1 to  1.0|| 9.3MB ||  5 ||
 
 || Documents / Documentos || Downloads ||
-|| [http://goo.gl/ykFsUj OpenProDoc_Overview.pdf] ||  903 ||
+|| [http://goo.gl/ykFsUj OpenProDoc_Overview.pdf] ||  906 ||
 || [http://goo.gl/KFCNg9 OpenProDoc_Vision_General.pdf] || 1171 ||
-|| [http://goo.gl/ZyChAe OpenProdoc_Load_Test.pdf] ||  356 ||
-|| [http://goo.gl/GsAKSt Modelado interno de Metadatos en productos ECM.pdf] ||  363 ||
+|| [http://goo.gl/ZyChAe OpenProdoc_Load_Test.pdf] ||  357 ||
+|| [http://goo.gl/GsAKSt Modelado interno de Metadatos en productos ECM.pdf] ||  366 ||
 
 *Old Downloads / Antiguas Descargas*
 
