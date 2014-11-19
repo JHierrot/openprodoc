@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Import Thesaurus</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management, Thesaurus"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+<H4>Importa Thesaurus</H4>
+<hr>
+<p>You should use the menu option "Thesaurus->Import" for importing a complete Thesaurus.</p>
+<p>This option Imports from the filesystem a file in the standard format <a href="http://www.w3.org/2004/02/skos/">SKOS</a>. created by OopenProdoc o other systems. 
+    Before the process, OpenProdoc will show a form for defining diferent aspects of the process. The options to fill are:</p> 
+<ul>
+    <li><b>Thesaurus Number</b>: Numeric identifier of the thesaurus. A number between 1 and 999999. It will be used as a reference when defining metadata validated against values in a specific thesaurus</li>
+    <li><b>Thesaurus name</b>: Name to asignt to the Thesaurus in OpenProdoc.</li>
+    <li><b>URI Text</b>: it's the test included int the SKOS file as thesaurus reference. I.e.: for '&LT;skos:ConceptScheme rdf:about="http://skos.um.es/unescothes/CS000"&GT;' you introduce: 'http://skos.um.es/unescothes/' in this field. 
+        The URI will be deleted for obtaining the original Term code and analyze the relations between terms. During the import process, new codes will be generated to avoid duplicates or colissions.</li>
+    <li><b>Main Language</b>: The selected language will be used as default language for the export process. This means that the thesaurus will be scanned using the main language as a guide. 
+        If the structure in every language is identical, the selected language dont affect to the result, but if there are diferences (i.e. the specific terms in a language are different form another) the relations and term to be included will be different.</li>
+    <li><b>Origin Document</b>: File to be imported.</li>
+    <li><b>Create subthesaur by language</b>: If checked, during the import process a subthesaur will be created for every language, so you can manage the terms in an easier way.</li>
+    <li><b>Transactional Import</b>: If checked, the import process will be in transactional mode, that is, all the term and relations will be imported, or none. it's the recommended way, except if the the thesaurus it's too big or if some minor errors are allowed in order to correct them manuallly.</li>
+</ul>
+<p style="text-align:center;"><img alt="Screenshot Import Thes" src="img/ImportThes.png"/></p>
+<p>the process will create the new thesaur and show a html report with the result. If there is an error, the system will communicate the reason for the error.</p>
+<p>It should be noted that the SKOS format can be interpreted or suported in different ways(<a href="http://www.w3.org/2006/07/SWD/SKOS/reference/20090315/implementation.html">Implementations</a>, <a href="http://lab.usgin.org/book/usgin-skos-vocabulary-service-profile-home/examples-skos-concept-encoding">Codification</a> ), so the import and export process between systems different of OpenProdoc can be limited, losing part of the information.</p>
+<hr>
+<a href="ThesIndex.html">Help Index Thesaurus</a>
+    </body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Ventana Principal OpenProdoc</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+<H4>Ventana Principal OpenProdoc</H4><hr>
+<p>La ventana principal de OpenProdoc tiene 2 zonas principales:</p>
+<ul>
+    <li>El árbol de carpetas a la izquierda</li>
+    <li>Zona principal a la derecha</li>
+</ul>
+<p>El árbol nos permite navegar por las distintas estructuras de información que componen el repositorio. A partir de una rama principal (<b>RootFolder</b>) se puede abrir las distintas carpetas contenidas en ella. 
+    Siempre existirá una carpeta <b>Users</b> que contiene las carpetas personales de cada usuario. Según los permisos, odrá verse solo la carpeta personal u otras carpetas de otros usuarios a las que se tenga autorizado el acceso.</p>
+<p> La estructura de carpetas que puede verse depende de las estructuras creadas y de los permisos. Si un usuario no tiene permisos sobre una carpeta o documento, no le aparecerá en ningun caso, aunque si podrá aparecer en los árboles de otros usuarios autorizados.</p>
+<p>El arbol de carpeta presenta una estructura de carpetas con iconos junto al nombre de carpeta que tiene el siguiente significado:</p>
+<ul>
+    <li>Icono con Interrogación <b>?</b>: Indica que aún no se ha explorado esa carpeta. Al pulsar sobre él se consultará al repositorio y se expandirá la rama con las carpetas contenidas en ella. Por defecto las carpetas se presentan en ese estado.</li>
+    <li>Icono con mas <b>+</b>: Indica que ya se ha explorado la rama pero que está replegada. Pulsando en el icono se expandirá la rama con las carpetas tal como estaban antes de replegarse.</li>
+    <li>Icono con menos <b>-</b>: Indica que ya se ha explorado la rama y que está expandida y muestra elementos contenidos en ella. Pulsando en el icono se replegará la rama con todas las subcarpetas.</li>
+    <li>Icono con punto <b>.</b> o blanco: Indica que el elemento no tiene carpetas contenidas.</li>
+</ul>
+<p>En el caso del cliente Swing, la apariencia es ligeramente diferente, pero el comportamiento es básicamente el mismo.</p>
+<p>Cuando se navega por las carpetas, la zona derecha contendrá a su vez dos zonas:</p>
+<ul>
+    <li>El detalle de la carpeta actual, con todos los metadatos de la carpeta</li>
+    <li>La lista de documentos contenidos en la carpeta actual.</li>
+</ul>
+<p>La tabla de documentos muestra los datos:</p>
+<ul>
+    <li>Titulo Documento</li>
+    <li>Tipo de documento</li>
+    <li>Fecha del documento</li>
+    <li>Usuario que creó o modificó el documento</li>
+    <li>Fecha en que se creó o modificó el documento en OPD</li>    
+</ul>
+<p>Haciendo doble-click sobre el título del documento se abrirá este con la aplicación o plugin asociado al tipo de archivo (tipo mime/extensión)</p>
+<p>Siempre que se selecciona una carpeta pulsando sobre su nombre en el árbol, o un documento, pulsando sobre la línea en la lista de documento, se convierten en la "carpeta actual" o el "documento actual". Todas las operaciones se realizan sobre el elemento actual, por tanto, al elegir por ejemplo Documentos->Borrar, se borrará el documento actual, y al elegir Carpetas->Alta, se añade una carpeta dentro de la carpeta actual.</p>
+<p>En la parte superior se dispone de unos menús desplegables para realizar operaciones sobre la carpeta actual o sobre el documento actual, así como otra serie de opciones. Al elegir una opción del menú, en el cliente Web aparecerá un formulario para realizar la operación en la zona derecha de la pantalla. En el caso de los clientes Swing, aparecerá una ventana emergente para realizar la operación.</p>
+<p style="text-align:center;"><img alt="Copia de pantalla MainWin" src="img/MainWin.png"/></p>
+<p>En la versión de cliente Swing, esa tabla de documentos puede ordenarse seleccionando la cabecera de cada columna. Puede también cambiarse el tamaño de cada columna arrastrando la línea separadora de las cabeceras</p>
+
+<hr>
+<a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>
+    </body>
+</html>

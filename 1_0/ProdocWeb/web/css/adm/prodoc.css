@@ -1,0 +1,236 @@
+/* CSS Document    Style sheet for the CSS2 specification */
+A:link, A:visited
+{
+color: #ffffff;
+text-decoration: none;
+}
+A:hover
+{
+text-decoration: underline;
+}
+
+
+.FFormularios
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    text-align:left;
+    color: #5c96d7;
+}
+.FFormInput
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    width: 300px;
+    border: 1px solid whitesmoke;
+    border-right: 2px solid whitesmoke;
+    border-bottom: 2px solid whitesmoke;
+    text-align:left;
+    color: #5c96d7;
+}
+.FFormInputHide
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    width: 1px;
+    border: 1px solid whitesmoke;
+    border-right: 2px solid whitesmoke;
+    border-bottom: 2px solid whitesmoke;
+    text-align:left;
+    color: #5c96d7;
+    visibility : hidden;
+}
+.FFormInputCheck
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    border: 2px solid whitesmoke;
+    text-align:left;
+    color: #5c96d7;
+}
+.FFormInputCombo
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    width: 200px;
+    border: 1px solid whitesmoke;
+    text-align:left;
+    color: #5c96d7;
+}
+.FFormInputButton
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    width: 100px;
+    border: 1px solid whitesmoke;
+    margin: 3px;
+    color: #ffffff;
+    background-color: #5c96d7;
+}
+.FFormInputDate
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    width: 80px;
+    border: 1px solid whitesmoke;
+    border-right: 2px solid whitesmoke;
+    border-bottom: 2px solid whitesmoke;
+    text-align:left;
+    color: #5c96d7;
+}
+.FFormInputTS
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    width: 150px;
+    border: 1px solid black;
+    border-right: 2px solid black;
+    border-bottom: 2px solid black;
+    color: #5c96d7;
+}
+
+.FFormulReq
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    text-align:left;
+    color: #ffffff;
+}
+
+.UDFrames
+{
+    background-color: #5c96d7;
+    height: 10px;
+}
+#IdMain
+{
+vertical-align: top;   
+background-color: #adc4e0;
+}
+.CentArea
+{
+background-color: #adc4e0;     /* #b6c de9; */
+color: #ffffff;
+}
+.FTitle
+{
+    height: 18px;
+    background-color: #5c96d7;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    color: #ffffff;
+}
+
+table
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 10px;
+    padding: 0;
+    vertical-align: top;
+}
+
+#HeaderRight
+{
+    background-color: #5c96d7;
+    vertical-align: top;
+    padding : 1em;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    color: #ffffff;
+}
+
+.ListDocsHead
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    height: 20px;
+    background-color: #5c96d7;
+    font-weight: bold;
+    color: #ffffff;
+}
+.ListDocs
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    height: 20px;
+    background-color: #adc4e0;
+    color: #ffffff;
+}
+.ListThesHead
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    height: 20px;
+    background-color: #5c96d7;
+    font-weight: bold;
+}
+.ListThes
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    height: 20px;
+    background-color: #adc4e0
+}
+.ListDocsSel
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    height: 20px;
+    color: white;
+    background-color: #5c96d7;
+}
+.ListFolds
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    height: 20px;
+
+}
+.ListFoldsSel
+{
+    font-family: Arial,Helvetica,sans-serif;
+    font-weight: bold;
+    font-size: 12px;
+    height: 20px;
+}
+.MultiEdit
+{
+visibility:hidden;
+z-index:10;
+background-color:#ffffff;
+position:fixed;
+border-width:1px;
+border-style:solid;
+border-color:#000000;
+text-align:left;
+}
+.FieldThes
+{
+visibility:hidden;
+z-index:10;
+background-color:#ffffff;
+position:fixed;
+border-width:1px;
+border-style:solid;
+border-color:#000000;
+text-align:left;
+}
+.FieldThes2
+{
+font-family: Arial,Helvetica,sans-serif;
+font-size: 12px;
+width: 100px;
+border: 1px solid black;
+border-right: 2px solid black;
+border-bottom: 2px solid black;
+text-align:left;
+}
+.FieldHide
+{
+visibility:hidden;
+z-index:10;    
+width: 2px;
+}

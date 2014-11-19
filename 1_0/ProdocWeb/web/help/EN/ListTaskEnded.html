@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Ended Tasks List</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+<H4>Ended Tasks List</H4><hr>
+<p>By selecting the option to manage Scheduled Tasks, will appear the form "list of Scheduled Tasks" that allows to review the Pending Tasks.</p>
+<p>To filter the Task or list of Tasks you want to review, just enter part of the name of the category and a range of timestamp (autofilled with the last minutes) in the text box and press "ok". The list of Tasks that meet the conditions will be shown on the results table. The results table shows the data:</p>
+<ul>
+    <li>Unique identifier of the task ("Work Order")</li>
+    <li>Name of the Task</li>
+    <li>Description of the Task</li>
+    <li>Category of the Task</li>
+    <li>Kind of Taks</li>    
+    <li>Object type (one of Folder or Document types) that apply the task</li>    
+    <li>Object filter(always *)</li>    
+    <li>Parameters of the task. Depend on task type.</li>    
+    <li>Date and time of next execution</li>    
+    <li>Flag indicating whether the task is active</li>   
+    <li>Flag indicating whether the task is transactional</li>   
+    <li>Name of last user who modified the Task definition</li>
+    <li>Date and time of last modification</li>
+    <li>Flag indicating whether the task is sucessful or not</li>   
+    <li>Message error if the task was unsucessful</li>       
+</ul>
+<p style="text-align:center;"><img alt="Screenshot of Ended Tasks list" src="img/ListTaskEnded.png"/></p>
+<p>This results table can be sorted by selecting the header of each column. You can also change the size of each column by dragging the separator line in the headers.</p>
+<p>Above the table of results there are several buttons for performing operations on the selected item. The available operations are:</p>
+<ul>
+    <li> <img alt="button image" src="img/edit.png"/>   Modify the selected element</li>
+    <li> <img alt="button image" src="img/del.png"/>   Delete the selected element </li>
+    <li> <img alt="button image" src="img/expCSV.png"/>   Export all items listed in CSV format so it can be imported in Databases or Spreadsheet</li>
+</ul>
+<p>In the event of an error (lack of user permissions, data inconsistency, etc.), the operation is canceled and will present the reason for the error to the user.</p>
+<p>View <a href="ListTaskCron.html">Scheduled Tasks List</a>, <a href="ListTaskPend.html">Pending Tasks List</a> y <a href="ListTaskEvent.html">Event Tasks List</a></p>
+<hr>
+<a href="HelpIndex.html">Help Index OpenProdoc</a>
+    </body>
+</html>
