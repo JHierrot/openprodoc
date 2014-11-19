@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Lista Roles</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+        <H4>Lista Roles</H4><hr>
+        <p>Al seleccionar la opción de administrar Roles, aparecerá la pantalla de listado de Roles. Esta pantalla permite realizar el mantenimiento de todas las Roles del sistema.</p>
+        <p>El Rol permite configurar los permisos de un usuario para realizar actividades sobre tipos de elementos. Son permisos complementarios y adicionales a los ACL.
+            A los usuarios se les asigna una Rol, que indica qué tipo de operaciones puede realizar. Aunque estén autorizados a realizar esas operaciones, el acceso a cada elemento concreto depende del ACL del objeto. 
+            Es decir, si un usuario no puede modificar grupos, no podrá siquiera intentar modificar uno. Si tiene permiso para modificar grupos, podrá modificar uno y no otros dependiendo del ACL concreto de cada grupo. 
+            Esto permite distribuir el trabajo delegando tareas diferentes entre distintas personas de acuerdo a sus perfiles. Así, un usuario con conocimiento de gestión documental puede mantener las definiciones de los tipos documentales y otro usuario puede responsable de la seguridad puede mantener los usuarios y los grupos (o incluso un solo grupo) evitando colisiones. 
+            A un usuario de consulta se le puede limitar todos los permisos para asegurar que errores en la definicion de ACL le concedan permisos no previstos</p>
+        <p> Los permisos incluidos en cada Rol son:</p>
+        <ul>
+            <li><b>AllowCreateUser</b>: Permite crear un usuario pero no modificar los existentes</li>
+            <li><b>AllowMaintainUser</b>: Permite modificar y borrar los usuarios</li>
+            <li><b>AllowCreateGroup</b>: Permite crear un grupo pero no modificar los existentes</li>
+            <li><b>AllowMaintainGroup</b>: Permite modificar y borrar los grupos</li>
+            <li><b>AllowCreateAcl</b>: Permite crear un ACL pero no modificar los existentes</li>
+            <li><b>AllowMaintainAcl</b>: Permite modificar y borrar los ACL</li>
+            <li><b>AllowCreateRole</b>: Permite crear un rol pero no modificar los existentes</li>
+            <li><b>AllowMaintainRole</b>: Permite modificar y borrar los roles</li>
+            <li><b>AllowCreateObject</b>: Permite crear una definición de objeto pero no modificar los existentes</li>
+            <li><b>AllowMaintainObject</b>: Permite modificar y borrar las definiciones de objetos</li>
+            <li><b>AllowCreateRepos</b>: Permite crear un repositorio pero no modificar los existentes</li>
+            <li><b>AllowMaintainRepos</b>: Permite modificar y borrar los repositorios</li>
+            <li><b>AllowCreateFolder</b>: Permite crear una carpeta pero no modificar los existentes</li>
+            <li><b>AllowMaintainFolder</b>: Permite modificar y borrar las carpetas</li>
+            <li><b>AllowCreateDoc</b>: Permite crear un documento pero no modificar los existentes</li>
+            <li><b>AllowMaintainDoc</b>: Permite modificar y borrar los documentos</li>
+            <li><b>AllowCreateMime</b>: Permite crear un tipo mime pero no modificar los existentes</li>
+            <li><b>AllowMaintainMime</b>: Permite modificar y borrar los tipos mime</li>
+            <li><b>AllowCreateAuth</b>: Permite crear un sistema de autenticación pero no modificar los existentes</li>
+            <li><b>AllowMaintainAuth</b>: Permite modificar y borrar los sistemas de autenticación</li>
+            <li><b>AllowCreateCustom</b>: Permite crear una personalización usuario pero no modificar los existentes</li>
+            <li><b>AllowMaintainCustom</b>: Permite modificar y borrar las personalizaciones</li>  
+        </ul>
+        <p>Para filtrar el Rol o lista de Roles que se desea revisar, basta introducir parte del nombre en el cuadro de texto y pulsar el botón.  La lista de Roles que cumplen las condiciones aparecerá en la tabla de resultados. Si se pulsa el botón sin introducir ningún valor se visualizará todos los elementos sobre los que tenga permiso el usuario. La tabla de resultados muestra los datos:</p>
+        <ul>
+            <li>Nombre identificativo</li>
+            <li>Descripción del Rol</li>
+            <li>Permisos asignados</li>    
+            <li>Nombre del último usuario que modificó el Rol</li>
+            <li>Fecha y hora de la última modificación</li>
+        </ul>
+        <p style="text-align:center;"><img alt="Copia de pantalla ListRoles" src="img/ListRoles.jpg"/></p>
+        <p>Esa tabla de resultados puede ordenarse seleccionando la cabecera de cada columna. Puede también cambiarse el tamaño de cada columna arrastrando la línea separadora de las cabeceras</p>
+        <p>Sobre la tabla de resultados se dispone de varios botones que permiten realizar operaciones sobre el elemento seleccionado. Las operaciones disponibles son:</p>
+        <ul>
+    <li> <img alt="button image" src="img/add.png"/>   Añadir un nuevo elemento</li>
+    <li> <img alt="button image" src="img/del.png"/>   Eliminar el elemento seleccionado (Siempre que no se esté utilizando)</li>
+    <li> <img alt="button image" src="img/edit.png"/>   Modificar el elemento seleccionado</li>
+    <li> <img alt="button image" src="img/copy.png"/>   Crear un nuevo elemento como copia del elemento seleccionado</li>
+    <li> <img alt="button image" src="img/export.png"/>   Exportar el elemento seleccionado</li>
+    <li> <img alt="button image" src="img/export_all.png"/>   Exportar todos los elementos listados</li>
+    <li> <img alt="button image" src="img/import.png"/>   Importar desde archivo uno o más elementos previamente guardados</li>
+    <li> <img alt="button image" src="img/expCSV.png"/>   Exportar todos los elementos listados en formato CSV, para su importación en Hojas de Cálculo o BBDD</li>
+        </ul>
+        <p>Debe tenerse en cuenta al exportar e importar que algunos elementos pueden tener dependencia de otros, por lo que debe exportarse todos los elementos relacionados y en el momento de importarse hacerlo en el orden adecuado</p>
+        <p>En caso de producirse un error (carencia de permisos del usuario, incoherencia de los datos, etc), la operación se cancela y se comunicará al usuario el motivo del error.</p>
+        <p> Ver: <a href="MantRoles.html">Mantenimiento Roles</a> y <a href="ListUsers.html">Lista de Usuarios</a></p>
+        <hr>
+        <a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>
+    </body>
+</html>

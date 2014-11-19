@@ -1,0 +1,38 @@
+/* 
+    Document   : HelpProdoc
+    Created on : 01-oct-2011, 20:58:44
+    Author     : jhierrot
+    Description:
+        Purpose of the stylesheet follows.
+*/
+h4
+{
+font-family: sans-serif;
+font-size: 20px;   
+font-weight:600;
+}
+h5
+{
+font-family: sans-serif;
+font-size: 16px;   
+font-weight:600;
+}
+p
+{
+font-family: sans-serif;
+font-size: 16px;
+}
+li
+{
+font-family: sans-serif;
+font-size: 14px;    
+}
+a
+{
+font-family: sans-serif;
+font-size: 14px;        
+}
+a:hover 
+{
+color: black;
+}
