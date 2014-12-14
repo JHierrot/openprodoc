@@ -97,6 +97,11 @@ public static final String fSTATUS_DEL="DELETED";
  */
 public static final String fSTATUS_LASTDEL="DELETE_A";
 
+private static final String fOPERINS="INSERT";
+private static final String fOPERDEL="DELETE";
+private static final String fOPERUPD="UPDATE";
+private static final String fOPERVIE="VIEW";
+
 /**
  *
  */
@@ -829,6 +834,8 @@ d.getStream(OutCont);
         } catch (IOException ex1)
             {}
         }
+    if (MustTrace(fOPERVIE))
+       Trace(fOPERVIE, false); 
     throw new PDException(ex.getLocalizedMessage());
     }
 try {
@@ -890,6 +897,8 @@ d.getStreamVer(OutCont);
         } catch (IOException ex1)
             {}
         }
+    if (MustTrace(fOPERVIE))
+       Trace(fOPERVIE, false);
     throw new PDException(ex.getLocalizedMessage());
     }
 try {
@@ -902,12 +911,12 @@ Rep.Disconnect();
 return(FolderPath);
 }
 //-------------------------------------------------------------------------
-    /**
-     *
-     * @return
-     * @throws PDException
-     */
-    public boolean IsUrl() throws PDException
+/**
+ *
+ * @return
+ * @throws PDException
+ */
+public boolean IsUrl() throws PDException
 {
 PDDocs d=new PDDocs(getDrv());
 d.Load(getPDId());
@@ -915,12 +924,12 @@ StoreGeneric Rep=getDrv().getRepository(d.getReposit());
 return(Rep.IsURL());
 }
 //-------------------------------------------------------------------------
-    /**
-     *
-     * @return
-     * @throws PDException
-     */
-    public String getUrl() throws PDException
+/**
+ *
+ * @return
+ * @throws PDException
+ */
+public String getUrl() throws PDException
 {
 PDDocs d=new PDDocs(getDrv());
 d.Load(getPDId());
@@ -928,13 +937,13 @@ StoreGeneric Rep=getDrv().getRepository(d.getReposit());
 return(Rep.GetUrl(d.getName()));
 }
 //-------------------------------------------------------------------------
-    /**
-     *
-     * @param Ver
-     * @return
-     * @throws PDException
-     */
-    public String getUrlVer(String Ver) throws PDException
+/**
+ *
+ * @param Ver
+ * @return
+ * @throws PDException
+ */
+public String getUrlVer(String Ver) throws PDException
 {
 PDDocs d=new PDDocs(getDrv());
 d.LoadVersion(getPDId(), Ver);
@@ -968,9 +977,13 @@ Rep.Connect();
 Rep.Retrieve(getPDId(), getVersion(), OutBytes);
 Rep.Disconnect();
 Rep=null;
+if (MustTrace(fOPERVIE))
+    Trace(fOPERVIE, true);
 } catch(Exception ex)
     {
     Rep.Disconnect();
+    if (MustTrace(fOPERVIE))
+        Trace(fOPERVIE, false);
     throw new PDException(ex.getLocalizedMessage());
     }
 }
@@ -989,9 +1002,13 @@ if (Rep.IsURL())
 try {    
 Rep.Connect();
 Rep.Retrieve(getPDId(), getVersion(), OutBytes);
+if (MustTrace(fOPERVIE))
+    Trace(fOPERVIE, true);
 } catch(Exception ex)
     {
     Rep.Disconnect();
+    if (MustTrace(fOPERVIE))
+       Trace(fOPERVIE, false);
     throw new PDException(ex.getLocalizedMessage());
     }
 }
@@ -1297,10 +1314,14 @@ ExecuteTransThreads(PDTasksDefEvent.fMODEINS);
 FilePath=null;
 FileStream=null;
 GenerateNoTransThreads(PDTasksDefEvent.fMODEINS);
+if (MustTrace(fOPERINS))
+    Trace(fOPERINS, true);
 getObjCache().put(getKey(), getRecord());
 } catch (Exception Ex)
     {
     getDrv().AnularTrans();
+    if (MustTrace(fOPERINS))
+        Trace(fOPERINS, false);
     if (PDLog.isDebug())
         Ex.printStackTrace();
     PDException.GenPDException("Error_inserting_Document", Ex.getLocalizedMessage());
@@ -1767,10 +1788,14 @@ if (!Rep.IsRef())
     }
 FilePath=null;
 FileStream=null;
+if (MustTrace(fOPERUPD))
+    Trace(fOPERUPD, true);
 getObjCache().put(getKey(), getRecord());
 } catch (Exception Ex)
     {
     getDrv().AnularTrans();
+    if (MustTrace(fOPERUPD))
+        Trace(fOPERUPD, false);
     if (PDLog.isDebug())
         Ex.printStackTrace();
     PDExceptionFunc.GenPDException("Error_updating_Document",Ex.getLocalizedMessage());
@@ -1888,10 +1913,14 @@ AddLogFields(); // for tracing delete
 UpdateVersion(Id, Vers, R);
 DeleteFragments(TypeDefs, Id);
 GenerateNoTransThreads(PDTasksDefEvent.fMODEDEL);
+if (MustTrace(fOPERDEL))
+    Trace(fOPERDEL, true);
 getObjCache().remove(getKey());
 } catch (Exception Ex)
     {
     getDrv().AnularTrans();
+    if (MustTrace(fOPERDEL))
+        Trace(fOPERDEL, false);
     if (PDLog.isDebug())
         Ex.printStackTrace();    
     PDException.GenPDException("Error_deleting_Document",Ex.getLocalizedMessage());
@@ -2633,6 +2662,31 @@ for (int i = 0; i < R.NumAttr(); i++)
     }
 SHtml.append("</p>");
 return(SHtml.toString());
+}
+//---------------------------------------------------------------------
+private boolean MustTrace(String Oper) throws PDException
+{
+PDObjDefs Def=new PDObjDefs(getDrv());
+Def.Load(getDocType());
+if (Oper.equals(fOPERVIE))
+    return(Def.isTraceView());
+if (Oper.equals(fOPERDEL))
+    return(Def.isTraceDel());
+if (Oper.equals(fOPERINS))
+    return(Def.isTraceAdd());
+if (Oper.equals(fOPERUPD))
+    return(Def.isTraceMod());
+return(false);
+}
+//---------------------------------------------------------------------
+private void Trace(String Oper, boolean Allowed) throws PDException
+{
+PDTrace tr=new PDTrace(getDrv());
+tr.setObjectType(getDocType());
+tr.setName(getPDId());
+tr.setOperation(Oper);
+tr.setResult(Allowed);
+tr.insert();
 }
 //---------------------------------------------------------------------
 }

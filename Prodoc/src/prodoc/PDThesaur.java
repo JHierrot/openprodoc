@@ -86,22 +86,22 @@ static private Record ThesaurStruct=null;
 static private Record ThesaurLevStruct=null;
 static private Record ThesaurRTStruct=null;
 static private Record ThesaurLangStruct=null;
-private static String SKOS_CONCEPT="skos:concept";
-private static String SKOS_CONCEPTSCHEME="skos:ConceptScheme";
-private static String DC_TITLE="dc:title";
-private static String SKOS_DEFINITION="skos:definition";
-private static String SKOS_NOTE="skos:note";
-private static String SKOS_SCNNOTE="skos:scopeNote";
-private static String SKOS_TOPCONCEPT="skos:hasTopConcept";
-private static String RDF_RESOURCE="rdf:resource";
-private static String RDF_ABOUT="rdf:about";
-private static String RDF_NODEID="rdf:nodeID";
-private static String XML_LANG="xml:lang";
-private static String SKOS_PREFLABEL="skos:prefLabel";
-private static String SKOS_BROADER="skos:broader";
-private static String SKOS_NARROWER="skos:narrower";
-private static String SKOS_RELATED="skos:related";
-private static String SKOS_ALTLABEL="skos:altLabel";
+private static final String SKOS_CONCEPT="skos:concept";
+private static final String SKOS_CONCEPTSCHEME="skos:ConceptScheme";
+private static final String DC_TITLE="dc:title";
+private static final String SKOS_DEFINITION="skos:definition";
+private static final String SKOS_NOTE="skos:note";
+private static final String SKOS_SCNNOTE="skos:scopeNote";
+private static final String SKOS_TOPCONCEPT="skos:hasTopConcept";
+private static final String RDF_RESOURCE="rdf:resource";
+private static final String RDF_ABOUT="rdf:about";
+private static final String RDF_NODEID="rdf:nodeID";
+private static final String XML_LANG="xml:lang";
+private static final String SKOS_PREFLABEL="skos:prefLabel";
+private static final String SKOS_BROADER="skos:broader";
+private static final String SKOS_NARROWER="skos:narrower";
+private static final String SKOS_RELATED="skos:related";
+private static final String SKOS_ALTLABEL="skos:altLabel";
 private static TreeMap TermEquiv=new TreeMap();
 private static HashSet TermExp=new HashSet();
 private static TreeMap TermCache=new TreeMap();
@@ -1640,7 +1640,127 @@ if (PDLog.isDebug())
  * @return 
  * @throws PDException  
  */
-synchronized public int Import(String ThesName, String ImpThesId, File XMLFile, String MainLang, String Root, boolean SubThesLang, boolean Transact) throws PDException
+synchronized public int Import(String ThesName, String ImpThesId, File XMLFile, String MainLang, String Root, boolean SubThesLang, boolean Transact, boolean RetainCodes) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.Import:"+ThesName+"|"+ImpThesId+"|"+Root+"|"+MainLang+">");        
+try {
+Date t1=new Date();    
+ImportReport="";    
+DocumentBuilder DB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+Document XMLObjects = DB.parse(XMLFile);
+Node SkosObjectConcept;
+Node SkosObjectSub;
+TermEquiv.clear();
+TermExp.clear();
+TermCache.clear();
+TermRT.clear();
+TermLang.clear();
+int Tot=0;
+PDThesaur Thes=new PDThesaur(getDrv());
+PDThesaur Term;
+Thes.setPDId(ImpThesId);
+Thes.setName(ThesName);
+Thes.setParentId(PDThesaur.ROOTTERM);
+Thes.setLang(MainLang);
+if (Transact)
+   getDrv().IniciarTrans();
+Thes.insert(); Tot++;
+TermExp.add(Thes.getPDId());
+NodeList ConceptObjectList = XMLObjects.getElementsByTagName("*");
+NodeList SubConceptObjectList;
+for (int NumConc=0; NumConc<ConceptObjectList.getLength(); NumConc++)
+    {
+    SkosObjectConcept = ConceptObjectList.item(NumConc);   
+    if (SkosObjectConcept.getNodeName().equalsIgnoreCase(PDThesaur.SKOS_CONCEPTSCHEME))
+        {
+        SubConceptObjectList=SkosObjectConcept.getChildNodes();
+        for (int NumNod=0; NumNod<SubConceptObjectList.getLength(); NumNod++)
+            {
+            SkosObjectSub = SubConceptObjectList.item(NumNod);
+            if (SkosObjectSub.getNodeName().equalsIgnoreCase(PDThesaur.DC_TITLE))
+                {
+                Node Res=SkosObjectSub.getAttributes().getNamedItem(PDThesaur.XML_LANG);    
+                if (Res==null || Res.getNodeValue().equalsIgnoreCase(MainLang))  
+                   Thes.setName(SkosObjectSub.getTextContent());
+                }
+            else if (SkosObjectSub.getNodeName().equalsIgnoreCase(PDThesaur.SKOS_DEFINITION))
+                {
+                Node Res=SkosObjectSub.getAttributes().getNamedItem(PDThesaur.XML_LANG);    
+                if (Res==null || Res.getNodeValue().equalsIgnoreCase(MainLang))  
+                    Thes.setDescription(SkosObjectSub.getTextContent());
+                }
+            else if (SkosObjectSub.getNodeName().equalsIgnoreCase(PDThesaur.SKOS_NOTE) || SkosObjectSub.getNodeName().equalsIgnoreCase(PDThesaur.SKOS_SCNNOTE) )
+                {
+                Node Res=SkosObjectSub.getAttributes().getNamedItem(PDThesaur.XML_LANG);    
+                if (Res==null || Res.getNodeValue().equalsIgnoreCase(MainLang))  
+                    Thes.setSCN(SkosObjectSub.getTextContent());    
+                }
+            else if (SkosObjectSub.getNodeName().equalsIgnoreCase(PDThesaur.SKOS_TOPCONCEPT))
+                {
+                Node Res=SkosObjectSub.getAttributes().getNamedItem(PDThesaur.RDF_RESOURCE); 
+                if (Res!=null && Res.getNodeValue().length()>=Root.length())  
+                    {
+                    String SourceId=Res.getNodeValue().substring(Root.length()); 
+                    Term=ObtainTerm(SourceId, RetainCodes);                    
+                    Term.setName(SourceId); // provisional
+                    Term.setLang(MainLang);
+                    Term.setParentId(Thes.getPDId());
+                    StoreTerm(SourceId, Term);
+                    }        
+                }   
+            }
+        Thes.update();
+        }
+    else if (SkosObjectConcept.getNodeName().equalsIgnoreCase(PDThesaur.SKOS_CONCEPT))
+        {
+        String SourceId=GetOrigId(SkosObjectConcept, Root);    
+        if (SourceId==null) // no way to match references in Skos file
+            continue;
+        Term=ObtainTerm(SourceId, RetainCodes);
+        FillTerm(Term, SkosObjectConcept, MainLang, Root, Thes, SubThesLang, RetainCodes);
+        StoreTerm(SourceId, Term);
+        Tot++;
+        }
+    }
+StoreCache();
+if (Transact)
+   getDrv().CerrarTrans();
+Date t2=new Date();    
+ImportReport="<html><head><title>SKOS Import Report</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"></head><body>Import Start:"+t1+"<br>Concepts= <b>"+Tot+"</b> >>> OPD Terms= <b>"+TermCache.size()+"</b><br>"+"Relations= <b>"+TermRT.size()+"</b><br><b>Warnings:</b><br>"+ImportReport+"<br>Import End:"+t2+"</body></html>";
+TermEquiv.clear();
+TermExp.clear();
+TermCache.clear();
+TermRT.clear();
+TermLang.clear();
+SubTermByLang.clear();
+UseTermsByLang.clear();
+DB.reset();
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.Import:"+"<");    
+return(Tot);
+} catch(Exception ex)
+    {
+    PDLog.Error(ex.getLocalizedMessage());
+    if (getDrv().isInTransaction())
+        getDrv().AnularTrans();
+    ex.printStackTrace();
+    throw new PDException(ex.getLocalizedMessage());
+    }
+}
+//---------------------------------------------------------------------
+/**
+ * Import a thesaurus in RDF-XML format
+ * @param ThesName 
+ * @param ImpThesId thesaurus Id
+ * @param XMLFile 
+ * @param Root Root to be included in the RDF (i.e. :http://metadataregistry.org/uri/FTWG/ )
+ * @param MainLang Language that defines the ID of terms and "walking" of thesaur
+ * @return 
+ * @throws PDException  
+ */
+/**
+synchronized public int Import2(String ThesName, String ImpThesId, File XMLFile, String MainLang, String Root, boolean SubThesLang, boolean Transact) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.Import:"+ThesName+"|"+ImpThesId+"|"+Root+"|"+MainLang+">");        
@@ -1727,7 +1847,7 @@ StoreCache();
 if (Transact)
    getDrv().CerrarTrans();
 Date t2=new Date();    
-ImportReport="<html><body>Import Start:"+t1+"<br>Concepts= <b>"+Tot+"</b> >>> OPD Terms= <b>"+TermCache.size()+"</b><br>"+"Relations= <b>"+TermRT.size()+"</b><br><b>Warnings:</b><br>"+ImportReport+"<br>Import End:"+t2+"</body></html>";
+ImportReport="<html><head><title>SKOS Import Report</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"></head><body>Import Start:"+t1+"<br>Concepts= <b>"+Tot+"</b> >>> OPD Terms= <b>"+TermCache.size()+"</b><br>"+"Relations= <b>"+TermRT.size()+"</b><br><b>Warnings:</b><br>"+ImportReport+"<br>Import End:"+t2+"</body></html>";
 TermEquiv.clear();
 TermExp.clear();
 TermCache.clear();
@@ -1747,7 +1867,7 @@ return(Tot);
     ex.printStackTrace();
     throw new PDException(ex.getLocalizedMessage());
     }
-}
+}**/
 //---------------------------------------------------------------------
 /**
  * Extracts the original Id from the XML
@@ -1780,14 +1900,17 @@ return(SourceId);
  * @return  
  * @throws PDException in any error
  */
-private PDThesaur ObtainTerm(String SourceId) throws PDException
+private PDThesaur ObtainTerm(String SourceId, boolean RetainCodes) throws PDException
 {
 PDThesaur Term;    
 String NewId=(String)TermEquiv.get(SourceId); 
 if (NewId==null)
     {
     Term=new PDThesaur(getDrv());
-    NewId=GenerateId();
+    if (RetainCodes)
+        NewId=SourceId;
+    else
+        NewId=GenerateId();
     Term.setPDId(NewId);
     Term.setName(SourceId);
     StoreTerm(SourceId, Term);
@@ -1803,7 +1926,7 @@ return (PDThesaur)TermCache.get(NewId);
  * @param Root Base URL
  * @param Thes Thesaurus
  */
-private void FillTerm(PDThesaur Term, Node SkosObjectConcept, String MainLang, String Root, PDThesaur Thes, boolean SubThesLang) throws PDExceptionFunc, PDException
+private void FillTerm(PDThesaur Term, Node SkosObjectConcept, String MainLang, String Root, PDThesaur Thes, boolean SubThesLang, boolean RetainCodes) throws PDExceptionFunc, PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.FillTerm:"+Term.getPDId()+">");        
@@ -1838,7 +1961,7 @@ for (int NumNod=0; NumNod<SubConceptObjectList.getLength(); NumNod++)
             String PrevLangTerm=(String)SubTermByLang.get(LangNode);
             if (PrevLangTerm!=null && PrevLangTerm.length()!=0)
                 {
-                ChildTerm=ObtainTerm(PrevLangTerm);
+                ChildTerm=ObtainTerm(PrevLangTerm, RetainCodes);
                 }
             else
                 {
@@ -1870,7 +1993,7 @@ for (int NumNod=0; NumNod<SubConceptObjectList.getLength(); NumNod++)
             String PrevLangTerm=(String)SubTermByLang.get(LangNode);
             if (PrevLangTerm!=null && PrevLangTerm.length()!=0)
                 {
-                ChildTerm=ObtainTerm(PrevLangTerm);
+                ChildTerm=ObtainTerm(PrevLangTerm, RetainCodes);
                 }
             else
                 {
@@ -1902,7 +2025,7 @@ for (int NumNod=0; NumNod<SubConceptObjectList.getLength(); NumNod++)
             String PrevLangTerm=(String)SubTermByLang.get(LangNode);
             if (PrevLangTerm!=null && PrevLangTerm.length()!=0)
                 {
-                ChildTerm=ObtainTerm(PrevLangTerm);
+                ChildTerm=ObtainTerm(PrevLangTerm, RetainCodes);
                 }
             else
                 {
@@ -1921,7 +2044,7 @@ for (int NumNod=0; NumNod<SubConceptObjectList.getLength(); NumNod++)
         {
         Node Res=SkosObjectSub.getAttributes().getNamedItem(PDThesaur.RDF_RESOURCE); 
         String SourceId=Res.getNodeValue().substring(Root.length());   
-        PDThesaur ParentTerm=ObtainTerm(SourceId);                    
+        PDThesaur ParentTerm=ObtainTerm(SourceId, RetainCodes);                    
         StoreTerm(SourceId, ParentTerm);
         Term.setParentId(ParentTerm.getPDId());
         if (BTAsigned)
@@ -1932,7 +2055,7 @@ for (int NumNod=0; NumNod<SubConceptObjectList.getLength(); NumNod++)
         {
         Node Res=SkosObjectSub.getAttributes().getNamedItem(PDThesaur.RDF_RESOURCE); 
         String SourceId=Res.getNodeValue().substring(Root.length());   
-        PDThesaur ChildTerm=ObtainTerm(SourceId);                    
+        PDThesaur ChildTerm=ObtainTerm(SourceId, RetainCodes);                    
         ChildTerm.setParentId(Term.getPDId());
         StoreTerm(SourceId, ChildTerm);
         }
@@ -1940,13 +2063,13 @@ for (int NumNod=0; NumNod<SubConceptObjectList.getLength(); NumNod++)
         {
         Node Res=SkosObjectSub.getAttributes().getNamedItem(PDThesaur.RDF_RESOURCE); 
         String SourceId=Res.getNodeValue().substring(Root.length());   
-        PDThesaur RtTerm=ObtainTerm(SourceId);                    
+        PDThesaur RtTerm=ObtainTerm(SourceId, RetainCodes);                    
         AddImportRT(Term.getPDId(),RtTerm.getPDId());   
         }
     else if (SkosObjectSub.getNodeName().equalsIgnoreCase(PDThesaur.SKOS_ALTLABEL))
         {
         String SourceId=SkosObjectSub.getTextContent();    
-        PDThesaur UseTerm=ObtainTerm(SourceId);     
+        PDThesaur UseTerm=ObtainTerm(SourceId, RetainCodes);     
         UseTerm.setName(SkosObjectSub.getTextContent());    
         Node Res=SkosObjectSub.getAttributes().getNamedItem(PDThesaur.XML_LANG);    
         if (Res!=null)  
@@ -1973,7 +2096,7 @@ PDThesaur TermTemp;
 for (Iterator it = UseTermsByLang.iterator(); it.hasNext();)
     {
     String Id = (String)it.next();
-    TermTemp=ObtainTerm(Id);
+    TermTemp=ObtainTerm(Id, RetainCodes);
     if (Term.getParentId().equalsIgnoreCase(Thes.getPDId()))
         {
         if (SubThesLang)               
@@ -1994,7 +2117,7 @@ for (Iterator it = UseTermsByLang.iterator(); it.hasNext();)
 for (Iterator it = SubTermByLang.keySet().iterator(); it.hasNext();)
     {
     String Id = (String)SubTermByLang.get((String)it.next());
-    TermTemp=ObtainTerm(Id);
+    TermTemp=ObtainTerm(Id, RetainCodes);
     if (Term.getParentId().equalsIgnoreCase(Thes.getPDId()))
         {
         if (SubThesLang)               

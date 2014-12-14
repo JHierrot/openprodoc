@@ -37,6 +37,7 @@ public static final String fOBJECTID="ObjectId";
  *
  */
 public static final String fOPERATION="Operation";
+public static final String fRESULT="Result";
 
 /**
  *
@@ -54,6 +55,7 @@ private String ObjectId;
  *
  */
 private String Operation;
+private boolean Result;
 
 static private ObjectsCache TraceObjectsCache = null;
 
@@ -77,6 +79,7 @@ public void assignValues(Record Rec) throws PDException
 setObjectType((String) Rec.getAttr(fOBJECTTYPE).getValue());
 setName((String) Rec.getAttr(fOBJECTID).getValue());
 setOperation((String) Rec.getAttr(fOPERATION).getValue());
+setResult((Boolean) Rec.getAttr(fRESULT).getValue());
 assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
@@ -92,6 +95,7 @@ Record Rec=getRecordStruct();
 Rec.getAttr(fOBJECTTYPE).setValue(getObjectType());
 Rec.getAttr(fOBJECTID).setValue(getName());
 Rec.getAttr(fOPERATION).setValue(getOperation());
+Rec.getAttr(fRESULT).setValue(isResult());
 getCommonValues(Rec);
 return(Rec);
 }
@@ -155,7 +159,8 @@ if (TraceStruct==null)
     Record R=new Record();
     R.addAttr( new Attribute(fOBJECTTYPE, "Object_type", "Object_type", Attribute.tSTRING, true, null, 32, false, false, false));
     R.addAttr( new Attribute(fOBJECTID, "PDID", "PDID", Attribute.tSTRING, true, null, 32, false, false, false));
-    R.addAttr( new Attribute(fOPERATION, "Operation", "Operation", Attribute.tSTRING, true, null, 32, false, false, true));
+    R.addAttr( new Attribute(fOPERATION, "Operation", "Operation", Attribute.tSTRING, true, null, 32, false, false, false));
+    R.addAttr( new Attribute(fRESULT, "Result", "Result", Attribute.tBOOLEAN, false, null, 0, false, false, false));
     R.addRecord(getRecordStructCommon());
     return(R);
     }
@@ -262,6 +267,38 @@ return(TraceObjectsCache);
 protected String getKey()
 {
 return(getName());
+}
+//-------------------------------------------------------------------------
+
+/**
+* @return the Result
+*/
+public boolean isResult()
+{
+return Result;
+}
+//-------------------------------------------------------------------------
+/**
+* @param pResult the Result to set
+*/
+public void setResult(boolean pResult)
+{
+Result = pResult;
+}
+//-------------------------------------------------------------------------
+/**
+ * 
+ * @param Conds
+ * @return 
+ */    
+public Cursor Search(Conditions Conds) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDef.Search>:"+getTabName());
+Query QBE=new Query(getTabName(), getRecordStruct(), Conds);
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDef.Search <");
+return(getDrv().OpenCursor(QBE));
 }
 //-------------------------------------------------------------------------
 }
