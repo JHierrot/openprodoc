@@ -37,8 +37,6 @@ private Record ListFields = null;
 private Cursor CursorId = null;
 private int NumRows=0;
 private Vector ListRes=new Vector();
-//private SimpleDateFormat formatterTS = MainWin.getFormatterTS();
-//private SimpleDateFormat formatterDate = MainWin.getFormatterDate();
 static private SimpleDateFormat formatterTS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 static private SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -94,9 +92,9 @@ else
     if (Attr.getType()==Attribute.tDATE)
         return( getFormatterDate().format(Attr.getValue()));
     if (Attr.getName().equals(PDACL.fPERMISION))
-        return(Permision2String(((Integer)Attr.getValue()).intValue()));
+        return(Permision2String(((Integer)Attr.getValue())));
     if (Attr.getName().equals(PDObjDefs.fATTRTYPE))
-        return(Atribute2String(((Integer)Attr.getValue()).intValue()));
+        return(Atribute2String(((Integer)Attr.getValue())));
     return (Attr.getValue().toString());
     } catch (PDException ex)
         {

@@ -35,7 +35,7 @@ import prodocswing.PDTableModel;
  *
  * @author jhierrot
  */
-public class ListTaskEnded extends javax.swing.JDialog
+public class ListTrace extends javax.swing.JDialog
 {
 protected ObjPD PDObject;
 protected PDTableModel UserList1 = new PDTableModel();
@@ -46,7 +46,7 @@ protected Frame Fparent;
  * @param modal
  * @param pPDObject 
  */
-public ListTaskEnded(java.awt.Frame parent, boolean modal, ObjPD pPDObject)
+public ListTrace(java.awt.Frame parent, boolean modal, ObjPD pPDObject)
 {
 super(parent, modal);
 Fparent=parent;
@@ -78,15 +78,13 @@ TimeStampFilter1.setValue(d1);
         TimeStampFilter2 = new javax.swing.JFormattedTextField();
         ButtonFilter = new javax.swing.JButton();
         jToolBar1 = new javax.swing.JToolBar();
-        ReviewButton = new javax.swing.JButton();
         DeleteButton = new javax.swing.JButton();
         ExpCSV = new javax.swing.JButton();
-        ReLaunch = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         ObjectsTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle(MainWin.TT("Task_Results_List"));
+        setTitle(MainWin.TT("Trace_Logs"));
         addWindowListener(new java.awt.event.WindowAdapter()
         {
             public void windowClosing(java.awt.event.WindowEvent evt)
@@ -96,7 +94,7 @@ TimeStampFilter1.setValue(d1);
         });
 
         CategoryLabel.setFont(MainWin.getFontDialog());
-        CategoryLabel.setText(MainWin.TT("Category"));
+        CategoryLabel.setText(MainWin.TT("Document_Type"));
 
         CategoryFilter.setFont(MainWin.getFontDialog());
         CategoryFilter.setToolTipText("Introducir nombre completo o parcial del usuario");
@@ -123,20 +121,6 @@ TimeStampFilter1.setValue(d1);
         });
 
         jToolBar1.setRollover(true);
-
-        ReviewButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/edit.png"))); // NOI18N
-        ReviewButton.setToolTipText("View");
-        ReviewButton.setFocusable(false);
-        ReviewButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        ReviewButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        ReviewButton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                ReviewButtonActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(ReviewButton);
 
         DeleteButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/del.png"))); // NOI18N
         DeleteButton.setToolTipText("Delete");
@@ -165,20 +149,6 @@ TimeStampFilter1.setValue(d1);
             }
         });
         jToolBar1.add(ExpCSV);
-
-        ReLaunch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/copy.png"))); // NOI18N
-        ReLaunch.setToolTipText("ReLaunch");
-        ReLaunch.setFocusable(false);
-        ReLaunch.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        ReLaunch.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        ReLaunch.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                ReLaunchActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(ReLaunch);
 
         ObjectsTable.setFont(MainWin.getFontList());
         ObjectsTable.addMouseListener(new java.awt.event.MouseAdapter()
@@ -258,18 +228,6 @@ private void formWindowClosing(java.awt.event.WindowEvent evt)//GEN-FIRST:event_
 {//GEN-HEADEREND:event_formWindowClosing
 }//GEN-LAST:event_formWindowClosing
 
-    private void ReviewButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ReviewButtonActionPerformed
-    {//GEN-HEADEREND:event_ReviewButtonActionPerformed
-int Pos=getObjectsTable().getSelectedRow();
-if (Pos==-1)
-    return;
-MantTask MU = new MantTask(Fparent, true);
-MU.setRecord(getPDTableModel().getElement(getSelectedRow()));
-MU.setLocationRelativeTo(null);
-MU.EditMode();
-MU.setVisible(true);
-    }//GEN-LAST:event_ReviewButtonActionPerformed
-
     private void DeleteButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_DeleteButtonActionPerformed
     {//GEN-HEADEREND:event_DeleteButtonActionPerformed
 int Pos=getObjectsTable().getSelectedRow();
@@ -279,11 +237,10 @@ try {
 int[] Sel=getObjectsTable().getSelectedRows();
 if (Sel.length==0)
     return;
-PDTasksExecEnded Ts=new PDTasksExecEnded(MainWin.getSession());
+PDTrace Ts=new PDTrace(MainWin.getSession());
 for (int i = 0; i <Sel.length; i++)
     {
     int RowToDel = Sel[i];
-  
     Ts.assignValues(getPDTableModel().getElement(Sel[i]));
     Ts.delete();
     }
@@ -303,23 +260,21 @@ RefreshTable();
 
     private void ExpCSVActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ExpCSVActionPerformed
     {//GEN-HEADEREND:event_ExpCSVActionPerformed
-        String FileName=MainWin.SelectDestination("List_"+PDObject.getTabName()+".csv", "csv", true);
-        if (FileName.length()==0)
-        return;
-        PrintWriter PW =null;
-        try
-        {
-            PW = new PrintWriter(FileName);
-            ExportAllCSV(PW);
-            PW.flush();
-            PW.close();
-        } catch (Exception ex)
-        {
-            if (PW!=null)
-            PW.close();
-            MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
-        }
-
+String FileName=MainWin.SelectDestination("List_"+PDObject.getTabName()+".csv", "csv", true);
+if (FileName.length()==0)
+return;
+PrintWriter PW =null;
+try {
+PW = new PrintWriter(FileName);
+ExportAllCSV(PW);
+PW.flush();
+PW.close();
+} catch (Exception ex)
+    {
+    if (PW!=null)
+    PW.close();
+    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
     }//GEN-LAST:event_ExpCSVActionPerformed
 
     private void ObjectsTableMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_ObjectsTableMouseClicked
@@ -340,19 +295,6 @@ MU.setVisible(true);
     }
     }//GEN-LAST:event_ObjectsTableMouseClicked
 
-    private void ReLaunchActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ReLaunchActionPerformed
-    {//GEN-HEADEREND:event_ReLaunchActionPerformed
-try {
-PDTasksExec TE=new PDTasksExec(MainWin.getSession());
-TE.assignValues(getPDTableModel().getElement(getSelectedRow()));  
-TE.setPDId(TE.GenerateId());  //avoid repeating Id
-TE.setNextDate(new Date());
-TE.insert();
-} catch (Exception ex)
-    {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
-    }
-    }//GEN-LAST:event_ReLaunchActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonFilter;
     private javax.swing.JTextField CategoryFilter;
@@ -362,8 +304,6 @@ TE.insert();
     private javax.swing.JButton DeleteButton;
     private javax.swing.JButton ExpCSV;
     private javax.swing.JTable ObjectsTable;
-    private javax.swing.JButton ReLaunch;
-    private javax.swing.JButton ReviewButton;
     private javax.swing.JFormattedTextField TimeStampFilter1;
     private javax.swing.JFormattedTextField TimeStampFilter2;
     private javax.swing.JScrollPane jScrollPane1;
@@ -401,12 +341,12 @@ ObjectsList2.setListFields(PDObject.getRecord());
 Conditions Conds=new Conditions();
 if (CategoryFilter.getText().length()!=0)
     {
-    Condition C=new Condition(PDTasksDef.fCATEGORY, Condition.cEQUAL, CategoryFilter.getText());    
+    Condition C=new Condition(PDTrace.fOBJECTTYPE, Condition.cEQUAL, CategoryFilter.getText());    
     Conds.addCondition(C);
     }
 if (TimeStampFilter1.getText().length()!=0)
     {
-    PDTasksExec T=new PDTasksExec(MainWin.getSession());
+    PDTrace T=new PDTrace(MainWin.getSession());
     Attribute Attr=T.getRecord().getAttr(PDTasksExec.fPDDATE);
     Date d1=(Date)TimeStampFilter1.getValue();   
     Attr.setValue(d1);
@@ -415,7 +355,7 @@ if (TimeStampFilter1.getText().length()!=0)
     }
 if (TimeStampFilter2.getText().length()!=0)
     {    
-    PDTasksExec T=new PDTasksExec(MainWin.getSession());
+    PDTrace T=new PDTrace(MainWin.getSession());
     Attribute Attr=T.getRecord().getAttr(PDTasksExec.fPDDATE);
     Date d1=(Date)TimeStampFilter2.getValue();   
     Attr.setValue(d1);
@@ -427,8 +367,8 @@ if (Conds.NumCond()==0)
     MainWin.Message(MainWin.TT("Empty_conditions"));
     return;
     }
-PDTasksExecEnded Task=new PDTasksExecEnded(MainWin.getSession());
-Cursor Cur=Task.Search(Conds);
+PDTrace T=new PDTrace(MainWin.getSession());
+Cursor Cur=T.Search(Conds);
 ObjectsList2.setCursor(Cur);
 getObjectsTable().setModel(ObjectsList2);
 } catch (PDException ex)

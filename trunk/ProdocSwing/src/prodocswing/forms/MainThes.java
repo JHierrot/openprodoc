@@ -69,6 +69,7 @@ public MainThes(java.awt.Frame parent, boolean modal, DriverGeneric Sess)
 super(parent, modal);
 Session=Sess;
 initComponents();
+TreeTerm.setSelectionRow(0);
 try {
 Record R=PDThesaur.getRecordStructPDThesaur();
 NameLabel.setText(MainWin.TT(R.getAttr(PDThesaur.fNAME).getUserName()));
@@ -982,7 +983,7 @@ if (ImpThes.isCancel())
    return;
 setCursor(MainWin.WaitCur);    
 PDThesaur Thes=new PDThesaur(Session);
-Thes.Import(ImpThes.getThesName(), ImpThes.getThesNum(), new File(ImpThes.SelFolder.getAbsolutePath()), ImpThes.getMainLang(), ImpThes.getRoot(), ImpThes.isSubThesLang(), ImpThes.isTransac());
+Thes.Import(ImpThes.getThesName(), ImpThes.getThesNum(), new File(ImpThes.SelFolder.getAbsolutePath()), ImpThes.getMainLang(), ImpThes.getRoot(), ImpThes.isSubThesLang(), ImpThes.isTransac(), ImpThes.isRetainCodes());
 setCursor(MainWin.DefCur);
 //MainWin.Report(PDThesaur.getImportReport());
 String TempName = System.getProperty("java.io.tmpdir");

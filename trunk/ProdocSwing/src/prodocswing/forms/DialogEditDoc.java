@@ -27,6 +27,7 @@ package prodocswing.forms;
 
 import java.awt.Component;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Vector;
@@ -723,11 +724,35 @@ else if (Attr.getType()==Attribute.tTHES)
     }
 else if (Attr.getType()==Attribute.tDATE)
     {
-    JTF=new JFormattedTextField(MainWin.getFormatterDate());
     if (Attr.getValue()!=null)
-        ((JFormattedTextField)JTF).setValue((Date)Attr.getValue());
+        JTF=new JTextField((String)Attr.getValue());
     else
-        ((JFormattedTextField)JTF).setValue(new Date());
+        JTF=new JTextField();
+    if (!(ViewMode || Modif&&!Attr.isModifAllowed()))
+        {
+        JTF.addFocusListener(
+            new java.awt.event.FocusAdapter() 
+            {
+            public void focusLost(java.awt.event.FocusEvent e)
+            { 
+            String Val=((JTextField)e.getComponent()).getText();
+            if (Val.length()!=0)
+                {
+                try {
+                MainWin.getFormatterDate().parse(Val);
+                } catch (Exception ex)
+                    {
+                    ((JTextField)e.getComponent()).grabFocus();
+                    }
+                }
+            }
+            });
+        }
+//    JTF=new JFormattedTextField(MainWin.getFormatterDate());
+//    if (Attr.getValue()!=null)
+//        ((JFormattedTextField)JTF).setValue((Date)Attr.getValue());
+//    else
+//        ((JFormattedTextField)JTF).setValue(new Date());
     }
 else if (Attr.getType()==Attribute.tTIMESTAMP)
     {
@@ -808,6 +833,9 @@ else if (Attr.getType()==Attribute.tTHES)
     }
 else if (Attr.getType()==Attribute.tDATE)
     {
+    String Val=((JTextField)JTF).getText();
+    if (Val.length()==0)
+        Attr.setValue(null);
     Attr.setValue((Date)((JFormattedTextField)JTF).getValue());
     }
 else if (Attr.getType()==Attribute.tTIMESTAMP)

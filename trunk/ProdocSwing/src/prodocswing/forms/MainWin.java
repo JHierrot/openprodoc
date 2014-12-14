@@ -89,6 +89,7 @@ TreeFolder.setPreferredSize(null);
 DocsTable.setAutoCreateRowSorter(true);
 DocsTable.setAutoCreateColumnsFromModel(true);
 SetMenu();
+TreeFolder.setSelectionRow(0);
 try {
 setTitle(getTitle()+" @"+getSession().getUser().getName()+"("+getSession().getUser().getDescription()+")");
 } catch (Exception ex)
@@ -164,6 +165,7 @@ setTitle(getTitle()+" @"+getSession().getUser().getName()+"("+getSession().getUs
         TaskEvenMenuItem = new javax.swing.JMenuItem();
         TaskExecMenuItem = new javax.swing.JMenuItem();
         TaskEndedMenuItem = new javax.swing.JMenuItem();
+        TraceMenuItem = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
         contentsMenuItem1 = new javax.swing.JMenuItem();
         aboutMenuItem1 = new javax.swing.JMenuItem();
@@ -723,6 +725,17 @@ setTitle(getTitle()+" @"+getSession().getUser().getName()+"("+getSession().getUs
             }
         });
         AdminMenu.add(TaskEndedMenuItem);
+
+        TraceMenuItem.setFont(getFontMenu());
+        TraceMenuItem.setText(TT("Trace_Logs"));
+        TraceMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                TraceMenuItemActionPerformed(evt);
+            }
+        });
+        AdminMenu.add(TraceMenuItem);
 
         menuBar.add(AdminMenu);
 
@@ -1502,6 +1515,18 @@ LC.setVisible(true);
     }
     }//GEN-LAST:event_TaskEndedMenuItemActionPerformed
 
+    private void TraceMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_TraceMenuItemActionPerformed
+    {//GEN-HEADEREND:event_TraceMenuItemActionPerformed
+try {
+ListTrace LT = new ListTrace(this, true, new PDTrace(getSession()));
+LT.setLocationRelativeTo(null);
+LT.setVisible(true);
+} catch (Exception ex)
+    {
+    Message(DrvTT(ex.getLocalizedMessage()));
+    }
+    }//GEN-LAST:event_TraceMenuItemActionPerformed
+
 /**
 * @param args the command line arguments
 */
@@ -1570,6 +1595,7 @@ java.awt.EventQueue.invokeLater(new Runnable()
     private javax.swing.JMenuItem TaskEvenMenuItem;
     private javax.swing.JMenuItem TaskExecMenuItem;
     private javax.swing.JMenuItem Thesaur;
+    private javax.swing.JMenuItem TraceMenuItem;
     private javax.swing.JTree TreeFolder;
     private javax.swing.JMenuItem UserMenuItem;
     private javax.swing.JMenuItem ViewMetadata;
@@ -2081,7 +2107,7 @@ return(Tmp);
  */
 static public String getVersion()
 {
-return("1.0");  
+return("1.1");  
 }
 //---------------------------------------------------------------------
 
@@ -2325,6 +2351,7 @@ TaskCronMenuItem.setVisible(R.isAllowCreateTask()  || R.isAllowMaintainTask());
 TaskEvenMenuItem.setVisible(R.isAllowCreateTask()  || R.isAllowMaintainTask());
 TaskExecMenuItem.setVisible(R.isAllowCreateTask()  || R.isAllowMaintainTask());
 TaskEndedMenuItem.setVisible(R.isAllowCreateTask()  || R.isAllowMaintainTask());
+this.TraceMenuItem.setVisible(R.isAllowCreateObject()  || R.isAllowMaintainObject());
 AddFold.setVisible(R.isAllowCreateFolder());
 AddFoldAdvanced.setVisible(R.isAllowCreateFolder());
 ImportFold.setVisible(R.isAllowCreateFolder());

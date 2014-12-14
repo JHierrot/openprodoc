@@ -31,6 +31,7 @@ import prodoc.Attribute;
 import prodoc.Cursor;
 import prodoc.PDDocs;
 import prodoc.PDException;
+import prodoc.PDThesaur;
 import prodoc.Record;
 import prodocswing.PDTableModel;
 
@@ -449,6 +450,7 @@ private void ExportAllCSV(PrintWriter PW) throws Exception
 {
 PDTableModel TM = (PDTableModel) getObjectsTable().getModel();
 boolean HeaderWrite=false;
+PDThesaur UseTerm=new PDThesaur(MainWin.getSession());    
 for (int NumRow = 0; NumRow < TM.getRowCount(); NumRow++)
     {
     Record r=TM.getElement(NumRow);
@@ -469,7 +471,13 @@ for (int NumRow = 0; NumRow < TM.getRowCount(); NumRow++)
     for (int NumAt = 0; NumAt < r.NumAttr(); NumAt++)
         {
         Attribute At=r.nextAttr(); 
-        PW.print(At.ToCSV());
+        if (At.getType()==Attribute.tTHES)
+            {
+            UseTerm.Load((String)At.getValue());
+            PW.print("\""+UseTerm.getName()+"\"");
+            }
+        else
+            PW.print(At.ToCSV());
         if (NumAt<r.NumAttr()-1)
            PW.print(";");
         }
