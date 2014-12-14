@@ -587,12 +587,31 @@ public void Update(boolean UpMetadataInc, Vector Trace)  throws PDException
 {
 PDServer Serv=new PDServer(this);
 Serv.Load("Prodoc");
-if (Serv.getVersion().equalsIgnoreCase("1.0"))
+if (Serv.getVersion().equalsIgnoreCase("1.1"))
     {
-    Trace.add("NO Update possible. Already 1.0 version");    
+    Trace.add("NO Update possible. Already 1.1 version");    
     return;
     }
 Trace.add("Update started");    
+if (Serv.getVersion().equalsIgnoreCase("1.0"))
+    {
+    //--- Update ended ----    
+    PDTrace TR=new PDTrace(this);
+    Attribute Attr1=TR.getRecordStruct().getAttr(PDTrace.fRESULT).Copy();
+    Attr1.setValue(false);
+    try {
+    AlterTableAdd(PDTrace.getTableName(), Attr1, false);
+    Trace.add(PDTrace.fRESULT+" created");
+    } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
+    //--- Update ended ----
+    Trace.add("Updated to 1.1");
+    }
 if (Serv.getVersion().equalsIgnoreCase("0.7")) //******************************
     {
     // -- Adding Thesaurus tables -----------------------------------------    
@@ -633,7 +652,7 @@ if (Serv.getVersion().equalsIgnoreCase("0.7")) //******************************
     Attr1.setValue(false);
     try {
     AlterTableAdd(PDRoles.getTableName(), Attr1, false);
-    Trace.add(PDRoles.fALLOWCREATETHESAUR+"created");
+    Trace.add(PDRoles.fALLOWCREATETHESAUR+" created");
     } catch (PDException pDException)
         {
         if (!UpMetadataInc)
@@ -645,7 +664,7 @@ if (Serv.getVersion().equalsIgnoreCase("0.7")) //******************************
     try {
     Attr2.setValue(false);
     AlterTableAdd(PDRoles.getTableName(), Attr2, false);
-    Trace.add(PDRoles.fALLOWMAINTAINTHESAUR+"created");
+    Trace.add(PDRoles.fALLOWMAINTAINTHESAUR+" created");
     } catch (PDException pDException)
         {
         if (!UpMetadataInc)
@@ -744,7 +763,7 @@ if (Serv.getVersion().equalsIgnoreCase("0.8")  //*****************************
     Attr1.setValue(false);
     try {
     AlterTableAdd(PDRoles.getTableName(), Attr1, false);
-    Trace.add(PDRoles.fALLOWCREATETASK+"created");
+    Trace.add(PDRoles.fALLOWCREATETASK+" created");
     } catch (PDException pDException)
         {
         if (!UpMetadataInc)
@@ -756,7 +775,7 @@ if (Serv.getVersion().equalsIgnoreCase("0.8")  //*****************************
     try {
     Attr2.setValue(false);
     AlterTableAdd(PDRoles.getTableName(), Attr2, false);
-    Trace.add(PDRoles.fALLOWMAINTAINTASK+"created");
+    Trace.add(PDRoles.fALLOWMAINTAINTASK+" created");
     } catch (PDException pDException)
         {
         if (!UpMetadataInc)
@@ -785,7 +804,7 @@ if (Serv.getVersion().equalsIgnoreCase("0.8")  //*****************************
     try {
     Record RecServ=new Record();    
     Attribute RV=Serv.getRecord().getAttr(PDServer.fVERSION).Copy();
-    RV.setValue("1.0");
+    RV.setValue("1.1");
     RecServ.addAttr(RV);
     Conditions ServDef=new Conditions();
     ServDef.addCondition(new Condition(PDServer.fNAME, Condition.cEQUAL, "Prodoc"));
@@ -1516,7 +1535,7 @@ if (PDLog.isDebug())
  */
 static public String getVersion()
 {
-return("1.0");
+return("1.1");
 }
 private static final char[] HEX_CHARS = "0123456789abcdef".toCharArray();
 //-----------------------------------------------------------------------------------
