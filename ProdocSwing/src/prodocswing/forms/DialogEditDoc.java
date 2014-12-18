@@ -756,9 +756,33 @@ else if (Attr.getType()==Attribute.tDATE)
     }
 else if (Attr.getType()==Attribute.tTIMESTAMP)
     {
-    JTF=new JFormattedTextField(MainWin.getFormatterTS());
     if (Attr.getValue()!=null)
-        ((JFormattedTextField)JTF).setValue((Date)Attr.getValue());
+        JTF=new JTextField(MainWin.getFormatterTS().format((Date)Attr.getValue()));
+    else
+        JTF=new JTextField();
+    if (!(Modif&&!Attr.isModifAllowed()))
+        {
+        JTF.addFocusListener(
+            new java.awt.event.FocusAdapter() 
+            {
+            public void focusLost(java.awt.event.FocusEvent e)
+            { 
+            String Val=((JTextField)e.getComponent()).getText();
+            if (Val.length()!=0)
+                {
+                try {
+                MainWin.getFormatterTS().parse(Val);
+                } catch (Exception ex)
+                    {
+                    ((JTextField)e.getComponent()).grabFocus();
+                    }
+                }
+            }
+            });
+        }            
+//    JTF=new JFormattedTextField(MainWin.getFormatterTS());
+//    if (Attr.getValue()!=null)
+//        ((JFormattedTextField)JTF).setValue((Date)Attr.getValue());
     }
 else if (Attr.getType()==Attribute.tBOOLEAN)
     {
@@ -836,11 +860,35 @@ else if (Attr.getType()==Attribute.tDATE)
     String Val=((JTextField)JTF).getText();
     if (Val.length()==0)
         Attr.setValue(null);
-    Attr.setValue((Date)((JFormattedTextField)JTF).getValue());
+    else
+        {
+        try {
+        Attr.setValue(MainWin.getFormatterDate().parse(Val));
+        } catch (Exception exf)
+            {
+             Attr.setValue(null);
+            }
+        }
+//    String Val=((JTextField)JTF).getText();
+//    if (Val.length()==0)
+//        Attr.setValue(null);
+//    Attr.setValue((Date)((JFormattedTextField)JTF).getValue());
     }
 else if (Attr.getType()==Attribute.tTIMESTAMP)
     {
-    Attr.setValue((Date)((JFormattedTextField)JTF).getValue());
+    String Val=((JTextField)JTF).getText();
+    if (Val.length()==0)
+        Attr.setValue(null);
+    else
+        {
+        try {
+        Attr.setValue(MainWin.getFormatterTS().parse(Val));
+        } catch (Exception exf)
+            {
+             Attr.setValue(null);
+            }
+        }        
+//    Attr.setValue((Date)((JFormattedTextField)JTF).getValue());
     }
 else if (Attr.getType()==Attribute.tBOOLEAN)
     {
