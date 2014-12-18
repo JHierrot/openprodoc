@@ -253,7 +253,7 @@ Fields.initList();
 for (int i = 0; i < NumAttr; i++)
     {
     At=Fields.nextAttr();
-    if (At.getValue()!=null)
+    if (At.getValue()!=null || (At.getValue()==null && (At.getType()==Attribute.tDATE || At.getType()==Attribute.tTIMESTAMP)))
         {
         if (i>0 && Attrs.length()>0)
             {
@@ -322,7 +322,7 @@ boolean Second=false;
 for (int i = 0; i < NumAttr; i++)
     {
     At=NewFields.nextAttr();
-    if ((At.getValue()!=null || (At.getValue()==null && At.getType()==Attribute.tTHES)) && !At.isPrimKey())
+    if ((At.getValue()!=null || (At.getValue()==null && At.getType()==Attribute.tTHES)) && !At.isPrimKey() || (At.getValue()==null && (At.getType()==Attribute.tDATE || At.getType()==Attribute.tTIMESTAMP)))
         {
         if (Second)
             SQL+=", ";
@@ -489,7 +489,10 @@ setInTransaction(false);
  */
 protected String toDate(Date Fec)
 {
-return("'"+ formatterDate.format(Fec)+"'");
+if (Fec!=null)    
+    return("'"+ formatterDate.format(Fec)+"'");
+else
+    return("''");
 }
 //-----------------------------------------------------------------------------------
 /**
@@ -499,7 +502,10 @@ return("'"+ formatterDate.format(Fec)+"'");
  */
 protected String toTimeStamp(Date Fec)
 {
-return("'"+ formatterTS.format(Fec)+"'");
+if (Fec!=null)    
+    return("'"+ formatterTS.format(Fec)+"'");
+else
+    return("''");
 }
 //-----------------------------------------------------------------------------------
 /**
