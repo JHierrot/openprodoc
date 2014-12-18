@@ -523,7 +523,8 @@ for (int NumDefTyp = 0; NumDefTyp<getTypeDefs().size(); NumDefTyp++)
         {
         AtrOrig=TypDef.nextAttr();
         Atr2Ins=Rec.getAttr(AtrOrig.getName());
-        if (Atr2Ins==null || Atr2Ins.getValuesList()==null || Atr2Ins.getValuesList().isEmpty())
+//        if (Atr2Ins==null || Atr2Ins.getValuesList()==null || Atr2Ins.getValuesList().isEmpty())
+        if (Atr2Ins.getValuesList()==null || Atr2Ins.getValuesList().isEmpty())
            continue;
         AtrOrig=Atr2Ins;
         Values=AtrOrig.getValuesList();
