@@ -843,11 +843,18 @@ String IdUnder=Fold.getIdPath(getParam4());
 if (!Fold.IsUnder(IdUnder))    
    return; 
 Record r=Fold.getRecSum();
-r=Update(getParam(), r);
+Record rParent=null;
+if (getParam().indexOf(ObjPD.SYN_PARENT)!=0 || getParam2().indexOf(ObjPD.SYN_PARENT)!=0 || getParam3().indexOf(ObjPD.SYN_PARENT)!=0)
+    {
+    PDFolders FoldP=new PDFolders(getDrv());
+    FoldP.LoadFull(Fold.getParentId());
+    rParent=FoldP.getRecSum();
+    }
+r=Update(getParam(), r, rParent);
 if (getParam2()!=null && getParam2().length()!=0)
-    r=Update(getParam2(), r);
+    r=Update(getParam2(), r, rParent);
 if (getParam3()!=null && getParam2().length()!=0)
-    r=Update(getParam3(), r);
+    r=Update(getParam3(), r, rParent);
 Fold.assignValues(r);
 Fold.MonoUpdate();
 }
@@ -1052,11 +1059,17 @@ Fold.setPDId(Doc.getParentId());
 if (!Fold.IsUnder(IdUnder))    
    return; 
 Record r=Doc.getRecSum();
-r=Update(getParam(), r);
+Record rParent=null;
+if (getParam().indexOf(ObjPD.SYN_PARENT)!=0 || getParam2().indexOf(ObjPD.SYN_PARENT)!=0 || getParam3().indexOf(ObjPD.SYN_PARENT)!=0)
+    {
+    Fold.LoadFull(Doc.getParentId());
+    rParent=Fold.getRecSum();
+    }
+r=Update(getParam(), r, rParent);
 if (getParam2()!=null && getParam2().length()!=0)
-    r=Update(getParam2(), r);
+    r=Update(getParam2(), r, rParent);
 if (getParam3()!=null && getParam2().length()!=0)
-    r=Update(getParam3(), r);
+    r=Update(getParam3(), r, rParent);
 Doc.assignValues(r);
 Doc.updateFragments(r, Doc.getPDId());
 Doc.UpdateVersion(Doc.getPDId(), Doc.getVersion(), r);
