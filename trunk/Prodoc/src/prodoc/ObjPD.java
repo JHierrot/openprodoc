@@ -20,6 +20,7 @@
 package prodoc;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -105,6 +106,7 @@ static public final String AllowedChars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLM
 static public final char SYN_SEP='#';
 static public final char SYN_ADD='+';
 static public final char SYN_DEL='+';
+public static final char SYN_PARENT='@';
 //-------------------------------------------------------------------------
 /**
  *
@@ -658,7 +660,7 @@ return(Name);
  * @param r Record
  * @return Updates record
  */
-protected Record Update(String param, Record r) throws PDException
+protected Record Update(String param, Record r, Record rParent) throws PDException
 {
 if (param==null || param.length()==0)    
     return(r);
@@ -704,8 +706,8 @@ if (Current.length()!=0)
     Current="";
     }
 String TotalVal="";
-String NewVal="";
-Attribute Attr1=null;
+String NewVal;
+Attribute Attr1;
 for (int i = 0; i < ListElem.size(); i++)
     {
     if (i % 2 == 0) // Field 
@@ -713,23 +715,52 @@ for (int i = 0; i < ListElem.size(); i++)
         String Elem = ListElem.get(i);
         if (Elem.charAt(0)==SYN_SEP)
             NewVal=Elem.substring(1, Elem.length()-1);
+        else if (Elem.charAt(0)==SYN_PARENT)
+            {
+            Attr1=rParent.getAttr(Elem.substring(1));
+            NewVal=Attr1.Export();
+            }       
         else 
             {
             Attr1=r.getAttr(Elem);
             NewVal=Attr1.Export();
             }       
         if (Current.equals(""))
+            {
             TotalVal=NewVal;
+            }
         else if (Current.charAt(0)==SYN_ADD)
-            TotalVal+=NewVal;
+            {
+            if (Att.getType()==Attribute.tDATE)
+               TotalVal=AddDate(TotalVal, NewVal);
+            else if (Att.getType()==Attribute.tSTRING)            
+               TotalVal+=NewVal;
+            }
         }
     else
         {
         Current=ListElem.get(i);
         }
     }
-r.getAttr(DestAttr).setValue(TotalVal);
+r.getAttr(DestAttr).Import(TotalVal);
 return(r);
+}
+//---------------------------------------------------------------------
+/**
+ * Adds dates in the export/import format. Dates can be "partial" that is date with some 00 values.
+ * @param TotalVal Date/partial date to be added YYYY-MM-DD
+ * @param NewVal Date/partial date to be added   YYYY-MM-DD
+ * @return Date/partial date to be added YYYY-MM-DD
+ */
+private String AddDate(String TotalVal, String NewVal)
+{
+int Year1=Integer.parseInt(TotalVal.substring(0,4));
+int Month1=Integer.parseInt(TotalVal.substring(5,7));
+int Day1=Integer.parseInt((TotalVal+" ").substring(8,10));
+Year1+=Integer.parseInt(NewVal.substring(0,4));
+Month1+=Integer.parseInt(NewVal.substring(5,7));
+Day1+=Integer.parseInt((NewVal+" ").substring(8,10));
+return(String.format("%04d", Year1)+"-"+String.format("%02d", Month1)+"-"+String.format("%02d", Day1));
 }
 //---------------------------------------------------------------------
 }
