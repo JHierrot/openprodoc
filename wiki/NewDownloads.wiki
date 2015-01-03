@@ -11,16 +11,16 @@ Debido a la nuevas normas de Google Code, las nuevas descargas est√°n en esta p√
 * Version 1.0 ( Nov 2014) *
 
 || Module || Version || Size|| Downloads ||
-|| [http://goo.gl/PNXqU7 OPDPortable 1.0.zip] || OpenProdoc Portable multiplatform 1.0|| 11.6 MB ||  504 ||	 
-|| [http://goo.gl/8Yl03j OPD_Install 1.0.zip] || OpenProdoc Installation, Client and Administration 1.0|| 8.0 MB ||  193 || 	 
-|| [http://goo.gl/lw5a1Y OPD_Web 1.0.zip] || OpenProdoc Web client 1.0|| 6.9 MB ||  131 ||
-|| [http://goo.gl/ncKK21 OPD_Update 1.0.zip] || Update from 0.7,0.8, 0.8.1 to  1.0|| 9.3MB ||  33 ||
+|| [http://goo.gl/PNXqU7 OPDPortable 1.0.zip] || OpenProdoc Portable multiplatform 1.0|| 11.6 MB ||  550 ||	 
+|| [http://goo.gl/8Yl03j OPD_Install 1.0.zip] || OpenProdoc Installation, Client and Administration 1.0|| 8.0 MB ||  212 || 	 
+|| [http://goo.gl/lw5a1Y OPD_Web 1.0.zip] || OpenProdoc Web client 1.0|| 6.9 MB ||  141 ||
+|| [http://goo.gl/ncKK21 OPD_Update 1.0.zip] || Update from 0.7,0.8, 0.8.1 to  1.0|| 9.3MB ||  38 ||
 
 || Documents / Documentos || Downloads ||
-|| [http://goo.gl/ykFsUj OpenProDoc_Overview.pdf] ||  1111 ||
-|| [http://goo.gl/KFCNg9 OpenProDoc_Vision_General.pdf] || 1394 ||
-|| [http://goo.gl/ZyChAe OpenProdoc_Load_Test.pdf] ||  437 ||
-|| [http://goo.gl/GsAKSt Modelado interno de Metadatos en productos ECM.pdf] ||  453 ||
+|| [http://goo.gl/ykFsUj OpenProDoc_Overview.pdf] ||  1226 ||
+|| [http://goo.gl/KFCNg9 OpenProDoc_Vision_General.pdf] || 1536 ||
+|| [http://goo.gl/ZyChAe OpenProdoc_Load_Test.pdf] ||  495 ||
+|| [http://goo.gl/GsAKSt Modelado interno de Metadatos en productos ECM.pdf] ||  501 ||
 
 *Old Downloads / Antiguas Descargas*
 
