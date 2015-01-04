@@ -67,11 +67,11 @@ static private PDTableModel DocsContained;
 static private int ExpFolds=0;
 static private int ExpDocs=0;
 private PDFolders FoldAct=null;
-static private String List=PDFolders.fACL+"/"+PDFolders.fFOLDTYPE+"/"+PDFolders.fPARENTID+"/"+PDFolders.fPDID+"/"+PDFolders.fTITLE+"/"+PDFolders.fPDAUTOR+"/"+PDFolders.fPDDATE;
-static private HashSet ExecFiles=new HashSet();
+private static final String List=PDFolders.fACL+"/"+PDFolders.fFOLDTYPE+"/"+PDFolders.fPARENTID+"/"+PDFolders.fPDID+"/"+PDFolders.fTITLE+"/"+PDFolders.fPDAUTOR+"/"+PDFolders.fPDDATE;
+private static final HashSet ExecFiles=new HashSet();
 static protected java.awt.Cursor DefCur=new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR);
 static protected final java.awt.Cursor WaitCur=new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR);
-static private final char DC=34;
+
 
 /**
 * @return the Session
@@ -128,6 +128,8 @@ setTitle(getTitle()+" @"+getSession().getUser().getName()+"("+getSession().getUs
         ExportFold = new javax.swing.JMenuItem();
         ImportFold = new javax.swing.JMenuItem();
         ImportExtFold = new javax.swing.JMenuItem();
+        jSeparator7 = new javax.swing.JPopupMenu.Separator();
+        ReportsFold = new javax.swing.JMenuItem();
         jSeparator5 = new javax.swing.JPopupMenu.Separator();
         exitMenuItem = new javax.swing.JMenuItem();
         DocMenu = new javax.swing.JMenu();
@@ -147,6 +149,8 @@ setTitle(getTitle()+" @"+getSession().getUser().getName()+"("+getSession().getUs
         SearchDocs = new javax.swing.JMenuItem();
         ExportDoc = new javax.swing.JMenuItem();
         ImportDoc = new javax.swing.JMenuItem();
+        jSeparator8 = new javax.swing.JPopupMenu.Separator();
+        ReportsDoc = new javax.swing.JMenuItem();
         OtherMenu = new javax.swing.JMenu();
         PaperBin = new javax.swing.JMenuItem();
         ChangePass = new javax.swing.JMenuItem();
@@ -369,6 +373,18 @@ setTitle(getTitle()+" @"+getSession().getUser().getName()+"("+getSession().getUs
             }
         });
         FolderMenu.add(ImportExtFold);
+        FolderMenu.add(jSeparator7);
+
+        ReportsFold.setFont(getFontMenu());
+        ReportsFold.setText("Reports");
+        ReportsFold.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                ReportsFoldActionPerformed(evt);
+            }
+        });
+        FolderMenu.add(ReportsFold);
         FolderMenu.add(jSeparator5);
 
         exitMenuItem.setFont(getFontMenu());
@@ -538,6 +554,18 @@ setTitle(getTitle()+" @"+getSession().getUser().getName()+"("+getSession().getUs
             }
         });
         DocMenu.add(ImportDoc);
+        DocMenu.add(jSeparator8);
+
+        ReportsDoc.setFont(getFontMenu());
+        ReportsDoc.setText("Reports");
+        ReportsDoc.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                ReportsDocActionPerformed(evt);
+            }
+        });
+        DocMenu.add(ReportsDoc);
 
         menuBar.add(DocMenu);
 
@@ -1527,6 +1555,34 @@ LT.setVisible(true);
     }
     }//GEN-LAST:event_TraceMenuItemActionPerformed
 
+    private void ReportsFoldActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ReportsFoldActionPerformed
+    {//GEN-HEADEREND:event_ReportsFoldActionPerformed
+try {
+SelectReport SR = new SelectReport(this, true);
+SR.setLocationRelativeTo(null);
+SR.setVisible(true);
+if (SR.isCancel())
+    return;
+PDFolders Fold=new PDFolders(Session);
+Conditions Conds=new Conditions();
+Condition Cond=new Condition(PDFolders.fPARENTID, Condition.cEQUAL, ActFolderId);
+Conds.addCondition(Cond);
+Cursor Cur=Fold.Search(PDFolders.getTableName(), Conds,  true, false, null, null);
+PDReport Rep=new PDReport(Session);
+Rep.setPDId(SR.getSelectedRep());
+ArrayList<String> GeneratedRep = Rep.GenerateRep(ActFolderId, Cur,  SR.getDocsPerPage(), SR.getPagesPerFile());
+Message("generated:"+GeneratedRep.get(0));
+} catch (Exception ex)
+    {
+    Message(DrvTT(ex.getLocalizedMessage()));
+    }
+    }//GEN-LAST:event_ReportsFoldActionPerformed
+
+    private void ReportsDocActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ReportsDocActionPerformed
+    {//GEN-HEADEREND:event_ReportsDocActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ReportsDocActionPerformed
+
 /**
 * @param args the command line arguments
 */
@@ -1585,6 +1641,8 @@ java.awt.EventQueue.invokeLater(new Runnable()
     private javax.swing.JMenuItem RefreshDocs;
     private javax.swing.JMenuItem RefreshFold;
     private javax.swing.JMenuItem ReportBugs;
+    private javax.swing.JMenuItem ReportsDoc;
+    private javax.swing.JMenuItem ReportsFold;
     private javax.swing.JMenuItem ReposMenuItem;
     private javax.swing.JMenuItem RolMenuItem;
     private javax.swing.JMenuItem SearchDocs;
@@ -1612,6 +1670,8 @@ java.awt.EventQueue.invokeLater(new Runnable()
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JPopupMenu.Separator jSeparator6;
+    private javax.swing.JPopupMenu.Separator jSeparator7;
+    private javax.swing.JPopupMenu.Separator jSeparator8;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JMenuBar menuBar;
