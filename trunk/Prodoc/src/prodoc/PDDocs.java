@@ -2689,4 +2689,12 @@ tr.setResult(Allowed);
 tr.insert();
 }
 //---------------------------------------------------------------------
+@Override
+public Cursor getAll() throws PDException
+{
+PDException.GenPDException("ERROR", null);
+return(null);
+}
+//-------------------------------------------------------------------------
+
 }
