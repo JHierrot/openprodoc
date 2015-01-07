@@ -1602,5 +1602,11 @@ SHtml.append("</p>");
 return(SHtml.toString());
 }
 //---------------------------------------------------------------------
-
+@Override
+public Cursor getAll() throws PDException
+{
+PDException.GenPDException("ERROR", null);
+return(null);
+}
+//-------------------------------------------------------------------------
 }
