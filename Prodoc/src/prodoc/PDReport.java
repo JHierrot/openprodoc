@@ -25,6 +25,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * Class for generating "reports"
@@ -42,6 +45,8 @@ private static final String R_LOOPATTR_S="@OPD_ATTRLOOP_S";
 private static final String R_LOOPATTR_E="@OPD_ATTRLOOP_E";
 private static final String R_GLOBPARENT="@OPD_GLOBPARENT";
 private static final String R_PARENT="@OPD_PARENT";
+private static final String R_NAME_ATTR="@OPD_NAME_ATTR";
+private static final String R_UNAME_ATTR="@OPD_UNAME_ATTR";
 private static final String R_VAL_ATTR="@OPD_VAL_ATTR";
 private static final String R_REF_ATTR="@OPD_REF_ATTR";
 private static final String R_RECCOUNT="@OPD_RECCOUNT";
@@ -63,6 +68,8 @@ private int FilesCount=0;
 Record Res=null;
 Attribute Attr=null;
 private boolean FirstLine=false;
+boolean ExpandObject=false;
+boolean DelNull=false;
 /**
  * Default constructor
  * @param pDrv Generic sesion to be used
@@ -162,8 +169,17 @@ while (Line!=null)
         RecLoopStart=RepLines.size();
     else if (Line.equals(R_LOOPDOCS_E))
         RecLoopEnd=RepLines.size();
-    else if (Line.equals(R_LOOPATTR_S))
+    else if (Line.startsWith(R_LOOPATTR_S))
+        {
         AttrLoopStart=RepLines.size();
+        if (Line.contains("*"))
+            ExpandObject=true;
+        else if (Line.contains("?"))
+            {
+            ExpandObject=true;
+            DelNull=true;
+            }  
+        }
     else if (Line.equals(R_LOOPATTR_E))
         AttrLoopEnd=RepLines.size();
     else
@@ -212,6 +228,10 @@ if (Line.startsWith("@OPD"))
             FRepDoc.print(Fold.getPathId(IdParent));
             }
         }
+    else if (Line.startsWith(R_NAME_ATTR))
+        FRepDoc.print(NameAttr(Line));
+    else if (Line.startsWith(R_UNAME_ATTR))
+        FRepDoc.print(UNameAttr(Line));
     else if (Line.startsWith(R_VAL_ATTR))
         FRepDoc.print(ValAttr(Line));
     else if (Line.startsWith(R_REF_ATTR))
@@ -249,13 +269,95 @@ private String ValAttr(String Line)
 if (Res==null)
     return("Res==null");
 Attribute Attr1;
+int ElemSize=0;
+int PosSize;
+PosSize=Line.indexOf(':');
+if (PosSize!=-1)
+    {
+    ElemSize=Integer.parseInt(Line.substring(PosSize+1));
+    Line=Line.substring(0, PosSize);
+    } 
 if (Line.substring(R_VAL_ATTR.length()+1).startsWith("*")) // @OPD_VAL_ATTR_*
    Attr1=Attr;
 else
     Attr1=Res.getAttr(Line.substring(R_VAL_ATTR.length()+1)); // @OPD_VAL_ATTR_TITLE
 if (Attr1==null)
     return("");
-return(Attr1.Export());   
+String Res=Attr1.Export();
+if (ElemSize==0)
+    return(Res); 
+else if (Res.length()>=ElemSize)
+    return(Res.substring(0, ElemSize));
+else if (Attr1.getType()==Attribute.tSTRING || Attr1.getType()==Attribute.tTHES)
+   return(Res+GetSpaces(ElemSize-Res.length()));  
+else    
+   return(GetSpaces(ElemSize-Res.length())+Res);  
+}
+//-------------------------------------------------------------------------
+/**
+ * Returns de Internal Name of Attribute
+ * @param Line R_VAL_ATTR+name atribute
+ * @return Exported value of Attribute
+ */
+private String NameAttr(String Line)
+{
+if (Res==null)
+    return("Res==null");
+Attribute Attr1;
+int ElemSize=0;
+int PosSize;
+PosSize=Line.indexOf(':');
+if (PosSize!=-1)
+    {
+    ElemSize=Integer.parseInt(Line.substring(PosSize+1));
+    Line=Line.substring(0, PosSize);
+    } 
+if (Line.substring(R_NAME_ATTR.length()+1).startsWith("*")) // @OPD_NAME_ATTR_*
+   Attr1=Attr;
+else
+    Attr1=Res.getAttr(Line.substring(R_NAME_ATTR.length()+1)); // @OPD_NAME_ATTR_TITLE
+if (Attr1==null)
+    return("");
+String Res=Attr1.getName();
+if (ElemSize==0)
+    return(Res); 
+else if (Res.length()>=ElemSize)
+    return(Res.substring(0, ElemSize));
+else
+   return(Res+GetSpaces(ElemSize-Res.length())); 
+}
+//-------------------------------------------------------------------------
+/**
+ * Returns de Internal Name of Attribute
+ * @param Line R_VAL_ATTR+name atribute
+ * @return Exported value of Attribute
+ */
+private String UNameAttr(String Line)
+{
+if (Res==null)
+    return("Res==null");
+Attribute Attr1;
+int ElemSize=0;
+int PosSize;
+PosSize=Line.indexOf(':');
+if (PosSize!=-1)
+    {
+    ElemSize=Integer.parseInt(Line.substring(PosSize+1));
+    Line=Line.substring(0, PosSize);
+    } 
+if (Line.substring(R_UNAME_ATTR.length()+1).startsWith("*")) // @OPD_UNAME_ATTR_*
+   Attr1=Attr;
+else
+    Attr1=Res.getAttr(Line.substring(R_UNAME_ATTR.length()+1)); // @OPD_UNAME_ATTR_TITLE
+if (Attr1==null)
+    return("");
+String Res=Attr1.getUserName();
+if (ElemSize==0)
+    return(Res); 
+else if (Res.length()>=ElemSize)
+    return(Res.substring(0, ElemSize));
+else
+   return(Res+GetSpaces(ElemSize-Res.length())); 
 }
 //-------------------------------------------------------------------------
 /**
@@ -267,33 +369,49 @@ private String RefAttr(String Line) throws PDException
 {
 if (Res==null)
     return("Res==null");
-String AttrName = Line.substring(R_REF_ATTR.length()+1);
 Attribute Attr1;
-if (AttrName.startsWith("*"))
+int ElemSize=0;
+int PosSize;
+PosSize=Line.indexOf(':');
+if (PosSize!=-1)
+    {
+    ElemSize=Integer.parseInt(Line.substring(PosSize+1));
+    Line=Line.substring(0, PosSize);
+    } 
+if (Line.substring(R_REF_ATTR.length()+1).startsWith("*")) // @OPD_REF_ATTR_*
    Attr1=Attr;
 else
-   Attr1=Res.getAttr(AttrName);
+    Attr1=Res.getAttr(Line.substring(R_REF_ATTR.length()+1)); // @OPD_REF_ATTR_TITLE
 if (Attr1==null)
     return("");
+String AttrName = Attr1.getName();
+String Res;
 if (AttrName.equals(PDDocs.fPARENTID))
     {
     PDFolders Fold=new PDFolders(getDrv());
     Fold.Load((String)Attr1.getValue());
-    return(Fold.getTitle());
+    Res=Fold.getTitle();
     } 
-if (Attr1.getType()==Attribute.tTHES)
+else if (Attr1.getType()==Attribute.tTHES)
     {
     PDThesaur Thes=new PDThesaur(getDrv());
     Thes.Load((String)Attr1.getValue());
-    return(Thes.getName());
+    Res=Thes.getName();
     }
-if (AttrName.equals(PDDocs.fMIMETYPE))
+else if (AttrName.equals(PDDocs.fMIMETYPE))
     {
     PDMimeType MT=new PDMimeType(getDrv());
     MT.Load((String)Attr1.getValue());
-    return(MT.getDescription());
+    Res=MT.getDescription();
     }
-return(Attr1.Export());  
+else
+    Res=Attr1.Export();  
+if (ElemSize==0)
+    return(Res); 
+else if (Res.length()>=ElemSize)
+    return(Res.substring(0, ElemSize));
+else
+   return(Res+GetSpaces(ElemSize-Res.length())); 
 }
 //-------------------------------------------------------------------------
 /**
@@ -351,15 +469,37 @@ for (int i = RecLoopStart; i < AttrLoopStart; i++)
     }
 if (Res==null)
     FRepDoc.println("Res==null");
+if (ExpandObject)
+    {
+    Attr=Res.getAttr(PDDocs.fDOCTYPE);
+    if (Attr==null) // is Folder
+        {
+        PDFolders F=new PDFolders(getDrv());
+        F.LoadFull((String)Res.getAttr(PDFolders.fPDID).getValue());
+        Res=F.getRecSum();
+        }
+    else
+        {
+        PDDocs D=new PDDocs(getDrv());
+        D.LoadFull((String)Res.getAttr(PDDocs.fPDID).getValue());
+        Res=D.getRecSum();
+        }
+    }
+TreeMap<String, Attribute> AttrList=new TreeMap();
 Res.initList();
 Attr=Res.nextAttr();
 while (Attr!=null)
     {
+    AttrList.put(Attr.getName().toUpperCase(), Attr);
+    Attr=Res.nextAttr();
+    }
+for (Map.Entry<String, Attribute> entrySet : AttrList.entrySet())
+    {
+    Attr = entrySet.getValue();
     for (int i = AttrLoopStart; i < AttrLoopEnd; i++)
         {
         ProcessLine(RepLines.get(i));
         }
-    Attr=Res.nextAttr();
     }
 for (int i = AttrLoopEnd; i < RecLoopEnd; i++)
     {
@@ -379,4 +519,18 @@ Conds.addCondition(new Condition(PDDocs.fPDID, Condition.cNE, "*"));
 return(Search(getTableName(), Conds,  true, false, false, PDFolders.ROOTFOLDER, null));
 }
 //-------------------------------------------------------------------------
+/**
+ * generates a string of ' ' of a size
+ * @param SSize Number of chars to generate
+ * @return generated string
+ */
+private String GetSpaces(int SSize)
+{
+StringBuilder S=new StringBuilder(SSize);
+for (int i = 0; i < SSize; i++)
+    {
+    S.append(' ');
+    }
+return(S.toString());
+}
 }
