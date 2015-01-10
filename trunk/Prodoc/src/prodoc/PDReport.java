@@ -25,8 +25,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
@@ -65,11 +65,13 @@ private int TotalRecsCount=0;
 private int RecsInPageCount=0;
 private int PagesCount=1;
 private int FilesCount=0;
-Record Res=null;
-Attribute Attr=null;
+private Record Res=null;
+private Attribute Attr=null;
 private boolean FirstLine=false;
-boolean ExpandObject=false;
-boolean DelNull=false;
+private boolean ExpandObject=false;
+private boolean DelNull=false;
+private HashSet<String> ListIgnTypes=null; 
+private HashSet<String> ListIgnFields=null; 
 /**
  * Default constructor
  * @param pDrv Generic sesion to be used
@@ -110,9 +112,12 @@ PrintHeader();
 Res=getDrv().NextRec(ListDocs);
 while (Res!=null)    
     {
-    TotalRecsCount++;
-    RecsInPageCount++;
-    PrintRec();
+    if (CanInclude(Res))
+        {
+        TotalRecsCount++;
+        RecsInPageCount++;
+        PrintRec();
+        }
     Res=getDrv().NextRec(ListDocs);
     if (RecsInPageCount>=RecsPag)
         {
@@ -157,7 +162,7 @@ FileOutputStream FO=null;
 BufferedReader BR = null;
 File Template=null;
 try {
-FO=new FileOutputStream(OrigRep); // download the oriiginal
+FO=new FileOutputStream(OrigRep); // download the original
 this.getStream(FO);
 FO.close();
 Template=new File(OrigRep); // read the original
@@ -165,8 +170,11 @@ BR=new BufferedReader(new FileReader(Template));
 String Line=BR.readLine();
 while (Line!=null)
     {
-    if (Line.equals(R_LOOPDOCS_S))
+    if (Line.startsWith(R_LOOPDOCS_S))
+        {
         RecLoopStart=RepLines.size();
+        EvalIgTypes(Line);
+        }
     else if (Line.equals(R_LOOPDOCS_E))
         RecLoopEnd=RepLines.size();
     else if (Line.startsWith(R_LOOPATTR_S))
@@ -178,7 +186,8 @@ while (Line!=null)
             {
             ExpandObject=true;
             DelNull=true;
-            }  
+            }
+        EvalIgFields(Line);
         }
     else if (Line.equals(R_LOOPATTR_E))
         AttrLoopEnd=RepLines.size();
@@ -490,7 +499,8 @@ Res.initList();
 Attr=Res.nextAttr();
 while (Attr!=null)
     {
-    AttrList.put(Attr.getName().toUpperCase(), Attr);
+    if (CanInclude(Attr))
+        AttrList.put(Attr.getName().toUpperCase(), Attr);
     Attr=Res.nextAttr();
     }
 for (Map.Entry<String, Attribute> entrySet : AttrList.entrySet())
@@ -533,4 +543,76 @@ for (int i = 0; i < SSize; i++)
     }
 return(S.toString());
 }
+//-------------------------------------------------------------------------
+/** 
+ * Evaluates the DocTypes to be ignored
+ * @param Line Line in the template containing "-list": -Report, Remplate
+ */
+private void EvalIgTypes(String Line)
+{
+int PosSize;
+PosSize=Line.indexOf('-');
+if (PosSize==-1) 
+    return;
+String[] ListTypes = Line.substring(PosSize+1).split(",");
+ListIgnTypes= new HashSet(ListTypes.length);
+for (String ListType : ListTypes)
+    ListIgnTypes.add(ListType.trim().toUpperCase());
+}
+//-------------------------------------------------------------------------
+/** 
+ * Evaluates the Fields to be ignored
+ * @param Line Line in the template containing "-list": -PDID, PDDDATE
+ */
+private void EvalIgFields(String Line)
+{
+int PosSize;
+PosSize=Line.indexOf('-');
+if (PosSize==-1) 
+    return;
+String[] ListFields = Line.substring(PosSize+1).split(",");
+ListIgnFields= new HashSet(ListFields.length);
+for (String ListField : ListFields)
+    ListIgnFields.add(ListField.trim().toUpperCase());
+}
+//-------------------------------------------------------------------------
+/**
+ * Checks if the Attr can be include in the list
+ * @param Attr Attribute to check
+ * @return true if can be included
+ */
+private boolean CanInclude(Attribute Attr)
+{
+if (ListIgnFields!=null && ListIgnFields.contains(Attr.getName().toUpperCase()))
+    return(false);
+if (DelNull)
+    {
+    if (Attr.getValue()==null || Attr.Export().length()==0)
+        return(false);
+    }
+return(true);
+}
+//-------------------------------------------------------------------------
+/**
+ * Checks if the DocType/FoldType can be included in list
+ * @param Rec record btained of a Cursor
+ * @return 
+ */
+private boolean CanInclude(Record Rec)
+{
+if (ListIgnTypes==null)    
+    return(true);
+Attribute Attr=Rec.getAttr(PDDocs.fDOCTYPE);
+if (Attr!=null)
+    {
+    return (!ListIgnTypes.contains(((String)Attr.getValue()).toUpperCase()));
+    }
+Attr=Rec.getAttr(PDFolders.fFOLDTYPE);
+if (Attr!=null)
+    {
+    return (!ListIgnTypes.contains(((String)Attr.getValue()).toUpperCase()));
+    }
+return(true);
+}    
+//-------------------------------------------------------------------------
 }
