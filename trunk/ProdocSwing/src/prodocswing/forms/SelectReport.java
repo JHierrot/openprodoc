@@ -26,6 +26,8 @@
 package prodocswing.forms;
 
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import prodoc.Attribute;
 import prodoc.Cursor;
 import prodoc.PDDocs;
 import prodoc.PDException;
@@ -48,7 +50,7 @@ String TypeDocRestore="";
 String DocType=null;
 private Cursor RetrievedDocsCur=null;
 private Record RepStruct=new Record();
-private boolean Cancel;
+private boolean Cancel=true;
 
 /** Creates new form ListObjects
  * @param parent 
@@ -63,14 +65,9 @@ ObjectsTable.setAutoCreateColumnsFromModel(true);
 DocType=PDReport.getTableName();
 PDReport Rep=new PDReport(MainWin.getSession());
 RetrievedDocsCur=Rep.GetListReports();
-//Record Original=Rep.getRecSum().CopyMono();
-//RepStruct.addAttr(Original.getAttr(PDDocs.fPDID));
-//RepStruct.addAttr(Original.getAttr(PDDocs.fTITLE));
-//RepStruct.addAttr(Original.getAttr(PDDocs.fDOCTYPE));
-//RepStruct.addAttr(Original.getAttr(PDDocs.fDOCDATE));
-//RepStruct.addAttr(Original.getAttr(PDDocs.fVERSION));
 RepStruct=Rep.getRecSum().CopyMono();
 RefreshTable();
+FilePathTextField.setText(MainWin.getIO_OSFolder());
 }
 
     /** This method is called from within the constructor to
@@ -92,6 +89,9 @@ RefreshTable();
         PagesPerDocText = new javax.swing.JFormattedTextField();
         ButtonCancel = new javax.swing.JButton();
         ButtonAcept = new javax.swing.JButton();
+        FilePathLabel = new javax.swing.JLabel();
+        FilePathTextField = new javax.swing.JTextField();
+        ButtonSelFile = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(MainWin.TT("Reports_Generation"));
@@ -149,6 +149,21 @@ RefreshTable();
             }
         });
 
+        FilePathLabel.setFont(MainWin.getFontDialog());
+        FilePathLabel.setText(MainWin.TT("Destination_Folder"));
+
+        FilePathTextField.setFont(MainWin.getFontDialog());
+
+        ButtonSelFile.setFont(MainWin.getFontDialog());
+        ButtonSelFile.setText("Sel");
+        ButtonSelFile.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                ButtonSelFileActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -156,7 +171,7 @@ RefreshTable();
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 571, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
                     .addComponent(jScrollPane1)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -173,7 +188,13 @@ RefreshTable();
                                 .addComponent(PagesPerDocLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(PagesPerDocText, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(FilePathLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(FilePathTextField)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(ButtonSelFile, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -191,7 +212,12 @@ RefreshTable();
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(PagesPerDocLabel)
                     .addComponent(PagesPerDocText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(FilePathTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(FilePathLabel)
+                    .addComponent(ButtonSelFile))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButtonCancel)
                     .addComponent(ButtonAcept))
@@ -207,7 +233,13 @@ private void formWindowClosing(java.awt.event.WindowEvent evt)//GEN-FIRST:event_
 
     private void ObjectsTableMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_ObjectsTableMouseClicked
     {//GEN-HEADEREND:event_ObjectsTableMouseClicked
-
+if (getObjectsTable().getSelectedRow()==-1)
+    return;
+Record R=DocsList.getElement(getObjectsTable().convertRowIndexToModel(getObjectsTable().getSelectedRow()));
+Attribute DocsPage=R.getAttr(PDReport.fDOCSPAGE);
+Attribute PagesDoc=R.getAttr(PDReport.fPAGESDOC);
+DocsPerPageText.setText(((Integer)DocsPage.getValue()).toString());
+PagesPerDocText.setText(((Integer)PagesDoc.getValue()).toString());
     }//GEN-LAST:event_ObjectsTableMouseClicked
 
     private void ButtonCancelActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ButtonCancelActionPerformed
@@ -218,15 +250,28 @@ this.dispose();
 
     private void ButtonAceptActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ButtonAceptActionPerformed
     {//GEN-HEADEREND:event_ButtonAceptActionPerformed
+MainWin.setIO_OSFolder(FilePathTextField.getText());
 Cancel=false;
 this.dispose();
     }//GEN-LAST:event_ButtonAceptActionPerformed
 
+    private void ButtonSelFileActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ButtonSelFileActionPerformed
+    {//GEN-HEADEREND:event_ButtonSelFileActionPerformed
+JFileChooser fc = new JFileChooser(MainWin.getIO_OSFolder());
+fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+int returnVal = fc.showOpenDialog(this);
+if (returnVal == JFileChooser.APPROVE_OPTION)
+    FilePathTextField.setText(fc.getSelectedFile().getAbsolutePath());
+    }//GEN-LAST:event_ButtonSelFileActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonAcept;
     private javax.swing.JButton ButtonCancel;
+    private javax.swing.JButton ButtonSelFile;
     private javax.swing.JLabel DocsPerPageLab;
     private javax.swing.JFormattedTextField DocsPerPageText;
+    private javax.swing.JLabel FilePathLabel;
+    private javax.swing.JTextField FilePathTextField;
     private javax.swing.JTable ObjectsTable;
     private javax.swing.JLabel PagesPerDocLabel;
     private javax.swing.JFormattedTextField PagesPerDocText;

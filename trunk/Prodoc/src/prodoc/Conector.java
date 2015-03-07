@@ -89,14 +89,14 @@ Conector(String pConectorName, Properties ProdocProperties) throws PDException
 {
 ConectorName=pConectorName;
 DataAccessType=ProdocProperties.getProperty(ConectorName+".DATA_TYPE").trim();
-MinPoolSize=new Integer(ProdocProperties.getProperty(ConectorName+".DATA_MIN")).intValue();
-MaxPoolSize=new Integer(ProdocProperties.getProperty(ConectorName+".DATA_MAX")).intValue();
-TimeOutPool=new Integer(ProdocProperties.getProperty(ConectorName+".DATA_TIMEOUT")).intValue();
+MinPoolSize=Integer.parseInt(ProdocProperties.getProperty(ConectorName+".DATA_MIN"));
+MaxPoolSize=Integer.parseInt(ProdocProperties.getProperty(ConectorName+".DATA_MAX"));
+TimeOutPool=Integer.parseInt(ProdocProperties.getProperty(ConectorName+".DATA_TIMEOUT"));
 User=ProdocProperties.getProperty(ConectorName+".DATA_USER").trim();
 Password=ProdocProperties.getProperty(ConectorName+".DATA_PASSWORD").trim();
 URL=ProdocProperties.getProperty(ConectorName+".DATA_URL").trim();
 PARAM=ProdocProperties.getProperty(ConectorName+".DATA_PARAM").trim();
-int LogLevel=new Integer(ProdocProperties.getProperty("TRACELEVEL")).intValue();
+int LogLevel=Integer.parseInt(ProdocProperties.getProperty("TRACELEVEL"));
 PDLog.setLevel(LogLevel);
 String LogProp=ProdocProperties.getProperty("TRACECONF");
 if (LogProp==null || LogProp.length()==0)

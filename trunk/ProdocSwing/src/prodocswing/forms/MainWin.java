@@ -71,7 +71,7 @@ private static final String List=PDFolders.fACL+"/"+PDFolders.fFOLDTYPE+"/"+PDFo
 private static final HashSet ExecFiles=new HashSet();
 static protected java.awt.Cursor DefCur=new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR);
 static protected final java.awt.Cursor WaitCur=new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR);
-
+private static String IO_OSFolder=System.getProperty("java.io.tmpdir");
 
 /**
 * @return the Session
@@ -1402,7 +1402,7 @@ ExpFold.setVisible(true);
 if (ExpFold.isCancel())
     return;
 setCursor(WaitCur);    
-Export(FoldAct, ExpFold.SelFolder.getAbsolutePath(), ExpFold.IsOneLevel(), ExpFold.IncludeMetadata(), ExpFold.IncludeDocs());
+Export(FoldAct, getIO_OSFolder(), ExpFold.IsOneLevel(), ExpFold.IncludeMetadata(), ExpFold.IncludeDocs());
 setCursor(DefCur);
 Message(DrvTT("Exported")+" "+ExpFolds+" "+DrvTT("Folders")+" / "+ExpDocs +" "+DrvTT("Documents"));
 } catch (Exception ex)
@@ -1423,7 +1423,7 @@ ImpFold.setVisible(true);
 if (ImpFold.isCancel())
     return;
 setCursor(WaitCur);
-Import(FoldAct, ImpFold.SelFolder.getAbsolutePath(), ImpFold.IsOneLevel(), ImpFold.IncludeMetadata(), ImpFold.IncludeDocs(), ImpFold.FoldType(), ImpFold.DocType(), ImpFold.IsStrict());
+Import(FoldAct, getIO_OSFolder(), ImpFold.IsOneLevel(), ImpFold.IncludeMetadata(), ImpFold.IncludeDocs(), ImpFold.FoldType(), ImpFold.DocType(), ImpFold.IsStrict());
 TreePath ActualPath = TreeFolder.getSelectionPath();
 DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) ActualPath.getLastPathComponent();
 ExpandFold(TreeFold);
@@ -1474,7 +1474,7 @@ ImpFold.setVisible(true);
 if (ImpFold.isCancel())
     return;
 setCursor(WaitCur);
-ImportExt(FoldAct, ImpFold.SelFolder.getAbsolutePath(), ImpFold.DeleteAfterImport(), ImpFold.ImpFormat(), ImpFold.DefaultFoldType(), ImpFold.DateFormat(), ImpFold.TimeStampFormat());
+ImportExt(FoldAct, getIO_OSFolder(), ImpFold.DeleteAfterImport(), ImpFold.ImpFormat(), ImpFold.DefaultFoldType(), ImpFold.DateFormat(), ImpFold.TimeStampFormat());
 TreePath ActualPath = TreeFolder.getSelectionPath();
 DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) ActualPath.getLastPathComponent();
 ExpandFold(TreeFold);
@@ -1563,6 +1563,7 @@ SR.setLocationRelativeTo(null);
 SR.setVisible(true);
 if (SR.isCancel())
     return;
+setCursor(WaitCur);
 PDFolders Fold=new PDFolders(Session);
 Conditions Conds=new Conditions();
 Condition Cond=new Condition(PDFolders.fPARENTID, Condition.cEQUAL, ActFolderId);
@@ -1570,8 +1571,12 @@ Conds.addCondition(Cond);
 Cursor Cur=Fold.Search(PDFolders.getTableName(), Conds,  true, false, null, null);
 PDReport Rep=new PDReport(Session);
 Rep.setPDId(SR.getSelectedRep());
-ArrayList<String> GeneratedRep = Rep.GenerateRep(ActFolderId, Cur,  SR.getDocsPerPage(), SR.getPagesPerFile());
-Message("generated:"+GeneratedRep.get(0));
+ArrayList<String> GeneratedRep = Rep.GenerateRep(ActFolderId, Cur,  SR.getDocsPerPage(), SR.getPagesPerFile(), getIO_OSFolder());
+setCursor(DefCur);
+ListReports LR = new ListReports(this, true);
+LR.setLocationRelativeTo(null);
+LR.setRepList(GeneratedRep);
+LR.setVisible(true);
 } catch (Exception ex)
     {
     Message(DrvTT(ex.getLocalizedMessage()));
@@ -1580,7 +1585,23 @@ Message("generated:"+GeneratedRep.get(0));
 
     private void ReportsDocActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ReportsDocActionPerformed
     {//GEN-HEADEREND:event_ReportsDocActionPerformed
-        // TODO add your handling code here:
+try {
+SelectReport SR = new SelectReport(this, true);
+SR.setLocationRelativeTo(null);
+SR.setVisible(true);
+if (SR.isCancel())
+    return;
+setCursor(WaitCur);
+PDDocs Doc=new PDDocs(Session);
+PDReport Rep=new PDReport(Session);
+Rep.setPDId(SR.getSelectedRep());
+ArrayList<String> GeneratedRep = Rep.GenerateRep(ActFolderId, Doc.getListContainedDocs(ActFolderId),  SR.getDocsPerPage(), SR.getPagesPerFile(), getIO_OSFolder());
+setCursor(DefCur);
+Message("generated:"+GeneratedRep.get(0));
+} catch (Exception ex)
+    {
+    Message(DrvTT(ex.getLocalizedMessage()));
+    }
     }//GEN-LAST:event_ReportsDocActionPerformed
 
 /**
@@ -1830,7 +1851,7 @@ return (DI.getReturnStatus()==DialogInfoQuestion.RET_OK);
  */
 static public String SelectDestination(String RecomFileName, String Ext, boolean Save)
 {
-JFileChooser fc = new JFileChooser();
+JFileChooser fc = new JFileChooser(getIO_OSFolder());
 if (Ext!=null)
     fc.setFileFilter(new FileNameExtensionFilter("file "+Ext, Ext));
 if (RecomFileName!=null)
@@ -1855,6 +1876,7 @@ return(fc.getSelectedFile().getAbsolutePath());
  */
 static public String SelectFolderDestination(String RecomFileName)
 {
+    //gfgfgf
 JFileChooser fc = new JFileChooser();
 if (RecomFileName!=null)
     fc.setSelectedFile(new File(RecomFileName));
@@ -2167,7 +2189,7 @@ return(Tmp);
  */
 static public String getVersion()
 {
-return("1.1");  
+return("1.2");  
 }
 //---------------------------------------------------------------------
 
@@ -2255,27 +2277,26 @@ ExpFolds++;
 File ImpFold=new File(OriginPath);
 File []ListOrigin=ImpFold.listFiles();
 ArrayList DirList=new ArrayList(5);
-for (int i = 0; i < ListOrigin.length; i++)
+for (File ListElement : ListOrigin)
     {
-    File ListElement = ListOrigin[i];
     if (ListElement.isDirectory())
         {
-        if (!IsOneLevel)   
+        if (!IsOneLevel)
             DirList.add(ListElement);
         continue;
         }
-    if (IncludeDocs)    
+    if (IncludeDocs)
         {
         if (ListElement.getName().endsWith(".opd"))
             {
             if (IncludeMetadata)
                 {
                 try {
-                ExpDocs+=getSession().ProcessXML(ListElement, NewFold.getPDId());   
-                        } catch (PDException ex)
-                            {
-                            throw new PDException(ex.getLocalizedMessage()+"->"+ListElement.getAbsolutePath());
-                            }
+                    ExpDocs+=getSession().ProcessXML(ListElement, NewFold.getPDId());
+                } catch (PDException ex)
+                    {
+                    throw new PDException(ex.getLocalizedMessage()+"->"+ListElement.getAbsolutePath());    
+                    }
                 }
             }
         else
@@ -2288,7 +2309,7 @@ for (int i = 0; i < ListOrigin.length; i++)
                 NewDoc.setDocDate(new Date(ListElement.lastModified()));
                 NewDoc.setParentId(NewFold.getPDId());
                 NewDoc.insert();
-                ExpDocs++;    
+                ExpDocs++;
                 }
             }
         }
@@ -2321,26 +2342,25 @@ File ImpFold=new File(OriginPath);
 File []ListOrigin=ImpFold.listFiles();
 ArrayList DirList=new ArrayList(5);
 File ImageFile=null;
-for (int i = 0; i < ListOrigin.length; i++)
+for (File ListElement : ListOrigin)
     {
-    File ListElement = ListOrigin[i];
     if (ListElement.isDirectory())
         {
         DirList.add(ListElement);
         continue;
         }
     if (ListElement.getName().toLowerCase().endsWith(".xml") && Format.equals("Abby"))
-        {       
+        {
         ExpDocs++;
         try {
-        ImageFile=PDDocs.ProcessXMLAbby(getSession(), ListElement, NewFold.getPDId(), DateFormat, TimeStampFormat); 
+            ImageFile=PDDocs.ProcessXMLAbby(getSession(), ListElement, NewFold.getPDId(), DateFormat, TimeStampFormat);
         } catch (PDException ex)
             {
             throw new PDException(ex.getLocalizedMessage()+"->"+ListElement.getAbsolutePath());
             }
         if (DeleteAfter)
             {
-            if (ImageFile!=null)    
+            if (ImageFile!=null)
                 ImageFile.delete();
             ListElement.delete();
             }
@@ -2349,17 +2369,17 @@ for (int i = 0; i < ListOrigin.length; i++)
         {
         ExpDocs++;
         try {
-        ImageFile=PDDocs.ProcessXMLKofax(getSession(), ListElement, NewFold.getPDId(), DateFormat, TimeStampFormat); 
+            ImageFile=PDDocs.ProcessXMLKofax(getSession(), ListElement, NewFold.getPDId(), DateFormat, TimeStampFormat);
         } catch (PDException ex)
             {
             throw new PDException(ex.getLocalizedMessage()+"->"+ListElement.getAbsolutePath());
             }
         if (DeleteAfter)
             {
-            if (ImageFile!=null)    
+            if (ImageFile!=null)
                 ImageFile.delete();
             ListElement.delete();
-            }        
+            }
         }
     }
 ListOrigin=null; // to help gc and save memory during recursivity
@@ -2434,4 +2454,23 @@ DelDoc.setVisible(R.isAllowMaintainDoc());
     }
 }
 //---------------------------------------------------------------------
+/**
+* @return the IO_OSFolder
+*/
+public static String getIO_OSFolder()
+{
+return IO_OSFolder;
+}
+//---------------------------------------------------------------------
+
+/**
+* @param aIO_OSFolder the IO_OSFolder to set
+*/
+public static void setIO_OSFolder(String aIO_OSFolder)
+{
+IO_OSFolder = aIO_OSFolder;
+}
+//---------------------------------------------------------------------
+
+
 }

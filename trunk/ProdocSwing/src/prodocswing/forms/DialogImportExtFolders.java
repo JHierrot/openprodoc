@@ -44,7 +44,7 @@ private boolean Cancel;
 /**
  * 
  */
-public File SelFolder=null;
+private File SelFolder=null;
 
 /** Creates new form DialogEditFold
  * @param parent
@@ -54,6 +54,7 @@ public DialogImportExtFolders(java.awt.Frame parent, boolean modal)
 {
 super(parent, modal);
 initComponents();
+FilePathTextField.setText(MainWin.getIO_OSFolder());
 }
 
 /** This method is called from within the constructor to
@@ -250,24 +251,18 @@ this.dispose();
 
     private void ButtonAceptActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ButtonAceptActionPerformed
     {//GEN-HEADEREND:event_ButtonAceptActionPerformed
-if (SelFolder==null)
-    {
-    SelFolder=new File(FilePathTextField.getText());
-    }
+MainWin.setIO_OSFolder(FilePathTextField.getText());
 Cancel = false;
 this.dispose();
 }//GEN-LAST:event_ButtonAceptActionPerformed
 
     private void ButtonSelFileActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ButtonSelFileActionPerformed
     {//GEN-HEADEREND:event_ButtonSelFileActionPerformed
-JFileChooser fc = new JFileChooser();
+JFileChooser fc = new JFileChooser(MainWin.getIO_OSFolder());
 fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 int returnVal = fc.showOpenDialog(this);
 if (returnVal == JFileChooser.APPROVE_OPTION)
-    {
-    SelFolder = fc.getSelectedFile();
-    FilePathTextField.setText(SelFolder.getAbsolutePath());
-    }
+    FilePathTextField.setText(fc.getSelectedFile().getAbsolutePath());
     }//GEN-LAST:event_ButtonSelFileActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowClosing
