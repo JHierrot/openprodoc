@@ -72,6 +72,8 @@ private boolean ExpandObject=false;
 private boolean DelNull=false;
 private HashSet<String> ListIgnTypes=null; 
 private HashSet<String> ListIgnFields=null; 
+public static final String fDOCSPAGE="DOCSPAGE";
+public static final String fPAGESDOC="PAGESDOCS";
 /**
  * Default constructor
  * @param pDrv Generic sesion to be used
@@ -91,7 +93,7 @@ super(pDrv,getTableName());
  * @return path to the generated Report.
  * @throws prodoc.PDException
  */
-public ArrayList<String> GenerateRep(String pIdParent, Cursor pListDocs, int pRecsPag, int pPagsDoc) throws PDException
+public ArrayList<String> GenerateRep(String pIdParent, Cursor pListDocs, int pRecsPag, int pPagsDoc, String OSFolder) throws PDException
 {
 ArrayList<String> ListFiles=new ArrayList();
 Load(getPDId());  
@@ -99,15 +101,15 @@ IdParent=pIdParent;
 ListDocs=pListDocs;
 RecsPag=pRecsPag!=0?pRecsPag:99999999;
 PagsDoc=pPagsDoc!=0?pPagsDoc:99999999;
-String GenRep = System.getProperty("java.io.tmpdir");
+String GenRep = OSFolder;
 if (!GenRep. endsWith(File.separator))
     GenRep+=File.separator;
 GenRep+=GenerateId();
-ListFiles.add(GenRep+"."+getMimeType());
+ListFiles.add(GenRep+"_0."+getMimeType());
 String OrigRep=GenRep+".org";
 try {
 ReadTemplate(OrigRep);
-FRepDoc = new PrintWriter(GenRep+"."+getMimeType(), "UTF-8");
+FRepDoc = new PrintWriter(GenRep+"_0."+getMimeType(), "UTF-8");
 PrintHeader();
 Res=getDrv().NextRec(ListDocs);
 while (Res!=null)    
