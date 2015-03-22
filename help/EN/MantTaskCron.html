@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Scheduled Tasks Maintenance</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+<H4>Scheduled Tasks Maintenance</H4><hr>
+<p>When selected in the form <a href="ListTaskCron.html">Scheduled Tasks List</a> one of the options to add, delete, modify or copy the task, will appear this form with different fields on or off.</p>
+<p>This form contains the information:</p>
+<ul>
+    <li><b>Task Name</b>: Task system identifier whose value can not be repeated or changed once assigned. Itcan have a maximum length of 32 characters. (I.e. "Purge_HR_Exp")</li>
+    <li><b>Task Description</b>: Description for understanding the task. It can have a maximum length of 128 characters. (Eg "Purge Human Resources Files")</li>
+    <li><b>Task Category</b>: Text for grouping and clasifying tasks. It can have a maximum length of 32 characters.</li>
+    <li><b>Kind of Task</b>: Kind of Task. It can be:
+        <ul>
+        <li>"DELETE_OLD_FOLD": Deletes the folders (and all the objects contained in them) with a specified age,</li>
+        <li>"DELETE_OLD_DOC": Deletes (move to trash bin) all the documents with a specified age,</li>
+        <li>"PURGE_DOC": Purges/Deletes from the paper bin all the documents with an specified age.</li>
+        <li>"IMPORT": Imports automatically from a filesystem,</li>
+        <li>"EXPORT": Exports automatically from OpenProdoc to a filesystem,</li>
+        <li>"DOCSREPORT": Creates a report about documents of a document type (and subtypes) updated under a folder estructure and saves the report as document html in the home folder of each user of defined group.</li>
+        <li>"FOLDSREPORT": Creates a report about folders of a folder type (and subtypes) updated under a folder estructure and saves the report as document html in the home folder of each user of defined group.</li>
+        </ul>
+    </li>    
+    <li><b>Object type</b> (one of Folder or Document types) that apply the task.</li>    
+    <li><b>Object filter</b> always * in this version</li>    
+    <li><b>Parameters of the task</b>. Depend on task type. The "Edit" button shows a form different depending on task type for easier entry. The meaning of the parameters is:
+        <ul>
+        <li>"DELETE_OLD_FOLD": 
+            <ul>
+                <li>Param1: Boolean value (0/1) indicating whether the task applies to subtypes or only the type assigned (I.e. "0").</li>
+                <li>Param2: Number of days to maintain the folders.(I.e.: For deleting folders older than ten years: "3650")</li>
+                <li>Param3: Root folder for the task. All the folder of the specified type under this folder (in any level) will be deleted. Don't include "Rootfolder"(I.e."/Administration/HR").</li>
+            </ul>
+        </li>
+        <li>"DELETE_OLD_DOC":             
+            <ul>
+                <li>Param1: Boolean value (0/1) indicating whether the task applies to subtypes or only the type assigned I.e.Ej: "0").</li>
+                <li>Param2: Number of days to maintain the documents.(I.e.: For deleting documents older than ten years: "3650")</li>
+                <li>Param3: Root folder for the task. All the documents of the specified type under this folder (in any level) will be deleted. Don't include "Rootfolder"(I.e."/Administration/HR").</li>
+            </ul>
+        </li>
+        <li>"PURGE_DOC": 
+            <ul>
+                <li>Param1: Number of days to maintain the documents.(I.e.: For deleting documents older than ten years: "3650")</li>
+            </ul>
+        </li>
+        <li>"IMPORT":
+            <ul>
+                <li>Param1: Boolean value (0/1) indicating whether the task should travel recursively by all the folders conatined int the source folder (I.e.: "0").</li>
+                <li>Param2: Document Type to by asigned to the imported documents.(I.e.: "FinantialReport")</li>
+                <li>Param3: Target folder in OpenProdoc where all the external structure of folders and documents will be recreated. You don't need to include "Rootfolder"(I.e.."/Administration/HR").</li>
+                <li>Param4: Source folder from which all the structure will be imported. (I.e."c:\ImporFolder").</li>
+            </ul>
+        </li>
+        <li>"EXPORT":            
+            <ul>
+                <li>Param1: Boolean value (0/1) indicating whether the task should travel recursively by all the folders conatined int the source folder (I.e.: "0").</li>
+                <li>Param2: Number of days from updating.(I.e. For exporting the documents inserted during the last week: "7")</li>
+                <li>Param3: Source folder in OpenProdoc from which all the structure of folders and documents will be exported. You don't need to include "Rootfolder"(I.e.."/Administration/HR").</li>
+                <li>Param4: Target folder where all the structure will be exported. (I.e.."/tmp/NewDocuments").</li>
+            </ul>
+        </li>
+        <li>"DOCSREPORT":            
+            <ul>
+                <li>Param1: Boolean value (0/1) indicating whether the task should travel recursively by all the folders conatined int the source folder (I.e.: "0").</li>
+                <li>Param2: Range of days .(I.e. For reporting the documents updated three weeks ago: "21|14")</li>
+                <li>Param3: Group of users who will receive the document with the report of new documents (i.e. 2"Suscriptors"). The subgroups will be ignored.</li>
+                <li>Param4: Source folder in OpenProdoc. The documents updated under this structure will be inclued in report. You don't need to include "Rootfolder"(I.e.."/Administration/HR").</li>
+            </ul>
+        </li>
+        <li>"FOLDSREPORT":            
+            <ul>
+                <li>Param1: Boolean value (0/1) indicating whether the task should travel recursively by all the folders conatined int the source folder (I.e.: "0").</li>
+                <li>Param2: Range of days .(I.e. For reporting the documents updated three weeks ago: "21|14")</li>
+                <li>Param3: Group of users who will receive the document with the report of new documents (i.e. 2"Suscriptors"). The subgroups will be ignored.</li>
+                <li>Param4: Source folder in OpenProdoc. The documents updated under this structure will be inclued in report. You don't need to include "Rootfolder"(I.e.."/Administration/HR").</li>
+            </ul>
+        </li>
+        </ul>
+    </li>    
+    <li><b>Date and time</b>: Date and time of next execution (generation) of the task.</li>    
+    <li><b>Months</b> Months between execution (it can be 0)</li>    
+    <li><b>Days</b> Days between execution (it can be 0)</li>    
+    <li><b>Hours</b> Hours between execution (it can be 0)</li>    
+    <li><b>Minutes</b> Minutes between execution (it can be 0, but at least one in Months, Days, Hours or Minutes MUST be not cero)</li>    
+    <li><b>Active</b>: Flag indicating whether the task is active (and will be executed) or not.</li>    
+    <li><b>Transaccionality</b>: Flag indicating whether the task is transactional (and affect to all the objects or none) or not.</li>    
+</ul>
+<p>This form includes two additional buttons:<b>Test</b> y <b>Run</b>.</p> 
+<p>Selecting <b>Test</b> OPD runs a search for the elements that fill the criteria specified (Document type, folders, dates,. ) and shows a list with the elements found so you can check that the criteria is correct and returns the expected set of documents or folders.
+This search doesn't apply to operations as import that don't manage existing objects in the repository.</p>
+<p>Selecting <b>Run</b> you RUN the task only once with the defined criteria, so beware that you can delete or modify thousands of elements.</p> 
+<p style="text-align:center;"><img alt="Screenshot MantTaskCron" src="img/MantTaskCron.png"/></p>
+<p>View: <a href="ListTaskCron.html">Scheduled Tasks List</a></p>
+<hr>
+<a href="HelpIndex.html">Help Index OpenProdoc</a>
+    </body>
+</html>
