@@ -22,7 +22,6 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
-
 /* Base text styles */
 
 body {
@@ -95,6 +94,7 @@ em {
 
 strong {
   font-weight:700;
+  font-size: 18px;
 }
 
 ul {
@@ -215,19 +215,19 @@ td {
 /* Header */
 
 header {
-	background-color: #171717;
+	background-color: #606060;
 	color: #FDFDFB;
-  width:170px;
+  width:190px;
   float:left;
   position:fixed;
-	border: 1px solid #000;
+	border: 1px solid #808080;
 	-webkit-border-top-right-radius: 4px;
 	-webkit-border-bottom-right-radius: 4px;
 	-moz-border-radius-topright: 4px;
 	-moz-border-radius-bottomright: 4px;
 	border-top-right-radius: 4px;
 	border-bottom-right-radius: 4px;
-	padding: 34px 25px 22px 50px;
+	padding: 34px 25px 22px 25px;
 	margin: 30px 25px 0 0;
 	-webkit-font-smoothing: antialiased;
 }
@@ -265,7 +265,7 @@ header ul {
 
 header li {
 	list-style-type: none;
-  width:132px;
+  width:182px;
   height:15px;
 	margin-bottom: 12px;
 	line-height: 1em;
@@ -309,6 +309,9 @@ a.buttons {
 a.github {
 	background: url(../images/octocat-small.png) no-repeat 1px;
 }
+a.openprodoc {
+	background: url(../images/LogoProdocMini.png) no-repeat 1px;
+}
 
 a.buttons:hover {
 	color: #fff;
@@ -335,7 +338,7 @@ footer {
 	padding-left: 50px;
 }
 
-@media print, screen and (max-width: 960px) {
+@media print, screen and (max-width: 1200px) {
 
   div.wrapper {
     width:auto;
