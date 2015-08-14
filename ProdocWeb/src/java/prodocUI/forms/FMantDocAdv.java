@@ -142,7 +142,7 @@ if (pMode!=ADDMOD)
         DocFile.setActivado(false);
         DocFile2.setActivado(false);
         }
-    Element ListFields=ListTypeDocs.GenTabFields(Req, pRec, pMode);
+    Element ListFields=ListTypeDocs.GenTabFields(Req, pRec, pMode, false);
     BorderTab.getCelda(0,2).AddElem(ListFields);
     String NomRep=(String)pRec.getAttr(PDDocs.fREPOSIT).getValue();
     if (ServParent.IsUrl(Req, NomRep))

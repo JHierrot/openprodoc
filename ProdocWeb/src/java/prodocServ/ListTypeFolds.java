@@ -32,6 +32,7 @@ import prodoc.PDFolders;
 import prodoc.PDThesaur;
 import prodoc.Record;
 import prodocUI.forms.FMantFoldAdv;
+import prodocUI.forms.FSearchFoldAdv;
 import prodocUI.servlet.SMain;
 import prodocUI.servlet.SParent;
 
@@ -59,7 +60,7 @@ DriverGeneric PDSession=(DriverGeneric)Sess.getAttribute("PRODOC_SESS");
 String Typ=(String)Req.getParameter("Type");
 PDFolders F = new PDFolders(PDSession, Typ);
 Record Rec=F.getRecSum();
-Element TabFields=GenTabFields(Req, Rec, FMantFoldAdv.ADDMOD);
+Element TabFields=GenTabFields(Req, Rec, FMantFoldAdv.ADDMOD, false);
 out.println(TabFields.ToHtml(Sess));
 }
 //-----------------------------------------------------------------------------------------------
@@ -81,7 +82,7 @@ static public String getUrlServlet()
 return("ListTypeFolds");
 }
 //-----------------------------------------------------------------------------------------------
-static public Element GenTabFields(HttpServletRequest Req, Record Rec, int pMode) throws PDException
+static public Element GenTabFields(HttpServletRequest Req, Record Rec, int pMode, boolean Search) throws PDException
 {
 Rec.initList();
 Attribute Attr=Rec.nextAttr();
@@ -98,11 +99,12 @@ if (FL.isEmpty())
     {
     return(new Element(" "));
     }
-Table AditionFieldsTab=new Table(4, FL.size(), 0);
+boolean IsSearch=SParent.getIsSearch(Req) || Search;
+Table AditionFieldsTab=new Table(5, FL.size(), 0);
 AditionFieldsTab.setWidth(-100);
 AditionFieldsTab.setCellPadding(5);
 AditionFieldsTab.setCSSClass("FFormularios");
-AditionFieldsTab.getCelda(0,0).setWidth(-25);
+AditionFieldsTab.getCelda(0,0).setWidth(-15);
 AditionFieldsTab.getCelda(0,0).setHeight(30);
 Field FieldHtml;
 for (int i = 0; i < FL.size(); i++)
@@ -146,7 +148,7 @@ for (int i = 0; i < FL.size(); i++)
         }
     else if (Attr.getType()==Attribute.tTHES)
         {
-        if (Attr.getValue()!=null)    
+        if (Attr.getValue()!=null && ((String)Attr.getValue()).length()!=0)    
             {
             PDThesaur TermU=new PDThesaur(SMain.getSessOPD(Req));
             TermU.Load((String)Attr.getValue());
@@ -169,8 +171,15 @@ for (int i = 0; i < FL.size(); i++)
         }
     if (pMode==FMantFoldAdv.DELMOD || pMode==FMantFoldAdv.EDIMOD && !Attr.isModifAllowed())
         FieldHtml.setActivado(false);
-//    FieldHtml.setCSSClass("FFormInput");
-    AditionFieldsTab.getCelda(2,i).AddElem(FieldHtml);
+    if (IsSearch)
+        {
+        FieldComboOper OperCont=new FieldComboOper(FSearchFoldAdv.COMP+Attr.getName());
+        String OperVal=SParent.getOperMap(Req).get(FSearchFoldAdv.COMP+Attr.getName());
+        if (OperVal!=null)
+            OperCont.setValue(OperVal);
+        AditionFieldsTab.getCelda(2,i).AddElem(OperCont);
+        }
+    AditionFieldsTab.getCelda(3,i).AddElem(FieldHtml);
     }
 return(AditionFieldsTab);
 }

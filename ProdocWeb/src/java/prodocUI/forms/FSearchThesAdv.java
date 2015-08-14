@@ -57,7 +57,7 @@ public FSearchThesAdv(HttpServletRequest Req, int pMode, Record pRec,String Dest
 super(Req, SParent.TT(Req,"Search_Term"), pMode, pRec);
 AddJS("Types.js");
 HttpSession Sess=Req.getSession(true);
-Record Rec=(Record)Sess.getAttribute("SD_Rec");
+Record Rec=(Record)Sess.getAttribute(SParent.SD_Rec);
 DriverGeneric PDSession=SParent.getSessOPD(Req);
 Table BorderTab=new Table(1, 5, 1);
 BorderTab.setCSSId("BordTab");
@@ -120,9 +120,9 @@ FormTab.getCelda(2,4).AddElem(new Element(TT("Specific_Terms")+":"));
 FieldCheck SubFCh=new FieldCheck("SubTerms");
 SubFCh.setCSSClass("FFormInputCheck");
 SubFCh.setMensStatus(TT("When_checked_limits_the_search_to_actual_term_and_specific_terms"));
-if (Sess.getAttribute("ST_SubT")!=null)
+if (Sess.getAttribute(SParent.ST_SubT)!=null)
     {
-    if ((Boolean) Sess.getAttribute("ST_SubT"))
+    if ((Boolean) Sess.getAttribute(SParent.ST_SubT))
         SubFCh.setValue("1");
     }
 FormTab.getCelda(2,4).AddElem(SubFCh);

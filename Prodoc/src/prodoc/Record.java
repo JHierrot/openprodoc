@@ -428,6 +428,7 @@ S.append("<Rec>");
 initList();
 for (int i = 0; i < NumAttr(); i++)
     S.append(nextAttr().toXMLt());
+//    S.append(nextAttr().toXMLFull());
 S.append("</Rec>");
 return(S.toString());
 }
@@ -454,6 +455,8 @@ return(S.toString());
 //--------------------------------------------------------------------------
 static Record FillFromXML(Node AttrsNode, Record R) throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("Record.FillFromXML>:R="+R+"AttrsNode="+AttrsNode);        
 NodeList AttrLst = AttrsNode.getChildNodes();
 for (int j = 0; j < AttrLst.getLength(); j++)
     {
@@ -469,6 +472,8 @@ for (int j = 0; j < AttrLst.getLength(); j++)
             At.Import(Value);
         }
     }
+if (PDLog.isDebug())
+    PDLog.Debug("Record.FillFromXML<");        
 return(R);
 }
 //--------------------------------------------------------------------------
@@ -484,16 +489,42 @@ for (int j = 0; j < AttrLst.getLength(); j++)
         NamedNodeMap XMLattributes = Attr.getAttributes();
         Node XMLAttrName = XMLattributes.getNamedItem("Name");
         String AttrName=XMLAttrName.getNodeValue();
+        XMLAttrName = XMLattributes.getNamedItem("Multi");
+        boolean Multi=Integer.parseInt(XMLAttrName.getNodeValue())==1;
         XMLAttrName = XMLattributes.getNamedItem("Type");
         int Type=Integer.parseInt(XMLAttrName.getNodeValue());
+        XMLAttrName = XMLattributes.getNamedItem("LongStr");
+        int LongStr=Integer.parseInt(XMLAttrName.getNodeValue());
+        XMLAttrName = XMLattributes.getNamedItem("Req");
+        boolean Req=Integer.parseInt(XMLAttrName.getNodeValue())==1;
+        XMLAttrName = XMLattributes.getNamedItem("ModAllow");
+        boolean ModAllow=Integer.parseInt(XMLAttrName.getNodeValue())==1;
+        XMLAttrName = XMLattributes.getNamedItem("UniKey");
+        boolean UniKey=Integer.parseInt(XMLAttrName.getNodeValue())==1;
         String Value=DriverGeneric.DeCodif(Attr.getTextContent());
-        Attribute At=new Attribute(AttrName, "", "", Type, false, null, 254, false, false, false);
+        Attribute At=new Attribute(AttrName, "", "", Type, Req, null, LongStr, false, UniKey, ModAllow, Multi);
         if (Type==Attribute.tSTRING || Value.length()!=0)
             At.Import(Value);
         R.addAttr(At);
         }
     }
 return(R);
+}
+//--------------------------------------------------------------------------
+/**
+ * 
+ */
+public void CheckDef() throws PDExceptionFunc
+{
+initList();
+for (int i = 0; i < NumAttr(); i++)
+    {
+    Attribute At=nextAttr();
+    if (At.getName().equals(PDDocs.fNAME) || At.getName().equals(PDDocs.fMIMETYPE))
+        continue;
+    if (At.isRequired() && (At.getValue()==null || (At.getType()==Attribute.tSTRING && ((String)At.getValue()).length()==0)))
+        PDExceptionFunc.GenPDException("A_value_is_required", At.getUserName());
+    }
 }
 //--------------------------------------------------------------------------
 }

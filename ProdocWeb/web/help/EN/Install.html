@@ -39,7 +39,7 @@ It's necessary to start the shell script <b>Install.sh</b> or <b>Install.bat</b>
 <li><b>BBDD user password</b>: Password of the user in the DDBB. (required)</li>
 <li><b>DDBB server url</b>: Url in JDBC format of the database server (IE.:<i>"jdbc:mysql://127.0.0.1:3306/Prodoc", "jdbc:derby://localhost:1527/Prodoc"</i>). (required)</li>
 <li><b>Kind of conection</b>: Kind of connection to use. (In this version only JDBC, in the future, other systems as non SQL DDBB). (required)</li>
-<li><b>Java class to use</b>: Name of the classes used for connection (JDBC) (IE.:<i>"org.apache.derby.jdbc.ClientDriver", "com.mysql.jdbc.Driver"</i>). (required)</li>
+<li><b>Java class to use</b>: Name of the classes used for connection (JDBC) (IE.:<i>"org.apache.derby.jdbc.ClientDriver", "com.mysql.jdbc.Driver", "com.ibm.db2jcc.DBDriver"</i>). (required)</li>
 <li><b>Aditional Classpath</b>: Classpath where the connection classes and any required library is stored besides the folder ".\lib". The classpath must include the path to the JDBC driver libraries.</li>
 </ul> 
 <p>With the previous data, the install program will create a config file (Prodoc.properties) and a script Prodoc.sh or Prodoc.bat depending on Operative System.  

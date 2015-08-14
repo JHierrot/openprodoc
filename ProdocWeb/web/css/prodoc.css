@@ -184,7 +184,7 @@ table
 visibility:hidden;
 z-index:10;
 background-color:#ffffff;
-position:fixed;
+position:absolute;
 border-width:1px;
 border-style:solid;
 border-color:#000000;
@@ -195,7 +195,7 @@ text-align:left;
 visibility:hidden;
 z-index:10;
 background-color:#ffffff;
-position:fixed;
+position:absolute;
 border-width:1px;
 border-style:solid;
 border-color:#000000;

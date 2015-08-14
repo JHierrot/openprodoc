@@ -20,14 +20,18 @@ package prodoc;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.Vector;
 
 /**
  * Class for generating "reports"
@@ -38,11 +42,13 @@ public class PDReport extends PDDocs
  /**
  *
  */
-private static final String REPTABNAME="PD_REPORT";
+public static final String REPTABNAME="PD_REPORT";
 private static final String R_LOOPDOCS_S="@OPD_DOCSLOOP_S";
 private static final String R_LOOPDOCS_E="@OPD_DOCSLOOP_E";
 private static final String R_LOOPATTR_S="@OPD_ATTRLOOP_S";
 private static final String R_LOOPATTR_E="@OPD_ATTRLOOP_E";
+private static final String R_LOOPVAL_S="@OPD_VALLOOP_S";
+private static final String R_LOOPVAL_E="@OPD_VALLOOP_E";
 private static final String R_GLOBPARENT="@OPD_GLOBPARENT";
 private static final String R_PARENT="@OPD_PARENT";
 private static final String R_NAME_ATTR="@OPD_NAME_ATTR";
@@ -51,13 +57,15 @@ private static final String R_VAL_ATTR="@OPD_VAL_ATTR";
 private static final String R_REF_ATTR="@OPD_REF_ATTR";
 private static final String R_RECCOUNT="@OPD_RECCOUNT";
 private static final String R_PAGCOUNT="@OPD_PAGCOUNT";
-String IdParent=null;
-Cursor ListDocs=null;
+private String IdParent=null;
+private Cursor ListDocs=null;
 private final ArrayList<String> RepLines=new ArrayList();
 private int RecLoopStart=0;
 private int RecLoopEnd=0;
 private int AttrLoopStart=-1;
 private int AttrLoopEnd=-1;
+private int ValLoopStart=-1;
+private int ValLoopEnd=-1;
 PrintWriter FRepDoc = null;
 private int RecsPag; 
 private int PagsDoc;
@@ -74,6 +82,9 @@ private HashSet<String> ListIgnTypes=null;
 private HashSet<String> ListIgnFields=null; 
 public static final String fDOCSPAGE="DOCSPAGE";
 public static final String fPAGESDOC="PAGESDOCS";
+private TreeSet AttrValuesList=null;
+private Object CurVal=null;
+private Vector<Record> VectRec=null;
 /**
  * Default constructor
  * @param pDrv Generic sesion to be used
@@ -88,17 +99,25 @@ super(pDrv,getTableName());
  * generates a report with the current PDId
  * @param pIdParent Parent of the "cursor". Can be null
  * @param pListDocs Cursor with the list of docs
+ * @param pVectRec
  * @param pRecsPag Number oc record by page
  * @param pPagsDoc Number of pages by Archive
+ * @param OSFolder Folder for saving reports
  * @return path to the generated Report.
  * @throws prodoc.PDException
  */
-public ArrayList<String> GenerateRep(String pIdParent, Cursor pListDocs, int pRecsPag, int pPagsDoc, String OSFolder) throws PDException
+public ArrayList<String> GenerateRep(String pIdParent, Cursor pListDocs, Vector pVectRec, int pRecsPag, int pPagsDoc, String OSFolder) throws PDException
 {
+if (pListDocs!=null)    
+    ListDocs=pListDocs;
+else if (pVectRec!=null)
+    VectRec=pVectRec;
+else
+    PDException.GenPDException("Cursor_or_Vector_of_Records_needed", null);
+int CountVect=0;
 ArrayList<String> ListFiles=new ArrayList();
 Load(getPDId());  
 IdParent=pIdParent;
-ListDocs=pListDocs;
 RecsPag=pRecsPag!=0?pRecsPag:99999999;
 PagsDoc=pPagsDoc!=0?pPagsDoc:99999999;
 String GenRep = OSFolder;
@@ -111,7 +130,15 @@ try {
 ReadTemplate(OrigRep);
 FRepDoc = new PrintWriter(GenRep+"_0."+getMimeType(), "UTF-8");
 PrintHeader();
-Res=getDrv().NextRec(ListDocs);
+if (ListDocs!=null) 
+    Res=getDrv().NextRec(ListDocs);
+else
+    {
+    if (CountVect>=VectRec.size())
+        Res=null;
+    else
+        Res=VectRec.get(CountVect++);
+    }
 while (Res!=null)    
     {
     if (CanInclude(Res))
@@ -120,7 +147,15 @@ while (Res!=null)
         RecsInPageCount++;
         PrintRec();
         }
-    Res=getDrv().NextRec(ListDocs);
+    if (ListDocs!=null) 
+        Res=getDrv().NextRec(ListDocs);
+    else
+        {
+        if (CountVect>=VectRec.size())
+            Res=null;
+        else
+            Res=VectRec.get(CountVect++);
+        }
     if (RecsInPageCount>=RecsPag)
         {
         if (Res!=null)
@@ -140,14 +175,16 @@ while (Res!=null)
         PagesCount++;
         }   
     }
-getDrv().CloseCursor(ListDocs);
+if (ListDocs!=null) 
+    getDrv().CloseCursor(ListDocs);
 PrintFooter();
 FRepDoc.close();
 } catch (Exception Ex)
     {
     if (FRepDoc!=null)
         FRepDoc.close();
-    getDrv().CloseCursor(ListDocs);
+    if (ListDocs!=null) 
+        getDrv().CloseCursor(ListDocs);
     PDException.GenPDException(Ex.getLocalizedMessage() , getPDId()+"/"+getTitle());
     }
 return(ListFiles);
@@ -168,10 +205,12 @@ FO=new FileOutputStream(OrigRep); // download the original
 this.getStream(FO);
 FO.close();
 Template=new File(OrigRep); // read the original
-BR=new BufferedReader(new FileReader(Template));
+InputStreamReader in = new InputStreamReader(new FileInputStream(OrigRep), "UTF-8"); 
+BR=new BufferedReader(in);
 String Line=BR.readLine();
 while (Line!=null)
     {
+    Line=Line.trim();
     if (Line.startsWith(R_LOOPDOCS_S))
         {
         RecLoopStart=RepLines.size();
@@ -193,6 +232,10 @@ while (Line!=null)
         }
     else if (Line.equals(R_LOOPATTR_E))
         AttrLoopEnd=RepLines.size();
+    else if (Line.equals(R_LOOPVAL_S))
+        ValLoopStart=RepLines.size();
+    else if (Line.equals(R_LOOPVAL_E))
+        ValLoopEnd=RepLines.size();
     else
         RepLines.add(Line);
     Line=BR.readLine();
@@ -203,6 +246,10 @@ if (AttrLoopStart==-1)
     AttrLoopStart=RecLoopStart;
 if (AttrLoopEnd==-1)
    AttrLoopEnd=RecLoopStart; 
+if (ValLoopStart==-1)
+    ValLoopStart=AttrLoopStart;
+if (ValLoopEnd==-1)
+    ValLoopEnd=AttrLoopEnd; 
 } catch (Exception Ex)
     {
     if (BR!=null)
@@ -291,18 +338,25 @@ if (PosSize!=-1)
 if (Line.substring(R_VAL_ATTR.length()+1).startsWith("*")) // @OPD_VAL_ATTR_*
    Attr1=Attr;
 else
+    {
+    String s=Line.substring(R_VAL_ATTR.length()+1);
     Attr1=Res.getAttr(Line.substring(R_VAL_ATTR.length()+1)); // @OPD_VAL_ATTR_TITLE
+    }
 if (Attr1==null)
     return("");
-String Res=Attr1.Export();
-if (ElemSize==0)
-    return(Res); 
-else if (Res.length()>=ElemSize)
-    return(Res.substring(0, ElemSize));
-else if (Attr1.getType()==Attribute.tSTRING || Attr1.getType()==Attribute.tTHES)
-   return(Res+GetSpaces(ElemSize-Res.length()));  
+String ResVal;
+if (Attr1.isMultivalued())
+    ResVal=(String)CurVal;
 else    
-   return(GetSpaces(ElemSize-Res.length())+Res);  
+    ResVal=Attr1.Export();
+if (ElemSize==0)
+    return(ResVal); 
+else if (ResVal.length()>=ElemSize)
+    return(ResVal.substring(0, ElemSize));
+else if (Attr1.getType()==Attribute.tSTRING || Attr1.getType()==Attribute.tTHES)
+   return(ResVal+GetSpaces(ElemSize-ResVal.length()));  
+else    
+   return(GetSpaces(ElemSize-ResVal.length())+ResVal);  
 }
 //-------------------------------------------------------------------------
 /**
@@ -396,33 +450,43 @@ else
 if (Attr1==null)
     return("");
 String AttrName = Attr1.getName();
-String Res;
+String ResVal;
 if (AttrName.equals(PDDocs.fPARENTID))
     {
     PDFolders Fold=new PDFolders(getDrv());
     Fold.Load((String)Attr1.getValue());
-    Res=Fold.getTitle();
+    ResVal=Fold.getTitle();
     } 
 else if (Attr1.getType()==Attribute.tTHES)
     {
     PDThesaur Thes=new PDThesaur(getDrv());
-    Thes.Load((String)Attr1.getValue());
-    Res=Thes.getName();
+    if (Attr1.getValue()!=null)
+        {
+        Thes.Load((String)Attr1.getValue());
+        ResVal=Thes.getName();
+        }
+    else
+        ResVal="";
     }
 else if (AttrName.equals(PDDocs.fMIMETYPE))
     {
     PDMimeType MT=new PDMimeType(getDrv());
     MT.Load((String)Attr1.getValue());
-    Res=MT.getDescription();
+    ResVal=MT.getDescription();
     }
 else
-    Res=Attr1.Export();  
+    {
+    if (Attr1.isMultivalued())
+        ResVal=(String)CurVal;
+    else    
+        ResVal=Attr1.Export();
+    }
 if (ElemSize==0)
-    return(Res); 
-else if (Res.length()>=ElemSize)
-    return(Res.substring(0, ElemSize));
+    return(ResVal); 
+else if (ResVal.length()>=ElemSize)
+    return(ResVal.substring(0, ElemSize));
 else
-   return(Res+GetSpaces(ElemSize-Res.length())); 
+   return(ResVal+GetSpaces(ElemSize-ResVal.length())); 
 }
 //-------------------------------------------------------------------------
 /**
@@ -474,10 +538,6 @@ FRepDoc.println("");
  */
 private void PrintRec() throws PDException
 {
-for (int i = RecLoopStart; i < AttrLoopStart; i++)
-    {
-    ProcessLine(RepLines.get(i));
-    }
 if (Res==null)
     FRepDoc.println("Res==null");
 if (ExpandObject)
@@ -496,6 +556,10 @@ if (ExpandObject)
         Res=D.getRecSum();
         }
     }
+for (int i = RecLoopStart; i < AttrLoopStart; i++)
+    {
+    ProcessLine(RepLines.get(i));
+    }
 TreeMap<String, Attribute> AttrList=new TreeMap();
 Res.initList();
 Attr=Res.nextAttr();
@@ -508,9 +572,27 @@ while (Attr!=null)
 for (Map.Entry<String, Attribute> entrySet : AttrList.entrySet())
     {
     Attr = entrySet.getValue();
-    for (int i = AttrLoopStart; i < AttrLoopEnd; i++)
+    if (!Attr.isMultivalued())
         {
-        ProcessLine(RepLines.get(i));
+        CurVal=Attr.getValue();
+        for (int i = AttrLoopStart; i < AttrLoopEnd; i++)
+            {
+            ProcessLine(RepLines.get(i));
+            }
+        }
+    else
+        {
+        for (int i = AttrLoopStart; i < ValLoopStart; i++)
+            ProcessLine(RepLines.get(i));
+        AttrValuesList = Attr.getValuesList();
+        for (Iterator iterator1 = AttrValuesList.iterator(); iterator1.hasNext();)
+                {
+                CurVal = iterator1.next();
+                for (int i = ValLoopStart; i < ValLoopEnd; i++)
+                    ProcessLine(RepLines.get(i));
+                }
+        for (int i = ValLoopEnd; i < AttrLoopEnd; i++)
+            ProcessLine(RepLines.get(i));
         }
     }
 for (int i = AttrLoopEnd; i < RecLoopEnd; i++)
@@ -583,13 +665,14 @@ for (String ListField : ListFields)
  * @param Attr Attribute to check
  * @return true if can be included
  */
-private boolean CanInclude(Attribute Attr)
+private boolean CanInclude(Attribute Attr) throws PDException
 {
 if (ListIgnFields!=null && ListIgnFields.contains(Attr.getName().toUpperCase()))
     return(false);
 if (DelNull)
     {
-    if (Attr.getValue()==null || Attr.Export().length()==0)
+    if (!Attr.isMultivalued() && (Attr.getValue()==null || Attr.Export().length()==0)
+        || Attr.isMultivalued() && (Attr.getValuesList()==null || Attr.getValuesList().isEmpty()) )
         return(false);
     }
 return(true);
@@ -616,5 +699,26 @@ if (Attr!=null)
     }
 return(true);
 }    
+//-------------------------------------------------------------------------
+public int getDocsPerPage() throws PDException
+{
+return(Integer)getRecSum().getAttr(PDReport.fDOCSPAGE).getValue();    
+}
+//-------------------------------------------------------------------------
+public int getPagesPerFile() throws PDException
+{
+return(Integer)getRecSum().getAttr(PDReport.fPAGESDOC).getValue();   
+}
+//-------------------------------------------------------------------------
+/**
+ *
+ * @throws PDException
+ */
+@Override
+public void Install() throws PDException
+{
+    
+getDrv().CreateTable(getTabName(), getRecordStruct());
+}
 //-------------------------------------------------------------------------
 }

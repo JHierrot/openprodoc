@@ -26,11 +26,14 @@
 package prodocswing.forms;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Vector;
 import javax.swing.JDialog;
 import prodoc.Attribute;
 import prodoc.Cursor;
 import prodoc.PDException;
 import prodoc.PDFolders;
+import prodoc.PDReport;
 import prodoc.PDThesaur;
 import prodoc.Record;
 import prodocswing.PDTableModel;
@@ -78,6 +81,7 @@ ObjectsTable.setAutoCreateColumnsFromModel(true);
         ModButton = new javax.swing.JButton();
         DelButton = new javax.swing.JButton();
         ExpCSV = new javax.swing.JButton();
+        ReportButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -137,6 +141,20 @@ ObjectsTable.setAutoCreateColumnsFromModel(true);
             }
         });
         jToolBar1.add(ExpCSV);
+
+        ReportButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/Report.png"))); // NOI18N
+        ReportButton.setToolTipText("");
+        ReportButton.setFocusable(false);
+        ReportButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        ReportButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        ReportButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                ReportButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(ReportButton);
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText(MainWin.TT("Search_Results"));
@@ -239,11 +257,40 @@ PW.close();
  }
     }//GEN-LAST:event_ExpCSVActionPerformed
 
+    private void ReportButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ReportButtonActionPerformed
+    {//GEN-HEADEREND:event_ReportButtonActionPerformed
+try {
+SelectReport SR = new SelectReport(this, true);
+SR.setLocationRelativeTo(null);
+SR.setVisible(true);
+if (SR.isCancel())
+    return;
+setCursor(MainWin.WaitCur);
+PDTableModel TM = (PDTableModel) getObjectsTable().getModel();
+//List<? extends RowSorter.SortKey> sortKeys = getObjectsTable().getRowSorter().getSortKeys();
+Vector<Record> Res=new Vector(TM.getRowCount());
+for (int NumRow = 0; NumRow < TM.getRowCount(); NumRow++)
+    Res.add(TM. getElement(getObjectsTable().convertRowIndexToModel(NumRow)));
+PDReport Rep=new PDReport(MainWin.getSession());
+Rep.setPDId(SR.getSelectedRep());
+ArrayList<String> GeneratedRep = Rep.GenerateRep(MainWin.getActFolderId(), null, Res, SR.getDocsPerPage(), SR.getPagesPerFile(), MainWin.getIO_OSFolder());
+setCursor(MainWin.DefCur);
+ListReports LR = new ListReports(this, true);
+LR.setLocationRelativeTo(null);
+LR.setRepList(GeneratedRep);
+LR.setVisible(true);
+} catch (Exception ex)
+    {
+    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
+    }//GEN-LAST:event_ReportButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton DelButton;
     private javax.swing.JButton ExpCSV;
     private javax.swing.JButton ModButton;
     private javax.swing.JTable ObjectsTable;
+    private javax.swing.JButton ReportButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
@@ -337,8 +384,18 @@ for (int NumRow = 0; NumRow < TM.getRowCount(); NumRow++)
         Attribute At=r.nextAttr(); 
         if (At.getType()==Attribute.tTHES)
             {
-            UseTerm.Load((String)At.getValue());
-            PW.print("\""+UseTerm.getName()+"\"");
+            if (At.getValue()!=null && ((String)At.getValue()).length()!=0)
+                {
+                try {
+                UseTerm.Load((String)At.getValue());
+                PW.print("\""+UseTerm.getName()+"\"");
+                } catch (PDException ex)
+                    {
+                    PW.print("\"\"");
+                    }
+                }
+            else
+                PW.print("\"\"");
             }
         else
             PW.print(At.ToCSV());

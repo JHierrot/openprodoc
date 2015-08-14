@@ -760,12 +760,16 @@ for (int i = 0; i < Fields.NumAttr(); i++)
             String D=rs.getString(Attr.getName());
             if (D!=null && D.length()==8)
                 Attr.setValue(formatterDate.parse(D));
+            else
+                Attr.setValue(null);
             }
     else if (Attr.getType()==Attribute.tTIMESTAMP)
             {
             String D=rs.getString(Attr.getName());
             if (D!=null && D.length()==14)
                 Attr.setValue(formatterTS.parse(D));
+            else
+                Attr.setValue(null);
             }
     else if (Attr.getType()==Attribute.tINTEGER)
         Attr.setValue(rs.getInt(Attr.getName()));

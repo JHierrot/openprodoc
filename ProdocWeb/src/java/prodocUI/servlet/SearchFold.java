@@ -30,6 +30,7 @@ import prodoc.DriverGeneric;
 import prodoc.PDException;
 import prodoc.PDFolders;
 import prodoc.Record;
+import prodocUI.forms.FSearchFoldAdv;
 
 /**
  *
@@ -120,13 +121,16 @@ while (Attr!=null)
         continue;
         }
     String Val=Req.getParameter(Attr.getName());
+    String Comp=Req.getParameter(FSearchFoldAdv.COMP+Attr.getName());
+    SParent.getOperMap(Req).put(FSearchFoldAdv.COMP+Attr.getName(), Comp);
     if (!(Val == null || Val.length()==0 || Val != null && Attr.getName().equals(PDFolders.fACL) && Val.equals("None")))
         {
-        Cond.addCondition(SParent.FillCond(Req, Attr, Val));
+        int Oper=Integer.parseInt(Comp);
+        Cond.addCondition(SParent.FillCond(Req, Attr, Val, Oper));
         }
     Attr=Rec.nextAttr();
     }
-SaveConds(Req, FType, Cond, (SubTypes!=null), (SubFolders!=null), false, getActFolderId(Req), null, Rec);
+SaveConds(Req, FType, Cond, (SubTypes!=null), (SubFolders!=null), false, getActFolderId(Req), null, Rec, null);
 Cursor c=F.Search(FType, Cond, (SubTypes!=null), (SubFolders!=null), getActFolderId(Req), null);
 return(c);
 }

@@ -66,6 +66,7 @@ public static final String ROOTFOLDER="RootFolder";
  *
  */
 public static final String USERSFOLDER="Users";
+public static final String SYSTEMFOLDER="System";
 /**
  *
  */
@@ -452,18 +453,8 @@ else
         }
     }
 AddLogFields();
+getRecSum().CheckDef();
 MonoInsert();
-//for (int i = getTypeDefs().size()-1; i >=0; i--)
-//    {
-//    Record TypDef=(Record)getTypeDefs().get(i);
-//    Record DatParc=(Record)getTypeRecs().get(i);
-//    if (i!=getTypeDefs().size()-1)
-//        {
-//        DatParc.addAttr(getRecSum().getAttr(fPDID));
-//        }
-//    DatParc.assign(getRecSum().CopyMono());
-//    getDrv().InsertRecord((String)TypDef.getAttr(PDObjDefs.fNAME).getValue(), DatParc);
-//    }
 MultiInsert(getRecSum());
 if (!IsRootFolder)
     ActFoldLev();
@@ -931,6 +922,7 @@ if (InTransLocal)
     getDrv().IniciarTrans();
 try {
 AddLogFields();
+//getRecSum().CheckDef();
 Record R=getRecord().Copy();
 R.delAttr(fPARENTID);
 R.delAttr(fFOLDTYPE);
@@ -973,8 +965,9 @@ for (int i = getTypeDefs().size()-1; i >=0; i--)
 }
 //-------------------------------------------------------------------------
 /**
- * Creates the main folder used by all the elements as "infraestructure"
- * @param Drv to be used (is a "prefolder")
+ * Creates the main folder used by all the elements as "infraestructure", 
+ * the "Users" folder and the "System" folder
+ * @param Drv to be used
  * @throws PDException
  */
 protected static void CreateBaseRootFold(DriverGeneric Drv) throws PDException
@@ -993,6 +986,13 @@ f2.setTitle(USERSFOLDER);
 f2.setParentId(ROOTFOLDER);
 f2.setACL("Public");
 f2.insert();
+PDFolders f3=new PDFolders(Drv);
+f3.setFolderType(getTableName());
+f3.setPDId(SYSTEMFOLDER);
+f3.setTitle(SYSTEMFOLDER);
+f3.setParentId(ROOTFOLDER);
+f3.setACL("Public");
+f3.insert();
 }
 //-------------------------------------------------------------------------
 /**

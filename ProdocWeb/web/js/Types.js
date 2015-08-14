@@ -245,7 +245,7 @@ for (i=0 ; i < Terms.length ; i++)
     List_M.add(NewOpt);
     }
 var Panel_M=document.getElementById(layerName+"P");
-Panel_M.style.visibility="visible";
+Panel_M.style.visibility="visible";    
 }
 //------------------------------------------------------------
 function NoVer(layerName)

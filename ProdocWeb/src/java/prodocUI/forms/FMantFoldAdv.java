@@ -119,7 +119,7 @@ if (pMode!=ADDMOD)
         ListACL.setActivado(false);
         }
 //    Record Rec=F.getRecSum();
-    Element ListFields=ListTypeFolds.GenTabFields(Req, pRec, pMode);
+    Element ListFields=ListTypeFolds.GenTabFields(Req, pRec, pMode, false);
     BorderTab.getCelda(0,2).AddElem(ListFields);
     }
 Form FolderForm=new Form(Destination+"?Read=1","FormVal");

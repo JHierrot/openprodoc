@@ -122,7 +122,6 @@ CentralArea.getCelda(0,0).setCSSId("IdTreeFrame");
 CentralArea.getCelda(1,0).setCSSClass("UDFrames");
 CentralArea.getCelda(1,0).setWidth(2);
 CentralArea.getCelda(2,0).setCSSId("IdMain");
-// CentralArea.getCelda(2,0).AddElem(new Element("<iframe src=\"RefreshDocs\" width=\"100%\" height=\"100%\" FRAMEBORDER=\"0\" name=\"MainFrame\"><p>Your browser does not support iframes.</p></iframe>"));
 CentralArea.getCelda(2,0).AddElem(new Element("<iframe src=\"RefreshDocs\" width=\"100%\" height=\"600px\" FRAMEBORDER=\"0\" name=\"MainFrame\"><p>Your browser does not support iframes.</p></iframe>"));
 }
 //----------------------------------------------------------------------------

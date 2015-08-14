@@ -83,7 +83,7 @@ while (Attr!=null)
         if (Attr.getType()==Attribute.tTHES)
             {
             PDThesaur Term=new PDThesaur(PDSession);
-            if (Attr.getValue()!=null)
+            if (Attr.getValue()!=null && ((String)Attr.getValue()).length()!=0)
                 {
                 Term.Load((String)Attr.getValue());
                 DescFold.append(Term.getName());

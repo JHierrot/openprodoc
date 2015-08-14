@@ -306,7 +306,7 @@ if (ThesaurStruct==null)
     R.addAttr( new Attribute(fDESCRIP, "Definition","Definition", Attribute.tSTRING, false, null, 254, false, false, true));
     R.addAttr( new Attribute(fUSE, "USE","Use_this_term", Attribute.tSTRING, false, null, 32, false, false, true));
     R.addAttr( new Attribute(fSCN, "Scope_Note","Scope_Note", Attribute.tSTRING, false, null, 254, false, false, true));
-    R.addAttr( new Attribute(fLANG, "Language","Term Language", Attribute.tSTRING, false, null, 2, false, true, true));
+    R.addAttr( new Attribute(fLANG, "Language","Term Language", Attribute.tSTRING, true, null, 2, false, true, true));
     R.addAttr( new Attribute(fPARENTID, "Parent_Term","Parent_Term", Attribute.tSTRING, true, null, 32, false, true, false));
     R.addRecord(getRecordStructCommon());
     return(R);
@@ -540,13 +540,14 @@ this.ParentId = pParentId;
  *
  * @throws PDException
  */
-protected void CreateRootThesaur() throws PDException
+protected void CreateRootThesaur(String DefLang) throws PDException
 {
 IsRootThesaur=true;
 setPDId(ROOTTERM);
 setName(ROOTTERM);
 setDescription(ROOTTERM);
 setParentId(ROOTTERM);
+setLang(DefLang);
 insert();
 IsRootThesaur=false;
 }

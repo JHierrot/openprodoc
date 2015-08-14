@@ -709,6 +709,16 @@ S.append("<"+ObjPD.XML_Attr+" Name=\"");
 S.append(getName());
 S.append("\" Type=\"");
 S.append(getType());
+S.append("\" Req=\"");
+S.append(isRequired()?"1":"0");
+S.append("\" LongStr=\"");
+S.append(getLongStr());
+S.append("\" Multi=\"");
+S.append(isMultivalued()?"1":"0");
+S.append("\" UniKey=\"");
+S.append(isUnique()?"1":"0");
+S.append("\" ModAllow=\"");
+S.append(isModifAllowed()?"1":"0");
 S.append("\">");
 S.append(Export());
 S.append("</"+ObjPD.XML_Attr+">\n");
@@ -723,10 +733,10 @@ return(S.toString());
 public String toXMLFull() throws PDException
 {
 StringBuilder S=new StringBuilder(300);
-S.append("<attr><Name>");
+S.append("<Attr><Name>");
 S.append(getName());
 S.append("</Name>");
-S.append("<UserName>");
+S.append("<UserName>");  
 S.append(getUserName());
 S.append("</UserName>");
 S.append("<Descrip>");
@@ -756,7 +766,7 @@ S.append("</ModAllow>");
 S.append("<Multi>");
 S.append(isMultivalued()?"1":"0");
 S.append("</Multi>");
-S.append("</attr>\n");
+S.append("</Attr>\n");
 return(S.toString());
 }
 //--------------------------------------------------------------------------

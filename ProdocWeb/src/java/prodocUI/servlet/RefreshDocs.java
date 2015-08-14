@@ -42,15 +42,6 @@ static private String List=PDFolders.fACL+"/"+PDFolders.fFOLDTYPE+"/"+PDFolders.
 @Override
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {
-//HttpSession Sess=Req.getSession(true);
-//String NewTabId=Req.getParameter("NewTabId");
-//if (NewTabId==null)
-//    NewTabId="T0";
-//Sess.setAttribute("NewTabId", NewTabId);
-//String I=Req.getParameter("RowI");
-//if (I==null)
-//    I="0";
-//Sess.setAttribute("RowI", I);
 GenListForm(Req, out, LISTDOC_FORM, null, null);
 }
 //-----------------------------------------------------------------------------------------------

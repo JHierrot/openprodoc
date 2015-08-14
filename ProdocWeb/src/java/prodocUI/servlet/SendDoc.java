@@ -91,6 +91,7 @@ else
     mt.Load(doc.getMimeType());
     response.setContentType(mt.getMimeCode());
     response.setHeader("Content-disposition", "inline; filename=" + doc.getName());
+    response.setCharacterEncoding("UTF-8"); // just for text family docs
     try {
     if (Ver!=null && Ver.length()!=0)
         doc.getStreamVer(out);

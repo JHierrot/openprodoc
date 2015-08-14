@@ -792,6 +792,7 @@ for (int NumNodes = 0; NumNodes < childNodes.getLength(); NumNodes++)
 /**
  * Fills a Haskmap with all the ACL and DELETE permisions
  * @return created Hashmap
+ * @throws prodoc.PDException
  */
 protected HashMap FillAclTaskUser() throws PDException
 {

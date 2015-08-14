@@ -51,8 +51,22 @@ private static final String File_name="File_name";
 /** Creates new form ListObjects
  * @param parent 
  * @param modal
+ * @throws prodoc.PDException
  */
 public ListReports(java.awt.Frame parent, boolean modal) throws PDException
+{
+super(parent, modal);
+initComponents();
+ObjectsTable.setAutoCreateRowSorter(true);
+ObjectsTable.setAutoCreateColumnsFromModel(true);
+R.addAttr(new Attribute(File_name, File_name, File_name, Attribute.tSTRING, true, null, 256, true, false, false));
+}
+/** Creates new form ListObjects
+ * @param parent 
+ * @param modal
+ * @throws prodoc.PDException
+ */
+public ListReports(javax.swing.JDialog parent, boolean modal) throws PDException
 {
 super(parent, modal);
 initComponents();

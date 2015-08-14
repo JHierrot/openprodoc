@@ -20,6 +20,7 @@
 package prodoc;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -161,13 +162,14 @@ return (Conected);
  * @param Fields
  * @throws PDException 
  */
+@Override
 protected void CreateTable(String TableName, Record Fields) throws PDException
 {
 if (PDLog.isInfo())
     PDLog.Info("DriverRemote.CreateTable>:"+TableName+"/"+Fields);
 ReadWrite(S_CREATE, "<OPD><Tab>"+TableName+"</Tab>"+Fields.toXMLt()+"</OPD>");
-if (PDLog.isInfo())
-    PDLog.Info("DriverRemote.CreateTable<:"+TableName);
+if (PDLog.isDebug())
+    PDLog.Debug("DriverRemote.CreateTable<:"+TableName);
 }
 //--------------------------------------------------------------------------
 /**
@@ -175,21 +177,24 @@ if (PDLog.isInfo())
  * @param TableName
  * @throws PDException 
  */
+@Override
 protected void DropTable(String TableName) throws PDException
 {
 if (PDLog.isInfo())
     PDLog.Info("DriverRemote.DropTable>:"+TableName);
-ReadWrite(S_DROP, TableName);
-if (PDLog.isInfo())
-    PDLog.Info("DriverRemote.DropTable<:"+TableName);
+ReadWrite(S_DROP, "<OPD><Tab>"+TableName+"</Tab></OPD>");
+if (PDLog.isDebug())
+    PDLog.Debug("DriverRemote.DropTable<:"+TableName);
 }
 //--------------------------------------------------------------------------
 /**
  * Modifies a table adding a field
  * @param TableName
  * @param NewAttr New field to add
+     * @param IsVer
  * @throws PDException
  */
+@Override
 protected void AlterTableAdd(String TableName, Attribute NewAttr, boolean IsVer) throws PDException
 {
 if (PDLog.isInfo())
@@ -205,6 +210,7 @@ if (PDLog.isInfo())
  * @param OldAttr old field to delete
  * @throws PDException
  */
+@Override
 protected void AlterTableDel(String TableName, String OldAttr) throws PDException
 {
 if (PDLog.isInfo())
@@ -220,11 +226,12 @@ if (PDLog.isInfo())
  * @param Fields
  * @throws PDException 
  */
+@Override
 protected void InsertRecord(String TableName, Record Fields) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.InsertRecord>:"+TableName+"="+Fields);
-ReadWrite(S_INSERT, "<OPD><Tab>"+TableName+"</Tab>"+Fields.toXMLt()+"</OPD>");
+ReadWrite(S_INSERT, "<OPD><Tab>"+TableName+"</Tab>"+Fields.toXMLtNotNull()+"</OPD>");
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.InsertRecord<");
 }
@@ -235,6 +242,7 @@ if (PDLog.isDebug())
  * @param DelConds
  * @throws PDException 
  */
+@Override
 protected void DeleteRecord(String TableName, Conditions DelConds) throws PDException
 {
 if (PDLog.isDebug())
@@ -251,6 +259,7 @@ if (PDLog.isDebug())
  * @param UpConds
  * @throws PDException 
  */
+@Override
 protected void UpdateRecord(String TableName, Record NewFields, Conditions UpConds) throws PDException
 {
 if (PDLog.isDebug())
@@ -268,6 +277,7 @@ if (PDLog.isDebug())
  * @param Field2
  * @throws PDException
  */
+@Override
 protected void AddIntegrity(String TableName1, String Field1, String TableName2, String Field2) throws PDException
 {
 if (PDLog.isDebug())
@@ -287,6 +297,7 @@ if (PDLog.isDebug())
  * @param Field22 
  * @throws PDException
  */
+@Override
 protected void AddIntegrity(String TableName1, String Field11, String Field12, String TableName2, String Field21, String Field22) throws PDException
 {
 if (PDLog.isDebug())
@@ -300,6 +311,7 @@ if (PDLog.isDebug())
  * Starts a Transaction
  * @throws PDException 
  */
+@Override
 public void IniciarTrans() throws PDException
 {
 if (PDLog.isDebug())
@@ -317,6 +329,7 @@ setInTransaction(true);
  * Ends a transaction
  * @throws PDException 
  */
+@Override
 public void CerrarTrans() throws PDException
 {
 if (PDLog.isDebug())
@@ -334,6 +347,7 @@ setInTransaction(false);
  * Aborts a Transaction
  * @throws PDException 
  */
+@Override
 public void AnularTrans() throws PDException
 {
 if (PDLog.isDebug())
@@ -353,6 +367,7 @@ setInTransaction(false);
  * @return String identifier of the cursor
  * @throws PDException
  */
+@Override
 public Cursor OpenCursor(Query Search) throws PDException
 {
 if (PDLog.isDebug())
@@ -398,6 +413,7 @@ return(StoreCursor(Res, RF));
  * @param CursorIdent
  * @throws PDException 
  */
+@Override
 public void CloseCursor(Cursor CursorIdent) throws PDException
 {
 if (PDLog.isDebug())
@@ -414,6 +430,7 @@ delCursor(CursorIdent);
  * @return OPD next Record
  * @throws PDException 
  */
+@Override
 public Record NextRec(Cursor CursorIdent) throws PDException
 {
 if (PDLog.isDebug())
@@ -541,97 +558,7 @@ super.UnLock();
     PDLog.Error(ex.getLocalizedMessage());
     }
 }
-//-----------------------------------------------------------------------------------
-//private Node ReadWrite(String pOrder, String pParam) throws PDException
-//{
-//Node OPDObject =null;
-//if (PDLog.isDebug())
-//    {
-//    PDLog.Debug("DriverRemote. ReadWrite: Order:"+pOrder);
-//    PDLog.Debug("Param:"+pParam);
-//    }
-//try {
-//URLCon=(HttpURLConnection) OUrl.openConnection();
-//URLCon.setDoOutput(true);
-//URLCon.setDoInput(true);
-//URLCon.setRequestProperty("Accept-Charset", charset);
-//URLCon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + charset);
-//if (SessionID!=null)
-//    {
-//    URLCon.addRequestProperty("Cookie", "JSESSIONID="+SessionID);
-//    }
-//URLCon.setUseCaches(false);
-//URLCon.setDefaultUseCaches(false);
-//URLCon.setRequestMethod("POST");
-////URLCon.setReadTimeout(60000);
-//String Param="";
-//if (pParam!=null && pParam.length()!=0)
-//    Param=PARAM+"="+pParam; // TODO Encode
-//String Order=ORDER+"="+pOrder;
-//String SumPar=Order+"&"+Param;
-//URLCon.setRequestProperty("Content-Length", "" + SumPar.getBytes(charset).length );
-//URLCon.connect();
-//output = new OutputStreamWriter(URLCon.getOutputStream());
-//output.write(SumPar);
-//} catch (Exception Ex)
-//    {
-//    Ex.printStackTrace();
-//    } 
-//finally 
-//    {
-//     try { 
-//     output.close(); 
-//     } catch (IOException ex) 
-//        {
-//        ex.printStackTrace();
-//        }
-//    }
-//BufferedReader in = null;
-//try {
-//in = new BufferedReader( new InputStreamReader(URLCon.getInputStream()));
-//Answer.setLength(0);
-//String Line;
-//while ((Line= in.readLine()) != null)
-//    Answer.append(Line);
-//String wholeCookie = URLCon.getHeaderField("Set-Cookie");  
-//if(wholeCookie != null) 
-//  SessionID = wholeCookie.split(";")[0].split("JSESSIONID=")[1];  
-//Document XMLObjects = DB.parse(new ByteArrayInputStream(Answer.toString().getBytes("UTF-8")));
-//NodeList OPDObjectList = XMLObjects.getElementsByTagName("Result");
-//OPDObject = OPDObjectList.item(0);
-//if (OPDObject.getTextContent().equalsIgnoreCase("KO"))
-//    {
-//    OPDObjectList = XMLObjects.getElementsByTagName("Msg");
-//    if (OPDObjectList.getLength()>0)
-//        {
-//        OPDObject = OPDObjectList.item(0);
-//        PDException.GenPDException("Server_Error", DriverRemote.DeCodif(OPDObject.getTextContent()));
-//        }
-//    else
-//        PDException.GenPDException("Server_Error", "");
-//    }
-//OPDObjectList = XMLObjects.getElementsByTagName("Data");
-//OPDObject = OPDObjectList.item(0);
-//} catch (Exception ex)
-//    {
-//    PDException.GenPDException(ex.getLocalizedMessage(), "");
-//    }
-//finally
-//    {
-//    if (in!=null)
-//        {
-//        try{
-//        in.close();
-//        } catch (IOException ex)
-//            {
-//            ex.printStackTrace();
-//            }
-//        }
-//    URLCon.disconnect();
-//    }
-//return(OPDObject);
-//}
-////-----------------------------------------------------------------   
+//-----------------------------------------------------------------   
 
 private CloseableHttpClient GetHttpClient()
 {
@@ -641,7 +568,7 @@ private CloseableHttpClient GetHttpClient()
 CloseableHttpClient httpclient = HttpClients.createDefault();
 return(httpclient);
 }
-
+//-----------------------------------------------------------------------------------
 static synchronized private PoolingHttpClientConnectionManager GenPool()
 {
 if (cm==null)
@@ -653,5 +580,33 @@ if (cm==null)
     }
 return(cm);
 }   
+//-----------------------------------------------------------------------------------
+/**
+ * Returns an object of type Fulltext indexer
+ * if the repository is yet constructed, returns the constructed one
+ * @return object of type repository
+ * @throws PDException in any error
+ */
+@Override
+protected FTConnector getFTRepository(String pDocType) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("DriverRemote.getFTRepository>");
+if (FTConn!=null)
+    {
+    if (PDLog.isDebug())
+        PDLog.Debug("DriverRemote.Rep yet Instantiated");
+    return (FTConn);
+    }
+if (PDLog.isDebug())
+    PDLog.Debug("DriverRemote.Rep new Instance");
+PDRepository RepDesc=new PDRepository(this);
+RepDesc.Load("PD_FTRep");
+FTConn=new FTRemote(RepDesc.getURL(), RepDesc.getUser(), RepDesc.getPassword(), RepDesc.getParam(), UrlPost, httpclient, context, DB );
+if (PDLog.isDebug())
+    PDLog.Debug("DriverRemote.getFTRepository<");
+return(FTConn);
+}
+//-----------------------------------------------------------------------------------
 
 }

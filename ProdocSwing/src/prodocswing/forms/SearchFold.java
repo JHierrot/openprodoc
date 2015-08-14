@@ -136,6 +136,7 @@ initComponents();
 
         ButtonAcept.setFont(MainWin.getFontDialog());
         ButtonAcept.setText(MainWin.TT("Ok"));
+        ButtonAcept.setEnabled(false);
         ButtonAcept.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -240,10 +241,9 @@ Cancel=true;
     private void FoldTypeCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FoldTypeCBActionPerformed
 try {
 PDFolders newFolder = new PDFolders(MainWin.getSession(), (String) FoldTypeCB.getSelectedItem());
-    {
-    Folder=newFolder.getRecSum();
-    setRecord(Folder);
-    }
+Folder=newFolder.getRecSum();
+setRecord(Folder);
+ButtonAcept.setEnabled(true);
 } catch (PDException ex)
     {
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));

@@ -139,6 +139,15 @@ finally
 return(Tot);
 }
 //-----------------------------------------------------------------
+/**
+ * 
+ * @param Id
+ * @param Ver
+ * @param fo
+ * @return
+ * @throws PDException 
+ */
+@Override
 protected int Retrieve(String Id, String Ver, OutputStream fo) throws PDException
 {
 int Tot=0;
@@ -172,6 +181,7 @@ return(Tot);
  * @param Ver
  * @throws PDException
  */
+@Override
 protected void Delete(String Id, String Ver) throws PDException
 {
 VerifyId(Id);
@@ -186,6 +196,7 @@ f.delete();
  * @return
  * @throws PDException
  */
+@Override
 protected InputStream Retrieve(String Id, String Ver) throws PDException
 {
 VerifyId(Id);    

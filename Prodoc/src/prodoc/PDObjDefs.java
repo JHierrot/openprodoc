@@ -219,7 +219,10 @@ if (Rec.getAttr(fCREATED).getValue()!=null)
     setCreated(((Boolean)Rec.getAttr(fCREATED).getValue()).booleanValue());
 setACL((String)  Rec.getAttr(fACL).getValue());
 setParent((String)  Rec.getAttr(fPARENT).getValue());
-setReposit((String) Rec.getAttr(fREPOSIT).getValue());
+if (getClassType()!=null && getClassType().equalsIgnoreCase(CT_DOC))
+    setReposit((String) Rec.getAttr(fREPOSIT).getValue());
+else
+    setReposit(null);
 if (Rec.getAttr(fTRACEADD).getValue()!=null)
     setTraceAdd(((Boolean)Rec.getAttr(fTRACEADD).getValue()).booleanValue());
 if (Rec.getAttr(fTRACEDEL).getValue()!=null)
@@ -1078,6 +1081,31 @@ return(Cur);
 }
 //-------------------------------------------------------------------------
 /**
+ * Search for accesible definitions of clases from family CT_DOC
+ * @return an Opened cursor with Clases of family CT_DOC
+ * @throws PDException on any error
+ */
+public Cursor getListDocsRIS() throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDObjDefs.getListDocs>");
+Condition CondType=new Condition(fCLASSTYPE, Condition.cEQUAL, CT_DOC);
+Condition CondCreated=new Condition(fCREATED, Condition.cEQUAL, true);
+Condition CondAcl=new Condition(PDObjDefs.fACL, new HashSet(getDrv().getUser().getAclList().keySet()));
+Condition CondRIS=new Condition(PDObjDefs.fNAME, Condition.cLIKE ,"RIS_");
+Conditions Conds=new Conditions();
+Conds.addCondition(CondType);
+Conds.addCondition(CondAcl);
+Conds.addCondition(CondCreated);
+Conds.addCondition(CondRIS);
+Query ListFold=new Query(getTabName(), getRecordStruct(), Conds, PDObjDefs.fNAME);
+Cursor Cur=getDrv().OpenCursor(ListFold);
+if (PDLog.isDebug())
+    PDLog.Debug("PDObjDefs.getListDocs<:"+Cur);
+return(Cur);
+}
+//-------------------------------------------------------------------------
+/**
  * Return a Cursor with the list of the attibutes of ClassName
  * @param ClassName
  * @return Cursor with list of attributes definition
@@ -1090,7 +1118,7 @@ if (PDLog.isDebug())
 Condition CondType=new Condition(fTYPNAME, Condition.cEQUAL, ClassName);
 Conditions Conds=new Conditions();
 Conds.addCondition(CondType);
-Query ListAttr=new Query(getTabNameAttrs(), getRecordAttrsStruct(), Conds);
+Query ListAttr=new Query(getTabNameAttrs(), getRecordAttrsStruct(), Conds, fATTRUSERNAME);
 Cursor Cur=getDrv().OpenCursor(ListAttr);
 if (PDLog.isDebug())
     PDLog.Debug("PDObjDefs.getListAttr<:"+Cur);

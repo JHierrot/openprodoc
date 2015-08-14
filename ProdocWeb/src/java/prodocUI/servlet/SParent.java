@@ -76,6 +76,23 @@ public final static int SEARCHDOC_FORM =2;
 public final static int SEARCHFOLD_FORM=3;
 public final static int SEARCHTERM_FORM=4;
 
+public final static String SD_FType="SD_FType";
+public final static String SD_Cond="SD_Cond";
+public final static String SD_SubT="SD_SubT";
+public final static String SD_SubF="SD_SubF";
+public final static String SD_Vers="SD_Vers";
+public final static String SD_actFolderId="SD_actFolderId";
+public final static String SD_Ord="SD_Ord";
+public final static String SD_Rec="SD_Rec";
+public final static String SD_OperComp="SD_OperComp";
+public final static String SD_FTQ="SD_FTQ";
+
+public final static String ST_Cond="ST_Cond";
+public final static String ST_SubT="ST_SubT";
+public final static String ST_actFolderId="ST_actFolderId";
+public final static String ST_Ord="ST_Ord";
+public final static String ST_Rec="ST_Rec";
+
 public static HashSet ListThes=null;
 
 /** Initializes the servlet.
@@ -463,30 +480,43 @@ else
  */
 static public Condition FillCond(HttpServletRequest Req, Attribute Attr, String Val) throws PDException
 {
+return(FillCond(Req, Attr, Val, Condition.cEQUAL));    
+}
+//--------------------------------------------------------------
+/**
+ * Creates a new condition of the attribute with the text o value of the fieldest1
+ * @param Req
+ * @param Attr
+ * @param Val
+ * @return a new condition
+ * @throws PDException
+ */
+static public Condition FillCond(HttpServletRequest Req, Attribute Attr, String Val, int Oper) throws PDException
+{
 Condition Cond = null;
 try {
 if (Attr.getType()==Attribute.tSTRING || Attr.getType()==Attribute.tTHES)
     {
-    Cond=new Condition(Attr.getName(), Condition.cEQUAL, Val);
+    Cond=new Condition(Attr.getName(), Oper, Val);
     Attr.setValue(Val);
     }
 else if (Attr.getType()==Attribute.tDATE)
     {
     // Cond=new Condition(Attr.getName(), Condition.cEQUAL, getFormatterDate(Req).parse(Val));
     Attr.setValue(getFormatterDate(Req).parse(Val));   
-    Cond=new Condition(Attr, Condition.cEQUAL);
+    Cond=new Condition(Attr, Oper);
     }
 else if (Attr.getType()==Attribute.tTIMESTAMP)
     {
 //     Cond=new Condition(Attr.getName(), Condition.cEQUAL, getFormatterTS(Req).parse(Val));
     Attr.setValue(getFormatterTS(Req).parse(Val));
-    Cond=new Condition(Attr, Condition.cEQUAL);
+    Cond=new Condition(Attr, Oper);
     }
 else if (Attr.getType()==Attribute.tBOOLEAN)
     {
     if (Val!=null)
         {
-        Cond=new Condition(Attr.getName(), Condition.cEQUAL, true);
+        Cond=new Condition(Attr.getName(), Oper, true);
         Attr.setValue(true);
         }
     }
@@ -771,16 +801,17 @@ if (Form==SEARCHDOC_FORM || Form==LAST_FORM && LastForm==SEARCHDOC_FORM)
     Record Rec=F.getRecord();
     if (Results==null)
         {
-        String FType=(String)Sess.getAttribute("SD_FType");
+        String FType=(String)Sess.getAttribute(SParent.SD_FType);
         if (FType!=null)
             {
-            Conditions Cond=(Conditions)Sess.getAttribute("SD_Cond");
-            boolean SubT=(Boolean) Sess.getAttribute("SD_SubT");
-            boolean SubF=(Boolean) Sess.getAttribute("SD_SubF");
-            boolean Vers=(Boolean) Sess.getAttribute("SD_Vers");
-            String actFolderId=(String) Sess.getAttribute("SD_actFolderId");
-            Vector Ord=(Vector)Sess.getAttribute("SD_Ord");
-            Results=F.Search(FType, Cond, SubT, SubF, Vers, actFolderId, Ord);
+            Conditions Cond=(Conditions)Sess.getAttribute(SParent.SD_Cond);
+            boolean SubT=(Boolean) Sess.getAttribute(SParent.SD_SubT);
+            boolean SubF=(Boolean) Sess.getAttribute(SParent.SD_SubF);
+            boolean Vers=(Boolean) Sess.getAttribute(SParent.SD_Vers);
+            String actFolderId=(String) Sess.getAttribute(SParent.SD_actFolderId);
+            Vector Ord=(Vector)Sess.getAttribute(SParent.SD_Ord);
+            String FTQuery=(String) Sess.getAttribute(SParent.SD_FTQ);
+            Results=F.Search(FTQuery, FType, Cond, SubT, SubF, Vers, actFolderId, Ord);
             }
         } 
     FSearchDocAdv f=new FSearchDocAdv(Req, FSearchDocAdv.ADDMOD, Rec, SearchDoc.getUrlServlet(), Results);
@@ -795,14 +826,14 @@ if (Form==SEARCHFOLD_FORM || Form==LAST_FORM && LastForm==SEARCHFOLD_FORM)
     Record Rec=F.getRecord();
     if (Results==null)
         {
-        String FType=(String)Sess.getAttribute("SD_FType");
+        String FType=(String)Sess.getAttribute(SParent.SD_FType);
         if (FType!=null)
             {
-            Conditions Cond=(Conditions)Sess.getAttribute("SD_Cond");
-            boolean SubT=(Boolean) Sess.getAttribute("SD_SubT");
-            boolean SubF=(Boolean) Sess.getAttribute("SD_SubF");
-            String actFolderId=(String) Sess.getAttribute("SD_actFolderId");
-            Vector Ord=(Vector)Sess.getAttribute("SD_Ord");
+            Conditions Cond=(Conditions)Sess.getAttribute(SParent.SD_Cond);
+            boolean SubT=(Boolean) Sess.getAttribute(SParent.SD_SubT);
+            boolean SubF=(Boolean) Sess.getAttribute(SParent.SD_SubF);
+            String actFolderId=(String) Sess.getAttribute(SParent.SD_actFolderId);
+            Vector Ord=(Vector)Sess.getAttribute(SParent.SD_Ord);
             Results=F.Search(FType, Cond, SubT, SubF, actFolderId, Ord);
             }
         } 
@@ -842,12 +873,12 @@ if (Form==SEARCHTERM_FORM || Form==LAST_FORM && LastForm==SEARCHTERM_FORM)
     Record Rec=T.getRecord();
     if (Results==null)
         {
-        Conditions Cond=(Conditions)Sess.getAttribute("ST_Cond");
+        Conditions Cond=(Conditions)Sess.getAttribute(SParent.ST_Cond);
         if (Cond!=null)
             {
-            boolean SubF=(Boolean) Sess.getAttribute("ST_SubT");
-            String actFolderId=(String) Sess.getAttribute("ST_actFolderId");
-            Vector Ord=(Vector)Sess.getAttribute("ST_Ord");
+            boolean SubF=(Boolean) Sess.getAttribute(SParent.ST_SubT);
+            String actFolderId=(String) Sess.getAttribute(SParent.ST_actFolderId);
+            Vector Ord=(Vector)Sess.getAttribute(SParent.ST_Ord);
             Results=T.Search(Cond, SubF, actFolderId, Ord);
             }
         } 
@@ -872,35 +903,55 @@ Sess.setAttribute("ThesLastForm", LISTDOC_FORM);
 }
 //--------------------------------------------------------------
 /**
- *
- * @param Req
+ * Cleans all the conditions related to search of documents
+ * @param Req HttpServletRequest
  */
 protected void CleanConds(HttpServletRequest Req)
 {
 HttpSession Sess=Req.getSession(true);
-Sess.setAttribute("SD_FType", null);
-Sess.setAttribute("SD_Cond", null);
-Sess.setAttribute("SD_SubT", null);
-Sess.setAttribute("SD_SubF", null);
-Sess.setAttribute("SD_Vers", null);
-Sess.setAttribute("SD_actFolderId", null);
-Sess.setAttribute("SD_Ord", null);
-Sess.setAttribute("SD_Rec", null);
+Sess.setAttribute(SParent.SD_FType, null);
+Sess.setAttribute(SParent.SD_Cond, null);
+Sess.setAttribute(SParent.SD_SubT, null);
+Sess.setAttribute(SParent.SD_SubF, null);
+Sess.setAttribute(SParent.SD_Vers, null);
+Sess.setAttribute(SParent.SD_actFolderId, null);
+Sess.setAttribute(SParent.SD_Ord, null);
+Sess.setAttribute(SParent.SD_Rec, null);
+Sess.setAttribute(SParent.SD_OperComp, null);
+Sess.setAttribute(SParent.SD_FTQ, null);
 }
 //-----------------------------------------------------------------------------------------------
 /**
- *
- * @param Req
+ * Cleans all the conditions related to search of thesaurus
+ * @param Req HttpServletRequest
  */
 protected void CleanCondsThes(HttpServletRequest Req)
 {
 HttpSession Sess=Req.getSession(true);
-Sess.setAttribute("ST_Cond", null);
-Sess.setAttribute("ST_SubT", null);
-Sess.setAttribute("ST_actFolderId", null);
-Sess.setAttribute("ST_Ord", null);
-Sess.setAttribute("ST_Rec", null);
+Sess.setAttribute(SParent.ST_Cond, null);
+Sess.setAttribute(SParent.ST_SubT, null);
+Sess.setAttribute(SParent.ST_actFolderId, null);
+Sess.setAttribute(SParent.ST_Ord, null);
+Sess.setAttribute(SParent.ST_Rec, null);
 }
+//-----------------------------------------------------------------------------------------------
+/**
+ * Returns a HashMap containing the operators for a Search form. Creates a new one if needed
+ * @param Req HttpServletRequest
+ * @return a HashMap containing the operators
+ */
+static public HashMap<String, String> getOperMap(HttpServletRequest Req)
+{
+HttpSession Sess=Req.getSession(true);
+HashMap<String, String> OperComp=(HashMap<String, String>)Sess.getAttribute(SParent.SD_OperComp);
+if (OperComp==null)
+    {
+    OperComp=new HashMap<String, String>();
+    Sess.setAttribute(SParent.SD_OperComp, OperComp);
+    }
+return(OperComp);
+}
+
 //-----------------------------------------------------------------------------------------------
 /**
  *
@@ -914,26 +965,25 @@ Sess.setAttribute("ST_Rec", null);
  * @param Ord
  * @param Rec
  */
-protected void SaveConds(HttpServletRequest Req, String FType, Conditions Cond, boolean SubT, boolean SubF, boolean Vers, String actFolderId, Vector Ord, Record Rec)
+protected void SaveConds(HttpServletRequest Req, String FType, Conditions Cond, boolean SubT, boolean SubF, boolean Vers, String actFolderId, Vector Ord, Record Rec, String FTQuery)
 {
 HttpSession Sess=Req.getSession(true);
-Sess.setAttribute("SD_FType", FType);
-Sess.setAttribute("SD_Cond", Cond);
-Sess.setAttribute("SD_SubT", SubT);
-Sess.setAttribute("SD_SubF", SubF);
-Sess.setAttribute("SD_Vers", Vers);
-Sess.setAttribute("SD_actFolderId", actFolderId);
-Sess.setAttribute("SD_Ord", Ord);
-Sess.setAttribute("SD_Rec", Rec);
+Sess.setAttribute(SParent.SD_FType, FType);
+Sess.setAttribute(SParent.SD_Cond, Cond);
+Sess.setAttribute(SParent.SD_SubT, SubT);
+Sess.setAttribute(SParent.SD_SubF, SubF);
+Sess.setAttribute(SParent.SD_Vers, Vers);
+Sess.setAttribute(SParent.SD_actFolderId, actFolderId);
+Sess.setAttribute(SParent.SD_Ord, Ord);
+Sess.setAttribute(SParent.SD_Rec, Rec);
+Sess.setAttribute(SParent.SD_FTQ, FTQuery);
 }
 //-----------------------------------------------------------------------------------------------
 /**
  *
  * @param Req
  * @param Cond
- * @param SubT
  * @param SubF
- * @param Vers
  * @param actFolderId
  * @param Ord
  * @param Rec
@@ -941,11 +991,11 @@ Sess.setAttribute("SD_Rec", Rec);
 protected void SaveCondsThes(HttpServletRequest Req, Conditions Cond, boolean SubF, String actFolderId, Vector Ord, Record Rec)
 {
 HttpSession Sess=Req.getSession(true);
-Sess.setAttribute("ST_Cond", Cond);
-Sess.setAttribute("ST_SubT", SubF);
-Sess.setAttribute("ST_actFolderId", actFolderId);
-Sess.setAttribute("ST_Ord", Ord);
-Sess.setAttribute("ST_Rec", Rec);
+Sess.setAttribute(SParent.ST_Cond, Cond);
+Sess.setAttribute(SParent.ST_SubT, SubF);
+Sess.setAttribute(SParent.ST_actFolderId, actFolderId);
+Sess.setAttribute(SParent.ST_Ord, Ord);
+Sess.setAttribute(SParent.ST_Rec, Rec);
 }
 //-----------------------------------------------------------------------------------------------
 /**
@@ -954,7 +1004,7 @@ Sess.setAttribute("ST_Rec", Rec);
  */
 static public String getVersion()
 {
-return("0.9");
+return("1.2");
 }
 //-----------------------------------------------------------------------------------------------
 /**
@@ -994,7 +1044,7 @@ if (ProdocProperRef==null)
         Path=System.getenv("OPDWeb");
         Is  = new FileInputStream(Path+File.separator+"OPDWeb.properties");            
         }
-    Properties p= new Properties();
+    Properties p= new Properties(); // TODO: CAMBIAR DOC apunta a OPEWEB , no properties y jdbc en path. Interfaz administración tareas ingles y 't''
     p.load(Is);
     Is.close();
     ProdocProperRef=p.getProperty("OPDConfig");
@@ -1037,6 +1087,20 @@ return (" @"+getSessOPD(Req).getUser().getName()+"("+getSessOPD(Req).getUser().g
     return ("");
     }
 }
+//----------------------------------------------------------   
+
+public static boolean getIsSearch(HttpServletRequest Req)
+{
+String IsSearch=Req.getParameter("IsSearch");
+if (IsSearch==null || !IsSearch.equals("1"))
+    return(false);
+else
+    return(true);
+}
 //-----------------------------------------------------------
+static String getIO_OSFolder()
+{
+return(System.getProperty("java.io.tmpdir"));
+}
 }
 

@@ -135,7 +135,6 @@ else
     PrintWriter out = response.getWriter();      
     AddLog(e.getMessage());
     Answer(request, out, false, e.getMessage(), null);
-//    e.printStackTrace();
     out.close();
     }
 }

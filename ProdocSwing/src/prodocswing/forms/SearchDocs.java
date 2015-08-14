@@ -73,12 +73,14 @@ initComponents();
         LabelOperation = new javax.swing.JLabel();
         LabelFoldType = new javax.swing.JLabel();
         DocTypeCB = new javax.swing.JComboBox();
-        Attributes = new javax.swing.JTabbedPane();
-        ButtonCancel = new javax.swing.JButton();
-        ButtonAcept = new javax.swing.JButton();
         SubTypesCheckB = new javax.swing.JCheckBox();
         SubFoldersCheckB = new javax.swing.JCheckBox();
         VersionsCheckB = new javax.swing.JCheckBox();
+        LabelFT = new javax.swing.JLabel();
+        TextFieldFT = new javax.swing.JTextField();
+        Attributes = new javax.swing.JTabbedPane();
+        ButtonAcept = new javax.swing.JButton();
+        ButtonCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(MainWin.TT("Search_Documents"));
@@ -107,26 +109,6 @@ initComponents();
             }
         });
 
-        ButtonCancel.setFont(MainWin.getFontDialog());
-        ButtonCancel.setText(MainWin.TT("Cancel"));
-        ButtonCancel.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                ButtonCancelActionPerformed(evt);
-            }
-        });
-
-        ButtonAcept.setFont(MainWin.getFontDialog());
-        ButtonAcept.setText(MainWin.TT("Ok"));
-        ButtonAcept.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                ButtonAceptActionPerformed(evt);
-            }
-        });
-
         SubTypesCheckB.setFont(MainWin.getFontDialog());
         SubTypesCheckB.setText(MainWin.TT("Subtypes"));
         SubTypesCheckB.setToolTipText(MainWin.TT("When_checked_includes_subtypes_of_document_in_results"));
@@ -139,11 +121,37 @@ initComponents();
         VersionsCheckB.setText(MainWin.TT("Versions"));
         VersionsCheckB.setToolTipText(MainWin.TT("When_checked_includes_all_versions_of_document_in_results"));
 
+        LabelFT.setFont(MainWin.getFontDialog());
+        LabelFT.setText(MainWin.TT("Full_Text_Search"));
+
+        TextFieldFT.setFont(MainWin.getFontDialog());
+
+        ButtonAcept.setFont(MainWin.getFontDialog());
+        ButtonAcept.setText(MainWin.TT("Ok"));
+        ButtonAcept.setEnabled(false);
+        ButtonAcept.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                ButtonAceptActionPerformed(evt);
+            }
+        });
+
+        ButtonCancel.setFont(MainWin.getFontDialog());
+        ButtonCancel.setText(MainWin.TT("Cancel"));
+        ButtonCancel.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                ButtonCancelActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Attributes, javax.swing.GroupLayout.DEFAULT_SIZE, 573, Short.MAX_VALUE)
+            .addComponent(Attributes, javax.swing.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -157,16 +165,21 @@ initComponents();
                                 .addComponent(SubFoldersCheckB)
                                 .addGap(42, 42, 42)
                                 .addComponent(VersionsCheckB)
-                                .addGap(0, 102, Short.MAX_VALUE))
+                                .addGap(0, 180, Short.MAX_VALUE))
                             .addComponent(DocTypeCB, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(313, Short.MAX_VALUE)
+                        .addContainerGap(385, Short.MAX_VALUE)
                         .addComponent(ButtonAcept)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(ButtonCancel))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(21, 21, 21)
-                        .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE)))
+                        .addComponent(LabelOperation, javax.swing.GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(LabelFT, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(TextFieldFT)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -174,7 +187,7 @@ initComponents();
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(LabelOperation)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(LabelFoldType)
                     .addComponent(DocTypeCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -184,6 +197,10 @@ initComponents();
                     .addComponent(SubFoldersCheckB)
                     .addComponent(VersionsCheckB))
                 .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(LabelFT)
+                    .addComponent(TextFieldFT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(Attributes, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -207,7 +224,7 @@ try {
 RetrieveFields(DocSearched, AttrExcluded, InputFields, Comparators);
 Cancel = false;
 PDDocs DocS=new PDDocs(MainWin.getSession());
-Cursor Cur=DocS.Search(getDocTyp(), getConds(), getSubTyp(), getSubFold(), getVersions(), ActFolderId, null);
+Cursor Cur=DocS.Search(this.TextFieldFT.getText(), getDocTyp(), getConds(), getSubTyp(), getSubFold(), getVersions(), ActFolderId, null);
 ListDocs LD = new ListDocs(this, true);
 LD.setLocationRelativeTo(null);
 LD.setCursor(getDocTyp(), Cur);
@@ -237,6 +254,7 @@ for (int i = 0; i < DocSearched.NumAttr(); i++)
         Attr.setMultivalued(false);// to avoid problems with SetValue for searching
     }
 setRecord(DocSearched);
+ButtonAcept.setEnabled(true);
 } catch (PDException ex)
     {
     MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
@@ -248,10 +266,12 @@ setRecord(DocSearched);
     private javax.swing.JButton ButtonAcept;
     private javax.swing.JButton ButtonCancel;
     private javax.swing.JComboBox DocTypeCB;
+    private javax.swing.JLabel LabelFT;
     private javax.swing.JLabel LabelFoldType;
     private javax.swing.JLabel LabelOperation;
     private javax.swing.JCheckBox SubFoldersCheckB;
     private javax.swing.JCheckBox SubTypesCheckB;
+    private javax.swing.JTextField TextFieldFT;
     private javax.swing.JCheckBox VersionsCheckB;
     // End of variables declaration//GEN-END:variables
 

@@ -48,6 +48,9 @@ public static final int fTASKEVENT_COPY_FOLD  =STARTNUM+3;
 public static final int fTASKEVENT_EXPORT_DOC =STARTNUM+4;
 public static final int fTASKEVENT_EXPORT_FOLD=STARTNUM+5;
 public static final int fTASKEVENT_CONVERT_DOC=STARTNUM+6;
+public static final int fTASKEVENT_FTINDEX_DOC=STARTNUM+7;
+public static final int fTASKEVENT_FTUPDA_DOC =STARTNUM+8;
+public static final int fTASKEVENT_FTDEL_DOC  =STARTNUM+9;
 
 private static final String[] LisTypeEventTask= {"UPDATE_DOC",
                                                  "UPDATE_FOLD",
@@ -55,7 +58,10 @@ private static final String[] LisTypeEventTask= {"UPDATE_DOC",
                                                  "COPY_FOLD",
                                                  "EXPORT_DOC",
                                                  "EXPORT_FOLD",
-                                                 "CONVERT_DOC"
+                                                 "CONVERT_DOC",
+                                                 "FTINDEX_DOC",
+                                                 "FTUPDA_DOC",
+                                                 "FTDEL_DOC"
                                                  };
 /**
  *
@@ -257,6 +263,15 @@ switch (this.getType())
         break;
      case fTASKEVENT_CONVERT_DOC:
         ExecuteConvertDoc(Doc);
+        break;
+     case fTASKEVENT_FTINDEX_DOC:
+        ExecuteFTAddDoc(Doc);
+        break;
+     case fTASKEVENT_FTUPDA_DOC:
+        ExecuteFTUpdDoc(Doc);
+        break;
+     case fTASKEVENT_FTDEL_DOC:
+        ExecuteFTDelDoc(Doc);
         break;
      default:
          PDException.GenPDException("Unexpected_Task", "Type"+getType());
@@ -532,6 +547,45 @@ protected void VerifyAllowedUpd() throws PDException
 {
 if (!getDrv().getUser().getRol().isAllowMaintainTask() )
    PDExceptionFunc.GenPDException("Operation_do_not_allowed",getName());
+}
+//-------------------------------------------------------------------------
+private void ExecuteFTAddDoc(PDDocs Doc) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDefEvent.ExecuteFTAddDoc>:"+Doc.getPDId()+"/"+Doc.getTitle());                    
+PDFolders Fold=new PDFolders(getDrv());
+String IdUnder=Fold.getIdPath(getParam());
+Fold.setPDId(Doc.getParentId());
+if (!Fold.IsUnder(IdUnder))    
+   return;      
+Doc.ExecuteFTAdd();  
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDefEvent.ExecuteFTAddDoc<:"+Doc.getPDId()+"/"+Doc.getTitle());                    
+}
+//-------------------------------------------------------------------------
+
+private void ExecuteFTUpdDoc(PDDocs Doc) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDefEvent.ExecuteFTUpdDoc>:"+Doc.getPDId()+"/"+Doc.getTitle());                    
+PDFolders Fold=new PDFolders(getDrv());
+String IdUnder=Fold.getIdPath(getParam());
+Fold.setPDId(Doc.getParentId());
+if (!Fold.IsUnder(IdUnder))    
+   return;          
+Doc.ExecuteFTUpd();   
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDefEvent.ExecuteFTUpdDoc<:"+Doc.getPDId()+"/"+Doc.getTitle());                    
+}
+//-------------------------------------------------------------------------
+
+private void ExecuteFTDelDoc(PDDocs Doc) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDefEvent.ExecuteFTDelDoc>:"+Doc.getPDId());                           
+Doc.ExecuteFTDel();  
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDefEvent.ExecuteFTDelDoc<:"+Doc.getPDId());                    
 }
 //-------------------------------------------------------------------------
 }

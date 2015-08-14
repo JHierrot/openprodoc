@@ -28,6 +28,8 @@ import prodoc.DriverGeneric;
 import prodoc.PDException;
 import prodoc.PDDocs;
 import prodoc.Record;
+import prodocUI.forms.FSearchDocAdv;
+import prodocUI.forms.FSearchFoldAdv;
 
 /**
  *
@@ -98,17 +100,17 @@ if (Acept==null || Acept.length()==0)
     return(null);
 DriverGeneric PDSession=getSessOPD(Req);
 String FType=Req.getParameter(PDDocs.fDOCTYPE);
-PDDocs F;
+PDDocs Doc;
 if (FType==null)
-    F = new PDDocs(PDSession);
+    Doc = new PDDocs(PDSession);
 else
-    F = new PDDocs(PDSession, FType);
+    Doc = new PDDocs(PDSession, FType);
 String Acl=Req.getParameter(PDDocs.fACL);
 String SubTypes=Req.getParameter("Subtypes");
 String SubFolders=Req.getParameter("SubFolders");
 String Versions=Req.getParameter("Versions");
 Conditions Cond=new Conditions();
-Record Rec=F.getRecSum();
+Record Rec=Doc.getRecSum();
 Rec.initList();
 Attribute Attr=Rec.nextAttr();
 while (Attr!=null)
@@ -119,14 +121,18 @@ while (Attr!=null)
         continue;
         }
     String Val=Req.getParameter(Attr.getName());
+    String Comp=Req.getParameter(FSearchDocAdv.COMP+Attr.getName());
+    SParent.getOperMap(Req).put(FSearchDocAdv.COMP+Attr.getName(), Comp);
     if (!(Val == null || Val.length()==0 || Val != null && Attr.getName().equals(PDDocs.fACL) && Val.equals("None")))
         {
-        Cond.addCondition(SParent.FillCond(Req, Attr, Val));
+        int Oper=Integer.parseInt(Comp);
+        Cond.addCondition(SParent.FillCond(Req, Attr, Val, Oper));
         }
     Attr=Rec.nextAttr();
     }
-SaveConds(Req, FType, Cond, (SubTypes!=null), (SubFolders!=null), (Versions!=null), getActFolderId(Req), null, Rec);
-Cursor c=F.Search(FType, Cond, (SubTypes!=null), (SubFolders!=null), (Versions!=null), getActFolderId(Req), null);
+String FTQuery=Req.getParameter(FSearchDocAdv.COMPFTQ);
+SaveConds(Req, FType, Cond, (SubTypes!=null), (SubFolders!=null), (Versions!=null), getActFolderId(Req), null, Rec, FTQuery);
+Cursor c=Doc.Search(FTQuery, FType, Cond, (SubTypes!=null), (SubFolders!=null), (Versions!=null), getActFolderId(Req), null);
 return(c);
 }
 //-----------------------------------------------------------------------------------------------

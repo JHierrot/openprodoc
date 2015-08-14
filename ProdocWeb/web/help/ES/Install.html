@@ -41,7 +41,7 @@ Para ello debe elegirse el sistema de base de datos a utilizar y crearse un usua
 <li><b>Clave usuario BBDD</b>: Clave del usuario de BBDD. (requerido)</li>
 <li><b>Url del servidor de BBDD</b>: Url en formato JDBC del servidor de BBDD (Ej.:<i>"jdbc:mysql://127.0.0.1:3306/Prodoc", "jdbc:derby://localhost:1527/Prodoc", "jdbc:oracle:thin:@127.0.0.1:1521:Prodoc"</i>). (requerido)</li>
 <li><b>Tipo de conexión</b>: Indicar el tipo de conexión a utilizar. (Actualmente solo soportado JDBC). (requerido)</li>
-<li><b>Clases java a utilizar</b>: Indicar las clases de conexión (JDBC) a utilizar (Ej.:<i>"org.apache.derby.jdbc.ClientDriver", "com.mysql.jdbc.Driver"</i>). (requerido)</li>
+<li><b>Clases java a utilizar</b>: Indicar las clases de conexión (JDBC) a utilizar (Ej.:<i>"org.apache.derby.jdbc.ClientDriver", "com.mysql.jdbc.Driver", "com.ibm.db2jcc.DBDriver"</i>). (requerido)</li>
 <li><b>Classpath adicional</b>: Localización de las clases adicionales a las instaladas en la carpeta ".\lib". Debe especificarse el classpath de las clases del driver JDBC.</li>
 </ul> 
 <p>Con los datos suministrados, el programa de instalación creará un fichero de configuración y un script de arranque Prodoc.sh o Prodoc.bat según el sistema operativo.  
@@ -87,7 +87,7 @@ Una vez creada la estructura básica, deberá instalarse los clientes de los usu
 <p>Si el acceso para otros usuarios es a través del cliente Web, o si hay usuarios que utilizarán conexión cliente pesado servidor Web, deberá instalarse la aplicación J2EE. Para ello, en un servidor J2EE soportado deberá desplegarse el WAR de la aplicación.
 A continuación debe configurarse el fichero de configuración <b>Prodoc.properties</b> que utilizará la aplicación J2EE con la herramienta Install o copiando un properties ya creado.</p>
 <p>Por ultimo, debe crearse una variable de sistema de entorno OPDWeb que referencie a la carpeta donde está el archivo <b>OPDWeb.properties</b> (Ej.: OPDWeb=/OpenProdoc/Web/Conf ), modificando la entrada para que referencie la ubicación del fichero <b>Prodoc.properties</b></p>
-<p>Alternativam,ente, puede hacerse lo siguiente: en el directorio home (ej.: /home/J_Smith) del usuario con que se ejecuta el servidor J2EE debe copiarse el archivo <b>OPDWeb.properties</b>, modificando la entrada para que referencie la ubicación del fichero <b>Prodoc.properties</b></p> 
+<p>Alternativamente, puede hacerse lo siguiente: en el directorio home (ej.: /home/J_Smith) del usuario con que se ejecuta el servidor J2EE debe copiarse el archivo <b>OPDWeb.properties</b>, modificando la entrada para que referencie la ubicación del fichero <b>Prodoc.properties</b></p> 
 <hr>
 <a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>
     </body>

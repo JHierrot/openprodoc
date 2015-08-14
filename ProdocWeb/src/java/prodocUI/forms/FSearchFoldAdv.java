@@ -22,6 +22,7 @@ package prodocUI.forms;
 
 import html.*;
 import java.util.Date;
+import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import prodoc.Attribute;
@@ -31,6 +32,8 @@ import prodoc.PDException;
 import prodoc.PDFolders;
 import prodoc.Record;
 import prodocServ.ListTypeFolds;
+import prodocUI.servlet.ExportFoldCSV;
+import prodocUI.servlet.ReportFolds;
 import prodocUI.servlet.SParent;
 
 /**
@@ -42,8 +45,14 @@ public class FSearchFoldAdv extends FFormBase
 FieldCombo ListTip;
 FieldCombo ListACL;
 public FieldText FoldTitle;
+public FieldText FoldPDid;
 
-static private String ListExcluded=PDFolders.fPARENTID+"/"+PDFolders.fPDID+"/"+PDFolders.fPDAUTOR+"/"+PDFolders.fPDDATE;
+private static final String ListExcluded=PDFolders.fPARENTID+"/"+PDFolders.fPDID+"/"+PDFolders.fPDAUTOR+"/"+PDFolders.fPDDATE;
+
+static final public String COMP="COMP__";
+static final private String COMPTITLE=COMP+PDFolders.fTITLE;
+static final private String COMPACL=COMP+PDFolders.fACL;
+static final private String COMPPDID=COMP+PDFolders.fPDID;
 
 /** Creates a new instance of FMantFoldAdv
  * @param Req
@@ -56,10 +65,10 @@ static private String ListExcluded=PDFolders.fPARENTID+"/"+PDFolders.fPDID+"/"+P
 public FSearchFoldAdv(HttpServletRequest Req, int pMode, Record pRec,String Destination, Cursor ListFold) throws PDException
 {
 super(Req, SParent.TT(Req,"Search_Folders"), pMode, pRec);
-AddJS("Types.js");
+AddJS("TypesSearch.js");
 AddJS("ThesTreeSel.js");
 HttpSession Sess=Req.getSession(true);
-Record Rec=(Record)Sess.getAttribute("SD_Rec");
+Record Rec=(Record)Sess.getAttribute(SParent.SD_Rec);
 DriverGeneric PDSession=SParent.getSessOPD(Req);
 Table BorderTab=new Table(1, 5, 1);
 BorderTab.setCSSId("BordTab");
@@ -73,7 +82,17 @@ BorderTab.getCelda(0,3).AddElem(CancelButton);
 BorderTab.getCelda(0,4).AddElem(Status);
 BorderTab.getCelda(0,4).AddElem(Element.getEspacio2());
 BorderTab.getCelda(0,4).AddElem(HHelp);
-Table FormTab=new Table(4, 5, 0);
+if (ListFold!=null) //second time
+    {
+    BorderTab.getCelda(0,4).AddElem(Element.getEspacio2());
+    HiperlinkImag ExportCsv=new HiperlinkImag("img/"+getStyle()+"expCSV.png" , "CSV Export", ExportFoldCSV.getUrlServlet(), "CSV Export");
+    ExportCsv.setTarget("_blank");
+    BorderTab.getCelda(0,4).AddElem(ExportCsv);
+    BorderTab.getCelda(0,4).AddElem(Element.getEspacio2());
+    HiperlinkImag Reports=new HiperlinkImag("img/"+getStyle()+"Report.png" , "Reports", ReportFolds.getUrlServlet(), "Reports");
+    BorderTab.getCelda(0,4).AddElem(Reports);
+    }
+Table FormTab=new Table(5, 6, 0);
 FormTab.setCellPadding(5);
 FormTab.setWidth(-100);
 FormTab.setCSSClass("FFormularios");
@@ -90,6 +109,18 @@ if (Rec!=null && Rec.getAttr(PDFolders.fTITLE)!=null)
     if (Val!=null)
         FoldTitle.setValue(Val);
     }
+Attr=TmpFold.getRecord().getAttr(PDFolders.fPDID);
+FoldPDid=new FieldText(Attr.getName());
+FoldPDid.setMaxSize(Attr.getLongStr());
+FoldPDid.setCSSClass("FFormInput");
+FoldPDid.setMensStatus(TT(Attr.getDescription()));
+Val=null;
+if (Rec!=null && Rec.getAttr(PDFolders.fPDID)!=null)
+    {
+    Val=(String)Rec.getAttr(PDFolders.fPDID).getValue();
+    if (Val!=null)
+        FoldPDid.setValue(Val);
+    }
 Attr=TmpFold.getRecord().getAttr(PDFolders.fFOLDTYPE);
 ListTip=new FieldCombo(Attr.getName());
 ListTip.setCSSClass("FFormInputCombo");
@@ -103,7 +134,7 @@ if (Rec!=null && Rec.getAttr(PDFolders.fFOLDTYPE)!=null)
         {
         ListTip.setValue(Val);
         SParent.FillRec(Req, ListExcluded, Rec);
-        Element TabFields=ListTypeFolds.GenTabFields(Req, Rec, FMantFoldAdv.ADDMOD);
+        Element TabFields=ListTypeFolds.GenTabFields(Req, Rec, FMantFoldAdv.ADDMOD, true);
         BorderTab.getCelda(0,2).AddElem(TabFields);
         }
     }
@@ -120,21 +151,39 @@ if (Rec!=null && Rec.getAttr(PDFolders.fACL)!=null)
     if (Val!=null)
          ListACL.setValue(Val);
     }
-FormTab.getCelda(0,0).setWidth(-25);
+FormTab.getCelda(0,0).setWidth(-15);
 FormTab.getCelda(0,0).setHeight(30);
+FormTab.getCelda(1,0).AddElem(new Element(TT("Id")+":"));
+FieldComboOper IdOper=new FieldComboOper(COMPPDID);
+FormTab.getCelda(2,0).AddElem(IdOper);
+HashMap<String, String> OperComp=SParent.getOperMap(Req);
+String Oper=OperComp.get(COMPPDID);
+if (Oper!=null)
+   IdOper.setValue(Oper);
+FormTab.getCelda(3,0).AddElem(FoldPDid);
 FormTab.getCelda(1,1).AddElem(new Element(TT("Folder_Title")+":"));
-FormTab.getCelda(2,1).AddElem(FoldTitle);
+FieldComboOper TitleOper=new FieldComboOper(COMPTITLE);
+FormTab.getCelda(2,1).AddElem(TitleOper);
+Oper=OperComp.get(COMPTITLE);
+if (Oper!=null)
+   TitleOper.setValue(Oper);
+FormTab.getCelda(3,1).AddElem(FoldTitle);
 FormTab.getCelda(1,2).AddElem(new Element(TT("Folder_Type")+":"));
-FormTab.getCelda(2,2).AddElem(ListTip);
+FormTab.getCelda(3,2).AddElem(ListTip);
 FormTab.getCelda(1,3).AddElem(new Element(TT("Folder_ACL")+":"));
-FormTab.getCelda(2,3).AddElem(ListACL);
+FieldComboOper ACLOper=new FieldComboOper(COMPACL);
+Oper=OperComp.get(COMPACL);
+if (Oper!=null)
+   ACLOper.setValue(Oper);
+FormTab.getCelda(2,3).AddElem(ACLOper);
+FormTab.getCelda(3,3).AddElem(ListACL);
 FormTab.getCelda(1,4).AddElem(new Element(TT("Subtypes")+":"));
 FieldCheck SubTCh=new FieldCheck("Subtypes");
 SubTCh.setCSSClass("FFormInputCheck");
 SubTCh.setMensStatus(TT("When_checked_includes_subtypes_of_folders_in_results"));
-if (Sess.getAttribute("SD_SubT")!=null)
+if (Sess.getAttribute(SParent.SD_SubT)!=null)
     {
-    if ((Boolean) Sess.getAttribute("SD_SubT"))
+    if ((Boolean) Sess.getAttribute(SParent.SD_SubT))
          SubTCh.setValue("1");
     }
 FormTab.getCelda(1,4).AddElem(SubTCh);
@@ -142,9 +191,9 @@ FormTab.getCelda(2,4).AddElem(new Element(TT("SubFolders")+":"));
 FieldCheck SubFCh=new FieldCheck("SubFolders");
 SubFCh.setCSSClass("FFormInputCheck");
 SubFCh.setMensStatus(TT("When_checked_limits_the_search_to_actual_folder_and_subfolders"));
-if (Sess.getAttribute("SD_SubF")!=null)
+if (Sess.getAttribute(SParent.SD_SubF)!=null)
     {
-    if ((Boolean) Sess.getAttribute("SD_SubF"))
+    if ((Boolean) Sess.getAttribute(SParent.SD_SubF))
         SubFCh.setValue("1");
     }
 FormTab.getCelda(2,4).AddElem(SubFCh);

@@ -22,11 +22,15 @@ package prodoc;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import static prodoc.PDTasksDef.fNAME;
+import static prodoc.PDTasksDef.fTYPE;
 
 /**
  *
@@ -554,6 +558,8 @@ this.Name = Name;
  */
 protected void VerifyAllowedIns() throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("PDDocs.VerifyAllowedIns>");    
 if (!getDrv().getUser().getRol().isAllowCreateDoc() )
    PDExceptionFunc.GenPDException("Document_creation_not_allowed_to_user",getName());
 PDObjDefs D=new PDObjDefs(getDrv());
@@ -563,6 +569,8 @@ if (!getDrv().getUser().getAclList().containsKey(D.getACL()))
 Integer Perm=(Integer)getDrv().getUser().getAclList().get(D.getACL());
 if (Perm.intValue()<PDACL.pUPDATE)
     PDExceptionFunc.GenPDException("Document_creation_not_allowed_to_user",getDrv().getUser().getName()+" / "+getDocType());
+if (PDLog.isDebug())
+    PDLog.Debug("PDDocs.VerifyAllowedIns<");    
 }
 //-------------------------------------------------------------------------
 /**
@@ -1244,8 +1252,8 @@ for (int NumDefTyp = 0; NumDefTyp<getTypeDefs().size(); NumDefTyp++)
 public void insert() throws PDException
 {
 boolean InTransLocal;
-if (PDLog.isDebug())
-    PDLog.Debug("PDDocs.insert>:"+getPDId());
+if (PDLog.isInfo())
+    PDLog.Debug("PDDocs.insert>: File="+FilePath+" R="+getRecSum());
 VerifyAllowedIns();
 InTransLocal=!getDrv().isInTransaction();
 if (InTransLocal)
@@ -1256,7 +1264,7 @@ if (getPDId()==null || getPDId().length()==0)
 String Fold=getParentId();
 if (Fold==null || Fold.length()==0)
     setParentId(getDrv().getUser().getUserFolder());
-if (!(getDrv().getUser().getName().equals("Install") && getDrv().getUser().getAclList()==null))
+if (!(getDrv().getUser().getName().equals("Install") && getDrv().getUser().getAclList()==null)) //just for installation tasks
     {
     PDFolders Parent=new PDFolders(getDrv());
     Parent.Load(getParentId());
@@ -1273,6 +1281,7 @@ if (getReposit()==null || getReposit().length()==0 )
     setReposit(getDrv().getAssignedRepos(getDocType()));
 AddLogFields();
 setVersion("1.0");
+getRecSum().CheckDef();
 StoreGeneric Rep=getDrv().getRepository(getReposit());
 if (getName()==null || getName().length()==0)
     {
@@ -1732,12 +1741,12 @@ if (InTransLocal)
 try {
 String Id=getPDId();
 PDDocs TobeUpdated=new PDDocs(getDrv());
-//TobeUpdated.Load(Id);
 TobeUpdated.LoadCurrent(Id);
 if (TobeUpdated.getLockedBy()==null || !TobeUpdated.getLockedBy().equalsIgnoreCase(getDrv().getUser().getName()))
    PDExceptionFunc.GenPDException("Document_not_locked_by_user", getPDId());
 AddLogFields();
 setReposit(TobeUpdated.getReposit());
+getRecSum().CheckDef();
 Record Rec=getRecSum().Copy();
 Rec.delAttr(fVERSION);
 Attribute Attr=Rec.getAttr(fDOCTYPE);
@@ -2146,6 +2155,42 @@ return(Cur);
 /**
  * Search for Folders returning a cursor with the results of folders with the
  * indicated values of fields. Only return the folders alowed for the user, as defined by ACL.
+     * @param FTQuery
+ * @param DocType Type of folder to search. Can return folders of subtype.
+ * @param AttrConds Conditions over the fields ofthe FolderType
+ * @param SubTypes if true, returns results of the indicated type AND susbtipes
+ * @param SubFolders if true seach in actual folder AND subfolders, if false, serach in ALL the structure
+ * @param IncludeVers if true, includes in the searching ALL versions of documents. Not posible with subtypes
+ * @param IdActFold Folder to start the search. if null, start in the root level
+ * @param Ord 
+ * @return a Cursor with the results of the query to use o send to NextFold()
+ * @throws PDException when occurs any problem
+ */
+public Cursor Search(String FTQuery, String DocType, Conditions AttrConds, boolean SubTypes, boolean SubFolders, boolean IncludeVers, String IdActFold, Vector Ord) throws PDException
+{
+if (FTQuery==null || FTQuery.length()==0)
+    return(Search(DocType, AttrConds, SubTypes, SubFolders, IncludeVers, IdActFold, Ord));
+ArrayList FTRes=SearchFT(DocType, SubTypes, FTQuery);
+Condition Cond;
+if (!FTRes.isEmpty())
+    {
+    HashSet IdList=new HashSet(FTRes);
+    Cond=new Condition(PDDocs.fPDID,IdList);    
+    }
+else
+    { //to force an empty curor
+    Cond=new Condition(PDDocs.fPDID, Condition.cEQUAL, "az");
+    }
+Conditions WithFT=new Conditions();
+WithFT.addCondition(Cond);
+if (AttrConds.NumCond()>0)
+    WithFT.addCondition(AttrConds);
+return(Search(DocType, WithFT, SubTypes, SubFolders, IncludeVers, IdActFold, Ord));
+}
+//-------------------------------------------------------------------------
+/**
+ * Search for Folders returning a cursor with the results of folders with the
+ * indicated values of fields. Only return the folders alowed for the user, as defined by ACL.
  * @param DocType Type of folder to search. Can return folders of subtype.
  * @param AttrConds Conditions over the fields ofthe FolderType
  * @param SubTypes if true, returns results of the indicated type AND susbtipes
@@ -2411,6 +2456,8 @@ FMetadataXML=null;
  */
 public void ImportXMLNode(Node OPDObject, String FolderPath, String DestFold, boolean MaintainId) throws PDException
 {
+if (PDLog.isInfo())
+    PDLog.Debug("PDDocs.ImportXMLNode>:FolderPath="+FolderPath+" DestFold="+DestFold+" MaintainId="+MaintainId+" OPDObject="+OPDObject);    
 if (FolderPath.charAt(FolderPath.length()-1)!=File.separatorChar)
     FolderPath+=File.separatorChar; 
 NodeList childNodes = OPDObject.getChildNodes();
@@ -2441,6 +2488,8 @@ for (int i = 0; i < childNodes.getLength(); i++)
             }
         }
     }
+if (PDLog.isDebug())
+    PDLog.Debug("PDDocs.ImportXMLNode<");    
 NewDoc.insert();
 }    
 //-------------------------------------------------------------------------
@@ -2591,6 +2640,7 @@ while (DocMeta!=null &&DocMeta.length()!=0)
     Doc.insert();
     DocMeta=Metadata.readLine();
     }
+Metadata.close();
 return(ImageFile);
 }catch(Exception ex)
     {
@@ -2689,6 +2739,11 @@ tr.setResult(Allowed);
 tr.insert();
 }
 //---------------------------------------------------------------------
+/**
+ * Overloading of abstract method. Not valid for documents
+ * @return null 
+ * @throws PDException Always
+ */
 @Override
 public Cursor getAll() throws PDException
 {
@@ -2697,4 +2752,93 @@ return(null);
 }
 //-------------------------------------------------------------------------
 
+protected void ExecuteFTAdd()  throws PDException
+{
+LoadFull(getPDId());
+StoreGeneric Rep=getDrv().getRepository(getReposit());
+if (Rep.IsURL())
+    throw new UnsupportedOperationException("Not supported.");   
+InputStream Is=null;
+try {    
+FTConnector FTConn=getDrv().getFTRepository(getDocType());
+FTConn.Connect();
+Rep.Connect();
+Is=Rep.Retrieve(getPDId(), getVersion());
+FTConn.Insert(getDocType(), getPDId(), Is, getRecSum());
+FTConn.Disconnect();
+Is.close();
+Rep.Disconnect();
+} catch (Exception Ex)
+    {
+    if (Is!=null)
+        {
+        try {
+        Is.close();
+        } catch (IOException ex) {}
+        Rep.Disconnect();
+        }
+    PDException.GenPDException(Ex.getLocalizedMessage(), "");
+    }
+}
+//-------------------------------------------------------------------------
+protected void ExecuteFTUpd() throws PDException
+{
+LoadFull(getPDId());
+StoreGeneric Rep=getDrv().getRepository(getReposit());
+if (Rep.IsURL())
+    throw new UnsupportedOperationException("Not supported.");   
+InputStream Is=null;
+try {    
+FTConnector FTConn=getDrv().getFTRepository(getDocType());
+FTConn.Connect();
+Rep.Connect();
+Is=Rep.Retrieve(getPDId(), getVersion());
+FTConn.Update(getDocType(), getPDId(), Is, getRecSum());
+FTConn.Disconnect();
+Is.close();
+Rep.Disconnect();
+} catch (Exception Ex)
+    {
+    if (Is!=null)
+        {
+        try {
+        Is.close();
+        } catch (IOException ex) {}
+        Rep.Disconnect();
+        }
+    PDException.GenPDException(Ex.getLocalizedMessage(), "");
+    }
+}
+//-------------------------------------------------------------------------
+protected void ExecuteFTDel() throws PDException
+{
+FTConnector FTConn=getDrv().getFTRepository(getDocType());
+FTConn.Connect();
+try {
+FTConn.Delete(getPDId());
+FTConn.Disconnect();
+} catch (Exception Ex)
+    {
+    FTConn.Disconnect();
+    PDException.GenPDException(Ex.getLocalizedMessage(), "");
+    }
+}
+//-------------------------------------------------------------------------
+
+private ArrayList SearchFT(String pDocType, boolean SubTypes, String FTQuery) throws PDException
+{
+ArrayList FTRes=null;    
+FTConnector FTConn=getDrv().getFTRepository(pDocType);
+FTConn.Connect();
+try {
+FTRes=FTConn.Search(pDocType, null, FTQuery, null);
+FTConn.Disconnect();
+} catch (Exception Ex)
+    {
+    FTConn.Disconnect();
+    PDException.GenPDException(Ex.getLocalizedMessage(), "");
+    }   
+return (FTRes);
+}
+//-------------------------------------------------------------------------
 }

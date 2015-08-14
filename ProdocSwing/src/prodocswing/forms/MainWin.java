@@ -66,6 +66,14 @@ static private String ActFolderId=PDFolders.ROOTFOLDER;
 static private PDTableModel DocsContained;
 static private int ExpFolds=0;
 static private int ExpDocs=0;
+
+    /**
+     * @return the ActFolderId
+     */
+    public static String getActFolderId()
+    {
+        return ActFolderId;
+    }
 private PDFolders FoldAct=null;
 private static final String List=PDFolders.fACL+"/"+PDFolders.fFOLDTYPE+"/"+PDFolders.fPARENTID+"/"+PDFolders.fPDID+"/"+PDFolders.fTITLE+"/"+PDFolders.fPDAUTOR+"/"+PDFolders.fPDDATE;
 private static final HashSet ExecFiles=new HashSet();
@@ -128,7 +136,6 @@ setTitle(getTitle()+" @"+getSession().getUser().getName()+"("+getSession().getUs
         ExportFold = new javax.swing.JMenuItem();
         ImportFold = new javax.swing.JMenuItem();
         ImportExtFold = new javax.swing.JMenuItem();
-        jSeparator7 = new javax.swing.JPopupMenu.Separator();
         ReportsFold = new javax.swing.JMenuItem();
         jSeparator5 = new javax.swing.JPopupMenu.Separator();
         exitMenuItem = new javax.swing.JMenuItem();
@@ -149,6 +156,8 @@ setTitle(getTitle()+" @"+getSession().getUser().getName()+"("+getSession().getUs
         SearchDocs = new javax.swing.JMenuItem();
         ExportDoc = new javax.swing.JMenuItem();
         ImportDoc = new javax.swing.JMenuItem();
+        jSeparator7 = new javax.swing.JPopupMenu.Separator();
+        ImportExtRIS = new javax.swing.JMenuItem();
         jSeparator8 = new javax.swing.JPopupMenu.Separator();
         ReportsDoc = new javax.swing.JMenuItem();
         OtherMenu = new javax.swing.JMenu();
@@ -373,9 +382,9 @@ setTitle(getTitle()+" @"+getSession().getUser().getName()+"("+getSession().getUs
             }
         });
         FolderMenu.add(ImportExtFold);
-        FolderMenu.add(jSeparator7);
 
         ReportsFold.setFont(getFontMenu());
+        ReportsFold.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/Report.png"))); // NOI18N
         ReportsFold.setText("Reports");
         ReportsFold.addActionListener(new java.awt.event.ActionListener()
         {
@@ -554,9 +563,22 @@ setTitle(getTitle()+" @"+getSession().getUser().getName()+"("+getSession().getUs
             }
         });
         DocMenu.add(ImportDoc);
+        DocMenu.add(jSeparator7);
+
+        ImportExtRIS.setFont(getFontMenu());
+        ImportExtRIS.setText(TT("Import_RIS"));
+        ImportExtRIS.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                ImportExtRISActionPerformed(evt);
+            }
+        });
+        DocMenu.add(ImportExtRIS);
         DocMenu.add(jSeparator8);
 
         ReportsDoc.setFont(getFontMenu());
+        ReportsDoc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/Report.png"))); // NOI18N
         ReportsDoc.setText("Reports");
         ReportsDoc.addActionListener(new java.awt.event.ActionListener()
         {
@@ -936,7 +958,7 @@ if (NewFoldChild==null || NewFoldChild.length()==0)
     return;
 try {
 PDFolders Fold=new PDFolders(Session);
-Fold.setPDId(ActFolderId);
+Fold.setPDId(getActFolderId());
 Fold.CreateChild(NewFoldChild);
 TreePath ActualPath = TreeFolder.getSelectionPath();
 DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) ActualPath.getLastPathComponent();
@@ -957,7 +979,7 @@ PDFolders Fold= ((TreeFolder) TreeFold.getUserObject()).getFold();
 DialogEditFold DEF = new DialogEditFold(this, true);
 DEF.setLocationRelativeTo(null);
 DEF.DelMode();
-Fold.LoadFull(ActFolderId);
+Fold.LoadFull(getActFolderId());
 DEF.setRecord(Fold.getRecord());
 DEF.setVisible(true);
 if (DEF.isCancel())
@@ -978,26 +1000,38 @@ SelFolderDesc.setText(HtmlDesc(FoldAct));
 
     private void AddFoldAdvancedActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_AddFoldAdvancedActionPerformed
     {//GEN-HEADEREND:event_AddFoldAdvancedActionPerformed
+DialogEditFold DEF;
+PDFolders Fold;
 try {
-DialogEditFold DEF = new DialogEditFold(this, true);
+DEF = new DialogEditFold(this, true);
 DEF.setLocationRelativeTo(null);
 DEF.AddMode();
 DEF.setAcl(FoldAct.getACL());
-PDFolders Fold=new PDFolders(Session);
-DEF.setParentPath(Fold.getPathId(FoldAct.getPDId()));
-DEF.setVisible(true);
-if (DEF.isCancel())
-    return;
 Fold=new PDFolders(Session);
-Fold.assignValues(DEF.getRecord());
-Fold.setParentId(ActFolderId);
-Fold.insert();
-TreePath ActualPath = TreeFolder.getSelectionPath();
-ExpandFold((DefaultMutableTreeNode)ActualPath.getLastPathComponent());
-TreeFolder.setSelectionPath(ActualPath);
+DEF.setParentPath(Fold.getPathId(FoldAct.getPDId()));
 } catch (Exception ex)
     {
     Message(DrvTT(ex.getLocalizedMessage()));
+    return;
+    }
+while (true)
+    {
+    try {
+    DEF.setVisible(true);
+    if (DEF.isCancel())
+        return;
+    Fold=new PDFolders(Session);
+    Fold.assignValues(DEF.getRecord());
+    Fold.setParentId(getActFolderId());
+    Fold.insert();
+    TreePath ActualPath = TreeFolder.getSelectionPath();
+    ExpandFold((DefaultMutableTreeNode)ActualPath.getLastPathComponent());
+    TreeFolder.setSelectionPath(ActualPath);
+    return;
+    } catch (Exception ex)
+        {
+        Message(DrvTT(ex.getLocalizedMessage()));
+        }
     }
     }//GEN-LAST:event_AddFoldAdvancedActionPerformed
 
@@ -1023,26 +1057,39 @@ TreeFolder.setSelectionPath(selectionPath);
 
     private void ModFoldAdvancedActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ModFoldAdvancedActionPerformed
     {//GEN-HEADEREND:event_ModFoldAdvancedActionPerformed
-try {
+DialogEditFold DEF;
+PDFolders Fold;
 TreePath selectionPath = TreeFolder.getSelectionPath();
+try {
 DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) selectionPath.getLastPathComponent();
-PDFolders Fold= ((TreeFolder) TreeFold.getUserObject()).getFold();
-DialogEditFold DEF = new DialogEditFold(this, true);
+Fold= ((TreeFolder) TreeFold.getUserObject()).getFold();
+DEF = new DialogEditFold(this, true);
 DEF.setLocationRelativeTo(null);
 DEF.EditMode();
 Fold.LoadFull(Fold.getPDId());
 DEF.setRecord(Fold.getRecord());
-DEF.setVisible(true);
-if (DEF.isCancel())
-    return;
-Fold.assignValues(DEF.getRecord());
-Fold.update();
-TreePath ParentFold = (TreePath) TreeFolder.getSelectionPath().getParentPath();
-ExpandFold((DefaultMutableTreeNode)ParentFold.getLastPathComponent());
-TreeFolder.setSelectionPath(selectionPath);
 } catch (Exception ex)
     {
     Message(DrvTT(ex.getLocalizedMessage()));
+    return;
+    }
+while (true)
+    {
+    try {
+    DEF.setVisible(true);
+    if (DEF.isCancel())
+        return;
+    DEF.getRecord().CheckDef();
+    Fold.assignValues(DEF.getRecord());
+    Fold.update();
+    TreePath ParentFold = (TreePath) TreeFolder.getSelectionPath().getParentPath();
+    ExpandFold((DefaultMutableTreeNode)ParentFold.getLastPathComponent());
+    TreeFolder.setSelectionPath(selectionPath);
+    return;
+    } catch (Exception ex)
+        {
+        Message(DrvTT(ex.getLocalizedMessage()));
+        }
     }
     }//GEN-LAST:event_ModFoldAdvancedActionPerformed
 
@@ -1085,7 +1132,7 @@ while (true)
         Doc.setFile(MD.SelFile.getAbsolutePath());
     else
         throw new PDException("Error_retrieving_file");
-    Doc.setParentId(ActFolderId);
+    Doc.setParentId(getActFolderId());
     Doc.insert();
     RefreshDocs();
     return;
@@ -1151,13 +1198,14 @@ while (true)
         Doc.setFile(MD.GetSelectPath());
     else
         throw new PDException("Error_retrieving_file");
-    Doc.setParentId(ActFolderId);
+    Doc.setParentId(getActFolderId());
     Doc.insert();
     RefreshDocs();
     return;
     } catch (Exception ex)
         {
         Message(DrvTT(ex.getLocalizedMessage()));
+        RefreshDocs();
         }
     }
     }//GEN-LAST:event_AddDocAdvancedActionPerformed
@@ -1185,6 +1233,7 @@ while (true)
     MD.setVisible(true);
     if (MD.isCancel())
         return;
+    MD.getRecord().CheckDef();
     Doc.assignValues(MD.getRecord());
     if (MD.GetSelectPath()!=null && MD.GetSelectPath().length()>0)
         Doc.setFile(MD.GetSelectPath());
@@ -1271,14 +1320,14 @@ LV.setVisible(true);
     private void SearchFoldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchFoldActionPerformed
 SearchFold SF = new SearchFold(this, true);
 SF.setLocationRelativeTo(null);
-SF.setFoldAct(ActFolderId);
+SF.setFoldAct(getActFolderId());
 SF.setVisible(true);     
     }//GEN-LAST:event_SearchFoldActionPerformed
 
     private void SearchDocsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchDocsActionPerformed
 SearchDocs SD = new SearchDocs(this, true);
 SD.setLocationRelativeTo(null);
-SD.setFoldAct(ActFolderId);
+SD.setFoldAct(getActFolderId());
 SD.setVisible(true);
     }//GEN-LAST:event_SearchDocsActionPerformed
 
@@ -1383,7 +1432,7 @@ if (FileName.length()==0)
 try {
 PDDocs Doc = new PDDocs(getSession());
 File FileImp=new File(FileName);  
-getSession().ProcessXML(FileImp, ActFolderId); 
+getSession().ProcessXML(FileImp, getActFolderId()); 
 RefreshDocs();
 } catch (Exception ex)
     {
@@ -1566,12 +1615,12 @@ if (SR.isCancel())
 setCursor(WaitCur);
 PDFolders Fold=new PDFolders(Session);
 Conditions Conds=new Conditions();
-Condition Cond=new Condition(PDFolders.fPARENTID, Condition.cEQUAL, ActFolderId);
+Condition Cond=new Condition(PDFolders.fPARENTID, Condition.cEQUAL, getActFolderId());
 Conds.addCondition(Cond);
 Cursor Cur=Fold.Search(PDFolders.getTableName(), Conds,  true, false, null, null);
 PDReport Rep=new PDReport(Session);
 Rep.setPDId(SR.getSelectedRep());
-ArrayList<String> GeneratedRep = Rep.GenerateRep(ActFolderId, Cur,  SR.getDocsPerPage(), SR.getPagesPerFile(), getIO_OSFolder());
+ArrayList<String> GeneratedRep = Rep.GenerateRep(getActFolderId(), Cur, null, SR.getDocsPerPage(), SR.getPagesPerFile(), getIO_OSFolder());
 setCursor(DefCur);
 ListReports LR = new ListReports(this, true);
 LR.setLocationRelativeTo(null);
@@ -1595,14 +1644,34 @@ setCursor(WaitCur);
 PDDocs Doc=new PDDocs(Session);
 PDReport Rep=new PDReport(Session);
 Rep.setPDId(SR.getSelectedRep());
-ArrayList<String> GeneratedRep = Rep.GenerateRep(ActFolderId, Doc.getListContainedDocs(ActFolderId),  SR.getDocsPerPage(), SR.getPagesPerFile(), getIO_OSFolder());
+ArrayList<String> GeneratedRep = Rep.GenerateRep(getActFolderId(), Doc.getListContainedDocs(getActFolderId()), null, SR.getDocsPerPage(), SR.getPagesPerFile(), getIO_OSFolder());
 setCursor(DefCur);
-Message("generated:"+GeneratedRep.get(0));
+ListReports LR = new ListReports(this, true);
+LR.setLocationRelativeTo(null);
+LR.setRepList(GeneratedRep);
+LR.setVisible(true);
 } catch (Exception ex)
     {
     Message(DrvTT(ex.getLocalizedMessage()));
     }
     }//GEN-LAST:event_ReportsDocActionPerformed
+
+    private void ImportExtRISActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ImportExtRISActionPerformed
+    {//GEN-HEADEREND:event_ImportExtRISActionPerformed
+try {
+DialogImportRIS ImpRIS = new DialogImportRIS(this,true);
+ImpRIS.setLocationRelativeTo(null);
+ImpRIS.setVisible(true);
+if (ImpRIS.isCancel())
+    return;
+PDDocsRIS D=new PDDocsRIS(getSession(), ImpRIS.DefaultRISDocType());
+D.ImportFileRIS(getActFolderId(), ImpRIS.GetFilePath());
+RefreshDocs();
+} catch (Exception ex)
+    {
+    Message(DrvTT(ex.getLocalizedMessage()));
+    }        
+    }//GEN-LAST:event_ImportExtRISActionPerformed
 
 /**
 * @param args the command line arguments
@@ -1650,6 +1719,7 @@ java.awt.EventQueue.invokeLater(new Runnable()
     private javax.swing.JMenuItem GroupMenuItem;
     private javax.swing.JMenuItem ImportDoc;
     private javax.swing.JMenuItem ImportExtFold;
+    private javax.swing.JMenuItem ImportExtRIS;
     private javax.swing.JMenuItem ImportFold;
     private javax.swing.JMenuItem ListVersions;
     private javax.swing.JMenuItem MimeTypeMenuItem;
@@ -1866,6 +1936,7 @@ else
     if (fc.showSaveDialog(null)!=JFileChooser.APPROVE_OPTION)
         return("");
     }
+setIO_OSFolder(fc.getSelectedFile().getParent());
 return(fc.getSelectedFile().getAbsolutePath());
 }
 //---------------------------------------------------------------------
@@ -1883,6 +1954,7 @@ if (RecomFileName!=null)
 fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 if (fc.showSaveDialog(null)!=JFileChooser.APPROVE_OPTION)
     return("");
+setIO_OSFolder(fc.getSelectedFile().getAbsolutePath());
 return(fc.getSelectedFile().getAbsolutePath());
 }
 //---------------------------------------------------------------------
@@ -1966,7 +2038,8 @@ else
 //---------------------------------------------------------------------
 static private Image getIcon()
 {
-ImageIcon PDIcon=new ImageIcon("resources/LogoProdoc.jpg");
+ImageIcon Ic=new ImageIcon( );    
+ImageIcon PDIcon=new ImageIcon(Ic.getClass().getResource("/resources/LogoProdoc.jpg"));
 return PDIcon.getImage();
 }
 //---------------------------------------------------------------------
@@ -1979,8 +2052,9 @@ private void RefreshDocs()
 try {
     DocsContained = new PDTableModel();
     DocsContained.setDrv(MainWin.getSession());
-    FoldAct.getListDirectDescendList(ActFolderId);
+    FoldAct.getListDirectDescendList(getActFolderId());
     PDDocs Doc = new PDDocs(getSession());
+    Record R1=Doc.getRecordStruct();
     DocsContained.setListFields(Doc.getRecordStruct());
     DocsContained.setCursor(Doc.getListContainedDocs(FoldAct.getPDId()));
     DocsTable.setModel(DocsContained);
@@ -2448,6 +2522,8 @@ CancelCheckout.setVisible(R.isAllowMaintainDoc());
 CheckIn.setVisible(R.isAllowMaintainDoc());
 CheckOut.setVisible(R.isAllowMaintainDoc());
 DelDoc.setVisible(R.isAllowMaintainDoc());
+ImportExtFold.setVisible(R.isAllowCreateFolder() && R.isAllowCreateDoc());
+ImportExtRIS.setVisible(R.isAllowCreateDoc());
 } catch (Exception ex)
     {
     Message(ex.getLocalizedMessage());

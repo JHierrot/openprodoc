@@ -115,8 +115,16 @@ static final public String S_RENFILE   ="RENFILE";
 static final public String S_RETRIEVEFILE   ="RETRIEVEFILE";    
 static final public String S_INSFILE   ="INSFILE";    
 
+static final public String S_FTINS   ="FTINS";    
+static final public String S_FTUPD   ="FTUPD";    
+static final public String S_FTDEL   ="FTDEL";    
+static final public String S_FTSEARCH ="FTSEARCH";    
+
 private TreeMap AllTaskTrans=null;
 private TreeMap AllTaskNoTrans=null;
+
+protected static FTConnector FTConn=null;
+
 /**
  *
  * @param pURL
@@ -520,12 +528,7 @@ for (int i = 0; i < Rec.NumAttr(); i++)
     }
 Trace.add("Definitions elements created");
 // --- Folders -----------------------------------------
-PDFolders.CreateBaseRootFold(this);
-PDFolders UsersFold=new PDFolders(this);
-//UsersFold.setPDId(PDFolders.USERSFOLDER);
-//UsersFold.setTitle(PDFolders.USERSFOLDER);
-//UsersFold.setParentId(PDFolders.ROOTFOLDER);
-//UsersFold.setACL("Public");
+PDFolders.CreateBaseRootFold(this); //and all the system folders
 // --- Administrator ---
 PDUser Usu=new PDUser(this);
 Usu.setName("root");
@@ -576,10 +579,37 @@ Trace.add("Document elements created");
 //----------MIME Types -------------------------------------------
 File FileImp=new File("ex/defs.opd");
 ProcessXML(FileImp, PDFolders.ROOTFOLDER);
-TE.CreateRootThesaur();
+Trace.add("MIME types created");
+//--- Creating Reports Type -------------
+FileImp=new File("ex/PD_REPORTS.opd");
+ProcessXML(FileImp, PDFolders.ROOTFOLDER);
+D.CreateObjectTables(PDReport.REPTABNAME, false); 
+//FileImp=new File("ex/PD_REP_EXA_TXT.opd");
+//ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
+//FileImp=new File("ex/PD_REP_EXA_CSV.opd");
+//ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
+//FileImp=new File("ex/PD_REP_EXA_HTML.opd");
+//ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
+//FileImp=new File("ex/PD_REP_EXA_XML.opd");
+//ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
+Trace.add("Reports Type and Examples created");
+//--- Creating RIS Complete Type -------------
+FileImp=new File("ex/PD_REPOSIT_URL.opd");
+ProcessXML(FileImp, PDFolders.ROOTFOLDER);
+//--- Creating RIS Complete Type -------------
+FileImp=new File("ex/PD_RIS_COMP.opd");
+ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
+D.CreateObjectTables("RIS_Complete", false); 
+//FileImp=new File("ex/PD_REP_EXA_RIS.opd"); //report for RIS
+//ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
+//--- Creating RIS Reassign Type -------------
+FileImp=new File("ex/PD_RIS_REASIG.opd");
+ProcessXML(FileImp, PDFolders.ROOTFOLDER);
+D.CreateObjectTables("RIS_Reasign", false); 
+Trace.add("RIS types created");
+TE.CreateRootThesaur(DefLang);
 //----------------------
-this.CerrarTrans();
-
+CerrarTrans();
 Trace.add("Installation finished");
 }
 //--------------------------------------------------------------------------
@@ -618,7 +648,7 @@ if (Serv.getVersion().equalsIgnoreCase("0.7")) //******************************
             Trace.add(pDException.getLocalizedMessage());            
         }
     try {
-    TE.CreateRootThesaur();
+    TE.CreateRootThesaur("EN");
     Trace.add("Root Term created");
     } catch (PDException pDException)
         {
@@ -1397,10 +1427,11 @@ return(Rep);
 }
 //-----------------------------------------------------------------------------------
 /**
- *
- * @param RepName
- * @return
- * @throws PDException
+ * Returns an object of type repository from its name
+ * if the repository is yet constructed, returns the constructed one
+ * @param RepName Nmae of repository
+ * @return object of type repository
+ * @throws PDException in any error
  */
 protected StoreGeneric getRepository(String RepName) throws PDException
 {
@@ -1883,6 +1914,8 @@ return PDCust;
  */
 public int ProcessXML(File XMLFile, String ParentFolderId) throws PDException
 {
+if (PDLog.isInfo())
+    PDLog.Debug("DriverGeneric.ProcessXML>:XMLFile="+XMLFile.getAbsolutePath()+" ParentFolderId="+ParentFolderId);        
 try {
 DocumentBuilder DB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 Document XMLObjects = DB.parse(XMLFile);
@@ -1890,6 +1923,8 @@ NodeList OPDObjectList = XMLObjects.getElementsByTagName(ObjPD.XML_OPDObject);
 Node OPDObject = null;
 ObjPD Obj2Build=null;
 int Tot=0;
+if (PDLog.isDebug())
+    PDLog.Debug("DriverGeneric.ProcessXML:Elements="+OPDObjectList.getLength());        
 for (int i=0; i<OPDObjectList.getLength(); i++)
     {
     OPDObject = OPDObjectList.item(i);
@@ -1910,6 +1945,8 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
         }
     }
 DB.reset();
+if (PDLog.isDebug())
+    PDLog.Debug("DriverGeneric.ProcessXML<");        
 return(Tot);
 }catch(Exception ex)
     {
@@ -1919,10 +1956,12 @@ return(Tot);
 }
 //---------------------------------------------------------------------
 private ObjPD BuildObj(Node OPDObject) throws PDException
-{
+{           
 NamedNodeMap attributes = OPDObject.getAttributes();
 Node namedItem = attributes.getNamedItem("type");
 String OPDObjectType=namedItem.getNodeValue();
+if (PDLog.isDebug())
+    PDLog.Debug("DriverGeneric.BuildObj:Tipe="+OPDObjectType);            
 if (OPDObjectType.equalsIgnoreCase(PDDocs.getTableName()))
     return(new PDDocs(this));
 if (OPDObjectType.equalsIgnoreCase(PDFolders.getTableName()))
@@ -2015,6 +2054,22 @@ else if (Order.equals(S_COMMIT))
 else if (Order.equals(S_CANCEL))
     {
     AnularTrans();
+    }
+else if (Order.equals(S_FTSEARCH))
+    {
+    return("<OPD><Result>OK</Result><Data>"+FTSearch(XMLObjects)+"</Data></OPD>");                    
+    }
+else if (Order.equals(S_FTINS))
+    {
+    return("<OPD><Result>OK</Result><Data>"+FTIns(XMLObjects)+"</Data></OPD>");                        
+    }
+else if (Order.equals(S_FTUPD))
+    {
+    return("<OPD><Result>OK</Result><Data>"+FTUpd(XMLObjects)+"</Data></OPD>");                            
+    }
+else if (Order.equals(S_FTDEL))
+    { 
+    return("<OPD><Result>OK</Result><Data>"+FTDel(XMLObjects)+"</Data></OPD>");                    
     }
 else 
     return("<OPD><Result>KO</Result><Msg>Unknown Order</Msg></OPD>");
@@ -2441,4 +2496,125 @@ else
     return("EN");
 }
 //---------------------------------------------------------------------
+/**
+ * Returns an object of type Fulltext indexer
+ * if the repository is yet constructed, returns the constructed one
+ * @return object of type repository
+ * @throws PDException in any error
+ */
+protected FTConnector getFTRepository(String pDocType) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("DriverGeneric.getFTRepository>");
+if (FTConn!=null)
+    {
+    if (PDLog.isDebug())
+        PDLog.Debug("DriverGeneric.Rep yet Instantiated");
+    return (FTConn);
+    }
+if (PDLog.isDebug())
+    PDLog.Debug("DriverGeneric.Rep new Instance");
+PDRepository RepDesc=new PDRepository(this);
+RepDesc.Load("PD_FTRep");
+FTConn=new FTConnLucene(RepDesc.getURL(), RepDesc.getUser(), RepDesc.getPassword(), RepDesc.getParam());
+if (PDLog.isDebug())
+    PDLog.Debug("DriverGeneric.getFTRepository<");
+return(FTConn);
+}
+//-----------------------------------------------------------------------------------
+
+private String FTSearch(Document XMLObjects) throws PDException
+{
+NodeList OPDObjectList = XMLObjects.getElementsByTagName("Type");
+Node OPDObject = OPDObjectList.item(0);
+String Type=OPDObject.getTextContent();
+OPDObjectList = XMLObjects.getElementsByTagName("DocMetadata");
+OPDObject = OPDObjectList.item(0);
+String DocMetadata=OPDObject.getTextContent();
+OPDObjectList = XMLObjects.getElementsByTagName("Body");
+OPDObject = OPDObjectList.item(0);
+String Body=OPDObject.getTextContent();
+OPDObjectList = XMLObjects.getElementsByTagName("Metadata");
+OPDObject = OPDObjectList.item(0);
+String Metadata=OPDObject.getTextContent();
+ArrayList<String> FTRes=null; 
+FTConnector FTConn=null;
+try {
+FTConn=getFTRepository(Type);
+FTConn.Connect();
+FTRes=FTConn.Search(Type, DocMetadata, Body, Metadata);
+FTConn.Disconnect();
+} catch (Exception Ex)
+    {
+    if (FTConn!=null)
+       FTConn.Disconnect();
+    PDException.GenPDException(Ex.getLocalizedMessage(), "");
+    }   
+StringBuilder S=new StringBuilder();
+for (String Id : FTRes)
+    {
+    S.append("<ID>").append(Id).append("</ID>");
+    }
+return(S.toString());    
+}
+//-----------------------------------------------------------------------------------
+
+private String FTDel(Document XMLObjects) throws PDException
+{
+NodeList OPDObjectList = XMLObjects.getElementsByTagName("Id");
+Node OPDObject = OPDObjectList.item(0);
+String Id=OPDObject.getTextContent();
+try {
+PDDocs D=new PDDocs(this);
+D.Load(Id);
+D.ExecuteFTDel();
+} catch (Exception Ex)
+    {
+    PDException.GenPDException(Ex.getLocalizedMessage(), "");
+    }   
+return("");    
+}
+    
+//-----------------------------------------------------------------------------------
+
+private String FTIns(Document XMLObjects) throws PDException
+{
+NodeList OPDObjectList = XMLObjects.getElementsByTagName("Type");
+Node OPDObject = OPDObjectList.item(0);
+String Type=OPDObject.getTextContent();
+OPDObjectList = XMLObjects.getElementsByTagName("Id");
+OPDObject = OPDObjectList.item(0);
+String Id=OPDObject.getTextContent();
+try {
+PDDocs D=new PDDocs(this, Type);
+D.setPDId(Id);
+D.ExecuteFTAdd();
+} catch (Exception Ex)
+    {
+    PDException.GenPDException(Ex.getLocalizedMessage(), "");
+    }   
+return("");    
+}
+//-----------------------------------------------------------------------------------
+
+private String FTUpd(Document XMLObjects) throws PDException
+{
+NodeList OPDObjectList = XMLObjects.getElementsByTagName("Type");
+Node OPDObject = OPDObjectList.item(0);
+String Type=OPDObject.getTextContent();
+OPDObjectList = XMLObjects.getElementsByTagName("Id");
+OPDObject = OPDObjectList.item(0);
+String Id=OPDObject.getTextContent();
+try {
+PDDocs D=new PDDocs(this, Type);
+D.setPDId(Id);
+D.ExecuteFTUpd();
+} catch (Exception Ex)
+    {
+    PDException.GenPDException(Ex.getLocalizedMessage(), "");
+    }   
+return("");    
+}
+//-----------------------------------------------------------------------------------
+
 }

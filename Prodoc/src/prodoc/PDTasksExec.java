@@ -25,13 +25,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.StringTokenizer;
-import static prodoc.PDTasksDefEvent.fTASKEVENT_CONVERT_DOC;
-import static prodoc.PDTasksDefEvent.fTASKEVENT_COPY_DOC;
-import static prodoc.PDTasksDefEvent.fTASKEVENT_COPY_FOLD;
-import static prodoc.PDTasksDefEvent.fTASKEVENT_EXPORT_DOC;
-import static prodoc.PDTasksDefEvent.fTASKEVENT_EXPORT_FOLD;
-import static prodoc.PDTasksDefEvent.fTASKEVENT_UPDATE_DOC;
-import static prodoc.PDTasksDefEvent.fTASKEVENT_UPDATE_FOLD;
 
 /**
  * Class responsible of actual execution of pending task
@@ -304,19 +297,25 @@ switch (getType())
         break;
     case fTASK_FOLDSREPORT: FoldsReport();
         break;
-    case fTASKEVENT_UPDATE_FOLD: ExecuteUpdFold();
+    case PDTasksDefEvent.fTASKEVENT_UPDATE_FOLD: ExecuteUpdFold();
         break;
-    case fTASKEVENT_COPY_FOLD: ExecuteCopyFold();
+    case PDTasksDefEvent.fTASKEVENT_COPY_FOLD: ExecuteCopyFold();
         break;
-    case fTASKEVENT_EXPORT_FOLD: ExecuteExportFold();
+    case PDTasksDefEvent.fTASKEVENT_EXPORT_FOLD: ExecuteExportFold();
         break;
-    case fTASKEVENT_UPDATE_DOC: ExecuteUpdDoc();
+    case PDTasksDefEvent.fTASKEVENT_UPDATE_DOC: ExecuteUpdDoc();
         break;
-     case fTASKEVENT_COPY_DOC: ExecuteCopyDoc();
+    case PDTasksDefEvent.fTASKEVENT_COPY_DOC: ExecuteCopyDoc();
         break;
-     case fTASKEVENT_EXPORT_DOC: ExecuteExportDoc();
+    case PDTasksDefEvent.fTASKEVENT_EXPORT_DOC: ExecuteExportDoc();
         break;
-     case fTASKEVENT_CONVERT_DOC: ExecuteConvertDoc();
+    case PDTasksDefEvent.fTASKEVENT_CONVERT_DOC: ExecuteConvertDoc();
+        break;
+    case PDTasksDefEvent.fTASKEVENT_FTINDEX_DOC: ExecuteFTIndexDoc();
+        break;
+    case PDTasksDefEvent.fTASKEVENT_FTUPDA_DOC: ExecuteFTUpdDoc();
+        break;
+    case PDTasksDefEvent.fTASKEVENT_FTDEL_DOC: ExecuteFTDelDoc();
         break;
     default: PDExceptionFunc.GenPDException("Unexpected_Task", ""+getType());
         break;
@@ -1200,7 +1199,7 @@ if (PDLog.isDebug())
 }
 //-------------------------------------------------------------------------
 /**
- * Checks that the document meets the requirements for creating a non trabns taks
+ * Checks that the document meets the requirements for creating a non trans taks
  * @param Doc Doc to check
  * @return true when de doc meets req.
  */
@@ -1210,17 +1209,22 @@ PDFolders Fold=new PDFolders(getDrv());
 String IdUnder=PDFolders.ROOTFOLDER;
 switch (getType())
     {
-    case fTASKEVENT_UPDATE_DOC:
+    case PDTasksDefEvent.fTASKEVENT_UPDATE_DOC:
         IdUnder=Fold.getIdPath(getParam4());
         break;
-     case fTASKEVENT_COPY_DOC:
+    case PDTasksDefEvent.fTASKEVENT_COPY_DOC:
         IdUnder=Fold.getIdPath(getParam2());
         break;
-     case fTASKEVENT_EXPORT_DOC:
+    case PDTasksDefEvent.fTASKEVENT_EXPORT_DOC:
         IdUnder=Fold.getIdPath(getParam());
         break;
-     case fTASKEVENT_CONVERT_DOC:
+    case PDTasksDefEvent.fTASKEVENT_CONVERT_DOC:
         IdUnder=Fold.getIdPath(getParam2());
+        break;
+    case PDTasksDefEvent.fTASKEVENT_FTINDEX_DOC:
+    case PDTasksDefEvent.fTASKEVENT_FTDEL_DOC:
+    case PDTasksDefEvent.fTASKEVENT_FTUPDA_DOC:
+        IdUnder=Fold.getIdPath(getParam());
         break;
     }
 Fold.setPDId(Doc.getParentId());
@@ -1240,19 +1244,63 @@ PDFolders Fold=new PDFolders(getDrv());
 String IdUnder=PDFolders.ROOTFOLDER;    
 switch (getType())
     {
-    case fTASKEVENT_UPDATE_FOLD:
+    case PDTasksDefEvent.fTASKEVENT_UPDATE_FOLD:
         IdUnder=Fold.getIdPath(getParam4());
         break;
-    case fTASKEVENT_COPY_FOLD:
+    case PDTasksDefEvent.fTASKEVENT_COPY_FOLD:
         IdUnder=Fold.getIdPath(getParam2());
         break;
-    case fTASKEVENT_EXPORT_FOLD:
+    case PDTasksDefEvent.fTASKEVENT_EXPORT_FOLD:
         IdUnder=Fold.getIdPath(getParam());
         break;
     }
 if (!FoldE.IsUnder(IdUnder))    
    return(false); 
 return(true);
+}
+//-------------------------------------------------------------------------
+
+private void ExecuteFTIndexDoc() throws PDException
+{
+PDDocs Doc=new PDDocs(this.getDrv(), getObjType());
+Doc.LoadFull(getObjFilter());
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksExec.ExecuteFTIndexDoc>:"+Doc.getPDId()+"/"+Doc.getTitle());                    
+PDFolders Fold=new PDFolders(getDrv());
+String IdUnder=Fold.getIdPath(getParam());
+Fold.setPDId(Doc.getParentId());
+if (!Fold.IsUnder(IdUnder))    
+   return;      
+Doc.ExecuteFTAdd();  
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksExec.ExecuteFTIndexDoc<:"+Doc.getPDId()+"/"+Doc.getTitle());                    
+}
+//-------------------------------------------------------------------------
+private void ExecuteFTUpdDoc() throws PDException
+{
+PDDocs Doc=new PDDocs(this.getDrv(), getObjType());
+Doc.LoadFull(getObjFilter());    
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksExec.ExecuteFTUpdDoc>:"+Doc.getPDId()+"/"+Doc.getTitle());                    
+PDFolders Fold=new PDFolders(getDrv());
+String IdUnder=Fold.getIdPath(getParam());
+Fold.setPDId(Doc.getParentId());
+if (!Fold.IsUnder(IdUnder))    
+   return;          
+Doc.ExecuteFTUpd();   
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksExec.ExecuteFTUpdDoc<:"+Doc.getPDId()+"/"+Doc.getTitle());                    
+}
+//-------------------------------------------------------------------------
+private void ExecuteFTDelDoc() throws PDException
+{
+PDDocs Doc=new PDDocs(this.getDrv(), getObjType());
+Doc.setPDId(getObjFilter());    
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksExec.ExecuteFTDelDoc>:"+Doc.getPDId());                            
+Doc.ExecuteFTDel();  
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksExec.ExecuteFTDelDoc<:"+Doc.getPDId());                    
 }
 //-------------------------------------------------------------------------
 }
