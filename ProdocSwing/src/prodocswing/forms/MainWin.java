@@ -1128,8 +1128,8 @@ while (true)
     if (MD.isCancel())
         return;
     Doc.assignValues(MD.getRecord());
-    if (MD.SelFile!=null)
-        Doc.setFile(MD.SelFile.getAbsolutePath());
+    if (MD.getPath()!=null)
+        Doc.setFile(MD.getPath());
     else
         throw new PDException("Error_retrieving_file");
     Doc.setParentId(getActFolderId());

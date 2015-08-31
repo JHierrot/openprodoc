@@ -27,7 +27,6 @@ package prodocswing.forms;
 
 import java.awt.Component;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Vector;

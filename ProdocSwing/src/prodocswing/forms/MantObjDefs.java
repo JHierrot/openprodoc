@@ -651,8 +651,6 @@ try {
 PDObjDefs newObjDef=new PDObjDefs((MainWin.getSession()));
 newObjDef.Load((String)ObjDef.getAttr(PDObjDefs.fNAME).getValue()); // exist the object?
 newObjDef.DeleteObjectTables(newObjDef.getName());
-//if (MainWin.getSession().isInTransaction())
-//        MainWin.getSession().CerrarTrans();
 ObjDef.getAttr(PDObjDefs.fCREATED).setValue(false);
 } catch (PDException ex)
     {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));

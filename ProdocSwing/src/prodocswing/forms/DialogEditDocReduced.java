@@ -28,19 +28,14 @@ package prodocswing.forms;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Vector;
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
 import prodoc.Attribute;
-import prodoc.Cursor;
-import prodoc.DriverGeneric;
 import prodoc.ObjPD;
 import prodoc.PDDocs;
 import prodoc.PDException;
 //import prodoc.PDFolders;
 import prodoc.PDLog;
 import prodoc.PDMimeType;
-import prodoc.PDObjDefs;
 import prodoc.Record;
 
 /**
@@ -58,7 +53,7 @@ private HashSet AttrExcluded=new HashSet();
 /**
  * 
  */
-public File SelFile=null;
+private File SelFile=null;
 
 /** Creates new form DialogEditFold
  * @param parent
@@ -255,7 +250,7 @@ Attr = EditedDoc.getAttr(PDDocs.fDOCDATE);
 Attr.setValue(DateTextField.getValue());
 Attr = EditedDoc.getAttr(PDDocs.fMIMETYPE);
 PDMimeType mt=new PDMimeType(MainWin.getSession());
-Attr.setValue(mt.SolveName(NameTextField.getText()));
+Attr.setValue(mt.SolveName(FilePathTextField.getText()));
 Cancel = false;
 this.dispose();
 } catch (PDException ex)
@@ -402,6 +397,16 @@ return Cancel;
 void setParentPath(String ActFolderPath)
 {
 PathTextField.setText(ActFolderPath);
+}
+//--------------------------------------------------------------
+public String getPath()
+{
+if (SelFile!=null)
+   return(SelFile.getAbsolutePath());
+else if (FilePathTextField.getText().length()!=0)   
+    return(FilePathTextField.getText());
+else
+    return(null);
 }
 //--------------------------------------------------------------
 }
