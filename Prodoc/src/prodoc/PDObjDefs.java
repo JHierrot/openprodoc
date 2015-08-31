@@ -742,6 +742,10 @@ if (PDLog.isDebug())
     PDLog.Debug("PDObjDefs.CreateObjectTables>:"+Name);
 PDObjDefs Def=new PDObjDefs(getDrv());
 Def.Load(Name);
+PDObjDefs DefParent=new PDObjDefs(getDrv());
+DefParent.Load(Def.getParent());
+if (!DefParent.isCreated())
+    PDExceptionFunc.GenPDException("Creation_forbidden_without_parent_created", Name);
 Record RecDef=Def.GetAttrDef();
 Record RecTab=RecDef.CopyMono();
 Attribute PdId=new Attribute(PDDocs.fPDID, PDDocs.fPDID, "Unique_identifier", Attribute.tSTRING, true, null, 32, true, false, false);
@@ -893,16 +897,43 @@ return(NewName.substring(0,Long>32?32:Long));
 }
 //-------------------------------------------------------------------------
 /**
- *
+ * 
  * @param Name
  * @throws PDException
  */
 public void DeleteObjectTables(String Name)  throws PDException
 {
-if (PDLog.isDebug())
-    PDLog.Debug("PDObjDefs.DeleteObjectTables:"+Name);
+if (PDLog.isInfo())
+    PDLog.Info("PDObjDefs.DeleteObjectTables>:"+Name);
 PDObjDefs Def=new PDObjDefs(getDrv());
 Def.Load(Name);
+if (Def.getClassType().equals(CT_FOLDER))
+    {
+    PDFolders Fold=new PDFolders(getDrv());
+    Condition c=new Condition(PDFolders.fPDID, Condition.cNE, "a");
+    Conditions Conds=new Conditions();
+    Conds.addCondition(c);
+    Cursor Search = Fold.Search(Name, Conds, true, false, PDFolders.ROOTFOLDER, null);
+    Record r=getDrv().NextRec(Search);
+    getDrv().CloseCursor(Search);
+    if (r!=null) // there are folder of type/subtipes
+       PDExceptionFunc.GenPDException("Delete_forbidden_with_existing_folders_of_type_or_subtypes", Name);
+    }
+else
+    {
+    PDDocs Doc=new PDDocs(getDrv());
+    Condition c=new Condition(PDFolders.fPDID, Condition.cNE, "a");
+    Conditions Conds=new Conditions();
+    Conds.addCondition(c);
+    Cursor Search = Doc.Search(Name, Conds, true, false,false, PDFolders.ROOTFOLDER, null);
+    Record r=getDrv().NextRec(Search);
+    getDrv().CloseCursor(Search);
+    if (r!=null) // there are docs of type/subtipes
+       PDExceptionFunc.GenPDException("Delete_forbidden_with_existing_documents_of_type_or_subtypes", Name);    
+    }
+HashSet listSubClases = Def.getListSubClasesCreated(Name);
+if (!listSubClases.isEmpty())
+   PDExceptionFunc.GenPDException("Delete_forbidden_with_existing_definitions_of_subtypes", Name);        
 String Err="";
 try {
 getDrv().DropTable(Def.getName());
@@ -939,6 +970,8 @@ if (Err.length()>0)
    PDExceptionFunc.GenPDException(Err, Name);
 Def.setCreated(false);
 Def.update();
+if (PDLog.isDebug())
+    PDLog.Debug("PDObjDefs.DeleteObjectTables<");
 }
 //-------------------------------------------------------------------------
 /**
@@ -1338,20 +1371,44 @@ for (int NumNodes = 0; NumNodes < childNodes.getLength(); NumNodes++)
     }
 }    
 //-------------------------------------------------------------------------
-
-    /**
-     * @return the Created
-     */
-    public boolean isCreated()
+/**
+* @return the Created
+*/
+public boolean isCreated()
+{
+return Created;
+}
+//-------------------------------------------------------------------------
+/**
+* @param Created the Created to set
+*/
+public void setCreated(boolean Created)
+{
+this.Created = Created;
+}
+//-------------------------------------------------------------------------
+private HashSet getListSubClasesCreated(String ClassName) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDObjDefs.getListSubClases>:"+ClassName);
+HashSet v=new HashSet();
+Condition CondType=new Condition(PDObjDefs.fPARENT, Condition.cEQUAL, ClassName);
+Condition CCreated=new Condition(PDObjDefs.fCREATED, Condition.cEQUAL, true);
+Conditions Conds=new Conditions();
+Conds.addCondition(CondType);
+Conds.addCondition(CCreated);
+Query ListAttr=new Query(getTabName(), getRecordStruct(), Conds);
+Cursor Cur=getDrv().OpenCursor(ListAttr);
+Record r=getDrv().NextRec(Cur);
+while (r!=null)
     {
-        return Created;
+    v.addAll(getListSubClases((String)r.getAttr(fNAME).getValue()));
+    r=getDrv().NextRec(Cur);
     }
-
-    /**
-     * @param Created the Created to set
-     */
-    public void setCreated(boolean Created)
-    {
-        this.Created = Created;
-    }
+getDrv().CloseCursor(Cur);
+if (PDLog.isDebug())
+    PDLog.Debug("PDObjDefs.getListSubClases<:"+v);
+return(v);
+}
+//-------------------------------------------------------------------------
 }
