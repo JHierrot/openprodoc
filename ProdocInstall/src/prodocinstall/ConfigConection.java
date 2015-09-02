@@ -26,6 +26,7 @@
 package prodocinstall;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -249,7 +250,7 @@ generateProps();
     return;
     }
 try {
-generateScripts();
+generateScripts(AditionalCP.getText().trim());
 } catch(Exception ex)
     {
     Message(TT("Error_writing_script_file")+" Prodoc.sh(.bat):"+ex.getLocalizedMessage());
@@ -264,8 +265,22 @@ dispose();
 */
 public static void main(String args[])
 {
+System.out.println("OpenProdoc Install.");
+System.out.println("    Options:");
+System.out.println("Install                 (For Installing with User Interface in OS language)");
+System.out.println("Install ES|EN|PT|CT     (For Installing with User Interface in specified language)");
+System.out.println("Install NO_UI Filename  (For Installing WITHOUT User Interface with parameters in Filename properties file)");
+System.out.println(" ");
 if (args.length>0)
+    {
+    if (args[0].equalsIgnoreCase("NO_UI"))
+        {
+        ProcessNoUI(args[1]);
+        System.out.println("Install Finished OK");
+        System.exit(0);
+        }
     AppLang=args[0];
+    }
 java.awt.EventQueue.invokeLater(new Runnable()
     {
     public void run()
@@ -372,7 +387,7 @@ DriverGeneric.generateProps("Prodoc.properties", "PD", Url.getText(), UserName.g
  * 
  * @throws Exception
  */
-private void generateScripts() throws Exception
+static private void generateScripts(String CP) throws Exception
 {
 //--- client Swing ---
 String Name="Prodoc.";
@@ -383,9 +398,9 @@ else
     Name+="sh";
 PrintWriter FScript = new PrintWriter(Name, "UTF-8");
 if (OS.contains("Win"))
-    FScript.println("start javaw -Dfile.encoding=UTF-8 -classpath .;.\\lib;.\\lib\\Prodoc.jar;.\\lib\\log4j-1.2.16.jar;ProdocSwing.jar;"+AditionalCP.getText().trim()+"  prodocswing.forms.MainWin %1");
+    FScript.println("start javaw -Dfile.encoding=UTF-8 -classpath .;.\\lib;.\\lib\\Prodoc.jar;.\\lib\\log4j-1.2.16.jar;ProdocSwing.jar;"+CP+"  prodocswing.forms.MainWin %1");
 else
-    FScript.println("java -Dfile.encoding=UTF-8 -classpath .:./lib:./lib/Prodoc.jar:ProdocSwing.jar:./lib/log4j-1.2.16.jar:"+AditionalCP.getText().trim()+"  prodocswing.forms.MainWin $1");
+    FScript.println("java -Dfile.encoding=UTF-8 -classpath .:./lib:./lib/Prodoc.jar:ProdocSwing.jar:./lib/log4j-1.2.16.jar:"+CP+"  prodocswing.forms.MainWin $1");
 FScript.flush();
 FScript.close();
 File f=new File(Name);
@@ -398,13 +413,44 @@ else
     Name+="sh";
 FScript = new PrintWriter(Name, "UTF-8");
 if (OS.contains("Win"))
-    FScript.println("java -Dfile.encoding=UTF-8 -classpath .;.\\lib;.\\lib\\Prodoc.jar;ProdocSetup.jar;.\\lib\\log4j-1.2.16.jar;"+AditionalCP.getText().trim()+"  prodocsetup.CreateMetadata %1");
+    FScript.println("java -Dfile.encoding=UTF-8 -classpath .;.\\lib;.\\lib\\Prodoc.jar;ProdocSetup.jar;.\\lib\\log4j-1.2.16.jar;"+CP+"  prodocsetup.CreateMetadata %1 %2");
 else
-    FScript.println("java -Dfile.encoding=UTF-8 -classpath .:./lib:./lib/Prodoc.jar:ProdocSetup.jar:./lib/log4j-1.2.16.jar:"+AditionalCP.getText().trim()+"  prodocsetup.CreateMetadata $1");
+    FScript.println("java -Dfile.encoding=UTF-8 -classpath .:./lib:./lib/Prodoc.jar:ProdocSetup.jar:./lib/log4j-1.2.16.jar:"+CP+"  prodocsetup.CreateMetadata $1 $2");
 FScript.flush();
 FScript.close();
 f=new File(Name);
 f.setExecutable(true);
+}
+//---------------------------------------------------------------------
+/**
+ * Installs OpenProdoc by means of a properties file for installing without User Interface
+ * @param PropFile 
+ */
+private static void ProcessNoUI(String PropFile)
+{
+Properties Prop;
+FileInputStream f=null;
+try {
+f=new FileInputStream(PropFile);
+Prop=new Properties();
+Prop.load(f);
+f.close();
+f=null;
+DriverGeneric.generateProps("Prodoc.properties", "PD", ((String)Prop.get("Url")).trim(), ((String)Prop.get("UserName")).trim(), ((String)Prop.get("Password")).trim(), ((String)Prop.get("JDBCClass")).trim());
+generateScripts(((String)Prop.get("CP")).trim());
+}catch (Exception ex)
+    {
+    if (f!=null)
+        {
+        try {
+            f.close();
+        } catch (IOException ex1)
+            {
+            System.out.println("Error:"+ex1.getLocalizedMessage());
+            }
+        }
+    System.out.println("Error:"+ex.getLocalizedMessage());
+    }
 }
 //---------------------------------------------------------------------
 }
