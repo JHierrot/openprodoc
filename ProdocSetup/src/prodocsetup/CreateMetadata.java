@@ -25,6 +25,7 @@
 
 package prodocsetup;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -65,7 +66,8 @@ setLocationRelativeTo(null);
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jLabel1 = new javax.swing.JLabel();
         AcceptButton = new javax.swing.JButton();
@@ -110,16 +112,20 @@ setLocationRelativeTo(null);
 
         AcceptButton.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         AcceptButton.setText(TT("Ok"));
-        AcceptButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        AcceptButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 AcceptButtonActionPerformed(evt);
             }
         });
 
         CancelButton.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         CancelButton.setText(TT("Cancel"));
-        CancelButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        CancelButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 CancelButtonActionPerformed(evt);
             }
         });
@@ -298,7 +304,7 @@ setLocationRelativeTo(null);
                 .addGroup(AttrTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
                     .addComponent(RepTypeCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
                 .addGroup(AttrTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(RepParamTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel13))
@@ -421,7 +427,7 @@ CreateMetadataStructure();
     Message(ex.getLocalizedMessage());
     AcceptButton.setEnabled(true);
     CancelButton.setEnabled(true);
-    return;
+    System.exit(1);
     }
     }//GEN-LAST:event_AcceptButtonActionPerformed
 
@@ -430,8 +436,27 @@ CreateMetadataStructure();
 */
 public static void main(String args[])
 {
+System.out.println("OpenProdoc Setup.");
+System.out.println("    Options:");
+System.out.println("Setup                 (For Setup with User Interface in OS language)");
+System.out.println("Setup ES|EN|PT|CT     (For Setup with User Interface in specified language)");
+System.out.println("Setup NO_UI Filename  (For Setup WITHOUT User Interface with parameters in Filename properties file)");
+System.out.println(" ");
 if (args.length>0)
+    {
+    if (args[0].equalsIgnoreCase("NO_UI"))
+        {
+        if (args.length<2)
+            {
+            System.out.println("¿Filename?");
+            System.exit(0);
+            }
+        ProcessNoUI(args[1]);
+        System.out.println("Install Finished OK");
+        System.exit(0);
+        }
     AppLang=args[0];
+    }
 java.awt.EventQueue.invokeLater(new Runnable()
     {
     public void run()
@@ -677,6 +702,59 @@ dispose();
 }
 //------------------------------------
 }
+/**
+ * Installs OpenProdoc by means of a properties file for installing without User Interface
+ * @param PropFile path to properties file of type Install
+ */
+private static void ProcessNoUI(String PropFile)
+{
+Properties Prop=null;
+FileInputStream f=null;
+System.out.println("Setup OpenProdoc Started");
+try {
+f=new FileInputStream(PropFile);
+Prop=new Properties();
+Prop.load(f);
+f.close();
+f=null;
+}catch (Exception ex)
+    {
+    if (f!=null)
+        {
+        try {
+            f.close();
+        } catch (IOException ex1)
+            {
+            System.out.println("Error:"+ex1.getLocalizedMessage());
+            }
+        }
+    System.out.println("Error:"+ex.getLocalizedMessage());
+    return;
+    }
+DriverGeneric Sesion=null;
+Vector TraceI=new Vector();
+try {
+if (PDLog.isDebug())
+   PDLog.Debug("Before InitProdoc");
+ProdocFW.InitProdoc("PD", "Prodoc.properties");
+if (PDLog.isDebug())
+   PDLog.Debug("Before getSession");
+Sesion=ProdocFW.getSession("PD", "Install", "Install");
+if (PDLog.isDebug())
+   PDLog.Debug("Before Install");
+Sesion.Install(((String)Prop.get("RootPassword")).trim(), ((String)Prop.get("DefLang")).trim(), ((String)Prop.get("DefTimeFormat")).trim(), ((String)Prop.get("DefDateFormat")).trim(), 
+               ((String)Prop.get("MainKey")).trim(), ((String)Prop.get("RepName")).trim(), Boolean.parseBoolean(((String)Prop.get("RepEncrypt")).trim()), ((String)Prop.get("RepUrl")).trim(), ((String)Prop.get("RepUser")).trim(), ((String)Prop.get("RepPassword")).trim(), ((String)Prop.get("RepType")).trim(), ((String)Prop.get("RepParam")).trim(), TraceI);
+ProdocFW.freeSesion("PD", Sesion);
+ProdocFW.ShutdownProdoc("PD");
+System.out.println("OpenProdoc_Server_created_correctly");
+}catch (Exception ex)
+    {
+    for (int i = 0; i < TraceI.size(); i++)
+        System.out.println((String)TraceI.elementAt(i));
+    System.out.println("Error:"+ex.getLocalizedMessage());
+    }
+}
+//---------------------------------------------------------------------
 
 //--------------------------------------------------------------
 /** internal class to update evolution

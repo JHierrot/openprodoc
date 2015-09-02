@@ -275,6 +275,11 @@ if (args.length>0)
     {
     if (args[0].equalsIgnoreCase("NO_UI"))
         {
+        if (args.length<2)
+            {
+            System.out.println("¿Filename?");
+            System.exit(0);
+            }
         ProcessNoUI(args[1]);
         System.out.println("Install Finished OK");
         System.exit(0);
@@ -424,7 +429,7 @@ f.setExecutable(true);
 //---------------------------------------------------------------------
 /**
  * Installs OpenProdoc by means of a properties file for installing without User Interface
- * @param PropFile 
+ * @param PropFile path to properties file of type Install
  */
 private static void ProcessNoUI(String PropFile)
 {
