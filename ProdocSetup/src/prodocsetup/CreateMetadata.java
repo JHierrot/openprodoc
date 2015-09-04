@@ -49,7 +49,8 @@ public class CreateMetadata extends javax.swing.JFrame
 private static HashMap TransList=new HashMap();
 private static String AppLang=null;
 Vector Trace=new Vector();
-DefaultListModel LM=null;
+//DefaultListModel LM=null;
+Object LM=null;
 ActThread Act;
 
 /** Creates new form ConfigConection */
@@ -617,7 +618,7 @@ private DefaultListModel getListModel()
 {
 if (LM==null)
     LM=new DefaultListModel();
-return LM;
+return (DefaultListModel)LM;
 }
 //--------------------------------------------------------------
 /** internal class to update evolution

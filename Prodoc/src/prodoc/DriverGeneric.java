@@ -599,13 +599,11 @@ ProcessXML(FileImp, PDFolders.ROOTFOLDER);
 //--- Creating RIS Complete Type -------------
 FileImp=new File("ex/PD_RIS_COMP.opd");
 ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
-D.CreateObjectTables("RIS_Complete", false); 
-//FileImp=new File("ex/PD_REP_EXA_RIS.opd"); //report for RIS
-//ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
+//D.CreateObjectTables("RIS_Complete", false); 
 //--- Creating RIS Reassign Type -------------
 FileImp=new File("ex/PD_RIS_REASIG.opd");
 ProcessXML(FileImp, PDFolders.ROOTFOLDER);
-D.CreateObjectTables("RIS_Reasign", false); 
+//D.CreateObjectTables("RIS_Reasign", false); 
 Trace.add("RIS types created");
 TE.CreateRootThesaur(DefLang);
 //----------------------
