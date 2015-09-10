@@ -21,6 +21,13 @@ package prodocUI.servlet;
 
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
+import prodoc.DriverGeneric;
+import prodoc.PDException;
+import prodocUI.forms.FChangePass;
+import static prodocUI.servlet.SParent.GenListForm;
+import static prodocUI.servlet.SParent.LAST_FORM;
+import static prodocUI.servlet.SParent.Reading;
+import static prodocUI.servlet.SParent.ShowMessage;
 
 /**
  *
@@ -38,8 +45,32 @@ public class SPassChange extends SParent
 @Override
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {
-    // TODO implement change password
-out.println("Papelera");
+if (!Reading(Req))
+    {
+    FChangePass f=new FChangePass(Req, FChangePass.ADDMOD, null, getUrlServlet());
+    out.println(f.ToHtml(Req.getSession()));
+    return;
+    }
+else
+    {
+    try {
+    String OldPass;
+    String NewPass1;
+    FChangePass f=new FChangePass(Req, FChangePass.ADDMOD, null, getUrlServlet() );
+    String Acept=f.OkButton.getValue(Req);
+    if (Acept!=null && Acept.length()!=0)
+        {
+        NewPass1=f.NewPass1.getValue(Req);
+        OldPass=f.OldPass.getValue(Req);
+        DriverGeneric sessOPD = SMain.getSessOPD(Req);
+        sessOPD.ChangePassword(sessOPD.getUser().getName(), OldPass, NewPass1);
+        }
+    GenListForm(Req, out, LAST_FORM, null, null);
+    } catch (PDException ex)
+        {
+        ShowMessage( Req,  out, SParent.TT(Req, ex.getLocalizedMessage()));
+        }
+    }
 }
 //-----------------------------------------------------------------------------------------------
 
