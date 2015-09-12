@@ -76,7 +76,7 @@ NewPass1.setClave(true);
 NewPass2=new FieldText("NewPass2");
 NewPass2.setMaxSize(32);
 NewPass2.setCSSClass("FFormInput");
-NewPass2.setMensStatus(TT("New_Password"));
+NewPass2.setMensStatus(TT("password_retype"));
 NewPass2.setClave(true);
 FormTab.getCelda(0,0).setWidth(-25);
 FormTab.getCelda(0,0).setHeight(30);

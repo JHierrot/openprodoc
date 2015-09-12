@@ -1538,8 +1538,8 @@ return ListReposit;
  */
 public void ChangePassword(String UserName, String OldPassword, String NewPassword) throws PDException
 {
-if (PDLog.isDebug())
-    PDLog.Debug("DriverGeneric.ChangePassword>:"+UserName);
+if (PDLog.isInfo())
+    PDLog.Info("DriverGeneric.ChangePassword>:"+UserName);
 PDUser U2cp=new PDUser(this);
 if (U2cp.Load(UserName)==null)
     PDExceptionFunc.GenPDException("User_or_password_incorrect", UserName);

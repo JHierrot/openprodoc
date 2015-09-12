@@ -23,6 +23,7 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import prodoc.DriverGeneric;
 import prodoc.PDException;
+import prodoc.PDExceptionFunc;
 import prodocUI.forms.FChangePass;
 import static prodocUI.servlet.SParent.GenListForm;
 import static prodocUI.servlet.SParent.LAST_FORM;
@@ -54,14 +55,18 @@ if (!Reading(Req))
 else
     {
     try {
-    String OldPass;
-    String NewPass1;
     FChangePass f=new FChangePass(Req, FChangePass.ADDMOD, null, getUrlServlet() );
     String Acept=f.OkButton.getValue(Req);
     if (Acept!=null && Acept.length()!=0)
         {
-        NewPass1=f.NewPass1.getValue(Req);
+        String OldPass;
+        String NewPass1;
+        String NewPass2;
         OldPass=f.OldPass.getValue(Req);
+        NewPass1=f.NewPass1.getValue(Req);
+        NewPass2=f.NewPass2.getValue(Req);
+        if (!NewPass1.equals(NewPass2))
+            PDExceptionFunc.GenPDException(TT(Req,"Both_new_passwords_different"), "");
         DriverGeneric sessOPD = SMain.getSessOPD(Req);
         sessOPD.ChangePassword(sessOPD.getUser().getName(), OldPass, NewPass1);
         }
