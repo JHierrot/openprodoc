@@ -35,19 +35,19 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.lucene-analyzers-common-5.2.1.jar}</file>
+                    <file>${file.reference.lucene-core-5.3.0.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.lucene-core-5.2.1.jar}</file>
+                    <file>${file.reference.lucene-analyzers-common-5.3.0.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.lucene-queryparser-5.2.1.jar}</file>
+                    <file>${file.reference.lucene-queryparser-5.3.0.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.tika-app-1.9.jar}</file>
+                    <file>${file.reference.tika-app-1.10.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>

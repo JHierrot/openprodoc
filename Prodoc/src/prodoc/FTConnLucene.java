@@ -109,9 +109,6 @@ if (SM==null)
 protected void Disconnect() throws PDException
 {
 try {        
-//SM.close();
-//iwriter.close();
-//directory.close();
 } catch (Exception ex)
     {
     PDException.GenPDException("Error_Disconnecting_FT_Index", ex.getLocalizedMessage());
@@ -137,7 +134,6 @@ doc.add(new TextField( F_FULLTEXT, getFullText(), Field.Store.NO));
 iwriter.addDocument(doc);
 iwriter.commit();
 SM.maybeRefresh();
-//iwriter.close();
 } catch (Exception ex)
     {
     PDException.GenPDException("Error_inserting_doc_FT", ex.getLocalizedMessage());
@@ -149,9 +145,6 @@ return(0);
 protected int Update(String Type, String Id, InputStream Bytes, Record pMetadata) throws PDException
 {
 try {       
-//iwc = new IndexWriterConfig(analyzer);
-//iwc.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
-//iwriter = new IndexWriter(directory, iwc);
 iwriter.deleteDocuments(new Term(F_ID,Id));
 Document doc = new Document();
 doc.add(new StringField(F_TYPE, Type, Field.Store.YES));
@@ -168,7 +161,6 @@ doc.add(new TextField( F_FULLTEXT, getFullText(), Field.Store.NO));
 iwriter.addDocument(doc);
 iwriter.commit();
 SM.maybeRefresh();
-//iwriter.close();
 } catch (Exception ex)
     {
     PDException.GenPDException("Error_inserting_doc_FT", ex.getLocalizedMessage());
@@ -185,13 +177,9 @@ return(0);
 protected void Delete(String Id) throws PDException
 {
 try {       
-//iwc = new IndexWriterConfig(analyzer);
-//iwc.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
-//iwriter = new IndexWriter(directory, iwc);    
 iwriter.deleteDocuments(new Term(F_ID,Id));
 iwriter.commit();
 SM.maybeRefresh();
-//iwriter.close();
 } catch (Exception ex)
     {
     PDException.GenPDException("Error_deleting_doc_FT", ex.getLocalizedMessage());
@@ -213,13 +201,9 @@ protected ArrayList<String> Search(String Type, String sDocMetadata, String sBod
 {
 ArrayList<String> Res=new ArrayList();   
 try {  
-//ireader = DirectoryReader.open(directory);
-//isearcher = new IndexSearcher(ireader);
 isearcher=SM.acquire();
 sBody=sBody.toLowerCase();
-//System.out.println("Buscando="+sBody);
 Query query = new QueryParser(F_FULLTEXT,analyzer).parse(sBody);
-//Query query = new StandardQueryParser(analyzer).parse(sBody, F_FULLTEXT);
 ScoreDoc[] hits = isearcher.search(query, MAXRESULTS).scoreDocs;
 for (ScoreDoc hit : hits)
     Res.add(isearcher.doc(hit.doc).get(F_ID));
