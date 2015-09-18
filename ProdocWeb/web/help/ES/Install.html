@@ -48,7 +48,7 @@
     <h4 id="3">3 - Instalación Cliente OpenProdoc Swing</h4>
     <p>Este cliente debe instalarse al menos una vez para la administración del sistema y además para todos los usuarios que utilicen esta forma de acceso.     Para ello debe iniciar el script de sistema <b>Install.sh</b> o <b>Install.bat</b> (según el sistema operativo) y cumplimentar los datos requeridos en pantalla.
     </p>
-    <p>En el caso del Linux, dependiendo de la configuración y modelo de seguridad, puede ser necesario cambiar los permisos de Install.sh o de Setup.sh (una vez creado) asignando permisos de ejecución: "chmod 777 Install.sh"
+    <p>En el caso del Linux, dependiendo de la configuración y modelo de seguridad, puede ser necesario cambiar los permisos de Install.sh o de Setup.sh (una vez creado) asignando permisos de ejecución: "chmod 777 Install.sh" o usando otras herramientas o instrucciones.
     </p>
     <p>Por defecto se elegirá el idioma del equipo, siempre que esté soportado, en otro caso se utilizará inglés (EN). Si se desea forzar otro idioma puede pasarse como parámetro de dos letras a la aplicación (Ej. Install.sh EN). Ver 
       <a href="Language.html">Soporte Idiomas</a>
@@ -62,7 +62,7 @@
       </li>
       <li><b>Tipo de conexión</b>: Indicar el tipo de conexión a utilizar. (Actualmente solo soportado JDBC). (requerido)
       </li>
-      <li><b>Clases java a utilizar</b>: Indicar las clases de conexión (JDBC) a utilizar (Ej.:<i>"org.apache.derby.jdbc.ClientDriver", "com.mysql.jdbc.Driver", "com.ibm.db2jcc.DBDriver"</i>). (requerido)
+      <li><b>Clases java a utilizar</b>: Indicar las clases de conexión (JDBC) a utilizar (Ej.:<i>"org.apache.derby.jdbc.ClientDriver", "com.mysql.jdbc.Driver", "com.ibm.db2jcc.DBDriver", "org.postgresql.Driver"</i>). (requerido)
       </li>
       <li><b>Classpath adicional</b>: Localización de las clases adicionales a las instaladas en la carpeta ".\lib". Debe especificarse el classpath de las clases del driver JDBC.
       </li>
@@ -77,7 +77,7 @@
       <li>La configuración relativa al classpath sea la misma
       </li>
     </ul>  
-    <p>en otro caso debe utilizase el programa de instalación o modificar manualmente el archivo de configuración.
+    <p>en otro caso debe utilizase el programa de instalación o modificar manualmente el archivo de configuración (Prodoc.properties).
     </p>
     <p>Si desea utilizarse repositorio documental Amazon S3, deberá descargarse e instalarse las librerías AWS S3 correspondientes, e incluirlas en el classpath.
     </p>
@@ -92,7 +92,7 @@
     <ul>
       <li><b>Password Administrador</b>: Clave de acceso del usuario administrador "root" creado al instalar. Otros usuarios pueden tener los mismos permisos, "root" se crea por defecto
       </li>
-      <li><b>Código del Lenguaje por defecto</b>: Código ISO del lenguaje por defecto para la parametrización por defecto.
+      <li><b>Código del Lenguaje por defecto</b>: Código ISO del lenguaje por defecto para la parametrización por defecto. (PT, ES, EN, CT) (requerido).
       </li>
       <li><b>Formato Fecha/Hora</b>: Formato de presentación y lectura de los campos fecha-hora según formatter java. (Ej. yyyy-MM-dd HH:mm:ss )
       </li>

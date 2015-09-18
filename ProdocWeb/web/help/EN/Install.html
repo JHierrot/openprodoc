@@ -48,7 +48,9 @@
     <h4 id="3">3 - Install OpenProdoc Swing Client for administration</h4>
     <p>This OPD client must be installed at least one time for administration and additionally, be installed for the users requiring a thick client. It's necessary to start the shell script <b>Install.sh</b> or <b>Install.bat</b> (Depending of the operative System) and fill the data asked in the form.
     </p>
-    <p>The program will assign the language of the computer if it's supported in the version, otherwise  will be used english (EN). It's possible to force a language, using as parameter the two characters language code when starting the application (IE. Install.sh EN). View 
+   <p>When installing in Linux, depending of version, user and configuration, it should be needed to change the permissions of Install.sh or Setup.sh (after the creationo) assigning execution permissions  with: "chmod 777 Install.sh" or using other tools or commands.
+    </p>
+     <p>The program will assign the language of the computer if it's supported in the version, otherwise  will be used english (EN). It's possible to force a language, using as parameter the two characters language code when starting the application (IE. Install.sh EN). View 
       <a href="Language.html">Languages support</a>
     </p>
     <ul>  
@@ -56,11 +58,11 @@
       </li>
       <li><b>BBDD user password</b>: Password of the user in the DDBB. (required)
       </li>
-      <li><b>DDBB server url</b>: Url in JDBC format of the database server (IE.:<i>"jdbc:mysql://127.0.0.1:3306/Prodoc", "jdbc:derby://localhost:1527/Prodoc"</i>). (required)
+      <li><b>DDBB server url</b>: Url in JDBC format of the database server (IE.:<i>"jdbc:mysql://127.0.0.1:3306/Prodoc", "jdbc:derby://localhost:1527/Prodoc", "jdbc:oracle:thin:@127.0.0.1:1521:Prodoc"</i>). (required)
       </li>
       <li><b>Kind of conection</b>: Kind of connection to use. (In this version only JDBC, in the future, other systems as non SQL DDBB). (required)
       </li>
-      <li><b>Java class to use</b>: Name of the classes used for connection (JDBC) (IE.:<i>"org.apache.derby.jdbc.ClientDriver", "com.mysql.jdbc.Driver", "com.ibm.db2jcc.DBDriver"</i>). (required)
+      <li><b>Java class to use</b>: Name of the classes used for connection (JDBC) (IE.:<i>"org.apache.derby.jdbc.ClientDriver", "com.mysql.jdbc.Driver", "com.ibm.db2jcc.DBDriver", "org.postgresql.Driver</i>). (required)
       </li>
       <li><b>Aditional Classpath</b>: Classpath where the connection classes and any required library is stored besides the folder ".\lib". The classpath must include the path to the JDBC driver libraries.
       </li>
@@ -70,7 +72,7 @@
     <p>With the previous data, the install program will create a config file (Prodoc.properties) and a script Prodoc.sh or Prodoc.bat depending on Operative System.   This files can be copied and used in any computer with the conditions: 
     </p>
     <ul>  
-      <li>The computers have connection to the DDBB
+      <li>The computers have connection to the DDBB and not through ProdocWeb and
       </li>
       <li>The computers have the same classptah and drivers installed.
       </li>
@@ -90,7 +92,7 @@
     <ul>
       <li><b>Administrator Password</b>: Password for user administrator "root" created during installation. It is possible to define several users with several administrator permissions, "root" is only the default administrator. (required)
       </li>
-      <li><b>Default Language Code</b>: ISO code two character for language for the default customization. (IE: PT, ES, EN) (required)
+      <li><b>Default Language Code</b>: ISO code two character for language for the default customization. (PT, ES, EN, CT) (required)
       </li>
       <li><b>Timestamp Format</b>: Format to display and read timestamp fields in default customization, according to formats of the Java formatter. (IE. "yyyy-MM-dd HH:mm:ss" )(required)
       </li>

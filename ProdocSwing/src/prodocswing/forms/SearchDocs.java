@@ -125,6 +125,7 @@ initComponents();
         LabelFT.setText(MainWin.TT("Full_Text_Search"));
 
         TextFieldFT.setFont(MainWin.getFontDialog());
+        TextFieldFT.setToolTipText("Term, Term1 Term2, \"Term3 term4\", Ter*, +Term, -Term");
 
         ButtonAcept.setFont(MainWin.getFontDialog());
         ButtonAcept.setText(MainWin.TT("Ok"));

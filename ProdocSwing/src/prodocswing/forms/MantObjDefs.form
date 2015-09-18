@@ -192,7 +192,7 @@
                           </Group>
                           <Component id="RepositComboBox" alignment="0" pref="361" max="32767" attributes="0"/>
                           <Component id="ParentNameTextField" alignment="0" pref="361" max="32767" attributes="0"/>
-                          <Component id="ClassTypeComboBox" alignment="0" pref="361" max="32767" attributes="0"/>
+                          <Component id="ClassTypeComboBox" alignment="0" pref="371" max="32767" attributes="0"/>
                           <Component id="ACLComboBox" alignment="0" pref="361" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -229,30 +229,32 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="ActiveCheckBox" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="TraceAddCheckBox" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="TraceDelCheckBox" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="TraceModCheckBox" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="TraceViewCheckBox" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
                               <Component id="ActiveLabel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="TraceAddLabel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                               <Component id="TraceDelLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-                              <Component id="TraceModLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-                              <Component id="TraceViewLabel" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="ActiveCheckBox" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="TraceAddCheckBox" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="TraceDelCheckBox" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="TraceModLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="TraceModCheckBox" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="TraceViewLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="TraceViewCheckBox" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
