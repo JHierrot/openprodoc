@@ -36,3 +36,10 @@ a:hover
 {
 color: black;
 }
+.SC
+{
+font-family: monospace;
+font-size: 12px;
+text-align:left;   
+color: #0000FF;
+}
