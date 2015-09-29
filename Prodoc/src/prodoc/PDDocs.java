@@ -22,15 +22,11 @@ package prodoc;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import static prodoc.PDTasksDef.fNAME;
-import static prodoc.PDTasksDef.fTYPE;
 
 /**
  *
@@ -38,7 +34,6 @@ import static prodoc.PDTasksDef.fTYPE;
  */
 public class PDDocs extends ObjPD
 {
-private static final int BUFFSIZE=1024*64;
 private static final String DEFTABNAME="PD_DOCS";
 /**
  *
@@ -2756,18 +2751,23 @@ protected void ExecuteFTAdd()  throws PDException
 {
 LoadFull(getPDId());
 StoreGeneric Rep=getDrv().getRepository(getReposit());
-if (Rep.IsURL())
-    throw new UnsupportedOperationException("Not supported.");   
+//if (Rep.IsURL())
+//    throw new UnsupportedOperationException("Not supported.");   
 InputStream Is=null;
 try {    
 FTConnector FTConn=getDrv().getFTRepository(getDocType());
 FTConn.Connect();
-Rep.Connect();
-Is=Rep.Retrieve(getPDId(), getVersion());
-FTConn.Insert(getDocType(), getPDId(), Is, getRecSum());
+if (!Rep.IsURL())
+    {
+    Rep.Connect();
+    Is=Rep.Retrieve(getPDId(), getVersion());
+    FTConn.Insert(getDocType(), getPDId(), Is, getRecSum());
+    Is.close();
+    Rep.Disconnect();
+    }
+else
+    FTConn.Insert(getDocType(), getPDId(), null, getRecSum());
 FTConn.Disconnect();
-Is.close();
-Rep.Disconnect();
 } catch (Exception Ex)
     {
     if (Is!=null)
@@ -2785,18 +2785,23 @@ protected void ExecuteFTUpd() throws PDException
 {
 LoadFull(getPDId());
 StoreGeneric Rep=getDrv().getRepository(getReposit());
-if (Rep.IsURL())
-    throw new UnsupportedOperationException("Not supported.");   
+//if (Rep.IsURL())
+//    throw new UnsupportedOperationException("Not supported.");   
 InputStream Is=null;
 try {    
 FTConnector FTConn=getDrv().getFTRepository(getDocType());
 FTConn.Connect();
-Rep.Connect();
-Is=Rep.Retrieve(getPDId(), getVersion());
-FTConn.Update(getDocType(), getPDId(), Is, getRecSum());
+if (!Rep.IsURL())
+    {
+    Rep.Connect();
+    Is=Rep.Retrieve(getPDId(), getVersion());
+    FTConn.Update(getDocType(), getPDId(), Is, getRecSum());
+    Is.close();
+    Rep.Disconnect();
+    }
+else
+    FTConn.Update(getDocType(), getPDId(), null, getRecSum());
 FTConn.Disconnect();
-Is.close();
-Rep.Disconnect();
 } catch (Exception Ex)
     {
     if (Is!=null)

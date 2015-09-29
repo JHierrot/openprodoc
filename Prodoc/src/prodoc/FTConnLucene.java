@@ -118,6 +118,7 @@ try {
 @Override
 protected int Insert(String Type, String Id, InputStream Bytes, Record pMetadata) throws PDException
 {
+StringBuilder S=new StringBuilder(1000);    
 try {       
 Document doc = new Document();
 doc.add(new StringField(F_TYPE.toLowerCase(), Type, Field.Store.YES));
@@ -126,11 +127,19 @@ pMetadata.initList();
 for (int NumAttr = 0; NumAttr < pMetadata.NumAttr(); NumAttr++)
     {
     Attribute Attr=pMetadata.nextAttr();
-    doc.add(new StringField(Attr.getName().toLowerCase(), Attr.Export().toLowerCase(), Field.Store.NO));    
+    if (Attr.getValue()!=null || Attr.isMultivalued() && !Attr.getValuesList().isEmpty())
+        S.append(Attr.getName().toLowerCase()).append("=").append(Attr.Export().toLowerCase()).append("\n");
+//    doc.add(new StringField(Attr.getName().toLowerCase(), Attr.Export().toLowerCase(), Field.Store.NO));    
     }
-Convert(Bytes);
-doc.add(new TextField( F_DOCMETADATA, getFileMetadata().toLowerCase(), Field.Store.NO));
-doc.add(new TextField( F_FULLTEXT, getFullText(), Field.Store.NO));
+if (Bytes!=null)
+    {
+    Convert(Bytes);
+//    doc.add(new TextField( F_DOCMETADATA, getFileMetadata().toLowerCase(), Field.Store.NO));
+//    doc.add(new TextField( F_FULLTEXT, getFullText(), Field.Store.NO));
+    doc.add(new TextField( F_FULLTEXT, S.toString()+getFileMetadata().toLowerCase()+"\n"+getFullText(), Field.Store.NO));
+    }
+else
+    doc.add(new TextField( F_FULLTEXT, S.toString(), Field.Store.NO));
 iwriter.addDocument(doc);
 iwriter.commit();
 SM.maybeRefresh();
@@ -144,6 +153,7 @@ return(0);
 @Override
 protected int Update(String Type, String Id, InputStream Bytes, Record pMetadata) throws PDException
 {
+StringBuilder S=new StringBuilder(1000);    
 try {       
 iwriter.deleteDocuments(new Term(F_ID,Id));
 Document doc = new Document();
@@ -153,11 +163,19 @@ pMetadata.initList();
 for (int NumAttr = 0; NumAttr < pMetadata.NumAttr(); NumAttr++)
     {
     Attribute Attr=pMetadata.nextAttr();
-    doc.add(new StringField(Attr.getName(), Attr.Export(), Field.Store.NO));    
+    if (Attr.getValue()!=null || Attr.isMultivalued() && !Attr.getValuesList().isEmpty())
+        S.append(Attr.getName().toLowerCase()).append("=").append(Attr.Export().toLowerCase()).append("\n");
+//    doc.add(new StringField(Attr.getName().toLowerCase(), Attr.Export().toLowerCase(), Field.Store.NO));    
     }
-Convert(Bytes);
-doc.add(new TextField( F_DOCMETADATA, getFileMetadata(), Field.Store.NO));
-doc.add(new TextField( F_FULLTEXT, getFullText(), Field.Store.NO));
+if (Bytes!=null)
+    {
+    Convert(Bytes);
+//    doc.add(new TextField( F_DOCMETADATA, getFileMetadata().toLowerCase(), Field.Store.NO));
+//    doc.add(new TextField( F_FULLTEXT, getFullText(), Field.Store.NO));
+    doc.add(new TextField( F_FULLTEXT, S.toString()+getFileMetadata().toLowerCase()+"\n"+getFullText(), Field.Store.NO));
+    }
+else
+    doc.add(new TextField( F_FULLTEXT, S.toString(), Field.Store.NO));
 iwriter.addDocument(doc);
 iwriter.commit();
 SM.maybeRefresh();

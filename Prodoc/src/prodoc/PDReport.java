@@ -85,6 +85,7 @@ public static final String fPAGESDOC="PAGESDOCS";
 private TreeSet AttrValuesList=null;
 private Object CurVal=null;
 private Vector<Record> VectRec=null;
+static final private char COMMENT='#';
 /**
  * Default constructor
  * @param pDrv Generic sesion to be used
@@ -207,7 +208,9 @@ FO.close();
 Template=new File(OrigRep); // read the original
 InputStreamReader in = new InputStreamReader(new FileInputStream(OrigRep), "UTF-8"); 
 BR=new BufferedReader(in);
-String Line=BR.readLine();
+String Line=""+COMMENT;
+while (Line!=null && (Line.length()>0 && Line.charAt(0)==COMMENT))
+    Line=BR.readLine();
 while (Line!=null)
     {
     Line=Line.trim();
@@ -239,6 +242,8 @@ while (Line!=null)
     else
         RepLines.add(Line);
     Line=BR.readLine();
+    while (Line!=null && (Line.length()>0 && Line.charAt(0)==COMMENT))
+        Line=BR.readLine();
     }    
 BR.close();
 Template.delete();
