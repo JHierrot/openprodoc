@@ -1,19 +1,179 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Fulltext OpenProdoc</title>
+        <title>Reports OpenProdoc</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management"/>
         <meta name="author" content="Joaquin Hierro" />
         <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
     </head>
     <body>
-<H4>FullText OpenProdoc</H4><hr>
-<p>When select the option "Folders->delete" it will be displayed this form showing all the information related to the folder; this allows to review that is the correct folder to be deleted.</p>
-<p>A folder can't be deleted if the user doesn't have enough privileges on the element or on any of the contained elements.</p>
-<p style="text-align:center;"><img alt="Screenshot DelFolder" src="img/DelFolder.jpg"/></p>
-<p>If you accept to delete the folder, the folder itself and all the folder contained will be deleted. The documents will be moved to the paperbin, so you can recover them or delete permanently.</p>
-<p>See: <a href="PaperBin.html">Papelera</a></p>
+<H4>Reports OpenProdoc</H4><hr>
+<H5>1- Introduction</H5>
+<p>The "Reports" function is developed for showing or exporting metadata from documents and folders in the desired format. The reports cover both functions because depending on the report file is possible to generate an html document formatted for good visibility or documents in CSV or XML format for exporting to other systems.</p>
+<p>The operation is as follows:</p>
+<ul> 
+<li>A template document whose usual format is text (HTML, XML, CSV, TXT) must be created. "Reports" generated have the same extension / mime type that the document template. That is a template with html extension will generate HTML documents that must meet that standard in their internal structure.</li>
+<li>The document must follow the syntax detailed below. Syntax basically involves combining:
+<ul>
+<li>Literals that will be displayed as introduced,</li>
+<li>Variables representing metadata and will be replaced by the value stored in the metadata.</li>
+<li>and control elements that repeat the elements contained within the boundaries to make nested loops over
+<ul>
+<li>the records/objects in the list</li>
+<li>and, for each object, a loop for all the metadata.</li>
+<li>and, for each metadata, a loop for all the values.</li>
+</ul></ul></li></li>
+<li>Templates are not specific to a document or folder type and can be applied to various types. Depending on the use of specific metadata, or the use of a loop for all metadata, the report may be applied to a document type, a type and all its subtypes or is valid for all types of objects (including both folders and documents).</li>
+<li>Once created the template, it must be stored in OpenProdoc, preferably in the "/ System" folder (where already some examples are included) as PD_REPORT document type.</li>
+<li>This document type includes 2 additional metadata, the "number of documents per page" and the "number of pages per file." The reporting function will write the "report header" (content elements between the beginning of the document and the start of the loop of records), then repeat loop region record as many times as "documents per page" are defined, then write the report footer (content elements between the end of the loop of records and the end of the document) and then return to start another "page" with the same procedure. When you have write "number of pages per file", the file will be closed and a new one will be created, and so on until you have write all records from the list. Some examples are included at the end of this page.</li>
+<li>With the template created and stored in OpenProdoc, you can access the functions of reports from several points:
+<ul>
+<li>Folders Menu</li>
+<li>Documents Menu</li>
+<li>Results of Folders Search</li>
+<li>Results of Documents Search</li>
+</ul></li>
+<li>When requesting reporting, a form with a list of available reports (taking into account the user's permissions, who can access reports according to his permissions (ACL) ) will be presented. The desired report can be selected and can changed (Swing client only) parameters for report generation (records/page and pages/file).</li>
+<li>At each point, the report function will receive a list of items to generate the report (taking into account the user's access permissions on documents). In each case the generated lists are:
+<ul>
+<li>Folders menu: The list contains all folders in the current folder.</li>
+<li>Documents menu: The list contains all the documents in the current folder.</li>
+<li>Search Folders: The list contains all folders retrieved in the search.</li>
+<li>Search Documents: The list contains all the documents retrieved in the query.</li>
+</ul></li>
+<li>To request the generation, the report will be composed and a reference to the outcome or results will be returned. If multiple files are generated with reports, in Web client a compressed file with all reports you will be returned.</li>
+</ul> 
+<p style="text-align:center;"><img alt="Screenshot ListReports" src="img/ListReports.png"/></p>
+<H5>2- Syntax</H5>
+<p>The syntax of the OPD reports is as follows:</p>
+<ul>
+<li>If the line begins with the character <b> "#" </ b> is considered a comment and content of that line is totally ignored. </ Li>
+<li> Before evaluating the line trailing spaces are removed.</li>
+<li>Si la línea empieza por el carácter <b>“+”</b>, el contenido de esta línea se suma a la línea anterior, tras evaluarse de acuerdo a la regla siguiente quitando el carácter <b>“+”</b>, en otro caso, se vuelva en una nueva línea, tras evaluarse de acuerdo a la regla siguiente.</li>
+<li>Si empieza por <b>“@OPD”</b>, se evalúa la línea como una “palabra reservada” dentro de la lista que se muestra a continuación, en otro caso se considera un literal que se volcará al archivo destino.</li>
+<li>La lista de palabras reservadas es:
+<ul>
+<li><b>@OPD_DOCSLOOP_S</b>: Inicio de bucle de registros. Todo el contenido entre el inicio y el fin (@OPD_DOCSLOOP_E) del bucle de registros se repetirá para todos los objetos  de la lista, sean literales o palabras reservadas. A continuación puede aparecer el carácter <b>“-“</b> seguido de una lista de nombres de tipos de documentos o carpetas separados por el carácter <b>“,”</b> (Ej. “@OPD_DOCSLOOP_S – DocsIdentidad, Pasaporte”). Los objetos de ese tipo incluidos en la lista se ignorarán y no serán volcados en el informe ni se repetirá el bucle para ellos.</li>
+<li><b>@OPD_DOCSLOOP_E</b>: Fin de bucle de registros</li>
+<li><b>@OPD_ATTRLOOP_S</b>: Inicio de bucle de metadatos. Todo el contenido entre el inicio y el fin (@OPD_ATTRLOOP_E) del bucle de metadatos se repetirá para todos los metadatos/atributos de cada documento/carpeta, sean literales o palabras reservadas. A continuación puede aparecer el carácter <b>“-“</b> seguido de una lista de nombres de metadatos separados por el carácter <b>“,”</b> (Ej. “@OPD_ATTRLOOP_S – PDId, LockedBy, ParentId”). Los metadatos incluidos en la lista se ignorarán y no serán volcados en el informe ni se repetirá el bucle para ellos. A continuación de @OPD_ATTRLOOP_S y antes de <b>“-“</b> puede incluirse 2 operadores: <b>“*”</b> y <b>“?”</b>.  El operador <b>“*”</b>(Ej. “@OPD_ATTRLOOP_S*”) indica que debe recuperarse todos los metadatos del documento o carpeta, no solo los obtenidos en la búsqueda y devueltos en la lista. Esto puede producirse si por ejemplo se busca documentos de un tipo documental Y sus subtipos. En ese caso por defecto solo se devuelven los metadatos del tipo documental padre, de forma que la estructura sea homogénea.  El operador <b>“?”</b> indica que NO debe incluirse en el bucle de metadatos los metadatos vacios.</li>
+<li><b>@OPD_ATTRLOOP_E</b>: Fin de bucle de metadatos</li>
+<li><b>@OPD_VALLOOP_S</b>: Inicio de bucle de Valores (para atributos multivaluados). Todo el contenido entre el inicio y el fin (@OPD_VALLOOP_E) del bucle de valores se repetirá para todos los valores de un metadato, sean literales o palabras reservadas.</li>
+<li><b>@OPD_VALLOOP_E</b>: Fin de bucle de Valores (para atributos multivaluados)</li>
+<li><b>@OPD_GLOBPARENT</b>: Se sustituirá por el camino completo de la carpeta contenedora sobre la que se inició la búsqueda o listado de elementos de una carpeta (ej. “/Expedientes”)</li>
+<li><b>@OPD_PARENT</b>: Se sustituirá por el camino completo de la carpeta contenedora del documento o carpeta actual dentro de la lista de resultados (ej. “/Expedientes/S-12345/Solicitud”, “/Expedientes/Z-67896/Aprobados”). Esta variable podrá ser diferente en cada elemento si el informe se genera tras una búsqueda (que puede localizar elementos a distintos niveles) y será igual si se muestra los elementos contenidos en una carpeta.</li>  
+<li><b>@OPD_NAME_ATTR</b>: Muestra el nombre interno/técnico de un atributo dentro del bucle de atributos. Puede expresarse como @OPD_NAME_ATTR_* o como @OPD_NAME_ATTR_NombreInternoAtributo (Ej. OPD_NAME_ATTR_TITLE). Puede seguido de <b>“:”</b> y un número entero, que indica la longitud que tendrá el texto. Si el valor es menor, se truncará, en otro caso se completará a espacios. (Ej. @OPD_NAME_ATTR _*:20).</li>
+<li><b>@OPD_UNAME_ATTR</b>: Muestra el nombre de usuario de un atributo dentro del bucle de atributos. Puede expresarse como @OPD_UNAME_ATTR_* o como @OPD_UNAME_ATTR_NombreInternoAtributo (Ej. OPD_UNAME_ATTR_TITLE). Puede seguido de <b>“:”</b> y un número entero, que indica la longitud que tendrá el texto. Si el valor es menor, se truncará, en otro caso se completará a espacios. (Ej. @OPD_UNAME_ATTR _*:20).</li>
+<li><b>@OPD_VAL_ATTR</b>: Valor del atributo. Puede expresarse como @OPD_VAL_ATTR_* o como @OPD_VAL_ATTR_NombreInternoAtributo (Ej. @OPD_VAL_ATTR_TITLE). En el primer caso, podrá utilizarse en un bucle para volcar todos los valores, para cualquier tipo de Documento o carpeta. Puede seguido de <b>“:”</b> y un número entero, que indica la longitud que tendrá el texto. Si el valor es menor, se truncará, en otro caso se completará a espacios. (Ej. @OPD_VAL_ATTR_*:20).</li>
+<li><b>@OPD_REF_ATTR</b>: Valor o referencia del atributo. El comportamiento y sintaxis es igual que en el caso de @OPD_VAL_ATTR, pero si el tipo de variable es tesauro, referencia a un tipo mime o a la carpeta contenedora, en lugar de mostrar el valor de la variable (identificador del término, ej: “12e434_43af43”) mostrará el valor del término referenciado (Ej: “Portugal”).</li>
+<li><b>@OPD_RECCOUNT</b>: Número de registros volcados en el informe hasta el momento.</li>
+<li><b>@OPD_PAGCOUNT</b>: Número de páginas volcadas en el informe hasta el momento.</li>
+</ul>
+</li>
+</ul>
+<H5>Ejemplos:</H5>
+<p>Suponiendo dos tipos documentales (simplificados por claridad) con los metadatos (Entre paréntesis el "nombre de usuario" de metadato):</p>
+<p>PD_DOCS</p>
+<ul>
+<li>PDId (PDId)</li>
+<li>Title (Título)</li>
+<li>DocDate (Fecha Documento)</li>
+</ul>
+<p>Informe (subtipo de PD_DOCS):</p>
+<ul>
+<li>PDId (PDId)</li>
+<li>Title (Título)</li>
+<li>DocDate (Fecha Documento)</li>
+<li>Autor (Nombre Autor)</li>
+<li>Keywords (Palabras Clave)</li>
+</ul>
+<p>Y una lista de resultados:</p>
+<p>PD_DOCS:</p>
+<ul>
+<li>PDId=1001</li>
+<li>Title="Documento 1"</li>
+<li>DocDate=2015/02/15</li>
+</ul>
+<p>PD_DOCS:</p>
+<ul>
+<li>PDId=1002</li>
+<li>Title="Documento 2"</li>
+<li>DocDate=</li>
+</ul>
+<p>Informe:</p>
+<ul>
+<li>PDId=1003</li>
+<li>Title="Documento 3"</li>
+<li>DocDate=2001/04/25</li>
+<li>Autor="John Smith"</li>
+<li>Keywords="Economía", "Documentación"</li>
+</ul>
+<p>Esta plantilla:</p>
+<p class="SC">
+# Ejemplo de Documento. Comentario que no se mostrará<br>
+================================================================================<br>
+<br>
+Contenido de carpeta:<br> 
++@OPD_GLOBPARENT<br>
+<br>
+# Inicio Bucle documentos<br>
+@OPD_DOCSLOOP_S<br>
+Doc:<br>
++@OPD_RECCOUNT<br>
+--------------------------------------------------------------------------------<br>
+Identificador=<br>
++@OPD_REF_ATTR_PDID <br>
+@OPD_UNAME_ATTR_TITLE<br>
++=<br>
++@OPD_REF_ATTR_TITLE<br>
+@OPD_UNAME_ATTR_DocDate<br>
++=<br>
++@OPD_REF_ATTR_DocDate<br>
+--------------------------------------------------------------------------------<br>
+<br>
+# Fin Bucle documentos<br>
+@OPD_DOCSLOOP_E<br>
+<br>
+Total Docs=<br>
++@OPD_RECCOUNT<br>
++                        Página:<br>
++@OPD_PAGCOUNT<br>
+<br>
+================================================================================<br>
+</p>
+<p>Generará este Informe:</p>
+<p class="SC">
+================================================================================<br>
+<br>
+Contenido de carpeta:/Report Test<br>
+<br>
+Doc:1<br>
+--------------------------------------------------------------------------------<br>
+Identificador=1001<br>
+Document_Title=Documento 1<br>
+Document_Date=2015-02-15<br>
+--------------------------------------------------------------------------------<br>
+<br>
+Doc:2<br>
+--------------------------------------------------------------------------------<br>
+Identificador=1002<br>
+Document_Title=Documento 2<br>
+Document_Date=<br>
+--------------------------------------------------------------------------------<br>
+<br>
+Doc:3<br>
+--------------------------------------------------------------------------------<br>
+Identificador=1003<br>
+Document_Title=Documento 3<br>
+Document_Date=2001-04-25<br>
+--------------------------------------------------------------------------------<br>
+<br>
+<br>
+Total Docs=3                        Página:1<br>
+<br>
+================================================================================<br>
+</p>
+<p>Ver: <a href="SearchFolder.html">Búsqueda de Carpetas</a> y <a href="SearchDocs.html">Búsqueda de Documentos</a></p>
 <hr>
 <a href="HelpIndex.html">Help Index OpenProdoc</a>
     </body>

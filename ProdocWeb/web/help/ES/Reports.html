@@ -1,30 +1,31 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Fulltext OpenProdoc</title>
+        <title>Informes OpenProdoc</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management"/>
         <meta name="author" content="Joaquin Hierro" />
         <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
     </head>
     <body>
-<H4>FullText OpenProdoc</H4><hr>
+<H4>Informes OpenProdoc</H4><hr>
 <H5>1- Descripción General</H5>
 <p>El objetivo de la función de “informes” es poder presentar o exportar metadatos de los documentos o carpetas de la forma deseada. Los informes cubren ambas funciones ya que dependiendo del formato de informe, podría generarse un documento html formateado para ser claro y legible o bien varios documentos XML o CSV preparados para ser procesados por otros sistemas.</p>
 <p>El funcionamiento es el siguiente:</p>
 <ul> 
 <li>Debe crearse un documento plantilla cuyo formato habitual sea texto (por ejemplo HTML, XML, CSV, TXT). Los “informes” que se generen tendrán la misma extensión/tipo mime que el documento plantilla. Es decir una plantilla con extensión html, generará documentos html que deben cumplir ese estándar en su estructura interna.</li>
-<li>El documento deberá seguir la sintaxis que se detalla posteriormente Básicamente esa sintaxis implica la combinación de:
+<li>El documento deberá seguir la sintaxis que se detalla posteriormente. Básicamente esa sintaxis implica la combinación de:
 <ul>
 <li>Literales que se mostrarán tal cual se introducen,</li>
 <li>variables que representan metadatos y que serán sustituidos por el valor almacenado en el metadatos</li>
-<li>y elementos de control que repiten los elementos contenidos entre los límites para realizar bucles sobre
+<li>y elementos de control que repiten los elementos contenidos entre los límites para realizar bucles anidados sobre
 <ul>
 <li>los registros de la lista</li>
 <li>y, para cada objeto, sobre todos sus metadatos.</li>
+<li>y, para cada metadato, sobre todos sus valores.</li>
 </ul></ul></li></li>
 <li>Las plantillas no son específicas de un tipo documental o carpeta, pueden aplicarse a varios tipos. Dependiendo de que se introduzca nombres de metadatos concretos o que se defina un bucle para todos los metadatos, el informe podrá aplicarse a un tipo documental, un tipo y todos sus subtipos o será válido para todos los tipos de objetos (incluso tanto carpetas como documentos).</li>
-<li>Una vez creado el documento, deberá almacenarse en OpenProdoc, preferiblemente en la carpeta “/System” (donde ya se incluyen algunos ejemplos) como tipo PD_REPORT.</li>
+<li>Una vez creado la plantilla, deberá almacenarse en OpenProdoc, preferiblemente en la carpeta “/System” (donde ya se incluyen algunos ejemplos) como tipo documental PD_REPORT.</li>
 <li>Ese tipo documental incluye 2 metadatos adicionales, el “número de documentos por página” y el “número de páginas por archivo”. La función de informes volcará la “cabecera del informe” (elementos contenidos entre el principio del documento y el inicio del bucle de registros), luego repetirá la zona del bucle de registros tantas veces como “documentos por página” se definan, luego volcará el pie del informe (elementos contenidos entre el final del bucle de registros y el final del documento) y luego volverá a iniciar otra “página” con el mismo procedimiento. Cuando se hayan volcado “número de páginas por archivo”, se cerrará el archivo y se creará otro nuevo, y así sucesivamente hasta que se hayan volcado todos los registros de la lista. Se muestran luego algunos ejemplos.</li>
 <li>Con la plantilla creada y almacenada en OpenProdoc, puede accederse a las funciones de Informes desde varios puntos:
 <ul>

@@ -7,13 +7,40 @@
         <meta name="author" content="Joaquin Hierro" />
         <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
     </head>
-    <body>
-<H4>FullText OpenProdoc</H4><hr>
-<p>When select the option "Folders->delete" it will be displayed this form showing all the information related to the folder; this allows to review that is the correct folder to be deleted.</p>
-<p>A folder can't be deleted if the user doesn't have enough privileges on the element or on any of the contained elements.</p>
-<p style="text-align:center;"><img alt="Screenshot DelFolder" src="img/DelFolder.jpg"/></p>
-<p>If you accept to delete the folder, the folder itself and all the folder contained will be deleted. The documents will be moved to the paperbin, so you can recover them or delete permanently.</p>
-<p>See: <a href="PaperBin.html">Papelera</a></p>
+  <body><H4>Fulltext Search OpenProdoc</H4>
+    <hr>
+    <p>The Fulltext search allow to find document by its text besides it metadata or other criteria. This is possible by means of the Apache libraries  <a href="https://tika.apache.org/">Tika</a>, that extract the text content from different file formats and <a href="https://lucene.apache.org/">Lucene</a>, that analizes and index all the words of the text. The index are stored in a disk folder (for what it must be created an special repository) and are updated when documents are inserted, updated or deletd (for what it must be created some indexing tasks).</p>
+    <p>For using the fulltext searching a repository must be created (<a href="MantRepositories.html">Repositories Maintenance</a>) with the reserved name "PD_FTRep", of type filesystem (FS) and with an URL referencing a folder/fiilesystem that can be accesed by all the systems that index or search fulltext. No additional parameters are needed. If the installation uses only Web Client or Remote Conection, the J2EE server where the OpenProdoc application is installed must have read/wirte access to the Fulltext folders/filesystem.</p>
+    <p style="text-align:center;"><img alt="Screenshot Repository FT" src="img/ReposFT.png"/></p>
+    <p>Additionally, it must be created tasks linked to events (<a href="MantTaskEvent.html">Tasks Event maintenance</a>) for updating the fulltext index. It's necessary to create a task linked to of each kind of event (insert, Delete, Update) so each time a document is inserted, updated or deleted, a task for updating the Full Text indexes is created.</p>
+    <p style="text-align:center;"><img alt="Screenshot Lista tareas FT" src="img/ListFTTasks.png"/></p>
+    <p>The easiest way, that will index all the dcuments in the complete repository, is to select as document type of the event the OpenProdoc base type "PD_DOCS" and as folder for filtering the root folder "/". That way the event will trigger for the documents of type PD_DOCS and all its subtypes (that is ALL types of documents) and the filter will for documents stored under folder root "/" and all its subfolders (that is ALL Folders in the repository).</p>    
+    <p>If, by volumen or performance limitations, it's needed to limit the FT indexing to a set of document types, you can define a task the the document type common ancestor of all the document types selected o to define several packs of tasks (insert, update, delete), one for each document type to index. In a similar way, it's possible to filter the folders structure, so that the system index the structure "/Marketing" and all its subfolders and not the structure "/Private Information". As with the document types, you can select the common parent folder or to create several packs of 3 tasks (one for each folder).</p>       
+    <p>The information to include in each task is:</p>
+<ul>
+    <li>Name of the Task: Any descriptive name (not duplicated)</li>
+    <li>Description of the Task: Any descriptive text</li>
+    <li>Category of the Task: It can be useful to use an specific category so you can assign the FT indexing to an specific computer.</li>
+    <li>Kind of Taks: FTIndex (Add to the index), FTUpdate (update index after updating the document), FTDelIndex (deleting docuemnt from index) </li>    
+    <li>Object type: Document type (and subtipes) to be indexed.If you select PD_DOCS this will included all document types.</li>    
+    <li>Object filter(always *)</li>    
+    <li>Parameters of the task: TaskParam has the folder under which all the documents stored (directly or under subfolders) will be indexed. All the documents (of de defined type and subtypes) stored under the specified folder will be indexed.</li>    
+    <li>Kind of event to process (INSert, DELete, UPDate): You must create one task for every event (INSert -> FTIndex, DELete -> FTDelIndex, UPDate -> FTUpdate)</li>    
+    <li>Order of execution of this task for the related event</li>    
+    <li>Flag indicating whether the task is active.</li>    
+    <li>Flag indicating whether the task is transactional: By performance reasons it's is recommended to define as Transactional any fulltext indexing.</li>    
+</ul>
+    <p>The scheduled task will run depending on the defined frecuence and the list of pending task, so generally the documents will be not accesible fr full text search just after being inserted or updated..</p>      
+    <p>You can search from the standard document search form (<a href="SearchDocs.html">Search docs</a>). The traditional search criteria by document types and metadata can be combined with full text expresions. The available operators are:
+<ul>
+    <li>Word: The search will return the documents containing the word.</li>
+    <li>Some words: The search will return the documents containing ANY of the words.</li>
+    <li>"Some words": The search will return the documents containing exactly the expression between quotes.</li>
+    <li><b>+</b>Word : The word MUST be included in all the documents.</li>
+    <li><b>-</b>Word : The word CAN'T be included in any the documents.</li>
+    <li>Word<b>*</b> : The search will return the documents that include the words starting with the root defined.</li>
+</ul>
+    </p>
 <hr>
 <a href="HelpIndex.html">Help Index OpenProdoc</a>
     </body>
