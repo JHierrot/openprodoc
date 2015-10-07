@@ -136,7 +136,7 @@ initComponents();
         Logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/LogoProdoc.jpg"))); // NOI18N
 
         Author2.setFont(new java.awt.Font("Dialog", 2, 12)); // NOI18N
-        Author2.setText("httpclient,httpcore, httpmime:");
+        Author2.setText("httpclient, httpcore, httpmime, Lucene :");
 
         Author3.setFont(MainWin.getFontDialog());
         Author3.setText("licence Apache Software Foundation");
@@ -154,7 +154,7 @@ initComponents();
         Author7.setText("Eli Ramirez");
 
         Author8.setFont(new java.awt.Font("Dialog", 2, 12)); // NOI18N
-        Author8.setText("log4j, commons-net.ftp, commons-fileupload");
+        Author8.setText("log4j, commons-net.ftp, commons-fileupload, Tika,");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

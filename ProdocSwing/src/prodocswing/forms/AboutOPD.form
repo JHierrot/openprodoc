@@ -252,7 +252,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Dialog" size="12" style="2"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="httpclient,httpcore, httpmime:"/>
+        <Property name="text" type="java.lang.String" value="httpclient, httpcore, httpmime, Lucene :"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="Author3">
@@ -300,7 +300,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Dialog" size="12" style="2"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="log4j, commons-net.ftp, commons-fileupload"/>
+        <Property name="text" type="java.lang.String" value="log4j, commons-net.ftp, commons-fileupload, Tika,"/>
       </Properties>
     </Component>
   </SubComponents>
