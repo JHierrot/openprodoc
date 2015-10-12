@@ -162,6 +162,7 @@ FormTab.getCelda(0,0).setWidth(-15);
 FormTab.getCelda(0,0).setHeight(30);
 FormTab.getCelda(1,0).AddElem(new Element(TT("Id")+":"));
 FieldComboOper IdOper=new FieldComboOper(COMPPDID);
+IdOper.setCSSClass("FFormInputCombo");
 FormTab.getCelda(2,0).AddElem(IdOper);
 HashMap<String, String> OperComp=SParent.getOperMap(Req);
 String Oper=OperComp.get(COMPPDID);
@@ -170,6 +171,7 @@ if (Oper!=null)
 FormTab.getCelda(3,0).AddElem(DocPDid);
 FormTab.getCelda(1,1).AddElem(new Element(TT("Document_Title")+":"));
 FieldComboOper TitleOper=new FieldComboOper(COMPTITLE);
+TitleOper.setCSSClass("FFormInputCombo");
 OperComp=SParent.getOperMap(Req);
 Oper=OperComp.get(COMPTITLE);
 if (Oper!=null)
@@ -180,6 +182,7 @@ FormTab.getCelda(1,2).AddElem(new Element(TT("Document_type")+":"));
 FormTab.getCelda(3,2).AddElem(ListTip);
 FormTab.getCelda(1,3).AddElem(new Element(TT("Document_ACL")+":"));
 FieldComboOper ACLOper=new FieldComboOper(COMPACL);
+ACLOper.setCSSClass("FFormInputCombo");
 Oper=OperComp.get(COMPACL);
 if (Oper!=null)
    ACLOper.setValue(Oper);

@@ -174,6 +174,7 @@ for (int i = 0; i < FL.size(); i++)
     if (IsSearch)
         {
         FieldComboOper OperCont=new FieldComboOper(FSearchFoldAdv.COMP+Attr.getName());
+        OperCont.setCSSClass("FFormInputCombo");
         String OperVal=SParent.getOperMap(Req).get(FSearchFoldAdv.COMP+Attr.getName());
         if (OperVal!=null)
             OperCont.setValue(OperVal);
