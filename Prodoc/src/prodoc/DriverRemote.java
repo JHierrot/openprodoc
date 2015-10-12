@@ -20,7 +20,6 @@
 package prodoc;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -93,7 +92,8 @@ super(pURL, pPARAM, pUser, pPassword);
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.DriverRemote>:"+pURL+"/"+pUser+"/"+pPARAM);
 try {
-//OUrl=new URL(pURL); 
+if (pURL==null || pURL.length()<4)
+    PDException.GenPDException("DATA_URL empty or wrong.",pURL);
 httpclient=GetHttpClient();
 UrlPost = new HttpPost(pURL);
 context = new BasicHttpContext();
@@ -458,7 +458,10 @@ CloseableHttpResponse response2 = null;
 if (PDLog.isDebug())
     {
     PDLog.Debug("DriverRemote. ReadWrite: Order:"+pOrder);
-    PDLog.Debug("Param:"+pParam);
+    if (!pOrder.equals(S_LOGIN))
+       PDLog.Debug("Param:"+pParam);
+    else
+       PDLog.Debug("Param:"+pParam.substring(0, 18));
     }
 try {
 List <NameValuePair> nvps = new ArrayList <NameValuePair>();

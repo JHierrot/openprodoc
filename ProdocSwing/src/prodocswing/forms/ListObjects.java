@@ -469,14 +469,22 @@ if (getObjectsTable().getSelectedRow()==-1)
 PrintWriter PW =null;
 try {
 PDTableModel TM = (PDTableModel) getObjectsTable().getModel();
-//String Name=(String)TM.getElement(getObjectsTable().getSelectedRow()).getAttr(PDUser.fNAME).getValue();
 String Name=PDObject.getTabName();
 String FileName=MainWin.SelectDestination(Name+".opd", "opd", true);
 if (FileName.length()==0)
     return;
-Record r=TM.getElement(getSelectedRow());
 PW = new PrintWriter(FileName);
-ExportXML(PW, r);
+int[] selectedRows = getObjectsTable().getSelectedRows();
+PW.print(PDObject.StartXML());    
+for (int i = 0; i < selectedRows.length; i++)
+    {
+    Record r=TM.getElement(selectedRows[i]);
+    PDObject.assignValues(r);   
+    PW.print(PDObject.toXML());
+    }
+PW.print(PDObject.EndXML());    
+//Record r=TM.getElement(getSelectedRow());
+//ExportXML(PW, r);
 PW.flush();
 PW.close();
 } catch (Exception ex)
