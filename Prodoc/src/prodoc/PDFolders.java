@@ -27,6 +27,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import static prodoc.PDDocs.fPDID;
+import static prodoc.PDDocs.fVERSION;
+import static prodoc.PDDocs.getTableName;
 
 /**
  *
@@ -1285,19 +1288,50 @@ if (!FolderType.equalsIgnoreCase(getTableName()))
     { // we add other "parts" of the folder in the "join"
     Conditions CondTyps=new Conditions();
     ArrayList ListTip=F.getTypeDefs();
-    for (int i = 0; i < ListTip.size(); i++)
-        {
-        Record R= (Record)ListTip.get(i);
-        Attribute Attr=R.getAttr(PDObjDefs.fNAME);
-        String Typ =(String) Attr.getValue();
-        if (!Typ.equalsIgnoreCase(getTableName()))
+    ArrayList ListAttr=F.getTypeRecs();
+    for (int NumTabsDef = 0; NumTabsDef < ListTip.size(); NumTabsDef++)
             {
-            Condition Con=new Condition(getTableName()+"."+fPDID, Typ+"."+fPDID);
-            CondTyps.addCondition(Con);
+            Record R= (Record)ListTip.get(NumTabsDef);
+            Attribute AttrNomTab=R.getAttr(PDObjDefs.fNAME);
+            String Typ =(String) AttrNomTab.getValue();
+            if (!Typ.equalsIgnoreCase(getTableName()))
+                {
+                Condition Con=new Condition(getTableName()+"."+fPDID, Typ+"."+fPDID);
+                CondTyps.addCondition(Con);
+                }
+            if (!Typ.equalsIgnoreCase(FolderType))
+                TypList.add(Typ);
+            Record AttrsTab= ((Record)ListAttr.get(NumTabsDef)).Copy();
+            AttrsTab.initList();
+            Attribute Attr;
+            for (int i = 0; i < AttrsTab.NumAttr(); i++)
+                {
+                Attr=AttrsTab.nextAttr();
+                if (Attr.isMultivalued())
+                    {
+                    if (ComposedConds.UsedAttr(Attr.getName()))
+                        {
+                        String MultiName=PDObjDefs.genMultValNam(Typ, Attr.getName());
+                        Condition Con=new Condition(getTableName()+"."+fPDID, MultiName+"."+fPDID);
+                        CondTyps.addCondition(Con);
+                        TypList.add(MultiName);
+                        }                            
+                    }                    
+                }
             }
-        if (!Typ.equalsIgnoreCase(FolderType))
-            TypList.add(Typ);
-        }
+//    for (int i = 0; i < ListTip.size(); i++)
+//        {
+//        Record R= (Record)ListTip.get(i);
+//        Attribute Attr=R.getAttr(PDObjDefs.fNAME);
+//        String Typ =(String) Attr.getValue();
+//        if (!Typ.equalsIgnoreCase(getTableName()))
+//            {
+//            Condition Con=new Condition(getTableName()+"."+fPDID, Typ+"."+fPDID);
+//            CondTyps.addCondition(Con);
+//            }
+//        if (!Typ.equalsIgnoreCase(FolderType))
+//            TypList.add(Typ);
+//        }
     ComposedConds.addCondition(CondTyps);
     }
 if (SubFolders)

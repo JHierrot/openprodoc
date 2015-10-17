@@ -30,6 +30,7 @@ import java.awt.Dimension;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -465,7 +466,10 @@ private void FillAttr(Attribute Attr, JComponent JTF) throws PDException
 {
 if (Attr.getType()==Attribute.tSTRING)
     {
-    Attr.setValue(((JTextField)JTF).getText());
+    if (Attr.isMultivalued())
+        Attr.Import(((JTextField)JTF).getText());
+    else
+        Attr.setValue(((JTextField)JTF).getText());
     }
 else if (Attr.getType()==Attribute.tTHES)
     {
@@ -539,26 +543,40 @@ Folder.initList();
 Attribute Attr=Folder.nextAttr();
 while (Attr!=null)
     {
-    if (Attr.getValue()!=null)
+    int Operator=Condition.cEQUAL;
+    String OperText=Attr.getDescription();
+    if (OperText.equals("="))
+       Operator=Condition.cEQUAL;
+    else if (OperText.equals("<"))
+       Operator=Condition.cLT;
+    else if (OperText.equals(">"))
+       Operator=Condition.cGT;
+    else if (OperText.equals("<>"))
+       Operator=Condition.cNE;
+    else if (OperText.equals("<="))
+       Operator=Condition.cLET;
+    else if (OperText.equals(">="))
+       Operator=Condition.cGET;
+    else if (OperText.equals("Contains"))
+       Operator=Condition.cLIKE;
+    if (Attr.isMultivalued())
         {
-        if (! (Attr.getType()==Attr.tSTRING && ((String)Attr.getValue()).length()==0) )
+        if (Attr.getValuesList()!=null && !Attr.getValuesList().isEmpty())
             {
-            int Operator=Condition.cEQUAL;
-            String OperText=Attr.getDescription();
-            if (OperText.equals("="))
-               Operator=Condition.cEQUAL;
-            else if (OperText.equals("<"))
-               Operator=Condition.cLT;
-            else if (OperText.equals(">"))
-               Operator=Condition.cGT;
-            else if (OperText.equals("<>"))
-               Operator=Condition.cNE;
-            else if (OperText.equals("<="))
-               Operator=Condition.cLET;
-            else if (OperText.equals(">="))
-               Operator=Condition.cGET;
-            else if (OperText.equals("Contains"))
-               Operator=Condition.cLIKE;
+            Conditions CMulti=new Conditions();
+            for (Iterator it = Attr.getValuesList().iterator(); it.hasNext();)
+                {
+                String Val = (String)it.next();
+                Condition c=new Condition( Attr.getName(), Operator, Val);
+                CMulti.addCondition(c);
+                }
+            Conds.addCondition(CMulti);    
+            }
+        }
+    else if (Attr.getValue()!=null)
+        {
+        if (! (Attr.getType()==Attribute.tSTRING && ((String)Attr.getValue()).length()==0) )
+            {
             Condition c=new Condition( Attr, Operator);
             Conds.addCondition(c);
             }

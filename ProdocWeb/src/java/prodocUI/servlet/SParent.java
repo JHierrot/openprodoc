@@ -498,7 +498,10 @@ try {
 if (Attr.getType()==Attribute.tSTRING || Attr.getType()==Attribute.tTHES)
     {
     Cond=new Condition(Attr.getName(), Oper, Val);
-    Attr.setValue(Val);
+    if (Attr.isMultivalued())
+        Attr.Import(Val);
+    else
+        Attr.setValue(Val);
     }
 else if (Attr.getType()==Attribute.tDATE)
     {
@@ -543,7 +546,10 @@ try {
 if (Attr.getType()==Attribute.tSTRING)
     {
     Cond=new Condition(Attr.getName(), Condition.cLIKE, Val);
-    Attr.setValue(Val);
+    if (Attr.isMultivalued())
+        Attr.Import(Val);
+    else
+        Attr.setValue(Val);
     }
 else if (Attr.getType()==Attribute.tDATE)
     {

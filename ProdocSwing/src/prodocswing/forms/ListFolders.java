@@ -332,7 +332,7 @@ try {
 FolderList = new PDTableModel();
 FolderList.setDrv(MainWin.getSession());
 PDFolders F=new PDFolders(MainWin.getSession(), FoldType);
-FolderList.setListFields(F.getRecSum());
+FolderList.setListFields(F.getRecSum().CopyMono());
 FolderList.setCursor(RetrievedFoldsCur);
 getObjectsTable().setModel(FolderList);
 } catch (PDException ex)

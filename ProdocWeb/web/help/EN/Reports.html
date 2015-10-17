@@ -48,80 +48,80 @@
 <H5>2- Syntax</H5>
 <p>The syntax of the OPD reports is as follows:</p>
 <ul>
-<li>If the line begins with the character <b> "#" </ b> is considered a comment and content of that line is totally ignored. </ Li>
-<li> Before evaluating the line trailing spaces are removed.</li>
-<li>Si la línea empieza por el carácter <b>“+”</b>, el contenido de esta línea se suma a la línea anterior, tras evaluarse de acuerdo a la regla siguiente quitando el carácter <b>“+”</b>, en otro caso, se vuelva en una nueva línea, tras evaluarse de acuerdo a la regla siguiente.</li>
-<li>Si empieza por <b>“@OPD”</b>, se evalúa la línea como una “palabra reservada” dentro de la lista que se muestra a continuación, en otro caso se considera un literal que se volcará al archivo destino.</li>
-<li>La lista de palabras reservadas es:
+<li>If the line starts with the character <b>"#"</b> is considered a comment and content of that line is totally ignored.</li>
+<li>Before evaluating the line trailing spaces are removed.</li>
+<li>If the line starts with the character <b>"+"</b>, the line will be added to the previous one <b>after</b> evaluation deleting the character <b>“+”</b>, otherwise it's evaluated and write in a new line. Evaluation is made, in both cases, following the next lines.</li>
+<li>If line starts by <b>“@OPD”</b>, the line is evaluated as a "reserved word" from the next list, otherwise it is evaluated as a literal string and write to the file "as is".</li>
+<li>The reserved words list is:
 <ul>
-<li><b>@OPD_DOCSLOOP_S</b>: Inicio de bucle de registros. Todo el contenido entre el inicio y el fin (@OPD_DOCSLOOP_E) del bucle de registros se repetirá para todos los objetos  de la lista, sean literales o palabras reservadas. A continuación puede aparecer el carácter <b>“-“</b> seguido de una lista de nombres de tipos de documentos o carpetas separados por el carácter <b>“,”</b> (Ej. “@OPD_DOCSLOOP_S – DocsIdentidad, Pasaporte”). Los objetos de ese tipo incluidos en la lista se ignorarán y no serán volcados en el informe ni se repetirá el bucle para ellos.</li>
-<li><b>@OPD_DOCSLOOP_E</b>: Fin de bucle de registros</li>
-<li><b>@OPD_ATTRLOOP_S</b>: Inicio de bucle de metadatos. Todo el contenido entre el inicio y el fin (@OPD_ATTRLOOP_E) del bucle de metadatos se repetirá para todos los metadatos/atributos de cada documento/carpeta, sean literales o palabras reservadas. A continuación puede aparecer el carácter <b>“-“</b> seguido de una lista de nombres de metadatos separados por el carácter <b>“,”</b> (Ej. “@OPD_ATTRLOOP_S – PDId, LockedBy, ParentId”). Los metadatos incluidos en la lista se ignorarán y no serán volcados en el informe ni se repetirá el bucle para ellos. A continuación de @OPD_ATTRLOOP_S y antes de <b>“-“</b> puede incluirse 2 operadores: <b>“*”</b> y <b>“?”</b>.  El operador <b>“*”</b>(Ej. “@OPD_ATTRLOOP_S*”) indica que debe recuperarse todos los metadatos del documento o carpeta, no solo los obtenidos en la búsqueda y devueltos en la lista. Esto puede producirse si por ejemplo se busca documentos de un tipo documental Y sus subtipos. En ese caso por defecto solo se devuelven los metadatos del tipo documental padre, de forma que la estructura sea homogénea.  El operador <b>“?”</b> indica que NO debe incluirse en el bucle de metadatos los metadatos vacios.</li>
-<li><b>@OPD_ATTRLOOP_E</b>: Fin de bucle de metadatos</li>
-<li><b>@OPD_VALLOOP_S</b>: Inicio de bucle de Valores (para atributos multivaluados). Todo el contenido entre el inicio y el fin (@OPD_VALLOOP_E) del bucle de valores se repetirá para todos los valores de un metadato, sean literales o palabras reservadas.</li>
-<li><b>@OPD_VALLOOP_E</b>: Fin de bucle de Valores (para atributos multivaluados)</li>
-<li><b>@OPD_GLOBPARENT</b>: Se sustituirá por el camino completo de la carpeta contenedora sobre la que se inició la búsqueda o listado de elementos de una carpeta (ej. “/Expedientes”)</li>
-<li><b>@OPD_PARENT</b>: Se sustituirá por el camino completo de la carpeta contenedora del documento o carpeta actual dentro de la lista de resultados (ej. “/Expedientes/S-12345/Solicitud”, “/Expedientes/Z-67896/Aprobados”). Esta variable podrá ser diferente en cada elemento si el informe se genera tras una búsqueda (que puede localizar elementos a distintos niveles) y será igual si se muestra los elementos contenidos en una carpeta.</li>  
-<li><b>@OPD_NAME_ATTR</b>: Muestra el nombre interno/técnico de un atributo dentro del bucle de atributos. Puede expresarse como @OPD_NAME_ATTR_* o como @OPD_NAME_ATTR_NombreInternoAtributo (Ej. OPD_NAME_ATTR_TITLE). Puede seguido de <b>“:”</b> y un número entero, que indica la longitud que tendrá el texto. Si el valor es menor, se truncará, en otro caso se completará a espacios. (Ej. @OPD_NAME_ATTR _*:20).</li>
-<li><b>@OPD_UNAME_ATTR</b>: Muestra el nombre de usuario de un atributo dentro del bucle de atributos. Puede expresarse como @OPD_UNAME_ATTR_* o como @OPD_UNAME_ATTR_NombreInternoAtributo (Ej. OPD_UNAME_ATTR_TITLE). Puede seguido de <b>“:”</b> y un número entero, que indica la longitud que tendrá el texto. Si el valor es menor, se truncará, en otro caso se completará a espacios. (Ej. @OPD_UNAME_ATTR _*:20).</li>
-<li><b>@OPD_VAL_ATTR</b>: Valor del atributo. Puede expresarse como @OPD_VAL_ATTR_* o como @OPD_VAL_ATTR_NombreInternoAtributo (Ej. @OPD_VAL_ATTR_TITLE). En el primer caso, podrá utilizarse en un bucle para volcar todos los valores, para cualquier tipo de Documento o carpeta. Puede seguido de <b>“:”</b> y un número entero, que indica la longitud que tendrá el texto. Si el valor es menor, se truncará, en otro caso se completará a espacios. (Ej. @OPD_VAL_ATTR_*:20).</li>
-<li><b>@OPD_REF_ATTR</b>: Valor o referencia del atributo. El comportamiento y sintaxis es igual que en el caso de @OPD_VAL_ATTR, pero si el tipo de variable es tesauro, referencia a un tipo mime o a la carpeta contenedora, en lugar de mostrar el valor de la variable (identificador del término, ej: “12e434_43af43”) mostrará el valor del término referenciado (Ej: “Portugal”).</li>
-<li><b>@OPD_RECCOUNT</b>: Número de registros volcados en el informe hasta el momento.</li>
-<li><b>@OPD_PAGCOUNT</b>: Número de páginas volcadas en el informe hasta el momento.</li>
+<li><b>@OPD_DOCSLOOP_S</b>: Starts the records loop. All content from the beginning to the end (OPD_DOCSLOOP_E) of records loop is repeated for all objects of the list, whether literal or reserved words. After @OPD_DOCSLOOP_S the  character <b>"-"</b> can appear  followed by a list of names of types of documents or Folders separated by the <b>","</b> (eg "OPD_DOCSLOOP_S -Contract, Passport "). Such objects included in the list are ignored and will not be write on the report and the loop will not be repeated for them.</li>
+<li><b>@OPD_DOCSLOOP_E</b>: Ends the Records loop</li>
+<li><b>@OPD_ATTRLOOP_S</b>: Starts the Metadata loop. All content from the beginning to the end (@OPD_ATTRLOOP_E) metadata loop will be repeated for all metadata/attributes of each document/folder, whether literal or reserved words. After that the character  can appear <b>"-"</b> followed by a list of metadata names separated by the <b>","</b> (eg "@OPD_ATTRLOOP_S -PDID, LockedBy, ParentId"). The metadata included in the list are ignored and will not be write in the report and the loop will not be repeated for them. Following @OPD_ATTRLOOP_S and before <b>"-"</b> 2 operator be included: <b>"*"</b> and <b>"?"</b>. The <b>"*"</b> (eg. "@OPD_ATTRLOOP_S*") indicates that OPD must retrieve all the metadata of the document or folder, not just those obtained in the search and returned in the list. This can occur if you search documents of a document type and its subtypes. In that case only metadata of document type father will be returned so that the structure is homogeneous. The <b>"?"</b> indicates that there should be NOT included in the metadata loop the empty metadata.</li>
+<li><b>@OPD_ATTRLOOP_E</b>: Ends the metadata loop</li>
+<li><b>@OPD_VALLOOP_S</b>: Values loop start (for multivalued attributes). All content (whether literal or reserved words) from the beginning to the end (@OPD_VALLOOP_E) of the values loop will be repeated for all values of metadata.</li>
+<li><b>@OPD_VALLOOP_E</b>: Ends the values loop (for multivalued attributes)</li>
+<li><b>@OPD_GLOBPARENT</b>: This expression will be replaced by the full path of the containing folder on which the search or list of items has started (eg. "/ Files")</li>
+<li><b>@OPD_PARENT</b>: This expression will be replaced by the full path of the parent folder of the document or folder within the current list (eg. "/Contracts/S-12345/Application", "/Contracts/Z-67896/Approved"). This variable can be different on each item if the report is generated after a search (which can locate elements at different levels) and will be equal when the items shown are in the same folder.</li>  
+<li><b>@OPD_NAME_ATTR</b>: Shows the internal technical name of an attribute within the attributes loop. It can be expressed as @OPD_NAME_ATTR_* (for all attributes) or @OPD_NAME_ATTR_NombreInternoAtributo (eg. @OPD_NAME_ATTR_TITLE). It can followed by <b>":"</b> and an integer that indicates the length of the text. If the value is less, it is truncated, otherwise spaces will be added. (Eg. @OPD_NAME_ATTR _*:20).</li>
+<li><b>@OPD_UNAME_ATTR</b>: Shows the user/visible name of an attribute within the attributes loop. It can be expressed as @OPD_UNAME_ATTR_* (for all attributes) or @OPD_UNAME_ATTR_NombreInternoAtributo (eg. @OPD_UNAME_ATTR_TITLE). It can followed by <b>":"</b> and an integer that indicates the length of the text. If the value is less, it is truncated, otherwise spaces will be added. (Eg. @OPD_UNAME_ATTR_*:20).</li>
+<li><b>@OPD_VAL_ATTR</b>: Shows the value of an attribute within the attributes loop. It can be expressed as @OPD_VAL_ATTR_* (for all attributes) or @OPD_VAL_ATTR_NombreInternoAtributo (eg. @OPD_VAL_ATTR_TITLE). It can followed by <b>":"</b> and an integer that indicates the length of the text. If the value is less, it is truncated, otherwise spaces will be added. (Eg. @OPD_VAL_ATTR_*:20).</li>
+<li><b>@OPD_REF_ATTR</b>: Attribute value or reference. The behavior and syntax is the same as in the case of @OPD_VAL_ATTR, but if the variable is thesaurus, reference to a mime type or to the containing folder, rather than showing the value of the variable (element identifier, Eg "12e434_43af43 ") will show the value of the referenced term (eg" Portugal ").</li>
+<li><b>@OPD_RECCOUNT</b>: Number of records written to the report until the current record.</li>
+<li><b>@OPD_PAGCOUNT</b>: Number of pages written to the report until the current record.</li>
 </ul>
 </li>
 </ul>
-<H5>Ejemplos:</H5>
-<p>Suponiendo dos tipos documentales (simplificados por claridad) con los metadatos (Entre paréntesis el "nombre de usuario" de metadato):</p>
+<H5>Examples:</H5>
+<p>Assuming two document types (simplified for clarity) with the metadata (in brackets "username" metadata):</p>
 <p>PD_DOCS</p>
 <ul>
 <li>PDId (PDId)</li>
-<li>Title (Título)</li>
-<li>DocDate (Fecha Documento)</li>
+<li>Title (Document_Title)</li>
+<li>DocDate (Document_Date)</li>
 </ul>
-<p>Informe (subtipo de PD_DOCS):</p>
+<p>Dossier (subtipe of PD_DOCS):</p>
 <ul>
 <li>PDId (PDId)</li>
-<li>Title (Título)</li>
-<li>DocDate (Fecha Documento)</li>
-<li>Autor (Nombre Autor)</li>
-<li>Keywords (Palabras Clave)</li>
+<li>Title (Document_Title)</li>
+<li>DocDate (Document_Date)</li>
+<li>Author (Author name)</li>
+<li>Keywords (Keywords)</li>
 </ul>
-<p>Y una lista de resultados:</p>
+<p>And a result list:</p>
 <p>PD_DOCS:</p>
 <ul>
 <li>PDId=1001</li>
-<li>Title="Documento 1"</li>
+<li>Title="Document 1"</li>
 <li>DocDate=2015/02/15</li>
 </ul>
 <p>PD_DOCS:</p>
 <ul>
 <li>PDId=1002</li>
-<li>Title="Documento 2"</li>
+<li>Title="Document 2"</li>
 <li>DocDate=</li>
 </ul>
 <p>Informe:</p>
 <ul>
 <li>PDId=1003</li>
-<li>Title="Documento 3"</li>
+<li>Title="Document 3"</li>
 <li>DocDate=2001/04/25</li>
 <li>Autor="John Smith"</li>
-<li>Keywords="Economía", "Documentación"</li>
+<li>Keywords="Economy", "Documentation"</li>
 </ul>
-<p>Esta plantilla:</p>
+<p>This report template:</p>
 <p class="SC">
-# Ejemplo de Documento. Comentario que no se mostrará<br>
+# Example of report tamplate. This comment will not be shown<br>
 ================================================================================<br>
 <br>
-Contenido de carpeta:<br> 
+Folder Content:<br> 
 +@OPD_GLOBPARENT<br>
 <br>
-# Inicio Bucle documentos<br>
+# Records loop start<br>
 @OPD_DOCSLOOP_S<br>
 Doc:<br>
 +@OPD_RECCOUNT<br>
 --------------------------------------------------------------------------------<br>
-Identificador=<br>
+Identifier=<br>
 +@OPD_REF_ATTR_PDID <br>
 @OPD_UNAME_ATTR_TITLE<br>
 +=<br>
@@ -131,49 +131,49 @@ Identificador=<br>
 +@OPD_REF_ATTR_DocDate<br>
 --------------------------------------------------------------------------------<br>
 <br>
-# Fin Bucle documentos<br>
+# Records loop End<br>
 @OPD_DOCSLOOP_E<br>
 <br>
 Total Docs=<br>
 +@OPD_RECCOUNT<br>
-+                        Página:<br>
++                        Page:<br>
 +@OPD_PAGCOUNT<br>
 <br>
 ================================================================================<br>
 </p>
-<p>Generará este Informe:</p>
+<p>Will create this report:</p>
 <p class="SC">
 ================================================================================<br>
 <br>
-Contenido de carpeta:/Report Test<br>
+Folder Content:/Report Test<br>
 <br>
 Doc:1<br>
 --------------------------------------------------------------------------------<br>
-Identificador=1001<br>
-Document_Title=Documento 1<br>
+Identifier=1001<br>
+Document_Title=Document 1<br>
 Document_Date=2015-02-15<br>
 --------------------------------------------------------------------------------<br>
 <br>
 Doc:2<br>
 --------------------------------------------------------------------------------<br>
-Identificador=1002<br>
-Document_Title=Documento 2<br>
+Identifier=1002<br>
+Document_Title=Document 2<br>
 Document_Date=<br>
 --------------------------------------------------------------------------------<br>
 <br>
 Doc:3<br>
 --------------------------------------------------------------------------------<br>
-Identificador=1003<br>
-Document_Title=Documento 3<br>
+Identifier=1003<br>
+Document_Title=Document 3<br>
 Document_Date=2001-04-25<br>
 --------------------------------------------------------------------------------<br>
 <br>
 <br>
-Total Docs=3                        Página:1<br>
+Total Docs=3                        Page:1<br>
 <br>
 ================================================================================<br>
 </p>
-<p>Ver: <a href="SearchFolder.html">Búsqueda de Carpetas</a> y <a href="SearchDocs.html">Búsqueda de Documentos</a></p>
+<p>View: <a href="SearchFolder.html">Folders Search</a> y <a href="SearchDocs.html">Documents Search</a></p>
 <hr>
 <a href="HelpIndex.html">Help Index OpenProdoc</a>
     </body>
