@@ -2182,7 +2182,7 @@ private String AlterTableAdd(Document XMLObjects) throws PDException
 NodeList OPDObjectList = XMLObjects.getElementsByTagName("Tab");
 Node OPDObject = OPDObjectList.item(0);
 String Tab=OPDObject.getTextContent();
-OPDObjectList = XMLObjects.getElementsByTagName("attr");
+OPDObjectList = XMLObjects.getElementsByTagName("Attr");
 OPDObject = OPDObjectList.item(0);
 Attribute A=new Attribute(OPDObject);
 OPDObjectList = XMLObjects.getElementsByTagName("IsVer");

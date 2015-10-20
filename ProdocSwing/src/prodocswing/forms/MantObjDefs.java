@@ -26,9 +26,11 @@
 package prodocswing.forms;
 
 import java.awt.Frame;
+import java.util.HashSet;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import prodoc.*;
+import static prodoc.PDObjDefs.fATTRNAME;
 import prodocswing.PDTableModel;
 
 /**
@@ -44,6 +46,7 @@ Frame Fparent;
 private PDTableModel AttrMembers;
 private PDTableModel InheritAttrMembers;
 private Vector ListRes=null;
+private HashSet<String> InhFieldNames=new HashSet();
 
 /** Creates new form MantUsers
  * @param parent
@@ -565,6 +568,9 @@ MP.setLocationRelativeTo(null);
 MP.setVisible(true);
 if (MP.isCancel())
     return;
+String Name=(String)MP.getRecord().getAttr(fATTRNAME).getValue();
+if (InhFieldNames.contains(Name))
+    PDExceptionFunc.GenPDException("Attribute_alredy_defined_in_parents_classes", Name);
 getListRes().add(MP.getRecord());
 ButtonCreateObject.setEnabled(false);
 RefreshOwnAttr(TypeNameTextField.getText());
@@ -678,6 +684,9 @@ MP.setLocationRelativeTo(null);
 MP.setVisible(true);
 if (MP.isCancel())
     return;
+String Name=(String)MP.getRecord().getAttr(fATTRNAME).getValue();
+if (InhFieldNames.contains(Name))
+    PDExceptionFunc.GenPDException("Attribute_alredy_defined_in_parents_classes", Name);
 getListRes().add(MP.getRecord());
 // RefreshOwnAttr(TypeNameTextField.getText());
 Attribute Attr=EditObjDef.ConvertRec(MP.getRecord());    
@@ -972,8 +981,10 @@ InheritAttrMembers.setDrv(MainWin.getSession());
 InheritAttrMembers.setListFields(EditObjDef.getRecordAttrsStruct());
 InheritAttrMembers.setCursor(EditObjDef.getListParentAttr2(TypeName));
 InheritAttrTable.setModel(InheritAttrMembers);
-//InheritAttrTable.getColumnModel().getColumn(0).setMaxWidth(0);
-//InheritAttrTable.getColumnModel().removeColumn(AttrTable.getColumnModel().getColumn(0));
+for (int n=0; n<InheritAttrMembers.getRowCount(); n++)
+    {   
+    InhFieldNames.add((String)InheritAttrMembers.getValueAt(n, 1));
+    }
 }
 //----------------------------------------------------------------
 /**
@@ -1054,34 +1065,19 @@ Attr=ObjDef.getAttr(PDObjDefs.fREPOSIT);
 Attr.setValue((String)RepositComboBox.getSelectedItem());
 Attr=ObjDef.getAttr(PDObjDefs.fACTIVE);
 Boolean Act;
-if (ActiveCheckBox.isSelected())
-    Act=    true;
-else
-    Act=    false;
+Act = ActiveCheckBox.isSelected();
 Attr.setValue(Act);
 Attr=ObjDef.getAttr(PDObjDefs.fTRACEADD);
-if (TraceAddCheckBox.isSelected())
-    Act=    true;
-else
-    Act=    false;
+Act = TraceAddCheckBox.isSelected();
 Attr.setValue(Act);
 Attr=ObjDef.getAttr(PDObjDefs.fTRACEDEL);
-if (TraceDelCheckBox.isSelected())
-    Act=    true;
-else
-    Act=    false;
+Act = TraceDelCheckBox.isSelected();
 Attr.setValue(Act);
 Attr=ObjDef.getAttr(PDObjDefs.fTRACEMOD); 
-if (TraceModCheckBox.isSelected())
-    Act=    true;
-else
-    Act=    false;
+Act = TraceModCheckBox.isSelected();
 Attr.setValue(Act);
 Attr=ObjDef.getAttr(PDObjDefs.fTRACEVIEW); 
-if (TraceViewCheckBox.isSelected())
-    Act=    true;
-else
-    Act=    false;
+Act = TraceViewCheckBox.isSelected();
 Attr.setValue(Act);
 } catch (PDException ex)
     {MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
