@@ -555,6 +555,8 @@ protected void VerifyAllowedIns() throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDDocs.VerifyAllowedIns>");    
+if (getDrv().getUser().getName().equals("Install"))  
+    return;
 if (!getDrv().getUser().getRol().isAllowCreateDoc() )
    PDExceptionFunc.GenPDException("Document_creation_not_allowed_to_user",getName());
 PDObjDefs D=new PDObjDefs(getDrv());

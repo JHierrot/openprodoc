@@ -494,6 +494,8 @@ this.GroupList = GroupList;
  */
 protected void InsertMulti() throws PDException
 {
+if (getName().equalsIgnoreCase("Install"))
+    PDExceptionFunc.GenPDException("Invalid_Name", getName());
 PDGroups G=new PDGroups(getDrv());
 G.setName("All");
 G.addUser(getName());

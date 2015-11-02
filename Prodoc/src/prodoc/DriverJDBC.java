@@ -759,7 +759,11 @@ for (int i = 0; i < Fields.NumAttr(); i++)
             {
             String D=rs.getString(Attr.getName());
             if (D!=null && D.length()==8)
+                { try {
                 Attr.setValue(formatterDate.parse(D));
+                } catch (Exception ex)
+                    {Attr.setValue(null);}
+                }
             else
                 Attr.setValue(null);
             }
@@ -767,7 +771,11 @@ for (int i = 0; i < Fields.NumAttr(); i++)
             {
             String D=rs.getString(Attr.getName());
             if (D!=null && D.length()==14)
+                { try {
                 Attr.setValue(formatterTS.parse(D));
+                } catch (Exception ex)
+                    {Attr.setValue(null);}
+                }                
             else
                 Attr.setValue(null);
             }

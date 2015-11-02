@@ -99,7 +99,7 @@ DocsTable.setAutoCreateColumnsFromModel(true);
 SetMenu();
 TreeFolder.setSelectionRow(0);
 try {
-setTitle(getTitle()+" @"+getSession().getUser().getName()+"("+getSession().getUser().getDescription()+")");
+setTitle(getTitle()+" @"+getSession().getUser().getName()+" ( "+getSession().getUser().getDescription()+" )");
 } catch (Exception ex)
     {}
 }

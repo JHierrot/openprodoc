@@ -27,6 +27,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import static prodoc.PDFolders.ROOTFOLDER;
+import static prodoc.PDFolders.SYSTEMFOLDER;
+import static prodoc.PDFolders.getTableName;
 import prodoc.security.*;
 
 /**
@@ -584,15 +587,22 @@ Trace.add("MIME types created");
 FileImp=new File("ex/PD_REPORTS.opd");
 ProcessXML(FileImp, PDFolders.ROOTFOLDER);
 D.CreateObjectTables(PDReport.REPTABNAME, false); 
-//FileImp=new File("ex/PD_REP_EXA_TXT.opd");
-//ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
-//FileImp=new File("ex/PD_REP_EXA_CSV.opd");
-//ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
-//FileImp=new File("ex/PD_REP_EXA_HTML.opd");
-//ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
+FileImp=new File("ex/PD_REP_EXA_TXT.opd");
+ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
+FileImp=new File("ex/PD_REP_EXA_CSV.opd");
+ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
+FileImp=new File("ex/PD_REP_EXA_HTML.opd");
+ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
+FileImp=new File("ex/PD_RIS_COMP.opd");
+ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
 //FileImp=new File("ex/PD_REP_EXA_XML.opd");
 //ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
 Trace.add("Reports Type and Examples created");
+//--- Creating Reposit Complete Type -------------
+FileImp=new File("ex/PD_REPOSIT_URL.opd");
+ProcessXML(FileImp, PDFolders.ROOTFOLDER);
+FileImp=new File("ex/PD_FTRep.opd");
+ProcessXML(FileImp, PDFolders.ROOTFOLDER);
 //--- Creating RIS Complete Type -------------
 FileImp=new File("ex/PD_REPOSIT_URL.opd");
 ProcessXML(FileImp, PDFolders.ROOTFOLDER);
@@ -615,9 +625,9 @@ public void Update(boolean UpMetadataInc, Vector Trace)  throws PDException
 {
 PDServer Serv=new PDServer(this);
 Serv.Load("Prodoc");
-if (Serv.getVersion().equalsIgnoreCase("1.1"))
+if (Serv.getVersion().equalsIgnoreCase("1.2"))
     {
-    Trace.add("NO Update possible. Already 1.1 version");    
+    Trace.add("NO Update possible. Already 1.2 version");    
     return;
     }
 Trace.add("Update started");    
@@ -863,6 +873,67 @@ if (Serv.getVersion().equalsIgnoreCase("1.0"))
         }
     //--- Update ended ----
     Trace.add("Updated to 1.1");
+    }
+Serv.Load("Prodoc");
+if (Serv.getVersion().equalsIgnoreCase("1.1") || Serv.getVersion().equalsIgnoreCase("1.0"))
+    {
+    PDFolders f3=new PDFolders(this);
+    f3.setFolderType(getTableName());
+    f3.setPDId(SYSTEMFOLDER);
+    f3.setTitle(SYSTEMFOLDER);
+    f3.setParentId(ROOTFOLDER);
+    f3.setACL("Public");
+    f3.insert();
+    PDObjDefs D=new PDObjDefs(this);
+    File FileImp=new File("ex/PD_REPORTS.opd");
+    ProcessXML(FileImp, PDFolders.ROOTFOLDER);
+    D.CreateObjectTables(PDReport.REPTABNAME, false); 
+    PDMimeType M=new PDMimeType(this);
+    FileImp=new File("ex/PD_REP_EXA_TXT.opd");
+    ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
+    try {
+    M.setName("csv");
+    M.setMimeCode("text/csv");
+    M.setDescription("text/csv");
+    M.insert();
+    Trace.add("MimeType CSV created");  
+    } catch (Exception ex) {}
+    FileImp=new File("ex/PD_REP_EXA_CSV.opd");
+    ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
+    FileImp=new File("ex/PD_REP_EXA_HTML.opd");
+    ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
+    try {
+    M.setName("xml");
+    M.setMimeCode("tapplication/xml");
+    M.setDescription("application/xml");
+    M.insert();
+    Trace.add("MimeType XML created");  
+    } catch (Exception ex) {}
+    //FileImp=new File("ex/PD_REP_EXA_XML.opd");
+    //ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
+    Trace.add("Reports Type and Examples created");
+    //--- Creating RIS Complete Type -------------
+    FileImp=new File("ex/PD_REPOSIT_URL.opd");
+    ProcessXML(FileImp, PDFolders.ROOTFOLDER);
+    //--- Creating RIS Complete Type -------------
+    FileImp=new File("ex/PD_RIS_COMP.opd");
+    ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
+    try {
+    D.CreateObjectTables("RIS_Complete", false);    
+    } catch (Exception ex)
+        {   
+        }
+    //--- Creating RIS Reassign Type -------------
+    FileImp=new File("ex/PD_RIS_REASIG.opd");
+    ProcessXML(FileImp, PDFolders.ROOTFOLDER);
+        try {
+    D.CreateObjectTables("RIS_Reasign", false);    
+    } catch (Exception ex)
+        {   
+        }
+    Trace.add("RIS types created");  
+    //--- Full text Reposit -----------
+    Trace.add("Updated to 1.2");
     }
 Trace.add("Update finished");
 }
