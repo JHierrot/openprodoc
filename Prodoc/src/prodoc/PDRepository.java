@@ -456,5 +456,41 @@ protected String getKey()
 return(getName());
 }
 //-------------------------------------------------------------------------
+/**
+ *
+ * @param FilePath
+ * @return
+ */
+protected String ObtainName(String FilePath)
+{
+if (IsRef())
+    {
+    if (FilePath.startsWith(getURL()))
+        return(FilePath.substring(getURL().length()));
+    else
+        return(FilePath);
+    }
+throw new UnsupportedOperationException("Unsupported");
+}
+//-----------------------------------------------------------------
+protected boolean IsRef()
+{
+return(getRepType().equals(tREFURL));    
+}
+//-----------------------------------------------------------------
+/**
+ *
+ * @param DocName
+ * @return
+ */
+protected String GetUrl(String DocName)
+{
+String S=getURL()+DocName;  
+S=S.replace("=", "%3D");
+S=S.replace("?", "%3F");
+return(S);    
+}        
+//-----------------------------------------------------------------
+
 }
 

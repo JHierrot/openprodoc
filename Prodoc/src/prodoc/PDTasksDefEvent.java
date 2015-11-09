@@ -472,6 +472,8 @@ String IdUnder=Fold.getIdPath(getParam2());
 Fold.setPDId(Doc.getParentId());
 if (!Fold.IsUnder(IdUnder))    
    return;     
+if (Doc.IsUrl())
+    return;
 String FName=null;    
 String DestName=null;
 PDDocs NewDoc=new PDDocs(getDrv(), Doc.getDocType());

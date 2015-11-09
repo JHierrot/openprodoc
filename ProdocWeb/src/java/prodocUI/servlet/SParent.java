@@ -1087,7 +1087,7 @@ return(ListThes);
 public static String getSessName(HttpServletRequest Req)
 {
 try {    
-return (" @"+getSessOPD(Req).getUser().getName()+"("+getSessOPD(Req).getUser().getDescription()+")");
+return (" @"+getSessOPD(Req).getUser().getName()+" ( "+getSessOPD(Req).getUser().getDescription()+" )");
 } catch (Exception ex)
     {
     return ("");

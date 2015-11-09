@@ -818,10 +818,11 @@ if (FolderPath.charAt(FolderPath.length()-1)!=File.separatorChar)
     FolderPath+=File.separatorChar+getPDId()+d.getVersion().replace(' ', '_')+d.getName().replace(' ', '_');
 else
     FolderPath+=getPDId()+d.getVersion().replace(' ', '_')+d.getName().replace(' ', '_');
-StoreGeneric Rep=getDrv().getRepository(d.getReposit());
-if (Rep.IsURL())
+// StoreGeneric Rep=getDrv().getRepository(d.getReposit());
+PDRepository Rep=new PDRepository(getDrv());
+Rep.Load(d.getReposit());
+if (Rep.IsRef())
     throw new UnsupportedOperationException("Not supported.");   
-//Rep.Connect();
 File NewF=new File(FolderPath);
 if (!Overwrite && NewF.exists())
     return(FolderPath);
@@ -849,7 +850,6 @@ OutCont.close();
     {
     throw new PDException(ex.getLocalizedMessage());
     }
-//Rep.Disconnect();
 return(FolderPath);
 }
 //-------------------------------------------------------------------------
@@ -881,10 +881,12 @@ if (FolderPath.charAt(FolderPath.length()-1)!=File.separatorChar)
     FolderPath+=File.separatorChar+getPDId()+d.getVersion().replace(' ', '_')+d.getName().replace(' ', '_');
 else
     FolderPath+=getPDId()+d.getVersion().replace(' ', '_')+d.getName().replace(' ', '_');
-StoreGeneric Rep=getDrv().getRepository(d.getReposit());
-if (Rep.IsURL())
+//StoreGeneric Rep=getDrv().getRepository(d.getReposit());
+PDRepository Rep=new PDRepository(getDrv());
+Rep.Load(d.getReposit());
+if (Rep.IsRef())
     throw new UnsupportedOperationException("Not supported.");   
-Rep.Connect();
+//Rep.Connect();
 File NewF=new File(FolderPath);
 if (!Overwrite && NewF.exists())
     return(FolderPath);
@@ -912,7 +914,7 @@ OutCont.close();
     {
     throw new PDException(ex.getLocalizedMessage());
     }
-Rep.Disconnect();
+//Rep.Disconnect();
 return(FolderPath);
 }
 //-------------------------------------------------------------------------
@@ -925,8 +927,10 @@ public boolean IsUrl() throws PDException
 {
 PDDocs d=new PDDocs(getDrv());
 d.Load(getPDId());
-StoreGeneric Rep=getDrv().getRepository(d.getReposit());
-return(Rep.IsURL());
+PDRepository Rep=new PDRepository(getDrv());
+Rep.Load(d.getReposit());
+//StoreGeneric Rep=getDrv().getRepository(d.getReposit());
+return(Rep.IsRef());
 }
 //-------------------------------------------------------------------------
 /**
@@ -938,7 +942,9 @@ public String getUrl() throws PDException
 {
 PDDocs d=new PDDocs(getDrv());
 d.Load(getPDId());
-StoreGeneric Rep=getDrv().getRepository(d.getReposit());
+PDRepository Rep=new PDRepository(getDrv());
+Rep.Load(d.getReposit());
+//StoreGeneric Rep=getDrv().getRepository(d.getReposit());
 return(Rep.GetUrl(d.getName()));
 }
 //-------------------------------------------------------------------------
@@ -952,7 +958,9 @@ public String getUrlVer(String Ver) throws PDException
 {
 PDDocs d=new PDDocs(getDrv());
 d.LoadVersion(getPDId(), Ver);
-StoreGeneric Rep=getDrv().getRepository(d.getReposit());
+PDRepository Rep=new PDRepository(getDrv());
+Rep.Load(d.getReposit());
+//StoreGeneric Rep=getDrv().getRepository(d.getReposit());
 return(Rep.GetUrl(d.getName()));
 }
 //-------------------------------------------------------------------------
@@ -975,7 +983,9 @@ public void getStream(OutputStream OutBytes) throws PDException
 {
 LoadCurrent(getPDId());
 StoreGeneric Rep=getDrv().getRepository(getReposit());
-if (Rep.IsURL())
+PDRepository Rep1=new PDRepository(getDrv());
+Rep1.Load(getReposit());
+if (Rep1.IsRef())
     throw new UnsupportedOperationException("Not supported.");   
 try {    
 Rep.Connect();
@@ -1002,7 +1012,9 @@ public void getStreamVer(OutputStream OutBytes) throws PDException
 {
 LoadVersion(getPDId(), getVersion());
 StoreGeneric Rep=getDrv().getRepository(getReposit());
-if (Rep.IsURL())
+PDRepository Rep1=new PDRepository(getDrv());
+Rep1.Load(getReposit());
+if (Rep1.IsRef())
     throw new UnsupportedOperationException("Not supported.");   
 try {    
 Rep.Connect();
@@ -1276,15 +1288,18 @@ if (!(getDrv().getUser().getName().equals("Install") && getDrv().getUser().getAc
     }
 if (getReposit()==null || getReposit().length()==0 )
     setReposit(getDrv().getAssignedRepos(getDocType()));
+PDRepository FinalRep=new PDRepository(getDrv());
+FinalRep.Load(getReposit());
 AddLogFields();
 setVersion("1.0");
 getRecSum().CheckDef();
 StoreGeneric Rep=getDrv().getRepository(getReposit());
 if (getName()==null || getName().length()==0)
     {
-    if (Rep.IsRef())
+//    if (Rep.IsRef())
+    if (FinalRep.IsRef())
         {
-        setName(Rep.ObtainName(FilePath));
+        setName(FinalRep.ObtainName(FilePath));
         }
     else
         {
@@ -1307,7 +1322,7 @@ Record Rec=getRecSum();
 insertFragments(Rec);
 InsertVersion(getPDId(), getVersion(), Rec);
 MultiInsert(Rec);
-if (!Rep.IsRef())
+if (!FinalRep.IsRef())
    {
     Rep.Connect();
     if (FileStream!=null)
@@ -1743,6 +1758,8 @@ if (TobeUpdated.getLockedBy()==null || !TobeUpdated.getLockedBy().equalsIgnoreCa
    PDExceptionFunc.GenPDException("Document_not_locked_by_user", getPDId());
 AddLogFields();
 setReposit(TobeUpdated.getReposit());
+PDRepository FinalRep=new PDRepository(getDrv());
+FinalRep.Load(getReposit());
 getRecSum().CheckDef();
 Record Rec=getRecSum().Copy();
 Rec.delAttr(fVERSION);
@@ -1750,10 +1767,10 @@ Attribute Attr=Rec.getAttr(fDOCTYPE);
 Attr.setValue(TobeUpdated.getDocType());
 Attr=Rec.getAttr(fNAME);
 StoreGeneric Rep=getDrv().getRepository(getReposit());
-if (Rep.IsRef())
+if (FinalRep.IsRef())
     {
     if (FilePath!=null)
-        Attr.setValue(Rep.ObtainName(FilePath));
+        Attr.setValue(FinalRep.ObtainName(FilePath));
     }
 else
     {
@@ -2472,8 +2489,11 @@ for (int i = 0; i < childNodes.getLength(); i++)
          if (!MaintainId)
             NewDoc.setPDId(null);
         NewDoc.setParentId(DestFold);
-        StoreGeneric Rep=getDrv().getRepository(NewDoc.getReposit());
-        if (!Rep.IsURL())
+//        StoreGeneric Rep=getDrv().getRepository(NewDoc.getReposit());
+        PDRepository Rep=new PDRepository(getDrv());
+        Rep.Load(NewDoc.getReposit());
+        if (!Rep.IsRef())
+//        if (!Rep.IsURL())
             {
             Attribute DocName=r.getAttr(fNAME);
             String Path=(String)DocName.getValue();
@@ -2752,14 +2772,15 @@ return(null);
 protected void ExecuteFTAdd()  throws PDException
 {
 LoadFull(getPDId());
-StoreGeneric Rep=getDrv().getRepository(getReposit());
-//if (Rep.IsURL())
-//    throw new UnsupportedOperationException("Not supported.");   
+StoreGeneric Rep=getDrv().getRepository(getReposit()); 
 InputStream Is=null;
 try {    
 FTConnector FTConn=getDrv().getFTRepository(getDocType());
 FTConn.Connect();
-if (!Rep.IsURL())
+PDRepository Rep1=new PDRepository(getDrv());
+Rep1.Load(getReposit());
+if (!Rep1.IsRef())
+//if (!Rep.IsURL())
     {
     Rep.Connect();
     Is=Rep.Retrieve(getPDId(), getVersion());
@@ -2786,14 +2807,15 @@ FTConn.Disconnect();
 protected void ExecuteFTUpd() throws PDException
 {
 LoadFull(getPDId());
-StoreGeneric Rep=getDrv().getRepository(getReposit());
-//if (Rep.IsURL())
-//    throw new UnsupportedOperationException("Not supported.");   
+StoreGeneric Rep=getDrv().getRepository(getReposit());   
 InputStream Is=null;
 try {    
 FTConnector FTConn=getDrv().getFTRepository(getDocType());
 FTConn.Connect();
-if (!Rep.IsURL())
+PDRepository Rep1=new PDRepository(getDrv());
+Rep1.Load(getReposit());
+if (!Rep1.IsRef())
+//if (!Rep.IsURL())
     {
     Rep.Connect();
     Is=Rep.Retrieve(getPDId(), getVersion());

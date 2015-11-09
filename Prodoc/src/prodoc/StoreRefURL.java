@@ -146,24 +146,10 @@ protected boolean IsURL()
 return(true);
 }
 //-----------------------------------------------------------------
-/**
- *
- * @param DocName
- * @return
- */
 @Override
-protected String GetUrl(String DocName)
+protected int Retrieve(String Id, String Ver, OutputStream fo) throws PDException
 {
-String S=getServer()+DocName;  
-S=S.replace("=", "%3D");
-S=S.replace("?", "%3F");
-return(S);    
-}        
+throw new UnsupportedOperationException("Not supported yet.");
+}
 //-----------------------------------------------------------------
-
-    @Override
-    protected int Retrieve(String Id, String Ver, OutputStream fo) throws PDException
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 }

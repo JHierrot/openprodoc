@@ -355,34 +355,6 @@ protected boolean IsURL()
 return(false);
 }
 //-----------------------------------------------------------------
-
-    /**
-     *
-     * @param FilePath
-     * @return
-     */
-    protected String ObtainName(String FilePath)
-{
-if (IsRef())
-    {
-    if (FilePath.startsWith(Server))
-        return(FilePath.substring(Server.length()));
-    else
-        return(FilePath);
-    }
-throw new UnsupportedOperationException("Unsupported");
-}
-//-----------------------------------------------------------------
-    /**
-     *
-     * @param DocName
-     * @return
-     */
-    protected String GetUrl(String DocName)
-{
-throw new UnsupportedOperationException("Unsupported");    
-}        
-//-----------------------------------------------------------------
 /**
  * @return the EncriptPass
  */
