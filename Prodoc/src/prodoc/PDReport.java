@@ -213,11 +213,11 @@ while (Line!=null && (Line.length()>0 && Line.charAt(0)==COMMENT))
     Line=BR.readLine();
 while (Line!=null)
     {
-    Line=Line.trim();
+//    Line=Line.trim(); only trim for "reserved words". Spaces nneded in RIS
     if (Line.startsWith(R_LOOPDOCS_S))
         {
         RecLoopStart=RepLines.size();
-        EvalIgTypes(Line);
+        EvalIgTypes(Line.trim());
         }
     else if (Line.equals(R_LOOPDOCS_E))
         RecLoopEnd=RepLines.size();
@@ -231,7 +231,7 @@ while (Line!=null)
             ExpandObject=true;
             DelNull=true;
             }
-        EvalIgFields(Line);
+        EvalIgFields(Line.trim());
         }
     else if (Line.equals(R_LOOPATTR_E))
         AttrLoopEnd=RepLines.size();
@@ -242,7 +242,7 @@ while (Line!=null)
     else
         RepLines.add(Line);
     Line=BR.readLine();
-    while (Line!=null && (Line.length()>0 && Line.charAt(0)==COMMENT))
+    while (Line!=null && (Line.trim().length()>0 && Line.charAt(0)==COMMENT))
         Line=BR.readLine();
     }    
 BR.close();
@@ -283,6 +283,7 @@ else if (!FirstLine)
     FRepDoc.println("");
 if (Line.startsWith("@OPD"))
     {
+    Line=Line.trim();
     if (Line.startsWith(R_GLOBPARENT))
         {
         if (IdParent!=null)

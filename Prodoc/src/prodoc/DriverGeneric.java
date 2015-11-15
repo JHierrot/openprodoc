@@ -583,6 +583,11 @@ Trace.add("Document elements created");
 File FileImp=new File("ex/defs.opd");
 ProcessXML(FileImp, PDFolders.ROOTFOLDER);
 Trace.add("MIME types created");
+//--- Creating Reposit Complete Type -------------
+FileImp=new File("ex/PD_REPOSIT_URL.opd");
+ProcessXML(FileImp, PDFolders.ROOTFOLDER);
+//FileImp=new File("ex/PD_FTRep.opd");
+//ProcessXML(FileImp, PDFolders.ROOTFOLDER);
 //--- Creating Reports Type -------------
 FileImp=new File("ex/PD_REPORTS.opd");
 ProcessXML(FileImp, PDFolders.ROOTFOLDER);
@@ -593,27 +598,20 @@ FileImp=new File("ex/PD_REP_EXA_CSV.opd");
 ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
 FileImp=new File("ex/PD_REP_EXA_HTML.opd");
 ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
-FileImp=new File("ex/PD_RIS_COMP.opd");
-ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
 //FileImp=new File("ex/PD_REP_EXA_XML.opd");
 //ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
 Trace.add("Reports Type and Examples created");
-//--- Creating Reposit Complete Type -------------
-FileImp=new File("ex/PD_REPOSIT_URL.opd");
-ProcessXML(FileImp, PDFolders.ROOTFOLDER);
-FileImp=new File("ex/PD_FTRep.opd");
-ProcessXML(FileImp, PDFolders.ROOTFOLDER);
-//--- Creating RIS Complete Type -------------
-FileImp=new File("ex/PD_REPOSIT_URL.opd");
-ProcessXML(FileImp, PDFolders.ROOTFOLDER);
-//--- Creating RIS Complete Type -------------
+//--- Creating RIS Reassign Type -------------
+FileImp=new File("ex/PD_TASKSFTDEFEVEN.opd");
+ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);  
+Trace.add("Full Text Task Add (Disabled)");
+//--- Creating RIS Reassign Type -------------
 FileImp=new File("ex/PD_RIS_COMP.opd");
 ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
-//D.CreateObjectTables("RIS_Complete", false); 
-//--- Creating RIS Reassign Type -------------
 FileImp=new File("ex/PD_RIS_REASIG.opd");
-ProcessXML(FileImp, PDFolders.ROOTFOLDER);
-//D.CreateObjectTables("RIS_Reasign", false); 
+ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
+FileImp=new File("ex/PD_REP_EXA_RIS.opd");
+ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
 Trace.add("RIS types created");
 TE.CreateRootThesaur(DefLang);
 //----------------------
