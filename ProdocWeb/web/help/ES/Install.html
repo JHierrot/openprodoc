@@ -28,6 +28,9 @@
       <li>
       <a href="#5">Instalación resto de clientes</a>
       </li>
+      <li>
+      <a href="#6">Tareas tras la instalacion</a>
+      </li>
     </ol>
     <h4 id="1">1 - Creación de usuario en Base de datos</h4>
     <p>Primero debe elegirse la forma de almacenamiento de toda la información de metadatos a almacenar. Para ello debe elegirse el sistema de base de datos a utilizar y crearse un usuario en el mismo con capacidad de:
@@ -137,6 +140,12 @@
     </p>
     <p>Alternativamente, puede hacerse lo siguiente: en el directorio home (ej.: /home/J_Smith) del usuario con que se ejecuta el servidor J2EE debe copiarse el archivo <b>OPDWeb.properties</b>, modificando la entrada para que referencie la ubicación del fichero <b>Prodoc.properties</b>
     </p>  
+    <h4 id="6">6 - Tareas tras la instalacion</h4>
+    <p>El proceso de instalación NO crea el repositorio de FullText. Si desea usar las funciones de <a href="Fulltext.html">Búsqueda por Texto Libre</a> DEBE crearse el repositorio para FullText en las carpetas o sistema de archivos elegido Y activar (o crear nuevas) tareas de actualización de los índices Fulltext. El programa de instalación crea 3 tareas pero están inicialmente DESACTIVADAS. DESPUÉS de crear el reppsitorio pueden activarse o crear otras otras nuevas.
+    </p>
+    <p>El proceso de instalación define tipos de documento RIS pero no los crea. Si se desea usar en OpenProdoc las funciones <a href="RIS.html">RIS</a>, debe crearse/activarse los tipos de documentos ya definidos o crear nuevos tipos. Debe tenerse cuidado con los tamaños de registro y las limitaciones de las BBDD ya que los limites  son muy diferentes y en algunas BBDD , el uso de UTF8 puede dividir por dos el tamaño máximo de un registro. Por tanto debe ajustarse los tamaños y definicion de metadatos a las propias necesidades y al entorno.
+    </p>
+    <p>Debe revisarse y activarse la ejecución de <a href="ListTaskCron.html">Tareas Programadas</a> o <a href="ListTaskEvent.html">Tareas asociadas a eventos</a>. Para ello debe tenerse en cuenta en qué ordenador u ordenadores se ejecutarán o generarán las tareas, y en ellos debe quitarse el comentario de las entradas del fichero Prodoc.properties corrrespondientes y ajustar los valores deseados.</p>
     <hr>
     <a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>    
   </body>

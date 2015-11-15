@@ -28,6 +28,9 @@
       <li>
       <a href="#5">Install any other client required</a>
       </li>
+      <li>
+      <a href="#6">Post Installation tasks</a>
+      </li>
     </ol>
     <h4 id="1">1 - Create an user in the database</h4>
     <p>First, should be selected the kind of system to store all the OPD structure and metadata of the documents. On the selected database, after install it if is a new installation, it should be created an user with the permissions:
@@ -123,7 +126,7 @@
       </li>
     </ul>  
     <p>This proccess will create all the tables structure and elements necessary for OPD. Later, it will be possible to define new document types or folders, creating the required elements.
-<p>It's possible to execute this program without showing user Interface (i.e.: Terminal installation only). You should call the install program with the parameters "NO_UI" and the name of a file (Ej."Setup.sh NO_UI Setup.properties") with the correct parameters (same parameters and options that used in interactive mode). In the installation package is included an example file that should be modify according to the installation environment.</p>        </p>
+<p>It's possible to execute this program without showing user Interface (i.e.: Terminal installation only). You should call the install program with the parameters "NO_UI" and the name of a file (Ej."Setup.sh NO_UI Setup.properties") with the correct parameters (same parameters and options that used in interactive mode). In the installation package is included an example file that should be modify according to the installation environment.</p>
     <h4 id="5">5 - Installation of other client</h4>
     <p>After the creation of the core structure, it's necessary to install OPD clients for the users.
     </p>  
@@ -135,6 +138,12 @@
     </p>
     <p>Another way to configure the  J2EE application is: in the home directory of the user (Ie.: /home/J_Smith) with which it's executed the J2EE server, it must be copied the file <b>OPDWeb.properties</b>, editing the line that contains the absolute path to <b>Prodoc.properties</b>
     </p>  
+    <h4 id="6">6 - Post Installation tasks</h4>
+    <p>The installation process DO NOT create a Full Text repository. If you are interested in using the <a href="Fulltext.html">Full Text Search</a> you MUST create the full text repository in your selected filesystem AND activate (or create new) full text events. The installation program creates 3 task but they are DEACTIVATED. AFTER creating the FT repository you can activate them or create new ones.
+    </p>
+    <p>The installation process define RIS document types but they are not created. If you want to use <a href="RIS.html">RIS</a>, you should create/activate the defined document types or new ones. Beware with record size and DDBB capacities because the limits are very different and also in some DDBB, using UTF8 can limit the size by two. So adjust the metadata definitions to your needs and environment.
+    </p>
+    <p>It should be reviewed the activation of <a href="ListTaskCron.html">Scheduled Tasks</a> or <a href="ListTaskEvent.html">Tasks related to Events</a>. It should be defined the computers in which geerate or run the task, and uncomment in them the related values in Prodoc.properties, adjusting to new values if needed.</p>
     <hr>
     <a href="HelpIndex.html">Help Index OpenProdoc</a>    
   </body>
