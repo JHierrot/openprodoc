@@ -20,7 +20,7 @@ font-weight:600;
 p
 {
 font-family: sans-serif;
-font-size: 16px;
+font-size: 14px;
 }
 li
 {
@@ -35,4 +35,11 @@ font-size: 14px;
 a:hover 
 {
 color: black;
+}
+.SC
+{
+font-family: monospace;
+font-size: 12px;
+text-align:left;   
+color: #0000FF;
 }
