@@ -604,7 +604,7 @@ Trace.add("Reports Type and Examples created");
 //--- Creating RIS Reassign Type -------------
 FileImp=new File("ex/PD_TASKSFTDEFEVEN.opd");
 ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);  
-Trace.add("Full Text Task Add (Disabled)");
+Trace.add("Full Text Tasks Added (Disabled)");
 //--- Creating RIS Reassign Type -------------
 FileImp=new File("ex/PD_RIS_COMP.opd");
 ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
@@ -902,7 +902,7 @@ if (Serv.getVersion().equalsIgnoreCase("1.1") || Serv.getVersion().equalsIgnoreC
     ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
     try {
     M.setName("xml");
-    M.setMimeCode("tapplication/xml");
+    M.setMimeCode("application/xml");
     M.setDescription("application/xml");
     M.insert();
     Trace.add("MimeType XML created");  
@@ -914,23 +914,49 @@ if (Serv.getVersion().equalsIgnoreCase("1.1") || Serv.getVersion().equalsIgnoreC
     FileImp=new File("ex/PD_REPOSIT_URL.opd");
     ProcessXML(FileImp, PDFolders.ROOTFOLDER);
     //--- Creating RIS Complete Type -------------
+    try {
+    M.setName("ris");
+    M.setMimeCode("application/x-research-info-systems");
+    M.setDescription("application/x-research-info-systems");
+    M.insert();
+    Trace.add("MimeType XML created");  
+    } catch (Exception ex) {}
     FileImp=new File("ex/PD_RIS_COMP.opd");
     ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
     try {
     D.CreateObjectTables("RIS_Complete", false);    
-    } catch (Exception ex)
-        {   
-        }
+    } catch (Exception ex){}
     //--- Creating RIS Reassign Type -------------
     FileImp=new File("ex/PD_RIS_REASIG.opd");
     ProcessXML(FileImp, PDFolders.ROOTFOLDER);
-        try {
+    try {
     D.CreateObjectTables("RIS_Reasign", false);    
-    } catch (Exception ex)
-        {   
-        }
+    } catch (Exception ex){}
+    FileImp=new File("ex/PD_REP_EXA_RIS.opd");
+    ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);    
     Trace.add("RIS types created");  
     //--- Full text Reposit -----------
+    try {
+    PDRepository R=new PDRepository(this);
+    R.Load("Reposit");
+    if (R.getURL().equals("Rep")) // es Portable
+        {
+        FileImp=new File("ex/PD_FTRep.opd");
+        ProcessXML(FileImp, PDFolders.ROOTFOLDER);
+        FileImp=new File("./RepFT");
+        FileImp.mkdir();
+        FileImp=new File("ex/PD_TASKSFTDEFEVEN_AC.opd");
+        ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);  
+        Trace.add("Full Text Tasks Added (Disabled)");
+        }
+    else
+        {
+        FileImp=new File("ex/PD_TASKSFTDEFEVEN.opd");
+        ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);  
+        Trace.add("Full Text Tasks Added (Disabled)");
+    
+        }
+    } catch (Exception ex){}
     Trace.add("Updated to 1.2");
     }
 Trace.add("Update finished");
