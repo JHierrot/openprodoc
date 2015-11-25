@@ -875,6 +875,7 @@ if (Serv.getVersion().equalsIgnoreCase("1.0"))
 Serv.Load("Prodoc");
 if (Serv.getVersion().equalsIgnoreCase("1.1") || Serv.getVersion().equalsIgnoreCase("1.0"))
     {
+    try {
     PDFolders f3=new PDFolders(this);
     f3.setFolderType(getTableName());
     f3.setPDId(SYSTEMFOLDER);
@@ -882,59 +883,126 @@ if (Serv.getVersion().equalsIgnoreCase("1.1") || Serv.getVersion().equalsIgnoreC
     f3.setParentId(ROOTFOLDER);
     f3.setACL("Public");
     f3.insert();
-    PDObjDefs D=new PDObjDefs(this);
+        } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
+    PDMimeType M=new PDMimeType(this);
     File FileImp=new File("ex/PD_REPORTS.opd");
+    PDObjDefs D=new PDObjDefs(this);
+    try {
     ProcessXML(FileImp, PDFolders.ROOTFOLDER);
     D.CreateObjectTables(PDReport.REPTABNAME, false); 
-    PDMimeType M=new PDMimeType(this);
     FileImp=new File("ex/PD_REP_EXA_TXT.opd");
     ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
+        } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
     try {
     M.setName("csv");
     M.setMimeCode("text/csv");
     M.setDescription("text/csv");
     M.insert();
     Trace.add("MimeType CSV created");  
-    } catch (Exception ex) {}
+        } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
+    try {
     FileImp=new File("ex/PD_REP_EXA_CSV.opd");
     ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
     FileImp=new File("ex/PD_REP_EXA_HTML.opd");
     ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
+        } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
     try {
     M.setName("xml");
     M.setMimeCode("application/xml");
     M.setDescription("application/xml");
     M.insert();
     Trace.add("MimeType XML created");  
-    } catch (Exception ex) {}
-    //FileImp=new File("ex/PD_REP_EXA_XML.opd");
-    //ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
+        } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
     Trace.add("Reports Type and Examples created");
     //--- Creating RIS Complete Type -------------
+    try {
     FileImp=new File("ex/PD_REPOSIT_URL.opd");
     ProcessXML(FileImp, PDFolders.ROOTFOLDER);
+    } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
     //--- Creating RIS Complete Type -------------
     try {
     M.setName("ris");
     M.setMimeCode("application/x-research-info-systems");
     M.setDescription("application/x-research-info-systems");
     M.insert();
-    Trace.add("MimeType XML created");  
-    } catch (Exception ex) {}
+    Trace.add("MimeType RIS created");  
+        } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
     FileImp=new File("ex/PD_RIS_COMP.opd");
     ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
     try {
     D.CreateObjectTables("RIS_Complete", false);    
-    } catch (Exception ex){}
+        } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
     //--- Creating RIS Reassign Type -------------
+    try {
     FileImp=new File("ex/PD_RIS_REASIG.opd");
     ProcessXML(FileImp, PDFolders.ROOTFOLDER);
-    try {
     D.CreateObjectTables("RIS_Reasign", false);    
-    } catch (Exception ex){}
+    } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
+    try {
     FileImp=new File("ex/PD_REP_EXA_RIS.opd");
     ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);    
     Trace.add("RIS types created");  
+    } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
     //--- Full text Reposit -----------
     try {
     PDRepository R=new PDRepository(this);
@@ -945,9 +1013,10 @@ if (Serv.getVersion().equalsIgnoreCase("1.1") || Serv.getVersion().equalsIgnoreC
         ProcessXML(FileImp, PDFolders.ROOTFOLDER);
         FileImp=new File("./RepFT");
         FileImp.mkdir();
+        Trace.add("Full Text Repository Created");
         FileImp=new File("ex/PD_TASKSFTDEFEVEN_AC.opd");
         ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);  
-        Trace.add("Full Text Tasks Added (Disabled)");
+        Trace.add("Full Text Tasks Added");
         }
     else
         {
@@ -956,7 +1025,29 @@ if (Serv.getVersion().equalsIgnoreCase("1.1") || Serv.getVersion().equalsIgnoreC
         Trace.add("Full Text Tasks Added (Disabled)");
     
         }
-    } catch (Exception ex){}
+    } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
+        // -- Updating Repository version -----    
+    try {
+    Record RecServ=new Record();    
+    Attribute RV=Serv.getRecord().getAttr(PDServer.fVERSION).Copy();
+    RV.setValue("1.2");
+    RecServ.addAttr(RV);
+    Conditions ServDef=new Conditions();
+    ServDef.addCondition(new Condition(PDServer.fNAME, Condition.cEQUAL, "Prodoc"));
+    UpdateRecord(Serv.getTabName(), RecServ, ServDef);    
+    } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
     Trace.add("Updated to 1.2");
     }
 Trace.add("Update finished");
