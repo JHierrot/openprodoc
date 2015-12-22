@@ -724,7 +724,7 @@ else if (Attr.getType()==Attribute.tTHES)
 else if (Attr.getType()==Attribute.tDATE)
     {
     if (Attr.getValue()!=null)
-        JTF=new JTextField((String)Attr.getValue());
+        JTF=new JTextField(MainWin.getFormatterDate().format((Date)Attr.getValue()));
     else
         JTF=new JTextField();
     if (!(ViewMode || Modif&&!Attr.isModifAllowed()))

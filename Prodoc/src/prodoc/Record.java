@@ -527,4 +527,14 @@ for (int i = 0; i < NumAttr(); i++)
     }
 }
 //--------------------------------------------------------------------------
+public void DelNull()
+{
+for (int i = VAttr.size()-1; i >=0; i--)
+        {
+        Attribute At = (Attribute)VAttr.get(i);
+        if (!At.isMultivalued() && At.getValue()==null)
+            VAttr.remove(i);
+        }
+}
+//--------------------------------------------------------------------------
 }

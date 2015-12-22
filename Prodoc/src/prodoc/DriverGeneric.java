@@ -1767,7 +1767,7 @@ if (PDLog.isDebug())
  */
 static public String getVersion()
 {
-return("1.2");
+return("1.2.1");
 }
 private static final char[] HEX_CHARS = "0123456789abcdef".toCharArray();
 //-----------------------------------------------------------------------------------

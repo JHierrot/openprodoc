@@ -1156,6 +1156,7 @@ Attr=Rec.getAttr(fLOCKEDBY);
 Attr.setValue(getDrv().getUser().getName());
 Attr=Rec.getAttr(fDOCTYPE);
 Attr.setValue(TobeUpdated.getDocType());
+Rec.DelNull();   //
 getDrv().UpdateRecord(getTabName(), Rec, getConditionsVer());
 Record Mult=TobeUpdated.getRecSum().Copy();
 Mult.getAttr(fVERSION).setValue(getDrv().getUser().getName());
@@ -1199,6 +1200,7 @@ Attr.setValue("");
 Attr=r.getAttr(fDOCTYPE);
 Attr.setValue(TobeUpdated.getDocType());
 //setLockedBy("");
+r.DelNull();
 Conditions Cond=getConditions();
 getDrv().UpdateRecord(getTabName(), r, Cond);
 setDocType(TobeUpdated.getDocType());
@@ -1928,8 +1930,11 @@ String Vers=getVersion();
 Record R =getRecordStruct();
 Attribute Attr=R.getAttr(fDOCTYPE);
 Attr.setValue(getDocType());
+Attr=R.getAttr(fPDDATE);
+Attr.setValue(new Date());
 Attr=R.getAttr(fSTATUS);
 Attr.setValue(fSTATUS_DEL);
+R.DelNull();
 UpdateVersion(Id, null, R);
 Attr.setValue(fSTATUS_LASTDEL); // actual version must be indicated
 AddLogFields(); // for tracing delete
@@ -1972,10 +1977,11 @@ InTransLocal=!getDrv().isInTransaction();
 if (InTransLocal)
     getDrv().IniciarTrans();
 try {
+PDDocs D2U=new PDDocs(getDrv(), DocTypename);
 Conditions Cond=new Conditions();
 Cond.addCondition(new Condition(fPDID, Condition.cEQUAL, Id));
 Cond.addCondition(new Condition(fSTATUS, Condition.cEQUAL, fSTATUS_LASTDEL));
-Query LoadAct=new Query(getTabNameVer(DocTypename), getRecSum(), Cond, null);
+Query LoadAct=new Query(getTabNameVer(DocTypename), D2U.getRecSum(), Cond, null);
 Cursor Cur=getDrv().OpenCursor(LoadAct);
 Record Rec=getDrv().NextRec(Cur);
 getDrv().CloseCursor(Cur);
@@ -1987,12 +1993,15 @@ if (!getDrv().getUser().getAclList().containsKey(AclRec))
     PDExceptionFunc.GenPDException("User_without_permissions_over_document",Id);
 Attr=Rec.getAttr(fSTATUS);
 Attr.setValue("");
-insertFragments(Rec);
+D2U.insertFragments(Rec);
 Record R =getRecordStruct();
 Attr=R.getAttr(fDOCTYPE);
 Attr.setValue(Rec.getAttr(fDOCTYPE).getValue());
+Attr=R.getAttr(fPDDATE);
+Attr.setValue(new Date());
 Attr=R.getAttr(fSTATUS);
 Attr.setValue("");
+R.DelNull();
 UpdateVersion(Id, null, R);
 } catch (PDException Ex)
     {
