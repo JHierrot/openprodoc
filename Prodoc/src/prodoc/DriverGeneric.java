@@ -2465,9 +2465,12 @@ String Id=OPDObject.getTextContent();
 OPDObjectList = XMLObjects.getElementsByTagName("Ver");
 OPDObject = OPDObjectList.item(0);
 String Ver=OPDObject.getTextContent();
-OPDObjectList = XMLObjects.getElementsByTagName("Rep");
-OPDObject = OPDObjectList.item(0);
-String RepName=OPDObject.getTextContent();
+PDDocs D=new PDDocs(this);
+D.LoadVersion(Id, Ver);
+String RepName=D.getReposit();
+//OPDObjectList = XMLObjects.getElementsByTagName("Rep");
+//OPDObject = OPDObjectList.item(0);
+//String RepName=OPDObject.getTextContent();
 if (PDLog.isDebug())
     PDLog.Debug("DriverGeneric.DeleteFile:"+Id+"/"+Ver);    
 StoreGeneric Rep=getRepository(RepName);

@@ -1204,7 +1204,6 @@ r.DelNull();
 Conditions Cond=getConditions();
 getDrv().UpdateRecord(getTabName(), r, Cond);
 setDocType(TobeUpdated.getDocType());
-DeleteVersion(getDocType(), Id, getDrv().getUser().getName());
 StoreGeneric Rep=getDrv().getRepository(TobeUpdated.getReposit());
 if (!Rep.IsRef())
     {
@@ -1213,6 +1212,7 @@ if (!Rep.IsRef())
     Rep.Delete(PDId, getDrv().getUser().getName());
     Rep.Disconnect();
     }
+DeleteVersion(getDocType(), Id, getDrv().getUser().getName());
 getObjCache().remove(getKey());
 } catch (PDException Ex)
     {
