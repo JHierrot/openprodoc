@@ -962,7 +962,8 @@ for (int i = getTypeDefs().size()-1; i >=0; i--)
     DatParc.assign(this.getRecSum());
     if (PDLog.isDebug())
         PDLog.Debug("PDFolders.update2:"+(String)TypDef.getAttr(PDObjDefs.fNAME).getValue()+ ">"+DatParc);
-    if (DatParc.NumAttrFilled()>1) // Id + some value
+//    if (DatParc.NumAttrFilled()>1) // Id + some value
+    if (DatParc.NumAttr()>1)
         getDrv().UpdateRecord((String)TypDef.getAttr(PDObjDefs.fNAME).getValue(), DatParc, getConditionsMaint());
     }
 }
