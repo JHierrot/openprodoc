@@ -207,7 +207,7 @@ setLocationRelativeTo(null);
         jLabel5.setText(TT("Date_Format"));
 
         TimeStampFormat.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        TimeStampFormat.setText("dd/MM/yyyy  HH:mm:ss");
+        TimeStampFormat.setText("dd/MM/yyyy HH:mm:ss");
         TimeStampFormat.setToolTipText("Format to display and read timestamp fields in default customization, according to formats of the Java formatter");
 
         javax.swing.GroupLayout AttrTabLayout = new javax.swing.GroupLayout(AttrTab);
