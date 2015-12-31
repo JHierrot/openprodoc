@@ -452,6 +452,7 @@ else
            PDExceptionFunc.GenPDException("User_without_permissions_on_container_folder", getParentId());
         if (getACL()==null || getACL().equals(""))
             setACL(Parent.getACL());
+        Parent.LoadFull(getParentId()); // due the nulls update
         Parent.update();
         }
     }
