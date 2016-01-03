@@ -451,16 +451,22 @@ else if (Attr.getType()==Attribute.tDATE)
     {
     if (Val.length()>0)
         Attr.setValue(getFormatterDate(Req).parse(Val));
+    else
+        Attr.setValue(null);
     }
 else if (Attr.getType()==Attribute.tTIMESTAMP)
     {
     if (Val.length()>0)
         Attr.setValue(getFormatterTS(Req).parse(Val));
+    else
+        Attr.setValue(null);
     }
 else if (Attr.getType()==Attribute.tINTEGER)
     {
     if (Val.length()>0)
         Attr.setValue(Integer.parseInt(Val));
+    else
+        Attr.setValue(null);
     }
 else
     Attr.setValue("Error");

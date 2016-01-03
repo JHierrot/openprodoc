@@ -452,8 +452,8 @@ else
            PDExceptionFunc.GenPDException("User_without_permissions_on_container_folder", getParentId());
         if (getACL()==null || getACL().equals(""))
             setACL(Parent.getACL());
-        Parent.LoadFull(getParentId()); // due the nulls update
-        Parent.update();
+        Parent.TouchDate(); // due the nulls update
+//        Parent.update();
         }
     }
 AddLogFields();
@@ -771,6 +771,9 @@ if (InTransLocal)
     getDrv().IniciarTrans();
 try {
 ExecuteTransThreads(PDTasksDefEvent.fMODEDEL);
+PDFolders Par=new PDFolders(getDrv());
+Par.setPDId(getParentId());
+Par.TouchDate();
 DeleteFoldersInFolder();
 DeleteDocsInFolder();
 DeleteFoldLevelParents();
@@ -1643,6 +1646,20 @@ public Cursor getAll() throws PDException
 {
 PDException.GenPDException("ERROR", null);
 return(null);
+}
+//-------------------------------------------------------------------------
+/** updates the "uodated date" of the folder after adding a folder or document.
+ * Id mus be assigned
+ */
+protected void TouchDate() throws PDException
+{
+if (PDLog.isInfo())
+    PDLog.Info("PDFolders.TouchDate:"+getPDId());
+Record r=new Record();
+Attribute A=this.getRecord().getAttr(fPDDATE );
+A.setValue(new Date());
+r.addAttr(A);
+getDrv().UpdateRecord(this.getTabName(), r, getConditionsMaint());
 }
 //-------------------------------------------------------------------------
 }

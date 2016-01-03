@@ -1286,8 +1286,8 @@ if (!(getDrv().getUser().getName().equals("Install") && getDrv().getUser().getAc
        PDExceptionFunc.GenPDException("User_without_permissions_on_container_folder", getParentId());
     if (getACL()==null || getACL().equals(""))
         setACL(Parent.getACL());
-    Parent.LoadFull(getParentId()); // due the nulls update
-    Parent.update();
+    Parent.TouchDate(); // due the nulls update 
+//    Parent.update();
     }
 if (getReposit()==null || getReposit().length()==0 )
     setReposit(getDrv().getAssignedRepos(getDocType()));
@@ -1927,6 +1927,9 @@ Integer Perm=(Integer)getDrv().getUser().getAclList().get(getACL());
 if (Perm<PDACL.pDELETE)
     PDExceptionFunc.GenPDException("User_without_permissions_over_document",getPDId());
 ExecuteTransThreads(PDTasksDefEvent.fMODEDEL);
+PDFolders Par=new PDFolders(getDrv());
+Par.setPDId(getParentId());
+Par.TouchDate();
 String Vers=getVersion();
 Record R =getRecordStruct();
 Attribute Attr=R.getAttr(fDOCTYPE);
