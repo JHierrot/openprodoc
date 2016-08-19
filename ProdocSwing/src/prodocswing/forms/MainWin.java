@@ -1443,6 +1443,8 @@ RefreshDocs();
     private void ExportFoldActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ExportFoldActionPerformed
     {//GEN-HEADEREND:event_ExportFoldActionPerformed
 try {
+if (FoldAct.getPDId().equals(PDFolders.ROOTFOLDER))    
+    PDExceptionFunc.GenPDException("Exporting_RootFolder_not_allowed", "");
 ExpFolds=0;
 ExpDocs=0;    
 DialogExportFolders ExpFold = new DialogExportFolders(this,true);
@@ -2271,7 +2273,7 @@ return("1.2.1");
 //---------------------------------------------------------------------
 
 /**
- * 
+ * Exports a full tree recursively
  * @param FoldAct OPD Folder to start exporting
  * @param SelFile Destination Folder to export
  * @param IsOneLevel When tru, the OPD folder and contained Docs (if IncDocs), are exported 
