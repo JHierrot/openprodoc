@@ -20,6 +20,7 @@
 package prodoc;
 
 import java.io.File;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
@@ -1467,6 +1468,32 @@ if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.Export:"+"<");    
 }
 //---------------------------------------------------------------------
+/**
+ * Exports a thesaurus to RDF-XML format
+ * @param ExpThesId thesaurus Id
+ * @param PW PrintWriter for printint Thesaur. MUST be closed by calling appication
+ * @param Root Root to be included in the RDF (i.e. :http://metadataregistry.org/uri/FTWG/ )
+ * @param MainLang Language that defines the ID of terms and "walking" of thesaur
+ * @throws PDException  
+ */
+public void Export(String ExpThesId, PrintWriter PW, String Root, String MainLang) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.Export:"+ExpThesId+"|"+Root+"|"+MainLang+">");      
+try {    
+PW.println(StartSKOSXML());    
+Load(ExpThesId);
+WriteThes(this, PW, Root, MainLang);
+PW.println(EndSKOSXML());  
+PW.flush();
+} catch(Exception ex)
+    {
+    PDException.GenPDException(ex.getLocalizedMessage(), "");
+    }
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.Export:"+"<");    
+}
+//---------------------------------------------------------------------
 private static String StartSKOSXML()
 {
 return("<?xml version=\"1.0\" encoding = \"UTF-8\"?>"
@@ -1641,15 +1668,30 @@ if (PDLog.isDebug())
  * @return 
  * @throws PDException  
  */
-synchronized public int Import(String ThesName, String ImpThesId, File XMLFile, String MainLang, String Root, boolean SubThesLang, boolean Transact, boolean RetainCodes) throws PDException
+synchronized public int Import(String ThesName, String ImpThesId, InputStream XMLFile, String MainLang, String Root, boolean SubThesLang, boolean Transact, boolean RetainCodes) throws PDException
 {
 if (PDLog.isDebug())
-    PDLog.Debug("PDThesaurs.Import:"+ThesName+"|"+ImpThesId+"|"+Root+"|"+MainLang+">");        
+    PDLog.Debug("PDThesaurs.Import:"+ThesName+"|"+ImpThesId+"|"+Root+"|"+MainLang+">");    
 try {
-Date t1=new Date();    
-ImportReport="";    
 DocumentBuilder DB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 Document XMLObjects = DB.parse(XMLFile);
+return(ImportThes(ThesName, ImpThesId, DB, XMLObjects, MainLang, Root, SubThesLang, Transact, RetainCodes));
+} catch(Exception ex)
+    {
+    PDLog.Error(ex.getLocalizedMessage());
+    if (getDrv().isInTransaction())
+        getDrv().AnularTrans();
+    ex.printStackTrace();
+    throw new PDException(ex.getLocalizedMessage());
+    }
+
+}
+synchronized private int ImportThes(String ThesName, String ImpThesId, DocumentBuilder DB, Document XMLObjects, String MainLang, String Root, boolean SubThesLang, boolean Transact, boolean RetainCodes) throws PDException
+{
+try {
+
+Date t1=new Date();    
+ImportReport="";    
 Node SkosObjectConcept;
 Node SkosObjectSub;
 TermEquiv.clear();
@@ -1739,7 +1781,43 @@ UseTermsByLang.clear();
 DB.reset();
 if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.Import:"+"<");    
-return(Tot);
+return(Tot);    
+} catch(Exception ex)
+    {
+    PDLog.Error(ex.getLocalizedMessage());
+    if (getDrv().isInTransaction())
+        getDrv().AnularTrans();
+    TermEquiv.clear();
+    TermExp.clear();
+    TermCache.clear();
+    TermRT.clear();
+    TermLang.clear();
+    SubTermByLang.clear();
+    UseTermsByLang.clear();
+    DB.reset();
+    ex.printStackTrace();
+    throw new PDException(ex.getLocalizedMessage());
+    }
+}
+//---------------------------------------------------------------------
+/**
+ * Import a thesaurus in RDF-XML format
+ * @param ThesName 
+ * @param ImpThesId thesaurus Id
+ * @param XMLFile 
+ * @param Root Root to be included in the RDF (i.e. :http://metadataregistry.org/uri/FTWG/ )
+ * @param MainLang Language that defines the ID of terms and "walking" of thesaur
+ * @return 
+ * @throws PDException  
+ */
+synchronized public int Import(String ThesName, String ImpThesId, File XMLFile, String MainLang, String Root, boolean SubThesLang, boolean Transact, boolean RetainCodes) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDThesaurs.Import:"+ThesName+"|"+ImpThesId+"|"+Root+"|"+MainLang+">");        
+try {
+DocumentBuilder DB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+Document XMLObjects = DB.parse(XMLFile);
+return(ImportThes(ThesName, ImpThesId, DB, XMLObjects, MainLang, Root, SubThesLang, Transact, RetainCodes));
 } catch(Exception ex)
     {
     PDLog.Error(ex.getLocalizedMessage());

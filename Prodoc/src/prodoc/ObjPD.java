@@ -531,6 +531,12 @@ Query qLike=new Query(getTabName(), getRecordStruct(), getConditionsLike(Name), 
 return(getDrv().OpenCursor(qLike));
 }
 //-------------------------------------------------------------------------
+public Cursor SearchLikeDesc(String Name) throws PDException
+{
+Query qLike=new Query(getTabName(), getRecordStruct(), getConditionsLike(Name), getDescOrder());
+return(getDrv().OpenCursor(qLike));
+}
+//-------------------------------------------------------------------------
 /**
  *
  * @param Name
@@ -761,6 +767,11 @@ Year1+=Integer.parseInt(NewVal.substring(0,4));
 Month1+=Integer.parseInt(NewVal.substring(5,7));
 Day1+=Integer.parseInt((NewVal+" ").substring(8,10));
 return(String.format("%04d", Year1)+"-"+String.format("%02d", Month1)+"-"+String.format("%02d", Day1));
+}
+//---------------------------------------------------------------------
+protected String getDescOrder()
+{
+return(PDObjDefs.fDESCRIPTION);
 }
 //---------------------------------------------------------------------
 }
