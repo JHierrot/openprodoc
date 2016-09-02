@@ -20,19 +20,22 @@
 package OpenProdocServ;
 
 import OpenProdocUI.SParent;
+import static OpenProdocUI.SParent.TT;
+import static OpenProdocUI.SParent.getSessOPD;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
+import prodoc.DriverGeneric;
+import prodoc.PDDocs;
 
 
 /**
  *
  * @author jhierrot
  */
-public class UpFileStatus extends SParent
-{
-private static final String RESULT_UPFILE="RESULT_UPFILE";    
+public class CancelCheckOut extends SParent
+{   
 //-----------------------------------------------------------------------------------------------
 /**
  *
@@ -44,31 +47,34 @@ protected void processRequest(HttpServletRequest Req, HttpServletResponse respon
 response.setContentType("text/xml;charset=UTF-8");
 response.setStatus(HttpServletResponse.SC_OK);
 PrintWriter out = response.getWriter();  
-try {
-String S=(String)Req.getSession().getAttribute(RESULT_UPFILE);
 StringBuilder Resp=new StringBuilder(200);
-Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-Resp.append("<status>").append(S==null?"":S).append("</status>");
+Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><status>");
+try {
+String IdDoc=Req.getParameter("D");
+if (IdDoc==null || IdDoc.length()==0)
+   Resp.append(TT(Req, "Document_unselected")).append("</status>"); 
+else
+    {
+    DriverGeneric Sess=getSessOPD(Req);
+    PDDocs Doc=new PDDocs(Sess);
+    Doc.setPDId(IdDoc);
+    Doc.CancelCheckout();
+    Resp.append("OK</status>"); 
+    }
 out.println(Resp.toString());
 } catch (Exception Ex)
         {
-        
+        String[] Ms = Ex.getLocalizedMessage().split(":");
+        for (int i = 0; i < Ms.length; i++)
+            {
+            Resp.append(TT(Req,Ms[i])).append(":"); 
+            }
+        Resp.append("</status>"); 
+        out.println(Resp.toString());
         }
 finally {
 out.close();
         }
-}
-//-----------------------------------------------------------------------------------------------
-protected static String SetResultOk(HttpServletRequest Req, String Result) 
-{
-Req.getSession().setAttribute(RESULT_UPFILE, Result);
-return("{state: true, name:'"+Result+"'}");
-}
-//-----------------------------------------------------------------------------------------------
-protected static String SetResultKo(HttpServletRequest Req, String Result) 
-{
-Req.getSession().setAttribute(RESULT_UPFILE, Result);
-return("{state: false, name:'"+Result+"'}");
 }
 //-----------------------------------------------------------------------------------------------
 /**
@@ -78,12 +84,12 @@ return("{state: false, name:'"+Result+"'}");
 @Override
 public String getServletInfo()
 {
-return "UpFileStatus Servlet";
+return "CancelCheckOut Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 static public String getUrlServlet()
 {
-return("UpFileStatus");
+return("CancelCheckOut");
 }
 //-----------------------------------------------------------------------------------------------
 }

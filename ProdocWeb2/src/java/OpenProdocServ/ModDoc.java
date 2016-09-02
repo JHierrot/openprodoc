@@ -1,0 +1,140 @@
+/*
+ * OpenProdoc
+ * 
+ * See the help doc files distributed with
+ * this work for additional information regarding copyright ownership.
+ * Joaquin Hierro licenses this file to You under:
+ * 
+ * License GNU GPL v3 http://www.gnu.org/licenses/gpl.html
+ * 
+ * you may not use this file except in compliance with the License.  
+ * Unless agreed to in writing, software is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ * author: Joaquin Hierro      2016
+ * 
+ */
+
+package OpenProdocServ;
+
+import OpenProdocUI.SParent;
+import static OpenProdocUI.SParent.StoreDat;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import javax.servlet.http.HttpServletRequest;
+import prodoc.Attribute;
+import prodoc.DriverGeneric;
+import prodoc.PDDocs;
+import prodoc.Record;
+
+/**
+ *
+ * @author jhierrot
+ */
+public class ModDoc extends SParent
+{
+
+final static private String List=PDDocs.fPARENTID
+                    +"/"+PDDocs.fPDAUTOR+"/"+PDDocs.fPDDATE
+                    +"/"+PDDocs.fLOCKEDBY+"/"+PDDocs.fVERSION+"/"+PDDocs.fPURGEDATE
+                    +"/"+PDDocs.fREPOSIT+"/"+PDDocs.fSTATUS;
+//-----------------------------------------------------------------------------------------------
+/**
+ *
+ * @param Req
+ * @param out
+ * @throws Exception
+ */
+@Override
+protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
+{   
+DriverGeneric PDSession=SParent.getSessOPD(Req);
+PDDocs TmpDoc=new PDDocs(PDSession);
+String CurrDoc=Req.getParameter("D");
+if (CurrDoc!=null)
+    {
+    TmpDoc.LoadFull(CurrDoc);
+    out.println( GenerateCompleteDocForm("Update_Document", Req, PDSession, TmpDoc.getParentId(), TmpDoc.getDocType(), TmpDoc.getRecSum(), false, true) );   
+    }
+else
+    { 
+    HashMap <String, String>ListFields=new HashMap(); 
+    ListFields.put("CurrFold", Req.getParameter("CurrFold"));
+    ListFields.put(PDDocs.fPDID, Req.getParameter(PDDocs.fPDID));
+    String NewType=Req.getParameter(PDDocs.fDOCTYPE); 
+    if (NewType==null)
+       TmpDoc=new PDDocs(PDSession);
+    else
+        {
+        TmpDoc=new PDDocs(PDSession, NewType); 
+        ListFields.put(PDDocs.fDOCTYPE, NewType);
+        }
+    Record Rec=TmpDoc.getRecSum();
+    Rec.initList();
+    Attribute Attr=Rec.nextAttr();
+    while (Attr!=null)
+        {
+        if (!List.contains(Attr.getName()))
+            {
+            if (Attr.getType()==Attribute.tTHES)
+                ListFields.put(Attr.getName(), Req.getParameter("TH_"+Attr.getName()));
+            else    
+                ListFields.put(Attr.getName(), Req.getParameter(Attr.getName()));
+            }
+        Attr=Rec.nextAttr();
+        }
+    StoreDat(Req, ListFields);    
+    if (Req.getParameter("EndMod")==null)
+        {
+        out.println("OK");    
+        return;
+        }
+    TmpDoc.LoadFull((String) ListFields.get(PDDocs.fPDID));
+    Rec.initList();
+    Attr=Rec.nextAttr();
+    while (Attr!=null)
+        {
+        if (!List.contains(Attr.getName()))
+            {
+            String Val=(String) ListFields.get(Attr.getName());
+            if (Attr.getType()==Attribute.tBOOLEAN)
+                {
+                if(Val == null || Val.length()==0 || Val.equals("0"))
+                    Attr.setValue(false);
+                else
+                    Attr.setValue(true);
+                }
+            else if(Val != null)
+                {
+                SParent.FillAttr(Req, Attr, Val, false);
+//                SParent.FillAttr(Req, Attr1, Val, false);
+                }
+            }
+        Attr=Rec.nextAttr();
+        }
+    TmpDoc.assignValues(Rec);
+    TmpDoc.setParentId(ListFields.get("CurrFold"));
+    TmpDoc.update();
+    out.println("OK");    
+    }
+}
+//-----------------------------------------------------------------------------------------------
+
+/** 
+ * Returns a short description of the servlet.
+ * @return a String containing servlet description
+ */
+@Override
+public String getServletInfo()
+{
+return "ModDoc Servlet";
+}
+//-----------------------------------------------------------------------------------------------
+static public String getUrlServlet()
+{
+return("ModDoc");
+}
+//-----------------------------------------------------------------------------------------------
+}

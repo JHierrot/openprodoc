@@ -33,6 +33,7 @@ var myWins=null;
 var CurrFold=ROOTFOLD;
 var CurrThes=ROOTTHES;
 var CurrTerm="";
+var CurrDoc="";
 var OK="OK";
 var CANCEL="CANCEL";
 var NewFoldId="";
@@ -104,7 +105,8 @@ DocsGrid.load("DocList?FoldId="+ROOTFOLD);
 DocsGrid.init();
 DocsGrid.attachEvent("onRowSelect",function(rowId,cellIndex)
     {
-    printLog("<b>Row </b> id="+rowId+"<br>");
+    CurrDoc=rowId;    
+//    printLog("<b>Row </b> id="+rowId+"<br>");
     return(true);
     });
 DocsGrid.selectRow(0, true, false, true);
@@ -143,6 +145,22 @@ switch (IdMenu)
     case "SearchFold": SearchFold();
         break;
     case "RefreshFold": DocsTree.refreshItem(CurrFold);
+        break;
+    case "AddDoc": AddDoc(CurrFold);
+        break;
+    case "AddExtDoc": AddExtDoc(CurrFold);
+        break;
+    case "ModExtDoc" : ModDoc(CurrDoc);
+        break;
+    case "DelDoc": DelDoc(CurrDoc);
+        break;
+    case "CheckOut": CheckOut(CurrDoc);
+        break;
+    case "CheckIn": CheckIn(CurrDoc);
+        break;
+    case "CancelCheckOut": CancelCheckOut(CurrDoc);
+        break;
+    case "SearchDoc": SearchDoc();
         break;
     case "Thesaurus": OpenThes();
         break;
@@ -243,7 +261,9 @@ modal:true,
 resize:false});  
 WinAF.setText("OpenProdoc");
 var FormAddThes=WinAF.attachForm();
-FormAddThes.loadStruct(Url+"?T="+CurrThes);
+FormAddThes.loadStruct(Url+"?T="+CurrThes, function(){
+FormAddThes.setFocusOnFirstActive();
+});
 FormAddThes.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {    
@@ -251,14 +271,13 @@ FormAddThes.attachEvent("onButtonClick", function (name)
         NewThesId=FormAddThes.getItemValue("PDId");
         FormAddThes.send(Url, function(loader, response)
                         { // Asynchronous 
-                        if (response.substring(0,2)!="OK")    
+                        if (response.substring(0,2)!=OK)    
                             alert(response); 
                         else
                             {
                             ThesTree.insertNewChild(ROOTTHES, NewThesId, NewThesName);
                             FormAddThes.unload();
-                            WinAF.close();
-                            WinAF.unload();    
+                            WinAF.close();   
                             }
                         } );
         }
@@ -266,7 +285,6 @@ FormAddThes.attachEvent("onButtonClick", function (name)
         {   
         FormAddThes.unload();
         WinAF.close();
-        WinAF.unload();
         }
      }
              );
@@ -336,7 +354,9 @@ if (Url!="AddTerm")
     NTGrid.load("TermNT?Id="+idCurrTerm);
     }
 NTGrid.init();
-FormAddTerm.loadStruct(Url+"?T="+idCurrTerm+"&Tes="+CurrThes);
+FormAddTerm.loadStruct(Url+"?T="+idCurrTerm+"&Tes="+CurrThes, function(){
+FormAddTerm.setFocusOnFirstActive();
+});
 FormAddTerm.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {    
@@ -345,7 +365,7 @@ FormAddTerm.attachEvent("onButtonClick", function (name)
         UpdateTerms(FormAddTerm, "H_Lang", LangGrid);        
         FormAddTerm.send(Url, function(loader, response)
                         { // Asynchronous 
-                        if (response.substring(0,2)!="OK")    
+                        if (response.substring(0,2)!=OK)    
                             alert(response); 
                         else
                             {
@@ -376,8 +396,7 @@ FormAddTerm.attachEvent("onButtonClick", function (name)
                                 ThesTree.deleteItem(idCurrTerm, true);
                                 }
                             FormAddTerm.unload();
-                            WinMT.close();
-                            WinMT.unload();    
+                            WinMT.close();    
                             }
                         } );
         }
@@ -387,7 +406,6 @@ FormAddTerm.attachEvent("onButtonClick", function (name)
         {   
         FormAddTerm.unload();
         WinMT.close();
-        WinMT.unload();
         }
      }
              );
@@ -435,7 +453,9 @@ modal:true,
 resize:false});  
 WinAF.setText("OpenProdoc");
 var FormAddThes=WinAF.attachForm();
-FormAddThes.loadStruct(Url+"?T="+CurrThes);
+FormAddThes.loadStruct(Url+"?T="+CurrThes, function(){
+FormAddThes.setFocusOnFirstActive();
+});
 FormAddThes.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {    
@@ -443,15 +463,14 @@ FormAddThes.attachEvent("onButtonClick", function (name)
         NewThesId=FormAddThes.getItemValue("PDId");
         FormAddThes.send(Url, function(loader, response)
                         { // Asynchronous 
-                        if (response.substring(0,2)!="OK")    
+                        if (response.substring(0,2)!=OK)    
                             alert(response); 
                         else
                             {
                             ThesTree.setItemText(NewThesId, NewThesName);
                             layoutThes.cells("b").attachURL("SThesRec", true, {ThesId: CurrTerm});
                             FormAddThes.unload();
-                            WinAF.close();
-                            WinAF.unload();    
+                            WinAF.close();    
                             }
                         } );
         }
@@ -459,7 +478,6 @@ FormAddThes.attachEvent("onButtonClick", function (name)
         {   
         FormAddThes.unload();
         WinAF.close();
-        WinAF.unload();
         }
      }
              );
@@ -480,22 +498,23 @@ modal:true,
 resize:false});  
 WinAF.setText("OpenProdoc");
 var FormAddThes=WinAF.attachForm();
-FormAddThes.loadStruct(Url+"?T="+CurrThes);
+FormAddThes.loadStruct(Url+"?T="+CurrThes, function(){
+FormAddThes.setFocusOnFirstActive();
+});
 FormAddThes.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {    
         NewThesId=FormAddThes.getItemValue("PDId");
         FormAddThes.send(Url, function(loader, response)
                         { // Asynchronous 
-                        if (response.substring(0,2)!="OK")    
+                        if (response.substring(0,2)!=OK)    
                             alert(response); 
                         else
                             {
                             ThesTree.deleteItem(NewThesId, true);
                             CurrThes="OPD_Thesaurus";
                             FormAddThes.unload();
-                            WinAF.close();
-                            WinAF.unload();    
+                            WinAF.close();   
                             }
                         } );
         }
@@ -503,7 +522,6 @@ FormAddThes.attachEvent("onButtonClick", function (name)
         {   
         FormAddThes.unload();
         WinAF.close();
-        WinAF.unload();
         }
      }
               );
@@ -537,7 +555,9 @@ ToolBar.attachEvent("onClick", function(id)
         }
     });
 var FormSearchTerm = TabBar.tabs("Search").attachForm();
-FormSearchTerm.loadStruct("SearchTerm?Thes="+CurrThes+"&Term="+CurrTerm);    
+FormSearchTerm.loadStruct("SearchTerm?Thes="+CurrThes+"&Term="+CurrTerm, function(){
+FormSearchTerm.setFocusOnFirstActive();
+});    
 FormSearchTerm.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {   
@@ -545,7 +565,7 @@ FormSearchTerm.attachEvent("onButtonClick", function (name)
         FormSearchTerm.send("SearchTerm", function(loader, response)
                         { // Asynchronous 
                         document.body.style.cursor = 'default';
-                        if (response.substring(0,2)!="OK")    
+                        if (response.substring(0,2)!=OK)    
                             alert(response); 
                         else
                             {
@@ -557,7 +577,6 @@ FormSearchTerm.attachEvent("onButtonClick", function (name)
         {   
         FormSearchTerm.unload();
         WinAF.close();
-        WinAF.unload();
         }  
     }
     );           
@@ -604,7 +623,9 @@ modal:true,
 resize:false});  
 WinAF.setText("OpenProdoc");
 var FormExpThes=WinAF.attachForm();
-FormExpThes.loadStruct(Url+"?CurrThesId="+CurrThes);
+FormExpThes.loadStruct(Url+"?CurrThesId="+CurrThes, function(){
+FormExpThes.setFocusOnFirstActive();
+});
 FormExpThes.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {    
@@ -612,7 +633,6 @@ FormExpThes.attachEvent("onButtonClick", function (name)
         }
     FormExpThes.unload();
     WinAF.close();
-    WinAF.unload();
     }
     );    
 }
@@ -630,16 +650,16 @@ modal:true,
 resize:false});  
 WinAF.setText("OpenProdoc");
 var FormImpThes=WinAF.attachForm();
-FormImpThes.loadStruct("ImportThes0");
+FormImpThes.loadStruct("ImportThes0", function(){
+FormImpThes.setFocusOnFirstActive();
+});
 FormImpThes.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {    
         FormImpThes.send("ImportThes", function(loader, response)
                         { // Asynchronous 
                         if (response.substring(0,2)==OK)    
-                            {
                             FormImpThes.enableItem("UpFile");                            
-                            }
                         else 
                             alert(response.substring(2)); 
                         });
@@ -648,20 +668,14 @@ FormImpThes.attachEvent("onButtonClick", function (name)
         {
         FormImpThes.unload();
         WinAF.close();
-        WinAF.unload();
         }
     }
     );    
 FormImpThes.attachEvent("onUploadFile",function(realName,serverName)
     {
-//    var Id=FormImpThes.getItemValue("ThesNum");
-//    var Name=FormImpThes.getItemValue("ThesName");
     ThesTree.refreshItem(ROOTTHES);
-//    alert(serverName);
     FormImpThes.unload();
     WinAF.attachHTMLString(serverName);
-//    WinAF.close();
-//    WinAF.unload();
     });
 //    });
 FormImpThes.attachEvent("onUploadFail",function(realName){
@@ -705,22 +719,23 @@ modal:true,
 resize:false});  
 WinAF.setText("OpenProdoc");
 var FormAddFold=WinAF.attachForm();
-FormAddFold.loadStruct(Url+"?F="+CurrFold);
+FormAddFold.loadStruct(Url+"?F="+CurrFold, function(){
+FormAddFold.setFocusOnFirstActive();
+});
 FormAddFold.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {    
         NewFoldName=FormAddFold.getItemValue("Title");
         FormAddFold.send(Url, function(loader, response)
                         { // Asynchronous 
-                        if (response.substring(0,2)!="OK")    
+                        if (response.substring(0,2)!=OK)    
                             alert(response); 
                         else
                             {
                             NewFoldId=response.substring(2,30);
                             DocsTree.insertNewChild(CurrFold, NewFoldId, NewFoldName);
                             FormAddFold.unload();
-                            WinAF.close();
-                            WinAF.unload();    
+                            WinAF.close();  
                             }
                         } );
         }
@@ -728,7 +743,6 @@ FormAddFold.attachEvent("onButtonClick", function (name)
         {   
         FormAddFold.unload();
         WinAF.close();
-        WinAF.unload();
         }
      }
              );
@@ -750,7 +764,7 @@ WinAF.setText("OpenProdoc");
 var LayoutFold=WinAF.attachLayout('2E');
 var a = LayoutFold.cells('a');
 a.hideHeader();
-a.setHeight(80);
+a.setHeight(50);
 var formCombo = a.attachForm();
 formCombo.loadStruct('formCombo');
 var b = LayoutFold.cells('b');
@@ -766,22 +780,23 @@ CreaFoldMain(Url, "PD_FOLDERS");
 //----------------------------------
 function CreaFoldMain(Url, Type)
 {
-FormAddFold.loadStruct(Url+"?F="+CurrFold+"&Ty="+Type);    
+FormAddFold.loadStruct(Url+"?F="+CurrFold+"&Ty="+Type, function(){
+FormAddFold.setFocusOnFirstActive();
+});    
 FormAddFold.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {   
         NewFoldName=FormAddFold.getItemValue("Title");
         FormAddFold.send(Url, function(loader, response)
                         { // Asynchronous 
-                        if (response.substring(0,2)!="OK")    
+                        if (response.substring(0,2)!=OK)    
                             alert(response); 
                         else
                             {
                             NewFoldId=response.substring(2,30);
                             DocsTree.insertNewChild(CurrFold, NewFoldId, NewFoldName);
                             FormAddFold.unload();
-                            WinAF.close();
-                            WinAF.unload();    
+                            WinAF.close();    
                             }
                         } );
         }
@@ -789,7 +804,6 @@ FormAddFold.attachEvent("onButtonClick", function (name)
         {   
         FormAddFold.unload();
         WinAF.close();
-        WinAF.unload();
         }
     else if (name.substring(0,2)=="M_") 
         ShowMulti(FormAddFold, name.substring(2));    
@@ -818,14 +832,16 @@ ModFoldMain(EditFold, Url, "");
 //----------------------------------
 function ModFoldMain(EditFold, Url, Type)
 {
-FormAddFold.loadStruct(Url+"?F="+EditFold+"&Ty="+Type);    
+FormAddFold.loadStruct(Url+"?F="+EditFold+"&Ty="+Type, function(){
+FormAddFold.setFocusOnFirstActive();
+});    
 FormAddFold.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {   
         NewFoldName=FormAddFold.getItemValue("Title");
         FormAddFold.send(Url, function(loader, response)
                         { // Asynchronous 
-                        if (response.substring(0,2)!="OK")    
+                        if (response.substring(0,2)!=OK)    
                             alert(response); 
                         else
                             {
@@ -833,8 +849,7 @@ FormAddFold.attachEvent("onButtonClick", function (name)
                             if (CurrFold==EditFold)
                                layout.cells("b").attachURL("SFoldRec", true, {FoldId: CurrFold});
                             FormAddFold.unload();
-                            WinAF.close();
-                            WinAF.unload();    
+                            WinAF.close();  
                             }
                         } );
         }
@@ -842,7 +857,6 @@ FormAddFold.attachEvent("onButtonClick", function (name)
         {   
         FormAddFold.unload();
         WinAF.close();
-        WinAF.unload();
         }
     else if (name.substring(0,2)=="T_") 
         ShowThes(FormAddFold, name.substring(2));  
@@ -904,13 +918,11 @@ MultiForm.attachEvent("onButtonClick", function (name)
         Form.setItemValue(AttName, Sum);    
         MultiForm.unload();
         WinMulti.close();
-        WinMulti.unload();
         }
     else if (name==CANCEL) 
         {   
         MultiForm.unload();
         WinMulti.close();
-        WinMulti.unload();
         }
     else if (name=='add') 
         {   
@@ -1071,7 +1083,7 @@ FormDelFold.attachEvent("onButtonClick", function (name)
         {    
         FormDelFold.send("DelFold", function(loader, response)
                         { // Asynchronous 
-                        if (response.substring(0,2)!="OK")    
+                        if (response.substring(0,2)!=OK)    
                             alert(response); 
                         else
                             {
@@ -1079,8 +1091,7 @@ FormDelFold.attachEvent("onButtonClick", function (name)
                             if (CurrFold=DelFold)
                                 CurrFold=DocsTree.getSelectedItemId();
                             FormDelFold.unload();
-                            WinDF.close();
-                            WinDF.unload();    
+                            WinDF.close();   
                             }
                         } );
         }
@@ -1088,7 +1099,6 @@ FormDelFold.attachEvent("onButtonClick", function (name)
         {   
         FormDelFold.unload();
         WinDF.close();
-        WinDF.unload();
         }
      }
              );
@@ -1108,22 +1118,23 @@ var WinUF=myWins.createWindow({
 });  
 WinUF.setText("OpenProdoc");
 var FormUpdFold=WinUF.attachForm();
-FormUpdFold.loadStruct("UpdFold?F="+EditFold);
+FormUpdFold.loadStruct("UpdFold?F="+EditFold, function(){
+FormUpdFold.setFocusOnFirstActive();
+});
 FormUpdFold.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {    
         NewFoldName=FormUpdFold.getItemValue("Title");
         FormUpdFold.send("UpdFold", function(loader, response)
                         { // Asynchronous 
-                        if (response.substring(0,2)!="OK")    
+                        if (response.substring(0,2)!=OK)    
                             alert(response); 
                         else
                             {
                             DocsTree.setItemText(EditFold, NewFoldName);
                             layout.cells("b").attachURL("SFoldRec", true, {FoldId: CurrFold});
                             FormUpdFold.unload();
-                            WinUF.close();
-                            WinUF.unload();    
+                            WinUF.close();  
                             }
                         } );
         }
@@ -1131,7 +1142,6 @@ FormUpdFold.attachEvent("onButtonClick", function (name)
         {   
         FormUpdFold.unload();
         WinUF.close();
-        WinUF.unload();
         }
      }
              );
@@ -1206,14 +1216,16 @@ SearchFoldMain(Url, "PD_FOLDERS");
 //----------------------------------
 function SearchFoldMain(Url, Type)
 {
-FormAddFold.loadStruct(Url+"?F="+CurrFold+"&Ty="+Type);    
+FormAddFold.loadStruct(Url+"?F="+CurrFold+"&Ty="+Type, function(){
+FormAddFold.setFocusOnFirstActive();
+});    
 FormAddFold.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {   
 //        NewFoldName=FormAddFold.getItemValue("Title");
         FormAddFold.send(Url, function(loader, response)
                         { // Asynchronous 
-                        if (response.substring(0,2)!="OK")    
+                        if (response.substring(0,2)!=OK)    
                             alert(response); 
                         else
                             {
@@ -1225,7 +1237,6 @@ FormAddFold.attachEvent("onButtonClick", function (name)
         {   
         FormAddFold.unload();
         WinAF.close();
-        WinAF.unload();
         }
     else 
         ShowMulti(FormAddFold, name.substring(2));    
@@ -1260,4 +1271,427 @@ else if (Order=="Delete")
     }     
 }
 //------------------------------------------------------------
-
+function AddDoc(CurrFold)
+{
+var Url="AddDoc";
+WinAF=myWins.createWindow({
+id:"AddDoc",
+left:20,
+top:30,
+width:500,
+height:300,
+center:true,
+modal:true,
+resize:false});  
+WinAF.setText("OpenProdoc");
+var FormAddDoc=WinAF.attachForm();
+FormAddDoc.loadStruct(Url+"?F="+CurrFold, function(){
+FormAddDoc.setFocusOnFirstActive();
+});
+FormAddDoc.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {    
+        FormAddDoc.send(Url, function(loader, response)
+                        { // Asynchronous 
+                        if (response.substring(0,2)==OK)    
+                            FormAddDoc.enableItem("UpFile");                            
+                        else 
+                            alert(response.substring(2)); 
+                        } );
+        }
+     else 
+        {   
+        FormAddDoc.unload();
+        WinAF.close();
+        }
+     }
+             );
+FormAddDoc.attachEvent("onUploadFile",function(realName,serverName)
+    {
+    FormAddDoc.unload();
+    WinAF.close();
+    DocsGrid.clearAndLoad("DocList?FoldId="+CurrFold);
+    });
+FormAddDoc.attachEvent("onUploadFail",function(realName){
+    window.dhx4.ajax.get("UpFileStatus", function(r)
+    {
+    var xml = r.xmlDoc.responseXML;
+    var nodes = xml.getElementsByTagName("status");
+    alert(nodes[0].textContent);
+    });
+    });
+    
+}
+//----------------------------------
+function DelDoc(Doc2Del)
+{
+var WinDD=myWins.createWindow({
+    id:"DelDoc",
+    left:20,
+    top:30,
+    width:500,
+    height:420,
+    center:true,
+    modal:true,
+    resize:false
+});  
+WinDD.setText("OpenProdoc");
+var FormDelDoc=WinDD.attachForm();
+FormDelDoc.loadStruct("DelDoc?D="+Doc2Del);
+FormDelDoc.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {    
+        FormDelDoc.send("DelDoc", function(loader, response)
+                        { // Asynchronous 
+                        if (response.substring(0,2)!=OK)    
+                            alert(response); 
+                        else
+                            {
+                            FormDelDoc.unload();
+                            WinDD.close();   
+                            DocsGrid.clearAndLoad("DocList?FoldId="+CurrFold);
+                            }
+                        } );
+        }
+     else 
+        {   
+        FormDelDoc.unload();
+        WinDD.close();
+        }
+     }
+             );
+}
+//------------------------------------------------------------
+function ModDoc(Doc2Mod)
+{
+var WinMD=myWins.createWindow({
+    id:"ModDoc",
+    left:20,
+    top:30,
+    width:500,
+    height:420,
+    center:true,
+    modal:true,
+    resize:false
+});  
+WinMD.setText("OpenProdoc");
+var FormModDoc=WinMD.attachForm();
+FormModDoc.loadStruct("ModDoc?D="+Doc2Mod, function(){
+FormModDoc.setFocusOnFirstActive();
+});
+FormModDoc.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {    
+        FormModDoc.send("ModDoc", function(loader, response)
+                        { // Asynchronous 
+                        if (response.substring(0,2)==OK)    
+                            FormModDoc.enableItem("UpFile");                            
+                        else 
+                            alert(response.substring(2)); 
+                        } );
+        }
+     else if (name=="OK2")
+        {    
+        FormModDoc.send("ModDoc?EndMod=1", function(loader, response)
+                        { // Asynchronous 
+                        if (response.substring(0,2)==OK)    
+                            {
+                            FormModDoc.unload();
+                            WinMD.close();    
+                            }                          
+                        else 
+                            alert(response.substring(2)); 
+                        } );
+        }
+     else if (name.substring(0,2)=="M_") 
+        ShowMulti(FormModDoc, name.substring(2));    
+    else if (name.substring(0,2)=="T_") 
+        ShowThes(FormModDoc, name.substring(2));  
+    else if (name==CANCEL) 
+        {   
+        FormModDoc.unload();
+        WinMD.close();
+        }
+     }
+             );
+FormModDoc.attachEvent("onUploadFile",function(realName,serverName)
+    {
+    FormModDoc.unload();
+    WinMD.close();
+    DocsGrid.clearAndLoad("DocList?FoldId="+CurrFold);
+    });
+FormModDoc.attachEvent("onUploadFail",function(realName){
+    window.dhx4.ajax.get("UpFileStatus", function(r)
+    {
+    var xml = r.xmlDoc.responseXML;
+    var nodes = xml.getElementsByTagName("status");
+    alert(nodes[0].textContent);
+    });
+    });
+ }
+//------------------------------------------------------------
+function CheckOut (Doc2CheckOut)
+{   
+window.dhx4.ajax.get("CheckOut?D="+Doc2CheckOut, function(r)
+    {
+    var xml = r.xmlDoc.responseXML;
+    var nodes = xml.getElementsByTagName("status");
+    if (nodes[0].textContent.substring(0,2)!=OK)
+        {
+        alert(nodes[0].textContent);    
+        return;
+        }
+    else   
+        {
+        var Cell=DocsGrid.cellById(Doc2CheckOut, 2);    
+        Cell.setValue(nodes[0].textContent.substring(2)); 
+        }
+    });    
+}
+//------------------------------------------------------------
+function CancelCheckOut (Doc2CancelCheck)
+{
+dhtmlx.confirm({text:"Desea cancelar CheckOut", callback: function(result)
+    {
+    if (result==true)    
+        {
+        window.dhx4.ajax.get("CancelCheckOut?D="+Doc2CancelCheck, function(r)
+            {
+            var xml = r.xmlDoc.responseXML;
+            var nodes = xml.getElementsByTagName("status");
+            if (nodes[0].textContent.substring(0,2)!=OK)
+                {
+                alert(nodes[0].textContent);    
+                return;
+                }
+            else   
+                {
+                var Cell=DocsGrid.cellById(Doc2CancelCheck, 2);    
+                Cell.setValue(""); 
+                }
+            });   
+        }
+    } }); 
+}
+//------------------------------------------------------------
+function CheckIn (Doc2CheckIn)
+{
+var Url="CheckIn";
+WinAF=myWins.createWindow({
+id:"CheckInDoc",
+left:20,
+top:30,
+width:400,
+height:230,
+center:true,
+modal:true,
+resize:false});  
+WinAF.setText("OpenProdoc");
+var FormCheckIn=WinAF.attachForm();
+FormCheckIn.loadStruct(Url+"?D="+Doc2CheckIn, function(){
+FormCheckIn.setFocusOnFirstActive();
+});
+FormCheckIn.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {    
+        FormCheckIn.send(Url, function(loader, response)
+                        { // Asynchronous 
+                        if (response.substring(0,2)!=OK)    
+                            alert(response); 
+                        else 
+                            {
+                            DocsGrid.clearAndLoad("DocList?FoldId="+CurrFold);    
+                            FormCheckIn.unload();
+                            WinAF.close();
+                            }
+                        } );
+        }
+     else 
+        {   
+        FormCheckIn.unload();
+        WinAF.close();
+        }
+     }
+             );
+}
+//------------------------------------------------------------
+function AddExtDoc()
+{
+var Url="AddDocExt";
+WinAF=myWins.createWindow({
+id:"AddExtDoc",
+left:20,
+top:30,
+width:500,
+height:500,
+center:true,
+modal:true,
+resize:true}); 
+WinAF.setText("OpenProdoc");
+var LayoutFold=WinAF.attachLayout('2E');
+var a = LayoutFold.cells('a');
+a.hideHeader();
+a.setHeight(50);
+var formCombo = a.attachForm();
+formCombo.loadStruct('DocCombo');
+var b = LayoutFold.cells('b');
+b.hideHeader();
+FormAddFold = b.attachForm();  
+formCombo.attachEvent("onChange", function(name, value, is_checked){
+    FormAddFold.unload();
+    FormAddFold = b.attachForm();
+    CreaDocMain(Url, value);
+    });
+CreaDocMain(Url, "PD_DOCS");   
+}
+//----------------------------------
+function CreaDocMain(Url, Type)
+{
+FormAddFold.loadStruct(Url+"?F="+CurrFold+"&Ty="+Type, function(){
+FormAddFold.setFocusOnFirstActive();
+});    
+FormAddFold.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {   
+        FormAddFold.send(Url, function(loader, response)
+                        { // Asynchronous 
+                        if (response.substring(0,2)!=OK)    
+                            alert(response); 
+                        else
+                            FormAddFold.enableItem("UpFile"); 
+                        } );
+        }
+     else if (name==CANCEL) 
+        {   
+        FormAddFold.unload();
+        WinAF.close();
+        }
+    else if (name.substring(0,2)=="M_") 
+        ShowMulti(FormAddFold, name.substring(2));    
+    else if (name.substring(0,2)=="T_") 
+        ShowThes(FormAddFold, name.substring(2));  
+    }
+    );   
+FormAddFold.attachEvent("onUploadFile",function(realName,serverName)
+    {
+    FormAddFold.unload();
+    WinAF.close();
+    DocsGrid.clearAndLoad("DocList?FoldId="+CurrFold);
+    });
+FormAddFold.attachEvent("onUploadFail",function(realName){
+    window.dhx4.ajax.get("UpFileStatus", function(r)
+    {
+    var xml = r.xmlDoc.responseXML;
+    var nodes = xml.getElementsByTagName("status");
+    alert(nodes[0].textContent);
+    });
+    });
+}
+//----------------------------------
+function SearchDoc()
+{
+var Url="SearchDoc";
+WinAF=myWins.createWindow({
+id:"SearchDoc",
+left:20,
+top:30,
+width:650,
+height:680,
+center:true,
+modal:true,
+resize:true}); 
+WinAF.setText("OpenProdoc");
+var LayoutFold=WinAF.attachLayout('2E');
+var a = LayoutFold.cells('a');
+a.hideHeader();
+a.setHeight(50);
+var formCombo = a.attachForm();
+formCombo.loadStruct('DocCombo');
+var b = LayoutFold.cells('b');
+b.hideHeader();
+TabBar=b.attachTabbar();
+TabBar.addTab("Search", "Search", null, null, true);
+TabBar.addTab("Results", "Results");
+TabBar.addTab("Reports", "Reports");
+GridReports=TabBar.tabs("Reports").attachGrid();
+GridReports.setHeader("Title,Mime,Docs/page, Pages/arch");   //sets the headers of columns
+GridReports.setColumnIds("Title,Mime,DocsPage, PagesArch");         //sets the columns' ids
+GridReports.setInitWidths("*,60,60,60");   //sets the initial widths of columns
+GridReports.setColAlign("left,left,left,left");     //sets the alignment of columns
+GridReports.setColTypes("link,ro,ro,ro");               //sets the types of columns
+GridReports.setColSorting("str,str,int,int");  //sets the sorting types of columns
+GridReports.load("RepList?Type=Fold");
+GridReports.init();
+TabBar.tabs("Reports").disable();
+ToolBar = TabBar.tabs("Results").attachToolbar();
+ToolBar.addButton("Edit", 0, "Edit", "Edit.png", "Edit.png");
+ToolBar.addButton("Delete", 1, "Delete", "Edit.png", "Edit.png");
+ToolBar.attachEvent("onClick", function(id)
+    {
+    if (GridResults.getSelectedRowId()!=null)    
+        DocResProc(id, GridResults.getSelectedRowId());    
+    });
+FormAddFold = TabBar.tabs("Search").attachForm();
+formCombo.attachEvent("onChange", function(name, value, is_checked){
+    FormAddFold.unload();
+    FormAddFold = TabBar.tabs("Search").attachForm();
+    SearchDocMain(Url, value);
+    });
+SearchDocMain(Url, "PD_DOCS");       
+}
+//----------------------------------
+function SearchDocMain(Url, Type)
+{
+FormAddFold.loadStruct(Url+"?F="+CurrFold+"&Ty="+Type, function(){
+FormAddFold.setFocusOnFirstActive();
+});    
+FormAddFold.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {   
+        FormAddFold.send(Url, function(loader, response)
+                        { // Asynchronous 
+                        if (response.substring(0,2)!=OK)    
+                            alert(response); 
+                        else
+                            {
+                            ShowDocResults(response.substring(2));  
+                            }
+                        } );
+        }
+     else if (name==CANCEL) 
+        {   
+        FormAddFold.unload();
+        WinAF.close();
+        }
+    else 
+        ShowMulti(FormAddFold, name.substring(2));    
+    }
+    );   
+}
+//------------------------------------------------------------
+function ShowDocResults(Result)
+{
+GridResults=TabBar.tabs("Results").attachGrid();
+var ListPar=Result.split("\n");
+GridResults.setHeader(ListPar[0]);
+//ResGrid.setInitWidths("70,150,*");
+GridResults.setColTypes(ListPar[1]);   
+GridResults.setColSorting(ListPar[2]);
+GridResults.init();
+GridResults.parse(ListPar[3],"json");
+TabBar.tabs("Reports").enable();
+TabBar.tabs("Results").show(true);
+//setTimeout( "TabBar.tabs('Results').show(true)" , 4000);
+}
+//------------------------------------------------------------
+function DocResProc(Order, SelDocId)
+{
+if (Order=="Edit")  
+    { 
+    ModDoc(SelDocId);
+    }
+else if (Order=="Delete")  
+    { 
+    DelDoc(SelDocId);
+    }     
+}

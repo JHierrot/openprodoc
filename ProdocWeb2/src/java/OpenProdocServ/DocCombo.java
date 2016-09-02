@@ -20,52 +20,58 @@
 package OpenProdocServ;
 
 import OpenProdocUI.SParent;
+import static OpenProdocUI.SParent.TT;
+import static OpenProdocUI.SParent.getSessOPD;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import javax.servlet.http.*;
-
+import javax.servlet.http.HttpServletRequest;
+import prodoc.Attribute;
+import prodoc.DriverGeneric;
+import prodoc.PDDocs;
 
 /**
  *
  * @author jhierrot
  */
-public class ImportThes extends SParent
+public class DocCombo extends SParent
 {
+    
+static private int NUMATTREXC=7;
 //-----------------------------------------------------------------------------------------------
 /**
  *
- * @param Req 
- * @param response
+ * @param Req
+ * @param out
  * @throws Exception
  */
+@Override
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
-{
-HashMap <String, String>ListFields=new HashMap(); 
-ListFields.put("ThesNum", Req.getParameter("ThesNum"));
-ListFields.put("ThesName", Req.getParameter("ThesName"));
-ListFields.put("RootText", Req.getParameter("RootText"));
-ListFields.put("MainLanguage", Req.getParameter("MainLanguage"));
-ListFields.put("SubByLang", Req.getParameter("SubByLang"));
-ListFields.put("Transact", Req.getParameter("Transact"));
-ListFields.put("RetainCodes", Req.getParameter("RetainCodes"));
-StoreDat(Req, ListFields);
-out.println("OK");
+{   
+DriverGeneric PDSession=getSessOPD(Req);
+PDDocs TmpFold=new PDDocs(PDSession);
+StringBuilder Form= new StringBuilder(3000);
+Attribute Attr;
+Form.append("[");
+Attr=TmpFold.getRecord().getAttr(PDDocs.fDOCTYPE);
+Form.append("{type: \"combo\", name: \"" + PDDocs.fDOCTYPE + "\", label: \"").append(TT(Req, Attr.getUserName())).append("\", required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", options:[");
+Form.append(getComboModelDoc(PDSession));
+Form.append("]} ];");
+out.println(Form.toString());
 }
 //-----------------------------------------------------------------------------------------------
 
-/**
+/** 
  * Returns a short description of the servlet.
  * @return a String containing servlet description
  */
 @Override
 public String getServletInfo()
 {
-return "ImportThes Servlet";
+return "DocCombo Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 static public String getUrlServlet()
 {
-return("ImportThes");
+return("DocCombo");
 }
 //-----------------------------------------------------------------------------------------------
 }

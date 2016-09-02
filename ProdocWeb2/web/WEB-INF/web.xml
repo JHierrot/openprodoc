@@ -168,6 +168,50 @@
         <servlet-name>UpFileStatus</servlet-name>
         <servlet-class>OpenProdocServ.UpFileStatus</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddDoc</servlet-name>
+        <servlet-class>OpenProdocServ.AddDoc</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ImportDocF</servlet-name>
+        <servlet-class>OpenProdocServ.ImportDocF</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DelDoc</servlet-name>
+        <servlet-class>OpenProdocServ.DelDoc</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ModDoc</servlet-name>
+        <servlet-class>OpenProdocServ.ModDoc</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ModDocF</servlet-name>
+        <servlet-class>OpenProdocServ.ModDocF</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CheckOut</servlet-name>
+        <servlet-class>OpenProdocServ.CheckOut</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CancelCheckOut</servlet-name>
+        <servlet-class>OpenProdocServ.CancelCheckOut</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CheckIn</servlet-name>
+        <servlet-class>OpenProdocServ.CheckIn</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddDocExt</servlet-name>
+        <servlet-class>OpenProdocServ.AddDocExt</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DocCombo</servlet-name>
+        <servlet-class>OpenProdocServ.DocCombo</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SearchDoc</servlet-name>
+        <servlet-class>OpenProdocServ.SearchDoc</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SMain</servlet-name>
         <url-pattern>/SMain</url-pattern>
@@ -335,6 +379,50 @@
     <servlet-mapping>
         <servlet-name>UpFileStatus</servlet-name>
         <url-pattern>/UpFileStatus</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddDoc</servlet-name>
+        <url-pattern>/AddDoc</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImportDocF</servlet-name>
+        <url-pattern>/ImportDocF</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DelDoc</servlet-name>
+        <url-pattern>/DelDoc</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ModDoc</servlet-name>
+        <url-pattern>/ModDoc</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ModDocF</servlet-name>
+        <url-pattern>/ModDocF</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CheckOut</servlet-name>
+        <url-pattern>/CheckOut</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CancelCheckOut</servlet-name>
+        <url-pattern>/CancelCheckOut</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CheckIn</servlet-name>
+        <url-pattern>/CheckIn</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddDocExt</servlet-name>
+        <url-pattern>/AddDocExt</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DocCombo</servlet-name>
+        <url-pattern>/DocCombo</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchDoc</servlet-name>
+        <url-pattern>/SearchDoc</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -20,16 +20,20 @@
 package OpenProdocServ;
 
 import OpenProdocUI.SParent;
+import static OpenProdocUI.SParent.TT;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import javax.servlet.http.*;
+import prodoc.Attribute;
+import prodoc.DriverGeneric;
+import prodoc.PDDocs;
 
 
 /**
  *
  * @author jhierrot
  */
-public class ImportThes extends SParent
+public class AddDoc extends SParent
 {
 //-----------------------------------------------------------------------------------------------
 /**
@@ -40,16 +44,34 @@ public class ImportThes extends SParent
  */
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {
-HashMap <String, String>ListFields=new HashMap(); 
-ListFields.put("ThesNum", Req.getParameter("ThesNum"));
-ListFields.put("ThesName", Req.getParameter("ThesName"));
-ListFields.put("RootText", Req.getParameter("RootText"));
-ListFields.put("MainLanguage", Req.getParameter("MainLanguage"));
-ListFields.put("SubByLang", Req.getParameter("SubByLang"));
-ListFields.put("Transact", Req.getParameter("Transact"));
-ListFields.put("RetainCodes", Req.getParameter("RetainCodes"));
-StoreDat(Req, ListFields);
-out.println("OK");
+DriverGeneric PDSession=SParent.getSessOPD(Req);
+PDDocs TmpDoc=new PDDocs(PDSession);
+String CurrFold=Req.getParameter("F");
+if (CurrFold!=null)
+    {
+    Attribute AttrTit=TmpDoc.getRecord().getAttr(PDDocs.fTITLE);
+    Attribute AttrDate=TmpDoc.getRecord().getAttr(PDDocs.fDOCDATE);
+    out.println(
+    "[" +
+    "{type: \"label\", label: \""+TT(Req, "Add_Document")+"\"}," +
+    GenInput(Req, AttrTit,  false, false)+        
+    GenInput(Req, AttrDate,  false, false)+        
+    "{type: \"block\", width: 250, list:[" +
+        "{type: \"button\", name: \"OK\", value: \""+TT(Req, "Ok")+"\"}," +
+        "{type: \"newcolumn\", offset:20 }," +
+        "{type: \"button\", name: \"CANCEL\", value: \""+TT(Req, "Cancel")+"\"}," +
+        "{type: \"hidden\", name:\"CurrFold\", value: \""+CurrFold+"\"}" +
+    "]},{type: \"upload\", name: \"UpFile\", url: \"ImportDocF\", autoStart: true, disabled:true } ];");
+    }
+else
+    {
+    HashMap <String, String>ListFields=new HashMap(); 
+    ListFields.put("CurrFold", Req.getParameter("CurrFold"));
+    ListFields.put(PDDocs.fTITLE, Req.getParameter(PDDocs.fTITLE)); 
+    ListFields.put(PDDocs.fDOCDATE, Req.getParameter(PDDocs.fDOCDATE)); 
+    StoreDat(Req, ListFields);
+    out.println("OK");
+    }
 }
 //-----------------------------------------------------------------------------------------------
 
@@ -60,12 +82,12 @@ out.println("OK");
 @Override
 public String getServletInfo()
 {
-return "ImportThes Servlet";
+return "AddDoc Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 static public String getUrlServlet()
 {
-return("ImportThes");
+return("AddDoc");
 }
 //-----------------------------------------------------------------------------------------------
 }

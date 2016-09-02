@@ -20,39 +20,61 @@
 package OpenProdocServ;
 
 import OpenProdocUI.SParent;
+import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
+import javax.servlet.ServletException;
 import javax.servlet.http.*;
+import prodoc.DriverGeneric;
+import prodoc.PDDocs;
 
 
 /**
  *
  * @author jhierrot
  */
-public class ImportThes extends SParent
-{
+public class CheckOut extends SParent
+{   
 //-----------------------------------------------------------------------------------------------
 /**
  *
- * @param Req 
- * @param response
- * @throws Exception
+ * @param Req
  */
-protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
-{
-HashMap <String, String>ListFields=new HashMap(); 
-ListFields.put("ThesNum", Req.getParameter("ThesNum"));
-ListFields.put("ThesName", Req.getParameter("ThesName"));
-ListFields.put("RootText", Req.getParameter("RootText"));
-ListFields.put("MainLanguage", Req.getParameter("MainLanguage"));
-ListFields.put("SubByLang", Req.getParameter("SubByLang"));
-ListFields.put("Transact", Req.getParameter("Transact"));
-ListFields.put("RetainCodes", Req.getParameter("RetainCodes"));
-StoreDat(Req, ListFields);
-out.println("OK");
+@Override
+protected void processRequest(HttpServletRequest Req, HttpServletResponse response) throws ServletException, IOException
+{   
+response.setContentType("text/xml;charset=UTF-8");
+response.setStatus(HttpServletResponse.SC_OK);
+PrintWriter out = response.getWriter();  
+StringBuilder Resp=new StringBuilder(200);
+Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><status>");
+try {
+String IdDoc=Req.getParameter("D");
+if (IdDoc==null || IdDoc.length()==0)
+   Resp.append(TT(Req, "Document_unselected")).append("</status>"); 
+else
+    {
+    DriverGeneric Sess=getSessOPD(Req);
+    PDDocs Doc=new PDDocs(Sess);
+    Doc.setPDId(IdDoc);
+    Doc.Checkout();
+    Resp.append("OK").append(Sess.getUser().getName()).append("</status>"); 
+    }
+out.println(Resp.toString());
+} catch (Exception Ex)
+        {
+        String[] Ms = Ex.getLocalizedMessage().split(":");
+        for (int i = 0; i < Ms.length; i++)
+            {
+            Resp.append(TT(Req,Ms[i])).append(":"); 
+            }
+        Resp.append("</status>"); 
+        out.println(Resp.toString());
+        }
+finally {
+out.close();
+        }
 }
 //-----------------------------------------------------------------------------------------------
-
 /**
  * Returns a short description of the servlet.
  * @return a String containing servlet description
@@ -60,12 +82,12 @@ out.println("OK");
 @Override
 public String getServletInfo()
 {
-return "ImportThes Servlet";
+return "CheckOut Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 static public String getUrlServlet()
 {
-return("ImportThes");
+return("CheckOut");
 }
 //-----------------------------------------------------------------------------------------------
 }

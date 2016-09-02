@@ -21,51 +21,64 @@ package OpenProdocServ;
 
 import OpenProdocUI.SParent;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import javax.servlet.http.*;
-
+import javax.servlet.http.HttpServletRequest;
+import prodoc.DriverGeneric;
+import prodoc.PDDocs;
+import prodoc.PDException;
 
 /**
  *
  * @author jhierrot
  */
-public class ImportThes extends SParent
+public class DelDoc extends SParent
 {
+
 //-----------------------------------------------------------------------------------------------
 /**
  *
- * @param Req 
- * @param response
+ * @param Req
+ * @param out
  * @throws Exception
  */
+@Override
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
-{
-HashMap <String, String>ListFields=new HashMap(); 
-ListFields.put("ThesNum", Req.getParameter("ThesNum"));
-ListFields.put("ThesName", Req.getParameter("ThesName"));
-ListFields.put("RootText", Req.getParameter("RootText"));
-ListFields.put("MainLanguage", Req.getParameter("MainLanguage"));
-ListFields.put("SubByLang", Req.getParameter("SubByLang"));
-ListFields.put("Transact", Req.getParameter("Transact"));
-ListFields.put("RetainCodes", Req.getParameter("RetainCodes"));
-StoreDat(Req, ListFields);
-out.println("OK");
+{   
+DriverGeneric PDSession=SParent.getSessOPD(Req);
+PDDocs TmpDoc=new PDDocs(PDSession);
+String CurrDoc=Req.getParameter("D");
+if (CurrDoc!=null)
+    {
+    TmpDoc.LoadFull(CurrDoc);
+    out.println( GenerateCompleteDocForm("Delete_Document", Req, PDSession, CurrDoc, TmpDoc.getDocType(), TmpDoc.getRecSum(), true, false) );   
+    }
+else
+    {
+    try {    
+    String IdDel=Req.getParameter("CurrDoc");      
+    TmpDoc.setPDId(IdDel);
+    TmpDoc.delete();
+    out.println("OK");
+    } catch (PDException ex)
+        {
+        out.println(ex.getLocalizedMessage());
+        }
+    }
 }
 //-----------------------------------------------------------------------------------------------
 
-/**
+/** 
  * Returns a short description of the servlet.
  * @return a String containing servlet description
  */
 @Override
 public String getServletInfo()
 {
-return "ImportThes Servlet";
+return "DelDoc Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 static public String getUrlServlet()
 {
-return("ImportThes");
+return("DelDoc");
 }
 //-----------------------------------------------------------------------------------------------
 }

@@ -20,6 +20,7 @@
 package OpenProdocServ;
 
 import OpenProdocUI.SParent;
+import static OpenProdocUI.SParent.GetDat;
 import static OpenProdocUI.SParent.getSessOPD;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -28,25 +29,32 @@ import java.util.Iterator;
 import java.util.List;
 import javax.servlet.http.*;
 import prodoc.DriverGeneric;
-import prodoc.PDThesaur;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import prodoc.Attribute;
+import prodoc.PDDocs;
+import prodoc.PDMimeType;
+import prodoc.Record;
 
 
 /**
  *
  * @author jhierrot
  */
-public class ImportThesF extends SParent
+public class ModDocF extends SParent
 {
+final static private String List=PDDocs.fPARENTID
+                    +"/"+PDDocs.fPDAUTOR+"/"+PDDocs.fPDDATE
+                    +"/"+PDDocs.fLOCKEDBY+"/"+PDDocs.fVERSION+"/"+PDDocs.fPURGEDATE
+                    +"/"+PDDocs.fREPOSIT+"/"+PDDocs.fSTATUS;
 //-----------------------------------------------------------------------------------------------
 /**
  *
- * @param Req 
- * @param response
+ * @param Req
  * @throws Exception
  */
+@Override
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {
 String FileName=null;
@@ -54,6 +62,7 @@ InputStream FileData=null;
 HashMap <String, String>ListFields=new HashMap();
 try {
 DiskFileItemFactory factory = new DiskFileItemFactory();
+factory.setSizeThreshold(1000000);
 ServletFileUpload upload = new ServletFileUpload(factory);
 boolean isMultipart = ServletFileUpload.isMultipartContent(Req);
 List items = upload.parseRequest(Req);
@@ -76,18 +85,44 @@ if (!isMultipart || FileData==null)
 else
     { 
     ListFields=GetDat(Req);  
-    String NewThesId=ListFields.get("ThesNum");
-    String ThesName=ListFields.get("ThesName");
-    String RootText=ListFields.get("RootText");
-    String MainLanguage=ListFields.get("MainLanguage");
-    String SubByLang=ListFields.get("SubByLang");
-    String Transact=ListFields.get("Transact");
-    String RetainCodes=ListFields.get("RetainCodes");
+    PDDocs Doc;
     DriverGeneric PDSession = getSessOPD(Req); 
-    PDThesaur Thes=new PDThesaur(PDSession);
-    Thes.Import(ThesName, NewThesId, FileData, MainLanguage, RootText, SubByLang.equals("1"), Transact.equals("1"), RetainCodes.equals("1"));
-    FileData.close();
-    out.println(UpFileStatus.SetResultOk(Req, Thes.getImportReport()));
+    String DType=(String) ListFields.get(PDDocs.fDOCTYPE);
+    if (DType==null)
+        Doc = new PDDocs(PDSession);
+    else
+        Doc = new PDDocs(PDSession, DType);
+    Doc.LoadFull((String) ListFields.get(PDDocs.fPDID));
+    Record Rec=Doc.getRecSum();
+    Rec.initList();
+    Attribute Attr=Rec.nextAttr();
+    while (Attr!=null)
+        {
+        if (!List.contains(Attr.getName()))
+            {
+            String Val=(String) ListFields.get(Attr.getName());
+            if (Attr.getType()==Attribute.tBOOLEAN)
+                {
+                if(Val == null || Val.length()==0 || Val.equals("0"))
+                    Attr.setValue(false);
+                else
+                    Attr.setValue(true);
+                }
+            else if(Val != null)
+                {
+                SParent.FillAttr(Req, Attr, Val, false);
+                }
+            }
+        Attr=Rec.nextAttr();
+        }
+    Doc.assignValues(Rec);
+    Doc.setParentId(ListFields.get("CurrFold"));
+    Doc.setName(FileName);   
+    PDMimeType mt=new PDMimeType(PDSession);
+    Doc.setMimeType(mt.SolveName(FileName));
+    Doc.setStream(FileData);
+    Doc.update();
+    out.println(UpFileStatus.SetResultOk(Req, ""));
     }
 } catch (Exception e)
     {
@@ -104,12 +139,12 @@ else
 @Override
 public String getServletInfo()
 {
-return "ImportThesF Servlet";
+return "ModDocF Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 static public String getUrlServlet()
 {
-return("ImportThesF");
+return("ModDocF");
 }
 //-----------------------------------------------------------------------------------------------
 }

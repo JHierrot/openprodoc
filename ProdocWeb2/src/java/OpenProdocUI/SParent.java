@@ -77,6 +77,7 @@ public final static int SEARCHDOC_FORM =2;
  * 
  */
 private static final String ListAttrFold=PDFolders.fACL+"/"+PDFolders.fFOLDTYPE+"/"+PDFolders.fPARENTID+"/"+PDFolders.fPDID+"/"+PDFolders.fTITLE+"/"+PDFolders.fPDAUTOR+"/"+PDFolders.fPDDATE;
+private static final String ListAttrDoc=PDDocs.fACL+"/"+PDDocs.fDOCTYPE+"/"+PDDocs.fPARENTID+"/"+PDDocs.fPDID+"/"+PDDocs.fTITLE+"/"+"/"+PDDocs.fPDID+"/"+PDDocs.fPDAUTOR+"/"+PDDocs.fPDDATE+"/"+PDDocs.fLOCKEDBY+"/"+PDDocs.fVERSION+"/"+PDDocs.fPURGEDATE+"/"+PDDocs.fREPOSIT+"/"+PDDocs.fSTATUS+"/"+PDDocs.fMIMETYPE+"/"+PDDocs.fNAME;
 
 public static HashSet ListThes=null;
 
@@ -91,7 +92,6 @@ public final static String SD_Ord="SD_Ord";
 public final static String SD_Rec="SD_Rec";
 public final static String SD_OperComp="SD_OperComp";
 public final static String SD_FTQ="SD_FTQ";
-
 
 /** Initializes the servlet.
  * @param config 
@@ -947,7 +947,7 @@ Cursor CursorId = Obj.getListFold();
 Record Res=Session.NextRec(CursorId);
 while (Res!=null)
     {
-    ListVals.append("{text: \"").append(Res.getAttr(PDObjDefs.fDESCRIPTION).getValue()).append("\", value: \"").append(Res.getAttr(PDObjDefs.fNAME).getValue()).append("\"}");
+    ListVals.append("{text: \"").append(Res.getAttr(PDObjDefs.fDESCRIPTION).getValue()).append("\", value: \"").append(Res.getAttr(PDObjDefs.fNAME).getValue()).append("\"").append(Res.getAttr(PDObjDefs.fNAME).getValue().equals(PDFolders.getTableName())?",selected:true":"").append("}");
     Res=Session.NextRec(CursorId);
     if (Res!=null)
         ListVals.append(",");
@@ -968,7 +968,7 @@ Cursor CursorId = Obj.getListDocs();
 Record Res=Session.NextRec(CursorId);
 while (Res!=null)
     {
-    ListVals.append("{text: \"").append(Res.getAttr(PDObjDefs.fDESCRIPTION).getValue()).append("\", value: \"").append(Res.getAttr(PDObjDefs.fNAME).getValue()).append("\"}");
+    ListVals.append("{text: \"").append(Res.getAttr(PDObjDefs.fDESCRIPTION).getValue()).append("\", value: \"").append(Res.getAttr(PDObjDefs.fNAME).getValue()).append("\"").append(Res.getAttr(PDObjDefs.fNAME).getValue().equals(PDDocs.getTableName())?",selected:true":"").append("}");
     Res=Session.NextRec(CursorId);
     if (Res!=null)
         ListVals.append(",");
@@ -1013,6 +1013,55 @@ Form.append("{type: \"block\", width: 250, list:[" +
     "{type: \"hidden\", name:\"CurrFold\", value: \""+CurrFold+"\"}" +
 "]}");
 Form.append("];");
+return(Form.toString());
+}
+//-----------------------------------------------------------------------------------------------
+protected String GenerateCompleteDocForm(String Title, HttpServletRequest Req, DriverGeneric PDSession, String CurrFold, String NewType, Record FR, boolean ReadOnly, boolean Modif) throws PDException
+{
+StringBuilder Form= new StringBuilder(3000);
+Attribute Attr;
+Form.append("[ {type: \"settings\", position: \"label-left\", labelWidth: 140, inputWidth: 300},");
+Form.append("{type: \"label\", label: \"").append(TT(Req, Title)).append("\"},");
+Attr=FR.getAttr(PDFolders.fTITLE);
+Form.append(GenInput(Req, Attr,  ReadOnly, Modif));
+Attr=FR.getAttr(PDFolders.fACL);
+Form.append("{type: \"combo\", name: \"" + PDFolders.fACL + "\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" options:[");
+Form.append(getComboModel("ACL",PDSession) );
+Form.append("]},");
+FR.initList();
+Attr=FR.nextAttr();
+ArrayList<Attribute> FL=new ArrayList();
+while (Attr!=null)
+    {
+    if (!ListAttrDoc.contains(Attr.getName()))
+        {
+        FL.add(Attr);
+        }
+    Attr=FR.nextAttr();
+    }
+for (int i = 0; i < FL.size(); i++)
+    {
+    Attr = FL.get(i);
+    Form.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    }
+Form.append("{type: \"block\", width: 350, list:[");
+Form.append("{type: \"button\", name: \"OK\", value: \"").append(TT(Req, "Ok")).append("\"},");
+Form.append("{type: \"newcolumn\", offset:20 },");
+Form.append("{type: \"button\", name: \"CANCEL\", value: \"").append(TT(Req, "Cancel")).append("\"},");
+if (Modif)
+    {
+    Form.append("{type: \"newcolumn\", offset:20 },");
+    Form.append("{type: \"button\", name: \"OK2\", value: \"").append(TT(Req, "Modif_without_File")).append("\"},");
+    }
+Form.append("{type: \"hidden\", name:\""+PDDocs.fDOCTYPE+"\", value: \"").append(NewType).append("\"},");
+Form.append("{type: \"hidden\", name:\"CurrFold\", value: \"").append(CurrFold).append("\"}");
+Attr=FR.getAttr(PDDocs.fPDID);
+if (Attr!=null && Attr.getValue()!=null && ((String)Attr.getValue()).length()!=0)
+    Form.append(",{type: \"hidden\", name:\""+PDDocs.fPDID+"\", value: \"").append((String)Attr.getValue()).append("\"}");
+if (Modif)
+    Form.append("]},{type: \"upload\", name: \"UpFile\", url: \"ModDocF\", autoStart: true, disabled:true }];");
+else
+    Form.append("]},{type: \"upload\", name: \"UpFile\", url: \"ImportDocF\", autoStart: true, disabled:true }];");
 return(Form.toString());
 }
 //----------------------------------------------------------------------------
@@ -1276,4 +1325,15 @@ return("[{type: \"label\", label: \"Error\"},\n" +
 "    {type: \"button\", name: \"CANCEL\", value: \"CANCEL\"}];");
 }
 //-----------------------------------------------------------------------------------------------
+public static void StoreDat(HttpServletRequest Req, HashMap<String, String> ListFields)
+{
+Req.getSession().setAttribute("PENDING_DATA", ListFields); 
+}
+//-----------------------------------------------------------------------------------------------
+public static HashMap<String, String> GetDat(HttpServletRequest Req )
+{
+return((HashMap)Req.getSession().getAttribute("PENDING_DATA")); 
+}
+//-----------------------------------------------------------------------------------------------
+
 }
