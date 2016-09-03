@@ -1238,8 +1238,10 @@ FormAddFold.attachEvent("onButtonClick", function (name)
         FormAddFold.unload();
         WinAF.close();
         }
-    else 
-        ShowMulti(FormAddFold, name.substring(2));    
+//    else if (name.substring(0,2)=="M_") 
+//        ShowMulti(FormAddFold, name.substring(2));    
+    else if (name.substring(0,2)=="T_") 
+        ShowThes(FormAddFold, name.substring(2));    
     }
     );   
 }
@@ -1662,9 +1664,9 @@ FormAddFold.attachEvent("onButtonClick", function (name)
         {   
         FormAddFold.unload();
         WinAF.close();
-        }
-    else 
-        ShowMulti(FormAddFold, name.substring(2));    
+        }    
+    else if (name.substring(0,2)=="T_") 
+        ShowThes(FormAddFold, name.substring(2));  
     }
     );   
 }

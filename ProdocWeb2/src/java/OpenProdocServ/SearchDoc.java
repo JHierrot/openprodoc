@@ -90,7 +90,13 @@ else
             }
         String Val=Req.getParameter(Attr.getName());
         String Comp=Req.getParameter("Comp_"+Attr.getName());
-        if (!(Val == null || Val.length()==0 || Attr.getName().equals(PDDocs.fACL) && Val.equals("null") 
+        if (Attr.getType()==Attribute.tTHES)
+                {
+                Val=Req.getParameter("TH_"+Attr.getName());   
+                if (Val != null && Val.length()!=0)
+                    Cond.addCondition(SParent.FillCond(Req, Attr, Val, Comp));
+                }
+        else if (!(Val == null || Val.length()==0 || Attr.getName().equals(PDDocs.fACL) && Val.equals("null") 
               || Attr.getType()==Attribute.tBOOLEAN && Val.equals("0") ) )
             {
             Cond.addCondition(SParent.FillCond(Req, Attr, Val, Comp));
@@ -101,12 +107,12 @@ else
     out.print("data={ rows:[");
     SaveConds(Req, "Doc", CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")),(IncludeVers.equals("1")), CurrentFold, null, Rec, null);
     Cursor c=TmpDoc.Search(FullTextSearch, CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")),(IncludeVers.equals("1")), CurrentFold, null);
-    Record NextFold=PDSession.NextRec(c);
-    while (NextFold!=null)
+    Record NextDoc=PDSession.NextRec(c);
+    while (NextDoc!=null)
         {
-        out.print(SParent.GenRowGrid(NextFold));    
-        NextFold=PDSession.NextRec(c);
-        if (NextFold!=null)
+        out.print(SParent.GenRowGrid(Req, NextDoc));    
+        NextDoc=PDSession.NextRec(c);
+        if (NextDoc!=null)
             out.print(",");
         }
     out.println("] };\n");
@@ -145,7 +151,7 @@ Form.append("{type: \"newcolumn\", offset:20 },");
 Form.append("{type: \"checkbox\", name: \"SubFolders\", label:\"").append(TT(Req, "SubFolders")).append("\", tooltip:\"").append(TT(Req,"When_checked_limits_the_search_to_actual_folder_and_subfolders")).append("\"},");
 Form.append("{type: \"newcolumn\", offset:20 },");
 Form.append("{type: \"checkbox\", name: \"IncludeVers\", label:\"").append(TT(Req, "Versions")).append("\", tooltip:\"").append(TT(Req,"When_checked_includes_all_versions_of_document_in_results")).append("\"}");
-Form.append("]},{type: \"input\", name: \"FullTextSearch\", label: \""+TT(Req, "Full_Text_Search")+"\", inputWidth: 250},");
+Form.append("]},{type: \"input\", name: \"FullTextSearch\", label: \"").append(TT(Req, "Full_Text_Search")).append("\", inputWidth: 300},");
 
 FR.initList();
 Attr=FR.nextAttr();

@@ -1058,10 +1058,13 @@ Form.append("{type: \"hidden\", name:\"CurrFold\", value: \"").append(CurrFold).
 Attr=FR.getAttr(PDDocs.fPDID);
 if (Attr!=null && Attr.getValue()!=null && ((String)Attr.getValue()).length()!=0)
     Form.append(",{type: \"hidden\", name:\""+PDDocs.fPDID+"\", value: \"").append((String)Attr.getValue()).append("\"}");
-if (Modif)
-    Form.append("]},{type: \"upload\", name: \"UpFile\", url: \"ModDocF\", autoStart: true, disabled:true }];");
-else
-    Form.append("]},{type: \"upload\", name: \"UpFile\", url: \"ImportDocF\", autoStart: true, disabled:true }];");
+if (!ReadOnly)
+    {
+    if (Modif)
+        Form.append("]},{type: \"upload\", name: \"UpFile\", url: \"ModDocF\", autoStart: true, disabled:true }];");
+    else
+        Form.append("]},{type: \"upload\", name: \"UpFile\", url: \"ImportDocF\", autoStart: true, disabled:true }];");
+    }
 return(Form.toString());
 }
 //----------------------------------------------------------------------------
@@ -1213,6 +1216,20 @@ else switch (Attr.getType())
     case Attribute.tSTRING:
         FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", inputWidth: 300, maxLength:").append(Attr.getLongStr()).append("}");
         break;
+    case Attribute.tTHES:
+        {
+        PDThesaur TmpThes=new PDThesaur(getSessOPD(Req));
+        if (Attr.getValue()!=null && ((String)Attr.getValue()).length()!=0)
+           TmpThes.Load((String)Attr.getValue());
+        else
+            TmpThes.setPDId("");
+        FormField.append("{type: \"block\", width: 300, list:[");
+        FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", readonly: \"true\",value:\"").append(TmpThes.getName()==null?"":TmpThes.getName()).append("\", tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", userdata: {ThesId:").append(Attr.getLongStr()).append("}}, ");
+        FormField.append("{type: \"hidden\", name:\"TH_").append(Attr.getName()).append("\", value: \"").append(TmpThes.getPDId()).append("\"},");
+        FormField.append("{type: \"newcolumn\", offset:2 },");
+        FormField.append("{type: \"button\",").append(" name:  \"T_").append(Attr.getName()).append("\", value: \"T\", width: 20}]}");
+        }
+        break;
     default:
         FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"ERROR TIPO\", required: ").append(Attr.isRequired()?"true":"false").append(", tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", inputWidth: 300, maxLength:").append(Attr.getLongStr()).append("} ");
         break;
@@ -1229,7 +1246,8 @@ CompCombo.append("{type: \"combo\", label: \"").append(TT(Req, Attr.getUserName(
 CompCombo.append("{text: \"=\", value: \"EQ\", selected: true},");
 CompCombo.append("{text: \"<>      \", value: \"NE\"}");
 if (! (Attr.getType()==Attribute.tBOOLEAN || Attr.getName().equals(PDFolders.fACL) || Attr.getName().equals(PDDocs.fACL) 
-        || Attr.getName().equals(PDFolders.fFOLDTYPE) || Attr.getName().equals(PDDocs.fDOCTYPE) ) )
+        || Attr.getName().equals(PDFolders.fFOLDTYPE) || Attr.getName().equals(PDDocs.fDOCTYPE) 
+        || Attr.getType()==Attribute.tTHES ) )
     {
     CompCombo.append(", {text: \">\", value: \"GT\"},");
     CompCombo.append("{text: \">=\", value: \"GE\"},");
@@ -1270,21 +1288,35 @@ Head.append(Type);
 return(Head.toString());
 }
 //----------------------------------------------------------------
-public static String GenRowGrid(Record NextFold)
+public static String GenRowGrid(HttpServletRequest Req, Record NextRec)
 {
-StringBuilder Row=new StringBuilder(500);
-Attribute Attr=NextFold.getAttr(PDFolders.fPDID);
+StringBuilder Row=new StringBuilder(1000);
+Attribute Attr=NextRec.getAttr(PDFolders.fPDID);
 Row.append("{ id:\"").append(Attr.getValue()).append("\", data:[");
-NextFold.initList();
-Attr=NextFold.nextAttr();
+NextRec.initList();
+Attr=NextRec.nextAttr();
 //ArrayList<Attribute> FL=new ArrayList();
 while (Attr!=null)
     {
-    if (!Attr.isMultivalued()) 
+    if (Attr.getType()==Attribute.tTHES)    
         {
-        Row.append("\"").append(Attr.Export()).append("\",");
+        if (Attr.getValue()!=null && ((String)Attr.getValue()).length()!=0)
+            {
+            try {    
+            PDThesaur TmpThes=new PDThesaur(SParent.getSessOPD(Req));
+            TmpThes.Load((String)Attr.getValue());
+            Row.append("\"").append(TmpThes.getName()).append("\",");
+            } catch(Exception ex)
+                {    
+                Row.append("\"\",");
+                }
+            }
+        else
+            Row.append("\"\",");
         }
-    Attr=NextFold.nextAttr();
+    else    //    if (!Attr.isMultivalued()) 
+        Row.append("\"").append(Attr.Export()).append("\",");
+    Attr=NextRec.nextAttr();
     }
 Row.deleteCharAt(Row.length()-1);
 Row.append("]}");

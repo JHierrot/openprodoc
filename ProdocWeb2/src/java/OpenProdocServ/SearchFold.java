@@ -87,7 +87,13 @@ else
             }
         String Val=Req.getParameter(Attr.getName());
         String Comp=Req.getParameter("Comp_"+Attr.getName());
-        if (!(Val == null || Val.length()==0 || Attr.getName().equals(PDFolders.fACL) && Val.equals("null") 
+        if (Attr.getType()==Attribute.tTHES)
+                {
+                Val=Req.getParameter("TH_"+Attr.getName());    
+                if (Val != null && Val.length()!=0)
+                    Cond.addCondition(SParent.FillCond(Req, Attr, Val, Comp));
+                }
+        else if (!(Val == null || Val.length()==0 || Attr.getName().equals(PDFolders.fACL) && Val.equals("null") 
               || Attr.getType()==Attribute.tBOOLEAN && Val.equals("0") ) )
             {
             Cond.addCondition(SParent.FillCond(Req, Attr, Val, Comp));
@@ -101,7 +107,7 @@ else
     Record NextFold=PDSession.NextRec(c);
     while (NextFold!=null)
         {
-        out.print(SParent.GenRowGrid(NextFold));    
+        out.print(SParent.GenRowGrid(Req, NextFold));    
         NextFold=PDSession.NextRec(c);
         if (NextFold!=null)
             out.print(",");
