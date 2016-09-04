@@ -103,19 +103,21 @@ else
             }
         Attr=Rec.nextAttr();
         }
-    out.println("OK"+GenHeader(Req, Rec));
-    out.print("data={ rows:[");
+    out.println("OK"+GenHeader(Req, Rec, true));
+//    out.print("data={ rows:[");
+    out.print("<?xml version=\"1.0\" encoding=\"iso-8859-1\"?><rows>");
     SaveConds(Req, "Doc", CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")),(IncludeVers.equals("1")), CurrentFold, null, Rec, null);
     Cursor c=TmpDoc.Search(FullTextSearch, CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")),(IncludeVers.equals("1")), CurrentFold, null);
     Record NextDoc=PDSession.NextRec(c);
     while (NextDoc!=null)
         {
-        out.print(SParent.GenRowGrid(Req, NextDoc));    
+        out.print(SParent.GenRowGrid(Req, NextDoc, true));    
         NextDoc=PDSession.NextRec(c);
-        if (NextDoc!=null)
-            out.print(",");
+//        if (NextDoc!=null)
+//            out.print(",");
         }
-    out.println("] };\n");
+//    out.println("] };\n");
+    out.println("</rows>");
     } catch (PDException ex)
         {
         out.println(ex.getLocalizedMessage());

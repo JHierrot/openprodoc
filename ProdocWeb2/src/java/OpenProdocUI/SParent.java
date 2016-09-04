@@ -1065,6 +1065,8 @@ if (!ReadOnly)
     else
         Form.append("]},{type: \"upload\", name: \"UpFile\", url: \"ImportDocF\", autoStart: true, disabled:true }];");
     }
+else
+   Form.append("]}];");
 return(Form.toString());
 }
 //----------------------------------------------------------------------------
@@ -1259,7 +1261,7 @@ CompCombo.append("]},");
 return(CompCombo);
 }
 //----------------------------------------------------------------
-protected String GenHeader(HttpServletRequest Req,Record Rec)
+protected String GenHeader(HttpServletRequest Req,Record Rec, boolean IsDoc)
 {
 StringBuilder Head=new StringBuilder(300);
 StringBuilder Edit=new StringBuilder(300);
@@ -1272,7 +1274,12 @@ while (Attr!=null)
     if (!Attr.isMultivalued()) 
         {
         Head.append(TT(Req,Attr.getUserName())).append(",");
-        Edit.append("ro,");
+        if (Attr.getName().equals(PDDocs.fTITLE))
+           Edit.append("link,");
+        else if (Attr.getName().equals(PDDocs.fLOCKEDBY))
+            Edit.append("rotxt,");
+        else        
+            Edit.append("ro,");
         Type.append("str,");
         }
     Attr=Rec.nextAttr();
@@ -1288,14 +1295,24 @@ Head.append(Type);
 return(Head.toString());
 }
 //----------------------------------------------------------------
-public static String GenRowGrid(HttpServletRequest Req, Record NextRec)
+public static String GenRowGrid(HttpServletRequest Req, Record NextRec, boolean IsDoc)
 {
 StringBuilder Row=new StringBuilder(1000);
-Attribute Attr=NextRec.getAttr(PDFolders.fPDID);
-Row.append("{ id:\"").append(Attr.getValue()).append("\", data:[");
+Attribute Attr;
+String IdDoc=null;
+if (IsDoc)
+    {
+    Attr=NextRec.getAttr(PDDocs.fPDID);
+    IdDoc=Attr.Export();
+    Row.append("<row id=\"").append(IdDoc).append("\">");
+    }
+else
+    {
+    Attr=NextRec.getAttr(PDFolders.fPDID);
+    Row.append("{ id:\"").append(Attr.getValue()).append("\", data:[");
+    }
 NextRec.initList();
 Attr=NextRec.nextAttr();
-//ArrayList<Attribute> FL=new ArrayList();
 while (Attr!=null)
     {
     if (Attr.getType()==Attribute.tTHES)    
@@ -1305,21 +1322,44 @@ while (Attr!=null)
             try {    
             PDThesaur TmpThes=new PDThesaur(SParent.getSessOPD(Req));
             TmpThes.Load((String)Attr.getValue());
-            Row.append("\"").append(TmpThes.getName()).append("\",");
+            if (IsDoc)
+                Row.append("<cell>").append(TmpThes.getName()).append("</cell>");
+            else
+                Row.append("\"").append(TmpThes.getName()).append("\",");
             } catch(Exception ex)
                 {    
-                Row.append("\"\",");
+                if (IsDoc)
+                    Row.append("<cell></cell>");
+                else    
+                    Row.append("\"\",");
                 }
             }
         else
-            Row.append("\"\",");
+            {
+            if (IsDoc)
+                Row.append("<cell></cell>");
+            else    
+                Row.append("\"\",");
+            }
         }
+    else if (IsDoc && Attr.getName().equals(PDDocs.fTITLE))
+        Row.append("<cell>").append(Attr.Export()).append("^SendDoc?Id=").append(IdDoc).append("^_blank</cell>");
     else    //    if (!Attr.isMultivalued()) 
-        Row.append("\"").append(Attr.Export()).append("\",");
+        {
+        if (IsDoc)
+            Row.append("<cell>").append(Attr.Export()).append("</cell>");
+        else
+            Row.append("\"").append(Attr.Export()).append("\",");
+        }
     Attr=NextRec.nextAttr();
     }
-Row.deleteCharAt(Row.length()-1);
-Row.append("]}");
+if (IsDoc)
+    Row.append("]</row>");
+else
+    {
+    Row.deleteCharAt(Row.length()-1);
+    Row.append("]}");
+    }
 return(Row.toString());
 }
 //----------------------------------------------------------------

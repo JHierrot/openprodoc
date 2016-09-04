@@ -81,7 +81,7 @@ else
             Cond.addCondition(SParent.FillCond(Req, Attr, Val, Comp));
         Attr=Rec.nextAttr();
         }
-    out.println("OK"+GenHeader(Req, Rec));
+    out.println("OK"+GenHeader(Req, Rec, false));
     out.print("data={ rows:[");
     Cursor c = TmpTerm.Search(Cond, IsNT, CurrTerm.length()>0?CurrTerm:CurrThes, null);
     Record NextTerm=PDSession.NextRec(c);

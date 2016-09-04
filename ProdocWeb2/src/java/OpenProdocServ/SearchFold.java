@@ -100,14 +100,14 @@ else
             }
         Attr=Rec.nextAttr();
         }
-    out.println("OK"+GenHeader(Req, Rec));
+    out.println("OK"+GenHeader(Req, Rec, false));
     out.print("data={ rows:[");
     SaveConds(Req, "Fold", CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")), false, CurrentFold, null, Rec, null);
     Cursor c=TmpFold.Search(CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")), CurrentFold, null);
     Record NextFold=PDSession.NextRec(c);
     while (NextFold!=null)
         {
-        out.print(SParent.GenRowGrid(Req, NextFold));    
+        out.print(SParent.GenRowGrid(Req, NextFold, false));    
         NextFold=PDSession.NextRec(c);
         if (NextFold!=null)
             out.print(",");

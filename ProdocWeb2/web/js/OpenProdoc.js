@@ -1351,7 +1351,10 @@ FormDelDoc.attachEvent("onButtonClick", function (name)
                             {
                             FormDelDoc.unload();
                             WinDD.close();   
-                            DocsGrid.clearAndLoad("DocList?FoldId="+CurrFold);
+                            if (MantFromGrid)
+                                GridResults.deleteRow(Doc2Del);
+                            else
+                                DocsGrid.clearAndLoad("DocList?FoldId="+CurrFold);
                             }
                         } );
         }
@@ -1445,7 +1448,16 @@ window.dhx4.ajax.get("CheckOut?D="+Doc2CheckOut, function(r)
         }
     else   
         {
-        var Cell=DocsGrid.cellById(Doc2CheckOut, 2);    
+        var Cell;
+        if (MantFromGrid) 
+            {
+            for (i=0; i<GridResults.getColumnsNum(); i++)  
+                if (GridResults.getColType(i)=="rotxt")
+                    break;
+            Cell=GridResults.cellById(Doc2CheckOut, i);  
+            }
+        else
+            Cell=DocsGrid.cellById(Doc2CheckOut, 2);    
         Cell.setValue(nodes[0].textContent.substring(2)); 
         }
     });    
@@ -1468,7 +1480,16 @@ dhtmlx.confirm({text:"Desea cancelar CheckOut", callback: function(result)
                 }
             else   
                 {
-                var Cell=DocsGrid.cellById(Doc2CancelCheck, 2);    
+                var Cell;
+                if (MantFromGrid) 
+                    {
+                    for (i=0; i<GridResults.getColumnsNum(); i++)  
+                        if (GridResults.getColType(i)=="rotxt")
+                            break;
+                    Cell=GridResults.cellById(Doc2CancelCheck, i);  
+                    }
+                else
+                    Cell=DocsGrid.cellById(Doc2CancelCheck, 2); 
                 Cell.setValue(""); 
                 }
             });   
@@ -1502,7 +1523,16 @@ FormCheckIn.attachEvent("onButtonClick", function (name)
                             alert(response); 
                         else 
                             {
-                            DocsGrid.clearAndLoad("DocList?FoldId="+CurrFold);    
+                            if (MantFromGrid) 
+                                {
+                                for (i=0; i<GridResults.getColumnsNum(); i++)  
+                                    if (GridResults.getColType(i)=="rotxt")
+                                        break;
+                                var Cell=GridResults.cellById(Doc2CheckIn, i);
+                                Cell.setValue(""); 
+                                } 
+                            else    
+                                DocsGrid.clearAndLoad("DocList?FoldId="+CurrFold);    
                             FormCheckIn.unload();
                             WinAF.close();
                             }
@@ -1628,6 +1658,9 @@ TabBar.tabs("Reports").disable();
 ToolBar = TabBar.tabs("Results").attachToolbar();
 ToolBar.addButton("Edit", 0, "Edit", "Edit.png", "Edit.png");
 ToolBar.addButton("Delete", 1, "Delete", "Edit.png", "Edit.png");
+ToolBar.addButton("CheckOut", 2, "CheckOut", "Edit.png", "Edit.png");
+ToolBar.addButton("CheckIn", 3, "CheckIn", "Edit.png", "Edit.png");
+ToolBar.addButton("CancelCheckOut", 4, "CancelCheckOut", "Edit.png", "Edit.png");
 ToolBar.attachEvent("onClick", function(id)
     {
     if (GridResults.getSelectedRowId()!=null)    
@@ -1650,6 +1683,8 @@ FormAddFold.setFocusOnFirstActive();
 FormAddFold.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {   
+        TabBar.tabs("Results").disable();  
+        TabBar.tabs("Reports").disable();  
         FormAddFold.send(Url, function(loader, response)
                         { // Asynchronous 
                         if (response.substring(0,2)!=OK)    
@@ -1673,6 +1708,8 @@ FormAddFold.attachEvent("onButtonClick", function (name)
 //------------------------------------------------------------
 function ShowDocResults(Result)
 {
+TabBar.tabs("Results").enable();  
+TabBar.tabs("Reports").enable();
 GridResults=TabBar.tabs("Results").attachGrid();
 var ListPar=Result.split("\n");
 GridResults.setHeader(ListPar[0]);
@@ -1680,14 +1717,14 @@ GridResults.setHeader(ListPar[0]);
 GridResults.setColTypes(ListPar[1]);   
 GridResults.setColSorting(ListPar[2]);
 GridResults.init();
-GridResults.parse(ListPar[3],"json");
-TabBar.tabs("Reports").enable();
+GridResults.parse(ListPar[3],"xml");
 TabBar.tabs("Results").show(true);
 //setTimeout( "TabBar.tabs('Results').show(true)" , 4000);
 }
 //------------------------------------------------------------
 function DocResProc(Order, SelDocId)
 {
+MantFromGrid=true;
 if (Order=="Edit")  
     { 
     ModDoc(SelDocId);
@@ -1695,5 +1732,17 @@ if (Order=="Edit")
 else if (Order=="Delete")  
     { 
     DelDoc(SelDocId);
+    }     
+else if (Order=="CheckOut")  
+    { 
+    CheckOut(SelDocId);
+    }     
+else if (Order=="CheckIn")  
+    { 
+    CheckIn(SelDocId);
+    }     
+else if (Order=="CancelCheckOut")  
+    { 
+    CancelCheckOut(SelDocId);
     }     
 }
