@@ -107,7 +107,7 @@ else
     Record NextFold=PDSession.NextRec(c);
     while (NextFold!=null)
         {
-        out.print(SParent.GenRowGrid(Req, NextFold, false));    
+        out.print(SParent.GenRowGrid(Req, NextFold, false, false));    
         NextFold=PDSession.NextRec(c);
         if (NextFold!=null)
             out.print(",");

@@ -53,10 +53,22 @@ protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Excep
 DriverGeneric PDSession=SParent.getSessOPD(Req);
 PDDocs TmpDoc=new PDDocs(PDSession);
 String CurrDoc=Req.getParameter("D");
+String RO=Req.getParameter("RO");
+String Vers=Req.getParameter("Vers");
+String Title;
 if (CurrDoc!=null)
     {
-    TmpDoc.LoadFull(CurrDoc);
-    out.println( GenerateCompleteDocForm("Update_Document", Req, PDSession, TmpDoc.getParentId(), TmpDoc.getDocType(), TmpDoc.getRecSum(), false, true) );   
+    if (Vers!=null&&Vers.length()!=0)    
+        {    
+        TmpDoc.LoadVersion(CurrDoc, Vers);
+        Title="Document_Attributes";
+        }
+    else
+        {
+        TmpDoc.LoadFull(CurrDoc);
+        Title="Update_Document";
+        }
+    out.println( GenerateCompleteDocForm(Title, Req, PDSession, TmpDoc.getParentId(), TmpDoc.getDocType(), TmpDoc.getRecSum(), RO.equalsIgnoreCase("true"), !RO.equalsIgnoreCase("true")) );   
     }
 else
     { 

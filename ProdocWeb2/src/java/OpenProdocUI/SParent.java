@@ -1021,7 +1021,7 @@ protected String GenerateCompleteDocForm(String Title, HttpServletRequest Req, D
 StringBuilder Form= new StringBuilder(3000);
 Attribute Attr;
 Form.append("[ {type: \"settings\", position: \"label-left\", labelWidth: 140, inputWidth: 300},");
-Form.append("{type: \"label\", label: \"").append(TT(Req, Title)).append("\"},");
+Form.append("{type: \"label\", label: \"").append(TT(Req, Title)).append("\", labelWidth: 280},");
 Attr=FR.getAttr(PDFolders.fTITLE);
 Form.append(GenInput(Req, Attr,  ReadOnly, Modif));
 Attr=FR.getAttr(PDFolders.fACL);
@@ -1045,8 +1045,11 @@ for (int i = 0; i < FL.size(); i++)
     Form.append(GenInput(Req, Attr,  ReadOnly, Modif));
     }
 Form.append("{type: \"block\", width: 350, list:[");
-Form.append("{type: \"button\", name: \"OK\", value: \"").append(TT(Req, "Ok")).append("\"},");
-Form.append("{type: \"newcolumn\", offset:20 },");
+if (!Title.equals("Document_Attributes"))
+    {
+    Form.append("{type: \"button\", name: \"OK\", value: \"").append(TT(Req, "Ok")).append("\"},");
+    Form.append("{type: \"newcolumn\", offset:20 },");
+    }
 Form.append("{type: \"button\", name: \"CANCEL\", value: \"").append(TT(Req, "Cancel")).append("\"},");
 if (Modif)
     {
@@ -1295,7 +1298,7 @@ Head.append(Type);
 return(Head.toString());
 }
 //----------------------------------------------------------------
-public static String GenRowGrid(HttpServletRequest Req, Record NextRec, boolean IsDoc)
+public static String GenRowGrid(HttpServletRequest Req, Record NextRec, boolean IsDoc, boolean IsVer)
 {
 StringBuilder Row=new StringBuilder(1000);
 Attribute Attr;
@@ -1308,8 +1311,19 @@ if (IsDoc)
     }
 else
     {
-    Attr=NextRec.getAttr(PDFolders.fPDID);
-    Row.append("{ id:\"").append(Attr.getValue()).append("\", data:[");
+    if (!IsVer)  
+        {
+        Attr=NextRec.getAttr(PDFolders.fPDID);
+        Row.append("{ id:\"").append(Attr.getValue()).append("\", data:[");
+        }
+    else
+        {
+        Attr=NextRec.getAttr(PDDocs.fPDID);
+        IdDoc=Attr.Export();
+        Attr=NextRec.getAttr(PDDocs.fVERSION);
+        String IdVer=Attr.Export();    
+        Row.append("{ id:\"").append(IdDoc+"/"+IdVer).append("\", data:[");
+        }
     }
 NextRec.initList();
 Attr=NextRec.nextAttr();
