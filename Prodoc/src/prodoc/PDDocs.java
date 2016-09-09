@@ -1192,6 +1192,8 @@ this.Clear();
 setPDId(Id);
 PDDocs TobeUpdated=new PDDocs(getDrv());
 TobeUpdated.Load(getPDId());
+if (TobeUpdated.getLockedBy()==null || TobeUpdated.getLockedBy().length()==0)
+   PDExceptionFunc.GenPDException("Document_not_locked_by_user",getPDId());
 if (TobeUpdated.getLockedBy()==null || !TobeUpdated.getLockedBy().equalsIgnoreCase(getDrv().getUser().getName()))
    PDExceptionFunc.GenPDException("Document_locked_by_another_user",getPDId());
 Record r=getRecordStruct();

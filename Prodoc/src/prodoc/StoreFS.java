@@ -132,6 +132,7 @@ finally
     try {
     if (fo!=null)
         fo.close();
+    Bytes.close();
     } catch (Exception e)
         {
         }

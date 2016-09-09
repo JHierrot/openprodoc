@@ -27,9 +27,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import static prodoc.PDDocs.fPDID;
-import static prodoc.PDDocs.fVERSION;
-import static prodoc.PDDocs.getTableName;
 
 /**
  *
