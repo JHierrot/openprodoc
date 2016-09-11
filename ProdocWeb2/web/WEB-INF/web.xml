@@ -212,6 +212,22 @@
         <servlet-name>SearchDoc</servlet-name>
         <servlet-class>OpenProdocServ.SearchDoc</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Oper</servlet-name>
+        <servlet-class>OpenProdocServ.Oper</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListVerDoc</servlet-name>
+        <servlet-class>OpenProdocServ.ListVerDoc</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PassChange</servlet-name>
+        <servlet-class>OpenProdocServ.PassChange</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TrashBin</servlet-name>
+        <servlet-class>OpenProdocServ.TrashBin</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SMain</servlet-name>
         <url-pattern>/SMain</url-pattern>
@@ -423,6 +439,22 @@
     <servlet-mapping>
         <servlet-name>SearchDoc</servlet-name>
         <url-pattern>/SearchDoc</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Oper</servlet-name>
+        <url-pattern>/Oper</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListVerDoc</servlet-name>
+        <url-pattern>/ListVerDoc</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PassChange</servlet-name>
+        <url-pattern>/PassChange</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TrashBin</servlet-name>
+        <url-pattern>/TrashBin</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

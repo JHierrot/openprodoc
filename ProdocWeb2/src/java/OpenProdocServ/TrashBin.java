@@ -37,7 +37,7 @@ import prodoc.Record;
  *
  * @author jhierrot
  */
-public class ListVerDoc extends SParent
+public class TrashBin extends SParent
 {
 
 //-----------------------------------------------------------------------------------------------
@@ -57,9 +57,8 @@ PrintWriter out = response.getWriter();
 StringBuilder Resp=new StringBuilder(3000);
 Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><row>");
 try {
-PDDocs TmpDoc=new PDDocs(PDSession);
-String CurrDoc=Req.getParameter("Id");
-TmpDoc.Load(CurrDoc);
+String DocType=Req.getParameter("DT");
+PDDocs TmpDoc=new PDDocs(PDSession, DocType);
 Record Rec=TmpDoc.getRecSum();
 StringBuilder Head=new StringBuilder(300);
 StringBuilder Edit=new StringBuilder(300);
@@ -72,9 +71,7 @@ while (Attr!=null)
     if (!Attr.isMultivalued()) 
         {
         Head.append(TT(Req,Attr.getUserName())).append(",");
-        if (Attr.getName().equals(PDDocs.fTITLE))
-           Edit.append("link,");
-        else if (Attr.getName().equals(PDDocs.fLOCKEDBY))
+        if (Attr.getName().equals(PDDocs.fLOCKEDBY))
             Edit.append("rotxt,");
         else        
             Edit.append("ro,");
@@ -87,13 +84,13 @@ Edit.deleteCharAt(Edit.length()-1);
 Type.deleteCharAt(Type.length()-1);
 StringBuilder VersionsData=new StringBuilder(1000);
 VersionsData.append("data={ rows:[");
-Cursor ListVer = TmpDoc.ListVersions(TmpDoc.getDocType(), TmpDoc.getPDId());
-Record NextVer=PDSession.NextRec(ListVer);
-while (NextVer!=null)
+Cursor ListDel=TmpDoc.ListDeleted(DocType);
+Record NextDel=PDSession.NextRec(ListDel);
+while (NextDel!=null)
     {
-    VersionsData.append(SParent.GenRowGrid(Req, NextVer, false, true));    
-    NextVer=PDSession.NextRec(ListVer);
-    if (NextVer!=null)
+    VersionsData.append(SParent.GenRowGrid(Req, NextDel, false, false));    
+    NextDel=PDSession.NextRec(ListDel);
+    if (NextDel!=null)
         VersionsData.append(",");
     }
 VersionsData.append("] };");
@@ -117,12 +114,12 @@ out.close();
 @Override
 public String getServletInfo()
 {
-return "ListVerDoc Servlet";
+return "TrashBin Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 static public String getUrlServlet()
 {
-return("ListVerDoc");
+return("TrashBin");
 }
 //-----------------------------------------------------------------------------------------------
 }

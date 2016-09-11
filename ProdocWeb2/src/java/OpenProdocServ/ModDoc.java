@@ -58,16 +58,14 @@ String Vers=Req.getParameter("Vers");
 String Title;
 if (CurrDoc!=null)
     {
-    if (Vers!=null&&Vers.length()!=0)    
-        {    
+    if (Vers!=null&&Vers.length()!=0)       
         TmpDoc.LoadVersion(CurrDoc, Vers);
-        Title="Document_Attributes";
-        }
     else
-        {
         TmpDoc.LoadFull(CurrDoc);
+    if (RO.equalsIgnoreCase("true"))    
+        Title="Document_Attributes";
+    else
         Title="Update_Document";
-        }
     out.println( GenerateCompleteDocForm(Title, Req, PDSession, TmpDoc.getParentId(), TmpDoc.getDocType(), TmpDoc.getRecSum(), RO.equalsIgnoreCase("true"), !RO.equalsIgnoreCase("true")) );   
     }
 else

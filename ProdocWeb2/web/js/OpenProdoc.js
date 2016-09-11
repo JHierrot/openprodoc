@@ -49,6 +49,7 @@ var GridResults;
 var ToolBar;
 var GridReports;
 var MantFromGrid=false;
+var TmpLayout;
 
 function doOnLoadLogin() 
 {   
@@ -150,7 +151,9 @@ switch (IdMenu)
         break;
     case "AddExtDoc": AddExtDoc(CurrFold);
         break;
-    case "ModExtDoc" : ModDoc(CurrDoc);
+    case "ModExtDoc" : ModDoc(CurrDoc, false, "");
+        break;
+    case "DocMetadata": ModDoc(CurrDoc, true, "");
         break;
     case "DelDoc": DelDoc(CurrDoc);
         break;
@@ -161,6 +164,12 @@ switch (IdMenu)
     case "CancelCheckOut": CancelCheckOut(CurrDoc);
         break;
     case "SearchDoc": SearchDoc();
+        break;
+    case "ListVer": ListVer(CurrDoc);
+        break;
+    case "PasswordChange": PassChange();
+        break;
+    case "TrashBin": TrashBin();
         break;
     case "Thesaurus": OpenThes();
         break;
@@ -744,8 +753,7 @@ FormAddFold.attachEvent("onButtonClick", function (name)
         FormAddFold.unload();
         WinAF.close();
         }
-     }
-             );
+     });
 }
 //------------------------------------------------------------
 function AddFoldExt()
@@ -1192,7 +1200,6 @@ GridReports.setColSorting("str,str,int,int");  //sets the sorting types of colum
 GridReports.load("RepList?Type=Fold");
 GridReports.init();
 TabBar.tabs("Reports").disable();
-
 ToolBar = TabBar.tabs("Results").attachToolbar();
 ToolBar.addButton("Edit", 0, "Edit", "Edit.png", "Edit.png");
 ToolBar.addButton("Delete", 1, "Delete", "Edit.png", "Edit.png");
@@ -1264,13 +1271,9 @@ TabBar.tabs("Results").show(true);
 function FoldResProc(Order, SelFoldId)
 {
 if (Order=="Edit")  
-    { 
     ModFoldExt(SelFoldId);
-    }
 else if (Order=="Delete")  
-    { 
-    DelFold(SelFoldId);
-    }     
+    DelFold(SelFoldId);    
 }
 //------------------------------------------------------------
 function AddDoc(CurrFold)
@@ -1367,7 +1370,7 @@ FormDelDoc.attachEvent("onButtonClick", function (name)
              );
 }
 //------------------------------------------------------------
-function ModDoc(Doc2Mod)
+function ModDoc(Doc2Mod, ReadOnly, Vers)
 {
 var WinMD=myWins.createWindow({
     id:"ModDoc",
@@ -1381,7 +1384,7 @@ var WinMD=myWins.createWindow({
 });  
 WinMD.setText("OpenProdoc");
 var FormModDoc=WinMD.attachForm();
-FormModDoc.loadStruct("ModDoc?D="+Doc2Mod, function(){
+FormModDoc.loadStruct("ModDoc?D="+Doc2Mod+"&RO="+ReadOnly+"&Vers="+Vers, function(){
 FormModDoc.setFocusOnFirstActive();
 });
 FormModDoc.attachEvent("onButtonClick", function (name)
@@ -1726,23 +1729,156 @@ function DocResProc(Order, SelDocId)
 {
 MantFromGrid=true;
 if (Order=="Edit")  
-    { 
-    ModDoc(SelDocId);
-    }
-else if (Order=="Delete")  
-    { 
-    DelDoc(SelDocId);
-    }     
-else if (Order=="CheckOut")  
-    { 
-    CheckOut(SelDocId);
-    }     
-else if (Order=="CheckIn")  
-    { 
-    CheckIn(SelDocId);
-    }     
+    ModDoc(SelDocId, false, "");
+else if (Order=="Delete")   
+    DelDoc(SelDocId);    
+else if (Order=="CheckOut")   
+    CheckOut(SelDocId);    
+else if (Order=="CheckIn")   
+    CheckIn(SelDocId);    
 else if (Order=="CancelCheckOut")  
-    { 
-    CancelCheckOut(SelDocId);
-    }     
+    CancelCheckOut(SelDocId);   
 }
+//------------------------------------------------------------
+function ListVer(Doc2List)
+{
+WinAF=myWins.createWindow({
+id:"ListVerDoc",
+left:20,
+top:30,
+width:650,
+height:500,
+center:true,
+modal:true,
+resize:true});   
+WinAF.setText("OpenProdoc");
+var TB=WinAF.attachToolbar();
+TB.addButton("Data", 0, "Data", "Data.png", "Data.png");
+TB.addButton("View", 1, "View", "View.png", "View.png");
+var GR=WinAF.attachGrid();
+window.dhx4.ajax.get("ListVerDoc?Id="+Doc2List, function(r)
+    {
+    var xml = r.xmlDoc.responseXML;
+    var nodes = xml.getElementsByTagName("LV");
+    GR.setHeader(nodes[0].textContent);
+    GR.setColTypes(nodes[1].textContent);   
+    GR.setColSorting(nodes[2].textContent);
+    GR.init();
+    var Data=nodes[3].textContent;
+    GR.parse(Data, "json");
+    });
+TB.attachEvent("onClick", function(Order)
+    {
+    if (GR.getSelectedRowId()!=null)    
+        {
+        var PartsId = GR.getSelectedRowId().split('/');     
+        if (Order=="Data")  
+            {    
+            ModDoc(PartsId[0], true, PartsId[1]);
+            }
+        else if (Order=="View")  
+            {    
+            window.open("SendDoc?Id="+PartsId[0]+"&Ver="+PartsId[1]);
+            }  
+        }
+    });
+}
+//------------------------------------------------------------
+function PassChange()
+{
+WinAF=myWins.createWindow({
+id:"PassChange",
+left:20,
+top:30,
+width:350,
+height:230,
+center:true,
+modal:true,
+resize:false});   
+WinAF.setText("OpenProdoc"); 
+var FormChangePass=WinAF.attachForm();
+FormChangePass.loadStruct("PassChange", function(){
+    FormChangePass.setFocusOnFirstActive();
+    });
+FormChangePass.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {    
+        FormChangePass.send("PassChange", function(loader, response)
+                        { // Asynchronous 
+                        if (response.substring(0,2)!=OK)    
+                            alert(response); 
+                        else
+                            {
+                            FormChangePass.unload();
+                            WinAF.close();  
+                            }
+                        } );
+        }
+     else 
+        {   
+        FormChangePass.unload();
+        WinAF.close();
+        }
+     });
+}
+//------------------------------------------------------------
+function TrashBin()
+{
+WinAF=myWins.createWindow({
+id:"TrashBin",
+left:20,
+top:30,
+width:600,
+height:600,
+center:true,
+modal:true,
+resize:true}); 
+WinAF.setText("OpenProdoc");
+TmpLayout=WinAF.attachLayout('2E');
+var a = TmpLayout.cells('a');
+a.hideHeader();
+a.setHeight(50);
+var formCombo = a.attachForm();
+formCombo.loadStruct('DocCombo');
+var b = TmpLayout.cells('b');
+b.hideHeader();
+ToolBar = b.attachToolbar();
+GridResults = b.attachGrid();
+ToolBar.addButton("Undelete", 0, "Undelete", "Undelete.png", "Undelete.png");
+ToolBar.addButton("Delete", 1, "Delete", "Edit.png", "Edit.png");
+ToolBar.attachEvent("onClick", function(id)
+    {
+    if (GridResults.getSelectedRowId()!=null)    
+        UndelPurge(id, GridResults.getSelectedRowId());    
+    });
+formCombo.attachEvent("onChange", function(name, value, is_checked){
+    ShowTrashBin(value);
+    });     
+}
+//------------------------------------------------------------
+function UndelPurge(Order, DocId)
+{
+if (Order=="Undelete")  
+    Undel(DocId);
+else if (Order=="Delete")   
+    Purge(DocId);        
+}
+//------------------------------------------------------------
+function ShowTrashBin(DocType)
+{
+window.dhx4.ajax.get("TrashBin?DT="+DocType, function(r)
+    {
+    var xml = r.xmlDoc.responseXML;
+    var nodes = xml.getElementsByTagName("LV");
+    GridResults.destructor();
+    GridResults = TmpLayout.cells('b').attachGrid();
+    GridResults.enableMultiselect(true);
+    GridResults.setHeader(nodes[0].textContent);
+    GridResults.setColTypes(nodes[1].textContent);   
+    GridResults.setColSorting(nodes[2].textContent);
+    GridResults.init();
+    var Data=nodes[3].textContent;
+    GridResults.parse(Data, "json");
+    });    
+}
+//------------------------------------------------------------

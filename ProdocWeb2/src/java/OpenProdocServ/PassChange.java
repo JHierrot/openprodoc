@@ -20,17 +20,19 @@
 package OpenProdocServ;
 
 import OpenProdocUI.SParent;
+import static OpenProdocUI.SParent.TT;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
+import prodoc.Attribute;
 import prodoc.DriverGeneric;
-import prodoc.PDDocs;
 import prodoc.PDException;
+import prodoc.PDFolders;
 
 /**
  *
  * @author jhierrot
  */
-public class DelDoc extends SParent
+public class PassChange extends SParent
 {
 
 //-----------------------------------------------------------------------------------------------
@@ -43,21 +45,34 @@ public class DelDoc extends SParent
 @Override
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {   
-DriverGeneric PDSession=SParent.getSessOPD(Req);
-PDDocs TmpDoc=new PDDocs(PDSession);
-String CurrDoc=Req.getParameter("D");
-if (CurrDoc!=null)
+String OldPass=Req.getParameter("OldPass");
+if (OldPass==null)
     {
-    TmpDoc.LoadFull(CurrDoc);
-    out.println( GenerateCompleteDocForm("Delete_Document", Req, PDSession, CurrDoc, TmpDoc.getDocType(), TmpDoc.getRecSum(), true, false) );   
+    out.println(
+    "[ {type: \"settings\", position: \"label-left\", labelWidth: 150, inputWidth: 150}," +
+    "{type: \"label\", label: \""+TT(Req, "Password_change")+"\"}," +
+    "{type: \"password\", name: \"OldPass\", label: \""+TT(Req, "Current_Password")+"\", required: true}," +
+    "{type: \"password\", name: \"NewPass\", label: \""+TT(Req, "New_Password")+"\", required: true}," +
+    "{type: \"password\", name: \"NewPass2\", label: \""+TT(Req, "password_retype")+"\", required: true}," +    
+    "{type: \"block\", width: 250, list:[" +
+        "{type: \"button\", name: \"OK\", value: \""+TT(Req, "Ok")+"\"}," +
+        "{type: \"newcolumn\", offset:20 }," +
+        "{type: \"button\", name: \"CANCEL\", value: \""+TT(Req, "Cancel")+"\"}," +
+        "{type: \"hidden\", name:\"CurrFold\", value: \""+OldPass+"\"}" +
+    "]} ];");
     }
 else
     {
     try {    
-//    String IdDel=Req.getParameter("CurrDoc");     
-    String IdDel=Req.getParameter(PDDocs.fPDID);
-    TmpDoc.setPDId(IdDel);
-    TmpDoc.delete();
+    String NewPass1=Req.getParameter("NewPass");    
+    String NewPass2=Req.getParameter("NewPass2");    
+    if (!NewPass1.equals(NewPass2))
+        {
+        out.println(TT(Req,"Both_new_passwords_different"));
+        return;
+        }
+    DriverGeneric PDSession=SParent.getSessOPD(Req);
+    PDSession.ChangePassword(PDSession.getUser().getName(), OldPass, NewPass1);
     out.println("OK");
     } catch (PDException ex)
         {
@@ -74,12 +89,12 @@ else
 @Override
 public String getServletInfo()
 {
-return "DelDoc Servlet";
+return "PassChange Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 static public String getUrlServlet()
 {
-return("DelDoc");
+return("PassChange");
 }
 //-----------------------------------------------------------------------------------------------
 }
