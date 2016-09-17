@@ -228,6 +228,14 @@
         <servlet-name>TrashBin</servlet-name>
         <servlet-class>OpenProdocServ.TrashBin</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Undel</servlet-name>
+        <servlet-class>OpenProdocServ.Undel</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Purge</servlet-name>
+        <servlet-class>OpenProdocServ.Purge</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SMain</servlet-name>
         <url-pattern>/SMain</url-pattern>
@@ -455,6 +463,14 @@
     <servlet-mapping>
         <servlet-name>TrashBin</servlet-name>
         <url-pattern>/TrashBin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Undel</servlet-name>
+        <url-pattern>/Undel</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Purge</servlet-name>
+        <url-pattern>/Purge</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

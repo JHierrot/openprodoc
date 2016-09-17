@@ -91,7 +91,9 @@ Cursor ListVer = TmpDoc.ListVersions(TmpDoc.getDocType(), TmpDoc.getPDId());
 Record NextVer=PDSession.NextRec(ListVer);
 while (NextVer!=null)
     {
-    VersionsData.append(SParent.GenRowGrid(Req, NextVer, false, true));    
+    String Id=(String)NextVer.getAttr(PDDocs.fPDID).getValue()+"/";
+    Id+=(String)NextVer.getAttr(PDDocs.fVERSION).getValue();    
+    VersionsData.append(SParent.GenRowGrid(Req, Id, NextVer, false));    
     NextVer=PDSession.NextRec(ListVer);
     if (NextVer!=null)
         VersionsData.append(",");

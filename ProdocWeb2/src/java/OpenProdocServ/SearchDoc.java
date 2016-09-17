@@ -30,7 +30,6 @@ import prodoc.Cursor;
 import prodoc.DriverGeneric;
 import prodoc.PDException;
 import prodoc.PDDocs;
-import prodoc.PDFolders;
 import prodoc.Record;
 
 /**
@@ -111,7 +110,7 @@ else
     Record NextDoc=PDSession.NextRec(c);
     while (NextDoc!=null)
         {
-        out.print(SParent.GenRowGrid(Req, NextDoc, true, false));    
+        out.print(SParent.GenRowGrid(Req, (String)NextDoc.getAttr(PDDocs.fPDID).getValue(), NextDoc, true));    
         NextDoc=PDSession.NextRec(c);
 //        if (NextDoc!=null)
 //            out.print(",");

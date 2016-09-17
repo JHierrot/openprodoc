@@ -37,7 +37,7 @@ import prodoc.Record;
  *
  * @author jhierrot
  */
-public class TrashBin extends SParent
+public class Purge extends SParent
 {
 
 //-----------------------------------------------------------------------------------------------
@@ -50,59 +50,21 @@ public class TrashBin extends SParent
 @Override
 protected void processRequest(HttpServletRequest Req, HttpServletResponse response) throws ServletException, IOException
 {   
-DriverGeneric PDSession=SParent.getSessOPD(Req);
 response.setContentType("text/xml;charset=UTF-8");
 response.setStatus(HttpServletResponse.SC_OK);
 PrintWriter out = response.getWriter();  
-StringBuilder Resp=new StringBuilder(3000);
-Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><row>");
+StringBuilder Resp=new StringBuilder(100);
+Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+String DocId=Req.getParameter("Id");  
 try {
-String DocType=Req.getParameter("DT");
-PDDocs TmpDoc=new PDDocs(PDSession, DocType);
-Record Rec=TmpDoc.getRecSum();
-StringBuilder Head=new StringBuilder(300);
-StringBuilder Edit=new StringBuilder(300);
-StringBuilder Type=new StringBuilder(300);
-Rec.initList();
-Attribute Attr=Rec.nextAttr();
-//ArrayList<Attribute> FL=new ArrayList();
-while (Attr!=null)
-    {
-    if (!Attr.isMultivalued()) 
-        {
-        Head.append(TT(Req,Attr.getUserName())).append(",");
-        if (Attr.getName().equals(PDDocs.fLOCKEDBY))
-            Edit.append("rotxt,");
-        else        
-            Edit.append("ro,");
-        Type.append("str,");
-        }
-    Attr=Rec.nextAttr();
-    }
-Head.deleteCharAt(Head.length()-1);
-Edit.deleteCharAt(Edit.length()-1);
-Type.deleteCharAt(Type.length()-1);
-StringBuilder VersionsData=new StringBuilder(1000);
-VersionsData.append("data={ rows:[");
-Cursor ListDel=TmpDoc.ListDeleted(DocType);
-Record NextDel=PDSession.NextRec(ListDel);
-while (NextDel!=null)
-    {
-    String Id=(String)NextDel.getAttr(PDDocs.fPDID).getValue()+"/";
-    Id+=(String)NextDel.getAttr(PDDocs.fDOCTYPE).getValue();
-    VersionsData.append(SParent.GenRowGrid(Req, Id, NextDel, false));    
-    NextDel=PDSession.NextRec(ListDel);
-    if (NextDel!=null)
-        VersionsData.append(",");
-    }
-VersionsData.append("] };");
-Resp.append("<LV>").append(Head).append("</LV>");       
-Resp.append("<LV>").append(Edit).append("</LV>");       
-Resp.append("<LV>").append(Type).append("</LV>");           
-Resp.append("<LV>").append(VersionsData).append("</LV></row>");
+String[] Ids = DocId.split("/");
+DriverGeneric PDSession=SParent.getSessOPD(Req);
+PDDocs TmpDoc=new PDDocs(PDSession);
+TmpDoc.Purge(Ids[1], Ids[0]);
+Resp.append("<status>OK").append(DocId).append("</status>");
 } catch (PDException ex)
     {
-    Resp.append("<LV>Error</LV></row>");
+    Resp.append("<status>").append(DocId).append(TT(Req,ex.getLocalizedMessage())).append("</status>");
     }
 out.println( Resp );   
 out.close();
@@ -116,12 +78,12 @@ out.close();
 @Override
 public String getServletInfo()
 {
-return "TrashBin Servlet";
+return "Purge Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 static public String getUrlServlet()
 {
-return("TrashBin");
+return("Purge");
 }
 //-----------------------------------------------------------------------------------------------
 }

@@ -1298,32 +1298,18 @@ Head.append(Type);
 return(Head.toString());
 }
 //----------------------------------------------------------------
-public static String GenRowGrid(HttpServletRequest Req, Record NextRec, boolean IsDoc, boolean IsVer)
+public static String GenRowGrid(HttpServletRequest Req, String Id, Record NextRec, boolean IsDoc)
 {
 StringBuilder Row=new StringBuilder(1000);
 Attribute Attr;
 String IdDoc=null;
 if (IsDoc)
     {
-    Attr=NextRec.getAttr(PDDocs.fPDID);
-    IdDoc=Attr.Export();
-    Row.append("<row id=\"").append(IdDoc).append("\">");
+    Row.append("<row id=\"").append(Id).append("\">");
     }
 else
     {
-    if (!IsVer)  
-        {
-        Attr=NextRec.getAttr(PDFolders.fPDID);
-        Row.append("{ id:\"").append(Attr.getValue()).append("\", data:[");
-        }
-    else
-        {
-        Attr=NextRec.getAttr(PDDocs.fPDID);
-        IdDoc=Attr.Export();
-        Attr=NextRec.getAttr(PDDocs.fVERSION);
-        String IdVer=Attr.Export();    
-        Row.append("{ id:\"").append(IdDoc+"/"+IdVer).append("\", data:[");
-        }
+    Row.append("{ id:\"").append(Id).append("\", data:[");
     }
 NextRec.initList();
 Attr=NextRec.nextAttr();

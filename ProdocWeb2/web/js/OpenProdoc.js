@@ -1856,14 +1856,6 @@ formCombo.attachEvent("onChange", function(name, value, is_checked){
     });     
 }
 //------------------------------------------------------------
-function UndelPurge(Order, DocId)
-{
-if (Order=="Undelete")  
-    Undel(DocId);
-else if (Order=="Delete")   
-    Purge(DocId);        
-}
-//------------------------------------------------------------
 function ShowTrashBin(DocType)
 {
 window.dhx4.ajax.get("TrashBin?DT="+DocType, function(r)
@@ -1873,6 +1865,7 @@ window.dhx4.ajax.get("TrashBin?DT="+DocType, function(r)
     GridResults.destructor();
     GridResults = TmpLayout.cells('b').attachGrid();
     GridResults.enableMultiselect(true);
+    GridResults.enableAutoWidth(true);
     GridResults.setHeader(nodes[0].textContent);
     GridResults.setColTypes(nodes[1].textContent);   
     GridResults.setColSorting(nodes[2].textContent);
@@ -1880,5 +1873,47 @@ window.dhx4.ajax.get("TrashBin?DT="+DocType, function(r)
     var Data=nodes[3].textContent;
     GridResults.parse(Data, "json");
     });    
+}
+//------------------------------------------------------------
+function UndelPurge(Order, DocId)
+{
+if (Order=="Undelete")  
+    Undel(DocId);
+else if (Order=="Delete")   
+    Purge(DocId);        
+}
+//------------------------------------------------------------
+function Undel(DocId)
+{
+var ListId=DocId.split(",");  
+for (var i=0; i<ListId.length; i++)
+    {   
+    window.dhx4.ajax.get("Undel?Id="+ListId[i], function(r)
+    {
+    var xml = r.xmlDoc.responseXML;
+    var nodes = xml.getElementsByTagName("status");
+    if (nodes[0].textContent.substring(0,2)!=OK)
+        alert(nodes[0].textContent);
+    else
+        GridResults.deleteRow(nodes[0].textContent.substring(2));
+    });
+    }    
+}
+//------------------------------------------------------------
+function Purge(DocId)
+{
+var ListId=DocId.split(",");  
+for (var i=0; i<ListId.length; i++)
+    {
+    window.dhx4.ajax.get("Purge?Id="+ListId[i], function(r)
+    {
+    var xml = r.xmlDoc.responseXML;
+    var nodes = xml.getElementsByTagName("status");
+    if (nodes[0].textContent.substring(0,2)!=OK)
+        alert(nodes[0].textContent);
+    else
+        GridResults.deleteRow(nodes[0].textContent.substring(2));
+    });
+    }     
 }
 //------------------------------------------------------------

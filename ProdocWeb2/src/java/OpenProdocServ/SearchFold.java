@@ -107,7 +107,7 @@ else
     Record NextFold=PDSession.NextRec(c);
     while (NextFold!=null)
         {
-        out.print(SParent.GenRowGrid(Req, NextFold, false, false));    
+        out.print(SParent.GenRowGrid(Req, (String)NextFold.getAttr(PDFolders.fPDID).getValue(), NextFold, false));    
         NextFold=PDSession.NextRec(c);
         if (NextFold!=null)
             out.print(",");
