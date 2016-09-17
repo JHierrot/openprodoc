@@ -53,7 +53,8 @@ initComponents();
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         LabelOperation = new javax.swing.JLabel();
         OldPassLabel = new javax.swing.JLabel();
@@ -68,18 +69,20 @@ initComponents();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(MainWin.TT("Change_of_password"));
         setResizable(false);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
+        addWindowListener(new java.awt.event.WindowAdapter()
+        {
+            public void windowClosing(java.awt.event.WindowEvent evt)
+            {
                 formWindowClosing(evt);
             }
         });
 
-        LabelOperation.setFont(new java.awt.Font("DejaVu Sans", 1, 14));
+        LabelOperation.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
         LabelOperation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         LabelOperation.setText(MainWin.TT("Password_change"));
 
         OldPassLabel.setFont(MainWin.getFontDialog());
-        OldPassLabel.setText(MainWin.TT("Actual_Password"));
+        OldPassLabel.setText(MainWin.TT("Current_Password"));
 
         OldPasswordField.setFont(MainWin.getFontDialog());
 
@@ -95,16 +98,20 @@ initComponents();
 
         ButtonAcept.setFont(MainWin.getFontDialog());
         ButtonAcept.setText(MainWin.TT("Ok"));
-        ButtonAcept.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ButtonAcept.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ButtonAceptActionPerformed(evt);
             }
         });
 
         ButtonCancel.setFont(MainWin.getFontDialog());
         ButtonCancel.setText(MainWin.TT("Cancel"));
-        ButtonCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ButtonCancel.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ButtonCancelActionPerformed(evt);
             }
         });
