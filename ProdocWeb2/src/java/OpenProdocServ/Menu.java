@@ -118,9 +118,39 @@ Men.append("<item id=\"Other\" text=\"Otras Tareas\">");
 if (R.isAllowCreateDoc() && R.isAllowMaintainDoc())
     Men.append("<item id=\"TrashBin\" text=\"").append(TT(Req, "Trash_bin")).append("\" />");
 Men.append("<item id=\"PasswordChange\" text=\"").append(TT(Req, "Password_change")).append("\"/>");
-if (R.isAllowCreateThesaur() && R.isAllowMaintainThesaur())
+if (R.isAllowCreateThesaur() || R.isAllowMaintainThesaur())
     Men.append("<item id=\"Thesaurus\" text=\"").append(TT(Req, "Thesaurus")).append("\"/>");
-Men.append("</item><item id=\"Help\" text=\"").append(TT(Req, "Help")).append("\">");
+Men.append("</item>");
+Men.append("<item id=\"Administration\" text=\"").append(TT(Req, "Administration")).append("\">");
+if (R.isAllowCreateAcl() || R.isAllowMaintainAcl())
+   Men.append("<item id=\"ACL\" text=\"").append(TT(Req, "ACL")).append("\"/>");
+if (R.isAllowCreateGroup() || R.isAllowMaintainGroup())
+   Men.append("<item id=\"Groups\" text=\"").append(TT(Req, "Groups")).append("\"/>");
+if (R.isAllowCreateUser() || R.isAllowMaintainUser())
+   Men.append("<item id=\"Users\" text=\"").append(TT(Req, "Users")).append("\"/>");
+if (R.isAllowCreateRole()|| R.isAllowMaintainRole())
+   Men.append("<item id=\"Roles\" text=\"").append(TT(Req, "Roles")).append("\"/>");
+if (R.isAllowCreateMime()|| R.isAllowMaintainMime())
+   Men.append("<item id=\"MimeTypes\" text=\"").append(TT(Req, "Mime_Types")).append("\"/>");
+if (R.isAllowCreateRepos() || R.isAllowMaintainRepos())
+   Men.append("<item id=\"Repositories\" text=\"").append(TT(Req, "Repositories")).append("\"/>");
+if (R.isAllowCreateObject()|| R.isAllowMaintainObject() )
+   Men.append("<item id=\"ObjDef\" text=\"").append(TT(Req, "Object_definitions")).append("\"/>");
+if (R.isAllowCreateAuth()|| R.isAllowMaintainAuth() )
+   Men.append("<item id=\"Authenticators\" text=\"").append(TT(Req, "Authenticators")).append("\"/>");
+if (R.isAllowCreateCustom()|| R.isAllowMaintainCustom() )
+   Men.append("<item id=\"Customizations\" text=\"").append(TT(Req, "Customizations")).append("\"/>");
+if (R.isAllowCreateTask()|| R.isAllowMaintainTask() )
+    {
+    Men.append("<item id=\"TaskCron\" text=\"").append(TT(Req, "Task_Cron")).append("\"/>");
+    Men.append("<item id=\"TaskEvents\" text=\"").append(TT(Req, "Task_Events")).append("\"/>");
+    Men.append("<item id=\"PendTasklog\" text=\"").append(TT(Req, "Pending_Task_log")).append("\"/>"); 
+    Men.append("<item id=\"EndTasksLogs\" text=\"").append(TT(Req, "Ended_Tasks_Logs")).append("\"/>");
+    }
+if (R.isAllowCreateObject()|| R.isAllowMaintainObject() )
+    Men.append("<item id=\"TraceLogs\" text=\"").append(TT(Req, "Trace_Logs")).append("\"/>");
+Men.append("</item>");
+Men.append("<item id=\"Help\" text=\"").append(TT(Req, "Help")).append("\">");
 Men.append("<item id=\"Contents\" text=\"").append(TT(Req, "Contents")).append("\" img=\"img/help.gif\"/>");
 Men.append("<item id=\"About\" text=\"").append(TT(Req, "About")).append("\" img=\"img/about.gif\"/>");
 Men.append("<item id=\"ReportingBugs\" text=\"").append(TT(Req, "Reporting_Bugs")).append("\" img=\"img/bug_reporting.gif\"/></item>");

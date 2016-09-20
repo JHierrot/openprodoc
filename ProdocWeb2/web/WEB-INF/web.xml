@@ -236,6 +236,14 @@
         <servlet-name>Purge</servlet-name>
         <servlet-class>OpenProdocServ.Purge</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ElemFilter</servlet-name>
+        <servlet-class>OpenProdocServ.ElemFilter</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListElem</servlet-name>
+        <servlet-class>OpenProdocServ.ListElem</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SMain</servlet-name>
         <url-pattern>/SMain</url-pattern>
@@ -471,6 +479,14 @@
     <servlet-mapping>
         <servlet-name>Purge</servlet-name>
         <url-pattern>/Purge</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ElemFilter</servlet-name>
+        <url-pattern>/ElemFilter</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListElem</servlet-name>
+        <url-pattern>/ListElem</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

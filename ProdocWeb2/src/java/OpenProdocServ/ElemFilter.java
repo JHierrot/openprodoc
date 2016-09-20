@@ -20,18 +20,22 @@
 package OpenProdocServ;
 
 import OpenProdocUI.SParent;
+import static OpenProdocUI.SParent.TT;
+import static OpenProdocUI.SParent.getSessOPD;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
+import prodoc.Attribute;
 import prodoc.DriverGeneric;
-import prodoc.PDServer;
+import prodoc.PDDocs;
 
 /**
  *
  * @author jhierrot
  */
-public class About extends SParent
+public class ElemFilter extends SParent
 {
-
+    
+static private int NUMATTREXC=7;
 //-----------------------------------------------------------------------------------------------
 /**
  *
@@ -42,22 +46,18 @@ public class About extends SParent
 @Override
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {   
-DriverGeneric PDSession=SParent.getSessOPD(Req);
-PDServer Serv=new PDServer(PDSession);
-Serv.Load("Prodoc");
-out.println("[" +
-            "{type:\"settings\", labelHeight:8}," +
-            "{type: \"image\", name: \"OPD\", url: \"img/LogoProdoc.jpg\"}," +
-            "{type: \"label\", label: \"- OPD Repository: "+Serv.getVersion()+"\"}," +
-            "{type: \"label\", label: \"- OPD Web: "+SParent.getVersion()+"\"}," +
-            "{type: \"label\", label: \"- OPD Engine: "+DriverGeneric.getVersion()+"\"}," +
-            "{type: \"label\", label: \"- Server Url: "+PDSession.getURL()+"\"}," +
-            "{type: \"label\", label: \"\"}," +
-            "{type: \"label\", label: \"Technical Design and Development:  Joaquín Hierro\"}," +
-            "{type: \"label\", label: \"  Literals en Català: Eli Ramirez\"}," +
-            "{type: \"label\", label: \"log4j, commons-net.ftp, commons-fileupload, Tika,\"}," +
-            "{type: \"label\", label: \"httpclient, httpcore, httpmime, Lucene: licence Apache Software Foundation\"}" +
-            "];");
+DriverGeneric PDSession=getSessOPD(Req);
+PDDocs TmpFold=new PDDocs(PDSession);
+StringBuilder Form= new StringBuilder(3000);
+Attribute Attr;
+Form.append("[");
+Attr=TmpFold.getRecord().getAttr(PDDocs.fDOCTYPE);
+Form.append("{type: \"block\", width: 450, list:[");
+Form.append("{type: \"input\", name: \"filter\", label: \"").append(TT(Req, "Filter")).append("\", tooltip:\"").append(TT(Req, "Enter_full_or_partial_name_of_the_item")).append("\"},");
+Form.append("{type: \"newcolumn\", offset:20 },");
+Form.append("{type: \"button\", name: \"OK\", value: \"").append(TT(Req, "Ok")).append("\"}");
+Form.append("]}];");
+out.println(Form.toString());
 }
 //-----------------------------------------------------------------------------------------------
 
@@ -68,12 +68,12 @@ out.println("[" +
 @Override
 public String getServletInfo()
 {
-return "About Servlet";
+return "ElemFilter Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 static public String getUrlServlet()
 {
-return("About");
+return("ElemFilter");
 }
 //-----------------------------------------------------------------------------------------------
 }

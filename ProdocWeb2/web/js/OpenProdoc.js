@@ -173,6 +173,34 @@ switch (IdMenu)
         break;
     case "Thesaurus": OpenThes();
         break;
+    case "ACL": Admin("ACL");
+        break;
+    case "Groups": Admin("Groups");
+        break;
+    case "Users": Admin("Users");
+        break;
+    case "Roles": Admin("Roles");
+        break;
+    case "MimeTypes": Admin("MimeTypes");
+        break;
+    case "Repositories": Admin("Repositories");
+        break;
+    case "ObjDef": Admin("ObjDef");
+        break;
+    case "Authenticators": Admin("Authenticators");
+        break;
+    case "Customizations": Admin("Customizations");
+        break;
+    case "TaskCron": Admin("TaskCron");
+        break;
+    case "TaskEvents": Admin("TaskEvents");
+        break;
+    case "PendTasklog": Admin("PendTasklog");
+        break;
+    case "EndTasksLogs": Admin("EndTasksLogs");
+        break;
+    case "TraceLogs": Admin("TraceLogs");
+        break;
     case "ReportingBugs": window.open("https://docs.google.com/spreadsheet/viewform?usp=drive_web&formkey=dEpsRzZzSmlaQVZET0g2NDdsM0ZRaEE6MA#gid=0");
         break;
     case "Exit": window.location.assign("Logout");
@@ -704,7 +732,7 @@ var WinA=myWins.createWindow({
     left:20,
     top:30,
     width:500,
-    height:360,
+    height:400,
     center:true,
     modal:true,
     resize:false
@@ -1917,3 +1945,66 @@ for (var i=0; i<ListId.length; i++)
     }     
 }
 //------------------------------------------------------------
+function Admin(TypeElem)
+{
+WinAF=myWins.createWindow({
+id:"Admin",
+left:20,
+top:30,
+width:600,
+height:600,
+center:true,
+modal:true,
+resize:true}); 
+WinAF.setText(TypeElem);
+TmpLayout=WinAF.attachLayout('2E');
+var a = TmpLayout.cells('a');
+a.hideHeader();
+a.setHeight(50);
+var formFilter = a.attachForm();
+formFilter.loadStruct('ElemFilter');
+var b = TmpLayout.cells('b');
+b.hideHeader();
+ToolBar = b.attachToolbar();
+GridResults = b.attachGrid();
+GridResults.load("ListElem?TE="+TypeElem);
+//GridResults.enableAutoWidth(true);
+GridResults.setSizes();
+formFilter.attachEvent("onButtonClick", function(name){
+    var FiltExp=formFilter.getItemValue("filter");
+    GridResults.load("ListElem?TE="+TypeElem+"&F="+FiltExp);
+//    ShowListElem(TypeElem,FiltExp);
+    });     
+//ShowListElem(TypeElem,"");    
+}
+//------------------------------------------------------------
+function AdminElem(TypeElem, Oper, SelectedRowId)
+{
+    
+}
+//------------------------------------------------------------
+function ShowListElem(TypeElem, FiltExp)
+{
+window.dhx4.ajax.get("ListElem?TE="+TypeElem+"&F="+FiltExp, function(r)
+    {
+    var xml = r.xmlDoc.responseXML;
+    var nodes = xml.getElementsByTagName("LV");
+    GridResults.enableAutoWidth(true);
+    GridResults.setHeader(nodes[0].textContent);
+    GridResults.setColTypes(nodes[1].textContent);   
+    GridResults.setColSorting(nodes[2].textContent);
+    GridResults.init();
+    var Data=nodes[3].textContent;
+    GridResults.parse(Data, "json");
+    // depend on type
+    ToolBar.addButton("New", 0, "New", "New.png", "New.png");
+    ToolBar.addButton("Delete", 1, "Delete", "Edit.png", "Edit.png");
+    ToolBar.attachEvent("onClick", function(Oper)
+        {  
+        AdminElem(TypeElem, Oper, GridResults.getSelectedRowId());    
+        });
+    });    
+    
+}
+//------------------------------------------------------------
+

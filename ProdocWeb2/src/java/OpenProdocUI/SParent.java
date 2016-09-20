@@ -1298,12 +1298,12 @@ Head.append(Type);
 return(Head.toString());
 }
 //----------------------------------------------------------------
-public static String GenRowGrid(HttpServletRequest Req, String Id, Record NextRec, boolean IsDoc)
+public static String GenRowGrid(HttpServletRequest Req, String Id, Record NextRec, boolean IsXML)
 {
 StringBuilder Row=new StringBuilder(1000);
 Attribute Attr;
 String IdDoc=null;
-if (IsDoc)
+if (IsXML)
     {
     Row.append("<row id=\"").append(Id).append("\">");
     }
@@ -1322,13 +1322,13 @@ while (Attr!=null)
             try {    
             PDThesaur TmpThes=new PDThesaur(SParent.getSessOPD(Req));
             TmpThes.Load((String)Attr.getValue());
-            if (IsDoc)
+            if (IsXML)
                 Row.append("<cell>").append(TmpThes.getName()).append("</cell>");
             else
                 Row.append("\"").append(TmpThes.getName()).append("\",");
             } catch(Exception ex)
                 {    
-                if (IsDoc)
+                if (IsXML)
                     Row.append("<cell></cell>");
                 else    
                     Row.append("\"\",");
@@ -1336,24 +1336,24 @@ while (Attr!=null)
             }
         else
             {
-            if (IsDoc)
+            if (IsXML)
                 Row.append("<cell></cell>");
             else    
                 Row.append("\"\",");
             }
         }
-    else if (IsDoc && Attr.getName().equals(PDDocs.fTITLE))
+    else if (IsXML && Attr.getName().equals(PDDocs.fTITLE))
         Row.append("<cell>").append(Attr.Export()).append("^SendDoc?Id=").append(IdDoc).append("^_blank</cell>");
     else    //    if (!Attr.isMultivalued()) 
         {
-        if (IsDoc)
+        if (IsXML)
             Row.append("<cell>").append(Attr.Export()).append("</cell>");
         else
             Row.append("\"").append(Attr.Export()).append("\",");
         }
     Attr=NextRec.nextAttr();
     }
-if (IsDoc)
+if (IsXML)
     Row.append("]</row>");
 else
     {

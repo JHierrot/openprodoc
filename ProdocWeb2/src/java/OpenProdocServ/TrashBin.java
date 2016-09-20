@@ -20,7 +20,6 @@
 package OpenProdocServ;
 
 import OpenProdocUI.SParent;
-import static OpenProdocUI.SParent.TT;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;

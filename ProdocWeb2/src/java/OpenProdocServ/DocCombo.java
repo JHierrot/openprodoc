@@ -35,7 +35,7 @@ import prodoc.PDDocs;
 public class DocCombo extends SParent
 {
     
-static private int NUMATTREXC=7;
+private static final int NUMATTREXC=7;
 //-----------------------------------------------------------------------------------------------
 /**
  *
