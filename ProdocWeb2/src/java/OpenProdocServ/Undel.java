@@ -26,12 +26,9 @@ import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import prodoc.Attribute;
-import prodoc.Cursor;
 import prodoc.DriverGeneric;
 import prodoc.PDDocs;
 import prodoc.PDException;
-import prodoc.Record;
 
 /**
  *
@@ -57,7 +54,7 @@ StringBuilder Resp=new StringBuilder(100);
 Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 String DocId=Req.getParameter("Id");  
 try {
-String[] Ids = DocId.split("/");
+String[] Ids = DocId.split("\\|");
 DriverGeneric PDSession=SParent.getSessOPD(Req);
 PDDocs TmpDoc=new PDDocs(PDSession);
 TmpDoc.UnDelete(Ids[1], Ids[0]);

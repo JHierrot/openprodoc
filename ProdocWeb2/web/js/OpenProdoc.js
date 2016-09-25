@@ -50,6 +50,11 @@ var ToolBar;
 var GridReports;
 var MantFromGrid=false;
 var TmpLayout;
+var WinElem;
+var FormElem;
+var ELEMACL="ACL";
+var ELEMMIME="MimeTypes";
+var FiltExp="";
 
 function doOnLoadLogin() 
 {   
@@ -173,7 +178,7 @@ switch (IdMenu)
         break;
     case "Thesaurus": OpenThes();
         break;
-    case "ACL": Admin("ACL");
+    case "ACL": Admin(ELEMACL);
         break;
     case "Groups": Admin("Groups");
         break;
@@ -181,7 +186,7 @@ switch (IdMenu)
         break;
     case "Roles": Admin("Roles");
         break;
-    case "MimeTypes": Admin("MimeTypes");
+    case "MimeTypes": Admin(ELEMMIME);
         break;
     case "Repositories": Admin("Repositories");
         break;
@@ -1784,30 +1789,15 @@ var TB=WinAF.attachToolbar();
 TB.addButton("Data", 0, "Data", "Data.png", "Data.png");
 TB.addButton("View", 1, "View", "View.png", "View.png");
 var GR=WinAF.attachGrid();
-window.dhx4.ajax.get("ListVerDoc?Id="+Doc2List, function(r)
-    {
-    var xml = r.xmlDoc.responseXML;
-    var nodes = xml.getElementsByTagName("LV");
-    GR.setHeader(nodes[0].textContent);
-    GR.setColTypes(nodes[1].textContent);   
-    GR.setColSorting(nodes[2].textContent);
-    GR.init();
-    var Data=nodes[3].textContent;
-    GR.parse(Data, "json");
-    });
+GR.load("ListVerDoc?Id="+Doc2List);
+GR.setSizes();
 TB.attachEvent("onClick", function(Order)
     {
     if (GR.getSelectedRowId()!=null)    
         {
-        var PartsId = GR.getSelectedRowId().split('/');     
+        var PartsId = GR.getSelectedRowId().split('|');     
         if (Order=="Data")  
-            {    
             ModDoc(PartsId[0], true, PartsId[1]);
-            }
-        else if (Order=="View")  
-            {    
-            window.open("SendDoc?Id="+PartsId[0]+"&Ver="+PartsId[1]);
-            }  
         }
     });
 }
@@ -1879,28 +1869,9 @@ ToolBar.attachEvent("onClick", function(id)
     if (GridResults.getSelectedRowId()!=null)    
         UndelPurge(id, GridResults.getSelectedRowId());    
     });
-formCombo.attachEvent("onChange", function(name, value, is_checked){
-    ShowTrashBin(value);
+formCombo.attachEvent("onChange", function(name, DocType, is_checked){
+    GridResults.load("TrashBin?DT="+DocType);
     });     
-}
-//------------------------------------------------------------
-function ShowTrashBin(DocType)
-{
-window.dhx4.ajax.get("TrashBin?DT="+DocType, function(r)
-    {
-    var xml = r.xmlDoc.responseXML;
-    var nodes = xml.getElementsByTagName("LV");
-    GridResults.destructor();
-    GridResults = TmpLayout.cells('b').attachGrid();
-    GridResults.enableMultiselect(true);
-    GridResults.enableAutoWidth(true);
-    GridResults.setHeader(nodes[0].textContent);
-    GridResults.setColTypes(nodes[1].textContent);   
-    GridResults.setColSorting(nodes[2].textContent);
-    GridResults.init();
-    var Data=nodes[3].textContent;
-    GridResults.parse(Data, "json");
-    });    
 }
 //------------------------------------------------------------
 function UndelPurge(Order, DocId)
@@ -1968,43 +1939,140 @@ b.hideHeader();
 ToolBar = b.attachToolbar();
 GridResults = b.attachGrid();
 GridResults.load("ListElem?TE="+TypeElem);
-//GridResults.enableAutoWidth(true);
 GridResults.setSizes();
+FiltExp="";
 formFilter.attachEvent("onButtonClick", function(name){
-    var FiltExp=formFilter.getItemValue("filter");
+    FiltExp=formFilter.getItemValue("filter");
     GridResults.load("ListElem?TE="+TypeElem+"&F="+FiltExp);
-//    ShowListElem(TypeElem,FiltExp);
-    });     
-//ShowListElem(TypeElem,"");    
+    });        
+ToolBar.addButton("New", 0, "New", "New.png", "New.png");
+ToolBar.addButton("Modif", 1, "Modif", "Modif.png", "Modif.png");
+ToolBar.addButton("Delete", 2, "Delete", "Edit.png", "Edit.png");
+ToolBar.addButton("Copy", 3, "Copy", "Copy.png", "Copy.png");
+ToolBar.addButton("Export", 4, "Export", "Export.png", "Export.png");
+ToolBar.addButton("ExportAll", 5, "ExportAll", "ExportAll.png", "ExportAll.png");
+ToolBar.addButton("Import", 6, "Import", "Import.png", "Import.png");
+ToolBar.attachEvent("onClick", function(Oper)
+    {  
+    if (GridResults.getSelectedRowId()!=null || Oper=="New" || Oper=="ExportAll" || Oper=="Import")     
+        {
+        if (Oper=="New")  
+            ElemNew(TypeElem);
+        else if (Oper=="Modif")
+            ElemMod(TypeElem, GridResults.getSelectedRowId());
+        else if (Oper=="Delete")
+            ElemDel(TypeElem, GridResults.getSelectedRowId());
+        else if (Oper=="Copy")
+            ElemCopy(TypeElem, GridResults.getSelectedRowId());
+        else if (Oper=="Export")
+            ElemExport(TypeElem, GridResults.getSelectedRowId());
+        else if (Oper=="ExportAll")
+            ElemExpAll(TypeElem, FiltExp);
+        else if (Oper=="Import")
+            ElemImp(TypeElem);
+        }
+    });
 }
 //------------------------------------------------------------
-function AdminElem(TypeElem, Oper, SelectedRowId)
+function ElemNew(TypeElem)
+{
+CreateWin(TypeElem);
+FormElem.loadStruct("MantElem?Oper=New&Ty="+TypeElem, function(){
+    FormElem.setFocusOnFirstActive();
+    });
+FormElem.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {    
+        FormElem.send("MantElem?Oper=New", function(loader, response)
+                        { // Asynchronous 
+                        if (response.substring(0,2)==OK)    
+                            {   
+                            GridResults.load("ListElem?TE="+TypeElem+"&F="+FiltExp);    
+                            FormElem.unload();
+                            WinElem.close();
+                            }
+                        else 
+                            alert(response); 
+                        } );
+        }
+     else 
+        {   
+        FormElem.unload();
+        WinElem.close();
+        }
+     }
+             );    
+}
+//------------------------------------------------------------
+function ElemMod(TypeElem, ElemId)
+{
+CreateWin(TypeElem);
+FormElem.loadStruct("MantElem?Oper=Modif&Ty="+TypeElem+"&Id="+ElemId, function(){
+    FormElem.setFocusOnFirstActive();
+    });
+FormElem.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {    
+        FormElem.send("MantElem?Oper=Modif", function(loader, response)
+                        { // Asynchronous 
+                        if (response.substring(0,2)==OK)    
+                            {   
+                            GridResults.load("ListElem?TE="+TypeElem+"&F="+FiltExp);    
+                            FormElem.unload();
+                            WinElem.close();
+                            }
+                        else 
+                            alert(response); 
+                        } );
+        }
+     else 
+        {   
+        FormElem.unload();
+        WinElem.close();
+        }
+     }
+             );       
+}
+//------------------------------------------------------------
+function ElemDel(TypeElem, ElemId)
 {
     
 }
 //------------------------------------------------------------
-function ShowListElem(TypeElem, FiltExp)
+function ElemCopy(TypeElem, ElemId)
 {
-window.dhx4.ajax.get("ListElem?TE="+TypeElem+"&F="+FiltExp, function(r)
-    {
-    var xml = r.xmlDoc.responseXML;
-    var nodes = xml.getElementsByTagName("LV");
-    GridResults.enableAutoWidth(true);
-    GridResults.setHeader(nodes[0].textContent);
-    GridResults.setColTypes(nodes[1].textContent);   
-    GridResults.setColSorting(nodes[2].textContent);
-    GridResults.init();
-    var Data=nodes[3].textContent;
-    GridResults.parse(Data, "json");
-    // depend on type
-    ToolBar.addButton("New", 0, "New", "New.png", "New.png");
-    ToolBar.addButton("Delete", 1, "Delete", "Edit.png", "Edit.png");
-    ToolBar.attachEvent("onClick", function(Oper)
-        {  
-        AdminElem(TypeElem, Oper, GridResults.getSelectedRowId());    
-        });
-    });    
     
 }
 //------------------------------------------------------------
-
+function ElemExport(TypeElem, ElemId)
+{
+    
+}
+//------------------------------------------------------------
+function ElemExpAll(TypeElem, FiltExp)
+{
+    
+}
+//------------------------------------------------------------
+function ElemImp(TypeElem)
+{
+    
+}
+//------------------------------------------------------------
+function CreateWin(TypeElem)
+{
+WinElem=myWins.createWindow({
+id:"WinElem",
+left:20,
+top:30,
+width:600,
+height:600,
+center:true,
+modal:true,
+resize:true});  
+WinElem.setText(TypeElem);
+if (TypeElem==ELEMMIME)
+    WinElem.setDimension(600, 250);
+FormElem=WinElem.attachForm();   
+}
+//------------------------------------------------------------

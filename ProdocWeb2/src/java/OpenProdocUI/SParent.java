@@ -1127,7 +1127,7 @@ return(Form.toString());
 }
 
 //----------------------------------------------------------------
-protected StringBuilder GenInput(HttpServletRequest Req,Attribute Attr, boolean ReadOnly, boolean Modif) throws PDException
+public StringBuilder GenInput(HttpServletRequest Req,Attribute Attr, boolean ReadOnly, boolean Modif) throws PDException
 {
 if (Modif&&!Attr.isModifAllowed()) 
     ReadOnly=true;
@@ -1135,30 +1135,30 @@ StringBuilder FormField= new StringBuilder(300);
 switch (Attr.getType())
     {
     case Attribute.tDATE:
-        FormField.append("{type: \"calendar\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: ").append(Attr.isRequired()?"true":"false").append(",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" tooltip:\"").append(Attr.getDescription()).append("\", dateFormat: \"%Y-%m-%d\", calendarPosition: \"right\"}, ");
+        FormField.append("{type: \"calendar\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: ").append(Attr.isRequired()?"true":"false").append(",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", dateFormat: \"%Y-%m-%d\", calendarPosition: \"right\"},");
         break;
     case Attribute.tTIMESTAMP:
-        FormField.append("{type: \"calendar\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: ").append(Attr.isRequired()?"true":"false").append(",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" tooltip:\"").append(Attr.getDescription()).append("\", dateFormat: \"%Y-%m-%d %H:%i:%s\", calendarPosition: \"right\"}, ");
+        FormField.append("{type: \"calendar\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: ").append(Attr.isRequired()?"true":"false").append(",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", dateFormat: \"%Y-%m-%d %H:%i:%s\", calendarPosition: \"right\"},");
         break;
     case Attribute.tBOOLEAN:
-        FormField.append("{type: \"checkbox\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: ").append(Attr.isRequired()?"true":"false").append(",").append(Attr.getValue()!=null?("checked:"+((Boolean)(Attr.getValue())==true)+","):"").append(" tooltip:\"").append(Attr.getDescription()).append("\"}, ");
+        FormField.append("{type: \"checkbox\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(Attr.getValue()!=null?("checked:"+((Boolean)(Attr.getValue())==true)+","):"").append(" tooltip:\"").append(TT(Req, Attr.getDescription())).append("\"},");
         break;
     case Attribute.tINTEGER:
-        FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: ").append(Attr.isRequired()?"true":"false").append(",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" tooltip:\"").append(Attr.getDescription()).append("\", numberFormat:\"000000000\", validate:\"ValidInteger\"}, ");
+        FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: ").append(Attr.isRequired()?"true":"false").append(",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", numberFormat:\"000000000\", validate:\"ValidInteger\"},");
         break;
     case Attribute.tFLOAT:
-        FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: ").append(Attr.isRequired()?"true":"false").append(",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" tooltip:\"").append(Attr.getDescription()).append("\", numberFormat:\"0000000000.00\", validate:\"ValidNumeric\"}, ");
+        FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: ").append(Attr.isRequired()?"true":"false").append(",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", numberFormat:\"0000000000.00\", validate:\"ValidNumeric\"},");
         break;
     case Attribute.tSTRING:
         if (Attr.isMultivalued())
         {
             FormField.append("{type: \"block\", width: 450, list:[");
-            FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\", labelWidth: \"auto\", readonly: \"true\",value:\"").append(Attr.Export()).append("\", tooltip:\"").append(TT(Req, Attr.getDescription())).append("\"}, ");
+            FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\", labelWidth: \"auto\", readonly: \"true\",value:\"").append(Attr.Export()).append("\", tooltip:\"").append(TT(Req, Attr.getDescription())).append("\"},");
             FormField.append("{type: \"newcolumn\", offset:2 },");
             FormField.append("{type: \"button\",").append(ReadOnly?"disabled:1,":"").append(" name:  \"M_").append(Attr.getName()).append("\", value: \"*\", width: 20}]},");
         }
         else
-            FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: ").append(Attr.isRequired()?"true":"false").append(",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", inputWidth: 300, maxLength:").append(Attr.getLongStr()).append("}, ");
+            FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: ").append(Attr.isRequired()?"true":"false").append(",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", inputWidth: 300, maxLength:").append(Attr.getLongStr()).append("},");
         break;
     case Attribute.tTHES:
         {
@@ -1175,7 +1175,7 @@ switch (Attr.getType())
         }
         break;
     default:
-        FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"ERROR TIPO\", required: ").append(Attr.isRequired()?"true":"false").append(", tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", inputWidth: 300, maxLength:").append(Attr.getLongStr()).append("}, ");
+        FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"ERROR TIPO\", required: ").append(Attr.isRequired()?"true":"false").append(", tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", inputWidth: 300, maxLength:").append(Attr.getLongStr()).append("},");
         break;
     }
 return(FormField);
@@ -1302,7 +1302,7 @@ public static String GenRowGrid(HttpServletRequest Req, String Id, Record NextRe
 {
 StringBuilder Row=new StringBuilder(1000);
 Attribute Attr;
-String IdDoc=null;
+//String IdDoc=null;
 if (IsXML)
     {
     Row.append("<row id=\"").append(Id).append("\">");
@@ -1343,7 +1343,7 @@ while (Attr!=null)
             }
         }
     else if (IsXML && Attr.getName().equals(PDDocs.fTITLE))
-        Row.append("<cell>").append(Attr.Export()).append("^SendDoc?Id=").append(IdDoc).append("^_blank</cell>");
+        Row.append("<cell>").append(Attr.Export()).append("^SendDoc?Id=").append(Id).append("^_blank</cell>");
     else    //    if (!Attr.isMultivalued()) 
         {
         if (IsXML)

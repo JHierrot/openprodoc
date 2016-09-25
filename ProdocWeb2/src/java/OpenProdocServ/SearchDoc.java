@@ -104,7 +104,7 @@ else
         }
     out.println("OK"+GenHeader(Req, Rec, true));
 //    out.print("data={ rows:[");
-    out.print("<?xml version=\"1.0\" encoding=\"iso-8859-1\"?><rows>");
+    out.print("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rows>");
     SaveConds(Req, "Doc", CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")),(IncludeVers.equals("1")), CurrentFold, null, Rec, null);
     Cursor c=TmpDoc.Search(FullTextSearch, CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")),(IncludeVers.equals("1")), CurrentFold, null);
     Record NextDoc=PDSession.NextRec(c);

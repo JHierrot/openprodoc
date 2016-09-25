@@ -70,7 +70,17 @@ String Ver=Req.getParameter("Ver");
 if (Ver!=null && Ver.length()!=0)
     doc.LoadVersion(Id, Ver);
 else
-    doc.LoadCurrent(Id);
+    {
+    if (Id.contains("|"))
+        {
+        String[] Id2 = Id.split("\\|");
+        Id=Id2[0];
+        Ver=Id2[1];
+        doc.LoadVersion(Id, Ver);
+        }
+    else    
+        doc.LoadCurrent(Id);
+    }
 if (doc.IsUrl())
     {
     PrintWriter out = response.getWriter();

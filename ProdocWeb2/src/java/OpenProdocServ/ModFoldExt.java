@@ -81,7 +81,7 @@ else
             String Val=Req.getParameter(Attr.getName());
             if (Attr.getType()==Attribute.tBOOLEAN)
                 {
-                if(Val == null || Val.equals("0"))
+                if(Val == null || Val.length()==0 || Val.equals("0"))
                     Attr.setValue(false);
                 else
                     Attr.setValue(true);

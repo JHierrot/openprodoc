@@ -54,51 +54,64 @@ response.setContentType("text/xml;charset=UTF-8");
 response.setStatus(HttpServletResponse.SC_OK);
 PrintWriter out = response.getWriter();  
 StringBuilder Resp=new StringBuilder(3000);
-Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><row>");
+Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rows><head>");
 try {
 String DocType=Req.getParameter("DT");
 PDDocs TmpDoc=new PDDocs(PDSession, DocType);
-Record Rec=TmpDoc.getRecSum();
-StringBuilder Head=new StringBuilder(300);
-StringBuilder Edit=new StringBuilder(300);
-StringBuilder Type=new StringBuilder(300);
+Record Rec=TmpDoc.getRecSum().CopyMono();
+//StringBuilder Head=new StringBuilder(300);
+//StringBuilder Edit=new StringBuilder(300);
+//StringBuilder Type=new StringBuilder(300);
+//Rec.initList();
+//while (Attr!=null)
+//    {
+//    if (!Attr.isMultivalued()) 
+//        {
+//        Head.append(TT(Req,Attr.getUserName())).append(",");
+//        if (Attr.getName().equals(PDDocs.fLOCKEDBY))
+//            Edit.append("rotxt,");
+//        else        
+//            Edit.append("ro,");
+//        Type.append("str,");
+//        }
+//    Attr=Rec.nextAttr();
+//    }
+Rec.delAttr(PDDocs.fSTATUS);
+Rec.delAttr(PDDocs.fDOCTYPE);
 Rec.initList();
 Attribute Attr=Rec.nextAttr();
-//ArrayList<Attribute> FL=new ArrayList();
+int Count=1;
 while (Attr!=null)
     {
-    if (!Attr.isMultivalued()) 
-        {
-        Head.append(TT(Req,Attr.getUserName())).append(",");
-        if (Attr.getName().equals(PDDocs.fLOCKEDBY))
-            Edit.append("rotxt,");
-        else        
-            Edit.append("ro,");
-        Type.append("str,");
-        }
+    Resp.append("<column width=\"").append(Count==Rec.NumAttr()?"*":600/Rec.NumAttr()).append("\" type=\""+(Attr.getName().equals(PDDocs.fTITLE)?"link":"ro")+"\" align=\"left\" sort=\"str\">").append(TT(Req,Attr.getUserName())).append("</column>");
+    Count++;
     Attr=Rec.nextAttr();
     }
-Head.deleteCharAt(Head.length()-1);
-Edit.deleteCharAt(Edit.length()-1);
-Type.deleteCharAt(Type.length()-1);
-StringBuilder VersionsData=new StringBuilder(1000);
-VersionsData.append("data={ rows:[");
+Resp.append("</head>");
+//Head.deleteCharAt(Head.length()-1);
+//Edit.deleteCharAt(Edit.length()-1);
+//Type.deleteCharAt(Type.length()-1);
+//StringBuilder VersionsData=new StringBuilder(1000);
+//VersionsData.append("data={ rows:[");
 Cursor ListDel=TmpDoc.ListDeleted(DocType);
 Record NextDel=PDSession.NextRec(ListDel);
 while (NextDel!=null)
     {
-    String Id=(String)NextDel.getAttr(PDDocs.fPDID).getValue()+"/";
+    String Id=(String)NextDel.getAttr(PDDocs.fPDID).getValue()+"|";
     Id+=(String)NextDel.getAttr(PDDocs.fDOCTYPE).getValue();
-    VersionsData.append(SParent.GenRowGrid(Req, Id, NextDel, false));    
+//    VersionsData.append(SParent.GenRowGrid(Req, Id, NextDel, false));    
+    Rec.assign(NextDel);
+    Resp.append(SParent.GenRowGrid(Req, Id, Rec, true));    
     NextDel=PDSession.NextRec(ListDel);
-    if (NextDel!=null)
-        VersionsData.append(",");
+//    if (NextDel!=null)
+//        VersionsData.append(",");
     }
-VersionsData.append("] };");
-Resp.append("<LV>").append(Head).append("</LV>");       
-Resp.append("<LV>").append(Edit).append("</LV>");       
-Resp.append("<LV>").append(Type).append("</LV>");           
-Resp.append("<LV>").append(VersionsData).append("</LV></row>");
+//VersionsData.append("] };");
+//Resp.append("<LV>").append(Head).append("</LV>");       
+//Resp.append("<LV>").append(Edit).append("</LV>");       
+//Resp.append("<LV>").append(Type).append("</LV>");           
+//Resp.append("<LV>").append(VersionsData).append("</LV></row>");
+Resp.append("</rows>");
 } catch (PDException ex)
     {
     Resp.append("<LV>Error</LV></row>");

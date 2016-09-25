@@ -244,6 +244,10 @@
         <servlet-name>ListElem</servlet-name>
         <servlet-class>OpenProdocServ.ListElem</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>MantElem</servlet-name>
+        <servlet-class>OpenProdocServ.MantElem</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SMain</servlet-name>
         <url-pattern>/SMain</url-pattern>
@@ -487,6 +491,10 @@
     <servlet-mapping>
         <servlet-name>ListElem</servlet-name>
         <url-pattern>/ListElem</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MantElem</servlet-name>
+        <url-pattern>/MantElem</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
