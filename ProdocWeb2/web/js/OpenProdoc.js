@@ -2036,22 +2036,72 @@ FormElem.attachEvent("onButtonClick", function (name)
 //------------------------------------------------------------
 function ElemDel(TypeElem, ElemId)
 {
-    
+CreateWin(TypeElem);
+FormElem.loadStruct("MantElem?Oper=Delete&Ty="+TypeElem+"&Id="+ElemId, function(){
+    FormElem.setFocusOnFirstActive();
+    });
+FormElem.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {    
+        FormElem.send("MantElem?Oper=Delete", function(loader, response)
+                        { // Asynchronous 
+                        if (response.substring(0,2)==OK)    
+                            {   
+                            GridResults.load("ListElem?TE="+TypeElem+"&F="+FiltExp);    
+                            FormElem.unload();
+                            WinElem.close();
+                            }
+                        else 
+                            alert(response); 
+                        } );
+        }
+     else 
+        {   
+        FormElem.unload();
+        WinElem.close();
+        }
+     }
+             );       
 }
 //------------------------------------------------------------
 function ElemCopy(TypeElem, ElemId)
 {
-    
+CreateWin(TypeElem);
+FormElem.loadStruct("MantElem?Oper=Copy&Ty="+TypeElem+"&Id="+ElemId, function(){
+    FormElem.setFocusOnFirstActive();
+    });
+FormElem.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {    
+        FormElem.send("MantElem?Oper=Copy", function(loader, response)
+                        { // Asynchronous 
+                        if (response.substring(0,2)==OK)    
+                            {   
+                            GridResults.load("ListElem?TE="+TypeElem+"&F="+FiltExp);    
+                            FormElem.unload();
+                            WinElem.close();
+                            }
+                        else 
+                            alert(response); 
+                        } );
+        }
+     else 
+        {   
+        FormElem.unload();
+        WinElem.close();
+        }
+     }
+             );           
 }
 //------------------------------------------------------------
 function ElemExport(TypeElem, ElemId)
 {
-    
+window.open("ElemExport?Ty="+TypeElem+"&Id="+ElemId);        
 }
 //------------------------------------------------------------
 function ElemExpAll(TypeElem, FiltExp)
 {
-    
+window.open("ElemExport?Ty="+TypeElem+"&F="+FiltExp);            
 }
 //------------------------------------------------------------
 function ElemImp(TypeElem)

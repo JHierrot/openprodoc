@@ -130,7 +130,8 @@ while (NextObj!=null)
     Rec.assign(NextObj);
     Resp.append(SParent.GenRowGrid(Req, Id, Rec, true));    
     NextObj=PDSession.NextRec(ListObj);
-    }          
+    }   
+PDSession.CloseCursor(ListObj);
 Resp.append("</rows>");
 } catch (PDException ex)
     {

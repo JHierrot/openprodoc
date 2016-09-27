@@ -50,6 +50,7 @@ public class MantElem extends SParent
 public static final String OPERNEW="New";   
 public static final String OPERMODIF="Modif";
 public static final String OPERDELETE="Delete";
+public static final String OPERCOPY="Copy";
 
 private static final String List2=ObjPD.fPDAUTOR+"/"+ObjPD.fPDDATE;
 
@@ -62,7 +63,6 @@ private static final String List2=ObjPD.fPDAUTOR+"/"+ObjPD.fPDDATE;
  */
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {
-//DriverGeneric PDSession=SParent.getSessOPD(Req);
 String Oper=Req.getParameter("Oper");
 String TypeElem=Req.getParameter("Ty");
 String Id=Req.getParameter("Id");
@@ -75,12 +75,8 @@ if (TypeElem!=null && TypeElem.length()!=0)
         out.println(ElemMod(Req, TypeElem, Id));
     else if (Oper.equals(OPERDELETE))
         out.println(ElemDel(Req, TypeElem, Id));
-    else if (Oper.equals("Copy"))
+    else if (Oper.equals(OPERCOPY))
         out.println(ElemCopy(Req, TypeElem, Id));
-    else if (Oper.equals("Export"))
-        out.println(ElemExport(Req, TypeElem, Id));
-    else if (Oper.equals("ExportAll"))
-        out.println(ElemExpAll(Req, TypeElem, Filter));
     else if (Oper.equals("Import"))
         out.println(ElemImport(Req, TypeElem));
     }
@@ -119,10 +115,12 @@ else
         Attr=Rec.nextAttr();
         }
     Obj.assignValues(Rec);
-    if (Oper.equals(OPERNEW))  
+    if (Oper.equals(OPERNEW) || Oper.equals(OPERCOPY))  
         Obj.insert();
     else if (Oper.equals(OPERMODIF))
         Obj.update();
+    else if (Oper.equals(OPERDELETE))
+        Obj.delete();
     out.println("OK");
     } catch(Exception Ex)
         {
@@ -162,7 +160,7 @@ private String ElemMod(HttpServletRequest Req, String TypeElem, String Id) throw
 {
 StringBuilder SB=new StringBuilder(1000);
 SB.append("[  {type: \"settings\", position: \"label-left\", labelWidth: 150, inputWidth: 230},");
-SB.append("{type: \"label\", label: \"").append(TT(Req, GetTitleModif(Req, TypeElem))).append("\"},");
+SB.append("{type: \"label\", label: \"").append(TT(Req, GetTitleCopy(Req, TypeElem))).append("\"},");
 SB.append(getBody("Modif", Req, TypeElem, Id));
 SB.append(OkBlock(Req, TypeElem, Id));
 return(SB.toString());
@@ -180,21 +178,14 @@ return(SB.toString());
 }
 //-----------------------------------------------------------------------------------------------
 
-private String ElemCopy(HttpServletRequest Req, String TypeElem, String Id)
+private String ElemCopy(HttpServletRequest Req, String TypeElem, String Id) throws PDException
 {
-throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-}
-//-----------------------------------------------------------------------------------------------
-
-private String ElemExport(HttpServletRequest Req, String TypeElem, String Id)
-{
-throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-}
-//-----------------------------------------------------------------------------------------------
-
-private String ElemExpAll(HttpServletRequest Req, String TypeElem, String Filter)
-{
-throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+StringBuilder SB=new StringBuilder(1000);
+SB.append("[  {type: \"settings\", position: \"label-left\", labelWidth: 150, inputWidth: 230},");
+SB.append("{type: \"label\", label: \"").append(TT(Req, GetTitleModif(Req, TypeElem))).append("\"},");
+SB.append(getBody("Copy", Req, TypeElem, Id));
+SB.append(OkBlock(Req, TypeElem, Id+"1"));
+return(SB.toString());
 }
 //-----------------------------------------------------------------------------------------------
 private String ElemImport(HttpServletRequest Req, String TypeElem)
@@ -246,6 +237,11 @@ DriverGeneric PDSession=SParent.getSessOPD(Req);
 ObjPD Obj=GenObj(ElemType, PDSession, Id);
 Record Rec=Obj.getRecord();
 Attribute Attr;
+if (Oper.equals(OPERCOPY))
+    {
+    Attr=Rec.getAttr(PDUser.fNAME);
+    Attr.setValue(((String)Attr.getValue())+"1");
+    }
 boolean Modif=(Oper.equals(OPERMODIF));
 boolean ReadOnly=(Oper.equals(OPERDELETE));
 if (ElemType.equals(ListElem.MANTACL))
@@ -407,6 +403,29 @@ else if (ElemType.equals(ListElem.MANTAUTH))
     return(TT(Req, "Delete_Authenticator"));
 else if (ElemType.equals(ListElem.MANTCUST))
     return(TT(Req, "Delete_Customization"));
+return("Error");
+}
+//-----------------------------------------------------------------------------------------------
+private String GetTitleCopy(HttpServletRequest Req, String ElemType)
+{
+if (ElemType.equals(ListElem.MANTACL))
+    return(TT(Req, "Copy_ACL"));
+else if (ElemType.equals(ListElem.MANTGROUPS))
+    return(TT(Req, "Copy_Group"));
+else if (ElemType.equals(ListElem.MANTUSERS))
+    return(TT(Req, "Copy_User"));
+else if (ElemType.equals(ListElem.MANTROLES))
+    return(TT(Req, "Copy_Role"));
+else if (ElemType.equals(ListElem.MANTMIME))
+    return(TT(Req, "Copy_Mime_Type"));
+else if (ElemType.equals(ListElem.MANTREPO))
+    return(TT(Req, "Copy_Repository"));
+else if (ElemType.equals(ListElem.MANTOBJ))
+    return(TT(Req, "Copy_Object_definition"));
+else if (ElemType.equals(ListElem.MANTAUTH))
+    return(TT(Req, "Copy_Authenticator"));
+else if (ElemType.equals(ListElem.MANTCUST))
+    return(TT(Req, "Copy_Customization"));
 return("Error");
 }
 //-----------------------------------------------------------------------------------------------
