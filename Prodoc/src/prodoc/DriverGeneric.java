@@ -2138,7 +2138,7 @@ return(Tot);
     }
 }
 //---------------------------------------------------------------------
-private ObjPD BuildObj(Node OPDObject) throws PDException
+public ObjPD BuildObj(Node OPDObject) throws PDException
 {           
 NamedNodeMap attributes = OPDObject.getAttributes();
 Node namedItem = attributes.getNamedItem("type");
