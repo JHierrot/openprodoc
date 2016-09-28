@@ -90,6 +90,7 @@ else
     String Uri=Req.getParameter("RootText");
     String MainLang=Req.getParameter("MainLanguage");
     CurrThesId=Req.getParameter("HideThesId");
+    response.setHeader("Content-disposition", "attachment; filename=\"Thes_"+CurrThesId+".rdf\"");
     try {
     DriverGeneric PDSession = getSessOPD(Req); 
     PDThesaur Thes=new PDThesaur(PDSession);

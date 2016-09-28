@@ -2106,7 +2106,45 @@ window.open("ElemExport?Ty="+TypeElem+"&F="+FiltExp);
 //------------------------------------------------------------
 function ElemImp(TypeElem)
 {
-    
+var Url="ImpElem";
+WinAF=myWins.createWindow({
+id:"AddDoc",
+left:20,
+top:30,
+width:400,
+height:200,
+center:true,
+modal:true,
+resize:false});  
+WinAF.setText("OpenProdoc");
+var FormImpElem=WinAF.attachForm();
+FormImpElem.loadStruct("ImpElem", function(){
+FormImpElem.setFocusOnFirstActive();
+});
+FormImpElem.attachEvent("onButtonClick", function (name)
+    {if (name==CANCEL)
+        {   
+        FormImpElem.unload();
+        WinAF.close();
+        }
+     });
+FormImpElem.attachEvent("onUploadFile",function(realName,serverName){
+    window.dhx4.ajax.get("UpFileStatus", function(r)
+    {
+    var xml = r.xmlDoc.responseXML;
+    var nodes = xml.getElementsByTagName("status");
+    alert(nodes[0].textContent);
+    });
+    });
+FormImpElem.attachEvent("onUploadFail",function(realName){
+    window.dhx4.ajax.get("UpFileStatus", function(r)
+    {
+    var xml = r.xmlDoc.responseXML;
+    var nodes = xml.getElementsByTagName("status");
+    alert(nodes[0].textContent);
+    });
+    });
+     
 }
 //------------------------------------------------------------
 function CreateWin(TypeElem)

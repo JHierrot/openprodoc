@@ -20,34 +20,35 @@
 package OpenProdocServ;
 
 import OpenProdocUI.SParent;
-import static OpenProdocUI.SParent.GetDat;
-import static OpenProdocUI.SParent.getSessOPD;
+import static OpenProdocUI.SParent.TT;
+import java.io.File;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import javax.servlet.http.*;
-import prodoc.DriverGeneric;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import prodoc.Attribute;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import prodoc.DriverGeneric;
+import prodoc.ObjPD;
 import prodoc.PDDocs;
-import prodoc.PDMimeType;
-import prodoc.Record;
+import prodoc.PDFolders;
+import prodoc.PDLog;
 
 
 /**
  *
  * @author jhierrot
  */
-public class ImportDocF extends SParent
+public class ImpElemF extends SParent
 {
-final static private String List=PDDocs.fPARENTID+"/"+PDDocs.fPDID
-                    +"/"+PDDocs.fPDAUTOR+"/"+PDDocs.fPDDATE
-                    +"/"+PDDocs.fLOCKEDBY+"/"+PDDocs.fVERSION+"/"+PDDocs.fPURGEDATE
-                    +"/"+PDDocs.fREPOSIT+"/"+PDDocs.fSTATUS;
 //-----------------------------------------------------------------------------------------------
 /**
  *
@@ -59,7 +60,6 @@ protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Excep
 {
 String FileName=null;
 InputStream FileData=null;
-HashMap <String, String>ListFields=new HashMap();
 try {
 DiskFileItemFactory factory = new DiskFileItemFactory();
 factory.setSizeThreshold(1000000);
@@ -70,60 +70,30 @@ Iterator iter = items.iterator();
 while (iter.hasNext())
     {
     FileItem item = (FileItem) iter.next();
-    if (item.isFormField())
-        ListFields.put(item.getFieldName(), item.getString());
-    else 
+    if (!item.isFormField())
         {
         FileName=item.getName();
         FileData=item.getInputStream();
+        break;
         }
-    }   
-if (!isMultipart || FileData==null)
+    }        
+DriverGeneric PDSession=SParent.getSessOPD(Req);       
+DocumentBuilder DB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+Document XMLObjects = DB.parse(FileData);
+NodeList OPDObjectList = XMLObjects.getElementsByTagName(ObjPD.XML_OPDObject);
+Node OPDObject;
+ObjPD Obj2Build;
+int Tot=0;
+for (int i=0; i<OPDObjectList.getLength(); i++)
     {
-    out.println("KO");
+    OPDObject = OPDObjectList.item(i);
+    Obj2Build=PDSession.BuildObj(OPDObject);
+    Obj2Build.ProcesXMLNode(OPDObject);
+    Tot++;
     }
-else
-    { 
-    ListFields=GetDat(Req);  
-    PDDocs Doc;
-    DriverGeneric PDSession = getSessOPD(Req); 
-    String DType=(String) ListFields.get(PDDocs.fDOCTYPE);
-    if (DType==null)
-        Doc = new PDDocs(PDSession);
-    else
-        Doc = new PDDocs(PDSession, DType);
-    Record Rec=Doc.getRecSum();
-    Rec.initList();
-    Attribute Attr=Rec.nextAttr();
-    while (Attr!=null)
-        {
-        if (!List.contains(Attr.getName()))
-            {
-            String Val=(String) ListFields.get(Attr.getName());
-            if (Attr.getType()==Attribute.tBOOLEAN)
-                {
-                if(Val == null || Val.length()==0 || Val.equals("0"))
-                    Attr.setValue(false);
-                else
-                    Attr.setValue(true);
-                }
-            else if(Val != null)
-                {
-                SParent.FillAttr(Req, Attr, Val, false);
-                }
-            }
-        Attr=Rec.nextAttr();
-        }
-    Doc.assignValues(Rec);
-    Doc.setParentId(ListFields.get("CurrFold"));
-    Doc.setName(FileName);
-    PDMimeType mt=new PDMimeType(PDSession);
-    Doc.setMimeType(mt.SolveName(FileName));
-    Doc.setStream(FileData);
-    Doc.insert();
-    out.println(UpFileStatus.SetResultOk(Req, ""));
-    FileData.close();
-    }
+DB.reset();    
+out.println(UpFileStatus.SetResultOk(Req, "Total="+Tot));
+FileData.close();
 } catch (Exception e)
     {
     out.println(UpFileStatus.SetResultKo(Req, e.getLocalizedMessage()));
@@ -139,12 +109,12 @@ else
 @Override
 public String getServletInfo()
 {
-return "ImportDocF Servlet";
+return "ImpElemF Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 static public String getUrlServlet()
 {
-return("ImportDocF");
+return("ImpElemF");
 }
 //-----------------------------------------------------------------------------------------------
 }

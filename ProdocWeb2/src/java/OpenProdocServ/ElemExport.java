@@ -21,8 +21,6 @@ package OpenProdocServ;
 
 import static OpenProdocServ.ListElem.GenObj;
 import OpenProdocUI.SParent;
-import static OpenProdocUI.SParent.TT;
-import static OpenProdocUI.SParent.getSessOPD;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -30,8 +28,6 @@ import javax.servlet.http.*;
 import prodoc.Cursor;
 import prodoc.DriverGeneric;
 import prodoc.ObjPD;
-import prodoc.PDACL;
-import prodoc.PDDocs;
 import prodoc.Record;
 
 
@@ -56,6 +52,7 @@ StringBuilder Resp=new StringBuilder(200);
 String TypeElem=Req.getParameter("Ty");
 String Id=Req.getParameter("Id");
 String Filter=Req.getParameter("F");
+response.setHeader("Content-disposition", "attachment; filename=\"List_"+TypeElem+(Id!=null?("_"+Id):"")+".opd\"");
 try {
 DriverGeneric PDSession=SParent.getSessOPD(Req);    
 ObjPD Obj=GenObj(TypeElem, PDSession, Id);

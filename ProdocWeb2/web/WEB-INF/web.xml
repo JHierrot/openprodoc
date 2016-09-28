@@ -252,6 +252,14 @@
         <servlet-name>ElemExport</servlet-name>
         <servlet-class>OpenProdocServ.ElemExport</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ImpElem</servlet-name>
+        <servlet-class>OpenProdocServ.ImpElem</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ImpElemF</servlet-name>
+        <servlet-class>OpenProdocServ.ImpElemF</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SMain</servlet-name>
         <url-pattern>/SMain</url-pattern>
@@ -503,6 +511,14 @@
     <servlet-mapping>
         <servlet-name>ElemExport</servlet-name>
         <url-pattern>/ElemExport</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImpElem</servlet-name>
+        <url-pattern>/ImpElem</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImpElemF</servlet-name>
+        <url-pattern>/ImpElemF</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
