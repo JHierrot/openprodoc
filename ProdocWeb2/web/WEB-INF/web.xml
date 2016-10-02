@@ -260,6 +260,10 @@
         <servlet-name>ImpElemF</servlet-name>
         <servlet-class>OpenProdocServ.ImpElemF</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>FormEPerm</servlet-name>
+        <servlet-class>OpenProdocServ.FormEPerm</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SMain</servlet-name>
         <url-pattern>/SMain</url-pattern>
@@ -519,6 +523,10 @@
     <servlet-mapping>
         <servlet-name>ImpElemF</servlet-name>
         <url-pattern>/ImpElemF</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FormEPerm</servlet-name>
+        <url-pattern>/FormEPerm</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

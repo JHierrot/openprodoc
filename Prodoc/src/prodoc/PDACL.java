@@ -816,4 +816,50 @@ if (PDLog.isDebug())
 return(Result);
 }
 //-------------------------------------------------------------------------
+public void DelAllUsers() throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDACL.DelAllUsers>:"+getName());
+boolean InTransLocal;
+InTransLocal=!getDrv().isInTransaction();
+Conditions ListCond=new Conditions();
+ListCond.addCondition(new Condition(fACLNAME, Condition.cEQUAL, getName()));
+if (InTransLocal)
+    getDrv().IniciarTrans();
+try {
+getDrv().DeleteRecord(getTabNameAclUsers(), ListCond);
+} catch (PDException Ex)
+    {
+    getDrv().AnularTrans();
+    throw Ex;
+    }
+if (InTransLocal)
+    getDrv().CerrarTrans();
+if (PDLog.isDebug())
+    PDLog.Debug("PDACL.DelAllUsers<:"+getName());
+}
+//-------------------------------------------------------------------------
+public void DelAllGroups() throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDACL.DelAllGroups>:"+getName());
+boolean InTransLocal;
+InTransLocal=!getDrv().isInTransaction();
+Conditions ListCond=new Conditions();
+ListCond.addCondition(new Condition(fACLNAME, Condition.cEQUAL, getName()));
+if (InTransLocal)
+    getDrv().IniciarTrans();
+try {
+getDrv().DeleteRecord(getTabNameAclGroups(), ListCond);
+} catch (PDException Ex)
+    {
+    getDrv().AnularTrans();
+    throw Ex;
+    }
+if (InTransLocal)
+    getDrv().CerrarTrans();
+if (PDLog.isDebug())
+    PDLog.Debug("PDACL.DelAllGroups<:"+getName());
+}
+
 }

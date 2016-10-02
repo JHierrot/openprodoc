@@ -55,7 +55,22 @@ var FormElem;
 var ELEMACL="ACL";
 var ELEMMIME="MimeTypes";
 var FiltExp="";
-
+var ElemTabBar;
+var EOPERNEW="New";
+var EOPERMOD="Modif";
+var EOPERDEL="Delete";
+var EOPERCOP="Copy";
+var EOPEREXP="Export";
+var EOPEREXA="ExportAll";
+var EOPERIMP="Import";
+var PERMISSIONS=["NOTHING", "READ","CATALOG","VERSION","UPDATE","DELETE"];
+var ElemLayout;
+var ElemTabBar;
+var GUsers;
+var GGroups;
+var TBG;
+var TBU;
+       
 function doOnLoadLogin() 
 {   
 var myForm;    
@@ -1945,30 +1960,30 @@ formFilter.attachEvent("onButtonClick", function(name){
     FiltExp=formFilter.getItemValue("filter");
     GridResults.load("ListElem?TE="+TypeElem+"&F="+FiltExp);
     });        
-ToolBar.addButton("New", 0, "New", "New.png", "New.png");
-ToolBar.addButton("Modif", 1, "Modif", "Modif.png", "Modif.png");
-ToolBar.addButton("Delete", 2, "Delete", "Edit.png", "Edit.png");
-ToolBar.addButton("Copy", 3, "Copy", "Copy.png", "Copy.png");
-ToolBar.addButton("Export", 4, "Export", "Export.png", "Export.png");
-ToolBar.addButton("ExportAll", 5, "ExportAll", "ExportAll.png", "ExportAll.png");
-ToolBar.addButton("Import", 6, "Import", "Import.png", "Import.png");
+ToolBar.addButton(EOPERNEW, 0, "New", "New.png", "New.png");
+ToolBar.addButton(EOPERMOD, 1, "Modif", "Modif.png", "Modif.png");
+ToolBar.addButton(EOPERDEL, 2, "Delete", "Edit.png", "Edit.png");
+ToolBar.addButton(EOPERCOP, 3, "Copy", "Copy.png", "Copy.png");
+ToolBar.addButton(EOPEREXP, 4, "Export", "Export.png", "Export.png");
+ToolBar.addButton(EOPEREXA, 5, "ExportAll", "ExportAll.png", "ExportAll.png");
+ToolBar.addButton(EOPERIMP, 6, "Import", "Import.png", "Import.png");
 ToolBar.attachEvent("onClick", function(Oper)
     {  
-    if (GridResults.getSelectedRowId()!=null || Oper=="New" || Oper=="ExportAll" || Oper=="Import")     
+    if (GridResults.getSelectedRowId()!=null || Oper==EOPERNEW || Oper==EOPEREXA || Oper==EOPERIMP)     
         {
-        if (Oper=="New")  
+        if (Oper==EOPERNEW)  
             ElemNew(TypeElem);
-        else if (Oper=="Modif")
+        else if (Oper==EOPERMOD)
             ElemMod(TypeElem, GridResults.getSelectedRowId());
-        else if (Oper=="Delete")
+        else if (Oper==EOPERDEL)
             ElemDel(TypeElem, GridResults.getSelectedRowId());
-        else if (Oper=="Copy")
+        else if (Oper==EOPERCOP)
             ElemCopy(TypeElem, GridResults.getSelectedRowId());
-        else if (Oper=="Export")
+        else if (Oper==EOPEREXP)
             ElemExport(TypeElem, GridResults.getSelectedRowId());
-        else if (Oper=="ExportAll")
+        else if (Oper==EOPEREXA)
             ElemExpAll(TypeElem, FiltExp);
-        else if (Oper=="Import")
+        else if (Oper==EOPERIMP)
             ElemImp(TypeElem);
         }
     });
@@ -1979,10 +1994,12 @@ function ElemNew(TypeElem)
 CreateWin(TypeElem);
 FormElem.loadStruct("MantElem?Oper=New&Ty="+TypeElem, function(){
     FormElem.setFocusOnFirstActive();
+    CompleteForm(EOPERNEW, TypeElem);    
     });
 FormElem.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {    
+        FillHideFields(TypeElem);    
         FormElem.send("MantElem?Oper=New", function(loader, response)
                         { // Asynchronous 
                         if (response.substring(0,2)==OK)    
@@ -1995,13 +2012,44 @@ FormElem.attachEvent("onButtonClick", function (name)
                             alert(response); 
                         } );
         }
-     else 
+     else if (name==CANCEL) 
         {   
         FormElem.unload();
         WinElem.close();
         }
+     else if (name=="ACLUsers")   
+        ShowACLUsersForm(EOPERNEW); 
+     else if (name=="ACLGroups")   
+        ShowACLGroupsForm(EOPERNEW); 
      }
              );    
+}
+//------------------------------------------------------------
+function FillHideFields(TypeElem)
+{
+if (TypeElem==ELEMACL)    
+    {
+    var AllPerm="";    
+    for (var NumG=0; NumG<GGroups.getRowsNum(); NumG++)   
+        {
+        var P;    
+        for (P=0; P<PERMISSIONS.length; P++) 
+            if (PERMISSIONS[P]==GGroups.cellByIndex(NumG, 1).getValue())
+                break;
+        AllPerm=AllPerm+"|"+GGroups.cellByIndex(NumG, 0).getValue()+"/"+P;
+        }
+    FormElem.setItemValue("Groups", AllPerm);    
+    AllPerm="";    
+    for (var NumU=0; NumU<GUsers.getRowsNum(); NumU++)   
+        {
+        var P;    
+        for (P=0; P<PERMISSIONS.length; P++) 
+            if (PERMISSIONS[P]==GUsers.cellByIndex(NumU, 1).getValue())
+                break;
+        AllPerm=AllPerm+"|"+GUsers.cellByIndex(NumU, 0).getValue()+"/"+P;
+        }
+    FormElem.setItemValue("Users", AllPerm);    
+    }
 }
 //------------------------------------------------------------
 function ElemMod(TypeElem, ElemId)
@@ -2009,10 +2057,12 @@ function ElemMod(TypeElem, ElemId)
 CreateWin(TypeElem);
 FormElem.loadStruct("MantElem?Oper=Modif&Ty="+TypeElem+"&Id="+ElemId, function(){
     FormElem.setFocusOnFirstActive();
+    CompleteForm(EOPERMOD, TypeElem);    
     });
 FormElem.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {    
+        FillHideFields(TypeElem);    
         FormElem.send("MantElem?Oper=Modif", function(loader, response)
                         { // Asynchronous 
                         if (response.substring(0,2)==OK)    
@@ -2025,11 +2075,15 @@ FormElem.attachEvent("onButtonClick", function (name)
                             alert(response); 
                         } );
         }
-     else 
+     else if (name==CANCEL)  
         {   
         FormElem.unload();
         WinElem.close();
         }
+     else if (name=="ACLUsers")   
+        ShowACLUsersForm(EOPERMOD); 
+     else if (name=="ACLGroups")   
+        ShowACLGroupsForm(EOPERMOD); 
      }
              );       
 }
@@ -2039,6 +2093,7 @@ function ElemDel(TypeElem, ElemId)
 CreateWin(TypeElem);
 FormElem.loadStruct("MantElem?Oper=Delete&Ty="+TypeElem+"&Id="+ElemId, function(){
     FormElem.setFocusOnFirstActive();
+    CompleteForm(EOPERDEL, TypeElem);    
     });
 FormElem.attachEvent("onButtonClick", function (name)
     {if (name==OK)
@@ -2055,7 +2110,7 @@ FormElem.attachEvent("onButtonClick", function (name)
                             alert(response); 
                         } );
         }
-     else 
+     else if (name==CANCEL) 
         {   
         FormElem.unload();
         WinElem.close();
@@ -2069,10 +2124,12 @@ function ElemCopy(TypeElem, ElemId)
 CreateWin(TypeElem);
 FormElem.loadStruct("MantElem?Oper=Copy&Ty="+TypeElem+"&Id="+ElemId, function(){
     FormElem.setFocusOnFirstActive();
+    CompleteForm(EOPERCOP, TypeElem);    
     });
 FormElem.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {    
+        FillHideFields(TypeElem);    
         FormElem.send("MantElem?Oper=Copy", function(loader, response)
                         { // Asynchronous 
                         if (response.substring(0,2)==OK)    
@@ -2085,7 +2142,7 @@ FormElem.attachEvent("onButtonClick", function (name)
                             alert(response); 
                         } );
         }
-     else 
+     else if (name==CANCEL)  
         {   
         FormElem.unload();
         WinElem.close();
@@ -2159,8 +2216,125 @@ center:true,
 modal:true,
 resize:true});  
 WinElem.setText(TypeElem);
+if (TypeElem==ELEMACL)
+    {
+    ElemLayout=WinElem.attachLayout('2E');   
+    ElemLayout.cells('a').hideHeader();
+    FormElem=ElemLayout.cells('a').attachForm(); 
+    ElemLayout.cells('a').setHeight(180);
+    ElemTabBar=ElemLayout.cells('b').attachTabbar();
+    ElemTabBar.addTab("Groups", "Groups", null, null, true); //---
+    TBG = ElemTabBar.tabs("Groups").attachToolbar();
+    TBG.addButton(EOPERNEW, 0, "New", "New.png", "New.png");
+    TBG.addButton(EOPERMOD, 1, "Modif", "Modif.png", "Modif.png");
+    TBG.addButton(EOPERDEL, 2, "Delete", "Edit.png", "Edit.png");
+    GGroups = ElemTabBar.tabs("Groups").attachGrid();
+    GGroups.setHeader("Groups, Perm");
+    GGroups.setColAlign("left,left");     
+    GGroups.setColTypes("ro,ro");              
+    GGroups.setColSorting("str,str");
+    GGroups.init();
+    ElemTabBar.addTab("Users", "Users");                    //---
+    TBU = ElemTabBar.tabs("Users").attachToolbar();
+    TBU.addButton(EOPERNEW, 0, "New", "New.png", "New.png");
+    TBU.addButton(EOPERMOD, 1, "Modif", "Modif.png", "Modif.png");
+    TBU.addButton(EOPERDEL, 2, "Delete", "Edit.png", "Edit.png");
+    GUsers = ElemTabBar.tabs("Users").attachGrid();
+    GUsers.setHeader("Users, Perm");
+    GUsers.setColAlign("left,left");     
+    GUsers.setColTypes("ro,ro");              
+    GUsers.setColSorting("str,str");
+    GUsers.init();
+    }
+else
+    FormElem=WinElem.attachForm();   
 if (TypeElem==ELEMMIME)
-    WinElem.setDimension(600, 250);
-FormElem=WinElem.attachForm();   
+    WinElem.setDimension(500, 250);
+
 }
-//------------------------------------------------------------
+//--------------------------------------------------------------
+function CompleteForm(Oper, TypeElem)
+{
+if (TypeElem==ELEMACL)
+    CompleteFormAcl(Oper);       
+}
+//--------------------------------------------------------------
+function CompleteFormAcl(Oper)   
+{
+if (Oper==EOPERDEL)
+    {
+    TBG.clearAll();
+    TBU.clearAll();
+    }    
+var ListUP=FormElem.getItemValue("Users");    
+var UP=ListUP.split("|");
+for (var i=0; i<UP.length; i++)
+    {
+    if (UP[i]!="")    
+        {
+        var U_P=UP[i].split("/"); 
+        GUsers.addRow(U_P[0], U_P[0]+","+PERMISSIONS[U_P[1]]);
+        }
+    }    
+ListUP=FormElem.getItemValue("Groups");    
+UP=ListUP.split("|");
+for (var i=0; i<UP.length; i++)
+    {
+    if (UP[i]!="")    
+        {
+        var U_P=UP[i].split("/"); 
+        GGroups.addRow(U_P[0], U_P[0]+","+PERMISSIONS[U_P[1]]);
+        }
+    } 
+TBG.attachEvent("onClick", function(Oper)  
+    {
+    if (Oper==EOPERNEW)    
+        GroupPerm(Oper, "Groups");
+    else if (GGroups.getSelectedRowId()!=null && Oper==EOPERMOD)     
+        GroupPerm(Oper, "Groups");
+    else if (GGroups.getSelectedRowId()!=null && Oper==EOPERDEL)     
+        GGroups.deleteRow(GGroups.getSelectedRowId());   
+    });
+TBU.attachEvent("onClick", function(Oper)  
+    {
+    if (Oper==EOPERNEW)    
+        GroupPerm(Oper, "Users");
+    else if (GUsers.getSelectedRowId()!=null && Oper==EOPERMOD)     
+        GroupPerm(Oper, "Users");
+    else if (GUsers.getSelectedRowId()!=null && Oper==EOPERDEL)     
+        GUsers.deleteRow(GUsers.getSelectedRowId());   
+    });
+}    
+//--------------------------------------------------------------
+function GroupPerm(Oper, Type)
+{
+var WEPerm=myWins.createWindow({
+id:"WEPerm",
+left:20,
+top:30,
+width:500,
+height:150,
+center:true,
+modal:true,
+resize:true});  
+WEPerm.setText(Type);
+var FormEPerm=WEPerm.attachForm();  
+var Grid;
+if (Type=="Groups")
+    Grid=GGroups;
+else
+    Grid=GUsers;
+FormEPerm.loadStruct("FormEPerm?Type="+Type+"&Oper="+Oper+"&Id="+GGroups.getSelectedRowId());
+FormEPerm.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {   
+        if (Oper==EOPERMOD)    
+            Grid.cellById(Grid.getSelectedRowId(), 1).setValue(PERMISSIONS[FormEPerm.getItemValue("Permission")]);
+        else
+            Grid.addRow(FormEPerm.getItemValue(Type),FormEPerm.getItemValue(Type)+","+PERMISSIONS[FormEPerm.getItemValue("Permission")]) 
+        }
+    FormEPerm.unload();
+    WEPerm.close();   
+    });
+}
+//--------------------------------------------------------------
