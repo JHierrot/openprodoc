@@ -31,6 +31,7 @@ import prodoc.ObjPD;
 import prodoc.PDACL;
 import prodoc.PDCustomization;
 import prodoc.PDException;
+import prodoc.PDGroups;
 import prodoc.PDLog;
 import prodoc.PDMimeType;
 import prodoc.PDRoles;
@@ -119,6 +120,8 @@ else
         Obj.insert();
         if (TypeElem.equals(ListElem.MANTACL))            
             InsertACLMembers((PDACL)Obj,Req);
+        else if (TypeElem.equals(ListElem.MANTGROUPS))            
+            InsertGroupMembers((PDGroups)Obj,Req);
         }
     else if (Oper.equals(OPERMODIF))
         {
@@ -129,6 +132,13 @@ else
             Acl.DelAllGroups();
             Acl.DelAllUsers();
             InsertACLMembers((PDACL)Obj,Req);
+            }
+        else if (TypeElem.equals(ListElem.MANTGROUPS)) 
+            {
+            PDGroups G=((PDGroups)Obj);    
+            G.DelAllSubGroups();
+            G.DelAllUsers();
+            InsertGroupMembers((PDGroups)Obj,Req);
             }
         }
     else if (Oper.equals(OPERDELETE))
@@ -163,7 +173,7 @@ return("MantElem");
 private String ElemNew(HttpServletRequest Req, String TypeElem) throws PDException
 {
 StringBuilder SB=new StringBuilder(1000);
-SB.append("[  {type: \"settings\", position: \"label-left\", labelWidth: 150, inputWidth: 230},");
+SB.append("[{type: \"settings\", position: \"label-left\", labelWidth: 150, inputWidth: 230},");
 SB.append("{type: \"label\", label: \"").append(TT(Req, GetTitleNew(Req, TypeElem))).append("\"},");
 SB.append(getBody("New", Req, TypeElem, null));
 SB.append(OkBlock(Req, TypeElem, null));
@@ -270,7 +280,16 @@ if (ElemType.equals(ListElem.MANTACL))
     }
 else if (ElemType.equals(ListElem.MANTGROUPS))
     {
-    
+    Attr=Rec.getAttr(PDGroups.fNAME);
+    SB.append(GenInput(Req, Attr, ReadOnly, Modif));
+    Attr=Rec.getAttr(PDGroups.fDESCRIPTION);
+    SB.append(GenInput(Req, Attr, ReadOnly, Modif)); 
+    Attr=Rec.getAttr(PDGroups.fACL);
+    SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" options:[");
+    SB.append(getComboModel("ACL",PDSession) );
+    SB.append("]},"); 
+    SB.append("{type: \"hidden\", name:\"Users\", value: \"").append(GenGUsers(PDSession, Id)).append("\"},");
+    SB.append("{type: \"hidden\", name:\"Groups\", value: \"").append(GenGGroups(PDSession, Id)).append("\"},");
     }
 else if (ElemType.equals(ListElem.MANTUSERS))
     {
@@ -463,6 +482,7 @@ while (NextUP!=null)
     SB.append("|").append(User).append("/").append(Perm);
     NextUP=PDSession.NextRec(ListUsersPerm);
     }   
+PDSession.CloseCursor(ListUsersPerm);
 } catch (Exception Ex)
     {
     PDLog.Error(Ex.getLocalizedMessage());
@@ -479,11 +499,12 @@ Cursor ListGroupsPerm = Acl.ListGroups(Id);
 Record NextGP=PDSession.NextRec(ListGroupsPerm);
 while (NextGP!=null)
     {   
-    String User=(String)NextGP.getAttr(PDACL.fGROUPNAME).getValue();
+    String Gr=(String)NextGP.getAttr(PDACL.fGROUPNAME).getValue();
     int Perm=(Integer)NextGP.getAttr(PDACL.fPERMISION).getValue();
-    SB.append("|").append(User).append("/").append(Perm);
+    SB.append("|").append(Gr).append("/").append(Perm);
     NextGP=PDSession.NextRec(ListGroupsPerm);
     }   
+PDSession.CloseCursor(ListGroupsPerm);
 } catch (Exception Ex)
     {
     PDLog.Error(Ex.getLocalizedMessage());
@@ -526,7 +547,49 @@ if (Groups!=null && Groups.length()>0)
     }
 }
 //-----------------------------------------------------------------------------------------------
-private void UpdateACLMembers(PDACL Acl, HttpServletRequest Req)
+private StringBuilder GenGUsers(DriverGeneric PDSession, String Id)
+{
+StringBuilder SB=new StringBuilder();
+try {
+PDGroups Gr=new PDGroups(PDSession);
+Cursor ListUsersPerm = Gr.ListUsers(Id);
+Record NextUP=PDSession.NextRec(ListUsersPerm);
+while (NextUP!=null)
+    {   
+    String User=(String)NextUP.getAttr(PDGroups.fUSERNAME).getValue();
+    SB.append("|").append(User);
+    NextUP=PDSession.NextRec(ListUsersPerm);
+    }   
+PDSession.CloseCursor(ListUsersPerm);
+} catch (Exception Ex)
+    {
+    PDLog.Error(Ex.getLocalizedMessage());
+    }
+return(SB);
+}
+//-----------------------------------------------------------------------------------------------
+private StringBuilder GenGGroups(DriverGeneric PDSession, String Id)
+{
+StringBuilder SB=new StringBuilder();
+try {
+PDGroups Gr=new PDGroups(PDSession);
+Cursor ListGroupsPerm = Gr.ListGroups(Id);
+Record NextGP=PDSession.NextRec(ListGroupsPerm);
+while (NextGP!=null)
+    {   
+    String SubGr=(String)NextGP.getAttr(PDGroups.fMEMBERNAME).getValue();
+    SB.append("|").append(SubGr);
+    NextGP=PDSession.NextRec(ListGroupsPerm);
+    }   
+PDSession.CloseCursor(ListGroupsPerm);
+} catch (Exception Ex)
+    {
+    PDLog.Error(Ex.getLocalizedMessage());
+    }
+return(SB);
+}
+//-----------------------------------------------------------------------------------------------
+private void InsertGroupMembers(PDGroups Gr, HttpServletRequest Req)
 {
 String[] UPairs;    
 String Users=Req.getParameter("Users");
@@ -535,10 +598,9 @@ if (Users!=null && Users.length()>0)
     UPairs = Users.split("\\|");
     for (int i = 0; i < UPairs.length; i++)
         {
-        String UPair = UPairs[i];
-        String[] U_P = UPair.split("/");
         try {
-        Acl.addUser(U_P[0], Integer.parseInt(U_P[1]));
+        if (UPairs[i].length()!=0)    
+            Gr.addUser( UPairs[i]);
         } catch(Exception Ex)
             {
             }
@@ -550,16 +612,16 @@ if (Groups!=null && Groups.length()>0)
     UPairs = Groups.split("\\|");
     for (int i = 0; i < UPairs.length; i++)
         {
-        String UPair = UPairs[i];
-        String[] U_P = UPair.split("/");
         try {
-        Acl.addGroup(U_P[0], Integer.parseInt(U_P[1]));
+        if (UPairs[i].length()!=0)    
+            Gr.addGroup(UPairs[i]);
         } catch(Exception Ex)
             {
             }
         }
     }
 }
+//-----------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------
 
 }

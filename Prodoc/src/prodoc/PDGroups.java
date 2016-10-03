@@ -918,4 +918,52 @@ for (int NumNodes = 0; NumNodes < childNodes.getLength(); NumNodes++)
     }
 }    
 //-------------------------------------------------------------------------
+
+public void DelAllSubGroups() throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDGroups.DelAllSubGroups>:"+getName());
+boolean InTransLocal;
+InTransLocal=!getDrv().isInTransaction();
+Conditions ListCond=new Conditions();
+ListCond.addCondition(new Condition(fGROUPNAME, Condition.cEQUAL, getName()));
+if (InTransLocal)
+    getDrv().IniciarTrans();
+try {
+getDrv().DeleteRecord(this.getTabNameGroupGroups(), ListCond);
+} catch (PDException Ex)
+    {
+    getDrv().AnularTrans();
+    throw Ex;
+    }
+if (InTransLocal)
+    getDrv().CerrarTrans();
+if (PDLog.isDebug())
+    PDLog.Debug("PDGroups.DelAllSubGroups<");
+}
+//-------------------------------------------------------------------------
+
+public void DelAllUsers() throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDGroups.DelAllSubGroups>:"+getName());
+boolean InTransLocal;
+InTransLocal=!getDrv().isInTransaction();
+Conditions ListCondUser=new Conditions();
+ListCondUser.addCondition(new Condition(fGROUPNAME, Condition.cEQUAL, getName()));
+if (InTransLocal)
+    getDrv().IniciarTrans();
+try {
+getDrv().DeleteRecord(this.getTabNameGroupUsers(), ListCondUser);
+} catch (PDException Ex)
+    {
+    getDrv().AnularTrans();
+    throw Ex;
+    }
+if (InTransLocal)
+    getDrv().CerrarTrans();
+if (PDLog.isDebug())
+    PDLog.Debug("PDGroups.DelAllSubGroups<");
+}
+//-------------------------------------------------------------------------
 }

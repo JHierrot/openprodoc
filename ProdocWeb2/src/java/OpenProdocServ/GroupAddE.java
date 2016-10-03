@@ -21,16 +21,20 @@ package OpenProdocServ;
 
 import OpenProdocUI.SParent;
 import static OpenProdocUI.SParent.TT;
+import static OpenProdocUI.SParent.getComboModel;
 import java.io.PrintWriter;
 import javax.servlet.http.*;
+import prodoc.Attribute;
 import prodoc.DriverGeneric;
+import prodoc.PDDocs;
+import prodoc.PDFolders;
 
 
 /**
  *
  * @author jhierrot
  */
-public class FormEPerm extends SParent
+public class GroupAddE extends SParent
 {
 //-----------------------------------------------------------------------------------------------
 /**
@@ -46,24 +50,9 @@ StringBuilder SB=new StringBuilder(2000);
 String Type=Req.getParameter("Type");
 String Oper=Req.getParameter("Oper");
 String Id=Req.getParameter("Id");
-SB.append("[{type: \"label\", label: \"").append(TT(Req, Oper.equalsIgnoreCase("New")?"Add_Permission":"Update_Permission")).append("\"},");  
-SB.append("{type: \"block\", list:[" );
-if (Oper.equalsIgnoreCase("New"))            
-    {
-    SB.append("{type: \"combo\", name: \"").append(Type).append("\", label: \"").append(TT(Req, Type)).append("\", options:[");
-    SB.append(getComboModel(Type,PDSession) );
-    SB.append("]},");
-    }
-else
-    {
-    SB.append("{type: \"input\", name: \"").append(Type).append("\", readonly: \"true\",value:\"").append(Id).append("\"}, ");
-    }
-SB.append("{type: \"newcolumn\", offset:20 },");
-SB.append("{type: \"combo\", label: \"").append(TT(Req, "Permission")).append("\", name: \"Permission\", inputWidth:\"auto\", options:[");
-SB.append("{text: \"READ\", value: \"1\", selected: true},");
-SB.append("{text: \"UPDATE\", value: \"4\"},");
-SB.append("{text: \"DELETE\", value: \"5\"}");
-SB.append("]}");
+SB.append("[{type: \"label\", label: \"").append(TT(Req, Type.equalsIgnoreCase("Users")?"Add_user_to_group":"Add_group_to_group")).append("\"},");  
+SB.append("{type: \"combo\", name: \"").append(Type).append("\", label: \"").append(TT(Req, Type)).append("\", options:[");
+SB.append(getComboModel(Type,PDSession) );
 SB.append("]},");
 SB.append("{type: \"block\", width: 250, list:[" );
 SB.append("{type: \"button\", name: \"OK\", value: \"").append(TT(Req, "Ok")).append("\"},");
@@ -81,12 +70,12 @@ out.println(SB.toString());
 @Override
 public String getServletInfo()
 {
-return "FormEPerm Servlet";
+return "GroupAddE Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 static public String getUrlServlet()
 {
-return("FormEPerm");
+return("GroupAddE");
 }
 //-----------------------------------------------------------------------------------------------
 }

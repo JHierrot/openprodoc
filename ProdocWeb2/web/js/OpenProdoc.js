@@ -54,6 +54,7 @@ var WinElem;
 var FormElem;
 var ELEMACL="ACL";
 var ELEMMIME="MimeTypes";
+var ELEMGROUPS="Groups";
 var FiltExp="";
 var ElemTabBar;
 var EOPERNEW="New";
@@ -195,7 +196,7 @@ switch (IdMenu)
         break;
     case "ACL": Admin(ELEMACL);
         break;
-    case "Groups": Admin("Groups");
+    case "Groups": Admin(ELEMGROUPS);
         break;
     case "Users": Admin("Users");
         break;
@@ -2050,6 +2051,17 @@ if (TypeElem==ELEMACL)
         }
     FormElem.setItemValue("Users", AllPerm);    
     }
+else if (TypeElem==ELEMGROUPS)    
+    {
+    var AllPerm="";    
+    for (var NumG=0; NumG<GGroups.getRowsNum(); NumG++)   
+        AllPerm=AllPerm+"|"+GGroups.cellByIndex(NumG, 0).getValue();
+    FormElem.setItemValue("Groups", AllPerm);    
+    AllPerm="";    
+    for (var NumU=0; NumU<GUsers.getRowsNum(); NumU++)   
+        AllPerm=AllPerm+"|"+GUsers.cellByIndex(NumU, 0).getValue();
+    FormElem.setItemValue("Users", AllPerm);    
+    }     
 }
 //------------------------------------------------------------
 function ElemMod(TypeElem, ElemId)
@@ -2246,6 +2258,34 @@ if (TypeElem==ELEMACL)
     GUsers.setColSorting("str,str");
     GUsers.init();
     }
+else if (TypeElem==ELEMGROUPS )
+    {
+    ElemLayout=WinElem.attachLayout('2E');   
+    ElemLayout.cells('a').hideHeader();
+    FormElem=ElemLayout.cells('a').attachForm(); 
+    ElemLayout.cells('a').setHeight(180);
+    ElemTabBar=ElemLayout.cells('b').attachTabbar();
+    ElemTabBar.addTab("Groups", "Groups", null, null, true); //---
+    TBG = ElemTabBar.tabs("Groups").attachToolbar();
+    TBG.addButton(EOPERNEW, 0, "New", "New.png", "New.png");
+    TBG.addButton(EOPERDEL, 1, "Delete", "Edit.png", "Edit.png");
+    GGroups = ElemTabBar.tabs("Groups").attachGrid();
+    GGroups.setHeader("Groups");
+    GGroups.setColAlign("left");     
+    GGroups.setColTypes("ro");              
+    GGroups.setColSorting("str");
+    GGroups.init();
+    ElemTabBar.addTab("Users", "Users");                    //---
+    TBU = ElemTabBar.tabs("Users").attachToolbar();
+    TBU.addButton(EOPERNEW, 0, "New", "New.png", "New.png");
+    TBU.addButton(EOPERDEL, 1, "Delete", "Edit.png", "Edit.png");
+    GUsers = ElemTabBar.tabs("Users").attachGrid();
+    GUsers.setHeader("Users");
+    GUsers.setColAlign("left");     
+    GUsers.setColTypes("ro");              
+    GUsers.setColSorting("str");
+    GUsers.init();
+    }
 else
     FormElem=WinElem.attachForm();   
 if (TypeElem==ELEMMIME)
@@ -2257,6 +2297,8 @@ function CompleteForm(Oper, TypeElem)
 {
 if (TypeElem==ELEMACL)
     CompleteFormAcl(Oper);       
+else if (TypeElem==ELEMGROUPS)
+    CompleteFormGroup(Oper);       
 }
 //--------------------------------------------------------------
 function CompleteFormAcl(Oper)   
@@ -2306,6 +2348,43 @@ TBU.attachEvent("onClick", function(Oper)
     });
 }    
 //--------------------------------------------------------------
+function CompleteFormGroup(Oper)   
+{
+if (Oper==EOPERDEL)
+    {
+    TBG.clearAll();
+    TBU.clearAll();
+    }    
+var ListUP=FormElem.getItemValue("Users");    
+var UP=ListUP.split("|");
+for (var i=0; i<UP.length; i++)
+    {
+    if (UP[i]!="")    
+        GUsers.addRow(UP[i], UP[i]);
+    }    
+ListUP=FormElem.getItemValue("Groups");    
+UP=ListUP.split("|");
+for (var i=0; i<UP.length; i++)
+    {
+    if (UP[i]!="")    
+        GGroups.addRow(UP[i], UP[i]);
+    } 
+TBG.attachEvent("onClick", function(Oper)  
+    {
+    if (Oper==EOPERNEW)    
+        GroupAddE(Oper, "Groups");
+    else if (GGroups.getSelectedRowId()!=null && Oper==EOPERDEL)     
+        GGroups.deleteRow(GGroups.getSelectedRowId());   
+    });
+TBU.attachEvent("onClick", function(Oper)  
+    {
+    if (Oper==EOPERNEW)    
+        GroupAddE(Oper, "Users");
+    else if (GUsers.getSelectedRowId()!=null && Oper==EOPERDEL)     
+        GUsers.deleteRow(GUsers.getSelectedRowId());   
+    });
+}    
+//--------------------------------------------------------------
 function GroupPerm(Oper, Type)
 {
 var WEPerm=myWins.createWindow({
@@ -2333,6 +2412,33 @@ FormEPerm.attachEvent("onButtonClick", function (name)
         else
             Grid.addRow(FormEPerm.getItemValue(Type),FormEPerm.getItemValue(Type)+","+PERMISSIONS[FormEPerm.getItemValue("Permission")]) 
         }
+    FormEPerm.unload();
+    WEPerm.close();   
+    });
+}
+//--------------------------------------------------------------
+function GroupAddE(Oper, Type)
+{
+var WEPerm=myWins.createWindow({
+id:"WEPerm",
+left:20,
+top:30,
+width:500,
+height:150,
+center:true,
+modal:true,
+resize:true});  
+WEPerm.setText(Type);
+var FormEPerm=WEPerm.attachForm();  
+var Grid;
+if (Type=="Groups")
+    Grid=GGroups;
+else
+    Grid=GUsers;
+FormEPerm.loadStruct("GroupAddE?Type="+Type+"&Oper="+Oper+"&Id="+GGroups.getSelectedRowId());
+FormEPerm.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        Grid.addRow(FormEPerm.getItemValue(Type),FormEPerm.getItemValue(Type)) 
     FormEPerm.unload();
     WEPerm.close();   
     });

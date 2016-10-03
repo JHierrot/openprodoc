@@ -264,6 +264,10 @@
         <servlet-name>FormEPerm</servlet-name>
         <servlet-class>OpenProdocServ.FormEPerm</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>GroupAddE</servlet-name>
+        <servlet-class>OpenProdocServ.GroupAddE</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SMain</servlet-name>
         <url-pattern>/SMain</url-pattern>
@@ -527,6 +531,10 @@
     <servlet-mapping>
         <servlet-name>FormEPerm</servlet-name>
         <url-pattern>/FormEPerm</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GroupAddE</servlet-name>
+        <url-pattern>/GroupAddE</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
