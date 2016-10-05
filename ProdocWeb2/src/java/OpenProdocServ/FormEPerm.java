@@ -51,7 +51,7 @@ SB.append("{type: \"block\", list:[" );
 if (Oper.equalsIgnoreCase("New"))            
     {
     SB.append("{type: \"combo\", name: \"").append(Type).append("\", label: \"").append(TT(Req, Type)).append("\", options:[");
-    SB.append(getComboModel(Type,PDSession) );
+    SB.append(getComboModel(Type,PDSession, null) );
     SB.append("]},");
     }
 else

@@ -869,7 +869,7 @@ return(System.getProperty("java.io.tmpdir"));
  * @param ListName
  * @return
  */
-static public String getComboModel(String ListName, DriverGeneric Session) throws PDException
+static public String getComboModel(String ListName, DriverGeneric Session, String Value) throws PDException
 {
 StringBuilder ListVals=new StringBuilder(5000);
 ObjPD Obj = null;
@@ -891,7 +891,7 @@ Cursor CursorId = Obj.SearchLikeDesc("*");
 Record Res=Session.NextRec(CursorId);
 while (Res!=null)
     {
-    ListVals.append("{text: \"").append(Res.getAttr(PDRoles.fDESCRIPTION).getValue()).append("\", value: \"").append(Res.getAttr(PDRoles.fNAME).getValue()).append("\"}");
+    ListVals.append("{text: \"").append(Res.getAttr(PDRoles.fDESCRIPTION).getValue()).append("\", value: \"").append(Res.getAttr(PDRoles.fNAME).getValue()).append("\" "+((Value!=null&&Value.equalsIgnoreCase((String)Res.getAttr(PDRoles.fNAME).getValue()))?", selected: true":"")+"}");
     Res=Session.NextRec(CursorId);
     if (Res!=null)
         ListVals.append(",");
@@ -987,7 +987,7 @@ Attr=FR.getAttr(PDFolders.fTITLE);
 Form.append(GenInput(Req, Attr,  ReadOnly, Modif));
 Attr=FR.getAttr(PDFolders.fACL);
 Form.append("{type: \"combo\", name: \"" + PDFolders.fACL + "\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" options:[");
-Form.append(getComboModel("ACL",PDSession) );
+Form.append(getComboModel("ACL",PDSession, (String)Attr.getValue()) );
 Form.append("]},");
 FR.initList();
 Attr=FR.nextAttr();
@@ -1026,7 +1026,7 @@ Attr=FR.getAttr(PDFolders.fTITLE);
 Form.append(GenInput(Req, Attr,  ReadOnly, Modif));
 Attr=FR.getAttr(PDFolders.fACL);
 Form.append("{type: \"combo\", name: \"" + PDFolders.fACL + "\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" options:[");
-Form.append(getComboModel("ACL",PDSession) );
+Form.append(getComboModel("ACL",PDSession,(String)Attr.getValue()) );
 Form.append("]},");
 FR.initList();
 Attr=FR.nextAttr();
@@ -1198,7 +1198,7 @@ else if (Attr.getName().equals(PDDocs.fDOCTYPE))
     {
     DriverGeneric PDSession=getSessOPD(Req);   
     FormField.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", inputWidth: 200, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", options:[");
-    FormField.append(getComboModel("ACL",PDSession) );
+    FormField.append(getComboModel("ACL",PDSession,(String)Attr.getValue()) );
     FormField.append("]},");    
     }
 else switch (Attr.getType())

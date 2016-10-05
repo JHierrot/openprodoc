@@ -29,11 +29,13 @@ import prodoc.Cursor;
 import prodoc.DriverGeneric;
 import prodoc.ObjPD;
 import prodoc.PDACL;
+import prodoc.PDAuthenticators;
 import prodoc.PDCustomization;
 import prodoc.PDException;
 import prodoc.PDGroups;
 import prodoc.PDLog;
 import prodoc.PDMimeType;
+import prodoc.PDRepository;
 import prodoc.PDRoles;
 import prodoc.PDUser;
 import prodoc.Record;
@@ -286,14 +288,35 @@ else if (ElemType.equals(ListElem.MANTGROUPS))
     SB.append(GenInput(Req, Attr, ReadOnly, Modif)); 
     Attr=Rec.getAttr(PDGroups.fACL);
     SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" options:[");
-    SB.append(getComboModel("ACL",PDSession) );
+    SB.append(getComboModel("ACL",PDSession, (String)Attr.getValue()) );
     SB.append("]},"); 
     SB.append("{type: \"hidden\", name:\"Users\", value: \"").append(GenGUsers(PDSession, Id)).append("\"},");
     SB.append("{type: \"hidden\", name:\"Groups\", value: \"").append(GenGGroups(PDSession, Id)).append("\"},");
     }
 else if (ElemType.equals(ListElem.MANTUSERS))
     {
-    
+    Attr=Rec.getAttr(PDUser.fNAME);
+    SB.append(GenInput(Req, Attr, ReadOnly, Modif));
+    Attr=Rec.getAttr(PDUser.fDESCRIPTION);
+    SB.append(GenInput(Req, Attr, ReadOnly, Modif)); 
+    Attr=Rec.getAttr(PDUser.fEMAIL);
+    SB.append(GenInput(Req, Attr, ReadOnly, Modif)); 
+    Attr=Rec.getAttr(PDUser.fVALIDATION);
+    SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", options:[");
+    SB.append(getComboModel("Authenticators",PDSession, (String)Attr.getValue()) );
+    SB.append("]},"); 
+    Attr=Rec.getAttr(PDUser.fACTIVE);
+    SB.append(GenInput(Req, Attr, ReadOnly, Modif)); 
+    Attr=Rec.getAttr(PDUser.fROLE);
+    SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", options:[");
+    SB.append(getComboModel("Roles",PDSession, (String)Attr.getValue()) );
+    SB.append("]},"); 
+    Attr=Rec.getAttr(PDUser.fPASSWORD);
+    SB.append(GenInput(Req, Attr, ReadOnly, Modif)); 
+    Attr=Rec.getAttr(PDUser.fCUSTOM);
+    SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", options:[");
+    SB.append(getComboModel("Customizers",PDSession,(String)Attr.getValue()) );
+    SB.append("]},"); 
     }
 else if (ElemType.equals(ListElem.MANTROLES))
     {
@@ -369,7 +392,31 @@ else if (ElemType.equals(ListElem.MANTMIME))
     }
 else if (ElemType.equals(ListElem.MANTREPO))
     {
-    
+    Attr=Rec.getAttr(PDRepository.fNAME);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDRepository.fDESCRIPTION);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDRepository.fREPTYPE);
+    String Value=(String)Attr.getValue();
+    SB.append("{type: \"combo\", label: \"").append(TT(Req, Attr.getUserName())).append("\", name: \"").append(Attr.getName()).append("\",").append((Oper.equals(OPERMODIF)|| Oper.equals(OPERDELETE))?"disabled:1,":"").append(" inputWidth:\"auto\", options:[");
+    SB.append("{text:\"" + PDRepository.tBBDD + "\", value:\"" + PDRepository.tBBDD + "\"").append((Value!=null&&Value.equalsIgnoreCase(PDRepository.tBBDD))?", selected:true":"").append("},");
+    SB.append("{text:\"" + PDRepository.tFS + "\", value:\"" + PDRepository.tFS + "\"").append((Value!=null&&Value.equalsIgnoreCase(PDRepository.tFS))?", selected:true":"").append("},");
+    SB.append("{text:\"" + PDRepository.tFTP + "\", value:\"" + PDRepository.tFTP + "\"").append((Value!=null&&Value.equalsIgnoreCase(PDRepository.tFTP))?", selected:true":"").append("},");
+    SB.append("{text:\"" + PDRepository.tREFURL + "\", value:\"" + PDRepository.tREFURL + "\"").append((Value!=null&&Value.equalsIgnoreCase(PDRepository.tREFURL))?", selected: true":"").append("},");
+    SB.append("{text:\"" + PDRepository.tS3 + "\", value:\"" + PDRepository.tS3 + "\"").append((Value!=null&&Value.equalsIgnoreCase(PDRepository.tS3))?", selected:true":"").append("}");
+    SB.append("]},");
+    Attr=Rec.getAttr(PDRepository.fURL);
+    if (Attr.getValue()!=null)
+        Attr.setValue(((String)Attr.getValue()).replace("\\", "/"));
+    SB.append(GenInput(Req, Attr,  (Oper.equals(OPERMODIF)|| Oper.equals(OPERDELETE)) , Modif));
+    Attr=Rec.getAttr(PDRepository.fPARAM);
+    SB.append(GenInput(Req, Attr,  (Oper.equals(OPERMODIF)|| Oper.equals(OPERDELETE)), Modif));
+    Attr=Rec.getAttr(PDRepository.fUSERNAME);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDRepository.fPASSWORD);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDRepository.fENCRYPT);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
     }
 else if (ElemType.equals(ListElem.MANTOBJ))
     {
@@ -377,7 +424,29 @@ else if (ElemType.equals(ListElem.MANTOBJ))
     }
 else if (ElemType.equals(ListElem.MANTAUTH))
     {
-    
+    Attr=Rec.getAttr(PDAuthenticators.fNAME);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDAuthenticators.fDESCRIPTION);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDAuthenticators.fAUTHTYPE);
+    String Value=(String)Attr.getValue();
+    SB.append("{type: \"combo\", label: \"").append(TT(Req, Attr.getUserName())).append("\", name: \"").append(Attr.getName()).append("\",").append((Oper.equals(OPERMODIF)|| Oper.equals(OPERDELETE))?"disabled:1,":"").append(" inputWidth:\"auto\", options:[");
+    SB.append("{text:\"" + PDAuthenticators.tOPD + "\", value:\"" + PDAuthenticators.tOPD + "\"").append((Value!=null&&Value.equalsIgnoreCase(PDRepository.tBBDD))?", selected:true":"").append("},");
+    SB.append("{text:\"" + PDAuthenticators.tLDAP + "\", value:\"" + PDAuthenticators.tLDAP + "\"").append((Value!=null&&Value.equalsIgnoreCase(PDRepository.tFTP))?", selected:true":"").append("},");
+    SB.append("{text:\"" + PDAuthenticators.tBBDD + "\", value:\"" + PDAuthenticators.tBBDD + "\"").append((Value!=null&&Value.equalsIgnoreCase(PDRepository.tFS))?", selected:true":"").append("},");
+    SB.append("{text:\"" + PDAuthenticators.tSO + "\", value:\"" + PDAuthenticators.tSO + "\"").append((Value!=null&&Value.equalsIgnoreCase(PDRepository.tREFURL))?", selected: true":"").append("},");
+    SB.append("{text:\"" + PDAuthenticators.tCUSTOM + "\", value:\"" + PDAuthenticators.tCUSTOM + "\"").append((Value!=null&&Value.equalsIgnoreCase(PDRepository.tS3))?", selected:true":"").append("}");
+    SB.append("]},");
+    Attr=Rec.getAttr(PDAuthenticators.fURL);
+    if (Attr.getValue()!=null)
+        Attr.setValue(((String)Attr.getValue()).replace("\\", "/"));
+    SB.append(GenInput(Req, Attr,  (Oper.equals(OPERMODIF)|| Oper.equals(OPERDELETE)) , Modif));
+    Attr=Rec.getAttr(PDAuthenticators.fPARAM);
+    SB.append(GenInput(Req, Attr,  (Oper.equals(OPERMODIF)|| Oper.equals(OPERDELETE)), Modif));
+    Attr=Rec.getAttr(PDAuthenticators.fUSERNAME);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDAuthenticators.fPASSWORD);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
     }
 else if (ElemType.equals(ListElem.MANTCUST))
     {
@@ -394,6 +463,8 @@ else if (ElemType.equals(ListElem.MANTCUST))
     Attr=Rec.getAttr(PDCustomization.fSTYLE);
     SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
     Attr=Rec.getAttr(PDCustomization.fSWINGSTYLE);
+    if (Attr.getValue()!=null)
+        Attr.setValue(((String)Attr.getValue()).replace("\"", "'"));
     SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
     }
 return(SB);

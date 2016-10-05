@@ -52,7 +52,7 @@ String Oper=Req.getParameter("Oper");
 String Id=Req.getParameter("Id");
 SB.append("[{type: \"label\", label: \"").append(TT(Req, Type.equalsIgnoreCase("Users")?"Add_user_to_group":"Add_group_to_group")).append("\"},");  
 SB.append("{type: \"combo\", name: \"").append(Type).append("\", label: \"").append(TT(Req, Type)).append("\", options:[");
-SB.append(getComboModel(Type,PDSession) );
+SB.append(getComboModel(Type,PDSession, null) );
 SB.append("]},");
 SB.append("{type: \"block\", width: 250, list:[" );
 SB.append("{type: \"button\", name: \"OK\", value: \"").append(TT(Req, "Ok")).append("\"},");

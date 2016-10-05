@@ -55,6 +55,8 @@ var FormElem;
 var ELEMACL="ACL";
 var ELEMMIME="MimeTypes";
 var ELEMGROUPS="Groups";
+var ELEMREPOS="Repositories";
+var ELEMAUTH="Authenticators";
 var FiltExp="";
 var ElemTabBar;
 var EOPERNEW="New";
@@ -204,11 +206,11 @@ switch (IdMenu)
         break;
     case "MimeTypes": Admin(ELEMMIME);
         break;
-    case "Repositories": Admin("Repositories");
+    case "Repositories": Admin(ELEMREPOS);
         break;
     case "ObjDef": Admin("ObjDef");
         break;
-    case "Authenticators": Admin("Authenticators");
+    case "Authenticators": Admin(ELEMAUTH);
         break;
     case "Customizations": Admin("Customizations");
         break;
@@ -2290,7 +2292,8 @@ else
     FormElem=WinElem.attachForm();   
 if (TypeElem==ELEMMIME)
     WinElem.setDimension(500, 250);
-
+else if (TypeElem==ELEMREPOS || TypeElem==ELEMAUTH)
+    WinElem.setDimension(500, 400);
 }
 //--------------------------------------------------------------
 function CompleteForm(Oper, TypeElem)
