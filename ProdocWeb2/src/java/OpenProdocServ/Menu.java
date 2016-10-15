@@ -19,7 +19,6 @@
 
 package OpenProdocServ;
 
-import OpenProdocUI.SMain;
 import OpenProdocUI.SParent;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -74,7 +73,7 @@ private String genMenu(HttpServletRequest Req)
 {
 try {    
 StringBuilder Men=new StringBuilder(2000);
-PDRoles R=SMain.getSessOPD(Req).getUser().getRol();
+PDRoles R=getSessOPD(Req).getUser().getRol();
 Men.append("<?xml version=\"1.0\"?><menu><item id=\"Folders\" text=\"").append(TT(Req, "Folders")).append("\">");
 if (R.isAllowCreateFolder())
    Men.append("<item id=\"AddFold\" text=\"").append(TT(Req, "Add")).append("\" img=\"img/new.gif\" imgdis=\"img/new_dis.gif\"/>");

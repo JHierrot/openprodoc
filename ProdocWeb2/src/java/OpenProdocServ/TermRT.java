@@ -19,7 +19,6 @@
 
 package OpenProdocServ;
 
-import OpenProdocUI.SMain;
 import OpenProdocUI.SParent;
 import java.io.PrintWriter;
 import java.util.HashSet;
@@ -69,7 +68,7 @@ private String GenListDoc(HttpServletRequest Req)
 {
 StringBuilder FolderDocs=new StringBuilder(3000);
 FolderDocs.append("<?xml version=\"1.0\" encoding=\"iso-8859-1\"?><rows>");
-DriverGeneric PDSession=SMain.getSessOPD(Req);
+DriverGeneric PDSession=getSessOPD(Req);
 String TermId=Req.getParameter("Id");
 try {
 PDThesaur Term=new PDThesaur(PDSession);

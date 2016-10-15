@@ -19,7 +19,6 @@
 
 package OpenProdocServ;
 
-import OpenProdocUI.SMain;
 import OpenProdocUI.SParent;
 import java.io.PrintWriter;
 import java.util.HashSet;
@@ -69,7 +68,7 @@ private String GenTreeThes(HttpServletRequest Req)
 {
 StringBuilder ThesTree=new StringBuilder(3000);
 ThesTree.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-DriverGeneric PDSession=SMain.getSessOPD(Req);
+DriverGeneric PDSession=getSessOPD(Req);
 String ThesaurId=Req.getParameter("ThesId");
 String ThesId=Req.getParameter("id");
 try {

@@ -819,6 +819,12 @@ public static String getProdocProperRef() throws Exception
 if (ProdocProperRef==null)
     {
     InputStream Is=null;    
+    File f=new File("../conf/Prodoc.properties");
+    if (f.exists())
+        {
+        ProdocProperRef=f.getAbsolutePath();    
+        return(ProdocProperRef);
+        }
     String Path=System.getProperty("user.home");    
     try {
     Is  = new FileInputStream(Path+File.separator+"OPDWeb.properties");        
@@ -829,7 +835,12 @@ if (ProdocProperRef==null)
     if (Is==null)
         {
         Path=System.getenv("OPDWeb");
-        Is  = new FileInputStream(Path+File.separator+"OPDWeb.properties");            
+        try {
+        Is  = new FileInputStream(Path+File.separator+"OPDWeb.properties");
+        } catch (Exception ex)
+            {
+            Is=null;    
+            }
         }
     Properties p= new Properties(); // TODO: CAMBIAR DOC apunta a OPEWEB , no properties y jdbc en path. Interfaz administración tareas ingles y 't''
     p.load(Is);

@@ -19,7 +19,6 @@
 
 package OpenProdocServ;
 
-import OpenProdocUI.SMain;
 import OpenProdocUI.SParent;
 import java.io.PrintWriter;
 import java.util.HashSet;
@@ -69,7 +68,7 @@ private String GenTree(HttpServletRequest Req)
 {
 StringBuilder FolderTree=new StringBuilder(3000);
 FolderTree.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-DriverGeneric PDSession=SMain.getSessOPD(Req);
+DriverGeneric PDSession=getSessOPD(Req);
 String FoldId=Req.getParameter("id");
 try {
 PDFolders CurFold = new PDFolders(PDSession);

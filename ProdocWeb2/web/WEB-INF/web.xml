@@ -1,20 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
     <servlet>
-        <servlet-name>SMain</servlet-name>
-        <servlet-class>OpenProdocUI.SMain</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>SParent</servlet-name>
         <servlet-class>OpenProdocUI.SParent</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Login</servlet-name>
         <servlet-class>OpenProdocServ.Login</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>SLogin</servlet-name>
-        <servlet-class>OpenProdocUI.SLogin</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Menu</servlet-name>
@@ -153,10 +145,6 @@
         <servlet-class>OpenProdocServ.ImportThes</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ImporThes0</servlet-name>
-        <servlet-class>OpenProdocServ.ImporThes0</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>ImportThes0</servlet-name>
         <servlet-class>OpenProdocServ.ImportThes0</servlet-class>
     </servlet>
@@ -268,10 +256,18 @@
         <servlet-name>GroupAddE</servlet-name>
         <servlet-class>OpenProdocServ.GroupAddE</servlet-class>
     </servlet>
-    <servlet-mapping>
-        <servlet-name>SMain</servlet-name>
-        <url-pattern>/SMain</url-pattern>
-    </servlet-mapping>
+    <servlet>
+        <servlet-name>MainOPD</servlet-name>
+        <servlet-class>OpenProdocUI.MainOPD</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListAttrInherited</servlet-name>
+        <servlet-class>OpenProdocServ.ListAttrInherited</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FormAttr</servlet-name>
+        <servlet-class>OpenProdocServ.FormAttr</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SParent</servlet-name>
         <url-pattern>/SParent</url-pattern>
@@ -279,10 +275,6 @@
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/Login</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>SLogin</servlet-name>
-        <url-pattern>/SLogin</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Menu</servlet-name>
@@ -421,10 +413,6 @@
         <url-pattern>/ImportThes</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ImporThes0</servlet-name>
-        <url-pattern>/ImporThes0</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>ImportThes0</servlet-name>
         <url-pattern>/ImportThes0</url-pattern>
     </servlet-mapping>
@@ -535,6 +523,18 @@
     <servlet-mapping>
         <servlet-name>GroupAddE</servlet-name>
         <url-pattern>/GroupAddE</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MainOPD</servlet-name>
+        <url-pattern>/MainOPD</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListAttrInherited</servlet-name>
+        <url-pattern>/ListAttrInherited</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FormAttr</servlet-name>
+        <url-pattern>/FormAttr</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

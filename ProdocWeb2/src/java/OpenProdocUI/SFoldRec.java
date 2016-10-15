@@ -48,7 +48,7 @@ private static final String List=PDFolders.fACL+"/"+PDFolders.fFOLDTYPE+"/"+PDFo
 @Override
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {
-DriverGeneric PDSession=SMain.getSessOPD(Req);
+DriverGeneric PDSession=getSessOPD(Req);
 String FoldId=Req.getParameter("FoldId");
 PDFolders Fold=new PDFolders(PDSession);
 Fold.LoadFull(FoldId);

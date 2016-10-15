@@ -57,6 +57,7 @@ var ELEMMIME="MimeTypes";
 var ELEMGROUPS="Groups";
 var ELEMREPOS="Repositories";
 var ELEMAUTH="Authenticators";
+var ELEMOBJ="ObjDef";
 var FiltExp="";
 var ElemTabBar;
 var EOPERNEW="New";
@@ -71,8 +72,13 @@ var ElemLayout;
 var ElemTabBar;
 var GUsers;
 var GGroups;
+var GMetadata;
+var GInherited;
 var TBG;
 var TBU;
+var WinAttr;
+var FormAttr;
+var AT_TYPESTRING="2";
        
 function doOnLoadLogin() 
 {   
@@ -208,7 +214,7 @@ switch (IdMenu)
         break;
     case "Repositories": Admin(ELEMREPOS);
         break;
-    case "ObjDef": Admin("ObjDef");
+    case "ObjDef": Admin(ELEMOBJ);
         break;
     case "Authenticators": Admin(ELEMAUTH);
         break;
@@ -322,8 +328,9 @@ resize:false});
 WinAF.setText("OpenProdoc");
 var FormAddThes=WinAF.attachForm();
 FormAddThes.loadStruct(Url+"?T="+CurrThes, function(){
-FormAddThes.setFocusOnFirstActive();
-});
+    FormAddThes.setFocusOnFirstActive();
+    });
+FormAddThes.enableLiveValidation(true);     
 FormAddThes.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {    
@@ -415,8 +422,9 @@ if (Url!="AddTerm")
     }
 NTGrid.init();
 FormAddTerm.loadStruct(Url+"?T="+idCurrTerm+"&Tes="+CurrThes, function(){
-FormAddTerm.setFocusOnFirstActive();
-});
+    FormAddTerm.setFocusOnFirstActive();
+    });
+FormAddTerm.enableLiveValidation(true);    
 FormAddTerm.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {    
@@ -514,8 +522,9 @@ resize:false});
 WinAF.setText("OpenProdoc");
 var FormAddThes=WinAF.attachForm();
 FormAddThes.loadStruct(Url+"?T="+CurrThes, function(){
-FormAddThes.setFocusOnFirstActive();
-});
+    FormAddThes.setFocusOnFirstActive();
+    });
+FormAddThes.enableLiveValidation(true); 
 FormAddThes.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {    
@@ -559,8 +568,9 @@ resize:false});
 WinAF.setText("OpenProdoc");
 var FormAddThes=WinAF.attachForm();
 FormAddThes.loadStruct(Url+"?T="+CurrThes, function(){
-FormAddThes.setFocusOnFirstActive();
-});
+    FormAddThes.setFocusOnFirstActive();
+    });
+FormAddThes.enableLiveValidation(true);     
 FormAddThes.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {    
@@ -616,8 +626,8 @@ ToolBar.attachEvent("onClick", function(id)
     });
 var FormSearchTerm = TabBar.tabs("Search").attachForm();
 FormSearchTerm.loadStruct("SearchTerm?Thes="+CurrThes+"&Term="+CurrTerm, function(){
-FormSearchTerm.setFocusOnFirstActive();
-});    
+    FormSearchTerm.setFocusOnFirstActive();
+    });    
 FormSearchTerm.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {   
@@ -684,8 +694,8 @@ resize:false});
 WinAF.setText("OpenProdoc");
 var FormExpThes=WinAF.attachForm();
 FormExpThes.loadStruct(Url+"?CurrThesId="+CurrThes, function(){
-FormExpThes.setFocusOnFirstActive();
-});
+    FormExpThes.setFocusOnFirstActive();
+    });
 FormExpThes.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {    
@@ -711,8 +721,8 @@ resize:false});
 WinAF.setText("OpenProdoc");
 var FormImpThes=WinAF.attachForm();
 FormImpThes.loadStruct("ImportThes0", function(){
-FormImpThes.setFocusOnFirstActive();
-});
+    FormImpThes.setFocusOnFirstActive();
+    });
 FormImpThes.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {    
@@ -780,8 +790,9 @@ resize:false});
 WinAF.setText("OpenProdoc");
 var FormAddFold=WinAF.attachForm();
 FormAddFold.loadStruct(Url+"?F="+CurrFold, function(){
-FormAddFold.setFocusOnFirstActive();
-});
+    FormAddFold.setFocusOnFirstActive();
+    });
+FormAddFold.enableLiveValidation(true);     
 FormAddFold.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {    
@@ -840,8 +851,9 @@ CreaFoldMain(Url, "PD_FOLDERS");
 function CreaFoldMain(Url, Type)
 {
 FormAddFold.loadStruct(Url+"?F="+CurrFold+"&Ty="+Type, function(){
-FormAddFold.setFocusOnFirstActive();
-});    
+    FormAddFold.setFocusOnFirstActive();
+    });    
+FormAddFold.enableLiveValidation(true);     
 FormAddFold.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {   
@@ -892,8 +904,9 @@ ModFoldMain(EditFold, Url, "");
 function ModFoldMain(EditFold, Url, Type)
 {
 FormAddFold.loadStruct(Url+"?F="+EditFold+"&Ty="+Type, function(){
-FormAddFold.setFocusOnFirstActive();
-});    
+    FormAddFold.setFocusOnFirstActive();
+    });   
+FormAddFold.enableLiveValidation(true); 
 FormAddFold.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {   
@@ -1178,8 +1191,8 @@ var WinUF=myWins.createWindow({
 WinUF.setText("OpenProdoc");
 var FormUpdFold=WinUF.attachForm();
 FormUpdFold.loadStruct("UpdFold?F="+EditFold, function(){
-FormUpdFold.setFocusOnFirstActive();
-});
+    FormUpdFold.setFocusOnFirstActive();
+    });
 FormUpdFold.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {    
@@ -1275,8 +1288,9 @@ SearchFoldMain(Url, "PD_FOLDERS");
 function SearchFoldMain(Url, Type)
 {
 FormAddFold.loadStruct(Url+"?F="+CurrFold+"&Ty="+Type, function(){
-FormAddFold.setFocusOnFirstActive();
-});    
+    FormAddFold.setFocusOnFirstActive();
+    });    
+FormAddFold.enableLiveValidation(true);     
 FormAddFold.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {   
@@ -1342,8 +1356,9 @@ resize:false});
 WinAF.setText("OpenProdoc");
 var FormAddDoc=WinAF.attachForm();
 FormAddDoc.loadStruct(Url+"?F="+CurrFold, function(){
-FormAddDoc.setFocusOnFirstActive();
-});
+    FormAddDoc.setFocusOnFirstActive();
+    });
+FormAddDoc.enableLiveValidation(true);      
 FormAddDoc.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {    
@@ -1436,8 +1451,9 @@ var WinMD=myWins.createWindow({
 WinMD.setText("OpenProdoc");
 var FormModDoc=WinMD.attachForm();
 FormModDoc.loadStruct("ModDoc?D="+Doc2Mod+"&RO="+ReadOnly+"&Vers="+Vers, function(){
-FormModDoc.setFocusOnFirstActive();
-});
+    FormModDoc.setFocusOnFirstActive();
+    });
+FormModDoc.enableLiveValidation(true);     
 FormModDoc.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {    
@@ -1566,8 +1582,8 @@ resize:false});
 WinAF.setText("OpenProdoc");
 var FormCheckIn=WinAF.attachForm();
 FormCheckIn.loadStruct(Url+"?D="+Doc2CheckIn, function(){
-FormCheckIn.setFocusOnFirstActive();
-});
+    FormCheckIn.setFocusOnFirstActive();
+    });
 FormCheckIn.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {    
@@ -1634,8 +1650,9 @@ CreaDocMain(Url, "PD_DOCS");
 function CreaDocMain(Url, Type)
 {
 FormAddFold.loadStruct(Url+"?F="+CurrFold+"&Ty="+Type, function(){
-FormAddFold.setFocusOnFirstActive();
-});    
+    FormAddFold.setFocusOnFirstActive();
+    });    
+FormAddFold.enableLiveValidation(true);    
 FormAddFold.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {   
@@ -1732,8 +1749,8 @@ SearchDocMain(Url, "PD_DOCS");
 function SearchDocMain(Url, Type)
 {
 FormAddFold.loadStruct(Url+"?F="+CurrFold+"&Ty="+Type, function(){
-FormAddFold.setFocusOnFirstActive();
-});    
+    FormAddFold.setFocusOnFirstActive();
+    });       
 FormAddFold.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {   
@@ -1940,7 +1957,7 @@ WinAF=myWins.createWindow({
 id:"Admin",
 left:20,
 top:30,
-width:600,
+width:((TypeElem==ELEMOBJ)?1000:600),
 height:600,
 center:true,
 modal:true,
@@ -1975,7 +1992,15 @@ ToolBar.attachEvent("onClick", function(Oper)
     if (GridResults.getSelectedRowId()!=null || Oper==EOPERNEW || Oper==EOPEREXA || Oper==EOPERIMP)     
         {
         if (Oper==EOPERNEW)  
-            ElemNew(TypeElem);
+            {
+            if (TypeElem!=ELEMOBJ)    
+                ElemNew(TypeElem);
+            else{
+                var KK=GridResults.getSelectedRowId(); 
+                if (KK!=null)
+                   ElemNewObj(TypeElem, GridResults.getSelectedRowId());
+                }
+            }
         else if (Oper==EOPERMOD)
             ElemMod(TypeElem, GridResults.getSelectedRowId());
         else if (Oper==EOPERDEL)
@@ -1992,13 +2017,14 @@ ToolBar.attachEvent("onClick", function(Oper)
     });
 }
 //------------------------------------------------------------
-function ElemNew(TypeElem)
+function ElemNewObj(TypeElem, Id)
 {
 CreateWin(TypeElem);
-FormElem.loadStruct("MantElem?Oper=New&Ty="+TypeElem, function(){
+FormElem.loadStruct("MantElem?Oper=New&Ty="+TypeElem+"&ObjId="+Id, function(){
     FormElem.setFocusOnFirstActive();
     CompleteForm(EOPERNEW, TypeElem);    
     });
+FormElem.enableLiveValidation(true);
 FormElem.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {    
@@ -2020,10 +2046,40 @@ FormElem.attachEvent("onButtonClick", function (name)
         FormElem.unload();
         WinElem.close();
         }
-     else if (name=="ACLUsers")   
-        ShowACLUsersForm(EOPERNEW); 
-     else if (name=="ACLGroups")   
-        ShowACLGroupsForm(EOPERNEW); 
+     }
+             );    
+}
+
+//------------------------------------------------------------
+function ElemNew(TypeElem)
+{
+CreateWin(TypeElem);
+FormElem.loadStruct("MantElem?Oper=New&Ty="+TypeElem, function(){
+    FormElem.setFocusOnFirstActive();
+    CompleteForm(EOPERNEW, TypeElem);    
+    });
+FormElem.enableLiveValidation(true);    
+FormElem.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {    
+        FillHideFields(TypeElem);    
+        FormElem.send("MantElem?Oper=New", function(loader, response)
+                        { // Asynchronous 
+                        if (response.substring(0,2)==OK)    
+                            {   
+                            GridResults.load("ListElem?TE="+TypeElem+"&F="+FiltExp);    
+                            FormElem.unload();
+                            WinElem.close();
+                            }
+                        else 
+                            alert(response); 
+                        } );
+        }
+     else if (name==CANCEL) 
+        {   
+        FormElem.unload();
+        WinElem.close();
+        }
      }
              );    
 }
@@ -2063,7 +2119,25 @@ else if (TypeElem==ELEMGROUPS)
     for (var NumU=0; NumU<GUsers.getRowsNum(); NumU++)   
         AllPerm=AllPerm+"|"+GUsers.cellByIndex(NumU, 0).getValue();
     FormElem.setItemValue("Users", AllPerm);    
-    }     
+    }   
+else if (TypeElem==ELEMOBJ)    
+    {
+    var Tot="";    
+    for (var NumA=0; NumA<GMetadata.getRowsNum(); NumA++)   
+        {
+        for (var NC=0; NC<9; NC++)
+            {
+            var Val=GMetadata.cells2(NumA, NC).getValue();
+            if (Val=="")
+                Val="_";
+            else
+                Val.replace("|", "-");
+            Tot=Tot+"|"+Val;
+            }
+        Tot=Tot+"¬";   
+        }
+    FormElem.setItemValue("ATTRS",Tot);     
+    }    
 }
 //------------------------------------------------------------
 function ElemMod(TypeElem, ElemId)
@@ -2073,6 +2147,7 @@ FormElem.loadStruct("MantElem?Oper=Modif&Ty="+TypeElem+"&Id="+ElemId, function()
     FormElem.setFocusOnFirstActive();
     CompleteForm(EOPERMOD, TypeElem);    
     });
+FormElem.enableLiveValidation(true);    
 FormElem.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {    
@@ -2094,10 +2169,6 @@ FormElem.attachEvent("onButtonClick", function (name)
         FormElem.unload();
         WinElem.close();
         }
-     else if (name=="ACLUsers")   
-        ShowACLUsersForm(EOPERMOD); 
-     else if (name=="ACLGroups")   
-        ShowACLGroupsForm(EOPERMOD); 
      }
              );       
 }
@@ -2140,6 +2211,7 @@ FormElem.loadStruct("MantElem?Oper=Copy&Ty="+TypeElem+"&Id="+ElemId, function(){
     FormElem.setFocusOnFirstActive();
     CompleteForm(EOPERCOP, TypeElem);    
     });
+FormElem.enableLiveValidation(true);      
 FormElem.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {    
@@ -2190,8 +2262,8 @@ resize:false});
 WinAF.setText("OpenProdoc");
 var FormImpElem=WinAF.attachForm();
 FormImpElem.loadStruct("ImpElem", function(){
-FormImpElem.setFocusOnFirstActive();
-});
+    FormImpElem.setFocusOnFirstActive();
+    });
 FormImpElem.attachEvent("onButtonClick", function (name)
     {if (name==CANCEL)
         {   
@@ -2288,6 +2360,22 @@ else if (TypeElem==ELEMGROUPS )
     GUsers.setColSorting("str");
     GUsers.init();
     }
+else if (TypeElem==ELEMOBJ)
+    {
+    ElemLayout=WinElem.attachLayout('2E');   
+    ElemLayout.cells('a').hideHeader();
+    FormElem=ElemLayout.cells('a').attachForm(); 
+    ElemLayout.cells('a').setHeight(325);
+    ElemTabBar=ElemLayout.cells('b').attachTabbar();
+    ElemTabBar.addTab("Metadata", "Metadata", null, null, true); //---
+    TBG = ElemTabBar.tabs("Metadata").attachToolbar();
+    TBG.addButton(EOPERNEW, 0, "New", "New.png", "New.png");
+    TBG.addButton(EOPERMOD, 1, "Modif", "Modif.png", "Modif.png");
+    TBG.addButton(EOPERDEL, 2, "Delete", "Edit.png", "Edit.png");
+    GMetadata = ElemTabBar.tabs("Metadata").attachGrid();
+    ElemTabBar.addTab("Inherited", "Inherited");                    //---
+    GInherited = ElemTabBar.tabs("Inherited").attachGrid();
+    }
 else
     FormElem=WinElem.attachForm();   
 if (TypeElem==ELEMMIME)
@@ -2301,7 +2389,96 @@ function CompleteForm(Oper, TypeElem)
 if (TypeElem==ELEMACL)
     CompleteFormAcl(Oper);       
 else if (TypeElem==ELEMGROUPS)
-    CompleteFormGroup(Oper);       
+    CompleteFormGroup(Oper); 
+else if (TypeElem==ELEMOBJ)
+    CompleteFormObjDef(Oper, GridResults.getSelectedRowId());
+}
+//--------------------------------------------------------------
+function CompleteFormObjDef(Oper, Id)
+{
+GInherited.clearAndLoad("ListAttrInherited?Id="+Id+"&Oper="+Oper);  
+GMetadata.clearAndLoad("ListAttrInherited?Id="+Id+"&Oper="+Oper+"&Own=1");  
+if (Oper==EOPERDEL)
+    TBG.clearAll();    
+TBG.attachEvent("onClick", function(Oper)  
+    {
+    if (Oper==EOPERNEW)    
+        MantAttr(Oper, "");
+    else if (GMetadata.getSelectedRowId()!=null)
+        {
+        if (Oper==EOPERMOD)     
+            MantAttr(Oper, GMetadata.getSelectedRowId());
+        else if (Oper==EOPERDEL)     
+            MantAttr(Oper, GMetadata.getSelectedRowId());   
+        }
+    });
+}
+//--------------------------------------------------------------
+function MantAttr(Oper, Id)
+{
+WinAttr=myWins.createWindow({
+id:"WinAttr",
+left:20,
+top:30,
+width:500,
+height:450,
+center:true,
+modal:true,
+resize:false}); 
+WinAttr.setText("Attributes");  
+FormAttr=WinAttr.attachForm(); 
+FormAttr.loadStruct("FormAttr?Oper="+Oper, function(){
+    FormAttr.setFocusOnFirstActive(); 
+    if (Oper!=EOPERNEW)
+        {
+        var T=GMetadata.cellById(Id,1).getValue();    
+        FormAttr.setItemValue("Name",    GMetadata.cellById(Id,0).getValue());
+        FormAttr.setItemValue("UserName",GMetadata.cellById(Id,1).getValue());
+        FormAttr.setItemValue("Descrip", GMetadata.cellById(Id,2).getValue());
+        FormAttr.setItemValue("Type",    GMetadata.cellById(Id,3).getValue());
+        FormAttr.setItemValue("Req",     GMetadata.cellById(Id,4).getValue());
+        FormAttr.setItemValue("LongStr", GMetadata.cellById(Id,5).getValue());
+        FormAttr.setItemValue("UniKey",  GMetadata.cellById(Id,6).getValue());
+        FormAttr.setItemValue("ModAllow",GMetadata.cellById(Id,7).getValue());
+        FormAttr.setItemValue("Multi",   GMetadata.cellById(Id,8).getValue());
+        if (FormAttr.getItemValue("Type")!=AT_TYPESTRING)
+            FormAttr.hideItem("LongStr");
+        }
+    });
+FormAttr.attachEvent("onChange", function(name, value, is_checked){
+    if (name=="Type")
+        {
+        if (value!=AT_TYPESTRING)
+            FormAttr.hideItem("LongStr");
+        else
+            FormAttr.showItem("LongStr");
+        }
+    }); 
+FormAttr.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {   
+        if (Oper==EOPERDEL)    
+            GMetadata.deleteRow(Id);
+        else if (Oper==EOPERMOD || Oper==EOPERNEW)
+            {
+            Id=FormAttr.getItemValue("Name");    
+            if (Oper==EOPERNEW)
+                GMetadata.addRow(Id,"");
+            GMetadata.cellById(Id,0).setValue(FormAttr.getItemValue("Name"));
+            GMetadata.cellById(Id,1).setValue(FormAttr.getItemValue("UserName"));
+            GMetadata.cellById(Id,2).setValue(FormAttr.getItemValue("Descrip"));
+            GMetadata.cellById(Id,3).setValue(FormAttr.getItemValue("Type"));
+            GMetadata.cellById(Id,4).setValue(FormAttr.getItemValue("Req"));
+            GMetadata.cellById(Id,5).setValue(FormAttr.getItemValue("LongStr"));
+            GMetadata.cellById(Id,6).setValue(FormAttr.getItemValue("UniKey"));
+            GMetadata.cellById(Id,7).setValue(FormAttr.getItemValue("ModAllow"));
+            GMetadata.cellById(Id,8).setValue(FormAttr.getItemValue("Multi"));    
+            }
+        }
+    FormAttr.unload();
+    WinAttr.close();   
+    });
+    
 }
 //--------------------------------------------------------------
 function CompleteFormAcl(Oper)   

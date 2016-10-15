@@ -19,7 +19,6 @@
 
 package OpenProdocServ;
 
-import OpenProdocUI.SMain;
 import OpenProdocUI.SParent;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
@@ -72,7 +71,7 @@ private String GenListDoc(HttpServletRequest Req)
 StringBuilder FolderDocs=new StringBuilder(3000);
 String Type=Req.getParameter("Type");
 FolderDocs.append("<?xml version=\"1.0\" encoding=\"iso-8859-1\"?><rows>");
-DriverGeneric PDSession=SMain.getSessOPD(Req);
+DriverGeneric PDSession=getSessOPD(Req);
 Attribute AttrD;
 try {
 Record NextDoc=PDDocs.getRecordStructPDDocs();

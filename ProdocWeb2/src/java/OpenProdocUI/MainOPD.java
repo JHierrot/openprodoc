@@ -27,7 +27,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author jhierrot
  */
-public class SMain extends SParent
+public class MainOPD extends SParent
 {
 
 //-----------------------------------------------------------------------------------------------
@@ -52,12 +52,12 @@ out.println(new FMain(Sess).toHtml());
 @Override
 public String getServletInfo()
 {
-return "Main Servlet";
+return "MainOPD Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 static public String getUrlServlet()
 {
-return("SMain");
+return("MainOPD");
 }
 //-----------------------------------------------------------------------------------------------
 }

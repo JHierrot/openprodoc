@@ -46,7 +46,7 @@ public class SThesRec extends SParent
 @Override
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {
-DriverGeneric PDSession=SMain.getSessOPD(Req);
+DriverGeneric PDSession=getSessOPD(Req);
 String FoldId=Req.getParameter("ThesId");
 PDThesaur Thes=new PDThesaur(PDSession);
 Thes.Load(FoldId);

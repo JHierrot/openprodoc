@@ -35,6 +35,7 @@ import prodoc.PDException;
 import prodoc.PDGroups;
 import prodoc.PDLog;
 import prodoc.PDMimeType;
+import prodoc.PDObjDefs;
 import prodoc.PDRepository;
 import prodoc.PDRoles;
 import prodoc.PDUser;
@@ -66,7 +67,7 @@ protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Excep
 String Oper=Req.getParameter("Oper");
 String TypeElem=Req.getParameter("Ty");
 String Id=Req.getParameter("Id");
-String Filter=Req.getParameter("Fil");
+//String Filter=Req.getParameter("Fil");
 if (TypeElem!=null && TypeElem.length()!=0)
     {
     if (Oper.equals(OPERNEW))  
@@ -124,6 +125,8 @@ else
             InsertACLMembers((PDACL)Obj,Req);
         else if (TypeElem.equals(ListElem.MANTGROUPS))            
             InsertGroupMembers((PDGroups)Obj,Req);
+        else if (TypeElem.equals(ListElem.MANTOBJ))            
+            InsertObjAttrs((PDObjDefs)Obj,Req);
         }
     else if (Oper.equals(OPERMODIF))
         {
@@ -142,6 +145,8 @@ else
             G.DelAllUsers();
             InsertGroupMembers((PDGroups)Obj,Req);
             }
+        else if (TypeElem.equals(ListElem.MANTOBJ))            
+            InsertObjAttrs((PDObjDefs)Obj,Req);
         }
     else if (Oper.equals(OPERDELETE))
         Obj.delete();
@@ -420,7 +425,52 @@ else if (ElemType.equals(ListElem.MANTREPO))
     }
 else if (ElemType.equals(ListElem.MANTOBJ))
     {
-    
+    String ObjId=Req.getParameter("ObjId");
+    PDObjDefs Parent=null;
+    if (ObjId!=null)
+        {
+        Parent=new PDObjDefs(PDSession);
+        Parent.Load(ObjId);
+        } 
+    Attr=Rec.getAttr(PDObjDefs.fNAME);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDObjDefs.fDESCRIPTION);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDObjDefs.fACL);
+    SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" options:[");
+    if (ObjId!=null)
+        SB.append(getComboModel("ACL",PDSession, Parent.getACL()) );
+    else
+        SB.append(getComboModel("ACL",PDSession, (String)Attr.getValue()) );
+    SB.append("]},"); 
+    Attr=Rec.getAttr(PDObjDefs.fREPOSIT);
+    SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" options:[");
+    if (ObjId!=null)
+        SB.append(getComboModel("Reposit",PDSession, Parent.getReposit()) );
+    else
+        SB.append(getComboModel("Reposit",PDSession, (String)Attr.getValue()) );
+    SB.append("]},");    
+    Attr=Rec.getAttr(PDObjDefs.fACTIVE);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    SB.append("{type: \"block\", width: 500, list:[");
+    Attr=Rec.getAttr(PDObjDefs.fTRACEADD);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    SB.append("{type: \"newcolumn\", offset:5 },");
+    Attr=Rec.getAttr(PDObjDefs.fTRACEMOD);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    SB.append("{type: \"newcolumn\", offset:0 },");
+    Attr=Rec.getAttr(PDObjDefs.fTRACEDEL);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    SB.append("{type: \"newcolumn\", offset:5 },");
+    Attr=Rec.getAttr(PDObjDefs.fTRACEVIEW);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDObjDefs.fCLASSTYPE);
+    if (ObjId!=null)
+        SB.append("{type: \"hidden\", name:\"").append(Attr.getName()).append("\", value: \"").append(Parent.getClassType()).append("\"},");
+    else
+        SB.append("{type: \"hidden\", name:\"").append(Attr.getName()).append("\", value: \"").append(Attr.getValue()).append("\"},");
+    SB.append("{type: \"hidden\", name:\"ATTRS\", value: \"\"}");
+    SB.append("]},");
     }
 else if (ElemType.equals(ListElem.MANTAUTH))
     {
@@ -693,6 +743,27 @@ if (Groups!=null && Groups.length()>0)
     }
 }
 //-----------------------------------------------------------------------------------------------
+private void InsertObjAttrs(PDObjDefs pdObjDefs, HttpServletRequest Req) throws PDException
+{
+String AllAttrs=Req.getParameter("ATTRS");
+String[] Attrs = AllAttrs.split("¬");
+pdObjDefs.DelAtributes();
+for (String Attr : Attrs)
+    {
+    String[] AttrDef = Attr.split("\\|");   
+    String Name=AttrDef[0];
+    String Username=AttrDef[1];
+    String Descrip=AttrDef[2];
+    String Type=AttrDef[3];
+    String Required=AttrDef[4];
+    String LongStr=AttrDef[5];
+    String Unique=AttrDef[6];
+    String ModifAllow=AttrDef[7];
+    String Multival=AttrDef[8];
+    Attribute At=new Attribute(Name,Username, Descrip, Integer.parseInt(Type), Required.equals("1"), null, Integer.parseInt(LongStr), false, Unique.equals("1"),ModifAllow.equals("1"),Multival.equals("1"));
+    pdObjDefs.addAtribute(At);
+    }
+}
 //-----------------------------------------------------------------------------------------------
 
 }

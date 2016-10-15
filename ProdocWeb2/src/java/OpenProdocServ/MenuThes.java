@@ -19,7 +19,6 @@
 
 package OpenProdocServ;
 
-import OpenProdocUI.SMain;
 import OpenProdocUI.SParent;
 import static OpenProdocUI.SParent.TT;
 import java.io.IOException;
@@ -75,7 +74,7 @@ private String genMenu(HttpServletRequest Req)
 {
 try {    
 StringBuilder Men=new StringBuilder(2000);
-PDRoles R=SMain.getSessOPD(Req).getUser().getRol();
+PDRoles R=getSessOPD(Req).getUser().getRol();
 Men.append("<?xml version=\"1.0\"?><menu><item id=\"Thesaurus\" text=\"").append(TT(Req, "Thesaurus")).append("\">");
 if (R.isAllowCreateThesaur())
    Men.append("<item id=\"CreateTheusurus\" text=\"").append(TT(Req, "Create_Theusurus")).append("\" img=\"img/new.gif\" imgdis=\"img/new_dis.gif\"/>");

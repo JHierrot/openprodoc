@@ -66,7 +66,7 @@ public static final String MANTCUST="Customizations";
 @Override
 protected void processRequest(HttpServletRequest Req, HttpServletResponse response) throws ServletException, IOException
 {   
-DriverGeneric PDSession=SParent.getSessOPD(Req);
+DriverGeneric PDSession=getSessOPD(Req);
 response.setContentType("text/xml;charset=UTF-8");
 response.setStatus(HttpServletResponse.SC_OK);
 PrintWriter out = response.getWriter();  
@@ -112,12 +112,15 @@ else if (ElemType.equals(MANTROLES))
     Rec.delAttr(PDRoles.fALLOWMAINTAINUSER);
     }
 Rec.delAttr(Filter);
+int WIDTH=600;
+if (ElemType.equals(MANTOBJ))
+   WIDTH=1000; 
 Rec.initList();
 Attribute Attr=Rec.nextAttr();
 int Count=1;
 while (Attr!=null)
     {
-    Resp.append("<column width=\"").append(Count==Rec.NumAttr()?"*":600/Rec.NumAttr()).append("\" type=\"ro\" align=\"left\" sort=\"str\">").append(TT(Req,Attr.getUserName())).append("</column>");
+    Resp.append("<column width=\"").append(Count==Rec.NumAttr()?"*":WIDTH/Rec.NumAttr()).append("\" type=\"ro\" align=\"left\" sort=\"str\">").append(TT(Req,Attr.getUserName())).append("</column>");
     Count++;
     Attr=Rec.nextAttr();
     }
