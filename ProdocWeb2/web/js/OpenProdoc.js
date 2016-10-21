@@ -78,7 +78,7 @@ var TBG;
 var TBU;
 var WinAttr;
 var FormAttr;
-var AT_TYPESTRING="2";
+var AT_TYPESTRING="String";
        
 function doOnLoadLogin() 
 {   
@@ -136,7 +136,6 @@ DocsGrid.init();
 DocsGrid.attachEvent("onRowSelect",function(rowId,cellIndex)
     {
     CurrDoc=rowId;    
-//    printLog("<b>Row </b> id="+rowId+"<br>");
     return(true);
     });
 DocsGrid.selectRow(0, true, false, true);
@@ -2149,14 +2148,35 @@ FormElem.loadStruct("MantElem?Oper=Modif&Ty="+TypeElem+"&Id="+ElemId, function()
     });
 FormElem.enableLiveValidation(true);    
 FormElem.attachEvent("onButtonClick", function (name)
-    {if (name==OK)
+    {if (name==OK || name=="CreateObj" || name=="DeleteObj" )
         {    
         FillHideFields(TypeElem);    
         FormElem.send("MantElem?Oper=Modif", function(loader, response)
                         { // Asynchronous 
                         if (response.substring(0,2)==OK)    
                             {   
-                            GridResults.load("ListElem?TE="+TypeElem+"&F="+FiltExp);    
+                            if (name=="CreateObj")    
+                                window.dhx4.ajax.get("CreateObj?Id="+ElemId, function(r)
+                                {
+                                var xml = r.xmlDoc.responseXML;
+                                var nodes = xml.getElementsByTagName("status");
+                                if (nodes[0].textContent!=OK)
+                                    alert(nodes[0].textContent);
+                                else  // refresh the created status
+                                    GridResults.load("ListElem?TE="+TypeElem+"&F="+FiltExp);                                        
+                                });   
+                            else if (name=="DeleteObj")  
+                                window.dhx4.ajax.get("DeleteObj?Id="+ElemId, function(r)
+                                {
+                                var xml = r.xmlDoc.responseXML;
+                                var nodes = xml.getElementsByTagName("status");
+                                if (nodes[0].textContent!=OK)
+                                    alert(nodes[0].textContent);
+                                else  // refresh the created status
+                                    GridResults.load("ListElem?TE="+TypeElem+"&F="+FiltExp);   
+                                });  
+                            else    
+                                GridResults.load("ListElem?TE="+TypeElem+"&F="+FiltExp);    
                             FormElem.unload();
                             WinElem.close();
                             }

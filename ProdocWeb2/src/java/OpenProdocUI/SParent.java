@@ -988,7 +988,7 @@ Session.CloseCursor(CursorId);
 return(ListVals.toString());
 }
 //-----------------------------------------------------------------------------------------------
-protected String GenerateCompleteFoldForm(String Title, HttpServletRequest Req, DriverGeneric PDSession, String CurrFold, String NewType, Record FR, boolean ReadOnly, boolean Modif) throws PDException
+protected String GenerateCompleteFoldForm(String Title, HttpServletRequest Req, DriverGeneric PDSession, String CurrFold, String NewType, Record FR, boolean ReadOnly, boolean Modif, String DefACL) throws PDException
 {
 StringBuilder Form= new StringBuilder(3000);
 Attribute Attr;
@@ -998,7 +998,10 @@ Attr=FR.getAttr(PDFolders.fTITLE);
 Form.append(GenInput(Req, Attr,  ReadOnly, Modif));
 Attr=FR.getAttr(PDFolders.fACL);
 Form.append("{type: \"combo\", name: \"" + PDFolders.fACL + "\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" options:[");
-Form.append(getComboModel("ACL",PDSession, (String)Attr.getValue()) );
+if (Attr.getValue()==null)
+    Form.append(getComboModel("ACL",PDSession,DefACL) );
+else
+    Form.append(getComboModel("ACL",PDSession,(String)Attr.getValue()) );
 Form.append("]},");
 FR.initList();
 Attr=FR.nextAttr();
@@ -1027,7 +1030,7 @@ Form.append("];");
 return(Form.toString());
 }
 //-----------------------------------------------------------------------------------------------
-protected String GenerateCompleteDocForm(String Title, HttpServletRequest Req, DriverGeneric PDSession, String CurrFold, String NewType, Record FR, boolean ReadOnly, boolean Modif) throws PDException
+protected String GenerateCompleteDocForm(String Title, HttpServletRequest Req, DriverGeneric PDSession, String CurrFold, String NewType, Record FR, boolean ReadOnly, boolean Modif, String DefACL) throws PDException
 {
 StringBuilder Form= new StringBuilder(3000);
 Attribute Attr;
@@ -1037,7 +1040,10 @@ Attr=FR.getAttr(PDFolders.fTITLE);
 Form.append(GenInput(Req, Attr,  ReadOnly, Modif));
 Attr=FR.getAttr(PDFolders.fACL);
 Form.append("{type: \"combo\", name: \"" + PDFolders.fACL + "\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" options:[");
-Form.append(getComboModel("ACL",PDSession,(String)Attr.getValue()) );
+if (Attr.getValue()==null)
+    Form.append(getComboModel("ACL",PDSession,DefACL) );
+else
+    Form.append(getComboModel("ACL",PDSession,(String)Attr.getValue()) );
 Form.append("]},");
 FR.initList();
 Attr=FR.nextAttr();

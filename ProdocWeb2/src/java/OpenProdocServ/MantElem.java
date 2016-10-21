@@ -55,6 +55,8 @@ public static final String OPERCOPY="Copy";
 
 private static final String List2=ObjPD.fPDAUTOR+"/"+ObjPD.fPDDATE;
 
+
+
 //-----------------------------------------------------------------------------------------------
 /**
  *
@@ -70,16 +72,24 @@ String Id=Req.getParameter("Id");
 //String Filter=Req.getParameter("Fil");
 if (TypeElem!=null && TypeElem.length()!=0)
     {
-    if (Oper.equals(OPERNEW))  
-        out.println(ElemNew(Req, TypeElem));
-    else if (Oper.equals(OPERMODIF))
-        out.println(ElemMod(Req, TypeElem, Id));
-    else if (Oper.equals(OPERDELETE))
-        out.println(ElemDel(Req, TypeElem, Id));
-    else if (Oper.equals(OPERCOPY))
-        out.println(ElemCopy(Req, TypeElem, Id));
-    else if (Oper.equals("Import"))
+//    if (Oper.equals(OPERNEW))  
+//        out.println(ElemNew(Req, TypeElem));
+//    else if (Oper.equals(OPERMODIF))
+//        out.println(ElemMod(Req, TypeElem, Id));
+//    else if (Oper.equals(OPERDELETE))
+//        out.println(ElemDel(Req, TypeElem, Id));
+//    else if (Oper.equals(OPERCOPY))
+//        out.println(ElemCopy(Req, TypeElem, Id));
+//    else if (Oper.equals("Import"))
+//        out.println(ElemImport(Req, TypeElem));
+    if (Oper.equals("Import"))  
         out.println(ElemImport(Req, TypeElem));
+    else
+        {
+        DriverGeneric PDSession=SParent.getSessOPD(Req);        
+        ObjPD Obj=GenObj(TypeElem, PDSession, Id);    
+        out.println(ElemMant(Req, Oper, TypeElem, Obj, Id));
+        }
     }
 else
     {
@@ -177,6 +187,37 @@ static public String getUrlServlet()
 return("MantElem");
 }
 //-----------------------------------------------------------------------------------------------
+private String ElemMant(HttpServletRequest Req,String Oper, String TypeElem, ObjPD Obj, String Id) throws PDException
+{
+StringBuilder SB=new StringBuilder(1000);
+String Title;
+if (Oper.equals(OPERNEW))  
+    Title=GetTitleNew(Req, TypeElem);
+else if (Oper.equals(OPERMODIF))
+    Title=GetTitleModif(Req, TypeElem);
+else if (Oper.equals(OPERDELETE))
+    Title=GetTitleDel(Req, TypeElem);
+else if (Oper.equals(OPERCOPY))
+    {
+    Title=GetTitleCopy(Req, TypeElem);
+    Id+="1";
+    }
+else
+    Title="";
+SB.append("[  {type: \"settings\", position: \"label-left\", labelWidth: 150, inputWidth: 230},");
+SB.append("{type: \"label\", label: \"").append(Title).append("\"},");
+SB.append(getBody(Oper, Req, TypeElem, Obj, Id));
+if (TypeElem.equals(ListElem.MANTOBJ))
+    SB.append(OkBlockExt(Req, Oper, TypeElem, (PDObjDefs)Obj, Id));
+else
+    SB.append(OkBlock(Req, TypeElem, Id));
+return(SB.toString());
+}
+
+
+
+/**
+//-----------------------------------------------------------------------------------------------
 private String ElemNew(HttpServletRequest Req, String TypeElem) throws PDException
 {
 StringBuilder SB=new StringBuilder(1000);
@@ -219,6 +260,7 @@ SB.append(getBody("Copy", Req, TypeElem, Id));
 SB.append(OkBlock(Req, TypeElem, Id+"1"));
 return(SB.toString());
 }
+* ***/
 //-----------------------------------------------------------------------------------------------
 private String ElemImport(HttpServletRequest Req, String TypeElem)
 {
@@ -262,11 +304,33 @@ SB.append("]} ];");
 return(SB);
 }
 //-----------------------------------------------------------------------------------------------
-private StringBuilder getBody(String Oper, HttpServletRequest Req, String ElemType, String Id) throws PDException
+
+private StringBuilder OkBlockExt(HttpServletRequest Req, String Oper, String TypeElem, PDObjDefs Obj, String Id)
+{
+StringBuilder SB=new StringBuilder(500);    
+SB.append("{type: \"block\", width: 520, list:[");
+SB.append("{type: \"button\", name: \"OK\", value: \"").append(TT(Req, "Ok")).append("\"},");
+SB.append("{type: \"newcolumn\", offset:20 },");
+SB.append("{type: \"button\", name: \"CANCEL\", value: \"").append(TT(Req, "Cancel")).append("\"},");
+SB.append("{type: \"hidden\", name:\"Type\", value: \"").append(TypeElem).append("\"}");
+if (Id!=null)
+    SB.append(",{type: \"hidden\", name:\"Id\", value: \"").append(Id).append("\"}");
+if (Oper.equals(OPERMODIF))
+    {    
+    SB.append(",{type: \"newcolumn\", offset:20 },");
+    SB.append("{type: \"button\", name: \"CreateObj\", value: \"").append(TT(Req, "CreateObj")).append("\", disabled:").append(Obj.isCreated()?"true":"false").append("},");
+    SB.append("{type: \"newcolumn\", offset:20 },");
+    SB.append("{type: \"button\", name: \"DeleteObj\", value: \"").append(TT(Req, "DeleteObj")).append("\", disabled:").append(Obj.isCreated()?"false":"true").append("}");
+    }
+SB.append("]} ];");
+return(SB);
+}
+
+//-----------------------------------------------------------------------------------------------
+private StringBuilder getBody(String Oper, HttpServletRequest Req, String ElemType, ObjPD Obj, String Id) throws PDException
 {
 StringBuilder SB=new StringBuilder(2000);
 DriverGeneric PDSession=SParent.getSessOPD(Req);    
-ObjPD Obj=GenObj(ElemType, PDSession, Id);
 Record Rec=Obj.getRecord();
 Attribute Attr;
 if (Oper.equals(OPERCOPY))
@@ -443,13 +507,17 @@ else if (ElemType.equals(ListElem.MANTOBJ))
     else
         SB.append(getComboModel("ACL",PDSession, (String)Attr.getValue()) );
     SB.append("]},"); 
-    Attr=Rec.getAttr(PDObjDefs.fREPOSIT);
-    SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" options:[");
-    if (ObjId!=null)
-        SB.append(getComboModel("Reposit",PDSession, Parent.getReposit()) );
-    else
-        SB.append(getComboModel("Reposit",PDSession, (String)Attr.getValue()) );
-    SB.append("]},");    
+    if (ObjId!=null && Parent.getClassType().equals(PDObjDefs.CT_DOC) 
+             || ((String)Rec.getAttr(PDObjDefs.fCLASSTYPE).getValue()).equals(PDObjDefs.CT_DOC))
+        {
+        Attr=Rec.getAttr(PDObjDefs.fREPOSIT);
+        SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" options:[");
+        if (ObjId!=null)
+            SB.append(getComboModel("Reposit",PDSession, Parent.getReposit()) );
+        else
+            SB.append(getComboModel("Reposit",PDSession, (String)Attr.getValue()) );
+        SB.append("]},");    
+        }
     Attr=Rec.getAttr(PDObjDefs.fACTIVE);
     SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
     SB.append("{type: \"block\", width: 500, list:[");
@@ -467,6 +535,11 @@ else if (ElemType.equals(ListElem.MANTOBJ))
     Attr=Rec.getAttr(PDObjDefs.fCLASSTYPE);
     if (ObjId!=null)
         SB.append("{type: \"hidden\", name:\"").append(Attr.getName()).append("\", value: \"").append(Parent.getClassType()).append("\"},");
+    else
+        SB.append("{type: \"hidden\", name:\"").append(Attr.getName()).append("\", value: \"").append(Attr.getValue()).append("\"},");
+    Attr=Rec.getAttr(PDObjDefs.fPARENT);
+    if (ObjId!=null)
+        SB.append("{type: \"hidden\", name:\"").append(Attr.getName()).append("\", value: \"").append(Parent.getName()).append("\"},");
     else
         SB.append("{type: \"hidden\", name:\"").append(Attr.getName()).append("\", value: \"").append(Attr.getValue()).append("\"},");
     SB.append("{type: \"hidden\", name:\"ATTRS\", value: \"\"}");
@@ -751,19 +824,29 @@ pdObjDefs.DelAtributes();
 for (String Attr : Attrs)
     {
     String[] AttrDef = Attr.split("\\|");   
-    String Name=AttrDef[0];
-    String Username=AttrDef[1];
-    String Descrip=AttrDef[2];
-    String Type=AttrDef[3];
-    String Required=AttrDef[4];
-    String LongStr=AttrDef[5];
-    String Unique=AttrDef[6];
-    String ModifAllow=AttrDef[7];
-    String Multival=AttrDef[8];
-    Attribute At=new Attribute(Name,Username, Descrip, Integer.parseInt(Type), Required.equals("1"), null, Integer.parseInt(LongStr), false, Unique.equals("1"),ModifAllow.equals("1"),Multival.equals("1"));
+    String Name=AttrDef[1];
+    String Username=AttrDef[2];
+    String Descrip=AttrDef[3];
+    String Type=AttrDef[4];
+    int TypeN=2;
+    for (int i = 0; i < ListAttrInherited.LTyp.length; i++)
+        {
+        if (Type.equals(ListAttrInherited.LTyp[i]))  
+            {
+            TypeN=i;
+            break;
+            }
+        }
+    String Required=AttrDef[5];
+    String LongStr=AttrDef[6];   
+    if (LongStr.equals("_"))
+        LongStr="0";
+    String Unique=AttrDef[7];
+    String ModifAllow=AttrDef[8];
+    String Multival=AttrDef[9];
+    Attribute At=new Attribute(Name,Username, Descrip, TypeN, Required.equals("1"), null, Integer.parseInt(LongStr), false, Unique.equals("1"),ModifAllow.equals("1"),Multival.equals("1"));
     pdObjDefs.addAtribute(At);
     }
 }
 //-----------------------------------------------------------------------------------------------
-
 }

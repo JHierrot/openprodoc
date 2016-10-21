@@ -40,6 +40,8 @@ import prodoc.Record;
  */
 public class ListAttrInherited extends SParent
 {
+public static final String[] LTyp={"Integer", "Float", "String", "Date", "Boolean", "TimeStamp", "Thesaur"};
+
 //-----------------------------------------------------------------------------------------------
 /**
  *
@@ -56,13 +58,13 @@ response.setStatus(HttpServletResponse.SC_OK);
 PrintWriter out = response.getWriter();  
 StringBuilder Resp=new StringBuilder(3000);
 Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rows><head>");
+Cursor listParentAttr=null;
 try {
-Record Rec;
+//Record Rec;
 String ObjDefId=Req.getParameter("Id");
 String Oper=Req.getParameter("Oper");
 String Own=Req.getParameter("Own");
 PDObjDefs Def=new PDObjDefs(getSessOPD(Req));
-Cursor listParentAttr;
 if (Own!=null)
     {
     if (Oper.equals("New"))
@@ -96,6 +98,7 @@ if (Own==null || !Oper.equals("New"))
     while (NextObj!=null)
         {
         String Id=(String)NextObj.getAttr(PDObjDefs.fNAME).getValue();
+        NextObj.getAttr(PDObjDefs.fATTRTYPE).setValue(LTyp[(Integer)NextObj.getAttr(PDObjDefs.fATTRTYPE).getValue()]);
         Resp.append(SParent.GenRowGrid(Req, Id, NextObj, true));    
         NextObj=PDSession.NextRec(listParentAttr);
         if (NextObj!=null)
@@ -110,6 +113,10 @@ PDSession.CloseCursor(listParentAttr);
 Resp.append("</rows>");
 } catch (PDException ex)
     {
+    try{    
+    if (listParentAttr!=null)
+        PDSession.CloseCursor(listParentAttr);
+    } catch (Exception E) {}
     Resp.append("<LV>Error</LV></row>");
     }
 out.println( Resp.toString().replace("&", "&amp;") );   

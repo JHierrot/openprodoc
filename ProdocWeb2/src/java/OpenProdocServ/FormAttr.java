@@ -22,10 +22,6 @@ package OpenProdocServ;
 import OpenProdocUI.SParent;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
-import prodoc.Attribute;
-import prodoc.DriverGeneric;
-import prodoc.PDException;
-import prodoc.PDFolders;
 
 /**
  *
@@ -33,7 +29,6 @@ import prodoc.PDFolders;
  */
 public class FormAttr extends SParent
 {
-
 //-----------------------------------------------------------------------------------------------
 /**
  *
@@ -56,13 +51,13 @@ SB.append("{type: \"input\", name: \"Name\", label: \"").append(TT(Req, "Name"))
 SB.append("{type: \"input\", name: \"UserName\", label: \"").append(TT(Req, "Visible_Name_of_attribute")).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, inputWidth: 100, maxLength:32},");
 SB.append("{type: \"input\", name: \"Descrip\", label: \"").append(TT(Req, "Description")).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, inputWidth: 250, maxLength:32},");
 SB.append("{type: \"combo\", name: \"Type\", label: \"").append(TT(Req, "attribute_type")).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, inputWidth: 200, options:[");
-SB.append("{text: \"Integer  \", value: \"0\"},");
-SB.append("{text: \"Float    \", value: \"1\"},");
-SB.append("{text: \"String   \", value: \"2\"},");
-SB.append("{text: \"Date     \", value: \"3\"},");
-SB.append("{text: \"Boolean  \", value: \"4\"},");
-SB.append("{text: \"TimeStamp\", value: \"5\"},");
-SB.append("{text: \"Thesaur  \", value: \"6\"}");
+SB.append("{text: \"Integer  \", value: \"Integer\"},");
+SB.append("{text: \"Float    \", value: \"Float\"},");
+SB.append("{text: \"String   \", value: \"String\"},");
+SB.append("{text: \"Date     \", value: \"Date\"},");
+SB.append("{text: \"Boolean  \", value: \"Boolean\"},");
+SB.append("{text: \"TimeStamp\", value: \"TimeStamp\"},");
+SB.append("{text: \"Thesaur  \", value: \"Thesaur\"}");
 SB.append("]},");
 SB.append("{type: \"input\", name: \"LongStr\", label: \"").append(TT(Req, "Length")).append("\",").append(ReadOnly?"readonly:1,":"").append("inputWidth: 50, maxLength:32},");
 SB.append("{type: \"checkbox\", name: \"Req\", label: \"").append(TT(Req, "Required")).append("\",").append(ReadOnly?"readonly:1,":"").append("},");

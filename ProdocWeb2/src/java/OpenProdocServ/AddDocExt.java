@@ -63,11 +63,11 @@ if (CurrFold!=null)
     else
         {
         TmpDoc=new PDDocs(PDSession);
-        TmpDoc.LoadFull(CurrFold);
         NewType=TmpDoc.getDocType();
         }
-    Record R=TmpDoc.getRecSum();
-    out.println( GenerateCompleteDocForm("Add_Document", Req, PDSession, CurrFold, NewType, TmpDoc.getRecSum(), false, false) );    
+    PDFolders F=new PDFolders(PDSession);
+    F.Load(CurrFold);
+    out.println( GenerateCompleteDocForm("Add_Document", Req, PDSession, CurrFold, NewType, TmpDoc.getRecSum(), false, false, F.getACL()) );    
     }
 else
     {

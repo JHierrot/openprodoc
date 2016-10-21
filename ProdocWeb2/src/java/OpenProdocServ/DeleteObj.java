@@ -20,18 +20,28 @@
 package OpenProdocServ;
 
 import OpenProdocUI.SParent;
+import static OpenProdocUI.SParent.TT;
+import static OpenProdocUI.SParent.getSessOPD;
+import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import prodoc.Attribute;
+import prodoc.Cursor;
 import prodoc.DriverGeneric;
 import prodoc.PDDocs;
 import prodoc.PDException;
+import prodoc.PDObjDefs;
+import prodoc.Record;
 
 /**
  *
  * @author jhierrot
  */
-public class DelDoc extends SParent
+public class DeleteObj extends SParent
 {
+public static final String[] LTyp={"Integer", "Float", "String", "Date", "Boolean", "TimeStamp", "Thesaur"};
 
 //-----------------------------------------------------------------------------------------------
 /**
@@ -41,29 +51,34 @@ public class DelDoc extends SParent
  * @throws Exception
  */
 @Override
-protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
+protected void processRequest(HttpServletRequest Req, HttpServletResponse response) throws ServletException, IOException
 {   
-DriverGeneric PDSession=SParent.getSessOPD(Req);
-PDDocs TmpDoc=new PDDocs(PDSession);
-String CurrDoc=Req.getParameter("D");
-if (CurrDoc!=null)
-    {
-    TmpDoc.LoadFull(CurrDoc);
-    out.println( GenerateCompleteDocForm("Delete_Document", Req, PDSession, CurrDoc, TmpDoc.getDocType(), TmpDoc.getRecSum(), true, false, null) );   
-    }
+response.setContentType("text/xml;charset=UTF-8");
+response.setStatus(HttpServletResponse.SC_OK);
+PrintWriter out = response.getWriter();  
+StringBuilder Resp=new StringBuilder(200);
+try {
+String S;
+Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+String Id=Req.getParameter("Id");
+if (Id==null || Id.length()==0)
+    Resp.append("<status>Undefined Type Id</status>");
 else
     {
-    try {    
-//    String IdDel=Req.getParameter("CurrDoc");     
-    String IdDel=Req.getParameter(PDDocs.fPDID);
-    TmpDoc.setPDId(IdDel);
-    TmpDoc.delete();
-    out.println("OK");
-    } catch (PDException ex)
+    PDObjDefs Def=new PDObjDefs(getSessOPD(Req));
+    Def.Load(Id);
+    Def.DeleteObjectTables(Id);
+    Resp.append("<status>OK</status>");
+    }   
+out.println(Resp.toString());
+} catch (Exception Ex)
         {
-        out.println(ex.getLocalizedMessage());
+        Resp.append("<status>").append(Ex.getLocalizedMessage()).append("</status>");
+        out.println(Resp.toString());
         }
-    }
+finally {
+out.close();
+        }
 }
 //-----------------------------------------------------------------------------------------------
 
@@ -74,12 +89,12 @@ else
 @Override
 public String getServletInfo()
 {
-return "DelDoc Servlet";
+return "DeleteObj Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 static public String getUrlServlet()
 {
-return("DelDoc");
+return("DeleteObj");
 }
 //-----------------------------------------------------------------------------------------------
 }

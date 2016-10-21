@@ -50,7 +50,7 @@ if (CurrFold!=null)
     {
 //    Attribute Attr;
     TmpFold.LoadFull(CurrFold);
-    out.println( GenerateCompleteFoldForm("Delete_Folder", Req, PDSession, CurrFold, TmpFold.getFolderType(), TmpFold.getRecSum(), true, false) );   
+    out.println( GenerateCompleteFoldForm("Delete_Folder", Req, PDSession, CurrFold, TmpFold.getFolderType(), TmpFold.getRecSum(), true, false, null) );   
 //    Attr=TmpFold.getRecord().getAttr(PDFolders.fTITLE);
 //    out.println(
 //    "[" +

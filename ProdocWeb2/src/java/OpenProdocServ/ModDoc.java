@@ -66,7 +66,7 @@ if (CurrDoc!=null)
         Title="Document_Attributes";
     else
         Title="Update_Document";
-    out.println( GenerateCompleteDocForm(Title, Req, PDSession, TmpDoc.getParentId(), TmpDoc.getDocType(), TmpDoc.getRecSum(), RO.equalsIgnoreCase("true"), !RO.equalsIgnoreCase("true")) );   
+    out.println( GenerateCompleteDocForm(Title, Req, PDSession, TmpDoc.getParentId(), TmpDoc.getDocType(), TmpDoc.getRecSum(), RO.equalsIgnoreCase("true"), !RO.equalsIgnoreCase("true"), null) );   
     }
 else
     { 

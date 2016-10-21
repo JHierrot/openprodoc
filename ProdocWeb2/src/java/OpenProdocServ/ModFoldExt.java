@@ -63,7 +63,7 @@ if (CurrFold!=null)
         NewType=TmpFold.getFolderType();
         }
     Record R=TmpFold.getRecSum();
-    out.println( GenerateCompleteFoldForm("Update_Folder", Req, PDSession, CurrFold, NewType, TmpFold.getRecSum(), false, true) );    
+    out.println( GenerateCompleteFoldForm("Update_Folder", Req, PDSession, CurrFold, NewType, TmpFold.getRecSum(), false, true, null) );    
     }
 else
     {
