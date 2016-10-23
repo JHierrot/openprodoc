@@ -79,6 +79,7 @@ var TBU;
 var WinAttr;
 var FormAttr;
 var AT_TYPESTRING="String";
+var AT_TYPETHES="Thesaur";
        
 function doOnLoadLogin() 
 {   
@@ -2466,8 +2467,15 @@ FormAttr.loadStruct("FormAttr?Oper="+OperA, function(){
         FormAttr.setItemValue("UniKey",  GMetadata.cellById(Id,6).getValue());
         FormAttr.setItemValue("ModAllow",GMetadata.cellById(Id,7).getValue());
         FormAttr.setItemValue("Multi",   GMetadata.cellById(Id,8).getValue());
-        if (FormAttr.getItemValue("Type")!=AT_TYPESTRING)
-            FormAttr.hideItem("LongStr");
+        }
+    if (FormAttr.getItemValue("Type")!=AT_TYPESTRING)
+        FormAttr.hideItem("LongStr");
+    if (FormAttr.getItemValue("Type")!=AT_TYPETHES)
+        FormAttr.hideItem("ThesSel");
+    else
+        {
+        FormAttr.showItem("ThesSel");    
+        FormAttr.setItemValue("ThesSel", FormAttr.getItemValue("LongStr"));
         }
     });
 FormAttr.attachEvent("onChange", function(name, value, is_checked){
@@ -2477,10 +2485,15 @@ FormAttr.attachEvent("onChange", function(name, value, is_checked){
             FormAttr.hideItem("LongStr");
         else
             FormAttr.showItem("LongStr");
+        if (value!=AT_TYPETHES)
+            FormAttr.hideItem("ThesSel");
+        else
+            FormAttr.showItem("ThesSel");
         }
     }); 
 FormAttr.attachEvent("onButtonClick", function (name)
-    {if (name==OK)
+    {
+    if (name==OK)
         {   
         if (OperA==EOPERDEL)    
             GMetadata.deleteRow(Id);
@@ -2497,7 +2510,9 @@ FormAttr.attachEvent("onButtonClick", function (name)
             GMetadata.cellById(Id,5).setValue(FormAttr.getItemValue("LongStr"));
             GMetadata.cellById(Id,6).setValue(FormAttr.getItemValue("UniKey"));
             GMetadata.cellById(Id,7).setValue(FormAttr.getItemValue("ModAllow"));
-            GMetadata.cellById(Id,8).setValue(FormAttr.getItemValue("Multi"));    
+            GMetadata.cellById(Id,8).setValue(FormAttr.getItemValue("Multi"));  
+            if (FormAttr.getItemValue("Type")=="Thesaur")
+                GMetadata.cellById(Id,5).setValue(FormAttr.getItemValue("ThesSel")); 
             }
         else if (OperA=="DelAttr" || OperA=="AddAttr" )    
             {

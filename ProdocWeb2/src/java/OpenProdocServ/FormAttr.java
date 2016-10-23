@@ -21,7 +21,10 @@ package OpenProdocServ;
 
 import OpenProdocUI.SParent;
 import java.io.PrintWriter;
+import java.util.HashSet;
+import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
+import prodoc.PDThesaur;
 
 /**
  *
@@ -59,7 +62,21 @@ SB.append("{text: \"Boolean  \", value: \"Boolean\"},");
 SB.append("{text: \"TimeStamp\", value: \"TimeStamp\"},");
 SB.append("{text: \"Thesaur  \", value: \"Thesaur\"}");
 SB.append("]},");
-SB.append("{type: \"input\", name: \"LongStr\", label: \"").append(TT(Req, "Length")).append("\",").append(ReadOnly?"readonly:1,":"").append("inputWidth: 50, maxLength:32},");
+SB.append("{type: \"input\", name: \"LongStr\", hidden:true, label: \"").append(TT(Req, "Length")).append("\",").append(ReadOnly?"readonly:1,":"").append("inputWidth: 50, maxLength:32},");
+PDThesaur Thes=new PDThesaur(getSessOPD(Req));
+HashSet listThes = Thes.getListDirectDescendList(PDThesaur.ROOTTERM);
+SB.append("{type: \"combo\", name:\"ThesSel\", hidden:true, options:[");
+for (Iterator iterator = listThes.iterator(); iterator.hasNext();)
+    {
+    String Id =(String) iterator.next();
+    if (!Id.equals(PDThesaur.ROOTTERM))
+        {
+        Thes.Load(Id);
+        SB.append("{text: \"").append(Thes.getName()).append("\", value: \"").append(Id).append("\"},");    
+        }
+    }
+SB.deleteCharAt(SB.length()-1);
+SB.append("]},");
 SB.append("{type: \"checkbox\", name: \"Req\", label: \"").append(TT(Req, "Required")).append("\",").append(ReadOnly?"readonly:1,":"").append("},");
 SB.append("{type: \"checkbox\", name: \"UniKey\", label: \"").append(TT(Req, "Unique_value")).append("\",").append(ReadOnly?"readonly:1,":"").append("},");
 SB.append("{type: \"checkbox\", name: \"ModAllow\", label: \"").append(TT(Req, "Modifiable")).append("\",").append(ReadOnly?"readonly:1,":"").append("checked:true},");
