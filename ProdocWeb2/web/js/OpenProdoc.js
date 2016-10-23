@@ -1896,6 +1896,7 @@ var b = TmpLayout.cells('b');
 b.hideHeader();
 ToolBar = b.attachToolbar();
 GridResults = b.attachGrid();
+GridResults.enableMultiselect(true);
 ToolBar.addButton("Undelete", 0, "Undelete", "Undelete.png", "Undelete.png");
 ToolBar.addButton("Delete", 1, "Delete", "Edit.png", "Edit.png");
 ToolBar.attachEvent("onClick", function(id)
@@ -2420,21 +2421,25 @@ GInherited.clearAndLoad("ListAttrInherited?Id="+Id+"&Oper="+Oper);
 GMetadata.clearAndLoad("ListAttrInherited?Id="+Id+"&Oper="+Oper+"&Own=1");  
 if (Oper==EOPERDEL)
     TBG.clearAll();    
-TBG.attachEvent("onClick", function(Oper)  
+else if(Oper==EOPERMOD)
     {
-    if (Oper==EOPERNEW)    
-        MantAttr(Oper, "");
-    else if (GMetadata.getSelectedRowId()!=null)
+    if (FormElem.isItem("DeleteObj") && FormElem.isItemEnabled("DeleteObj"))
         {
-        if (Oper==EOPERMOD)     
-            MantAttr(Oper, GMetadata.getSelectedRowId());
-        else if (Oper==EOPERDEL)     
-            MantAttr(Oper, GMetadata.getSelectedRowId());   
+        TBG.clearAll(); 
+        TBG.addButton("AddAttr", 0, "NewA", "NewA.png", "NewA.png");
+        TBG.addButton("DelAttr", 1, "DelA", "DelA.png", "DelA.png"); 
         }
+    }
+TBG.attachEvent("onClick", function(OperA)  
+    {
+    if (OperA==EOPERNEW || OperA=="AddAttr")    
+        MantAttr(OperA, "");
+    else if (GMetadata.getSelectedRowId()!=null)     
+        MantAttr(OperA, GMetadata.getSelectedRowId()); 
     });
 }
 //--------------------------------------------------------------
-function MantAttr(Oper, Id)
+function MantAttr(OperA, Id)
 {
 WinAttr=myWins.createWindow({
 id:"WinAttr",
@@ -2447,9 +2452,9 @@ modal:true,
 resize:false}); 
 WinAttr.setText("Attributes");  
 FormAttr=WinAttr.attachForm(); 
-FormAttr.loadStruct("FormAttr?Oper="+Oper, function(){
+FormAttr.loadStruct("FormAttr?Oper="+OperA, function(){
     FormAttr.setFocusOnFirstActive(); 
-    if (Oper!=EOPERNEW)
+    if (OperA!=EOPERNEW)
         {
         var T=GMetadata.cellById(Id,1).getValue();    
         FormAttr.setItemValue("Name",    GMetadata.cellById(Id,0).getValue());
@@ -2477,12 +2482,12 @@ FormAttr.attachEvent("onChange", function(name, value, is_checked){
 FormAttr.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {   
-        if (Oper==EOPERDEL)    
+        if (OperA==EOPERDEL)    
             GMetadata.deleteRow(Id);
-        else if (Oper==EOPERMOD || Oper==EOPERNEW)
+        else if (OperA==EOPERMOD || OperA==EOPERNEW)
             {
             Id=FormAttr.getItemValue("Name");    
-            if (Oper==EOPERNEW)
+            if (OperA==EOPERNEW)
                 GMetadata.addRow(Id,"");
             GMetadata.cellById(Id,0).setValue(FormAttr.getItemValue("Name"));
             GMetadata.cellById(Id,1).setValue(FormAttr.getItemValue("UserName"));
@@ -2494,11 +2499,24 @@ FormAttr.attachEvent("onButtonClick", function (name)
             GMetadata.cellById(Id,7).setValue(FormAttr.getItemValue("ModAllow"));
             GMetadata.cellById(Id,8).setValue(FormAttr.getItemValue("Multi"));    
             }
+        else if (OperA=="DelAttr" || OperA=="AddAttr" )    
+            {
+            var Type=FormElem.getItemValue("Name");    
+            FormAttr.send(OperA+"?ObjType="+Type, function(loader, response)
+                { // Asynchronous 
+                if (response.substring(0,2)==OK)    
+                    {      
+                    FormElem.unload();
+                    WinElem.close();
+                    }
+                else 
+                    alert(response); 
+                } );
+            }
         }
     FormAttr.unload();
     WinAttr.close();   
     });
-    
 }
 //--------------------------------------------------------------
 function CompleteFormAcl(Oper)   

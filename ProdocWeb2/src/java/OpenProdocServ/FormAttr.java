@@ -62,7 +62,7 @@ SB.append("]},");
 SB.append("{type: \"input\", name: \"LongStr\", label: \"").append(TT(Req, "Length")).append("\",").append(ReadOnly?"readonly:1,":"").append("inputWidth: 50, maxLength:32},");
 SB.append("{type: \"checkbox\", name: \"Req\", label: \"").append(TT(Req, "Required")).append("\",").append(ReadOnly?"readonly:1,":"").append("},");
 SB.append("{type: \"checkbox\", name: \"UniKey\", label: \"").append(TT(Req, "Unique_value")).append("\",").append(ReadOnly?"readonly:1,":"").append("},");
-SB.append("{type: \"checkbox\", name: \"ModAllow\", label: \"").append(TT(Req, "Modifiable")).append("\",").append(ReadOnly?"readonly:1,":"").append("},");
+SB.append("{type: \"checkbox\", name: \"ModAllow\", label: \"").append(TT(Req, "Modifiable")).append("\",").append(ReadOnly?"readonly:1,":"").append("checked:true},");
 SB.append("{type: \"checkbox\", name: \"Multi\", label: \"").append(TT(Req, "MultiValued")).append("\",").append(ReadOnly?"readonly:1,":"").append("},");
 SB.append("{type: \"block\", width: 250, list:[");
 SB.append("{type: \"button\", name: \"OK\", value: \"").append(TT(Req, "Ok")).append("\"},");

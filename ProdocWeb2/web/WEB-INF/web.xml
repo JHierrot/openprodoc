@@ -276,6 +276,14 @@
         <servlet-name>DeleteObj</servlet-name>
         <servlet-class>OpenProdocServ.DeleteObj</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DelAttr</servlet-name>
+        <servlet-class>OpenProdocServ.DelAttr</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddAttr</servlet-name>
+        <servlet-class>OpenProdocServ.AddAttr</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SParent</servlet-name>
         <url-pattern>/SParent</url-pattern>
@@ -551,6 +559,14 @@
     <servlet-mapping>
         <servlet-name>DeleteObj</servlet-name>
         <url-pattern>/DeleteObj</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DelAttr</servlet-name>
+        <url-pattern>/DelAttr</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddAttr</servlet-name>
+        <url-pattern>/AddAttr</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -564,6 +564,7 @@ if (InTransLocal)
     getDrv().IniciarTrans();
 try {
 getDrv().DeleteRecord(getTabNameAttrs(), ListCond);
+getObjCacheAtr().put(getName(), null);
 } catch (PDException Ex)
     {
     if (InTransLocal)
@@ -576,11 +577,11 @@ if (PDLog.isDebug())
     PDLog.Debug("PDObjDefs.delAtribute>:"+AttrName);
 }
 //-------------------------------------------------------------------------
-    /**
-     *
-     * @throws PDException
-     */
-    public void DelAtributes() throws PDException
+/**
+ *
+ * @throws PDException
+ */
+public void DelAtributes() throws PDException
 {
 Conditions CondDelAttrs=new Conditions();
 Condition CondDelAttr=new Condition(fTYPNAME, Condition.cEQUAL, getName());

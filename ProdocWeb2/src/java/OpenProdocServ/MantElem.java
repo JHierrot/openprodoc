@@ -72,16 +72,6 @@ String Id=Req.getParameter("Id");
 //String Filter=Req.getParameter("Fil");
 if (TypeElem!=null && TypeElem.length()!=0)
     {
-//    if (Oper.equals(OPERNEW))  
-//        out.println(ElemNew(Req, TypeElem));
-//    else if (Oper.equals(OPERMODIF))
-//        out.println(ElemMod(Req, TypeElem, Id));
-//    else if (Oper.equals(OPERDELETE))
-//        out.println(ElemDel(Req, TypeElem, Id));
-//    else if (Oper.equals(OPERCOPY))
-//        out.println(ElemCopy(Req, TypeElem, Id));
-//    else if (Oper.equals("Import"))
-//        out.println(ElemImport(Req, TypeElem));
     if (Oper.equals("Import"))  
         out.println(ElemImport(Req, TypeElem));
     else
