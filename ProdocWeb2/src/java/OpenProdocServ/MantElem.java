@@ -38,6 +38,8 @@ import prodoc.PDMimeType;
 import prodoc.PDObjDefs;
 import prodoc.PDRepository;
 import prodoc.PDRoles;
+import prodoc.PDTasksCron;
+import prodoc.PDTasksDefEvent;
 import prodoc.PDUser;
 import prodoc.Record;
 
@@ -60,16 +62,15 @@ private static final String List2=ObjPD.fPDAUTOR+"/"+ObjPD.fPDDATE;
 //-----------------------------------------------------------------------------------------------
 /**
  *
- * @param Req 
- * @param response
+ * @param Req
  * @throws Exception
  */
+@Override
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {
 String Oper=Req.getParameter("Oper");
 String TypeElem=Req.getParameter("Ty");
 String Id=Req.getParameter("Id");
-//String Filter=Req.getParameter("Fil");
 if (TypeElem!=null && TypeElem.length()!=0)
     {
     if (Oper.equals("Import"))  
@@ -115,6 +116,24 @@ else
                 }
             }
         Attr=Rec.nextAttr();
+        }
+    if( TypeElem.equals(ListElem.MANTTASKCRON) )
+        {
+        int Type=(Integer)Rec.getAttr(PDTasksCron.fTYPE).getValue();    
+        if ( Type==1 ||Type==2 ||Type==5 )
+            {
+            String Val=Req.getParameter(PDTasksCron.fOBJTYPE + "2");
+            Rec.getAttr(PDTasksCron.fOBJTYPE).setValue(Val);
+            }
+        }
+    if( TypeElem.equals(ListElem.MANTTASKEVENT) )
+        {
+        int Value=(Integer)Rec.getAttr(PDTasksCron.fTYPE).getValue();    
+        if ( Value==200 || Value==202 || Value==204 || Value==206|| Value==207|| Value==208|| Value==209 )
+            {
+            String Val=Req.getParameter(PDTasksCron.fOBJTYPE + "2");
+            Rec.getAttr(PDTasksCron.fOBJTYPE).setValue(Val);
+            }
         }
     Obj.assignValues(Rec);
     PDSession.IniciarTrans();
@@ -203,54 +222,6 @@ else
     SB.append(OkBlock(Req, TypeElem, Id));
 return(SB.toString());
 }
-
-
-
-/**
-//-----------------------------------------------------------------------------------------------
-private String ElemNew(HttpServletRequest Req, String TypeElem) throws PDException
-{
-StringBuilder SB=new StringBuilder(1000);
-SB.append("[{type: \"settings\", position: \"label-left\", labelWidth: 150, inputWidth: 230},");
-SB.append("{type: \"label\", label: \"").append(TT(Req, GetTitleNew(Req, TypeElem))).append("\"},");
-SB.append(getBody("New", Req, TypeElem, null));
-SB.append(OkBlock(Req, TypeElem, null));
-return(SB.toString());
-}
-//-----------------------------------------------------------------------------------------------
-
-private String ElemMod(HttpServletRequest Req, String TypeElem, String Id) throws PDException
-{
-StringBuilder SB=new StringBuilder(1000);
-SB.append("[  {type: \"settings\", position: \"label-left\", labelWidth: 150, inputWidth: 230},");
-SB.append("{type: \"label\", label: \"").append(TT(Req, GetTitleModif(Req, TypeElem))).append("\"},");
-SB.append(getBody("Modif", Req, TypeElem, Id));
-SB.append(OkBlock(Req, TypeElem, Id));
-return(SB.toString());
-}
-//-----------------------------------------------------------------------------------------------
-
-private String ElemDel(HttpServletRequest Req, String TypeElem, String Id) throws PDException
-{
-StringBuilder SB=new StringBuilder(1000);
-SB.append("[  {type: \"settings\", position: \"label-left\", labelWidth: 150, inputWidth: 230},");
-SB.append("{type: \"label\", label: \"").append(TT(Req, GetTitleDel(Req, TypeElem))).append("\"},");
-SB.append(getBody("Delete", Req, TypeElem, Id));
-SB.append(OkBlock(Req, TypeElem, Id));
-return(SB.toString());
-}
-//-----------------------------------------------------------------------------------------------
-
-private String ElemCopy(HttpServletRequest Req, String TypeElem, String Id) throws PDException
-{
-StringBuilder SB=new StringBuilder(1000);
-SB.append("[  {type: \"settings\", position: \"label-left\", labelWidth: 150, inputWidth: 230},");
-SB.append("{type: \"label\", label: \"").append(TT(Req, GetTitleCopy(Req, TypeElem))).append("\"},");
-SB.append(getBody("Copy", Req, TypeElem, Id));
-SB.append(OkBlock(Req, TypeElem, Id+"1"));
-return(SB.toString());
-}
-* ***/
 //-----------------------------------------------------------------------------------------------
 private String ElemImport(HttpServletRequest Req, String TypeElem)
 {
@@ -277,6 +248,8 @@ else if (ElemType.equals(ListElem.MANTAUTH))
     return(TT(Req, "Add_Authenticator"));
 else if (ElemType.equals(ListElem.MANTCUST))
     return(TT(Req, "Add_Customization"));
+else if (ElemType.equals(ListElem.MANTTASKCRON) || ElemType.equals(ListElem.MANTTASKEVENT))
+    return(TT(Req, "Add_Task"));
 return("Error");
 }
 //-----------------------------------------------------------------------------------------------
@@ -580,6 +553,104 @@ else if (ElemType.equals(ListElem.MANTCUST))
         Attr.setValue(((String)Attr.getValue()).replace("\"", "'"));
     SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
     }
+else if (ElemType.equals(ListElem.MANTTASKCRON))
+    {
+    Attr=Rec.getAttr(PDTasksCron.fNAME);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDTasksCron.fDESCRIPTION);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDTasksCron.fCATEGORY);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDTasksCron.fTYPE);
+    Integer Value=(Integer)Attr.getValue();
+    SB.append("{type: \"combo\", label: \"").append(TT(Req, Attr.getUserName())).append("\", name: \"").append(Attr.getName()).append("\",").append(" inputWidth:\"auto\", options:[");
+    String[] listTypeTask = PDTasksCron.getListTypeTask();
+    for (int i = 0; i < listTypeTask.length; i++)
+        SB.append("{text:\"").append(listTypeTask[i]).append("\", value:\"").append(i).append("\"").append((Value!=null&&Value==i)?", selected:true":"").append("},");
+    SB.append("]},");
+    Attr=Rec.getAttr(PDTasksCron.fOBJTYPE);
+    boolean ShowFoldComb=true;
+    if (Value!=null && (Value==1 ||Value==2 ||Value==5 ))
+       ShowFoldComb=false; 
+    SB.append("{type: \"combo\", name: \"" + PDTasksCron.fOBJTYPE + "\", label: \"").append(TT(Req, Attr.getUserName())).append("\", required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", hidden:").append(ShowFoldComb?"false":"true").append(", options:[");
+    SB.append(getComboModelFold(PDSession, (String)Attr.getValue()) );
+    SB.append("]},");
+    SB.append("{type: \"combo\", name: \"" + PDTasksCron.fOBJTYPE + "2\", label: \"").append(TT(Req, Attr.getUserName())).append("\", required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", hidden:").append(ShowFoldComb?"true":"false").append(", options:[");
+    SB.append(getComboModelDoc(PDSession, (String)Attr.getValue()) );
+    SB.append("]},");
+    Attr=Rec.getAttr(PDTasksCron.fFILTER);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDTasksCron.fPARAM);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDTasksCron.fPARAM2);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDTasksCron.fPARAM3);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDTasksCron.fPARAM4);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDTasksCron.fNEXTDATE);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDTasksCron.fADDMONTH);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDTasksCron.fADDDAYS);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDTasksCron.fADDHOURS);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDTasksCron.fADDMINS);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDTasksCron.fACTIVE);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDTasksCron.fTRANSACT);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    }
+else if (ElemType.equals(ListElem.MANTTASKEVENT))
+    {
+    Attr=Rec.getAttr(PDTasksDefEvent.fNAME);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDTasksDefEvent.fDESCRIPTION);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDTasksDefEvent.fCATEGORY);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDTasksDefEvent.fTYPE);
+    Integer Value=(Integer)Attr.getValue();
+    SB.append("{type: \"combo\", label: \"").append(TT(Req, Attr.getUserName())).append("\", name: \"").append(Attr.getName()).append("\",").append(" inputWidth:\"auto\", options:[");
+    String[] listTypeTask = PDTasksDefEvent.getListTypeEventTask();
+    for (int i = 0; i < listTypeTask.length; i++)
+        SB.append("{text:\"").append(listTypeTask[i]).append("\", value:\"").append(200+i).append("\"").append((Value!=null&&Value==i+200)?", selected:true":"").append("},");
+    SB.append("]},");
+    Attr=Rec.getAttr(PDTasksDefEvent.fOBJTYPE);
+    boolean ShowFoldComb=true;
+    if (Value!=null && (Value==200 ||Value==202 ||Value==204 ||Value==206||Value==207||Value==208||Value==209))
+       ShowFoldComb=false; 
+    SB.append("{type: \"combo\", name: \"" + PDTasksDefEvent.fOBJTYPE + "\", label: \"").append(TT(Req, Attr.getUserName())).append("\", required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", hidden:").append(ShowFoldComb?"false":"true").append(", options:[");
+    SB.append(getComboModelFold(PDSession, (String)Attr.getValue()) );
+    SB.append("]},");
+    SB.append("{type: \"combo\", name: \"" + PDTasksDefEvent.fOBJTYPE + "2\", label: \"").append(TT(Req, Attr.getUserName())).append("\", required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", hidden:").append(ShowFoldComb?"true":"false").append(", options:[");
+    SB.append(getComboModelDoc(PDSession, (String)Attr.getValue()) );
+    SB.append("]},");
+    Attr=Rec.getAttr(PDTasksDefEvent.fFILTER);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDTasksDefEvent.fPARAM);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDTasksDefEvent.fPARAM2);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDTasksDefEvent.fPARAM3);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDTasksDefEvent.fPARAM4);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDTasksDefEvent.fEVENTYPE);
+    SB.append("{type: \"combo\", label: \"").append(TT(Req, Attr.getUserName())).append("\", name: \"").append(Attr.getName()).append("\",").append(" inputWidth:\"auto\", options:[");
+    SB.append("{text:\"INS\", value:\"INS\"").append((Attr.getValue()!=null&&Attr.getValue().equals("INS"))?", selected:true":"").append("},");
+    SB.append("{text:\"UPD\", value:\"UPD\"").append((Attr.getValue()!=null&&Attr.getValue().equals("UPD"))?", selected:true":"").append("},");
+    SB.append("{text:\"DEL\", value:\"DEL\"").append((Attr.getValue()!=null&&Attr.getValue().equals("DEL"))?", selected:true":"").append("}");
+    SB.append("]},");
+    Attr=Rec.getAttr(PDTasksDefEvent.fEVENORDER);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDTasksDefEvent.fACTIVE);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    Attr=Rec.getAttr(PDTasksDefEvent.fTRANSACT);
+    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));    
+    }
 return(SB);
 }
 //-----------------------------------------------------------------------------------------------    
@@ -603,6 +674,8 @@ else if (ElemType.equals(ListElem.MANTAUTH))
     return(TT(Req, "Update_Authenticator"));
 else if (ElemType.equals(ListElem.MANTCUST))
     return(TT(Req, "Update_Customization"));
+else if (ElemType.equals(ListElem.MANTTASKCRON) || ElemType.equals(ListElem.MANTTASKEVENT))
+    return(TT(Req, "Update_Task"));
 return("Error");
 }
 //-----------------------------------------------------------------------------------------------
@@ -626,6 +699,8 @@ else if (ElemType.equals(ListElem.MANTAUTH))
     return(TT(Req, "Delete_Authenticator"));
 else if (ElemType.equals(ListElem.MANTCUST))
     return(TT(Req, "Delete_Customization"));
+else if (ElemType.equals(ListElem.MANTTASKCRON) || ElemType.equals(ListElem.MANTTASKEVENT))
+    return(TT(Req, "Delete_Task"));
 return("Error");
 }
 //-----------------------------------------------------------------------------------------------
@@ -649,6 +724,8 @@ else if (ElemType.equals(ListElem.MANTAUTH))
     return(TT(Req, "Copy_Authenticator"));
 else if (ElemType.equals(ListElem.MANTCUST))
     return(TT(Req, "Copy_Customization"));
+else if (ElemType.equals(ListElem.MANTTASKCRON) || ElemType.equals(ListElem.MANTTASKEVENT))
+    return(TT(Req, "Copy_Task"));
 return("Error");
 }
 //-----------------------------------------------------------------------------------------------

@@ -950,15 +950,17 @@ return(ListVals.toString());
  * Obtains a list of clases of type folder allowed to the user
  * @return a DefaultComboModel with names of classes of folder
  */
-static protected String getComboModelFold(DriverGeneric Session) throws PDException
+static protected String getComboModelFold(DriverGeneric Session, String Value) throws PDException
 {
+if (Value==null || Value.length()==0)   
+    Value=PDFolders.getTableName();
 StringBuilder ListVals=new StringBuilder(5000);
 PDObjDefs Obj = new PDObjDefs(Session);
 Cursor CursorId = Obj.getListFold();
 Record Res=Session.NextRec(CursorId);
 while (Res!=null)
     {
-    ListVals.append("{text: \"").append(Res.getAttr(PDObjDefs.fDESCRIPTION).getValue()).append("\", value: \"").append(Res.getAttr(PDObjDefs.fNAME).getValue()).append("\"").append(Res.getAttr(PDObjDefs.fNAME).getValue().equals(PDFolders.getTableName())?",selected:true":"").append("}");
+    ListVals.append("{text: \"").append(Res.getAttr(PDObjDefs.fDESCRIPTION).getValue()).append("\", value: \"").append(Res.getAttr(PDObjDefs.fNAME).getValue()).append("\"").append(Res.getAttr(PDObjDefs.fNAME).getValue().equals(Value)?",selected:true":"").append("}");
     Res=Session.NextRec(CursorId);
     if (Res!=null)
         ListVals.append(",");
@@ -971,15 +973,17 @@ return(ListVals.toString());
  * Obtains a list of clases of type folder allowed to the user
  * @return a DefaultComboModel with names of classes of folder
  */
-static protected String getComboModelDoc(DriverGeneric Session) throws PDException
+static protected String getComboModelDoc(DriverGeneric Session, String Value) throws PDException
 {
+if (Value==null || Value.length()==0)   
+    Value=PDDocs.getTableName();
 StringBuilder ListVals=new StringBuilder(5000);
 PDObjDefs Obj = new PDObjDefs(Session);
 Cursor CursorId = Obj.getListDocs();
 Record Res=Session.NextRec(CursorId);
 while (Res!=null)
     {
-    ListVals.append("{text: \"").append(Res.getAttr(PDObjDefs.fDESCRIPTION).getValue()).append("\", value: \"").append(Res.getAttr(PDObjDefs.fNAME).getValue()).append("\"").append(Res.getAttr(PDObjDefs.fNAME).getValue().equals(PDDocs.getTableName())?",selected:true":"").append("}");
+    ListVals.append("{text: \"").append(Res.getAttr(PDObjDefs.fDESCRIPTION).getValue()).append("\", value: \"").append(Res.getAttr(PDObjDefs.fNAME).getValue()).append("\"").append(Res.getAttr(PDObjDefs.fNAME).getValue().equals(Value)?",selected:true":"").append("}");
     Res=Session.NextRec(CursorId);
     if (Res!=null)
         ListVals.append(",");

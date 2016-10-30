@@ -22,10 +22,14 @@ package OpenProdocServ;
 import OpenProdocUI.SParent;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import prodoc.Attribute;
+import prodoc.Condition;
+import prodoc.Conditions;
 import prodoc.Cursor;
 import prodoc.DriverGeneric;
 import prodoc.ObjPD;
@@ -38,6 +42,11 @@ import prodoc.PDMimeType;
 import prodoc.PDObjDefs;
 import prodoc.PDRepository;
 import prodoc.PDRoles;
+import prodoc.PDTasksCron;
+import prodoc.PDTasksDef;
+import prodoc.PDTasksDefEvent;
+import prodoc.PDTasksExec;
+import prodoc.PDTasksExecEnded;
 import prodoc.PDUser;
 import prodoc.Record;
 
@@ -56,12 +65,17 @@ public static final String MANTREPO="Repositories";
 public static final String MANTOBJ="ObjDef";
 public static final String MANTAUTH="Authenticators";
 public static final String MANTCUST="Customizations";
+public static final String MANTTASKCRON="TaskCron";
+public static final String MANTTASKEVENT="TaskEvents";
+public static final String MANTPENDTASK="PendTaskLog";
+public static final String MANTTASKENDED="EndTaskLogs";
+
 //-----------------------------------------------------------------------------------------------
 /**
  *
  * @param Req
- * @param out
- * @throws Exception
+ * @throws javax.servlet.ServletException
+ * @throws java.io.IOException
  */
 @Override
 protected void processRequest(HttpServletRequest Req, HttpServletResponse response) throws ServletException, IOException
@@ -111,9 +125,10 @@ else if (ElemType.equals(MANTROLES))
     Rec.delAttr(PDRoles.fALLOWMAINTAINTHESAUR);
     Rec.delAttr(PDRoles.fALLOWMAINTAINUSER);
     }
-Rec.delAttr(Filter);
+//Rec.delAttr(Filter);
 int WIDTH=600;
-if (ElemType.equals(MANTOBJ))
+if (ElemType.equals(MANTOBJ) || ElemType.equals(MANTTASKCRON)|| ElemType.equals(MANTTASKEVENT)
+        || ElemType.equals(MANTTASKENDED) || ElemType.equals(MANTPENDTASK))
    WIDTH=1000; 
 Rec.initList();
 Attribute Attr=Rec.nextAttr();
@@ -125,11 +140,58 @@ while (Attr!=null)
     Attr=Rec.nextAttr();
     }
 Resp.append("</head>");
-Cursor ListObj=Obj.SearchLike(Filter);
+Cursor ListObj;
+if (ElemType.equals("PendTaskLog") || ElemType.equals("EndTaskLogs") )
+    {
+    Conditions Conds=new Conditions();
+    String Category=Req.getParameter("Category");
+    if (Category!=null && Category.length()!=0)
+        {
+        Condition C=new Condition(PDTasksDef.fCATEGORY, Condition.cEQUAL, Category);    
+        Conds.addCondition(C);
+        }
+    String Fec1=Req.getParameter("Fec1");
+    Date D1;
+    if (Fec1!=null && Fec1.length()!=0)
+        D1=new Date(Long.parseLong(Fec1));
+    else
+        D1=new Date(System.currentTimeMillis()-600000);    
+    PDTasksExecEnded T=new PDTasksExecEnded(PDSession);
+    Attribute AttrF1=T.getRecord().getAttr(PDTasksExecEnded.fPDDATE);
+    AttrF1.setValue(D1);
+    Condition C1=new Condition(AttrF1, Condition.cGET);  
+    Conds.addCondition(C1);
+    String Fec2=Req.getParameter("Fec2");
+    if (Fec2!=null && Fec2.length()!=0)
+        {    
+        Attribute AttrF2=AttrF1.Copy();
+        AttrF2.setValue(new Date(Long.parseLong(Fec2)));
+        Condition C2=new Condition(AttrF2, Condition.cGET);  
+        Conds.addCondition(C2);
+        }
+    if (ElemType.equals("PendTaskLog")  )
+        {
+        PDTasksExec Task=new PDTasksExec(PDSession);
+        ListObj=Task.Search(Conds);
+        }
+    else 
+        {
+        PDTasksExecEnded Task=new PDTasksExecEnded(PDSession);
+        ListObj=Task.Search(Conds);
+        }
+    }
+else
+    ListObj=Obj.SearchLike(Filter);
 Record NextObj=PDSession.NextRec(ListObj);
 while (NextObj!=null)
     {
-    String Id=(String)NextObj.getAttr(PDACL.fNAME).getValue();
+    String Id;
+    if (ElemType.equals("PendTaskLog") || ElemType.equals("EndTaskLogs") )
+        {
+        Id=(String)NextObj.getAttr(PDTasksExecEnded.fPDID).getValue();
+        }
+    else
+        Id=(String)NextObj.getAttr(PDACL.fNAME).getValue();
     Rec.assign(NextObj);
     Resp.append(SParent.GenRowGrid(Req, Id, Rec, true));    
     NextObj=PDSession.NextRec(ListObj);
@@ -181,6 +243,14 @@ else if (ElemType.equals(MANTAUTH))
     Obj=new PDAuthenticators(PDSession);
 else if (ElemType.equals(MANTCUST))
     Obj=new PDCustomization(PDSession);
+else if (ElemType.equals(MANTTASKCRON))
+    Obj=new PDTasksCron(PDSession);
+else if (ElemType.equals(MANTTASKEVENT))
+    Obj=new PDTasksDefEvent(PDSession);
+else if (ElemType.equals(MANTPENDTASK))
+    Obj=new PDTasksExec(PDSession);
+else if (ElemType.equals(MANTTASKENDED))
+    Obj=new PDTasksExecEnded(PDSession);
 if (Id!=null)
     Obj.Load(Id);
 return (Obj);

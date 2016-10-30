@@ -1303,4 +1303,15 @@ if (PDLog.isDebug())
     PDLog.Debug("PDTasksExec.ExecuteFTDelDoc<:"+Doc.getPDId());                    
 }
 //-------------------------------------------------------------------------
+/**
+ *
+ * @param Ident
+ * @throws PDExceptionFunc  
+ */
+@Override
+protected void AsignKey(String Ident) throws PDExceptionFunc
+{
+setPDId(Ident);
+}
+//-------------------------------------------------------------------------
 }

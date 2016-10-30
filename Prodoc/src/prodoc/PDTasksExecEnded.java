@@ -224,4 +224,16 @@ ListCond.addCondition(new Condition(fPDID, Condition.cEQUAL, getPDId()));
 return(ListCond);
 }
 //-------------------------------------------------------------------------
+/**
+ *
+ * @param Ident
+ * @throws PDExceptionFunc  
+ */
+@Override
+protected void AsignKey(String Ident) throws PDExceptionFunc
+{
+setPDId(Ident);
+}
+//-------------------------------------------------------------------------
+
 }

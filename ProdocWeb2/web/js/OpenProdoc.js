@@ -58,6 +58,10 @@ var ELEMGROUPS="Groups";
 var ELEMREPOS="Repositories";
 var ELEMAUTH="Authenticators";
 var ELEMOBJ="ObjDef";
+var ELEMTASKCRON="TaskCron";
+var ELEMTASKEVENT="TaskEvents";
+var ELEMPENDTASK="PendTaskLog";
+var ELEMTASKEND="EndTaskLogs";
 var FiltExp="";
 var ElemTabBar;
 var EOPERNEW="New";
@@ -67,6 +71,7 @@ var EOPERCOP="Copy";
 var EOPEREXP="Export";
 var EOPEREXA="ExportAll";
 var EOPERIMP="Import";
+var EOPERRELAUN="Relaunch";
 var PERMISSIONS=["NOTHING", "READ","CATALOG","VERSION","UPDATE","DELETE"];
 var ElemLayout;
 var ElemTabBar;
@@ -80,6 +85,8 @@ var WinAttr;
 var FormAttr;
 var AT_TYPESTRING="String";
 var AT_TYPETHES="Thesaur";
+var COMBOFOLDER="ObjType";       
+var COMBODOCS="ObjType2";       
        
 function doOnLoadLogin() 
 {   
@@ -220,13 +227,13 @@ switch (IdMenu)
         break;
     case "Customizations": Admin("Customizations");
         break;
-    case "TaskCron": Admin("TaskCron");
+    case "TaskCron": Admin(ELEMTASKCRON);
         break;
-    case "TaskEvents": Admin("TaskEvents");
+    case "TaskEvents": Admin(ELEMTASKEVENT);
         break;
-    case "PendTasklog": Admin("PendTasklog");
+    case "PendTasklog": Admin(ELEMPENDTASK);
         break;
-    case "EndTasksLogs": Admin("EndTasksLogs");
+    case "EndTasksLogs": Admin(ELEMTASKEND);
         break;
     case "TraceLogs": Admin("TraceLogs");
         break;
@@ -1958,7 +1965,7 @@ WinAF=myWins.createWindow({
 id:"Admin",
 left:20,
 top:30,
-width:((TypeElem==ELEMOBJ)?1000:600),
+width:((TypeElem==ELEMOBJ||TypeElem==ELEMTASKCRON||TypeElem==ELEMTASKEVENT||TypeElem==ELEMPENDTASK||TypeElem==ELEMTASKEND)?1000:600),
 height:600,
 center:true,
 modal:true,
@@ -1967,9 +1974,12 @@ WinAF.setText(TypeElem);
 TmpLayout=WinAF.attachLayout('2E');
 var a = TmpLayout.cells('a');
 a.hideHeader();
-a.setHeight(50);
+if (TypeElem==ELEMPENDTASK || TypeElem==ELEMTASKEND)
+    a.setHeight(110);
+else
+    a.setHeight(50);
 var formFilter = a.attachForm();
-formFilter.loadStruct('ElemFilter');
+formFilter.loadStruct("ElemFilter?TE="+TypeElem);
 var b = TmpLayout.cells('b');
 b.hideHeader();
 ToolBar = b.attachToolbar();
@@ -1978,19 +1988,51 @@ GridResults.load("ListElem?TE="+TypeElem);
 GridResults.setSizes();
 FiltExp="";
 formFilter.attachEvent("onButtonClick", function(name){
-    FiltExp=formFilter.getItemValue("filter");
-    GridResults.load("ListElem?TE="+TypeElem+"&F="+FiltExp);
+    if (TypeElem!=ELEMPENDTASK && TypeElem!=ELEMTASKEND)
+        {
+        FiltExp=formFilter.getItemValue("filter");
+        GridResults.load("ListElem?TE="+TypeElem+"&F="+FiltExp);
+        }
+    else
+        {
+        var Cat=formFilter.getItemValue("Category");
+        var Fec1=formFilter.getItemValue("Fec1");
+        if (Fec1!=null && Fec1!="")
+            Fec1=Fec1.getTime();
+        else
+            Fec1="";
+        var Fec2=formFilter.getItemValue("Fec2");
+        if (Fec2!=null && Fec2!="")
+            Fec2=Fec2.getTime();
+        else
+            Fec2="";
+        GridResults.load("ListElem?TE="+TypeElem+"&Cat="+Cat+"&Fec1="+Fec1+"&Fec2="+Fec2);
+        }
     });        
-ToolBar.addButton(EOPERNEW, 0, "New", "New.png", "New.png");
-ToolBar.addButton(EOPERMOD, 1, "Modif", "Modif.png", "Modif.png");
-ToolBar.addButton(EOPERDEL, 2, "Delete", "Edit.png", "Edit.png");
-ToolBar.addButton(EOPERCOP, 3, "Copy", "Copy.png", "Copy.png");
-ToolBar.addButton(EOPEREXP, 4, "Export", "Export.png", "Export.png");
-ToolBar.addButton(EOPEREXA, 5, "ExportAll", "ExportAll.png", "ExportAll.png");
-ToolBar.addButton(EOPERIMP, 6, "Import", "Import.png", "Import.png");
+if (TypeElem!=ELEMPENDTASK && TypeElem!=ELEMTASKEND)
+    {
+    ToolBar.addButton(EOPERNEW, 0, "New", "New.png", "New.png");
+    ToolBar.addButton(EOPERMOD, 1, "Modif", "Modif.png", "Modif.png");
+    ToolBar.addButton(EOPERDEL, 2, "Delete", "Edit.png", "Edit.png");
+    ToolBar.addButton(EOPERCOP, 3, "Copy", "Copy.png", "Copy.png");
+    ToolBar.addButton(EOPEREXP, 4, "Export", "Export.png", "Export.png");
+    ToolBar.addButton(EOPEREXA, 5, "ExportAll", "ExportAll.png", "ExportAll.png");
+    ToolBar.addButton(EOPERIMP, 6, "Import", "Import.png", "Import.png");
+    }
+else if ( TypeElem==ELEMTASKEND)
+    {
+    ToolBar.addButton(EOPERRELAUN, 0, "Relaunch", "Relaunch.png", "Relaunch.png");    
+    }    
 ToolBar.attachEvent("onClick", function(Oper)
     {  
-    if (GridResults.getSelectedRowId()!=null || Oper==EOPERNEW || Oper==EOPEREXA || Oper==EOPERIMP)     
+    if (GridResults.getSelectedRowId()!=null && Oper==EOPERRELAUN)
+        window.dhx4.ajax.get("Relaunch?Id="+GridResults.getSelectedRowId(), function(r)
+            {
+            var xml = r.xmlDoc.responseXML;
+            var nodes = xml.getElementsByTagName("status");
+            alert(nodes[0].textContent);                                       
+            });  
+    else if (GridResults.getSelectedRowId()!=null || Oper==EOPERNEW || Oper==EOPEREXA || Oper==EOPERIMP)     
         {
         if (Oper==EOPERNEW)  
             {
@@ -2060,6 +2102,40 @@ FormElem.loadStruct("MantElem?Oper=New&Ty="+TypeElem, function(){
     CompleteForm(EOPERNEW, TypeElem);    
     });
 FormElem.enableLiveValidation(true);    
+FormElem.attachEvent("onChange", function(name, value, is_checked){
+    if (TypeElem==ELEMTASKCRON)
+        {
+        if (name=="TaskType") 
+            {
+            if (value==1 ||value==2 ||value==5 )
+                {
+                FormElem.hideItem(COMBOFOLDER);
+                FormElem.showItem(COMBODOCS);
+                }
+            else
+                {
+                FormElem.hideItem(COMBODOCS);
+                FormElem.showItem(COMBOFOLDER);                
+                }
+            }
+        }
+    else if (TypeElem==ELEMTASKEVENT)
+        {
+        if (name=="TaskType") 
+            {
+            if (value==200 || value==202 || value==204 || value==206|| value==207|| value==208|| value==209 )
+                {
+                FormElem.hideItem(COMBOFOLDER);
+                FormElem.showItem(COMBODOCS);
+                }
+            else
+                {
+                FormElem.hideItem(COMBODOCS);
+                FormElem.showItem(COMBOFOLDER);                
+                }
+            }
+        }
+    }); 
 FormElem.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {    
@@ -2233,7 +2309,42 @@ FormElem.loadStruct("MantElem?Oper=Copy&Ty="+TypeElem+"&Id="+ElemId, function(){
     FormElem.setFocusOnFirstActive();
     CompleteForm(EOPERCOP, TypeElem);    
     });
-FormElem.enableLiveValidation(true);      
+FormElem.enableLiveValidation(true); 
+FormElem.attachEvent("onChange", function(name, value, is_checked){
+    if (TypeElem==ELEMTASKCRON)
+        {
+        if (name=="TaskType") 
+            {
+            if (value==1 ||value==2 ||value==5 )
+                {
+                FormElem.hideItem(COMBOFOLDER);
+                FormElem.showItem(COMBODOCS);
+                }
+            else
+                {
+                FormElem.hideItem(COMBODOCS);
+                FormElem.showItem(COMBOFOLDER);                
+                }
+            }
+        }
+    else if (TypeElem==ELEMTASKEVENT)
+        {
+        if (name=="TaskType") 
+            {
+            if (value==200 || value==202 || value==204 || value==206|| value==207|| value==208|| value==209 )
+                {
+                FormElem.hideItem(COMBOFOLDER);
+                FormElem.showItem(COMBODOCS);
+                }
+            else
+                {
+                FormElem.hideItem(COMBODOCS);
+                FormElem.showItem(COMBOFOLDER);                
+                }
+            }
+        }
+    }); 
+
 FormElem.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {    

@@ -20,58 +20,69 @@
 package OpenProdocServ;
 
 import OpenProdocUI.SParent;
-import static OpenProdocUI.SParent.TT;
-import static OpenProdocUI.SParent.getSessOPD;
+import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.http.HttpServletRequest;
-import prodoc.Attribute;
-import prodoc.DriverGeneric;
-import prodoc.PDFolders;
+import java.util.Date;
+import javax.servlet.ServletException;
+import javax.servlet.http.*;
+import prodoc.PDTasksExec;
+import prodoc.PDTasksExecEnded;
+
 
 /**
  *
  * @author jhierrot
  */
-public class formCombo extends SParent
+public class Relaunch extends SParent
 {
-    
-static private int NUMATTREXC=7;
+private static final String RESULT_UPFILE="RESULT_UPFILE";    
 //-----------------------------------------------------------------------------------------------
 /**
  *
  * @param Req
- * @param out
- * @throws Exception
  */
 @Override
-protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
+protected void processRequest(HttpServletRequest Req, HttpServletResponse response) throws ServletException, IOException
 {   
-DriverGeneric PDSession=getSessOPD(Req);
-PDFolders TmpFold=new PDFolders(PDSession);
-StringBuilder Form= new StringBuilder(3000);
-Attribute Attr;
-Form.append("[");
-Attr=TmpFold.getRecord().getAttr(PDFolders.fFOLDTYPE);
-Form.append("{type: \"combo\", name: \"" + PDFolders.fFOLDTYPE + "\", label: \"").append(TT(Req, Attr.getUserName())).append("\", required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", options:[");
-Form.append(getComboModelFold(PDSession, null) );
-Form.append("]} ];");
-out.println(Form.toString());
+response.setContentType("text/xml;charset=UTF-8");
+response.setStatus(HttpServletResponse.SC_OK);
+PrintWriter out = response.getWriter();  
+StringBuilder Resp=new StringBuilder(200);
+Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+try {
+String Id=Req.getParameter("Id");
+PDTasksExecEnded TE=new PDTasksExecEnded(getSessOPD(Req));
+PDTasksExec TNew=new PDTasksExec(getSessOPD(Req));
+TE.Load(Id); 
+TNew.assignValues(TE.getRecord());
+TNew.setPDId(TE.GenerateId());  //avoid repeating Id
+TNew.setNextDate(new Date());
+TNew.insert();
+Resp.append("<status>").append(TT(Req, "Task_relaunched")).append("</status>");
+out.println(Resp.toString());
+} catch (Exception Ex)
+        {
+        Resp.append("<status>").append(Ex.getLocalizedMessage()).append("</status>");
+        out.println(Resp.toString());
+        }
+finally {
+    out.close();
+        }
 }
 //-----------------------------------------------------------------------------------------------
-
-/** 
+/**
  * Returns a short description of the servlet.
  * @return a String containing servlet description
  */
 @Override
 public String getServletInfo()
 {
-return "formCombo Servlet";
+return "Relaunch Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 static public String getUrlServlet()
 {
-return("formCombo");
+return("Relaunch");
 }
 //-----------------------------------------------------------------------------------------------
 }

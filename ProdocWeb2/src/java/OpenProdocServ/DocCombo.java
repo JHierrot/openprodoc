@@ -53,7 +53,7 @@ Attribute Attr;
 Form.append("[");
 Attr=TmpFold.getRecord().getAttr(PDDocs.fDOCTYPE);
 Form.append("{type: \"combo\", name: \"" + PDDocs.fDOCTYPE + "\", label: \"").append(TT(Req, Attr.getUserName())).append("\", required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", options:[");
-Form.append(getComboModelDoc(PDSession));
+Form.append(getComboModelDoc(PDSession, null));
 Form.append("]} ];");
 out.println(Form.toString());
 }
