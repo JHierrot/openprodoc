@@ -1323,7 +1323,6 @@ public static String GenRowGrid(HttpServletRequest Req, String Id, Record NextRe
 {
 StringBuilder Row=new StringBuilder(1000);
 Attribute Attr;
-//String IdDoc=null;
 if (IsXML)
     {
     Row.append("<row id=\"").append(Id).append("\">");
@@ -1382,6 +1381,39 @@ else
     Row.append("]}");
     }
 return(Row.toString());
+}
+//----------------------------------------------------------------
+public static StringBuilder GenRowCSV(HttpServletRequest Req, Record NextRec)
+{
+StringBuilder Row=new StringBuilder(1000);
+Attribute Attr;
+NextRec.initList();
+Attr=NextRec.nextAttr();
+while (Attr!=null)
+    {
+    if (Attr.getType()==Attribute.tTHES)    
+        {
+        if (Attr.getValue()!=null && ((String)Attr.getValue()).length()!=0)
+            {
+            try {    
+            PDThesaur TmpThes=new PDThesaur(SParent.getSessOPD(Req));
+            TmpThes.Load((String)Attr.getValue());
+            Row.append("\"").append(TmpThes.getName()).append("\",");
+            } catch(Exception ex)
+                {    
+                Row.append("\"\",");
+                }
+            }
+        else
+            Row.append("\"\",");
+        }
+    else 
+        {
+        Row.append("\"").append(Attr.Export()).append("\",");
+        }
+    Attr=NextRec.nextAttr();
+    }
+return(Row);
 }
 //----------------------------------------------------------------
 /**

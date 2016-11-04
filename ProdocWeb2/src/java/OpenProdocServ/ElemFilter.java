@@ -46,11 +46,14 @@ StringBuilder Form= new StringBuilder(3000);
 String TypeElem=Req.getParameter("TE");
 Form.append("[{type: \"settings\", labelWidth: 140},");
 Form.append("{type: \"block\", width: 450, list:[");
-if (TypeElem.equals("PendTaskLog") || TypeElem.equals("EndTaskLogs") )
+if (TypeElem.equals("PendTaskLog") || TypeElem.equals("EndTaskLogs") || TypeElem.equals("TraceLogs"))
     {
     SimpleDateFormat formatterTS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     String Now = formatterTS.format(new Date(System.currentTimeMillis()-60000));
-    Form.append("{type: \"input\", name: \"Category\", label: \"").append(TT(Req, "Category")).append("\", tooltip:\"").append(TT(Req, "Enter_full_or_partial_name_of_the_item")).append("\"},");
+    if (TypeElem.equals("TraceLogs"))    
+        Form.append("{type: \"input\", name: \"DocType\", label: \"").append(TT(Req, "Document_Type")).append("\", tooltip:\"").append(TT(Req, "Enter_full_or_partial_name_of_the_item")).append("\"},");
+    else    
+        Form.append("{type: \"input\", name: \"Category\", label: \"").append(TT(Req, "Category")).append("\", tooltip:\"").append(TT(Req, "Enter_full_or_partial_name_of_the_item")).append("\"},");
     Form.append("{type: \"calendar\", name: \"Fec1\", label: \"").append(TT(Req, "Timestamp_from")).append("\", dateFormat: \"%Y-%m-%d %H:%i:%s\", calendarPosition: \"right\", value:\""+Now+"\"},");
     Form.append("{type: \"calendar\", name: \"Fec2\", label: \"").append(TT(Req, "Timestamp_to")).append("\", dateFormat: \"%Y-%m-%d %H:%i:%s\", calendarPosition: \"right\"},");
     }

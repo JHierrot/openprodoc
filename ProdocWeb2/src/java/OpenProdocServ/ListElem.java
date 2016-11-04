@@ -47,6 +47,7 @@ import prodoc.PDTasksDef;
 import prodoc.PDTasksDefEvent;
 import prodoc.PDTasksExec;
 import prodoc.PDTasksExecEnded;
+import prodoc.PDTrace;
 import prodoc.PDUser;
 import prodoc.Record;
 
@@ -69,6 +70,7 @@ public static final String MANTTASKCRON="TaskCron";
 public static final String MANTTASKEVENT="TaskEvents";
 public static final String MANTPENDTASK="PendTaskLog";
 public static final String MANTTASKENDED="EndTaskLogs";
+public static final String MANTTRACELOG="TraceLogs";
 
 //-----------------------------------------------------------------------------------------------
 /**
@@ -81,15 +83,28 @@ public static final String MANTTASKENDED="EndTaskLogs";
 protected void processRequest(HttpServletRequest Req, HttpServletResponse response) throws ServletException, IOException
 {   
 DriverGeneric PDSession=getSessOPD(Req);
-response.setContentType("text/xml;charset=UTF-8");
-response.setStatus(HttpServletResponse.SC_OK);
-PrintWriter out = response.getWriter();  
 StringBuilder Resp=new StringBuilder(3000);
-Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rows><head>");
-try {
-Record Rec;
+boolean CSV;
+if (Req.getParameter("CSV")!=null)
+    CSV=true;
+else
+    CSV=false;
 String ElemType=Req.getParameter("TE");
 String Filter=Req.getParameter("F");
+if (CSV)
+    {
+    response.setContentType("text/csv; charset=UTF-8");
+    response.setHeader("Content-disposition", "inline; filename=" + ElemType+"_"+Long.toHexString(Double.doubleToLongBits(Math.random()))+".csv");
+    }
+else
+    response.setContentType("text/xml;charset=UTF-8");
+response.setStatus(HttpServletResponse.SC_OK);
+PrintWriter out = response.getWriter();  
+if (!CSV)
+    Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rows><head>");
+Cursor ListObj=null;
+try {
+Record Rec;
 if (Filter==null)
     Filter="";
 ObjPD Obj=GenObj(ElemType, PDSession, null);
@@ -135,13 +150,21 @@ Attribute Attr=Rec.nextAttr();
 int Count=1;
 while (Attr!=null)
     {
-    Resp.append("<column width=\"").append(Count==Rec.NumAttr()?"*":WIDTH/Rec.NumAttr()).append("\" type=\"ro\" align=\"left\" sort=\"str\">").append(TT(Req,Attr.getUserName())).append("</column>");
+    if (CSV)
+        Resp.append(Attr.getUserName()+",");
+    else
+        Resp.append("<column width=\"").append(Count==Rec.NumAttr()?"*":WIDTH/Rec.NumAttr()).append("\" type=\"ro\" align=\"left\" sort=\"str\">").append(TT(Req,Attr.getUserName())).append("</column>");
     Count++;
     Attr=Rec.nextAttr();
     }
-Resp.append("</head>");
-Cursor ListObj;
-if (ElemType.equals("PendTaskLog") || ElemType.equals("EndTaskLogs") )
+if (CSV)
+    {
+    Resp.deleteCharAt(Resp.length()-1);
+    Resp.append("\n");
+    }
+else
+    Resp.append("</head>");
+if (ElemType.equals(MANTTASKENDED) || ElemType.equals(MANTPENDTASK) || ElemType.equals(MANTTRACELOG) )
     {
     Conditions Conds=new Conditions();
     String Category=Req.getParameter("Category");
@@ -169,9 +192,14 @@ if (ElemType.equals("PendTaskLog") || ElemType.equals("EndTaskLogs") )
         Condition C2=new Condition(AttrF2, Condition.cGET);  
         Conds.addCondition(C2);
         }
-    if (ElemType.equals("PendTaskLog")  )
+    if (ElemType.equals(MANTPENDTASK)  )
         {
         PDTasksExec Task=new PDTasksExec(PDSession);
+        ListObj=Task.Search(Conds);
+        }
+    else if (ElemType.equals(MANTTRACELOG)  )
+        {
+        PDTrace Task=new PDTrace(PDSession);
         ListObj=Task.Search(Conds);
         }
     else 
@@ -190,17 +218,31 @@ while (NextObj!=null)
         {
         Id=(String)NextObj.getAttr(PDTasksExecEnded.fPDID).getValue();
         }
+    else if (ElemType.equals(MANTTRACELOG) )
+        {
+        Id=Double.toString(Math.random());
+        }
     else
         Id=(String)NextObj.getAttr(PDACL.fNAME).getValue();
     Rec.assign(NextObj);
-    Resp.append(SParent.GenRowGrid(Req, Id, Rec, true));    
+    if (CSV)
+        Resp.append(SParent.GenRowCSV(Req, Rec)).append("\n");    
+    else
+        Resp.append(SParent.GenRowGrid(Req, Id, Rec, true));    
     NextObj=PDSession.NextRec(ListObj);
     }   
-PDSession.CloseCursor(ListObj);
-Resp.append("</rows>");
+if (!CSV)
+    Resp.append("</rows>");
 } catch (PDException ex)
-    {
+    {    
     Resp.append("<LV>Error</LV></row>");
+    }
+finally 
+    {
+    if (ListObj!=null)
+        try {
+        PDSession.CloseCursor(ListObj);
+        } catch (Exception e){}
     }
 out.println( Resp.toString().replace("&", "&amp;") );   
 out.close();
@@ -251,6 +293,8 @@ else if (ElemType.equals(MANTPENDTASK))
     Obj=new PDTasksExec(PDSession);
 else if (ElemType.equals(MANTTASKENDED))
     Obj=new PDTasksExecEnded(PDSession);
+else if (ElemType.equals(MANTTRACELOG))
+    Obj=new PDTrace(PDSession);
 if (Id!=null)
     Obj.Load(Id);
 return (Obj);

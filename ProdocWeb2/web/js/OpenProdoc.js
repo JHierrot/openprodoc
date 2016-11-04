@@ -62,6 +62,7 @@ var ELEMTASKCRON="TaskCron";
 var ELEMTASKEVENT="TaskEvents";
 var ELEMPENDTASK="PendTaskLog";
 var ELEMTASKEND="EndTaskLogs";
+var ELEMTRACELOGS="TraceLogs"
 var FiltExp="";
 var ElemTabBar;
 var EOPERNEW="New";
@@ -72,6 +73,7 @@ var EOPEREXP="Export";
 var EOPEREXA="ExportAll";
 var EOPERIMP="Import";
 var EOPERRELAUN="Relaunch";
+var EOPEREXPCSV="ExportCSV";
 var PERMISSIONS=["NOTHING", "READ","CATALOG","VERSION","UPDATE","DELETE"];
 var ElemLayout;
 var ElemTabBar;
@@ -86,7 +88,8 @@ var FormAttr;
 var AT_TYPESTRING="String";
 var AT_TYPETHES="Thesaur";
 var COMBOFOLDER="ObjType";       
-var COMBODOCS="ObjType2";       
+var COMBODOCS="ObjType2";  
+var CSVFORMAT="CSV";
        
 function doOnLoadLogin() 
 {   
@@ -235,7 +238,7 @@ switch (IdMenu)
         break;
     case "EndTasksLogs": Admin(ELEMTASKEND);
         break;
-    case "TraceLogs": Admin("TraceLogs");
+    case "TraceLogs": Admin(ELEMTRACELOGS);
         break;
     case "ReportingBugs": window.open("https://docs.google.com/spreadsheet/viewform?usp=drive_web&formkey=dEpsRzZzSmlaQVZET0g2NDdsM0ZRaEE6MA#gid=0");
         break;
@@ -1974,7 +1977,7 @@ WinAF.setText(TypeElem);
 TmpLayout=WinAF.attachLayout('2E');
 var a = TmpLayout.cells('a');
 a.hideHeader();
-if (TypeElem==ELEMPENDTASK || TypeElem==ELEMTASKEND)
+if (TypeElem==ELEMPENDTASK || TypeElem==ELEMTASKEND || TypeElem==ELEMTRACELOGS)
     a.setHeight(110);
 else
     a.setHeight(50);
@@ -1987,29 +1990,11 @@ GridResults = b.attachGrid();
 GridResults.load("ListElem?TE="+TypeElem);
 GridResults.setSizes();
 FiltExp="";
-formFilter.attachEvent("onButtonClick", function(name){
-    if (TypeElem!=ELEMPENDTASK && TypeElem!=ELEMTASKEND)
-        {
-        FiltExp=formFilter.getItemValue("filter");
-        GridResults.load("ListElem?TE="+TypeElem+"&F="+FiltExp);
-        }
-    else
-        {
-        var Cat=formFilter.getItemValue("Category");
-        var Fec1=formFilter.getItemValue("Fec1");
-        if (Fec1!=null && Fec1!="")
-            Fec1=Fec1.getTime();
-        else
-            Fec1="";
-        var Fec2=formFilter.getItemValue("Fec2");
-        if (Fec2!=null && Fec2!="")
-            Fec2=Fec2.getTime();
-        else
-            Fec2="";
-        GridResults.load("ListElem?TE="+TypeElem+"&Cat="+Cat+"&Fec1="+Fec1+"&Fec2="+Fec2);
-        }
+formFilter.attachEvent("onButtonClick",  function(name)
+    {
+    RefreshAdminGrid(TypeElem, formFilter, "");    
     });        
-if (TypeElem!=ELEMPENDTASK && TypeElem!=ELEMTASKEND)
+if (TypeElem!=ELEMPENDTASK && TypeElem!=ELEMTASKEND && TypeElem!=ELEMTRACELOGS)
     {
     ToolBar.addButton(EOPERNEW, 0, "New", "New.png", "New.png");
     ToolBar.addButton(EOPERMOD, 1, "Modif", "Modif.png", "Modif.png");
@@ -2018,14 +2003,20 @@ if (TypeElem!=ELEMPENDTASK && TypeElem!=ELEMTASKEND)
     ToolBar.addButton(EOPEREXP, 4, "Export", "Export.png", "Export.png");
     ToolBar.addButton(EOPEREXA, 5, "ExportAll", "ExportAll.png", "ExportAll.png");
     ToolBar.addButton(EOPERIMP, 6, "Import", "Import.png", "Import.png");
+    ToolBar.addButton(EOPEREXPCSV, 7, "ExportCSV", "ExportCSV.png", "ExportCSV.png");
     }
 else if ( TypeElem==ELEMTASKEND)
     {
-    ToolBar.addButton(EOPERRELAUN, 0, "Relaunch", "Relaunch.png", "Relaunch.png");    
+    ToolBar.addButton(EOPERRELAUN, 0, "Relaunch", "Relaunch.png", "Relaunch.png"); 
+    ToolBar.addButton(EOPEREXPCSV, 1, "ExportCSV", "ExportCSV.png", "ExportCSV.png");
     }    
+else
+    ToolBar.addButton(EOPEREXPCSV, 0, "ExportCSV", "ExportCSV.png", "ExportCSV.png");    
 ToolBar.attachEvent("onClick", function(Oper)
     {  
-    if (GridResults.getSelectedRowId()!=null && Oper==EOPERRELAUN)
+    if (Oper==EOPEREXPCSV)    
+        ExportCSV(TypeElem, formFilter);
+    else if (GridResults.getSelectedRowId()!=null && Oper==EOPERRELAUN)
         window.dhx4.ajax.get("Relaunch?Id="+GridResults.getSelectedRowId(), function(r)
             {
             var xml = r.xmlDoc.responseXML;
@@ -2058,6 +2049,40 @@ ToolBar.attachEvent("onClick", function(Oper)
             ElemImp(TypeElem);
         }
     });
+}
+//------------------------------------------------------------
+function RefreshAdminGrid(TypeElem, formFilter, Format)
+{
+if (TypeElem!=ELEMPENDTASK && TypeElem!=ELEMTASKEND && TypeElem!=ELEMTRACELOGS)
+    {
+    FiltExp=formFilter.getItemValue("filter");
+    if (Format==CSVFORMAT)
+        window.open("ListElem?CSV=1&TE="+TypeElem+"&F="+FiltExp);
+    else    
+        GridResults.load("ListElem?TE="+TypeElem+"&F="+FiltExp);
+    }
+else
+    {
+    var Cat="";    
+    if (TypeElem==ELEMTRACELOGS)
+        Cat=formFilter.getItemValue("DocType");
+    else
+        Cat=formFilter.getItemValue("Category");
+    var Fec1=formFilter.getItemValue("Fec1");
+    if (Fec1!=null && Fec1!="")
+        Fec1=Fec1.getTime();
+    else
+        Fec1="";
+    var Fec2=formFilter.getItemValue("Fec2");
+    if (Fec2!=null && Fec2!="")
+        Fec2=Fec2.getTime();
+    else
+        Fec2="";
+    if (Format==CSVFORMAT)
+        window.open("ListElem?CSV=1&TE="+TypeElem+"&Cat="+Cat+"&Fec1="+Fec1+"&Fec2="+Fec2);
+    else    
+        GridResults.load("ListElem?TE="+TypeElem+"&Cat="+Cat+"&Fec1="+Fec1+"&Fec2="+Fec2);
+    }    
 }
 //------------------------------------------------------------
 function ElemNewObj(TypeElem, Id)
@@ -2788,3 +2813,7 @@ FormEPerm.attachEvent("onButtonClick", function (name)
     });
 }
 //--------------------------------------------------------------
+function ExportCSV(TypeElem, formFilter)
+{
+RefreshAdminGrid(TypeElem, formFilter, CSVFORMAT);
+}
