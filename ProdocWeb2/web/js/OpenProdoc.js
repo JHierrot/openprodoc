@@ -90,6 +90,8 @@ var AT_TYPETHES="Thesaur";
 var COMBOFOLDER="ObjType";       
 var COMBODOCS="ObjType2";  
 var CSVFORMAT="CSV";
+var T_EDIT;
+var T_DEL;
        
 function doOnLoadLogin() 
 {   
@@ -122,13 +124,21 @@ myForm.attachEvent("onButtonClick", function(id)
 		   
 }
 //--------------------------------------------------------------
+function Init()
+{   
+document.title="OpenProdoc2 "+LocaleTrans("_User");
+T_EDIT=LocaleTrans("Update");
+T_DEL=LocaleTrans("Delete");
+}
+//--------------------------------------------------------------
 function doOnLoadMain() 
-{                      
+{                   
+Init();    
 layout = new dhtmlXLayoutObject(document.body,"3L");         
-layout.cells("a").setText("Folders Tree"); 
+layout.cells("a").setText(LocaleTrans("Folders_Tree")); 
 layout.cells("a").setWidth(300);
-layout.cells("b").setText("Current Folder");   
-layout.cells("c").setText("Folder Documents");   
+layout.cells("b").setText(LocaleTrans("Current_Folder"));   
+layout.cells("c").setText(LocaleTrans("Folder_Documents"));   
 menu = layout.attachMenu();
 menu.loadStruct("Menu", function(){});
 menu.attachEvent("onClick", function(id, zoneId, cas)
@@ -136,12 +146,12 @@ menu.attachEvent("onClick", function(id, zoneId, cas)
     ExecMenu(id);    
     });
 DocsGrid = layout.cells("c").attachGrid();
-DocsGrid.setHeader("Type,Title,Lock,Date");   //sets the headers of columns
-DocsGrid.setColumnIds("Type,Title,Lock,Date");         //sets the columns' ids
-DocsGrid.setInitWidths("100,*,60,80");   //sets the initial widths of columns
-DocsGrid.setColAlign("left,left,left,left");     //sets the alignment of columns
-DocsGrid.setColTypes("ro,link,ro,ro");               //sets the types of columns
-DocsGrid.setColSorting("str,str,str,str");  //sets the sorting types of columns
+DocsGrid.setHeader(LocaleTrans("Document_Type")+","+LocaleTrans("Document_Title")+","+LocaleTrans("Lock_user")+","+LocaleTrans("Date"));   //sets the headers of columns
+DocsGrid.setColumnIds("Type,Title,Lock,Date");         
+DocsGrid.setInitWidths("130,600,100,*");   
+DocsGrid.setColAlign("left,left,left,left");    
+DocsGrid.setColTypes("ro,link,ro,ro");            
+DocsGrid.setColSorting("str,str,str,str"); 
 DocsGrid.load("DocList?FoldId="+ROOTFOLD);
 DocsGrid.init();
 DocsGrid.attachEvent("onRowSelect",function(rowId,cellIndex)
@@ -249,6 +259,8 @@ switch (IdMenu)
         break;
     case "ReportingBugs": window.open("https://docs.google.com/spreadsheet/viewform?usp=drive_web&formkey=dEpsRzZzSmlaQVZET0g2NDdsM0ZRaEE6MA#gid=0");
         break;
+    case "Contents": window.open(LocaleTrans("_Help"));
+        break;
     case "Exit": window.location.assign("Logout");
         layoutThes.unload();
         layoutThes=null;
@@ -265,11 +277,12 @@ switch (IdMenu)
 }
 //----------------------------------
 function doOnLoadThes() 
-{                      
+{            
+Init();    
 layoutThes = new dhtmlXLayoutObject(document.body,"2U");         
 layoutThes.cells("a").setText("Thesaurus"); 
 layoutThes.cells("a").setWidth(400);
-layoutThes.cells("b").setText("Current Term");    
+layoutThes.cells("b").setText(LocaleTrans("Current_Term"));    
 menuThes = layoutThes.attachMenu();
 menuThes.loadStruct("MenuThes", function(){});
 menuThes.attachEvent("onClick", function(id, zoneId, cas)
@@ -370,8 +383,7 @@ FormAddThes.attachEvent("onButtonClick", function (name)
         FormAddThes.unload();
         WinAF.close();
         }
-     }
-             );
+    });
 }
 //-----------------------------------
 function MantTerm(Url, idCurrTerm)
@@ -492,8 +504,7 @@ FormAddTerm.attachEvent("onButtonClick", function (name)
         FormAddTerm.unload();
         WinMT.close();
         }
-     }
-             );
+     });
 }
 //-----------------------------------
 function UpdateTerms(FormAddTerm, field, Grid)
@@ -516,12 +527,12 @@ else if (idButton=="Add")
 //-----------------------------------
 function PrepTermGrid(TermGrid)
 {
-TermGrid.setHeader("Name,Def,Use,Note,Lang");   //sets the headers of columns
-TermGrid.setColumnIds("Name,Def,Use,Note,Lang");         //sets the columns' ids
-TermGrid.setInitWidths("*,60,60,60,60");   //sets the initial widths of columns
-TermGrid.setColAlign("left,left,left,left,left");     //sets the alignment of columns
-TermGrid.setColTypes("ro,ro,ro,ro,ro");               //sets the types of columns
-TermGrid.setColSorting("str,str,str,str,str");  //sets the sorting types of columns    
+TermGrid.setHeader(LocaleTrans("Term_Name")+","+LocaleTrans("Description")+","+LocaleTrans("USE")+","+LocaleTrans("Scope_Note")+","+LocaleTrans("Language"));   
+TermGrid.setColumnIds("Name,Def,Use,Note,Lang"); 
+TermGrid.setInitWidths("100,100,60,60,*");  
+TermGrid.setColAlign("left,left,left,left,left");  
+TermGrid.setColTypes("ro,ro,ro,ro,ro");      
+TermGrid.setColSorting("str,str,str,str,str");  
 }
 //-----------------------------------
 function UpdThes()
@@ -565,9 +576,7 @@ FormAddThes.attachEvent("onButtonClick", function (name)
         FormAddThes.unload();
         WinAF.close();
         }
-     }
-             );
-    
+     });
 }
 //-----------------------------------
 function DelThes()
@@ -610,8 +619,7 @@ FormAddThes.attachEvent("onButtonClick", function (name)
         FormAddThes.unload();
         WinAF.close();
         }
-     }
-              );
+    });
     
 }
 //-----------------------------------
@@ -632,8 +640,8 @@ TabBar=WinAF.attachTabbar();
 TabBar.addTab("Search", "Search", null, null, true);
 TabBar.addTab("Results", "Results");
 ToolBar = TabBar.tabs("Results").attachToolbar();
-ToolBar.addButton("Edit", 0, "Edit", "Edit.png", "Edit.png");
-ToolBar.addButton("Delete", 1, "Delete", "Edit.png", "Edit.png");
+ToolBar.addButton(T_EDIT, 0, T_EDIT, "Edit.png", "Edit.png");
+ToolBar.addButton(T_DEL, 1, T_DEL, "Edit.png", "Edit.png");
 ToolBar.attachEvent("onClick", function(id)
     {
     if (GridResults.getSelectedRowId()!=null)     
@@ -665,8 +673,7 @@ FormSearchTerm.attachEvent("onButtonClick", function (name)
         FormSearchTerm.unload();
         WinAF.close();
         }  
-    }
-    );           
+    });           
 }
 //-----------------------------------
 function ShowTermResults(Result)
@@ -680,17 +687,17 @@ GridResults.setColSorting(ListPar[2]);
 GridResults.init();
 GridResults.parse(ListPar[3],"json");
 TabBar.tabs("Results").show(true);
-//setTimeout( "TabBar.tabs('Results').show(true)" , 4000);    
+TabBar.tabs("Results").setActive();  
 }
 //-----------------------------------
 function TermResProc(Order, idTerm)
 {
 MantFromGrid=true;    
-if (Order=="Edit")  
+if (Order==T_EDIT)  
     { 
     MantTerm("UpdTerm", idTerm);
     }
-else if (Order=="Delete")  
+else if (Order==T_DEL)  
     { 
     MantTerm("DelTerm", idTerm);
     }     
@@ -720,8 +727,7 @@ FormExpThes.attachEvent("onButtonClick", function (name)
         }
     FormExpThes.unload();
     WinAF.close();
-    }
-    );    
+    });    
 }
 //-----------------------------------
 function ImportThes()
@@ -756,15 +762,13 @@ FormImpThes.attachEvent("onButtonClick", function (name)
         FormImpThes.unload();
         WinAF.close();
         }
-    }
-    );    
+    });    
 FormImpThes.attachEvent("onUploadFile",function(realName,serverName)
     {
     ThesTree.refreshItem(ROOTTHES);
     FormImpThes.unload();
     WinAF.attachHTMLString(serverName);
     });
-//    });
 FormImpThes.attachEvent("onUploadFail",function(realName){
     window.dhx4.ajax.get("UpFileStatus", function(r)
     {
@@ -781,8 +785,8 @@ var WinA=myWins.createWindow({
     id:"About",
     left:20,
     top:30,
-    width:500,
-    height:400,
+    width:540,
+    height:420,
     center:true,
     modal:true,
     resize:false
@@ -897,8 +901,7 @@ FormAddFold.attachEvent("onButtonClick", function (name)
         ShowMulti(FormAddFold, name.substring(2));    
     else if (name.substring(0,2)=="T_") 
         ShowThes(FormAddFold, name.substring(2));  
-    }
-    );   
+    });   
 }
 //------------------------------------------------------------
 function ModFoldExt(EditFold)
@@ -951,8 +954,7 @@ FormAddFold.attachEvent("onButtonClick", function (name)
         ShowThes(FormAddFold, name.substring(2));  
     else 
         ShowMulti(FormAddFold, name.substring(2));    
-    }
-    );   
+    });   
 }
 //----------------------------------
 function ShowMulti(Form, AttName)
@@ -996,7 +998,6 @@ MultiForm.setItemFocus("Val");
 MultiForm.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {
-//        Form.setItemValue(AttName, MultiForm.getItemValue("Vals")); 
         var Sum="";
         for (var i=0; i<Vals.options.length; i++)
             {
@@ -1054,7 +1055,6 @@ MultiForm.attachEvent("onButtonClick", function (name)
 MultiForm.attachEvent("onChange", function (name, value)
     {if (name=="Vals")
         MultiForm.setItemValue("Val", value);   
-//        MultiForm.setItemValue("Val", MultiForm.getItemValue("Vals"));   
     });
 }
 //----------------------------------
@@ -1077,7 +1077,7 @@ Theslayout.cells("a").setText("Thesaurus");
 Theslayout.cells("a").setWidth(200);
 Theslayout.cells("b").setText("Current Term"); 
 var STToolBar = Theslayout.attachToolbar();
-STToolBar.addButton("Select", 0, "Select", "Edit.png", "Edit.png");
+STToolBar.addButton("Select", 0, LocaleTrans("Selection"), "Select.png", "Select.png");
 var SelThesTree = Theslayout.cells("a").attachTree();
 SelThesTree.setImagePath("js/imgs/dhxtree_skyblue/");
 SelThesTree.setXMLAutoLoading("ThesTree");
@@ -1106,8 +1106,7 @@ STToolBar.attachEvent("onClick", function(id)
 //----------------------------------
 function ShowThesGrid(Grid)
 {
-var ThesId=CurrThes;   
-//var TermId=Form.getItemValue("TH_"+AttName);   
+var ThesId=CurrThes;     
 var WinSelTerm=myWins.createWindow({
 id:"SelThes",
 left:20,
@@ -1123,7 +1122,7 @@ Theslayout.cells("a").setText("Thesaurus");
 Theslayout.cells("a").setWidth(200);
 Theslayout.cells("b").setText("Current Term"); 
 var STToolBar = Theslayout.attachToolbar();
-STToolBar.addButton("Select", 0, "Select", "Edit.png", "Edit.png");
+STToolBar.addButton("Select", 0, LocaleTrans("Selection"), "Select.png", "Select.png");
 var SelThesTree = Theslayout.cells("a").attachTree();
 SelThesTree.setImagePath("js/imgs/dhxtree_skyblue/");
 SelThesTree.setXMLAutoLoading("ThesTree");
@@ -1182,15 +1181,14 @@ FormDelFold.attachEvent("onButtonClick", function (name)
                             FormDelFold.unload();
                             WinDF.close();   
                             }
-                        } );
+                        });
         }
      else 
         {   
         FormDelFold.unload();
         WinDF.close();
         }
-     }
-             );
+    });
 }
 //----------------------------------
 function UpdFold(EditFold)
@@ -1225,15 +1223,14 @@ FormUpdFold.attachEvent("onButtonClick", function (name)
                             FormUpdFold.unload();
                             WinUF.close();  
                             }
-                        } );
+                        });
         }
      else 
         {   
         FormUpdFold.unload();
         WinUF.close();
         }
-     }
-             );
+    });
 }
 //----------------------------------
 function printLog(text) 
@@ -1268,23 +1265,24 @@ formCombo.loadStruct('formCombo');
 var b = LayoutFold.cells('b');
 b.hideHeader();
 TabBar=b.attachTabbar();
-TabBar.addTab("Search", "Search", null, null, true);
-TabBar.addTab("Results", "Results");
-TabBar.addTab("Reports", "Reports");
+TabBar.addTab("Search", LocaleTrans("Search_Folders"), null, null, true);
+TabBar.addTab("Results", LocaleTrans("Search_Results"));
+TabBar.addTab("Reports", LocaleTrans("Reports_Generation"));
 GridReports=TabBar.tabs("Reports").attachGrid();
-GridReports.setHeader("Title,Mime,Docs/page, Pages/arch");   //sets the headers of columns
-GridReports.setColumnIds("Title,Mime,DocsPage, PagesArch");         //sets the columns' ids
-GridReports.setInitWidths("*,60,60,60");   //sets the initial widths of columns
-GridReports.setColAlign("left,left,left,left");     //sets the alignment of columns
-GridReports.setColTypes("link,ro,ro,ro");               //sets the types of columns
-GridReports.setColSorting("str,str,int,int");  //sets the sorting types of columns
+GridReports.setHeader(LocaleTrans("Report_Title")+","+LocaleTrans("MimeType")+","+LocaleTrans("Docs_per_Page")+","+LocaleTrans("Pages_per_File"));   //sets the headers of columns
+GridReports.enableAutoWidth(true);
+GridReports.setColumnIds("Title,Mime,DocsPage,PagesArch");
+GridReports.setInitWidths("300,100,100, *"); 
+GridReports.setColAlign("left,left,left,left"); 
+GridReports.setColTypes("link,ro,ro,ro"); 
+GridReports.setColSorting("str,str,int,int");
 GridReports.load("RepList?Type=Fold");
 GridReports.init();
 TabBar.tabs("Reports").disable();
 FormAddFold = TabBar.tabs("Search").attachForm();
 ToolBar = TabBar.tabs("Results").attachToolbar();
-ToolBar.addButton("Edit", 0, "Edit", "Edit.png", "Edit.png");
-ToolBar.addButton("Delete", 1, "Delete", "Edit.png", "Edit.png");
+ToolBar.addButton(T_EDIT, 0, T_EDIT, "Edit.png", "Edit.png");
+ToolBar.addButton(T_DEL, 1, T_DEL, "Edit.png", "Edit.png");
 ToolBar.addButton(CSVFORMAT, 2, "CSV", "Edit.png", "Edit.png");
 ToolBar.attachEvent("onClick", function(id)
     {
@@ -1318,7 +1316,7 @@ FormAddFold.attachEvent("onButtonClick", function (name)
                             {
                             ShowFoldResults(response.substring(2));  
                             }
-                        } );
+                        });
         }
      else if (name==CANCEL) 
         {   
@@ -1327,8 +1325,7 @@ FormAddFold.attachEvent("onButtonClick", function (name)
         }   
     else if (name.substring(0,2)=="T_") 
         ShowThes(FormAddFold, name.substring(2));    
-    }
-    );   
+    });   
 }
 //------------------------------------------------------------
 function ShowFoldResults(Result)
@@ -1336,21 +1333,20 @@ function ShowFoldResults(Result)
 GridResults=TabBar.tabs("Results").attachGrid();
 var ListPar=Result.split("\n");
 GridResults.setHeader(ListPar[0]);
-//ResGrid.setInitWidths("70,150,*");
 GridResults.setColTypes(ListPar[1]);   
 GridResults.setColSorting(ListPar[2]);
 GridResults.init();
 GridResults.parse(ListPar[3],"json");
 TabBar.tabs("Reports").enable();
 TabBar.tabs("Results").show(true);
-//setTimeout( "TabBar.tabs('Results').show(true)" , 4000);
+TabBar.tabs("Results").setActive();
 }
 //------------------------------------------------------------
 function FoldResProc(Order, SelFoldId)
 {
-if (Order=="Edit")  
+if (Order==T_EDIT)  
     ModFoldExt(SelFoldId);
-else if (Order=="Delete")  
+else if (Order==T_DEL)  
     DelFold(SelFoldId);    
 }
 //------------------------------------------------------------
@@ -1381,15 +1377,14 @@ FormAddDoc.attachEvent("onButtonClick", function (name)
                             FormAddDoc.enableItem("UpFile");                            
                         else 
                             alert(response.substring(2)); 
-                        } );
+                        });
         }
      else 
         {   
         FormAddDoc.unload();
         WinAF.close();
         }
-     }
-             );
+    });
 FormAddDoc.attachEvent("onUploadFile",function(realName,serverName)
     {
     FormAddDoc.unload();
@@ -1398,13 +1393,12 @@ FormAddDoc.attachEvent("onUploadFile",function(realName,serverName)
     });
 FormAddDoc.attachEvent("onUploadFail",function(realName){
     window.dhx4.ajax.get("UpFileStatus", function(r)
-    {
-    var xml = r.xmlDoc.responseXML;
-    var nodes = xml.getElementsByTagName("status");
-    alert(nodes[0].textContent);
-    });
-    });
-    
+        {
+        var xml = r.xmlDoc.responseXML;
+        var nodes = xml.getElementsByTagName("status");
+        alert(nodes[0].textContent);
+        });
+    });    
 }
 //----------------------------------
 function DelDoc(Doc2Del)
@@ -1438,15 +1432,14 @@ FormDelDoc.attachEvent("onButtonClick", function (name)
                             else
                                 DocsGrid.clearAndLoad("DocList?FoldId="+CurrFold);
                             }
-                        } );
+                        });
         }
      else 
         {   
         FormDelDoc.unload();
         WinDD.close();
         }
-     }
-             );
+    });
 }
 //------------------------------------------------------------
 function ModDoc(Doc2Mod, ReadOnly, Vers)
@@ -1476,7 +1469,7 @@ FormModDoc.attachEvent("onButtonClick", function (name)
                             FormModDoc.enableItem("UpFile");                            
                         else 
                             alert(response.substring(2)); 
-                        } );
+                        });
         }
      else if (name=="OK2")
         {    
@@ -1489,7 +1482,7 @@ FormModDoc.attachEvent("onButtonClick", function (name)
                             }                          
                         else 
                             alert(response.substring(2)); 
-                        } );
+                        });
         }
      else if (name.substring(0,2)=="M_") 
         ShowMulti(FormModDoc, name.substring(2));    
@@ -1500,8 +1493,7 @@ FormModDoc.attachEvent("onButtonClick", function (name)
         FormModDoc.unload();
         WinMD.close();
         }
-     }
-             );
+    });
 FormModDoc.attachEvent("onUploadFile",function(realName,serverName)
     {
     FormModDoc.unload();
@@ -1510,11 +1502,11 @@ FormModDoc.attachEvent("onUploadFile",function(realName,serverName)
     });
 FormModDoc.attachEvent("onUploadFail",function(realName){
     window.dhx4.ajax.get("UpFileStatus", function(r)
-    {
-    var xml = r.xmlDoc.responseXML;
-    var nodes = xml.getElementsByTagName("status");
-    alert(nodes[0].textContent);
-    });
+        {
+        var xml = r.xmlDoc.responseXML;
+        var nodes = xml.getElementsByTagName("status");
+        alert(nodes[0].textContent);
+        });
     });
  }
 //------------------------------------------------------------
@@ -1577,7 +1569,7 @@ dhtmlx.confirm({text:"Desea cancelar CheckOut", callback: function(result)
                 }
             });   
         }
-    } }); 
+    }}); 
 }
 //------------------------------------------------------------
 function CheckIn (Doc2CheckIn)
@@ -1619,15 +1611,14 @@ FormCheckIn.attachEvent("onButtonClick", function (name)
                             FormCheckIn.unload();
                             WinAF.close();
                             }
-                        } );
+                        });
         }
      else 
         {   
         FormCheckIn.unload();
         WinAF.close();
         }
-     }
-             );
+    });
 }
 //------------------------------------------------------------
 function AddExtDoc()
@@ -1675,7 +1666,7 @@ FormAddFold.attachEvent("onButtonClick", function (name)
                             alert(response); 
                         else
                             FormAddFold.enableItem("UpFile"); 
-                        } );
+                        });
         }
      else if (name==CANCEL) 
         {   
@@ -1686,8 +1677,7 @@ FormAddFold.attachEvent("onButtonClick", function (name)
         ShowMulti(FormAddFold, name.substring(2));    
     else if (name.substring(0,2)=="T_") 
         ShowThes(FormAddFold, name.substring(2));  
-    }
-    );   
+    });   
 FormAddFold.attachEvent("onUploadFile",function(realName,serverName)
     {
     FormAddFold.unload();
@@ -1696,11 +1686,11 @@ FormAddFold.attachEvent("onUploadFile",function(realName,serverName)
     });
 FormAddFold.attachEvent("onUploadFail",function(realName){
     window.dhx4.ajax.get("UpFileStatus", function(r)
-    {
-    var xml = r.xmlDoc.responseXML;
-    var nodes = xml.getElementsByTagName("status");
-    alert(nodes[0].textContent);
-    });
+        {
+        var xml = r.xmlDoc.responseXML;
+        var nodes = xml.getElementsByTagName("status");
+        alert(nodes[0].textContent);
+        });
     });
 }
 //----------------------------------
@@ -1726,22 +1716,22 @@ formCombo.loadStruct('DocCombo');
 var b = LayoutFold.cells('b');
 b.hideHeader();
 TabBar=b.attachTabbar();
-TabBar.addTab("Search", "Search", null, null, true);
-TabBar.addTab("Results", "Results");
-TabBar.addTab("Reports", "Reports");
+TabBar.addTab("Search", LocaleTrans("Search_Documents"), null, null, true);
+TabBar.addTab("Results", LocaleTrans("Search_Results"));
+TabBar.addTab("Reports", LocaleTrans("Reports_Generation"));
 GridReports=TabBar.tabs("Reports").attachGrid();
-GridReports.setHeader("Title,Mime,Docs/page, Pages/arch");   //sets the headers of columns
-GridReports.setColumnIds("Title,Mime,DocsPage, PagesArch");         //sets the columns' ids
-GridReports.setInitWidths("*,60,60,60");   //sets the initial widths of columns
-GridReports.setColAlign("left,left,left,left");     //sets the alignment of columns
-GridReports.setColTypes("link,ro,ro,ro");               //sets the types of columns
-GridReports.setColSorting("str,str,int,int");  //sets the sorting types of columns
+GridReports.setHeader(LocaleTrans("Report_Title")+","+LocaleTrans("MimeType")+","+LocaleTrans("Docs_per_Page")+","+LocaleTrans("Pages_per_File"));   //sets the headers of columns
+GridReports.setColumnIds("Title,Mime,DocsPage,PagesArch");   
+GridReports.setInitWidths("300,100,100,*"); 
+GridReports.setColAlign("left,left,left,left");   
+GridReports.setColTypes("link,ro,ro,ro");  
+GridReports.setColSorting("str,str,int,int"); 
 GridReports.load("RepList?Type=Fold");
 GridReports.init();
 TabBar.tabs("Reports").disable();
 ToolBar = TabBar.tabs("Results").attachToolbar();
-ToolBar.addButton("Edit", 0, "Edit", "Edit.png", "Edit.png");
-ToolBar.addButton("Delete", 1, "Delete", "Edit.png", "Edit.png");
+ToolBar.addButton(T_EDIT, 0, T_EDIT, "Edit.png", "Edit.png");
+ToolBar.addButton(T_DEL, 1, T_DEL, "Edit.png", "Edit.png");
 ToolBar.addButton("CheckOut", 2, "CheckOut", "Edit.png", "Edit.png");
 ToolBar.addButton("CheckIn", 3, "CheckIn", "Edit.png", "Edit.png");
 ToolBar.addButton("CancelCheckOut", 4, "CancelCheckOut", "Edit.png", "Edit.png");
@@ -1780,7 +1770,7 @@ FormAddFold.attachEvent("onButtonClick", function (name)
                             {
                             ShowDocResults(response.substring(2));  
                             }
-                        } );
+                        });
         }
      else if (name==CANCEL) 
         {   
@@ -1789,8 +1779,7 @@ FormAddFold.attachEvent("onButtonClick", function (name)
         }    
     else if (name.substring(0,2)=="T_") 
         ShowThes(FormAddFold, name.substring(2));  
-    }
-    );   
+    });   
 }
 //------------------------------------------------------------
 function ShowDocResults(Result)
@@ -1806,15 +1795,15 @@ GridResults.setColSorting(ListPar[2]);
 GridResults.init();
 GridResults.parse(ListPar[3],"xml");
 TabBar.tabs("Results").show(true);
-//setTimeout( "TabBar.tabs('Results').show(true)" , 4000);
+TabBar.tabs("Results").setActive();
 }
 //------------------------------------------------------------
 function DocResProc(Order, SelDocId)
 {
 MantFromGrid=true;
-if (Order=="Edit")  
+if (Order==T_EDIT)  
     ModDoc(SelDocId, false, "");
-else if (Order=="Delete")   
+else if (Order==T_DEL)   
     DelDoc(SelDocId);    
 else if (Order=="CheckOut")   
     CheckOut(SelDocId);    
@@ -1837,8 +1826,7 @@ modal:true,
 resize:true});   
 WinAF.setText("OpenProdoc");
 var TB=WinAF.attachToolbar();
-TB.addButton("Data", 0, "Data", "Data.png", "Data.png");
-TB.addButton("View", 1, "View", "View.png", "View.png");
+TB.addButton("Data", 0, LocaleTrans("Document_Attributes"), "Data.png", "Data.png");
 var GR=WinAF.attachGrid();
 GR.load("ListVerDoc?Id="+Doc2List);
 GR.setSizes();
@@ -1881,7 +1869,7 @@ FormChangePass.attachEvent("onButtonClick", function (name)
                             FormChangePass.unload();
                             WinAF.close();  
                             }
-                        } );
+                        });
         }
      else 
         {   
@@ -1915,7 +1903,7 @@ ToolBar = b.attachToolbar();
 GridResults = b.attachGrid();
 GridResults.enableMultiselect(true);
 ToolBar.addButton("Undelete", 0, "Undelete", "Undelete.png", "Undelete.png");
-ToolBar.addButton("Delete", 1, "Delete", "Edit.png", "Edit.png");
+ToolBar.addButton(T_DEL, 1, T_DEL, "Edit.png", "Edit.png");
 ToolBar.attachEvent("onClick", function(id)
     {
     if (GridResults.getSelectedRowId()!=null)    
@@ -1930,7 +1918,7 @@ function UndelPurge(Order, DocId)
 {
 if (Order=="Undelete")  
     Undel(DocId);
-else if (Order=="Delete")   
+else if (Order==T_DEL)   
     Purge(DocId);        
 }
 //------------------------------------------------------------
@@ -1940,14 +1928,14 @@ var ListId=DocId.split(",");
 for (var i=0; i<ListId.length; i++)
     {   
     window.dhx4.ajax.get("Undel?Id="+ListId[i], function(r)
-    {
-    var xml = r.xmlDoc.responseXML;
-    var nodes = xml.getElementsByTagName("status");
-    if (nodes[0].textContent.substring(0,2)!=OK)
-        alert(nodes[0].textContent);
-    else
-        GridResults.deleteRow(nodes[0].textContent.substring(2));
-    });
+        {
+        var xml = r.xmlDoc.responseXML;
+        var nodes = xml.getElementsByTagName("status");
+        if (nodes[0].textContent.substring(0,2)!=OK)
+            alert(nodes[0].textContent);
+        else
+            GridResults.deleteRow(nodes[0].textContent.substring(2));
+        });
     }    
 }
 //------------------------------------------------------------
@@ -1957,14 +1945,14 @@ var ListId=DocId.split(",");
 for (var i=0; i<ListId.length; i++)
     {
     window.dhx4.ajax.get("Purge?Id="+ListId[i], function(r)
-    {
-    var xml = r.xmlDoc.responseXML;
-    var nodes = xml.getElementsByTagName("status");
-    if (nodes[0].textContent.substring(0,2)!=OK)
-        alert(nodes[0].textContent);
-    else
-        GridResults.deleteRow(nodes[0].textContent.substring(2));
-    });
+        {
+        var xml = r.xmlDoc.responseXML;
+        var nodes = xml.getElementsByTagName("status");
+        if (nodes[0].textContent.substring(0,2)!=OK)
+            alert(nodes[0].textContent);
+        else
+            GridResults.deleteRow(nodes[0].textContent.substring(2));
+        });
     }     
 }
 //------------------------------------------------------------
@@ -2004,7 +1992,7 @@ if (TypeElem!=ELEMPENDTASK && TypeElem!=ELEMTASKEND && TypeElem!=ELEMTRACELOGS)
     {
     ToolBar.addButton(EOPERNEW, 0, "New", "New.png", "New.png");
     ToolBar.addButton(EOPERMOD, 1, "Modif", "Modif.png", "Modif.png");
-    ToolBar.addButton(EOPERDEL, 2, "Delete", "Edit.png", "Edit.png");
+    ToolBar.addButton(EOPERDEL, 2, T_DEL, "Edit.png", "Edit.png");
     ToolBar.addButton(EOPERCOP, 3, "Copy", "Copy.png", "Copy.png");
     ToolBar.addButton(EOPEREXP, 4, "Export", "Export.png", "Export.png");
     ToolBar.addButton(EOPEREXA, 5, "ExportAll", "ExportAll.png", "ExportAll.png");
@@ -2477,7 +2465,7 @@ if (TypeElem==ELEMACL)
     TBG = ElemTabBar.tabs("Groups").attachToolbar();
     TBG.addButton(EOPERNEW, 0, "New", "New.png", "New.png");
     TBG.addButton(EOPERMOD, 1, "Modif", "Modif.png", "Modif.png");
-    TBG.addButton(EOPERDEL, 2, "Delete", "Edit.png", "Edit.png");
+    TBG.addButton(EOPERDEL, 2, T_DEL, "Edit.png", "Edit.png");
     GGroups = ElemTabBar.tabs("Groups").attachGrid();
     GGroups.setHeader("Groups, Perm");
     GGroups.setColAlign("left,left");     
@@ -2488,7 +2476,7 @@ if (TypeElem==ELEMACL)
     TBU = ElemTabBar.tabs("Users").attachToolbar();
     TBU.addButton(EOPERNEW, 0, "New", "New.png", "New.png");
     TBU.addButton(EOPERMOD, 1, "Modif", "Modif.png", "Modif.png");
-    TBU.addButton(EOPERDEL, 2, "Delete", "Edit.png", "Edit.png");
+    TBU.addButton(EOPERDEL, 2, T_DEL, "Edit.png", "Edit.png");
     GUsers = ElemTabBar.tabs("Users").attachGrid();
     GUsers.setHeader("Users, Perm");
     GUsers.setColAlign("left,left");     
@@ -2506,7 +2494,7 @@ else if (TypeElem==ELEMGROUPS )
     ElemTabBar.addTab("Groups", "Groups", null, null, true); //---
     TBG = ElemTabBar.tabs("Groups").attachToolbar();
     TBG.addButton(EOPERNEW, 0, "New", "New.png", "New.png");
-    TBG.addButton(EOPERDEL, 1, "Delete", "Edit.png", "Edit.png");
+    TBG.addButton(EOPERDEL, 1, T_DEL, "Edit.png", "Edit.png");
     GGroups = ElemTabBar.tabs("Groups").attachGrid();
     GGroups.setHeader("Groups");
     GGroups.setColAlign("left");     
@@ -2516,7 +2504,7 @@ else if (TypeElem==ELEMGROUPS )
     ElemTabBar.addTab("Users", "Users");                    //---
     TBU = ElemTabBar.tabs("Users").attachToolbar();
     TBU.addButton(EOPERNEW, 0, "New", "New.png", "New.png");
-    TBU.addButton(EOPERDEL, 1, "Delete", "Edit.png", "Edit.png");
+    TBU.addButton(EOPERDEL, 1, T_DEL, "Edit.png", "Edit.png");
     GUsers = ElemTabBar.tabs("Users").attachGrid();
     GUsers.setHeader("Users");
     GUsers.setColAlign("left");     
@@ -2535,7 +2523,7 @@ else if (TypeElem==ELEMOBJ)
     TBG = ElemTabBar.tabs("Metadata").attachToolbar();
     TBG.addButton(EOPERNEW, 0, "New", "New.png", "New.png");
     TBG.addButton(EOPERMOD, 1, "Modif", "Modif.png", "Modif.png");
-    TBG.addButton(EOPERDEL, 2, "Delete", "Edit.png", "Edit.png");
+    TBG.addButton(EOPERDEL, 2, T_DEL, "Edit.png", "Edit.png");
     GMetadata = ElemTabBar.tabs("Metadata").attachGrid();
     ElemTabBar.addTab("Inherited", "Inherited");                    //---
     GInherited = ElemTabBar.tabs("Inherited").attachGrid();
@@ -2829,3 +2817,29 @@ function ExporGenCSV()
 window.open("ExportCSV");    
 }
 //--------------------------------------------------------------
+var Orig=[];
+var Trans=[];
+function LocaleTrans(Term)
+{
+for (var i=0; i<Orig.length; i++)  
+    {
+    if (Orig[i]==Term)
+        return(Trans[i]);
+    }
+var r=window.dhx4.ajax.getSync("LocaleTrans?Par="+Term);
+var xml = r.xmlDoc.responseXML;
+var nodes = xml.getElementsByTagName("tr");
+Orig.push(Term);
+var Trad=nodes[0].textContent;
+Trans.push(Trad);
+return(Trad);   
+//window.dhx4.ajax.get("LocaleTrans?Par="+Term, function(r)
+//    {
+//    var xml = r.xmlDoc.responseXML;
+//    var nodes = xml.getElementsByTagName("tr");
+//    Orig.push(Term);
+//    var Trad=nodes[0].textContent;
+//    Trans.push(Trad);
+//    return(Trad);
+//    });      
+}

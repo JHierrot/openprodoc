@@ -292,6 +292,10 @@
         <servlet-name>ExportCSV</servlet-name>
         <servlet-class>OpenProdocServ.ExportCSV</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>LocaleTrans</servlet-name>
+        <servlet-class>OpenProdocServ.LocaleTrans</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SParent</servlet-name>
         <url-pattern>/SParent</url-pattern>
@@ -583,6 +587,10 @@
     <servlet-mapping>
         <servlet-name>ExportCSV</servlet-name>
         <url-pattern>/ExportCSV</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LocaleTrans</servlet-name>
+        <url-pattern>/LocaleTrans</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

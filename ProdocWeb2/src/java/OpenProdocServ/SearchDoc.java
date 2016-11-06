@@ -64,7 +64,7 @@ if (CurrFold!=null)
         NewType=TmpDoc.getDocType();
         }
     Record R=TmpDoc.getRecSum();
-    out.println( GenSearchDocForm("Search_Folder", Req, PDSession, CurrFold, NewType, TmpDoc.getRecSum(), false, false) );    
+    out.println( GenSearchDocForm("Search_Documents", Req, PDSession, CurrFold, NewType, TmpDoc.getRecSum(), false, false) );    
     }
 else
     {
@@ -147,14 +147,14 @@ protected String GenSearchDocForm(String Title, HttpServletRequest Req, DriverGe
 StringBuilder Form= new StringBuilder(3000);
 Attribute Attr;
 Form.append("[ {type: \"settings\", position: \"label-left\", labelWidth: 120, inputWidth: 200},");
-Form.append("{type: \"label\", label: \"").append(TT(Req, Title)).append("\"},");
+Form.append("{type: \"label\", label: \"").append(TT(Req, Title)).append("\", labelWidth:200},");
 Form.append("{type: \"block\", width: 600, list:[");
 Form.append("{type: \"checkbox\", name: \"Subtypes\", label:\"").append(TT(Req, "Subtypes")).append("\", tooltip:\"").append(TT(Req,"When_checked_includes_subtypes_of_folders_in_results")).append("\"},");
 Form.append("{type: \"newcolumn\", offset:20 },");
 Form.append("{type: \"checkbox\", name: \"SubFolders\", label:\"").append(TT(Req, "SubFolders")).append("\", tooltip:\"").append(TT(Req,"When_checked_limits_the_search_to_actual_folder_and_subfolders")).append("\"},");
 Form.append("{type: \"newcolumn\", offset:20 },");
 Form.append("{type: \"checkbox\", name: \"IncludeVers\", label:\"").append(TT(Req, "Versions")).append("\", tooltip:\"").append(TT(Req,"When_checked_includes_all_versions_of_document_in_results")).append("\"}");
-Form.append("]},{type: \"input\", name: \"FullTextSearch\", label: \"").append(TT(Req, "Full_Text_Search")).append("\", inputWidth: 300},");
+Form.append("]},{type: \"input\", name: \"FullTextSearch\", label: \"").append(TT(Req, "Full_Text_Search")).append("\", inputWidth: 300, labelWidth:200},");
 
 FR.initList();
 Attr=FR.nextAttr();
