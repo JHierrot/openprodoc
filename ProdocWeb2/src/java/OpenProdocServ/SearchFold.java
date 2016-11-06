@@ -68,6 +68,7 @@ if (CurrFold!=null)
     }
 else
     {
+    Cursor c=null;    
     try {    
     String CurrentFold=Req.getParameter("CurrFold");   
     String CurrType=Req.getParameter("OPDNewType"); 
@@ -103,7 +104,7 @@ else
     out.println("OK"+GenHeader(Req, Rec, false));
     out.print("data={ rows:[");
     SaveConds(Req, "Fold", CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")), false, CurrentFold, null, Rec, null);
-    Cursor c=TmpFold.Search(CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")), CurrentFold, null);
+    c=TmpFold.Search(CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")), CurrentFold, null);
     Record NextFold=PDSession.NextRec(c);
     while (NextFold!=null)
         {
@@ -116,6 +117,11 @@ else
     } catch (PDException ex)
         {
         out.println(ex.getLocalizedMessage());
+        }
+    finally 
+        {
+        if (c!=null)
+           PDSession.CloseCursor(c);
         }
     }
 }

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>    
+  <head>        
+    <title>Support RIS OpenProdoc</title>        
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">        
+    <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management"/>        
+    <meta name="author" content="Joaquin Hierro" />        
+    <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />    
+  </head>    
+  <body><H4>Support RIS OpenProdoc</H4>
+    <hr>
+    <H5>1- Storage</H5>
+    <p>The standard format <a href="http://en.wikipedia.org/wiki/RIS_%28file_format%29">RIS</a> for interchange of bibliographic references is used by reference managers as <a href="https://www.zotero.org/">Zotero</a> or <a href="https://www.mendeley.com/">Mendeley</a>. It's ppossible to find the reference at: <a href="http://refman.com/sites/rm/files/m/direct_export_ris.pdf">“RIS” Format Documentation</a>, although differences are observed occasionally in the use or interpretation of RIS from various sources.</p>
+    <p>Although OpenProdoc now supports references in previous versions, in version 1.2 support for RIS is added, so references can be imported and exported in a standardized way. To use RIS to OpenProdoc should be defined (<a href="ListObjDef.html"> definitions </a> objects) the type or types of documents in which you want to store the imported references. By default a RIS_Completo document type that includes all possible metadata of RIS is defined. Besides the already provided, new document types can be created , for which we must ensure that in addition to the definition, the container is created.</p>
+<p>The ability to define various types of documents to import RIS allows specialized types to use for the kind of material to use, eliminating unnecessary metadata and using the advantages to handle document types to filter, search and define tasks. For using a document type as RIS import destination it should be defined according to the following criteria:
+<ol>
+    <li>The document type (or document types) to which you want to import files RIS must have a name that starts with RIS_. The document type can descend from any other type of document and have any number of metadata in addition to those to be imported from the RIS structure. The repository must be of type URL (referenced).</li>   
+    <li>Metadata should have the internal name "RIS_" followed by any of those defined in RIS. (Eg "RIS_T1", "RIS_AB", "RIS_KW", ..). In this case, when you import a RIS document, the RIS label metadata "XX" will be assigned in OpenProdoc to "RIS_XX". In the absence of that metadata in the document type, the input is ignored. The only exceptions to allocation are "UR" assigned to "Name", "IT", "T1" and "T2" which is assigned to "Title" and "Y1," Y2 "and allocated PY to "docdate." So do you not need create metadata with these names in OpenProdoc.</li>   
+    <p style="text-align:center;"><img alt="Screenshot Attributo RIS" src="img/RIS_ATR.png"/></p>
+    <li>Alternatively metadata may have any internal name and, in description, within parentheses RIS Metadata names. (Eg "(A1, A2, A3, A4, AU) Authors", "(JO, JA) Magazine", ..). In this case, when OpenProdoc find a two characters RIS label such as "AB", OpenProdoc searches the metadata of the document type in its description, and when find the characters "AB" assigns the value to that metadata, whatever its name. If multiple RIS metadata are associated with one OpenProdoc metadata (eg. "(JO, JA) Journal") and all appear in the RIS register imported, are assigned in order of entry to the destination metadata separating them by a "/" character.</li>
+    <p style="text-align:center;"><img alt="Screenshot Attributo RIS" src="img/RIS_ATR_Reas.png"/></p>
+</ol>
+</p>
+<p>Anyway, the lengths of the metadata defined in OpenProdoc should be adequate to store the RIS record data. Also the data type (string, date, number) must correspond to the RIS type. For safety reasons, and given that elements like date are not always complete, it may be preferable to define all as string, preventing errors while importing.</p> 
+    <H5>2- Import</H5>
+    <p>
+The import is performed from the Documents->"Import RIS" menu. This form allows you to choose the type of RIS document type to which you want to import the RIS file to import, which can have a single entry or multiple records. The documents will be created in the current folder and the chosen document type, presenting a message if there is any import error (eg syntax errors in the file to import).</p>   
+    <p style="text-align:center;"><img alt="Screenshot Import RIS" src="img/ImportRIS.png"/></p>      
+    <H5>3- Export</H5>
+    <p>Exporting is done through the OpenProdoc <a href="Reports.html">reports</a>. You can be exported to RIS format again, for which a sample report is supplied with OpenProdoc, or could be exported to a text format of bibliographic reference or any other report. To export again to RIS requires using the document type RIS_Completo or similar, with all metadata disaggregated, because after adding fields using syntax "(A1, A2, A3)" it is no longer possible to separate them.</p>         
+    <hr>
+    <a href="HelpIndex.html">Help Index OpenProdoc</a>    
+  </body>
+</html>

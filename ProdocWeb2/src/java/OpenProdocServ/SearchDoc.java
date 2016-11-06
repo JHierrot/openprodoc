@@ -68,6 +68,7 @@ if (CurrFold!=null)
     }
 else
     {
+    Cursor c=null;    
     try {    
     String CurrentFold=Req.getParameter("CurrFold");   
     String CurrType=Req.getParameter("OPDNewType"); 
@@ -103,23 +104,24 @@ else
         Attr=Rec.nextAttr();
         }
     out.println("OK"+GenHeader(Req, Rec, true));
-//    out.print("data={ rows:[");
     out.print("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rows>");
     SaveConds(Req, "Doc", CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")),(IncludeVers.equals("1")), CurrentFold, null, Rec, null);
-    Cursor c=TmpDoc.Search(FullTextSearch, CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")),(IncludeVers.equals("1")), CurrentFold, null);
+    c=TmpDoc.Search(FullTextSearch, CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")),(IncludeVers.equals("1")), CurrentFold, null);
     Record NextDoc=PDSession.NextRec(c);
     while (NextDoc!=null)
         {
         out.print(SParent.GenRowGrid(Req, (String)NextDoc.getAttr(PDDocs.fPDID).getValue(), NextDoc, true));    
         NextDoc=PDSession.NextRec(c);
-//        if (NextDoc!=null)
-//            out.print(",");
         }
-//    out.println("] };\n");
     out.println("</rows>");
     } catch (PDException ex)
         {
         out.println(ex.getLocalizedMessage());
+        }
+    finally 
+        {
+        if (c!=null)
+           PDSession.CloseCursor(c);
         }
     }
 }

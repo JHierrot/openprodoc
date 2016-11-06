@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>OpenProdoc Architecture</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+<H4>OpenProdoc Architecture</H4>
+<hr>
+<p>The OpenProdoc architecture is based in a Core component that is resposible of all functionality.</p>
+<p style="text-align:center;"><img alt="OpenProdoc Core Schema" src="img/Architecture0.png"/></p>
+<p>The core can be embedded in a Java application (as in the Swing OpenProdoc Client or in the Portable OpenProc).
+Also it can be embedded ina a J2EE application (as in the OpenProdoc Web Client).</p>
+<p style="text-align:center;"><img alt="OpenProdoc Core Schema" src="img/Architecture1.png"/></p>
+<p>As an alternative, there is a remote connection that allows to connect the core to the J2EE OpenProdoc application using REST/http. 
+This mode, although has smaller performance, increases security and eases administration, as some elements are centralized in a server (or a server's farm).</p>
+<p style="text-align:center;"><img alt="Remote Connection" src="img/Architecture2.png"/></p>
+<hr>
+<a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>
+    </body>
+</html>

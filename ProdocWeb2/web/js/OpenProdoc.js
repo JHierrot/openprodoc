@@ -190,21 +190,28 @@ switch (IdMenu)
         break;
     case "AddExtDoc": AddExtDoc(CurrFold);
         break;
-    case "ModExtDoc" : ModDoc(CurrDoc, false, "");
+    case "ModExtDoc" : if (CurrDoc!="") 
+                        ModDoc(CurrDoc, false, "");
         break;
-    case "DocMetadata": ModDoc(CurrDoc, true, "");
+    case "DocMetadata": if (CurrDoc!="") 
+                        ModDoc(CurrDoc, true, "");
         break;
-    case "DelDoc": DelDoc(CurrDoc);
+    case "DelDoc": if (CurrDoc!="") 
+                        DelDoc(CurrDoc);
         break;
-    case "CheckOut": CheckOut(CurrDoc);
+    case "CheckOut": if (CurrDoc!="") 
+                        CheckOut(CurrDoc);
         break;
-    case "CheckIn": CheckIn(CurrDoc);
+    case "CheckIn": if (CurrDoc!="") 
+                        CheckIn(CurrDoc);
         break;
-    case "CancelCheckOut": CancelCheckOut(CurrDoc);
+    case "CancelCheckOut": if (CurrDoc!="") 
+                        CancelCheckOut(CurrDoc);
         break;
     case "SearchDoc": SearchDoc();
         break;
-    case "ListVer": ListVer(CurrDoc);
+    case "ListVer": if (CurrDoc!="") 
+                        ListVer(CurrDoc);
         break;
     case "PasswordChange": PassChange();
         break;
@@ -1274,21 +1281,20 @@ GridReports.setColSorting("str,str,int,int");  //sets the sorting types of colum
 GridReports.load("RepList?Type=Fold");
 GridReports.init();
 TabBar.tabs("Reports").disable();
+FormAddFold = TabBar.tabs("Search").attachForm();
 ToolBar = TabBar.tabs("Results").attachToolbar();
 ToolBar.addButton("Edit", 0, "Edit", "Edit.png", "Edit.png");
 ToolBar.addButton("Delete", 1, "Delete", "Edit.png", "Edit.png");
-//ToolBar.addButton("CSV", 2, "CSV", "Edit.png", "Edit.png");
-//ToolBar.addButton("Report", 2, "Report", "Edit.png", "Edit.png");
+ToolBar.addButton(CSVFORMAT, 2, "CSV", "Edit.png", "Edit.png");
 ToolBar.attachEvent("onClick", function(id)
     {
-    if (GridResults.getSelectedRowId()!=null)    
+    if (id==CSVFORMAT && GridResults.getRowsNum()>0)  
+        ExporGenCSV();
+    else if (GridResults.getSelectedRowId()!=null)    
         FoldResProc(id, GridResults.getSelectedRowId());    
-//    alert("Boton="+id+" Linea="+GridResults.getSelectedRowId());
     });
-FormAddFold = TabBar.tabs("Search").attachForm();
 formCombo.attachEvent("onChange", function(name, value, is_checked){
     FormAddFold.unload();
-    //FormAddFold = b.attachForm();
     FormAddFold = TabBar.tabs("Search").attachForm();
     SearchFoldMain(Url, value);
     });
@@ -1304,7 +1310,6 @@ FormAddFold.enableLiveValidation(true);
 FormAddFold.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {   
-//        NewFoldName=FormAddFold.getItemValue("Title");
         FormAddFold.send(Url, function(loader, response)
                         { // Asynchronous 
                         if (response.substring(0,2)!=OK)    
@@ -1319,9 +1324,7 @@ FormAddFold.attachEvent("onButtonClick", function (name)
         {   
         FormAddFold.unload();
         WinAF.close();
-        }
-//    else if (name.substring(0,2)=="M_") 
-//        ShowMulti(FormAddFold, name.substring(2));    
+        }   
     else if (name.substring(0,2)=="T_") 
         ShowThes(FormAddFold, name.substring(2));    
     }
@@ -1742,9 +1745,12 @@ ToolBar.addButton("Delete", 1, "Delete", "Edit.png", "Edit.png");
 ToolBar.addButton("CheckOut", 2, "CheckOut", "Edit.png", "Edit.png");
 ToolBar.addButton("CheckIn", 3, "CheckIn", "Edit.png", "Edit.png");
 ToolBar.addButton("CancelCheckOut", 4, "CancelCheckOut", "Edit.png", "Edit.png");
+ToolBar.addButton(CSVFORMAT, 5, "CSV", "Edit.png", "Edit.png");
 ToolBar.attachEvent("onClick", function(id)
     {
-    if (GridResults.getSelectedRowId()!=null)    
+    if (id==CSVFORMAT && GridResults.getRowsNum()>0)  
+        ExporGenCSV();
+    else if (GridResults.getSelectedRowId()!=null)    
         DocResProc(id, GridResults.getSelectedRowId());    
     });
 FormAddFold = TabBar.tabs("Search").attachForm();
@@ -2817,3 +2823,9 @@ function ExportCSV(TypeElem, formFilter)
 {
 RefreshAdminGrid(TypeElem, formFilter, CSVFORMAT);
 }
+//--------------------------------------------------------------
+function ExporGenCSV()
+{
+window.open("ExportCSV");    
+}
+//--------------------------------------------------------------
