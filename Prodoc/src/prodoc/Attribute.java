@@ -449,8 +449,8 @@ return PrimKey;
 */
 public void setPrimKey(boolean PrimKey) throws PDException
 {
-if (PrimKey && isMultivalued())    
-   PDException.GenPDException("Attribute_is_Multivalued",getName());           
+//if (PrimKey && isMultivalued())    
+//   PDException.GenPDException("Attribute_is_Multivalued",getName());           
 this.PrimKey = PrimKey;
 }
 //--------------------------------------------------------------------------

@@ -26,10 +26,8 @@
 
 package OpenProdocServ;
 
+import OpenProdocUI.SParent;
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -37,7 +35,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -323,34 +320,9 @@ static public String getVersion()
 return("0.9");
 }
 //-----------------------------------------------------------------------------------------------
-public static String getProdocProperRef() throws Exception
-{
-if (ProdocProperRef==null)
-    {
-    InputStream Is;    
-    String Path=System.getProperty("user.home");    
-    try {
-    Is  = new FileInputStream(Path+File.separator+"OPDWeb.properties");        
-    } catch (FileNotFoundException ex)
-        {
-        Is=null;    
-        }
-    if (Is==null)
-        {
-        Path=System.getenv("OPDWeb");
-        Is  = new FileInputStream(Path+File.separator+"OPDWeb.properties");            
-        }
-    Properties p= new Properties();
-    p.load(Is);
-    Is.close();
-    ProdocProperRef=p.getProperty("OPDConfig");
-    }
-return(ProdocProperRef);
-}
-//----------------------------------------------------------   
 private void StartFW() throws Exception
 {
-ProdocFW.InitProdoc("PD", getProdocProperRef());    
+ProdocFW.InitProdoc("PD", SParent.getProdocProperRef());    
 }
 //----------------------------------------------------------   
 

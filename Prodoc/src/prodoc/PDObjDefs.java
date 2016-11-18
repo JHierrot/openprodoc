@@ -784,6 +784,7 @@ for (int i = 0; i < RecDef.NumAttr(); i++)
             RecTab.addAttr(IdVer);
         Attribute A=Atr.Copy();
         A.setUnique(false); // to avoid double restriction
+        A.setPrimKey(true);
         RecTab.addAttr(A); 
         String MultiName=genMultValNam(Def.getName(),Atr.getName());
         getDrv().CreateTable(MultiName, RecTab);

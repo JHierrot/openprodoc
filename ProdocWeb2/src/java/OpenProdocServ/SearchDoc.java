@@ -146,7 +146,7 @@ protected String GenSearchDocForm(String Title, HttpServletRequest Req, DriverGe
 {
 StringBuilder Form= new StringBuilder(3000);
 Attribute Attr;
-Form.append("[ {type: \"settings\", position: \"label-left\", labelWidth: 120, inputWidth: 200},");
+Form.append("[ {type: \"settings\", position: \"label-left\", labelWidth: 150, inputWidth: 200},");
 Form.append("{type: \"label\", label: \"").append(TT(Req, Title)).append("\", labelWidth:200},");
 Form.append("{type: \"block\", width: 600, list:[");
 Form.append("{type: \"checkbox\", name: \"Subtypes\", label:\"").append(TT(Req, "Subtypes")).append("\", tooltip:\"").append(TT(Req,"When_checked_includes_subtypes_of_folders_in_results")).append("\"},");

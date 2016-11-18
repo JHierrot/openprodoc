@@ -689,7 +689,7 @@ if (!getDrv().getUser().getRol().isAllowMaintainUser() )
 //-------------------------------------------------------------------------
 protected void VerifyAllowedUpd() throws PDException
 {
-if (!getDrv().getUser().getRol().isAllowMaintainUser() )
+if (!getDrv().getUser().getRol().isAllowMaintainUser() && !getDrv().getUser().getName().equalsIgnoreCase(getName()))
    PDExceptionFunc.GenPDException("User_modification_not_allowed_to_user",getName());
 }
 //-------------------------------------------------------------------------

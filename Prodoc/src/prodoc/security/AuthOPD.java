@@ -74,8 +74,7 @@ if (!U.getPassword().equals(U2.getPassword()))
  */
 @Override
 public void UpdatePass(String User, String NewPass) throws PDException
-{// TODO: actualización clave falla
-    // TODO: Comprobar activo
+{
 PDUser U=new PDUser(OPDInstance);
 U.Load(User);
 U.setPassword(NewPass);

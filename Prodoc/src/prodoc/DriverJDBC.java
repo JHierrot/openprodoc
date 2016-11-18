@@ -348,6 +348,8 @@ for (int i = 0; i < NumAttr; i++)
             SQL+=At.getValue();
         }
     }
+if (!Second) // no fields
+    return;
 SQL+=" where "+EvalConditions(UpConds, null);
 this.ExecuteSql(SQL);
 if (PDLog.isDebug())

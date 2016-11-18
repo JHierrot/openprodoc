@@ -996,7 +996,7 @@ protected String GenerateCompleteFoldForm(String Title, HttpServletRequest Req, 
 {
 StringBuilder Form= new StringBuilder(3000);
 Attribute Attr;
-Form.append("[ {type: \"settings\", position: \"label-left\", labelWidth: 140, inputWidth: 300},");
+Form.append("[ {type: \"settings\", position: \"label-left\", labelWidth: 180, inputWidth: 300},");
 Form.append("{type: \"label\", label: \"").append(TT(Req, Title)).append("\"},");
 Attr=FR.getAttr(PDFolders.fTITLE);
 Form.append(GenInput(Req, Attr,  ReadOnly, Modif));
@@ -1038,7 +1038,7 @@ protected String GenerateCompleteDocForm(String Title, HttpServletRequest Req, D
 {
 StringBuilder Form= new StringBuilder(3000);
 Attribute Attr;
-Form.append("[ {type: \"settings\", position: \"label-left\", labelWidth: 140, inputWidth: 300},");
+Form.append("[ {type: \"settings\", position: \"label-left\", labelWidth: 180, inputWidth: 300},");
 Form.append("{type: \"label\", label: \"").append(TT(Req, Title)).append("\", labelWidth: 280},");
 Attr=FR.getAttr(PDFolders.fTITLE);
 Form.append(GenInput(Req, Attr,  ReadOnly, Modif));
@@ -1205,7 +1205,7 @@ return(FormField);
 protected StringBuilder GenSearchInput(HttpServletRequest Req, Attribute Attr) throws PDException
 {
 StringBuilder FormField= new StringBuilder(300);  
-FormField.append("{type: \"block\", width: 550, list:[");
+FormField.append("{type: \"block\", width: 650, list:[");
 FormField.append(GenCompCombo(Req, Attr));
 FormField.append("{type: \"newcolumn\", offset:5 },");
 if (Attr.getName().equals(PDFolders.fACL) || Attr.getName().equals(PDDocs.fACL) )

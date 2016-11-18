@@ -846,7 +846,7 @@ WinAF=myWins.createWindow({
 id:"AddFold",
 left:20,
 top:30,
-width:500,
+width:750,
 height:500,
 center:true,
 modal:true,
@@ -911,7 +911,7 @@ WinAF=myWins.createWindow({
 id:"ModFold",
 left:20,
 top:30,
-width:500,
+width:600,
 height:420,
 center:true,
 modal:true,
@@ -1250,7 +1250,7 @@ WinAF=myWins.createWindow({
 id:"SearchFold",
 left:20,
 top:30,
-width:600,
+width:750,
 height:650,
 center:true,
 modal:true,
@@ -1448,7 +1448,7 @@ var WinMD=myWins.createWindow({
     id:"ModDoc",
     left:20,
     top:30,
-    width:500,
+    width:600,
     height:420,
     center:true,
     modal:true,
@@ -1628,7 +1628,7 @@ WinAF=myWins.createWindow({
 id:"AddExtDoc",
 left:20,
 top:30,
-width:500,
+width:750,
 height:500,
 center:true,
 modal:true,
@@ -1701,7 +1701,7 @@ WinAF=myWins.createWindow({
 id:"SearchDoc",
 left:20,
 top:30,
-width:650,
+width:750,
 height:680,
 center:true,
 modal:true,
@@ -2417,7 +2417,7 @@ FormImpElem.loadStruct("ImpElem", function(){
     FormImpElem.setFocusOnFirstActive();
     });
 FormImpElem.attachEvent("onButtonClick", function (name)
-    {if (name==CANCEL)
+    {if (name==CANCEL || name==OK)
         {   
         FormImpElem.unload();
         WinAF.close();
@@ -2832,14 +2832,5 @@ var nodes = xml.getElementsByTagName("tr");
 Orig.push(Term);
 var Trad=nodes[0].textContent;
 Trans.push(Trad);
-return(Trad);   
-//window.dhx4.ajax.get("LocaleTrans?Par="+Term, function(r)
-//    {
-//    var xml = r.xmlDoc.responseXML;
-//    var nodes = xml.getElementsByTagName("tr");
-//    Orig.push(Term);
-//    var Trad=nodes[0].textContent;
-//    Trans.push(Trad);
-//    return(Trad);
-//    });      
+return(Trad);        
 }

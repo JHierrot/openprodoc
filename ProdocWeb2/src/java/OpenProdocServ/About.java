@@ -55,7 +55,7 @@ out.println("[" +
             "{type: \"label\", label: \"\"}," +
             "{type: \"label\", label: \"Technical Design and Development:  Joaquín Hierro\"}," +
             "{type: \"label\", label: \"  Literals en Català: Eli Ramirez\"}," +
-            "{type: \"label\", label: \"DHTMLX: license: Dinamenta, UAB\"}," +
+            "{type: \"label\", label: \"DHTMLX: license: Dinamenta UAB\"}," +
             "{type: \"label\", label: \"log4j, commons-net.ftp, commons-fileupload, Tika,\"}," +
             "{type: \"label\", label: \"httpclient, httpcore, httpmime, Lucene: licence: Apache Software Foundation\"}" +
             "];");

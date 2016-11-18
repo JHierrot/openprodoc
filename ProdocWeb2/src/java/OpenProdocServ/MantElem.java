@@ -136,6 +136,8 @@ else
             }
         }
     Obj.assignValues(Rec);
+    if( TypeElem.equals(ListElem.MANTUSERS) )
+        ((PDUser)Obj).setPassword((String)Rec.getAttr(PDUser.fPASSWORD).getValue());
     PDSession.IniciarTrans();
     if (Oper.equals(OPERNEW) || Oper.equals(OPERCOPY)) 
         {
@@ -458,6 +460,7 @@ else if (ElemType.equals(ListElem.MANTOBJ))
         {
         Parent=new PDObjDefs(PDSession);
         Parent.Load(ObjId);
+        Rec.getAttr(PDObjDefs.fCLASSTYPE).setValue(Parent.getClassType());
         } 
     Attr=Rec.getAttr(PDObjDefs.fNAME);
     SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
@@ -888,6 +891,8 @@ private void InsertObjAttrs(PDObjDefs pdObjDefs, HttpServletRequest Req) throws 
 String AllAttrs=Req.getParameter("ATTRS");
 String[] Attrs = AllAttrs.split("¬");
 pdObjDefs.DelAtributes();
+if (AllAttrs==null || AllAttrs.length()<2)
+    return;
 for (String Attr : Attrs)
     {
     String[] AttrDef = Attr.split("\\|");   

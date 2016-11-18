@@ -80,6 +80,12 @@ else
         listParentAttr = Def.getListParentAttr(ObjDefId);
     }
 Record NextObj=PDSession.NextRec(listParentAttr);
+boolean AttrEmpty=false;
+if (NextObj==null)
+    {
+    AttrEmpty=true;
+    NextObj=PDObjDefs.getRecordAttrsStruct();
+    } 
 NextObj.delAttr(PDObjDefs.fATTRPRIMKEY);
 if (Own!=null)
     NextObj.delAttr(PDObjDefs.fTYPNAME);
@@ -94,8 +100,8 @@ while (Attr!=null)
     }
 Resp.append("</head>");
 if (Own==null || !Oper.equals("New"))
-    {
-    while (NextObj!=null)
+    {   
+    while (NextObj!=null && !AttrEmpty)
         {
         String Id=(String)NextObj.getAttr(PDObjDefs.fNAME).getValue();
         NextObj.getAttr(PDObjDefs.fATTRTYPE).setValue(LTyp[(Integer)NextObj.getAttr(PDObjDefs.fATTRTYPE).getValue()]);

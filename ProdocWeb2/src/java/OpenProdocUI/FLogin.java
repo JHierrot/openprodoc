@@ -27,15 +27,15 @@ import javax.servlet.http.HttpSession;
 public class FLogin 
 {
 private static final String Html="<!DOCTYPE html>" +
-"<html>" +
-"    <head>" +
-"        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">" +
-"        <title>OpenProdoc2 Web</title>" +
-"        <script src=\"js/OpenProdoc.js\" type=\"text/javascript\"></script>" +
-"        <script src=\"js/dhtmlx.js\" type=\"text/javascript\"></script>" +
-"        <link rel=\"STYLESHEET\" type=\"text/css\" href=\"js/dhtmlx.css\">" +
-"        <link rel=\"STYLESHEET\" type=\"text/css\" href=\"css/OpenProdoc.css\">" +
-"        <style>" +
+"<html>\n" +
+        "<head>\n" +
+        "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n" +
+        "<title>OpenProdoc2 Web</title>\n" +
+        "<script src=\"js/OpenProdoc.js\" type=\"text/javascript\"></script>\n" +
+        "<script src=\"js/dhtmlx.js\" type=\"text/javascript\"/></script>\n" +
+        "<link rel=\"STYLESHEET\" type=\"text/css\" href=\"js/dhtmlx.css\">\n" +
+"        <link rel=\"STYLESHEET\" type=\"text/css\" href=\"css/OpenProdoc.css\">\n" +
+"        <style>\n" +
 "        html, body {" +
 "                width: 100%;" +
 "                height: 100%;" +
@@ -43,14 +43,14 @@ private static final String Html="<!DOCTYPE html>" +
 "                padding: 0px;" +
 "                overflow: hidden;" +
 "           }\n" +
-"	</style>" +
-"        </head>" +
-"    <body>" +
-        "<form action=\"Login\"  method=\"post\">" +
-"        <table align=\"center\"  width=\"300\" class=\"OPDForm\">" +
-"        <tr><td>&nbsp</td></tr>" +
-"        <tr><td><img src=\"img/Logo48.jpg\"><H3>OpenProdoc</H3></td></tr>" +
-"        <tr><td>"+
+"	</style>\n" +
+"        </head>\n" +
+"    <body>\n" +
+        "<form action=\"Login\"  method=\"post\">\n" +
+"        <table align=\"center\"  width=\"300\" class=\"OPDForm\">\n" +
+"        <tr><td>&nbsp</td></tr>\n" +
+"        <tr><td><img src=\"img/Logo48.jpg\"><H3>OpenProdoc</H3></td></tr>\n" +
+"        <tr><td>\n"+
         "  <fieldset class=\"dhxform_fs\"><legend class=\"fs_legend\">Login OpenProdoc:</legend><table>" +
         "  <tr><td width=\"100\"><div class=\"dhxform_label dhxform_label_align_left\" >User:</div></td>" +
         "  <td><div class=\"dhxform_control\"><input class=\"dhxform_textarea\" type=\"text\" name=\"User\"></div></td></tr>" +
@@ -59,10 +59,10 @@ private static final String Html="<!DOCTYPE html>" +
         "  <tr><td></td><td><input  class=\"dhxform_btn_filler\" type=\"submit\" value=\"  Ok  \"></td></tr>" +
         "  </table></fieldset>" +
 "        </td></tr>" +
-"    </table>"+        
-        "</form>" +
-"    </body>" +
-"</html>";
+"    </table>\n"+        
+        "</form>\n" +
+"    </body>\n" +
+"</html>\n";
 // "        <table align=\"center\"  width=\"300\" style=\"font-family: Tahoma,Helvetica; font-size: 12px;\">" +
 //-------------------------------------------------------------------
 public FLogin(HttpSession Sess)
