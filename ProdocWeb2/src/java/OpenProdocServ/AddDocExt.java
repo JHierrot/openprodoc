@@ -29,6 +29,7 @@ import prodoc.Attribute;
 import prodoc.DriverGeneric;
 import prodoc.PDDocs;
 import prodoc.PDFolders;
+import prodoc.PDMimeType;
 import prodoc.Record;
 
 /**
@@ -95,7 +96,45 @@ else
             }
         Attr=Rec.nextAttr();
         }
-    StoreDat(Req, ListFields);
+    if (!ListFields.containsKey(PDDocs.fNAME))
+        {
+        StoreDat(Req, ListFields);
+        out.println("OK");
+        return;
+        }
+    PDDocs Doc;
+    String DType=(String) ListFields.get(PDDocs.fDOCTYPE);
+    if (DType==null)
+        Doc = new PDDocs(PDSession);
+    else
+        Doc = new PDDocs(PDSession, DType);
+    Rec.initList();
+    Attr=Rec.nextAttr();
+    while (Attr!=null)
+        {
+        if (!List.contains(Attr.getName()))
+            {
+            String Val=(String) ListFields.get(Attr.getName());
+            if (Attr.getType()==Attribute.tBOOLEAN)
+                {
+                if(Val == null || Val.length()==0 || Val.equals("0"))
+                    Attr.setValue(false);
+                else
+                    Attr.setValue(true);
+                }
+            else if(Val != null)
+                {
+                SParent.FillAttr(Req, Attr, Val, false);
+                }
+            }
+        Attr=Rec.nextAttr();
+        }
+    Doc.assignValues(Rec);
+    Doc.setParentId(ListFields.get("CurrFold"));
+    Doc.setName(ListFields.get(PDDocs.fNAME));
+    PDMimeType mt=new PDMimeType(PDSession);
+    Doc.setMimeType(mt.SolveName(ListFields.get(PDDocs.fNAME)));
+    Doc.insert();
     out.println("OK");
     }
 }

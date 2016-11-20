@@ -473,7 +473,7 @@ if (IsRef())
 throw new UnsupportedOperationException("Unsupported");
 }
 //-----------------------------------------------------------------
-protected boolean IsRef()
+public boolean IsRef()
 {
 return(getRepType().equals(tREFURL));    
 }

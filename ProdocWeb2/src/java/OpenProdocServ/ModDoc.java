@@ -96,7 +96,7 @@ else
         Attr=Rec.nextAttr();
         }
     StoreDat(Req, ListFields);    
-    if (Req.getParameter("EndMod")==null)
+    if (Req.getParameter("EndMod")==null && Req.getParameter(PDDocs.fNAME)==null)
         {
         out.println("OK");    
         return;
@@ -119,7 +119,6 @@ else
             else if(Val != null)
                 {
                 SParent.FillAttr(Req, Attr, Val, false);
-//                SParent.FillAttr(Req, Attr1, Val, false);
                 }
             }
         Attr=Rec.nextAttr();

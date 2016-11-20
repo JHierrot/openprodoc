@@ -1084,10 +1084,27 @@ if (Attr!=null && Attr.getValue()!=null && ((String)Attr.getValue()).length()!=0
     Form.append(",{type: \"hidden\", name:\""+PDDocs.fPDID+"\", value: \"").append((String)Attr.getValue()).append("\"}");
 if (!ReadOnly)
     {
-    if (Modif)
-        Form.append("]},{type: \"upload\", name: \"UpFile\", url: \"ModDocF\", autoStart: true, disabled:true }];");
+    String DT=(String)FR.getAttr(PDDocs.fDOCTYPE).getValue();
+    PDObjDefs Def=new PDObjDefs(PDSession);
+    Def.Load(DT);
+    String Rp=Def.getReposit();
+    PDRepository Rep=new PDRepository(PDSession);
+    Rep.Load(Rp);
+    if (Rep.IsRef())
+        {   
+        Form.append("]},{type: \"input\", name: \""+PDDocs.fNAME+"\", label: \"URL\",").append(" required: ").append(!Modif?"true":"false").append(", inputWidth: 300}];");
+        }
     else
-        Form.append("]},{type: \"upload\", name: \"UpFile\", url: \"ImportDocF\", autoStart: true, disabled:true }];");
+        {
+        if (Modif)
+           Form.append("]},{type: \"fieldset\", label: \""+TT(Req, "Import_Doc")+"\", list:["+  
+           "{type: \"upload\", name: \"UpFile\", titleText:\""+TT(Req, "Drag_n_Drop_file_or_click_icon_to_select_file")+"\", url: \"ModDocF\", inputWidth: 350, autoStart: true, disabled:true }"+    
+           "]}];");              
+        else
+           Form.append("]},{type: \"fieldset\", label: \""+TT(Req, "Import_Doc")+"\", list:["+  
+           "{type: \"upload\", name: \"UpFile\", titleText:\""+TT(Req, "Drag_n_Drop_file_or_click_icon_to_select_file")+"\", url: \"ImportDocF\", inputWidth: 350, autoStart: true, disabled:true }"+    
+           "]}];"); 
+        }
     }
 else
    Form.append("]}];");

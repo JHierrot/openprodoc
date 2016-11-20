@@ -40,8 +40,9 @@ public class ImpElem extends SParent
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {
 out.println("[" +
-    "{type: \"label\", label: \""+TT(Req, "Import_Element")+"\"}," +
-    "{type: \"upload\", name: \"UpFile\", url: \"ImpElemF\", autoStart: true },"+  
+    "{type: \"fieldset\", label: \""+TT(Req, "Import_Element")+"\", list:["+  
+    "{type: \"upload\", name: \"UpFile\", titleText:\""+TT(Req, "Drag_n_Drop_file_or_click_icon_to_select_file")+"\", url: \"ImpElemF\", inputWidth: 350, autoStart: true }"+    
+    "]},"+  
     "{type: \"block\", width: 250, list:[" +
         "{type: \"button\", name: \"OK\", value: \""+TT(Req, "Ok")+"\"}," +
         "{type: \"newcolumn\", offset:20 }," +

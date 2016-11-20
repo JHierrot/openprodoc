@@ -1465,8 +1465,16 @@ FormModDoc.attachEvent("onButtonClick", function (name)
         {    
         FormModDoc.send("ModDoc", function(loader, response)
                         { // Asynchronous 
-                        if (response.substring(0,2)==OK)    
-                            FormModDoc.enableItem("UpFile");                            
+                        if (response.substring(0,2)==OK)  
+                            {
+                            if (!FormModDoc.isItem("UpFile")) 
+                                {
+                                FormModDoc.unload();
+                                WinMD.close();
+                                }
+                            else  
+                                FormModDoc.enableItem("UpFile");   
+                            }
                         else 
                             alert(response.substring(2)); 
                         });
@@ -1665,7 +1673,15 @@ FormAddFold.attachEvent("onButtonClick", function (name)
                         if (response.substring(0,2)!=OK)    
                             alert(response); 
                         else
-                            FormAddFold.enableItem("UpFile"); 
+                            {
+                            if (!FormAddFold.isItem("UpFile")) 
+                                {
+                                FormAddFold.unload();
+                                WinAF.close();
+                                }
+                            else    
+                                FormAddFold.enableItem("UpFile"); 
+                            }
                         });
         }
      else if (name==CANCEL) 
@@ -2406,8 +2422,8 @@ WinAF=myWins.createWindow({
 id:"AddDoc",
 left:20,
 top:30,
-width:400,
-height:200,
+width:450,
+height:350,
 center:true,
 modal:true,
 resize:false});  
