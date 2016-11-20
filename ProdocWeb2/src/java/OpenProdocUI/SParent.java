@@ -1208,8 +1208,10 @@ switch (Attr.getType())
         FormField.append("{type: \"block\", width: 450, list:[");
         FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\", labelWidth: \"auto\", readonly: \"true\",value:\"").append(TmpThes.getName()==null?"":TmpThes.getName()).append("\", tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", userdata: {ThesId:").append(Attr.getLongStr()).append("}}, ");
         FormField.append("{type: \"hidden\", name:\"TH_").append(Attr.getName()).append("\", value: \"").append(TmpThes.getPDId()).append("\"},");
-        FormField.append("{type: \"newcolumn\", offset:2 },");
-        FormField.append("{type: \"button\",").append(ReadOnly?"disabled:1,":"").append(" name:  \"T_").append(Attr.getName()).append("\", value: \"T\", width: 20}]},");
+        FormField.append("{type: \"newcolumn\" },");
+        FormField.append("{type: \"button\",").append(ReadOnly?"disabled:1,":"").append(" name:  \"T_").append(Attr.getName()).append("\", value: \"T\", width: 20},");
+        FormField.append("{type: \"newcolumn\" },");
+        FormField.append("{type: \"button\",").append(ReadOnly?"disabled:1,":"").append(" name:  \"TD_").append(Attr.getName()).append("\", value: \"-\", width: 20}]},");
         }
         break;
     default:
@@ -1269,8 +1271,10 @@ else switch (Attr.getType())
         FormField.append("{type: \"block\", width: 300, list:[");
         FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", readonly: \"true\",value:\"").append(TmpThes.getName()==null?"":TmpThes.getName()).append("\", tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", userdata: {ThesId:").append(Attr.getLongStr()).append("}}, ");
         FormField.append("{type: \"hidden\", name:\"TH_").append(Attr.getName()).append("\", value: \"").append(TmpThes.getPDId()).append("\"},");
-        FormField.append("{type: \"newcolumn\", offset:2 },");
-        FormField.append("{type: \"button\",").append(" name:  \"T_").append(Attr.getName()).append("\", value: \"T\", width: 20}]}");
+        FormField.append("{type: \"newcolumn\" },");
+        FormField.append("{type: \"button\", name:  \"T_").append(Attr.getName()).append("\", value: \"T\", width: 20},");
+        FormField.append("{type: \"newcolumn\" },");
+        FormField.append("{type: \"button\", name:  \"TD_").append(Attr.getName()).append("\", value: \"-\", width: 20}]},");
         }
         break;
     default:

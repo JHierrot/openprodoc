@@ -44,6 +44,8 @@ var WinAF;
 var WinMT;
 var WinRes;
 var FormAddFold; 
+var FormSearchFold; 
+var FormSearchDoc; 
 var TabBar;
 var GridResults;
 var ToolBar;
@@ -148,7 +150,7 @@ menu.attachEvent("onClick", function(id, zoneId, cas)
 DocsGrid = layout.cells("c").attachGrid();
 DocsGrid.setHeader(LocaleTrans("Document_Type")+","+LocaleTrans("Document_Title")+","+LocaleTrans("Lock_user")+","+LocaleTrans("Date"));   //sets the headers of columns
 DocsGrid.setColumnIds("Type,Title,Lock,Date");         
-DocsGrid.setInitWidths("130,600,100,*");   
+DocsGrid.setInitWidths("130,500,170,*");   
 DocsGrid.setColAlign("left,left,left,left");    
 DocsGrid.setColTypes("ro,link,ro,ro");            
 DocsGrid.setColSorting("str,str,str,str"); 
@@ -169,7 +171,11 @@ DocsTree.attachEvent("onClick",function(id)
     {
     CurrFold=id;
     layout.cells("b").attachURL("SFoldRec", true, {FoldId: CurrFold});
-    DocsGrid.clearAndLoad("DocList?FoldId="+CurrFold);
+    DocsGrid.clearAndLoad("DocList?FoldId="+CurrFold, function ()
+        {
+        if (DocsGrid.getRowsNum()>0)
+            DocsGrid.selectRow(0, true, false, true);
+        });
     });
 DocsTree.selectItem(ROOTFOLD);
 layout.cells("b").attachURL("SFoldRec", true, {FoldId: CurrFold});
@@ -409,8 +415,8 @@ TermTabBar.addTab("RT", "RT", null, null, true);
 if (Url!="DelTerm")
     {
     var RTTB=TermTabBar.tabs("RT").attachToolbar();
-    RTTB.addButton("Add", 0, "Add", "Add.png", "Add.png");
-    RTTB.addButton("Del", 1, "Del", "Del.png", "Del.png");
+    RTTB.addButton("Add", 0, "Add", "img/add.png", "img/add.png");
+    RTTB.addButton("Del", 1, "Del", "img/del.png", "img/del.png");
     RTTB.attachEvent("onClick", function(id)
         {
         CurrThes=FormAddTerm.getUserData("TES_USE", "ThesId");          
@@ -424,8 +430,8 @@ TermTabBar.addTab("Lang", "Lang");
 if (Url!="DelTerm")
     {
     var LangTB=TermTabBar.tabs("Lang").attachToolbar();
-    LangTB.addButton("Add", 0, "Add", "Add.png", "Add.png");
-    LangTB.addButton("Del", 1, "Del", "Del.png", "Del.png");
+    LangTB.addButton("Add", 0, "Add", "img/add.png", "img/add.png");
+    LangTB.addButton("Del", 1, "Del", "img/del.png", "img/del.png");
     LangTB.attachEvent("onClick", function(id)
         {
         CurrThes=FormAddTerm.getUserData("TES_USE", "ThesId");          
@@ -499,6 +505,8 @@ FormAddTerm.attachEvent("onButtonClick", function (name)
         }
      else if (name.substring(0,2)=="T_") 
         ShowThes(FormAddTerm, name.substring(2)); 
+     else if (name.substring(0,3)=="TD_") 
+        DelTerm(FormAddTerm, name.substring(3)); 
      else 
         {   
         FormAddTerm.unload();
@@ -640,8 +648,8 @@ TabBar=WinAF.attachTabbar();
 TabBar.addTab("Search", "Search", null, null, true);
 TabBar.addTab("Results", "Results");
 ToolBar = TabBar.tabs("Results").attachToolbar();
-ToolBar.addButton(T_EDIT, 0, T_EDIT, "Edit.png", "Edit.png");
-ToolBar.addButton(T_DEL, 1, T_DEL, "Edit.png", "Edit.png");
+ToolBar.addButton(T_EDIT, 0, T_EDIT, "img/edit.png", "img/edit.png");
+ToolBar.addButton(T_DEL, 1, T_DEL, "img/del.png", "img/del.png");
 ToolBar.attachEvent("onClick", function(id)
     {
     if (GridResults.getSelectedRowId()!=null)     
@@ -901,6 +909,8 @@ FormAddFold.attachEvent("onButtonClick", function (name)
         ShowMulti(FormAddFold, name.substring(2));    
     else if (name.substring(0,2)=="T_") 
         ShowThes(FormAddFold, name.substring(2));  
+    else if (name.substring(0,3)=="TD_") 
+        DelTerm(FormAddFold, name.substring(3)); 
     });   
 }
 //------------------------------------------------------------
@@ -952,6 +962,8 @@ FormAddFold.attachEvent("onButtonClick", function (name)
         }
     else if (name.substring(0,2)=="T_") 
         ShowThes(FormAddFold, name.substring(2));  
+    else if (name.substring(0,3)=="TD_") 
+        DelTerm(FormAddFold, name.substring(3)); 
     else 
         ShowMulti(FormAddFold, name.substring(2));    
     });   
@@ -1058,6 +1070,12 @@ MultiForm.attachEvent("onChange", function (name, value)
     });
 }
 //----------------------------------
+function DelTerm(Form, AttName)
+{ 
+Form.setItemValue("TH_"+AttName, ""); 
+Form.setItemValue(AttName, "");
+}
+//----------------------------------
 function ShowThes(Form, AttName)
 {
 var ThesId=Form.getUserData(AttName, "ThesId");   
@@ -1077,7 +1095,7 @@ Theslayout.cells("a").setText("Thesaurus");
 Theslayout.cells("a").setWidth(200);
 Theslayout.cells("b").setText("Current Term"); 
 var STToolBar = Theslayout.attachToolbar();
-STToolBar.addButton("Select", 0, LocaleTrans("Selection"), "Select.png", "Select.png");
+STToolBar.addButton("Select", 0, LocaleTrans("Selection"), "img/select.png", "img/select.png");
 var SelThesTree = Theslayout.cells("a").attachTree();
 SelThesTree.setImagePath("js/imgs/dhxtree_skyblue/");
 SelThesTree.setXMLAutoLoading("ThesTree");
@@ -1122,7 +1140,7 @@ Theslayout.cells("a").setText("Thesaurus");
 Theslayout.cells("a").setWidth(200);
 Theslayout.cells("b").setText("Current Term"); 
 var STToolBar = Theslayout.attachToolbar();
-STToolBar.addButton("Select", 0, LocaleTrans("Selection"), "Select.png", "Select.png");
+STToolBar.addButton("Select", 0, LocaleTrans("Selection"), "img/select.png", "img/select.png");
 var SelThesTree = Theslayout.cells("a").attachTree();
 SelThesTree.setImagePath("js/imgs/dhxtree_skyblue/");
 SelThesTree.setXMLAutoLoading("ThesTree");
@@ -1279,11 +1297,11 @@ GridReports.setColSorting("str,str,int,int");
 GridReports.load("RepList?Type=Fold");
 GridReports.init();
 TabBar.tabs("Reports").disable();
-FormAddFold = TabBar.tabs("Search").attachForm();
+FormSearchFold = TabBar.tabs("Search").attachForm();
 ToolBar = TabBar.tabs("Results").attachToolbar();
-ToolBar.addButton(T_EDIT, 0, T_EDIT, "Edit.png", "Edit.png");
-ToolBar.addButton(T_DEL, 1, T_DEL, "Edit.png", "Edit.png");
-ToolBar.addButton(CSVFORMAT, 2, "CSV", "Edit.png", "Edit.png");
+ToolBar.addButton(T_EDIT, 0, T_EDIT, "img/edit.png", "img/edit.png");
+ToolBar.addButton(T_DEL, 1, T_DEL, "img/del.png", "img/del.png");
+ToolBar.addButton(CSVFORMAT, 2, "CSV", "img/expCSV.png", "img/expCSV.png");
 ToolBar.attachEvent("onClick", function(id)
     {
     if (id==CSVFORMAT && GridResults.getRowsNum()>0)  
@@ -1292,8 +1310,8 @@ ToolBar.attachEvent("onClick", function(id)
         FoldResProc(id, GridResults.getSelectedRowId());    
     });
 formCombo.attachEvent("onChange", function(name, value, is_checked){
-    FormAddFold.unload();
-    FormAddFold = TabBar.tabs("Search").attachForm();
+    FormSearchFold.unload();
+    FormSearchFold = TabBar.tabs("Search").attachForm();
     SearchFoldMain(Url, value);
     });
 SearchFoldMain(Url, "PD_FOLDERS");       
@@ -1301,14 +1319,14 @@ SearchFoldMain(Url, "PD_FOLDERS");
 //----------------------------------
 function SearchFoldMain(Url, Type)
 {
-FormAddFold.loadStruct(Url+"?F="+CurrFold+"&Ty="+Type, function(){
+FormSearchFold.loadStruct(Url+"?F="+CurrFold+"&Ty="+Type, function(){
     FormAddFold.setFocusOnFirstActive();
     });    
-FormAddFold.enableLiveValidation(true);     
-FormAddFold.attachEvent("onButtonClick", function (name)
+FormSearchFold.enableLiveValidation(true);     
+FormSearchFold.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {   
-        FormAddFold.send(Url, function(loader, response)
+        FormSearchFold.send(Url, function(loader, response)
                         { // Asynchronous 
                         if (response.substring(0,2)!=OK)    
                             alert(response); 
@@ -1320,11 +1338,13 @@ FormAddFold.attachEvent("onButtonClick", function (name)
         }
      else if (name==CANCEL) 
         {   
-        FormAddFold.unload();
+        FormSearchFold.unload();
         WinAF.close();
         }   
     else if (name.substring(0,2)=="T_") 
-        ShowThes(FormAddFold, name.substring(2));    
+        ShowThes(FormSearchFold, name.substring(2));    
+    else if (name.substring(0,3)=="TD_") 
+        DelTerm(FormSearchFold, name.substring(3)); 
     });   
 }
 //------------------------------------------------------------
@@ -1496,6 +1516,8 @@ FormModDoc.attachEvent("onButtonClick", function (name)
         ShowMulti(FormModDoc, name.substring(2));    
     else if (name.substring(0,2)=="T_") 
         ShowThes(FormModDoc, name.substring(2));  
+    else if (name.substring(0,3)=="TD_") 
+        DelTerm(FormModDoc, name.substring(3)); 
     else if (name==CANCEL) 
         {   
         FormModDoc.unload();
@@ -1693,6 +1715,8 @@ FormAddFold.attachEvent("onButtonClick", function (name)
         ShowMulti(FormAddFold, name.substring(2));    
     else if (name.substring(0,2)=="T_") 
         ShowThes(FormAddFold, name.substring(2));  
+    else if (name.substring(0,3)=="TD_") 
+        DelTerm(FormAddFold, name.substring(3)); 
     });   
 FormAddFold.attachEvent("onUploadFile",function(realName,serverName)
     {
@@ -1746,12 +1770,12 @@ GridReports.load("RepList?Type=Fold");
 GridReports.init();
 TabBar.tabs("Reports").disable();
 ToolBar = TabBar.tabs("Results").attachToolbar();
-ToolBar.addButton(T_EDIT, 0, T_EDIT, "Edit.png", "Edit.png");
-ToolBar.addButton(T_DEL, 1, T_DEL, "Edit.png", "Edit.png");
-ToolBar.addButton("CheckOut", 2, "CheckOut", "Edit.png", "Edit.png");
-ToolBar.addButton("CheckIn", 3, "CheckIn", "Edit.png", "Edit.png");
-ToolBar.addButton("CancelCheckOut", 4, "CancelCheckOut", "Edit.png", "Edit.png");
-ToolBar.addButton(CSVFORMAT, 5, "CSV", "Edit.png", "Edit.png");
+ToolBar.addButton(T_EDIT, 0, T_EDIT, "img/edit.png", "img/edit.png");
+ToolBar.addButton(T_DEL, 1, T_DEL, "img/del.png", "img/del.png");
+ToolBar.addButton("CheckOut", 2, "CheckOut", "img/checkout.png", "img/checkout.png");
+ToolBar.addButton("CheckIn", 3, "CheckIn", "img/checkin.png", "img/checkin.png");
+ToolBar.addButton("CancelCheckOut", 4, "CancelCheckOut", "img/cancelcheckout.png", "img/cancelcheckout.png");
+ToolBar.addButton(CSVFORMAT, 5, "CSV", "img/expCSV.png", "img/expCSV.png");
 ToolBar.attachEvent("onClick", function(id)
     {
     if (id==CSVFORMAT && GridResults.getRowsNum()>0)  
@@ -1759,10 +1783,10 @@ ToolBar.attachEvent("onClick", function(id)
     else if (GridResults.getSelectedRowId()!=null)    
         DocResProc(id, GridResults.getSelectedRowId());    
     });
-FormAddFold = TabBar.tabs("Search").attachForm();
+FormSearchDoc = TabBar.tabs("Search").attachForm();
 formCombo.attachEvent("onChange", function(name, value, is_checked){
-    FormAddFold.unload();
-    FormAddFold = TabBar.tabs("Search").attachForm();
+    FormSearchDoc.unload();
+    FormSearchDoc = TabBar.tabs("Search").attachForm();
     SearchDocMain(Url, value);
     });
 SearchDocMain(Url, "PD_DOCS");       
@@ -1770,15 +1794,15 @@ SearchDocMain(Url, "PD_DOCS");
 //----------------------------------
 function SearchDocMain(Url, Type)
 {
-FormAddFold.loadStruct(Url+"?F="+CurrFold+"&Ty="+Type, function(){
-    FormAddFold.setFocusOnFirstActive();
+FormSearchDoc.loadStruct(Url+"?F="+CurrFold+"&Ty="+Type, function(){
+    FormSearchDoc.setFocusOnFirstActive();
     });       
-FormAddFold.attachEvent("onButtonClick", function (name)
+FormSearchDoc.attachEvent("onButtonClick", function (name)
     {if (name==OK)
         {   
         TabBar.tabs("Results").disable();  
         TabBar.tabs("Reports").disable();  
-        FormAddFold.send(Url, function(loader, response)
+        FormSearchDoc.send(Url, function(loader, response)
                         { // Asynchronous 
                         if (response.substring(0,2)!=OK)    
                             alert(response); 
@@ -1790,11 +1814,13 @@ FormAddFold.attachEvent("onButtonClick", function (name)
         }
      else if (name==CANCEL) 
         {   
-        FormAddFold.unload();
+        FormSearchDoc.unload();
         WinAF.close();
         }    
     else if (name.substring(0,2)=="T_") 
-        ShowThes(FormAddFold, name.substring(2));  
+        ShowThes(FormSearchDoc, name.substring(2));  
+    else if (name.substring(0,3)=="TD_") 
+        DelTerm(FormSearchDoc, name.substring(3)); 
     });   
 }
 //------------------------------------------------------------
@@ -1842,7 +1868,7 @@ modal:true,
 resize:true});   
 WinAF.setText("OpenProdoc");
 var TB=WinAF.attachToolbar();
-TB.addButton("Data", 0, LocaleTrans("Document_Attributes"), "Data.png", "Data.png");
+TB.addButton("Data", 0, LocaleTrans("Document_Attributes"), "img/data.png", "img/data.png");
 var GR=WinAF.attachGrid();
 GR.load("ListVerDoc?Id="+Doc2List);
 GR.setSizes();
@@ -1918,8 +1944,8 @@ b.hideHeader();
 ToolBar = b.attachToolbar();
 GridResults = b.attachGrid();
 GridResults.enableMultiselect(true);
-ToolBar.addButton("Undelete", 0, "Undelete", "Undelete.png", "Undelete.png");
-ToolBar.addButton(T_DEL, 1, T_DEL, "Edit.png", "Edit.png");
+ToolBar.addButton("Undelete", 0, "Undelete", "img/undel.png", "img/undel.png");
+ToolBar.addButton(T_DEL, 1, T_DEL, "img/del.png", "img/del.png");
 ToolBar.attachEvent("onClick", function(id)
     {
     if (GridResults.getSelectedRowId()!=null)    
@@ -2006,22 +2032,22 @@ formFilter.attachEvent("onButtonClick",  function(name)
     });        
 if (TypeElem!=ELEMPENDTASK && TypeElem!=ELEMTASKEND && TypeElem!=ELEMTRACELOGS)
     {
-    ToolBar.addButton(EOPERNEW, 0, "New", "New.png", "New.png");
-    ToolBar.addButton(EOPERMOD, 1, "Modif", "Modif.png", "Modif.png");
-    ToolBar.addButton(EOPERDEL, 2, T_DEL, "Edit.png", "Edit.png");
-    ToolBar.addButton(EOPERCOP, 3, "Copy", "Copy.png", "Copy.png");
-    ToolBar.addButton(EOPEREXP, 4, "Export", "Export.png", "Export.png");
-    ToolBar.addButton(EOPEREXA, 5, "ExportAll", "ExportAll.png", "ExportAll.png");
-    ToolBar.addButton(EOPERIMP, 6, "Import", "Import.png", "Import.png");
-    ToolBar.addButton(EOPEREXPCSV, 7, "ExportCSV", "ExportCSV.png", "ExportCSV.png");
+    ToolBar.addButton(EOPERNEW, 0, "New", "img/add.png", "img/add.png");
+    ToolBar.addButton(EOPERMOD, 1, "Modif", "img/edit.png", "img/edit.png");
+    ToolBar.addButton(EOPERDEL, 2, T_DEL, "img/del.png", "img/del.png");
+    ToolBar.addButton(EOPERCOP, 3, "Copy", "img/copy.png", "img/copy.png");
+    ToolBar.addButton(EOPEREXP, 4, "Export", "img/export.png", "img/export.png");
+    ToolBar.addButton(EOPEREXA, 5, "ExportAll", "img/export_all.png", "img/export_all.png");
+    ToolBar.addButton(EOPERIMP, 6, "Import", "img/import.png", "img/import.png");
+    ToolBar.addButton(EOPEREXPCSV, 7, "ExportCSV", "img/expCSV.png", "img/expCSV.png");
     }
 else if ( TypeElem==ELEMTASKEND)
     {
-    ToolBar.addButton(EOPERRELAUN, 0, "Relaunch", "Relaunch.png", "Relaunch.png"); 
-    ToolBar.addButton(EOPEREXPCSV, 1, "ExportCSV", "ExportCSV.png", "ExportCSV.png");
+    ToolBar.addButton(EOPERRELAUN, 0, "Relaunch", "img/relaunch.png", "img/relaunch.png"); 
+    ToolBar.addButton(EOPEREXPCSV, 1, "ExportCSV", "img/expCSV.png", "img/expCSV.png");
     }    
 else
-    ToolBar.addButton(EOPEREXPCSV, 0, "ExportCSV", "ExportCSV.png", "ExportCSV.png");    
+    ToolBar.addButton(EOPEREXPCSV, 0, "ExportCSV", "img/expCSV.png", "img/expCSV.png");    
 ToolBar.attachEvent("onClick", function(Oper)
     {  
     if (Oper==EOPEREXPCSV)    
@@ -2479,9 +2505,9 @@ if (TypeElem==ELEMACL)
     ElemTabBar=ElemLayout.cells('b').attachTabbar();
     ElemTabBar.addTab("Groups", "Groups", null, null, true); //---
     TBG = ElemTabBar.tabs("Groups").attachToolbar();
-    TBG.addButton(EOPERNEW, 0, "New", "New.png", "New.png");
-    TBG.addButton(EOPERMOD, 1, "Modif", "Modif.png", "Modif.png");
-    TBG.addButton(EOPERDEL, 2, T_DEL, "Edit.png", "Edit.png");
+    TBG.addButton(EOPERNEW, 0, "New", "img/add.png", "img/add.png");
+    TBG.addButton(EOPERMOD, 1, "Modif", "img/edit.png", "img/edit.png");
+    TBG.addButton(EOPERDEL, 2, T_DEL, "img/del.png", "img/del.png");
     GGroups = ElemTabBar.tabs("Groups").attachGrid();
     GGroups.setHeader("Groups, Perm");
     GGroups.setColAlign("left,left");     
@@ -2490,9 +2516,9 @@ if (TypeElem==ELEMACL)
     GGroups.init();
     ElemTabBar.addTab("Users", "Users");                    //---
     TBU = ElemTabBar.tabs("Users").attachToolbar();
-    TBU.addButton(EOPERNEW, 0, "New", "New.png", "New.png");
-    TBU.addButton(EOPERMOD, 1, "Modif", "Modif.png", "Modif.png");
-    TBU.addButton(EOPERDEL, 2, T_DEL, "Edit.png", "Edit.png");
+    TBU.addButton(EOPERNEW, 0, "New", "img/add.png", "img/add.png");
+    TBU.addButton(EOPERMOD, 1, "Modif", "img/edit.png", "img/edit.png");
+    TBU.addButton(EOPERDEL, 2, T_DEL, "img/del.png", "img/del.png");
     GUsers = ElemTabBar.tabs("Users").attachGrid();
     GUsers.setHeader("Users, Perm");
     GUsers.setColAlign("left,left");     
@@ -2509,8 +2535,8 @@ else if (TypeElem==ELEMGROUPS )
     ElemTabBar=ElemLayout.cells('b').attachTabbar();
     ElemTabBar.addTab("Groups", "Groups", null, null, true); //---
     TBG = ElemTabBar.tabs("Groups").attachToolbar();
-    TBG.addButton(EOPERNEW, 0, "New", "New.png", "New.png");
-    TBG.addButton(EOPERDEL, 1, T_DEL, "Edit.png", "Edit.png");
+    TBG.addButton(EOPERNEW, 0, "New", "img/add.png", "img/add.png");
+    TBG.addButton(EOPERDEL, 1, T_DEL, "img/del.png", "img/del.png");
     GGroups = ElemTabBar.tabs("Groups").attachGrid();
     GGroups.setHeader("Groups");
     GGroups.setColAlign("left");     
@@ -2519,8 +2545,8 @@ else if (TypeElem==ELEMGROUPS )
     GGroups.init();
     ElemTabBar.addTab("Users", "Users");                    //---
     TBU = ElemTabBar.tabs("Users").attachToolbar();
-    TBU.addButton(EOPERNEW, 0, "New", "New.png", "New.png");
-    TBU.addButton(EOPERDEL, 1, T_DEL, "Edit.png", "Edit.png");
+    TBU.addButton(EOPERNEW, 0, "New", "img/add.png", "img/add.png");
+    TBU.addButton(EOPERDEL, 1, T_DEL, "img/del.png", "img/del.png");
     GUsers = ElemTabBar.tabs("Users").attachGrid();
     GUsers.setHeader("Users");
     GUsers.setColAlign("left");     
@@ -2537,9 +2563,9 @@ else if (TypeElem==ELEMOBJ)
     ElemTabBar=ElemLayout.cells('b').attachTabbar();
     ElemTabBar.addTab("Metadata", "Metadata", null, null, true); //---
     TBG = ElemTabBar.tabs("Metadata").attachToolbar();
-    TBG.addButton(EOPERNEW, 0, "New", "New.png", "New.png");
-    TBG.addButton(EOPERMOD, 1, "Modif", "Modif.png", "Modif.png");
-    TBG.addButton(EOPERDEL, 2, T_DEL, "Edit.png", "Edit.png");
+    TBG.addButton(EOPERNEW, 0, "New", "img/add.png", "img/add.png");
+    TBG.addButton(EOPERMOD, 1, "Modif", "img/edit.png", "img/edit.png");
+    TBG.addButton(EOPERDEL, 2, T_DEL, "img/del.png", "img/del.png");
     GMetadata = ElemTabBar.tabs("Metadata").attachGrid();
     ElemTabBar.addTab("Inherited", "Inherited");                    //---
     GInherited = ElemTabBar.tabs("Inherited").attachGrid();
