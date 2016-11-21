@@ -21,27 +21,20 @@ package OpenProdocServ;
 
 import OpenProdocUI.SParent;
 import static OpenProdocUI.SParent.ShowMessage;
-import static OpenProdocUI.SParent.getActFolderId;
+import static OpenProdocUI.SParent.TT;
 import static OpenProdocUI.SParent.getSessOPD;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Vector;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 import javax.servlet.*;
 import javax.servlet.http.*;
+import prodoc.Attribute;
 import prodoc.Conditions;
 import prodoc.Cursor;
 import prodoc.DriverGeneric;
 import prodoc.PDDocs;
 import prodoc.PDException;
 import prodoc.PDFolders;
-import prodoc.PDMimeType;
-import prodoc.PDReport;
 import prodoc.Record;
 
 /**
@@ -114,6 +107,19 @@ else
     Cur=F.Search(FTQuery, FType, Conds, SubT, SubF, Vers, actFolderId, Ord);
     }
 Record Rec=PDSession.NextRec(Cur);
+if (Rec!=null)
+    {
+    StringBuilder Resp=new StringBuilder(1000);    
+    Rec.initList();
+    Attribute Attr=Rec.nextAttr();
+    while (Attr!=null)
+        {
+        Resp.append(Attr.getUserName()).append(";");
+        Attr=Rec.nextAttr();
+        }
+    Resp.deleteCharAt(Resp.length()-1);
+    out.println(Resp);
+    }
 while (Rec!=null)
     {
     out.println(SParent.GenRowCSV(Req, Rec));    

@@ -139,7 +139,6 @@ else if (ElemType.equals(MANTROLES))
     Rec.delAttr(PDRoles.fALLOWMAINTAINTHESAUR);
     Rec.delAttr(PDRoles.fALLOWMAINTAINUSER);
     }
-//Rec.delAttr(Filter);
 int WIDTH=600;
 if (ElemType.equals(MANTOBJ) || ElemType.equals(MANTTASKCRON)|| ElemType.equals(MANTTASKEVENT)
         || ElemType.equals(MANTTASKENDED) || ElemType.equals(MANTPENDTASK))
@@ -150,7 +149,7 @@ int Count=1;
 while (Attr!=null)
     {
     if (CSV)
-        Resp.append(Attr.getUserName()+",");
+        Resp.append(Attr.getUserName()).append(";");
     else
         Resp.append("<column width=\"").append(Count==Rec.NumAttr()?"*":WIDTH/Rec.NumAttr()).append("\" type=\"ro\" align=\"left\" sort=\"str\">").append(TT(Req,Attr.getUserName())).append("</column>");
     Count++;
@@ -243,7 +242,10 @@ finally
         PDSession.CloseCursor(ListObj);
         } catch (Exception e){}
     }
-out.println( Resp.toString().replace("&", "&amp;") );   
+if (!CSV)
+    out.println( Resp.toString().replace("&", "&amp;") ); 
+else
+    out.println( Resp.toString()); 
 out.close();
 }
 //-----------------------------------------------------------------------------------------------

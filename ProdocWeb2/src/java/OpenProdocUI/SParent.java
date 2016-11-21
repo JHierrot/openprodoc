@@ -1419,21 +1419,22 @@ while (Attr!=null)
             try {    
             PDThesaur TmpThes=new PDThesaur(SParent.getSessOPD(Req));
             TmpThes.Load((String)Attr.getValue());
-            Row.append("\"").append(TmpThes.getName()).append("\",");
+            Row.append("\"").append(TmpThes.getName()).append("\";");
             } catch(Exception ex)
                 {    
-                Row.append("\"\",");
+                Row.append("\"\";");
                 }
             }
         else
-            Row.append("\"\",");
+            Row.append("\"\";");
         }
     else 
         {
-        Row.append("\"").append(Attr.Export()).append("\",");
+        Row.append("\"").append(Attr.Export()).append("\";");
         }
     Attr=NextRec.nextAttr();
     }
+Row.deleteCharAt(Row.length()-1);
 return(Row);
 }
 //----------------------------------------------------------------
