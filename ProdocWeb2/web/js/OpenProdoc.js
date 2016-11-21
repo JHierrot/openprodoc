@@ -277,8 +277,6 @@ switch (IdMenu)
         break;
     case "About": About();    
         break;
-    default:     
-        printLog("<b>Menu onClick</b> id="+IdMenu+"<br>");
     }
 }
 //----------------------------------

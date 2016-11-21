@@ -52,6 +52,7 @@ static private Record TaksTypeStruct=null;
  */
 private String PDId;
 private Date NextDate;
+private boolean GenAuto=false;
 
 static private ObjectsCache TaksDefObjectsCache = null;
 
@@ -1312,6 +1313,31 @@ if (PDLog.isDebug())
 protected void AsignKey(String Ident) throws PDExceptionFunc
 {
 setPDId(Ident);
+}
+//-------------------------------------------------------------------------
+/**
+* @return the GenAuto
+*/
+protected boolean isGenAuto()
+{
+return GenAuto;
+}
+
+//-------------------------------------------------------------------------
+/**
+* @param GenAuto the GenAuto to set
+*/
+protected void setGenAuto(boolean pGenAuto)
+{
+GenAuto = pGenAuto;
+}
+//-------------------------------------------------------------------------
+@Override
+protected void VerifyAllowedIns() throws PDException
+{
+if (isGenAuto())  
+    return;
+super.VerifyAllowedIns();
 }
 //-------------------------------------------------------------------------
 }

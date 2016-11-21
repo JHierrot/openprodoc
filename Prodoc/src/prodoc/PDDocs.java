@@ -2711,6 +2711,7 @@ for (PDTasksDefEvent L1 : L)
     if (!TE.MeetsReq(this)) // under folder or future checks
         continue;
     TE.setNextDate(new Date());
+    TE.setGenAuto(true);
     TE.insert();
     }
 }
