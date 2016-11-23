@@ -468,7 +468,7 @@ try {
 List <NameValuePair> nvps = new ArrayList <NameValuePair>();
 nvps.add(new BasicNameValuePair(ORDER, pOrder));
 nvps.add(new BasicNameValuePair(PARAM, pParam));
-UrlPost.setEntity(new UrlEncodedFormEntity(nvps));
+UrlPost.setEntity(new UrlEncodedFormEntity(nvps, "UTF-8"));
 response2 = httpclient.execute(UrlPost, context);
 HttpEntity Resp=response2.getEntity();
 Document XMLObjects = DB.parse(Resp.getContent());
