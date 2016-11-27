@@ -296,6 +296,10 @@
         <servlet-name>LocaleTrans</servlet-name>
         <servlet-class>OpenProdocServ.LocaleTrans</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TaskWiz</servlet-name>
+        <servlet-class>OpenProdocServ.TaskWiz</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SParent</servlet-name>
         <url-pattern>/SParent</url-pattern>
@@ -591,6 +595,10 @@
     <servlet-mapping>
         <servlet-name>LocaleTrans</servlet-name>
         <url-pattern>/LocaleTrans</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TaskWiz</servlet-name>
+        <url-pattern>/TaskWiz</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

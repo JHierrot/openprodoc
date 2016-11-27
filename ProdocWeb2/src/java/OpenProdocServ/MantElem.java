@@ -137,7 +137,17 @@ else
         }
     Obj.assignValues(Rec);
     if( TypeElem.equals(ListElem.MANTUSERS) )
-        ((PDUser)Obj).setPassword((String)Rec.getAttr(PDUser.fPASSWORD).getValue());
+        {
+        String NewPass=(String)Rec.getAttr(PDUser.fPASSWORD).getValue();    
+        if (NewPass.equals("="))    
+            {
+            ((PDUser)Obj).Load(((PDUser)Obj).getName());
+            Rec.getAttr(PDUser.fPASSWORD).setValue(((PDUser)Obj).getPassword());
+            Obj.assignValues(Rec);
+            }
+        else
+            ((PDUser)Obj).setPassword(NewPass);
+        }
     PDSession.IniciarTrans();
     if (Oper.equals(OPERNEW) || Oper.equals(OPERCOPY)) 
         {
@@ -215,11 +225,15 @@ else if (Oper.equals(OPERCOPY))
     }
 else
     Title="";
-SB.append("[  {type: \"settings\", position: \"label-left\", labelWidth: 150, inputWidth: 230},");
+SB.append("[  {type: \"settings\", position: \"label-left\", labelWidth: 150},");
 SB.append("{type: \"label\", label: \"").append(Title).append("\"},");
 SB.append(getBody(Oper, Req, TypeElem, Obj, Id));
 if (TypeElem.equals(ListElem.MANTOBJ))
     SB.append(OkBlockExt(Req, Oper, TypeElem, (PDObjDefs)Obj, Id));
+else if (TypeElem.equals(ListElem.MANTTASKCRON))
+    SB.append(OkBlockTaskCron(Req, TypeElem, Id));
+else if (TypeElem.equals(ListElem.MANTTASKEVENT))
+    SB.append(OkBlockTaskEvent(Req, TypeElem, Id));
 else
     SB.append(OkBlock(Req, TypeElem, Id));
 return(SB.toString());
@@ -259,6 +273,42 @@ private StringBuilder OkBlock(HttpServletRequest Req,String TypeElem, String Id)
 {
 StringBuilder SB=new StringBuilder(500);    
 SB.append("{type: \"block\", width: 250, list:[");
+SB.append("{type: \"button\", name: \"OK\", value: \"").append(TT(Req, "Ok")).append("\"},");
+SB.append("{type: \"newcolumn\", offset:20 },");
+SB.append("{type: \"button\", name: \"CANCEL\", value: \"").append(TT(Req, "Cancel")).append("\"},");
+SB.append("{type: \"hidden\", name:\"Type\", value: \"").append(TypeElem).append("\"}");
+if (Id!=null)
+    SB.append(",{type: \"hidden\", name:\"Id\", value: \"").append(Id).append("\"}");
+SB.append("]} ];");
+return(SB);
+}
+//-----------------------------------------------------------------------------------------------
+private StringBuilder OkBlockTaskCron(HttpServletRequest Req,String TypeElem, String Id)
+{
+StringBuilder SB=new StringBuilder(500);    
+SB.append("{type: \"block\", list:[");
+SB.append("{type: \"button\", name: \"TEDIT\", value: \"").append(TT(Req, "Edit")).append("\"},");
+SB.append("{type: \"newcolumn\", offset:20 },");
+SB.append("{type: \"button\", name: \"TTEST\", value: \"").append(TT(Req, "Test")).append("\"},");
+SB.append("{type: \"newcolumn\", offset:20 },");
+SB.append("{type: \"button\", name: \"TRUN\", value: \"").append(TT(Req, "Run")).append("\"},");
+SB.append("{type: \"newcolumn\", offset:60 },");
+SB.append("{type: \"button\", name: \"OK\", value: \"").append(TT(Req, "Ok")).append("\"},");
+SB.append("{type: \"newcolumn\", offset:20 },");
+SB.append("{type: \"button\", name: \"CANCEL\", value: \"").append(TT(Req, "Cancel")).append("\"},");
+SB.append("{type: \"hidden\", name:\"Type\", value: \"").append(TypeElem).append("\"}");
+if (Id!=null)
+    SB.append(",{type: \"hidden\", name:\"Id\", value: \"").append(Id).append("\"}");
+SB.append("]} ];");
+return(SB);
+}
+//-----------------------------------------------------------------------------------------------
+private StringBuilder OkBlockTaskEvent(HttpServletRequest Req,String TypeElem, String Id)
+{
+StringBuilder SB=new StringBuilder(500);    
+SB.append("{type: \"block\", list:[");
+SB.append("{type: \"button\", name: \"TEDIT\", value: \"").append(TT(Req, "Edit")).append("\"},");
+SB.append("{type: \"newcolumn\", offset:60 },");
 SB.append("{type: \"button\", name: \"OK\", value: \"").append(TT(Req, "Ok")).append("\"},");
 SB.append("{type: \"newcolumn\", offset:20 },");
 SB.append("{type: \"button\", name: \"CANCEL\", value: \"").append(TT(Req, "Cancel")).append("\"},");
@@ -508,6 +558,8 @@ else if (ElemType.equals(ListElem.MANTOBJ))
         SB.append("{type: \"hidden\", name:\"").append(Attr.getName()).append("\", value: \"").append(Parent.getName()).append("\"},");
     else
         SB.append("{type: \"hidden\", name:\"").append(Attr.getName()).append("\", value: \"").append(Attr.getValue()).append("\"},");
+    Attr=Rec.getAttr(PDObjDefs.fCREATED);
+    SB.append("{type: \"hidden\", name:\"").append(Attr.getName()).append("\", value: \"").append(Attr.getValue()).append("\"},");
     SB.append("{type: \"hidden\", name:\"ATTRS\", value: \"\"}");
     SB.append("]},");
     }

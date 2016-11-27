@@ -53,6 +53,7 @@ var GridReports;
 var MantFromGrid=false;
 var TmpLayout;
 var WinElem;
+var WinListElem=null;
 var FormElem;
 var ELEMACL="ACL";
 var ELEMMIME="MimeTypes";
@@ -1998,7 +1999,9 @@ for (var i=0; i<ListId.length; i++)
 //------------------------------------------------------------
 function Admin(TypeElem)
 {
-WinAF=myWins.createWindow({
+//if (WinListElem!=null && WinListElem.isOnTop())
+//   WinListElem.close(); 
+WinListElem=myWins.createWindow({
 id:"Admin",
 left:20,
 top:30,
@@ -2007,8 +2010,8 @@ height:600,
 center:true,
 modal:true,
 resize:true}); 
-WinAF.setText(TypeElem);
-TmpLayout=WinAF.attachLayout('2E');
+WinListElem.setText(TypeElem);
+TmpLayout=WinListElem.attachLayout('2E');
 var a = TmpLayout.cells('a');
 a.hideHeader();
 if (TypeElem==ELEMPENDTASK || TypeElem==ELEMTASKEND || TypeElem==ELEMTRACELOGS)
@@ -2216,8 +2219,64 @@ FormElem.attachEvent("onButtonClick", function (name)
         FormElem.unload();
         WinElem.close();
         }
+     else if (TypeElem==ELEMTASKCRON || TypeElem==ELEMTASKEVENT )  
+        ProcessWizard(FormElem, TypeElem, name);
      }
              );    
+}
+//------------------------------------------------------------
+function ProcessWizard(FormEl, TypeElem, ButtName)
+{
+var TaskType=FormEl.getItemValue("TaskType");
+if (ButtName=="TEDIT")
+   EditWiz(FormEl, TypeElem, TaskType);
+else if (ButtName=="TTEST")
+    ShowTest(FormEl, TypeElem, TaskType);
+else if (ButtName=="TRUN")
+    RunTask(FormEl, TypeElem, TaskType);
+}
+//------------------------------------------------------------
+function EditWiz(FormEl, TypeElem, TaskType)
+{
+var WinWizard=myWins.createWindow({
+id:"WinWizard",
+left:20,
+top:30,
+width:500,
+height:260,
+center:true,
+modal:true,
+resize:true});  
+WinWizard.setText(TypeElem);
+var  FormWiz=WinWizard.attachForm();   
+FormWiz.loadStruct("TaskWiz?TE="+TypeElem+"&TT="+TaskType, function(){
+        FormWiz.setItemValue("TaskParam",FormEl.getItemValue("TaskParam") );    
+        FormWiz.setItemValue("TaskParam2",FormEl.getItemValue("TaskParam2") );    
+        FormWiz.setItemValue("TaskParam3",FormEl.getItemValue("TaskParam3") );    
+        FormWiz.setItemValue("TaskParam4",FormEl.getItemValue("TaskParam4") ); 
+    });
+FormWiz.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {
+        FormEl.setItemValue("TaskParam",FormWiz.getItemValue("TaskParam") );    
+        FormEl.setItemValue("TaskParam2",FormWiz.getItemValue("TaskParam2") );    
+        FormEl.setItemValue("TaskParam3",FormWiz.getItemValue("TaskParam3") );    
+        FormEl.setItemValue("TaskParam4",FormWiz.getItemValue("TaskParam4") ); 
+        }
+    FormWiz.unload();
+    WinWizard.close();
+    });    
+
+}
+//------------------------------------------------------------
+function ShowTest(FormEl, TypeElem, TaskType)
+{
+    
+}
+//------------------------------------------------------------
+function RunTask(FormEl, TypeElem, TaskType)
+{
+    
 }
 //------------------------------------------------------------
 function FillHideFields(TypeElem)

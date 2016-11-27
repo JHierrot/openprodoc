@@ -96,7 +96,8 @@ else
             }
         Attr=Rec.nextAttr();
         }
-    if (!ListFields.containsKey(PDDocs.fNAME))
+//    if (!ListFields.containsKey(PDDocs.fNAME))
+    if (Req.getParameter(PDDocs.fNAME)==null || Req.getParameter(PDDocs.fNAME).length()==0)
         {
         StoreDat(Req, ListFields);
         out.println("OK");

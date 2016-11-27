@@ -23,10 +23,8 @@ import OpenProdocUI.SParent;
 import static OpenProdocUI.SParent.TT;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
-import prodoc.Attribute;
 import prodoc.DriverGeneric;
 import prodoc.PDException;
-import prodoc.PDFolders;
 
 /**
  *
