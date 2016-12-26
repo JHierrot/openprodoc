@@ -1019,7 +1019,7 @@ protected String GenerateCompleteFoldForm(String Title, HttpServletRequest Req, 
 {
 StringBuilder Form= new StringBuilder(3000);
 Attribute Attr;
-Form.append("[ {type: \"settings\", position: \"label-left\", labelWidth: 180, inputWidth: 300},");
+Form.append("[ {type: \"settings\", position: \"label-left\",offsetLeft:10,labelWidth: 180, inputWidth: 300},");
 Form.append("{type: \"label\", label: \"").append(TT(Req, Title)).append("\"},");
 Attr=FR.getAttr(PDFolders.fTITLE);
 Form.append(GenInput(Req, Attr,  ReadOnly, Modif));
@@ -1061,7 +1061,7 @@ protected String GenerateCompleteDocForm(String Title, HttpServletRequest Req, D
 {
 StringBuilder Form= new StringBuilder(3000);
 Attribute Attr;
-Form.append("[ {type: \"settings\", position: \"label-left\", labelWidth: 180, inputWidth: 300},");
+Form.append("[ {type: \"settings\", position: \"label-left\", offsetLeft:10, labelWidth: 180, inputWidth: 300},");
 Form.append("{type: \"label\", label: \"").append(TT(Req, Title)).append("\", labelWidth: 280},");
 Attr=FR.getAttr(PDFolders.fTITLE);
 Form.append(GenInput(Req, Attr,  ReadOnly, Modif));
@@ -1138,7 +1138,7 @@ protected String GenerateCompleteThesForm(String Title, HttpServletRequest Req, 
 {
 StringBuilder Form=new StringBuilder(2000);    
 Attribute Attr;
-Form.append("[ {type: \"settings\", position: \"label-left\", labelWidth: 140}, ");
+Form.append("[ {type: \"settings\", position: \"label-left\",offsetLeft:10,labelWidth: 140}, ");
 Form.append("{type: \"label\", label: \"").append(TT(Req, Title)).append("\"},");
 Attr=TmpThes.getRecord().getAttr(PDThesaur.fPDID);
 Form.append(GenInput(Req, Attr,  ReadOnly, Modif));
@@ -1161,7 +1161,7 @@ protected String GenerateCompleteTermForm(String Title, HttpServletRequest Req, 
 {
 StringBuilder Form=new StringBuilder(2000);    
 Attribute Attr;
-Form.append("[ {type: \"settings\", position: \"label-left\", labelWidth: 140}, ");
+Form.append("[ {type: \"settings\", offsetLeft:10, position: \"label-left\", labelWidth: 140}, ");
 Form.append("{type: \"label\", label: \"").append(TT(Req, Title)).append("\"},");
 Attr=TmpThes.getRecord().getAttr(PDThesaur.fPDID);
 Form.append("{type: \"hidden\", name:\"PDId\", value: \"").append(Attr.getValue()).append("\"},");

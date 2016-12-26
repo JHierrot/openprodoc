@@ -52,7 +52,7 @@ if (CurrFold!=null)
     Attribute AttrTit=TmpDoc.getRecord().getAttr(PDDocs.fTITLE);
     Attribute AttrDate=TmpDoc.getRecord().getAttr(PDDocs.fDOCDATE);
     out.println(
-    "[" +
+    "[  {type:\"settings\", offsetLeft:10, labelWidth: 150}," +
     "{type: \"label\", label: \""+TT(Req, "Add_Document")+"\"}," +
     GenInput(Req, AttrTit,  false, false)+        
     GenInput(Req, AttrDate,  false, false)+        
@@ -61,7 +61,6 @@ if (CurrFold!=null)
         "{type: \"newcolumn\", offset:20 }," +
         "{type: \"button\", name: \"CANCEL\", value: \""+TT(Req, "Cancel")+"\"}," +
         "{type: \"hidden\", name:\"CurrFold\", value: \""+CurrFold+"\"}]},"
-//    + "{type: \"upload\", name: \"UpFile\", url: \"ImportDocF\", autoStart: true, disabled:true }"
     + "{type: \"fieldset\", label: \""+TT(Req, "Import_Doc")+"\", list:["+  
     "{type: \"upload\", name: \"UpFile\", titleText:\""+TT(Req, "Drag_n_Drop_file_or_click_icon_to_select_file")+"\", url: \"ImportDocF\", inputWidth: 350, autoStart: true, disabled:true }"+    
     "]},"              
