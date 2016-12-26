@@ -227,6 +227,8 @@ switch (IdMenu)
         break;
     case "SearchDoc": SearchDoc();
         break;
+    case "ImportRIS": ImportRIS(CurrFold);
+        break;
     case "ListVer": if (CurrDoc!="") 
                         ListVer(CurrDoc);
         break;
@@ -2385,6 +2387,8 @@ FormElem.attachEvent("onButtonClick", function (name)
         FormElem.unload();
         WinElem.close();
         }
+     else if (TypeElem==ELEMTASKCRON || TypeElem==ELEMTASKEVENT )  
+        ProcessWizard(FormElem, TypeElem, name);
      }
              );       
 }
@@ -2484,6 +2488,8 @@ FormElem.attachEvent("onButtonClick", function (name)
         FormElem.unload();
         WinElem.close();
         }
+     else if (TypeElem==ELEMTASKCRON || TypeElem==ELEMTASKEVENT )  
+        ProcessWizard(FormElem, TypeElem, name);
      }
              );           
 }
@@ -2633,6 +2639,8 @@ if (TypeElem==ELEMMIME)
     WinElem.setDimension(500, 250);
 else if (TypeElem==ELEMREPOS || TypeElem==ELEMAUTH)
     WinElem.setDimension(500, 400);
+else if (TypeElem==ELEMTASKCRON || TypeElem==ELEMTASKEVENT)
+        WinElem.setDimension(600, 650);
 }
 //--------------------------------------------------------------
 function CompleteForm(Oper, TypeElem)
@@ -2933,3 +2941,56 @@ var Trad=nodes[0].textContent;
 Trans.push(Trad);
 return(Trad);        
 }
+//--------------------------------------------------
+function ImportRIS(CurrFold)
+{
+var Url="ImportRIS";
+WinAF=myWins.createWindow({
+id:"ImportRIS",
+left:20,
+top:30,
+width:500,
+height:300,
+center:true,
+modal:true,
+resize:false});  
+WinAF.setText("OpenProdoc");
+var FormImportRIS=WinAF.attachForm();
+FormImportRIS.loadStruct(Url+"?F="+CurrFold, function(){
+    FormImportRIS.setFocusOnFirstActive();
+    });
+FormImportRIS.enableLiveValidation(true);      
+FormImportRIS.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {    
+        FormImportRIS.send(Url, function(loader, response)
+                        { // Asynchronous 
+                        if (response.substring(0,2)==OK)    
+                            FormImportRIS.enableItem("UpFile");                            
+                        else 
+                            alert(response.substring(2)); 
+                        });
+        }
+     else 
+        {   
+        FormImportRIS.unload();
+        WinAF.close();
+        }
+    });
+FormImportRIS.attachEvent("onUploadFile",function(realName,serverName)
+    {
+    FormImportRIS.unload();
+    WinAF.close();
+    DocsGrid.clearAndLoad("DocList?FoldId="+CurrFold);
+    });
+FormImportRIS.attachEvent("onUploadFail",function(realName){
+    window.dhx4.ajax.get("UpFileStatus", function(r)
+        {
+        var xml = r.xmlDoc.responseXML;
+        var nodes = xml.getElementsByTagName("status");
+        alert(nodes[0].textContent);
+        });
+    });    
+    
+}
+//--------------------------------------------------

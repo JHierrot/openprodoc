@@ -992,6 +992,29 @@ Session.CloseCursor(CursorId);
 return(ListVals.toString());
 }
 //-----------------------------------------------------------------------------------------------
+/**
+ * Obtains a list of clases of type folder allowed to the user
+ * @return a DefaultComboModel with names of classes of folder
+ */
+static protected String getComboModelDocRIS(DriverGeneric Session, String Value) throws PDException
+{
+if (Value==null || Value.length()==0)   
+    Value=PDDocs.getTableName();
+StringBuilder ListVals=new StringBuilder(5000);
+PDObjDefs Obj = new PDObjDefs(Session);
+Cursor CursorId = Obj.getListDocsRIS();
+Record Res=Session.NextRec(CursorId);
+while (Res!=null)
+    {
+    ListVals.append("{text: \"").append(Res.getAttr(PDObjDefs.fDESCRIPTION).getValue()).append("\", value: \"").append(Res.getAttr(PDObjDefs.fNAME).getValue()).append("\"").append(Res.getAttr(PDObjDefs.fNAME).getValue().equals(Value)?",selected:true":"").append("}");
+    Res=Session.NextRec(CursorId);
+    if (Res!=null)
+        ListVals.append(",");
+    }
+Session.CloseCursor(CursorId);
+return(ListVals.toString());
+}
+//-----------------------------------------------------------------------------------------------
 protected String GenerateCompleteFoldForm(String Title, HttpServletRequest Req, DriverGeneric PDSession, String CurrFold, String NewType, Record FR, boolean ReadOnly, boolean Modif, String DefACL) throws PDException
 {
 StringBuilder Form= new StringBuilder(3000);

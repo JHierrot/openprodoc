@@ -22,6 +22,8 @@ package prodoc;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.TreeSet;
@@ -46,6 +48,7 @@ public PDDocsRIS(DriverGeneric Drv, String pDocType) throws PDException
 {
 super(Drv, pDocType);
 }
+//------------------------------------------------------------------------
 public int ImportFileRIS(String ActFolderId, String RISFilepath) throws PDException
 {
 int NumDocs=0;
@@ -106,6 +109,83 @@ Metadata.close();
 }catch(Exception ex)
     {
     PDLog.Error(ex.getLocalizedMessage());
+    if (Metadata!=null)
+        try {
+            Metadata.close();
+        } catch (IOException ex1) 
+            {
+            }
+    throw new PDException(ex.getLocalizedMessage());
+    }
+return(NumDocs);
+}
+//-------------------------------------------------------------------------    
+public int ImportFileRIS(String ActFolderId, InputStream RISFile) throws PDException
+{
+int NumDocs=0;
+BufferedReader Metadata=null;
+TreeSet<String> LT=getTagList();
+try {
+Metadata = new BufferedReader(new InputStreamReader(RISFile));
+String DocMeta=Metadata.readLine();
+String CurVal="";
+String CurField="";
+PDDocs Doc=null;
+Record R=null;
+Attribute Attr;
+while (DocMeta!=null)
+    {
+    DocMeta=DocMeta.trim();
+    if (DocMeta.length()!=0)
+        {
+        if (!LT.contains(DocMeta.substring(0, 4)) && !LT.contains(DocMeta.substring(0, 5)))
+            CurVal+=DocMeta;
+        else
+            {
+            if (DocMeta.substring(0, TAG_LENGTH).equalsIgnoreCase(START_REC))
+                {
+                Doc=new PDDocs(getDrv(), getDocType());
+                R=Doc.getRecSum();
+                SaveAttr(R, START_REC.substring(0,2), DocMeta.substring(DocMeta.indexOf('-')+1).trim());
+                }
+            else if (DocMeta.substring(0, TAG_LENGTH).equalsIgnoreCase(END_REC))
+                {
+                if (Doc!=null)
+                    {
+                    if (CurField.length()!=0 && CurVal.length()!=0)
+                       SaveAttr(R, CurField, CurVal);
+                    Doc.assignValues(R);
+                    Doc.setParentId(ActFolderId);
+                    if (Doc.getName()==null || Doc.getName().length()==0)
+                        Doc.setFile("http://www.wikipedia.org/");
+                    else 
+                        {
+                        Doc.setFile(Doc.getName()); // so the "url base" is managed
+                        Doc.setName("");
+                        }
+                    Doc.insert();
+                    }
+                }
+            else 
+                {
+                SaveAttr(R, CurField, CurVal);
+                CurField=DocMeta.substring(0, 2);
+                CurVal=DocMeta.substring(DocMeta.indexOf('-')+1).trim();
+                }
+            }
+        }
+    DocMeta=Metadata.readLine();
+    }
+RISFile.close();
+Metadata.close();
+}catch(Exception ex)
+    {
+    PDLog.Error(ex.getLocalizedMessage());
+    try {
+        RISFile.close();
+        } catch (IOException ex1) 
+            {
+            }
     if (Metadata!=null)
         try {
             Metadata.close();

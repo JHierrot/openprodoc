@@ -300,6 +300,18 @@
         <servlet-name>TaskWiz</servlet-name>
         <servlet-class>OpenProdocServ.TaskWiz</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ImportRIS</servlet-name>
+        <servlet-class>OpenProdocServ.ImportRIS</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ImporDocRIS</servlet-name>
+        <servlet-class>OpenProdocServ.ImporDocRIS</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ImportDocRIS</servlet-name>
+        <servlet-class>OpenProdocServ.ImportDocRIS</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SParent</servlet-name>
         <url-pattern>/SParent</url-pattern>
@@ -599,6 +611,18 @@
     <servlet-mapping>
         <servlet-name>TaskWiz</servlet-name>
         <url-pattern>/TaskWiz</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImportRIS</servlet-name>
+        <url-pattern>/ImportRIS</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImporDocRIS</servlet-name>
+        <url-pattern>/ImporDocRIS</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImportDocRIS</servlet-name>
+        <url-pattern>/ImportDocRIS</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

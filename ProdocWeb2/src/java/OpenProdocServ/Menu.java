@@ -112,7 +112,13 @@ if (R.isAllowMaintainDoc())
     }
 Men.append("<item id=\"ListVer\" text=\"").append(TT(Req, "List_of_Versions")).append("\"/>");
 Men.append("<item id=\"file_sep_06\" type=\"separator\"/>");
-Men.append("<item id=\"SearchDoc\" text=\"").append(TT(Req, "Search_Documents")).append("\" img=\"img/search.png\" imgdis=\"img/search.png\" /></item>");
+Men.append("<item id=\"SearchDoc\" text=\"").append(TT(Req, "Search_Documents")).append("\" img=\"img/search.png\" imgdis=\"img/search.png\" />");
+if (R.isAllowMaintainDoc())
+    {
+Men.append("<item id=\"file_sep_07\" type=\"separator\"/>");
+    Men.append("<item id=\"ImportRIS\" text=\"").append(TT(Req, "Import_RIS")).append("\"/>");
+    }
+Men.append("</item>");
 Men.append("<item id=\"Other\" text=\"Otras Tareas\">");
 if (R.isAllowCreateDoc() && R.isAllowMaintainDoc())
     Men.append("<item id=\"TrashBin\" text=\"").append(TT(Req, "Trash_bin")).append("\" />");
