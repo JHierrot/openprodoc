@@ -144,7 +144,7 @@ Attribute Attr;
 PDThesaur U=new PDThesaur(PDSession);
 String Val="";
 Record NextTerm=PDSession.NextRec(ListRT);  
-Html.append("<table>");   
+Html.append("<table class=\"TabTerm\"><tr class=\"HeadTerm\">");   
 Attr=NextTerm.getAttr(PDThesaur.fNAME);
 Html.append("<td>").append(TT(Req,Attr.getUserName())).append("</td>");
 Attr=NextTerm.getAttr(PDThesaur.fDESCRIP);
@@ -152,7 +152,7 @@ Html.append("<td>").append(TT(Req,Attr.getUserName())).append("</td>");
 Attr=NextTerm.getAttr(PDThesaur.fUSE);
 Html.append("<td>").append(TT(Req,Attr.getUserName())).append("</td>");
 Attr=NextTerm.getAttr(PDThesaur.fLANG);
-Html.append("<td>").append(TT(Req,Attr.getUserName())).append("</td>");
+Html.append("<td>").append(TT(Req,Attr.getUserName())).append("</td></tr>");
 while (NextTerm!=null)
     {
     Html.append("<tr>");
@@ -173,9 +173,8 @@ while (NextTerm!=null)
     Html.append("<td>").append(Attr.getValue()!=null?Attr.getValue():"").append("</td>");
     Html.append("</tr>");
     NextTerm=PDSession.NextRec(ListRT);
-    if (NextTerm==null)
-        Html.append("</table><br>");
     }
+Html.append("</table><br>");
 } catch (Exception Ex)
     {
     return (new StringBuilder("Error:"+Ex.getLocalizedMessage()));

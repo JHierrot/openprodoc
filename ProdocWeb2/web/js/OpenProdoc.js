@@ -1378,7 +1378,7 @@ WinAF=myWins.createWindow({
 id:"AddDoc",
 left:20,
 top:30,
-width:500,
+width:550,
 height:300,
 center:true,
 modal:true,
@@ -1571,7 +1571,7 @@ window.dhx4.ajax.get("CheckOut?D="+Doc2CheckOut, function(r)
 //------------------------------------------------------------
 function CancelCheckOut (Doc2CancelCheck)
 {
-dhtmlx.confirm({text:"Desea cancelar CheckOut", callback: function(result)
+dhtmlx.confirm({text:LocaleTrans("Do_you_want_to_cancel_edition_and_lost_changes"), callback: function(result)
     {
     if (result==true)    
         {

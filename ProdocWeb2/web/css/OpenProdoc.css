@@ -5,3 +5,18 @@
 font-family: Tahoma,Helvetica;
 font-size: 12px;    
 }
+
+.TabTerm
+{
+font-family: Tahoma,Helvetica;
+font-size: 12px; 
+background-color: #EBF3FF;
+border: 3px;
+border-bottom-color: #FFFFFF;
+}
+
+.HeadTerm
+{
+background-color: #D3E7FF;
+}
+
