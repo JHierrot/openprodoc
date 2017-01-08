@@ -50,10 +50,26 @@ import prodoc.Record;
  */
 public class MantElem extends SParent
 {
-public static final String OPERNEW="New";   
-public static final String OPERMODIF="Modif";
-public static final String OPERDELETE="Delete";
-public static final String OPERCOPY="Copy";
+   
+    /**
+     *
+     */
+    public static final String OPERNEW="New";   
+
+    /**
+     *
+     */
+    public static final String OPERMODIF="Modif";
+
+    /**
+     *
+     */
+    public static final String OPERDELETE="Delete";
+
+    /**
+     *
+     */
+    public static final String OPERCOPY="Copy";
 
 private static final String List2=ObjPD.fPDAUTOR+"/"+ObjPD.fPDDATE;
 
@@ -201,11 +217,6 @@ else
 public String getServletInfo()
 {
 return "MantElem Servlet";
-}
-//-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("MantElem");
 }
 //-----------------------------------------------------------------------------------------------
 private String ElemMant(HttpServletRequest Req,String Oper, String TypeElem, ObjPD Obj, String Id) throws PDException

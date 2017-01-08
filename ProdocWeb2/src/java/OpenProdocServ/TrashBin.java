@@ -43,8 +43,8 @@ public class TrashBin extends SParent
 /**
  *
  * @param Req
- * @param out
- * @throws Exception
+     * @throws javax.servlet.ServletException
+     * @throws java.io.IOException
  */
 @Override
 protected void processRequest(HttpServletRequest Req, HttpServletResponse response) throws ServletException, IOException
@@ -129,11 +129,6 @@ out.close();
 public String getServletInfo()
 {
 return "TrashBin Servlet";
-}
-//-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("TrashBin");
 }
 //-----------------------------------------------------------------------------------------------
 }

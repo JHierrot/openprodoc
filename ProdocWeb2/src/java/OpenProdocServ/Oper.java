@@ -65,7 +65,10 @@ import prodoc.ProdocFW;
 public class Oper extends HttpServlet
 {
 
-protected static String ProdocProperRef=null;
+    /**
+     *
+     */
+    protected static String ProdocProperRef=null;
 
 private static boolean FWStartted=false;
 
@@ -282,15 +285,6 @@ public String getServletInfo()
 return "Servlet for Oper";
 }
 //-----------------------------------------------------------------------------------------------
-/**
- * 
- * @return
- */
-static public String getUrlServlet()
-{
-return("Oper");
-}
-//----------------------------------------------------------
 /**
  *
  * @param Req

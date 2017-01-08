@@ -58,12 +58,6 @@ public String getServletInfo()
 return "Tree Servlet";
 }
 //-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("Tree");
-}
-//-----------------------------------------------------------------------------------------------
-
 private String GenTree(HttpServletRequest Req) 
 {
 StringBuilder FolderTree=new StringBuilder(3000);

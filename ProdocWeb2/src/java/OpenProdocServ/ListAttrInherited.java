@@ -40,13 +40,19 @@ import prodoc.Record;
  */
 public class ListAttrInherited extends SParent
 {
-public static final String[] LTyp={"Integer", "Float", "String", "Date", "Boolean", "TimeStamp", "Thesaur"};
+
+    /**
+     *
+     */
+    public static final String[] LTyp={"Integer", "Float", "String", "Date", "Boolean", "TimeStamp", "Thesaur"};
 
 //-----------------------------------------------------------------------------------------------
 /**
  *
  * @param Req
  * @param out
+     * @throws javax.servlet.ServletException
+     * @throws java.io.IOException
  * @throws Exception
  */
 @Override
@@ -138,11 +144,6 @@ out.close();
 public String getServletInfo()
 {
 return "ListAttrInherited Servlet";
-}
-//-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("ListAttrInherited");
 }
 //-----------------------------------------------------------------------------------------------
 

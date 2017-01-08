@@ -58,12 +58,6 @@ public String getServletInfo()
 return "TermNT Servlet";
 }
 //-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("TermNT");
-}
-//-----------------------------------------------------------------------------------------------
-
 private String GenListDoc(HttpServletRequest Req) 
 {
 StringBuilder FolderDocs=new StringBuilder(3000);

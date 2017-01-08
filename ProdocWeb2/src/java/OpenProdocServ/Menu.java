@@ -44,6 +44,7 @@ public class Menu extends SParent
 /**
  *
  * @param Req
+     * @throws java.io.IOException
  */
 @Override
 protected void processRequest(HttpServletRequest Req, HttpServletResponse response) throws IOException
@@ -62,11 +63,6 @@ out.println(genMenu(Req));
 public String getServletInfo()
 {
 return "Menu Servlet";
-}
-//-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("Menu");
 }
 //-----------------------------------------------------------------------------------------------
 private String genMenu(HttpServletRequest Req)

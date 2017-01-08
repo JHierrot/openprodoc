@@ -40,6 +40,8 @@ private static final String RESULT_UPFILE="RESULT_UPFILE";
 /**
  *
  * @param Req
+     * @throws javax.servlet.ServletException
+     * @throws java.io.IOException
  */
 @Override
 protected void processRequest(HttpServletRequest Req, HttpServletResponse response) throws ServletException, IOException
@@ -78,11 +80,6 @@ finally {
 public String getServletInfo()
 {
 return "Relaunch Servlet";
-}
-//-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("Relaunch");
 }
 //-----------------------------------------------------------------------------------------------
 }

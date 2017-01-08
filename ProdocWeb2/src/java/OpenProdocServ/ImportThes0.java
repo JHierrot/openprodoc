@@ -34,8 +34,7 @@ public class ImportThes0 extends SParent
 //-----------------------------------------------------------------------------------------------
 /**
  *
- * @param Req 
- * @param response
+ * @param Req
  * @throws Exception
  */
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
@@ -68,11 +67,6 @@ out.close();
 public String getServletInfo()
 {
 return "ImportThes0 Servlet";
-}
-//-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("ImportThes0");
 }
 //-----------------------------------------------------------------------------------------------
 }

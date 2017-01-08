@@ -20,23 +20,21 @@
 package OpenProdocServ;
 
 import OpenProdocUI.SParent;
-import static OpenProdocUI.SParent.TT;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import prodoc.DriverGeneric;
-import prodoc.PDDocs;
-import prodoc.PDException;
+import prodoc.PDTasksExecEnded;
+
 
 /**
  *
  * @author jhierrot
  */
-public class Undel extends SParent
+public class DelElem extends SParent
 {
-
+private static final String RESULT_UPFILE="RESULT_UPFILE";    
 //-----------------------------------------------------------------------------------------------
 /**
  *
@@ -47,35 +45,39 @@ public class Undel extends SParent
 @Override
 protected void processRequest(HttpServletRequest Req, HttpServletResponse response) throws ServletException, IOException
 {   
+String Ids=Req.getParameter("ElemId");
+DriverGeneric PDSession=SParent.getSessOPD(Req); 
 response.setContentType("text/xml;charset=UTF-8");
 response.setStatus(HttpServletResponse.SC_OK);
 PrintWriter out = response.getWriter();  
-StringBuilder Resp=new StringBuilder(100);
-Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-String DocId=Req.getParameter("Id");  
+String S="";
 try {
-String[] Ids = DocId.split("\\|");
-DriverGeneric PDSession=SParent.getSessOPD(Req);
-PDDocs TmpDoc=new PDDocs(PDSession);
-TmpDoc.UnDelete(Ids[1], Ids[0]);
-Resp.append("<status>OK").append(DocId).append("</status>");
-} catch (PDException ex)
-    {
-    Resp.append("<status>").append(DocId).append(TT(Req,ex.getLocalizedMessage())).append("</status>");
+String[] ListId = Ids.split(",");
+for (int i = 0; i < ListId.length; i++)
+    { 
+    PDTasksExecEnded T=new PDTasksExecEnded(PDSession);
+    T.setPDId(ListId[i]);
+    T.delete();        
     }
-out.println( Resp );   
+} catch (Exception Ex)
+        {
+        S=Ex.getLocalizedMessage();
+        }
+StringBuilder Resp=new StringBuilder(200);
+Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+Resp.append("<status>").append(S==null?"":S).append("</status>");
+out.println(Resp.toString());
 out.close();
 }
 //-----------------------------------------------------------------------------------------------
-
-/** 
+/**
  * Returns a short description of the servlet.
  * @return a String containing servlet description
  */
 @Override
 public String getServletInfo()
 {
-return "Undel Servlet";
+return "DelElem Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 }

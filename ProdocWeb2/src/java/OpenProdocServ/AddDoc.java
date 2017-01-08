@@ -38,8 +38,7 @@ public class AddDoc extends SParent
 //-----------------------------------------------------------------------------------------------
 /**
  *
- * @param Req 
- * @param response
+ * @param Req
  * @throws Exception
  */
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
@@ -86,11 +85,6 @@ else
 public String getServletInfo()
 {
 return "AddDoc Servlet";
-}
-//-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("AddDoc");
 }
 //-----------------------------------------------------------------------------------------------
 }

@@ -58,12 +58,6 @@ public String getServletInfo()
 return "ThesTree Servlet";
 }
 //-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("ThesTree");
-}
-//-----------------------------------------------------------------------------------------------
-
 private String GenTreeThes(HttpServletRequest Req) 
 {
 StringBuilder ThesTree=new StringBuilder(3000);

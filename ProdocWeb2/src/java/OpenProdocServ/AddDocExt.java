@@ -151,9 +151,4 @@ public String getServletInfo()
 return "AddDocExt Servlet";
 }
 //-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("AddDocExt");
-}
-
 }

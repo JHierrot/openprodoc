@@ -118,9 +118,4 @@ public String getServletInfo()
 return "AddFoldExt Servlet";
 }
 //-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("AddFoldExt");
-}
-
 }

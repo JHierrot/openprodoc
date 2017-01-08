@@ -66,12 +66,6 @@ public String getServletInfo()
 return "SFoldRec Servlet";
 }
 //-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("SFoldRec");
-}
-//-----------------------------------------------------------------------------------------------
-
 private String CreateForm(HttpServletRequest Req, PDFolders FoldAct) throws PDException
 {  
 StringBuilder Html=new StringBuilder("<div class=\"OPDForm\"><b>"+FoldAct.getTitle()+"</b> ("+FoldAct.getFolderType() +") : "+FormatDate(Req, FoldAct.getPDDate())+ "<hr> ACL="+FoldAct.getACL());

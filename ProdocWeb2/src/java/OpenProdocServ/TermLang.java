@@ -58,12 +58,6 @@ public String getServletInfo()
 return "TermLang Servlet";
 }
 //-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("TermLang");
-}
-//-----------------------------------------------------------------------------------------------
-
 private String GenListDoc(HttpServletRequest Req) 
 {
 StringBuilder FolderDocs=new StringBuilder(3000);

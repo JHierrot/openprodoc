@@ -111,9 +111,4 @@ public String getServletInfo()
 return "ImportDocRIS Servlet";
 }
 //-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("ImportDocRIS");
-}
-//-----------------------------------------------------------------------------------------------
 }

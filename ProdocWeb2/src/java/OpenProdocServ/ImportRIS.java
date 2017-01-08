@@ -40,8 +40,7 @@ public class ImportRIS extends SParent
 //-----------------------------------------------------------------------------------------------
 /**
  *
- * @param Req 
- * @param response
+ * @param Req
  * @throws Exception
  */
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
@@ -84,11 +83,6 @@ else
 public String getServletInfo()
 {
 return "ImportRIS Servlet";
-}
-//-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("ImportRIS");
 }
 //-----------------------------------------------------------------------------------------------
 }

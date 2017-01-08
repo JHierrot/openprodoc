@@ -64,12 +64,6 @@ public String getServletInfo()
 return "SThesRec Servlet";
 }
 //-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("SThesRec");
-}
-//-----------------------------------------------------------------------------------------------
-
 private String CreateForm(HttpServletRequest Req, PDThesaur ThesAct)
 {  
 StringBuilder Html=new StringBuilder(5000);

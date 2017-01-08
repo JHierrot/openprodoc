@@ -78,9 +78,4 @@ public String getServletInfo()
 return "SThesaurMain Servlet";
 }
 //-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("SThesaurMain");
-}
-//-----------------------------------------------------------------------------------------------
 }

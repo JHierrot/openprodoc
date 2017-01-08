@@ -137,11 +137,20 @@ public String getServletInfo()
 return "SearchFold Servlet";
 }
 //-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("SearchFold");
-}
-//-----------------------------------------------------------------------------------------------
+
+    /**
+     *
+     * @param Title
+     * @param Req
+     * @param PDSession
+     * @param CurrFold
+     * @param NewType
+     * @param FR
+     * @param ReadOnly
+     * @param Modif
+     * @return
+     * @throws PDException
+     */
 protected String GenSearchFoldForm(String Title, HttpServletRequest Req, DriverGeneric PDSession, String CurrFold, String NewType, Record FR, boolean ReadOnly, boolean Modif) throws PDException
 {
 StringBuilder Form= new StringBuilder(3000);

@@ -58,12 +58,6 @@ public String getServletInfo()
 return "TermRT Servlet";
 }
 //-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("TermRT");
-}
-//-----------------------------------------------------------------------------------------------
-
 private String GenListDoc(HttpServletRequest Req) 
 {
 StringBuilder FolderDocs=new StringBuilder(3000);

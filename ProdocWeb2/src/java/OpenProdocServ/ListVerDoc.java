@@ -44,8 +44,8 @@ public class ListVerDoc extends SParent
 /**
  *
  * @param Req
- * @param out
  * @throws Exception
+     * @throws java.io.IOException
  */
 @Override
 protected void processRequest(HttpServletRequest Req, HttpServletResponse response) throws ServletException, IOException
@@ -131,11 +131,6 @@ out.close();
 public String getServletInfo()
 {
 return "ListVerDoc Servlet";
-}
-//-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("ListVerDoc");
 }
 //-----------------------------------------------------------------------------------------------
 }

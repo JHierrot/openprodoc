@@ -43,8 +43,7 @@ public class ImportThesF extends SParent
 //-----------------------------------------------------------------------------------------------
 /**
  *
- * @param Req 
- * @param response
+ * @param Req
  * @throws Exception
  */
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
@@ -105,11 +104,6 @@ else
 public String getServletInfo()
 {
 return "ImportThesF Servlet";
-}
-//-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("ImportThesF");
 }
 //-----------------------------------------------------------------------------------------------
 }

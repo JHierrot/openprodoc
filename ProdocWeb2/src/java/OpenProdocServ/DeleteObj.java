@@ -41,14 +41,17 @@ import prodoc.Record;
  */
 public class DeleteObj extends SParent
 {
+/**
+ *
+ */
 public static final String[] LTyp={"Integer", "Float", "String", "Date", "Boolean", "TimeStamp", "Thesaur"};
-
 //-----------------------------------------------------------------------------------------------
 /**
  *
  * @param Req
  * @param out
- * @throws Exception
+     * @throws javax.servlet.ServletException
+     * @throws java.io.IOException
  */
 @Override
 protected void processRequest(HttpServletRequest Req, HttpServletResponse response) throws ServletException, IOException
@@ -90,11 +93,6 @@ out.close();
 public String getServletInfo()
 {
 return "DeleteObj Servlet";
-}
-//-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("DeleteObj");
 }
 //-----------------------------------------------------------------------------------------------
 }

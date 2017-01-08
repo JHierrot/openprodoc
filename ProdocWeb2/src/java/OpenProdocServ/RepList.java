@@ -60,12 +60,6 @@ public String getServletInfo()
 return "RepList Servlet";
 }
 //-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("RepList");
-}
-//-----------------------------------------------------------------------------------------------
-
 private String GenListDoc(HttpServletRequest Req) 
 {
 StringBuilder FolderDocs=new StringBuilder(3000);

@@ -41,6 +41,8 @@ public class ElemExport extends SParent
 /**
  *
  * @param Req
+     * @throws javax.servlet.ServletException
+     * @throws java.io.IOException
  */
 @Override
 protected void processRequest(HttpServletRequest Req, HttpServletResponse response) throws ServletException, IOException
@@ -93,11 +95,6 @@ out.close();
 public String getServletInfo()
 {
 return "ElemExport Servlet";
-}
-//-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("ElemExport");
 }
 //-----------------------------------------------------------------------------------------------
 }

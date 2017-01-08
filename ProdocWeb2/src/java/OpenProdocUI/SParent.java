@@ -257,15 +257,6 @@ return "Servlet Base del resto de aplicacion";
 //-----------------------------------------------------------------------------------------------
 /**
  * 
- * @return
- */
-static public String getUrlServlet()
-{
-return("SParent");
-}
-//----------------------------------------------------------
-/**
- * 
  * @param Req
  * @param Text
  * @return

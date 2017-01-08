@@ -37,6 +37,8 @@ private static final String RESULT_UPFILE="RESULT_UPFILE";
 /**
  *
  * @param Req
+     * @throws javax.servlet.ServletException
+     * @throws java.io.IOException
  */
 @Override
 protected void processRequest(HttpServletRequest Req, HttpServletResponse response) throws ServletException, IOException
@@ -59,12 +61,26 @@ out.close();
         }
 }
 //-----------------------------------------------------------------------------------------------
+
+    /**
+     *
+     * @param Req
+     * @param Result
+     * @return
+     */
 protected static String SetResultOk(HttpServletRequest Req, String Result) 
 {
 Req.getSession().setAttribute(RESULT_UPFILE, Result);
 return("{state: true, name:'"+Result+"'}");
 }
 //-----------------------------------------------------------------------------------------------
+
+    /**
+     *
+     * @param Req
+     * @param Result
+     * @return
+     */
 protected static String SetResultKo(HttpServletRequest Req, String Result) 
 {
 Req.getSession().setAttribute(RESULT_UPFILE, Result);
@@ -79,11 +95,6 @@ return("{state: false, name:'"+Result+"'}");
 public String getServletInfo()
 {
 return "UpFileStatus Servlet";
-}
-//-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("UpFileStatus");
 }
 //-----------------------------------------------------------------------------------------------
 }

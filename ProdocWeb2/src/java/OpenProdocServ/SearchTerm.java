@@ -110,11 +110,6 @@ public String getServletInfo()
 {
 return "SearchTerm Servlet";
 }
-//-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("SearchTerm");
-}
 //----------------------------------------------------------------------------
 private String GenerateSearchTermForm(HttpServletRequest Req, DriverGeneric PDSession, PDThesaur TmpTerm, String CurrTerm, String idThesaur) throws PDException
 {

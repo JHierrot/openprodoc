@@ -56,20 +56,62 @@ import prodoc.Record;
  */
 public class ListElem extends SParent
 {
-public static final String MANTACL="ACL";
-public static final String MANTGROUPS="Groups";
-public static final String MANTUSERS="Users";
-public static final String MANTROLES="Roles";
-public static final String MANTMIME="MimeTypes";
-public static final String MANTREPO="Repositories";
-public static final String MANTOBJ="ObjDef";
-public static final String MANTAUTH="Authenticators";
-public static final String MANTCUST="Customizations";
-public static final String MANTTASKCRON="TaskCron";
-public static final String MANTTASKEVENT="TaskEvents";
-public static final String MANTPENDTASK="PendTaskLog";
-public static final String MANTTASKENDED="EndTaskLogs";
-public static final String MANTTRACELOG="TraceLogs";
+    /**
+     *
+     */
+    public static final String MANTACL="ACL";
+    /**
+     *
+     */
+    public static final String MANTGROUPS="Groups";
+    /**
+     *
+     */
+    public static final String MANTUSERS="Users";
+    /**
+     *
+     */
+    public static final String MANTROLES="Roles";
+    /**
+     *
+     */
+    public static final String MANTMIME="MimeTypes";
+    /**
+     *
+     */
+    public static final String MANTREPO="Repositories";
+    /**
+     *
+     */
+    public static final String MANTOBJ="ObjDef";
+    /**
+     *
+     */
+    public static final String MANTAUTH="Authenticators";
+    /**
+     *
+     */
+    public static final String MANTCUST="Customizations";
+    /**
+     *
+     */
+    public static final String MANTTASKCRON="TaskCron";
+    /**
+     *
+     */
+    public static final String MANTTASKEVENT="TaskEvents";
+    /**
+     *
+     */
+    public static final String MANTPENDTASK="PendTaskLog";
+    /**
+     *
+     */
+    public static final String MANTTASKENDED="EndTaskLogs";
+    /**
+     *
+     */
+    public static final String MANTTRACELOG="TraceLogs";
 
 //-----------------------------------------------------------------------------------------------
 /**
@@ -165,10 +207,14 @@ else
 if (ElemType.equals(MANTTASKENDED) || ElemType.equals(MANTPENDTASK) || ElemType.equals(MANTTRACELOG) )
     {
     Conditions Conds=new Conditions();
-    String Category=Req.getParameter("Category");
+    String Category=Req.getParameter("Cat");
     if (Category!=null && Category.length()!=0)
         {
-        Condition C=new Condition(PDTasksDef.fCATEGORY, Condition.cEQUAL, Category);    
+        Condition C;
+        if (ElemType.equals(MANTTRACELOG) )         
+            C=new Condition(PDTrace.fOBJECTTYPE, Condition.cEQUAL, Category);    
+        else
+            C=new Condition(PDTasksDef.fCATEGORY, Condition.cEQUAL, Category);    
         Conds.addCondition(C);
         }
     String Fec1=Req.getParameter("Fec1");
@@ -187,7 +233,7 @@ if (ElemType.equals(MANTTASKENDED) || ElemType.equals(MANTPENDTASK) || ElemType.
         {    
         Attribute AttrF2=AttrF1.Copy();
         AttrF2.setValue(new Date(Long.parseLong(Fec2)));
-        Condition C2=new Condition(AttrF2, Condition.cGET);  
+        Condition C2=new Condition(AttrF2, Condition.cLET);  
         Conds.addCondition(C2);
         }
     if (ElemType.equals(MANTPENDTASK)  )
@@ -260,11 +306,15 @@ public String getServletInfo()
 return "ListElem Servlet";
 }
 //-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("ListElem");
-}
-//-----------------------------------------------------------------------------------------------
+
+    /**
+     *
+     * @param ElemType
+     * @param PDSession
+     * @param Id
+     * @return
+     * @throws PDException
+     */
 static public ObjPD GenObj(String ElemType, DriverGeneric PDSession, String Id) throws PDException
 {   
 ObjPD Obj=null;

@@ -39,6 +39,7 @@ public class Login extends SParent
 /**
  *
  * @param Req
+     * @throws java.io.IOException
  */
 @Override
 protected void processRequest(HttpServletRequest Req, HttpServletResponse response) throws IOException
@@ -73,11 +74,6 @@ out.println(new FMain(Sess).toHtml());
 public String getServletInfo()
 {
 return "Login Servlet";
-}
-//-----------------------------------------------------------------------------------------------
-static public String getUrlServlet()
-{
-return("Login");
 }
 //-----------------------------------------------------------------------------------------------
 }
