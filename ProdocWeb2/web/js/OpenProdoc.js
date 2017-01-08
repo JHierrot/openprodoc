@@ -2001,8 +2001,6 @@ for (var i=0; i<ListId.length; i++)
 //------------------------------------------------------------
 function Admin(TypeElem)
 {
-//if (WinListElem!=null && WinListElem.isOnTop())
-//   WinListElem.close(); 
 WinListElem=myWins.createWindow({
 id:"Admin",
 left:20,
@@ -2029,6 +2027,8 @@ GridResults = b.attachGrid();
 GridResults.load("ListElem?TE="+TypeElem);
 GridResults.setSizes();
 FiltExp="";
+if (TypeElem==ELEMTASKEND)
+   GridResults.enableMultiselect(true);
 formFilter.attachEvent("onButtonClick",  function(name)
     {
     RefreshAdminGrid(TypeElem, formFilter, "");    
@@ -2047,8 +2047,14 @@ if (TypeElem!=ELEMPENDTASK && TypeElem!=ELEMTASKEND && TypeElem!=ELEMTRACELOGS)
 else if ( TypeElem==ELEMTASKEND)
     {
     ToolBar.addButton(EOPERRELAUN, 0, "Relaunch", "img/relaunch.png", "img/relaunch.png"); 
-    ToolBar.addButton(EOPEREXPCSV, 1, "ExportCSV", "img/expCSV.png", "img/expCSV.png");
+    ToolBar.addButton(EOPERDEL, 1, T_DEL, "img/del.png", "img/del.png");
+    ToolBar.addButton(EOPEREXPCSV, 2, "ExportCSV", "img/expCSV.png", "img/expCSV.png");
     }    
+else if ( TypeElem==ELEMTRACELOGS)
+    {
+    ToolBar.addButton(EOPERDEL, 0, T_DEL, "img/del.png", "img/del.png");    
+    ToolBar.addButton(EOPEREXPCSV, 1, "ExportCSV", "img/expCSV.png", "img/expCSV.png");    
+    }
 else
     ToolBar.addButton(EOPEREXPCSV, 0, "ExportCSV", "img/expCSV.png", "img/expCSV.png");    
 ToolBar.attachEvent("onClick", function(Oper)
@@ -2062,7 +2068,8 @@ ToolBar.attachEvent("onClick", function(Oper)
             var nodes = xml.getElementsByTagName("status");
             alert(nodes[0].textContent);                                       
             });  
-    else if (GridResults.getSelectedRowId()!=null || Oper==EOPERNEW || Oper==EOPEREXA || Oper==EOPERIMP)     
+    else if (GridResults.getSelectedRowId()!=null || Oper==EOPERNEW || Oper==EOPEREXA || Oper==EOPERIMP 
+            || Oper== EOPERDEL && TypeElem==ELEMTRACELOGS )     
         {
         if (Oper==EOPERNEW)  
             {
@@ -2077,7 +2084,14 @@ ToolBar.attachEvent("onClick", function(Oper)
         else if (Oper==EOPERMOD)
             ElemMod(TypeElem, GridResults.getSelectedRowId());
         else if (Oper==EOPERDEL)
-            ElemDel(TypeElem, GridResults.getSelectedRowId());
+            {
+            if (TypeElem==ELEMTASKEND)    
+                ElemDelTaskEnd(TypeElem, GridResults.getSelectedRowId());
+            else if (TypeElem==ELEMTRACELOGS)    
+                ElemDelLogs(TypeElem, formFilter);
+            else
+                ElemDel(TypeElem, GridResults.getSelectedRowId());
+            }
         else if (Oper==EOPERCOP)
             ElemCopy(TypeElem, GridResults.getSelectedRowId());
         else if (Oper==EOPEREXP)
@@ -2393,8 +2407,44 @@ FormElem.attachEvent("onButtonClick", function (name)
              );       
 }
 //------------------------------------------------------------
-function ElemDel(TypeElem, ElemId)
+function ElemDelLogs(TypeElem, formFilter)
 {
+var Cat="";    
+Cat=formFilter.getItemValue("DocType");
+var Fec1=formFilter.getItemValue("Fec1");
+if (Fec1!=null && Fec1!="")
+    Fec1=Fec1.getTime();
+else
+    Fec1="";
+var Fec2=formFilter.getItemValue("Fec2");
+if (Fec2!=null && Fec2!="")
+    Fec2=Fec2.getTime();
+else
+    Fec2="";
+window.dhx4.ajax.get("DelLogs?Cat="+Cat+"&Fec1="+Fec1+"&Fec2="+Fec2, function(r)
+    {
+    var xml = r.xmlDoc.responseXML;
+    var nodes = xml.getElementsByTagName("status");
+    if (nodes[0].textContent!="")
+        alert(nodes[0].textContent);
+    GridResults.load("ListElem?TE="+TypeElem+"&F="+FiltExp);
+    });
+}
+//------------------------------------------------------------
+function ElemDelTaskEnd(TypeElem, ElemId)
+{
+window.dhx4.ajax.post("DelElem", "ElemId="+ElemId, function(r)
+    {
+    var xml = r.xmlDoc.responseXML;
+    var nodes = xml.getElementsByTagName("status");
+    if (nodes[0].textContent!="")
+        alert(nodes[0].textContent);
+    GridResults.load("ListElem?TE="+TypeElem+"&F="+FiltExp);
+    });
+}
+//------------------------------------------------------------
+function ElemDel(TypeElem, ElemId)
+{    
 CreateWin(TypeElem);
 FormElem.loadStruct("MantElem?Oper=Delete&Ty="+TypeElem+"&Id="+ElemId, function(){
     FormElem.setFocusOnFirstActive();
