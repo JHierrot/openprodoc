@@ -312,6 +312,14 @@
         <servlet-name>ImportDocRIS</servlet-name>
         <servlet-class>OpenProdocServ.ImportDocRIS</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DelElem</servlet-name>
+        <servlet-class>OpenProdocServ.DelElem</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DelLogs</servlet-name>
+        <servlet-class>OpenProdocServ.DelLogs</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SParent</servlet-name>
         <url-pattern>/SParent</url-pattern>
@@ -623,6 +631,14 @@
     <servlet-mapping>
         <servlet-name>ImportDocRIS</servlet-name>
         <url-pattern>/ImportDocRIS</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DelElem</servlet-name>
+        <url-pattern>/DelElem</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DelLogs</servlet-name>
+        <url-pattern>/DelLogs</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
