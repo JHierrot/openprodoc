@@ -816,6 +816,12 @@ if (ProdocProperRef==null)
         ProdocProperRef=f.getAbsolutePath();    
         return(ProdocProperRef);
         }
+    f=new File("conf/Prodoc.properties");
+    if (f.exists())
+        {
+        ProdocProperRef=f.getAbsolutePath();    
+        return(ProdocProperRef);
+        }
     String Path=System.getProperty("user.home");    
     try {
     Is  = new FileInputStream(Path+File.separator+"OPDWeb.properties");        

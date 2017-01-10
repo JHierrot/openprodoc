@@ -20,23 +20,17 @@
 package OpenProdocServ;
 
 import OpenProdocUI.SParent;
-import static OpenProdocUI.SParent.GetDat;
-import static OpenProdocUI.SParent.getSessOPD;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import javax.servlet.http.*;
-import prodoc.DriverGeneric;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import prodoc.Attribute;
 import prodoc.PDDocs;
 import prodoc.PDDocsRIS;
-import prodoc.PDMimeType;
-import prodoc.Record;
 
 
 /**
