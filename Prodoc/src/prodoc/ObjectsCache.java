@@ -79,7 +79,8 @@ return(CO.getContent());
  */
 public void remove(Object Key)
 {
-//System.out.println("Remove:"+Key);      
+if (Key==null)
+    return;
 CacheValues.remove(Key);    
 } 
 //----------------------------------------------------------------------------

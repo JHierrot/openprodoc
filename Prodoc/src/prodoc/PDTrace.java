@@ -19,6 +19,8 @@
 
 package prodoc;
 
+import java.util.Date;
+
 /**
  *
  * @author jhierrot
@@ -299,6 +301,49 @@ Query QBE=new Query(getTabName(), getRecordStruct(), Conds);
 if (PDLog.isDebug())
     PDLog.Debug("PDTasksDef.Search <");
 return(getDrv().OpenCursor(QBE));
+}
+//-------------------------------------------------------------------------
+public void DeleteRange(String ObjType, Date D1, Date D2) throws PDException
+{
+boolean InTransLocal;
+if (PDLog.isDebug())
+    PDLog.Debug("PDTrace.DeleteRange>");
+VerifyAllowedDel();
+InTransLocal=!getDrv().isInTransaction();
+if (InTransLocal)
+    getDrv().IniciarTrans();
+try {
+Conditions Conds=new Conditions();   
+if (ObjType!=null && ObjType.length()!=0)
+    {
+    Condition C=new Condition(PDTrace.fOBJECTTYPE, Condition.cEQUAL, ObjType);
+    Conds.addCondition(C);
+    }
+if (D1!=null)
+    { 
+    Attribute AttrF1=getRecord().getAttr(PDTasksExecEnded.fPDDATE);
+    AttrF1.setValue(D1);
+    Condition C1=new Condition(AttrF1, Condition.cGET);     
+    Conds.addCondition(C1);
+    }
+if (D2!=null)
+    { 
+    Attribute AttrF2=getRecord().getAttr(PDTasksExecEnded.fPDDATE);
+    AttrF2.setValue(D2);    
+    Condition C2=new Condition(AttrF2, Condition.cLET);  
+    Conds.addCondition(C2);    
+    }
+getDrv().DeleteRecord(getTabName(), Conds);
+getObjCache().remove(getKey());
+} catch (PDException Ex)
+    {
+    getDrv().AnularTrans();
+    throw Ex;
+    }
+if (InTransLocal)
+    getDrv().CerrarTrans();
+if (PDLog.isDebug())
+    PDLog.Debug("PDTrace.DeleteRange<");
 }
 //-------------------------------------------------------------------------
 }
