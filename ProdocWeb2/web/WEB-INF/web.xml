@@ -305,10 +305,6 @@
         <servlet-class>OpenProdocServ.ImportRIS</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ImporDocRIS</servlet-name>
-        <servlet-class>OpenProdocServ.ImporDocRIS</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>ImportDocRIS</servlet-name>
         <servlet-class>OpenProdocServ.ImportDocRIS</servlet-class>
     </servlet>
@@ -623,10 +619,6 @@
     <servlet-mapping>
         <servlet-name>ImportRIS</servlet-name>
         <url-pattern>/ImportRIS</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ImporDocRIS</servlet-name>
-        <url-pattern>/ImporDocRIS</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ImportDocRIS</servlet-name>
