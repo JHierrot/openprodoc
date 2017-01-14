@@ -17,6 +17,7 @@
     <li><b>Lista de permisos asociados a grupos</b>: La solapa de grupos contiene una lista de los permisos asociados a cada grupo. Se puede añadir, borrar o modificar los permisos asociados a un grupo por medio de los botones correspondientes.</li>
     <li><b>Lista de permisos asociados a usuarios</b>: La solapa de usuarios contiene una lista de los permisos asociados a cada usuario. Se puede añadir, borrar o modificar los permisos asociados a un usuario por medio de los botones correspondientes.</li>
 </ul>
+<p style="text-align:center;"><img alt="Copia de pantalla MantACL Web" src="img/MantACLW.png"/></p>
 <p>Durante el alta solo se puede introducir nombre y descripción. Para agregar los permisos debe modificarse posteriormente.</p>
 <p>Durante la modificación no podrá alterarse el nombre del ACL, ya que es el elemento que identifica unívocamente el mismo.</p>
 <p>Durante la baja todos los elementos estarán desactivados. Solo se presentan para que pueda verificarse la información antes de su borrado.</p>
@@ -24,11 +25,10 @@
 <p>Los permisos puede tener uno de los valores:</p>
         <ul>
             <li><b>READ</b>: Permite leer el objeto</li>
-            <li><b>CATALOG</b>: Permite modificar los metadatos del elemento</li>
-            <li><b>VERSION</b>: Permite modificar los metadatos y el documento</li>
             <li><b>UPDATE</b>: modificar los metadatos y el documento sin necesidad de crear versión</li>
             <li><b>DELETE</b>: Permite borrar el elemento</li>
         </ul>
+<p style="text-align:center;"><img alt="Screenshot MantACL Perm Web" src="img/MantACLPW.png"/></p>
 <p>Los valores son aditivos, de forma que cada uno contiene al anterior.</p>
 <p>Si un usuario o grupo no aparece en un ACL, no tendrá ningún tipo de acceso al elemento; ni siquiera lo recuperará en una consulta.
     Si un usuario aparece explícitamente con un permiso, pero pertenece a uno o más grupos a los que se ha asignado un permiso diferente, prevalece el permiso mayor.</p>

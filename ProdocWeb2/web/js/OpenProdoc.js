@@ -2734,7 +2734,7 @@ id:"WinAttr",
 left:20,
 top:30,
 width:500,
-height:450,
+height:400,
 center:true,
 modal:true,
 resize:false}); 

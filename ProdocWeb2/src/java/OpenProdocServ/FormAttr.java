@@ -49,7 +49,7 @@ if (Oper.equals("Delete"))
     ReadOnly=true;
 else
     ReadOnly=false;
-SB.append("[ {type: \"settings\", position: \"label-left\", labelWidth: 180},{type: \"label\", label: \"").append(TT(Req, "Attributes_Maintenance")).append("\"},");
+SB.append("[ {type: \"settings\", position: \"label-left\", offsetLeft:10, labelWidth: 180},{type: \"label\", label: \"").append(TT(Req, "Attributes_Maintenance")).append("\"},");
 SB.append("{type: \"input\", name: \"Name\", label: \"").append(TT(Req, "Name")).append("\",").append(ReadOnly||Oper.equalsIgnoreCase("Modif")?"readonly:1,":"").append(" required: true, inputWidth: 100, maxLength:32},");
 SB.append("{type: \"input\", name: \"UserName\", label: \"").append(TT(Req, "Visible_Name_of_attribute")).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, inputWidth: 100, maxLength:32},");
 SB.append("{type: \"input\", name: \"Descrip\", label: \"").append(TT(Req, "Description")).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, inputWidth: 250, maxLength:32},");

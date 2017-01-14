@@ -236,7 +236,7 @@ else if (Oper.equals(OPERCOPY))
     }
 else
     Title="";
-SB.append("[  {type: \"settings\", position: \"label-left\", labelWidth: 150},");
+SB.append("[  {type: \"settings\", position: \"label-left\", offsetLeft:10, labelWidth: 150},");
 SB.append("{type: \"label\", label: \"").append(Title).append("\"},");
 SB.append(getBody(Oper, Req, TypeElem, Obj, Id));
 if (TypeElem.equals(ListElem.MANTOBJ))
