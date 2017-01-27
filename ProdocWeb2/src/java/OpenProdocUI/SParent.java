@@ -1227,7 +1227,7 @@ switch (Attr.getType())
            TmpThes.Load((String)Attr.getValue());
         else
             TmpThes.setPDId("");
-        FormField.append("{type: \"block\", width: 450, list:[");
+        FormField.append("{type: \"block\", width: 500, list:[");
         FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\", labelWidth: \"auto\", readonly: \"true\",value:\"").append(TmpThes.getName()==null?"":TmpThes.getName()).append("\", tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", userdata: {ThesId:").append(Attr.getLongStr()).append("}}, ");
         FormField.append("{type: \"hidden\", name:\"TH_").append(Attr.getName()).append("\", value: \"").append(TmpThes.getPDId()).append("\"},");
         FormField.append("{type: \"newcolumn\" },");

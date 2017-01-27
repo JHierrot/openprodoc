@@ -66,6 +66,7 @@ var ELEMTASKEVENT="TaskEvents";
 var ELEMPENDTASK="PendTaskLog";
 var ELEMTASKEND="EndTaskLogs";
 var ELEMTRACELOGS="TraceLogs"
+var ELEMCUST="Customizations";
 var FiltExp="";
 var ElemTabBar;
 var EOPERNEW="New";
@@ -254,7 +255,7 @@ switch (IdMenu)
         break;
     case "Authenticators": Admin(ELEMAUTH);
         break;
-    case "Customizations": Admin("Customizations");
+    case "Customizations": Admin(ELEMCUST);
         break;
     case "TaskCron": Admin(ELEMTASKCRON);
         break;
@@ -2687,7 +2688,7 @@ else
     FormElem=WinElem.attachForm();   
 if (TypeElem==ELEMMIME)
     WinElem.setDimension(500, 250);
-else if (TypeElem==ELEMREPOS || TypeElem==ELEMAUTH)
+else if (TypeElem==ELEMREPOS || TypeElem==ELEMAUTH || TypeElem==ELEMCUST)
     WinElem.setDimension(500, 400);
 else if (TypeElem==ELEMTASKCRON || TypeElem==ELEMTASKEVENT)
         WinElem.setDimension(600, 650);
@@ -2714,8 +2715,8 @@ else if(Oper==EOPERMOD)
     if (FormElem.isItem("DeleteObj") && FormElem.isItemEnabled("DeleteObj"))
         {
         TBG.clearAll(); 
-        TBG.addButton("AddAttr", 0, "NewA", "NewA.png", "NewA.png");
-        TBG.addButton("DelAttr", 1, "DelA", "DelA.png", "DelA.png"); 
+        TBG.addButton("AddAttr", 0, "NewA", "img/add.png", "img/add.png");
+        TBG.addButton("DelAttr", 1, "DelA", "img/del.png", "img/del.png"); 
         }
     }
 TBG.attachEvent("onClick", function(OperA)  

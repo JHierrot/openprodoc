@@ -115,7 +115,7 @@ Men.append("<item id=\"file_sep_07\" type=\"separator\"/>");
     Men.append("<item id=\"ImportRIS\" text=\"").append(TT(Req, "Import_RIS")).append("\"/>");
     }
 Men.append("</item>");
-Men.append("<item id=\"Other\" text=\"Otras Tareas\">");
+Men.append("<item id=\"Other\" text=\"").append(TT(Req, "Other_Tasks")).append("\">");
 if (R.isAllowCreateDoc() && R.isAllowMaintainDoc())
     Men.append("<item id=\"TrashBin\" text=\"").append(TT(Req, "Trash_bin")).append("\" />");
 Men.append("<item id=\"PasswordChange\" text=\"").append(TT(Req, "Password_change")).append("\"/>");
