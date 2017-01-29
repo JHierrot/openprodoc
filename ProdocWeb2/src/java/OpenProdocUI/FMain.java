@@ -29,6 +29,7 @@ public class FMain
 private static final String Html="<!DOCTYPE html>\n" +
 "<html>\n" +
 "    <head>\n" +
+"        <link rel=\"shortcut icon\" href=\"img/OpenProdoc.ico\" type=\"image/x-icon\">" +       
 "        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n" +
 "        <title>OpenProdoc2 Web</title>\n" +
 "        <script src=\"js/OpenProdoc.js\" type=\"text/javascript\"></script>\n" +

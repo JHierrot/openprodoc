@@ -36,6 +36,7 @@ private static final String Html="<!DOCTYPE html>\n" +
 "        <title>OpenProdoc2 Web</title>\n" +
 "        <script src=\"js/OpenProdoc.js\" type=\"text/javascript\"></script>\n" +
 "        <script src=\"js/dhtmlx.js\" type=\"text/javascript\"></script>\n" +
+"        <link rel=\"shortcut icon\" href=\"img/OpenProdoc.ico\" type=\"image/x-icon\">" +       
 "        <link rel=\"STYLESHEET\" type=\"text/css\" href=\"js/dhtmlx.css\">\n" +
 "        <link rel=\"STYLESHEET\" type=\"text/css\" href=\"css/OpenProdoc.css\">\n" +
 "        <style>\n" +
