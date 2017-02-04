@@ -67,6 +67,7 @@ var ELEMPENDTASK="PendTaskLog";
 var ELEMTASKEND="EndTaskLogs";
 var ELEMTRACELOGS="TraceLogs"
 var ELEMCUST="Customizations";
+var ELEMUSERS="Users";
 var FiltExp="";
 var ElemTabBar;
 var EOPERNEW="New";
@@ -243,7 +244,7 @@ switch (IdMenu)
         break;
     case "Groups": Admin(ELEMGROUPS);
         break;
-    case "Users": Admin("Users");
+    case "Users": Admin(ELEMUSERS);
         break;
     case "Roles": Admin("Roles");
         break;
@@ -2186,6 +2187,16 @@ FormElem.attachEvent("onChange", function(name, value, is_checked){
         {
         if (name=="TaskType") 
             {
+            if (value==3)    
+                {
+                FormElem.disableItem("TTEST");
+                FormElem.disableItem("TRUN");
+                }
+            else    
+                {
+                FormElem.enableItem("TTEST");
+                FormElem.enableItem("TRUN");
+                }
             if (value==1 ||value==2 ||value==5 )
                 {
                 FormElem.hideItem(COMBOFOLDER);
@@ -2288,7 +2299,32 @@ FormWiz.attachEvent("onButtonClick", function (name)
 //------------------------------------------------------------
 function ShowTest(FormEl, TypeElem, TaskType)
 {
-    
+var WinWizard=myWins.createWindow({
+id:"WinWizard",
+left:20,
+top:30,
+width:500,
+height:260,
+center:true,
+modal:true,
+resize:true});  
+WinWizard.setText("Test:"+TypeElem);    
+var GridWiz=WinWizard.attachGrid(); 
+var Fec1=FormEl.getItemValue("NextDate");
+if (Fec1!=null && Fec1!="")
+    Fec1=Fec1.getTime();
+else
+    Fec1="";
+GridWiz.load("TestProcess?T1="+FormEl.getItemValue("TaskParam")
+        +"&T2="+FormEl.getItemValue("TaskParam2")
+        +"&T3="+FormEl.getItemValue("TaskParam3")
+        +"&T4="+FormEl.getItemValue("TaskParam4")
+        +"&Task="+FormEl.getItemValue("TaskType")
+        +"&Filter="+FormEl.getItemValue("ObjFilter")
+        +"&Item="+FormEl.getItemValue("ObjType")
+        +"&Item2="+FormEl.getItemValue("ObjType2")
+        +"&NextDate="+Fec1
+        );
 }
 //------------------------------------------------------------
 function RunTask(FormEl, TypeElem, TaskType)
@@ -2360,6 +2396,50 @@ FormElem.loadStruct("MantElem?Oper=Modif&Ty="+TypeElem+"&Id="+ElemId, function()
     CompleteForm(EOPERMOD, TypeElem);    
     });
 FormElem.enableLiveValidation(true);    
+FormElem.attachEvent("onChange", function(name, value, is_checked){
+    if (TypeElem==ELEMTASKCRON)
+        {
+        if (name=="TaskType") 
+            {
+            if (value==3)    
+                {
+                FormElem.disableItem("TTEST");
+                FormElem.disableItem("TRUN");
+                }
+            else    
+                {
+                FormElem.enableItem("TTEST");
+                FormElem.enableItem("TRUN");
+                }
+            if (value==1 ||value==2 ||value==5 )
+                {
+                FormElem.hideItem(COMBOFOLDER);
+                FormElem.showItem(COMBODOCS);
+                }
+            else
+                {
+                FormElem.hideItem(COMBODOCS);
+                FormElem.showItem(COMBOFOLDER);                
+                }
+            }
+        }
+    else if (TypeElem==ELEMTASKEVENT)
+        {
+        if (name=="TaskType") 
+            {
+            if (value==200 || value==202 || value==204 || value==206|| value==207|| value==208|| value==209 )
+                {
+                FormElem.hideItem(COMBOFOLDER);
+                FormElem.showItem(COMBODOCS);
+                }
+            else
+                {
+                FormElem.hideItem(COMBODOCS);
+                FormElem.showItem(COMBOFOLDER);                
+                }
+            }
+        }
+    }); 
 FormElem.attachEvent("onButtonClick", function (name)
     {if (name==OK || name=="CreateObj" || name=="DeleteObj" )
         {    
@@ -2488,6 +2568,16 @@ FormElem.attachEvent("onChange", function(name, value, is_checked){
         {
         if (name=="TaskType") 
             {
+            if (value==3)    
+                {
+                FormElem.disableItem("TTEST");
+                FormElem.disableItem("TRUN");
+                }
+            else    
+                {
+                FormElem.enableItem("TTEST");
+                FormElem.enableItem("TRUN");
+                }
             if (value==1 ||value==2 ||value==5 )
                 {
                 FormElem.hideItem(COMBOFOLDER);
@@ -2688,10 +2778,13 @@ else
     FormElem=WinElem.attachForm();   
 if (TypeElem==ELEMMIME)
     WinElem.setDimension(500, 250);
-else if (TypeElem==ELEMREPOS || TypeElem==ELEMAUTH || TypeElem==ELEMCUST)
+else if (TypeElem==ELEMREPOS || TypeElem==ELEMAUTH || TypeElem==ELEMCUST || TypeElem==ELEMUSERS )
     WinElem.setDimension(500, 400);
-else if (TypeElem==ELEMTASKCRON || TypeElem==ELEMTASKEVENT)
-        WinElem.setDimension(600, 650);
+else if (TypeElem==ELEMTASKCRON)
+        WinElem.setDimension(600, 660);
+else if (TypeElem==ELEMTASKEVENT)
+        WinElem.setDimension(600, 580);
+WinElem.center();
 }
 //--------------------------------------------------------------
 function CompleteForm(Oper, TypeElem)

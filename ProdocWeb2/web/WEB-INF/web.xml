@@ -316,6 +316,10 @@
         <servlet-name>DelLogs</servlet-name>
         <servlet-class>OpenProdocServ.DelLogs</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TestProcess</servlet-name>
+        <servlet-class>OpenProdocServ.TestProcess</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SParent</servlet-name>
         <url-pattern>/SParent</url-pattern>
@@ -631,6 +635,10 @@
     <servlet-mapping>
         <servlet-name>DelLogs</servlet-name>
         <url-pattern>/DelLogs</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TestProcess</servlet-name>
+        <url-pattern>/TestProcess</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -1364,6 +1364,11 @@ return(Head.toString());
 //----------------------------------------------------------------
 public static String GenRowGrid(HttpServletRequest Req, String Id, Record NextRec, boolean IsXML)
 {
+boolean IsDoc;
+if (NextRec.ContainsAttr(PDDocs.fDOCTYPE))
+    IsDoc=true;
+else
+    IsDoc=false;
 StringBuilder Row=new StringBuilder(1000);
 Attribute Attr;
 if (IsXML)
@@ -1405,9 +1410,9 @@ while (Attr!=null)
                 Row.append("\"\",");
             }
         }
-    else if (IsXML && Attr.getName().equals(PDDocs.fTITLE))
+    else if (IsXML && IsDoc && Attr.getName().equals(PDDocs.fTITLE))
         Row.append("<cell>").append(Attr.Export()).append("^SendDoc?Id=").append(Id).append("^_blank</cell>");
-    else    //    if (!Attr.isMultivalued()) 
+    else    
         {
         if (IsXML)
             Row.append("<cell>").append(Attr.Export()).append("</cell>");

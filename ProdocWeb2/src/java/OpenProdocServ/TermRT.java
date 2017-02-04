@@ -61,7 +61,8 @@ return "TermRT Servlet";
 private String GenListDoc(HttpServletRequest Req) 
 {
 StringBuilder FolderDocs=new StringBuilder(3000);
-FolderDocs.append("<?xml version=\"1.0\" encoding=\"iso-8859-1\"?><rows>");
+// FolderDocs.append("<?xml version=\"1.0\" encoding=\"iso-8859-1\"?><rows>");
+FolderDocs.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rows>");
 DriverGeneric PDSession=getSessOPD(Req);
 String TermId=Req.getParameter("Id");
 try {

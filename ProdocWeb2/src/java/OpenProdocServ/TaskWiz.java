@@ -95,9 +95,26 @@ if (TE.equals(ListElem.MANTTASKCRON))
     StringBuilder SB=new StringBuilder(1000);
     SB.append("[ {type: \"settings\", position: \"label-left\", labelWidth: 200, inputWidth: 150},");
     SB.append("{type: \"label\", label: \"").append(listTypeTask[TT]).append("\"},");
-    SB.append("{type: \"input\", name: \"TaskParam\",  label: \"").append(ParamTexts[0]).append("\"").append(ParamTexts[0].length()==0?",hidden:true":"").append("},");
-    SB.append("{type: \"input\", name: \"TaskParam2\", label: \"").append(ParamTexts[1]).append("\"").append(ParamTexts[1].length()==0?",hidden:true":"").append("},");
-    SB.append("{type: \"input\", name: \"TaskParam3\", label: \"").append(ParamTexts[2]).append("\"").append(ParamTexts[2].length()==0?",hidden:true":"").append("},");
+    if (TT!=PDTasksDef.fTASK_PURGEDOC)
+        SB.append("{type: \"checkbox\", name: \"TaskParam\",  label: \"").append(ParamTexts[0]).append("\"").append(ParamTexts[0].length()==0?",hidden:true":"").append("},");
+    else
+        SB.append("{type: \"input\", name: \"TaskParam\",  label: \"").append(ParamTexts[0]).append("\"").append(ParamTexts[0].length()==0?",hidden:true":"").append("},");
+    if (TT==PDTasksDef.fTASK_IMPORT)
+        {
+        SB.append("{type: \"combo\", name: \"TaskParam2\", label: \"").append(ParamTexts[1]).append("\", options:[");
+        SB.append(getComboModelDoc(getSessOPD(Req), null) );
+        SB.append("]},");        
+        }
+    else  
+        SB.append("{type: \"input\", name: \"TaskParam2\", label: \"").append(ParamTexts[1]).append("\"").append(ParamTexts[1].length()==0?",hidden:true":"").append("},");
+    if (TT==PDTasksDef.fTASK_DOCSREPORT || TT==PDTasksDef.fTASK_FOLDSREPORT)
+        {
+        SB.append("{type: \"combo\", name: \"TaskParam3\", label: \"").append(ParamTexts[2]).append("\", options:[");
+        SB.append(getComboModel("Groups", getSessOPD(Req), "") );
+        SB.append("]},");        
+        }
+    else   
+        SB.append("{type: \"input\", name: \"TaskParam3\", label: \"").append(ParamTexts[2]).append("\"").append(ParamTexts[2].length()==0?",hidden:true":"").append("},");
     SB.append("{type: \"input\", name: \"TaskParam4\", label: \"").append(ParamTexts[3]).append("\"").append(ParamTexts[3].length()==0?",hidden:true":"").append("},");
     SB.append("{type: \"block\", width: 250, list:[");
     SB.append("{type: \"button\", name: \"OK\", value: \"").append(TT(Req, "Ok")).append("\"},");
@@ -108,7 +125,7 @@ if (TE.equals(ListElem.MANTTASKCRON))
     }
 else
     {
-    String[] listTypeTask = PDTasksDefEvent.getListTypeTask(); 
+    String[] listTypeTask = PDTasksDefEvent.getListTypeEventTask(); 
     String[] ParamTexts=new String[4];
     switch (TT)
         {
@@ -151,26 +168,9 @@ else
     StringBuilder SB=new StringBuilder(1000);
     SB.append("[ {type: \"settings\", position: \"label-left\", labelWidth: 200, inputWidth: 150},");
     SB.append("{type: \"label\", label: \"").append(listTypeTask[TT-PDTasksDefEvent.STARTNUM]).append("\"},");
-    if (TT!=PDTasksDef.fTASK_PURGEDOC)
-        SB.append("{type: \"checkbox\", name: \"TaskParam\",  label: \"").append(ParamTexts[0]).append("\"").append(ParamTexts[0].length()==0?",hidden:true":"").append("},");
-    else
-        SB.append("{type: \"input\", name: \"TaskParam\",  label: \"").append(ParamTexts[0]).append("\"").append(ParamTexts[0].length()==0?",hidden:true":"").append("},");
-    if (TT==PDTasksDef.fTASK_IMPORT)
-        {
-        SB.append("{type: \"combo\", name: \"TaskParam2\", label: \"").append(ParamTexts[1]).append("\", options:[");
-        SB.append(getComboModelDoc(getSessOPD(Req), null) );
-        SB.append("]},");        
-        }
-    else    
-        SB.append("{type: \"input\", name: \"TaskParam2\", label: \"").append(ParamTexts[1]).append("\"").append(ParamTexts[1].length()==0?",hidden:true":"").append("},");
-    if (TT==PDTasksDef.fTASK_DOCSREPORT || TT==PDTasksDef.fTASK_FOLDSREPORT)
-        {
-        SB.append("{type: \"combo\", name: \"TaskParam3\", label: \"").append(ParamTexts[2]).append("\", options:[");
-        SB.append(getComboModel("Groups", getSessOPD(Req), "") );
-        SB.append("]},");        
-        }
-    else    
-        SB.append("{type: \"input\", name: \"TaskParam3\", label: \"").append(ParamTexts[2]).append("\"").append(ParamTexts[2].length()==0?",hidden:true":"").append("},");
+    SB.append("{type: \"input\", name: \"TaskParam\",  label: \"").append(ParamTexts[0]).append("\"").append(ParamTexts[0].length()==0?",hidden:true":"").append("},");  
+    SB.append("{type: \"input\", name: \"TaskParam2\", label: \"").append(ParamTexts[1]).append("\"").append(ParamTexts[1].length()==0?",hidden:true":"").append("},");
+    SB.append("{type: \"input\", name: \"TaskParam3\", label: \"").append(ParamTexts[2]).append("\"").append(ParamTexts[2].length()==0?",hidden:true":"").append("},");
     SB.append("{type: \"input\", name: \"TaskParam4\", label: \"").append(ParamTexts[3]).append("\"").append(ParamTexts[3].length()==0?",hidden:true":"").append("},");
     SB.append("{type: \"block\", width: 250, list:[");
     SB.append("{type: \"button\", name: \"OK\", value: \"").append(TT(Req, "Ok")).append("\"},");
