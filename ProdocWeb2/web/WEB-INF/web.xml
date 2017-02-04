@@ -320,6 +320,10 @@
         <servlet-name>TestProcess</servlet-name>
         <servlet-class>OpenProdocServ.TestProcess</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RunProcess</servlet-name>
+        <servlet-class>OpenProdocServ.RunProcess</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SParent</servlet-name>
         <url-pattern>/SParent</url-pattern>
@@ -639,6 +643,10 @@
     <servlet-mapping>
         <servlet-name>TestProcess</servlet-name>
         <url-pattern>/TestProcess</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RunProcess</servlet-name>
+        <url-pattern>/RunProcess</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

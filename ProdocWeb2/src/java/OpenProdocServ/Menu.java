@@ -52,6 +52,7 @@ protected void processRequest(HttpServletRequest Req, HttpServletResponse respon
 response.setContentType("text/xml;charset=UTF-8");
 PrintWriter out = response.getWriter();
 out.println(genMenu(Req));
+out.close();
 }
 //-----------------------------------------------------------------------------------------------
 

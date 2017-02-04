@@ -2188,15 +2188,9 @@ FormElem.attachEvent("onChange", function(name, value, is_checked){
         if (name=="TaskType") 
             {
             if (value==3)    
-                {
                 FormElem.disableItem("TTEST");
-                FormElem.disableItem("TRUN");
-                }
             else    
-                {
                 FormElem.enableItem("TTEST");
-                FormElem.enableItem("TRUN");
-                }
             if (value==1 ||value==2 ||value==5 )
                 {
                 FormElem.hideItem(COMBOFOLDER);
@@ -2329,7 +2323,31 @@ GridWiz.load("TestProcess?T1="+FormEl.getItemValue("TaskParam")
 //------------------------------------------------------------
 function RunTask(FormEl, TypeElem, TaskType)
 {
-    
+var Fec1=FormEl.getItemValue("NextDate");
+if (Fec1!=null && Fec1!="")
+    Fec1=Fec1.getTime();
+else
+    Fec1="";    
+var Url="RunProcess?T1="+FormEl.getItemValue("TaskParam")
+        +"&T2="+FormEl.getItemValue("TaskParam2")
+        +"&T3="+FormEl.getItemValue("TaskParam3")
+        +"&T4="+FormEl.getItemValue("TaskParam4")
+        +"&Task="+FormEl.getItemValue("TaskType")
+        +"&Filter="+FormEl.getItemValue("ObjFilter")
+        +"&Item="+FormEl.getItemValue("ObjType")
+        +"&Item2="+FormEl.getItemValue("ObjType2")
+        +"&NextDate="+Fec1;    
+dhtmlx.confirm(LocaleTrans("Do_you_really_want_to_execute_the_task")+"? ("
+            +LocaleTrans("Beware_that_several_elements_can_be_altered_or_deleted")+")", function(result)
+    {    
+    if (result==true)   
+        {
+        var r=window.dhx4.ajax.getSync(Url);
+        var xml = r.xmlDoc.responseXML;
+        var nodes = xml.getElementsByTagName("status");
+        alert(nodes[0].textContent);                                   
+        }
+    });
 }
 //------------------------------------------------------------
 function FillHideFields(TypeElem)
@@ -2402,15 +2420,9 @@ FormElem.attachEvent("onChange", function(name, value, is_checked){
         if (name=="TaskType") 
             {
             if (value==3)    
-                {
                 FormElem.disableItem("TTEST");
-                FormElem.disableItem("TRUN");
-                }
             else    
-                {
                 FormElem.enableItem("TTEST");
-                FormElem.enableItem("TRUN");
-                }
             if (value==1 ||value==2 ||value==5 )
                 {
                 FormElem.hideItem(COMBOFOLDER);
@@ -2569,15 +2581,9 @@ FormElem.attachEvent("onChange", function(name, value, is_checked){
         if (name=="TaskType") 
             {
             if (value==3)    
-                {
                 FormElem.disableItem("TTEST");
-                FormElem.disableItem("TRUN");
-                }
             else    
-                {
                 FormElem.enableItem("TTEST");
-                FormElem.enableItem("TRUN");
-                }
             if (value==1 ||value==2 ||value==5 )
                 {
                 FormElem.hideItem(COMBOFOLDER);

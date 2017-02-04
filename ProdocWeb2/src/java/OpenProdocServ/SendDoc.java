@@ -107,8 +107,11 @@ else
         doc.getStream(out);
     } catch (Exception e)
         {
-        out.close();
         throw e;
+        }
+    finally
+        {
+        out.close();        
         }
     }
 }

@@ -99,18 +99,10 @@ while (NextDel!=null)
     {
     String Id=(String)NextDel.getAttr(PDDocs.fPDID).getValue()+"|";
     Id+=(String)NextDel.getAttr(PDDocs.fDOCTYPE).getValue();
-//    VersionsData.append(SParent.GenRowGrid(Req, Id, NextDel, false));    
     Rec.assign(NextDel);
     Resp.append(SParent.GenRowGrid(Req, Id, Rec, true));    
     NextDel=PDSession.NextRec(ListDel);
-//    if (NextDel!=null)
-//        VersionsData.append(",");
     }
-//VersionsData.append("] };");
-//Resp.append("<LV>").append(Head).append("</LV>");       
-//Resp.append("<LV>").append(Edit).append("</LV>");       
-//Resp.append("<LV>").append(Type).append("</LV>");           
-//Resp.append("<LV>").append(VersionsData).append("</LV></row>");
 Resp.append("</rows>");
 } catch (PDException ex)
     {
