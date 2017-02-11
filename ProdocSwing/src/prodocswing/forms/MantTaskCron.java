@@ -625,6 +625,9 @@ switch (TypeComboBox.getSelectedIndex())
     case PDTasksDef.fTASK_IMPORT: ObjTypeComboBox.setModel(getListObjFold());  
         ButtonTest.setEnabled(false);
         break;
+    case PDTasksDef.fTASK_LOCALSYNC: ObjTypeComboBox.setModel(getListObjFold());  
+        ButtonTest.setEnabled(false);
+        break;
     case PDTasksDef.fTASK_DOCSREPORT: ObjTypeComboBox.setModel(getListObjDoc());
         break;
     case PDTasksDef.fTASK_FOLDSREPORT: ObjTypeComboBox.setModel(getListObjFold());

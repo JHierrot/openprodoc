@@ -2191,7 +2191,7 @@ FormElem.attachEvent("onChange", function(name, value, is_checked){
         {
         if (name=="TaskType") 
             {
-            if (value==3)    
+            if (value==3 || value==7)    
                 FormElem.disableItem("TTEST");
             else    
                 FormElem.enableItem("TTEST");
@@ -2423,7 +2423,7 @@ FormElem.attachEvent("onChange", function(name, value, is_checked){
         {
         if (name=="TaskType") 
             {
-            if (value==3)    
+            if (value==3 || value==7)    
                 FormElem.disableItem("TTEST");
             else    
                 FormElem.enableItem("TTEST");
@@ -2584,7 +2584,7 @@ FormElem.attachEvent("onChange", function(name, value, is_checked){
         {
         if (name=="TaskType") 
             {
-            if (value==3)    
+            if (value==3 || value==7)    
                 FormElem.disableItem("TTEST");
             else    
                 FormElem.enableItem("TTEST");

@@ -520,7 +520,7 @@ while (Res!=null)
         }
     Res=getDrv().NextRec(listContainedDocs);
     }
-
+getDrv().CloseCursor(listContainedDocs);
 for (File ListElement : ListOrigin)
     {
     if (ListElement==null) // deleted by double reference opd + doc
