@@ -539,11 +539,14 @@ return Name;
 }
 //-------------------------------------------------------------------------
 /**
-* @param Name the Name to set
+* @param pName the Name to set
 */
-public void setName(String Name)
+public void setName(String pName)
 {
-this.Name = Name;
+if (pName==null)
+    Name=null;
+else
+    Name = pName.trim().replace('\\', '/');
 }
 //-------------------------------------------------------------------------
 /**
@@ -1987,7 +1990,7 @@ PDDocs D2U=new PDDocs(getDrv(), DocTypename);
 Conditions Cond=new Conditions();
 Cond.addCondition(new Condition(fPDID, Condition.cEQUAL, Id));
 Cond.addCondition(new Condition(fSTATUS, Condition.cEQUAL, fSTATUS_LASTDEL));
-Query LoadAct=new Query(getTabNameVer(DocTypename), D2U.getRecSum(), Cond, null);
+Query LoadAct=new Query(getTabNameVer(DocTypename), D2U.getRecSum().CopyMono(), Cond, null);
 Cursor Cur=getDrv().OpenCursor(LoadAct);
 Record Rec=getDrv().NextRec(Cur);
 getDrv().CloseCursor(Cur);
