@@ -570,7 +570,9 @@ else if (ElemType.equals(ListElem.MANTOBJ))
     else
         SB.append("{type: \"hidden\", name:\"").append(Attr.getName()).append("\", value: \"").append(Attr.getValue()).append("\"},");
     Attr=Rec.getAttr(PDObjDefs.fCREATED);
-    SB.append("{type: \"hidden\", name:\"").append(Attr.getName()).append("\", value: \"").append(Attr.getValue()).append("\"},");
+    if (Oper.equals(OPERNEW) || Oper.equals(OPERCOPY))
+        Attr.setValue(false);
+    SB.append("{type: \"hidden\", name:\"").append(Attr.getName()).append("\", value: \"").append( (Attr.getValue()!=null&&(Boolean)Attr.getValue()==true)?"1":"0").append("\"},");
     SB.append("{type: \"hidden\", name:\"ATTRS\", value: \"\"}");
     SB.append("]},");
     }

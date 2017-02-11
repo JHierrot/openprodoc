@@ -20,6 +20,7 @@
 package OpenProdocServ;
 
 import OpenProdocUI.SParent;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.*;
@@ -33,6 +34,7 @@ import prodoc.PDMimeType;
  */
 public class SendDoc extends SParent
 {
+static final int TAMBUFF=1024*64;    
 /** Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
  * Diferent from Sparent because ContentType, OutputStream vs Printwriter ...
  * @param request servlet request
@@ -82,15 +84,49 @@ else
     }
 if (doc.IsUrl())
     {
-    PrintWriter out = response.getWriter();
-    HttpSession Sess=Req.getSession(true);
-    String HeadRefresh="<META http-equiv=\"refresh\" content=\"0; URL=";    
+    String UrlTmp;    
     if (Ver!=null && Ver.length()!=0)
-        HeadRefresh+=doc.getUrlVer(Ver) +"\">";    
+        UrlTmp=doc.getUrlVer(Ver);    
     else
-        HeadRefresh+=doc.getUrl() +"\">";            
-    out.println("<!DOCTYPE html><head><head>"+HeadRefresh+"</head><html><body>Opening.....</body></html>");
-    out.close();
+        UrlTmp=doc.getUrl();   
+    if (UrlTmp.substring(0,4).equalsIgnoreCase("http"))
+        {
+        PrintWriter out = response.getWriter();
+        String HeadRefresh="<META http-equiv=\"refresh\" content=\"0; URL="+UrlTmp +"\">";                
+        out.println("<!DOCTYPE html><head><head>"+HeadRefresh+"</head><html><body>Opening.....</body></html>");
+        out.close();
+        }
+    else
+        {
+        ServletOutputStream out=response.getOutputStream();
+        PDMimeType mt=new PDMimeType(getSessOPD(Req));
+        mt.Load(doc.getMimeType());
+        response.setContentType(mt.getMimeCode());
+        response.setHeader("Content-disposition", "inline; filename=" + doc.getName());
+        response.setCharacterEncoding("UTF-8"); // just for text family docs
+        FileInputStream Is=null;
+        byte Buffer[]=new byte[TAMBUFF];
+        try {
+        Is=new FileInputStream(UrlTmp);
+        int readed=Is.read(Buffer);
+        while (readed!=-1)
+            {
+            out.write(Buffer, 0, readed);
+            readed=Is.read(Buffer);
+            }
+        Is.close();
+        out.flush();
+        } catch (Exception e)
+            {
+            throw e;
+            }
+        finally
+            {
+            if (Is!=null)    
+                Is.close();    
+            out.close();        
+            }        
+        }
     }
 else
     {

@@ -2059,6 +2059,10 @@ else if ( TypeElem==ELEMTRACELOGS)
     }
 else
     ToolBar.addButton(EOPEREXPCSV, 0, "ExportCSV", "img/expCSV.png", "img/expCSV.png");    
+GridResults.attachEvent("onRowDblClicked", function(rId,cInd){
+    GridResults.selectRow(rId);
+    ElemMod(TypeElem, GridResults.getSelectedRowId());
+});
 ToolBar.attachEvent("onClick", function(Oper)
     {  
     if (Oper==EOPEREXPCSV)    
@@ -2834,7 +2838,7 @@ id:"WinAttr",
 left:20,
 top:30,
 width:500,
-height:400,
+height:420,
 center:true,
 modal:true,
 resize:false}); 

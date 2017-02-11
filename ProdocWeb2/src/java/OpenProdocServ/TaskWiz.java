@@ -23,8 +23,6 @@ import OpenProdocUI.SParent;
 import static OpenProdocUI.SParent.TT;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
-import prodoc.DriverGeneric;
-import prodoc.PDException;
 import prodoc.PDTasksCron;
 import prodoc.PDTasksDef;
 import prodoc.PDTasksDefEvent;
@@ -68,6 +66,7 @@ if (TE.equals(ListElem.MANTTASKCRON))
             ParamTexts[3]="";
             break;
         case PDTasksDef.fTASK_IMPORT:
+        case PDTasksDef.fTASK_LOCALSYNC:
             ParamTexts[0]=TT(Req, "SubFolders");
             ParamTexts[1]=TT(Req, "Default_Docs_Type");
             ParamTexts[2]=TT(Req, "Parent_Folder");
@@ -99,7 +98,7 @@ if (TE.equals(ListElem.MANTTASKCRON))
         SB.append("{type: \"checkbox\", name: \"TaskParam\",  label: \"").append(ParamTexts[0]).append("\"").append(ParamTexts[0].length()==0?",hidden:true":"").append("},");
     else
         SB.append("{type: \"input\", name: \"TaskParam\",  label: \"").append(ParamTexts[0]).append("\"").append(ParamTexts[0].length()==0?",hidden:true":"").append("},");
-    if (TT==PDTasksDef.fTASK_IMPORT)
+    if (TT==PDTasksDef.fTASK_IMPORT || TT==PDTasksDef.fTASK_LOCALSYNC)
         {
         SB.append("{type: \"combo\", name: \"TaskParam2\", label: \"").append(ParamTexts[1]).append("\", options:[");
         SB.append(getComboModelDoc(getSessOPD(Req), null) );

@@ -27,8 +27,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import prodoc.DriverGeneric;
-import prodoc.PDDocs;
-import prodoc.PDFolders;
 import prodoc.PDTasksDef;
 import prodoc.PDTasksExec;
 
@@ -74,7 +72,8 @@ PDTasksExec TC=new PDTasksExec(PDSession);
 if ( Task==PDTasksDef.fTASK_DELETE_OLD_FOLD 
    || Task==PDTasksDef.fTASK_IMPORT
    || Task==PDTasksDef.fTASK_EXPORT
-   || Task==PDTasksDef.fTASK_FOLDSREPORT )
+   || Task==PDTasksDef.fTASK_FOLDSREPORT 
+   || Task==PDTasksDef.fTASK_LOCALSYNC )
     {
     TC.setObjType(ItemFold);    
     }

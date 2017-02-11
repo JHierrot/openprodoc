@@ -2796,7 +2796,6 @@ FTConn.Connect();
 PDRepository Rep1=new PDRepository(getDrv());
 Rep1.Load(getReposit());
 if (!Rep1.IsRef())
-//if (!Rep.IsURL())
     {
     Rep.Connect();
     Is=Rep.Retrieve(getPDId(), getVersion());
@@ -2805,7 +2804,16 @@ if (!Rep1.IsRef())
     Rep.Disconnect();
     }
 else
-    FTConn.Insert(getDocType(), getPDId(), null, getRecSum());
+    {
+    try {
+    Is=new FileInputStream(getName());    
+    FTConn.Insert(getDocType(), getPDId(), Is, getRecSum()); 
+    Is.close();
+    } catch (Exception Ex)
+        { // Metadata Alone
+        FTConn.Insert(getDocType(), getPDId(), null, getRecSum());        
+        }
+    }
 FTConn.Disconnect();
 } catch (Exception Ex)
     {

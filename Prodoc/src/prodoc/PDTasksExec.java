@@ -24,6 +24,9 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 
 /**
@@ -298,6 +301,11 @@ switch (getType())
         break;
     case fTASK_FOLDSREPORT: FoldsReport();
         break;
+    case fTASK_LOCALSYNC: 
+        PDFolders F=new PDFolders(getDrv());
+        String IdFold=F.getIdPath(getParam3());
+        LocalSync(getParam2(), IdFold, getParam4(), getParam()!=null && getParam().equals("1"));
+        break;
     case PDTasksDefEvent.fTASKEVENT_UPDATE_FOLD: ExecuteUpdFold();
         break;
     case PDTasksDefEvent.fTASKEVENT_COPY_FOLD: ExecuteCopyFold();
@@ -394,7 +402,7 @@ if (PDLog.isDebug())
     PDLog.Debug("PDTasksExec.Import >"+getPDId());
 File ImpFold=new File(Path);
 File []ListOrigin=ImpFold.listFiles();
-ArrayList DirList=new ArrayList(5);
+ArrayList DirList=new ArrayList(10);
 for (int i = 0; i < ListOrigin.length; i++) // first only folders and opd files to avouid double insert
     {
     File ListElement = ListOrigin[i];
@@ -438,12 +446,146 @@ if (Recursive)
         File SubDir = (File) DirList.get(i);
         PDFolders f=new PDFolders(getDrv(), getObjType());
         f.setTitle(SubDir.getName());
+        f.setParentId(ParentId);
         f.insert();
         Import(DefDocType, f.getPDId(), SubDir.getAbsolutePath(), Recursive);    
         }
     }
 if (PDLog.isDebug())
     PDLog.Debug("PDTasksExec.Import <"+getPDId());
+}
+//-------------------------------------------------------------------------
+/**
+ * Imports O.S. folders into OpenProdoc repository
+ * @throws PDException 
+ */
+private void LocalSync(String DefDocType, String ParentId, String Path, boolean Recursive) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksExec.LocalSync >"+getPDId());
+File ImpFold=new File(Path);
+File []ListOrigin=ImpFold.listFiles(); //Folders in FileSystem
+ArrayList DirList=new ArrayList(10);
+for (int i = 0; i < ListOrigin.length; i++) // first only folders and opd files to avouid double insert
+    {
+    File ListElement = ListOrigin[i];
+    if (ListElement==null) // deleted by double reference opd + doc
+        continue;
+    if (ListElement.isDirectory())
+        {
+        DirList.add(ListElement);
+        ListOrigin[i]=null;
+        continue;
+        }
+    if (ListElement.getName().endsWith(".opd"))
+        {
+        getDrv().ProcessXML(ListElement, ParentId);
+        int L2comp=ListElement.getName().length()-3;
+        String FileName=ListElement.getName().substring(0, L2comp);
+        for (int j = 0; j < ListOrigin.length; j++)
+            {   
+            if (ListOrigin[j]!=null && ListOrigin[j].getName().substring(0, L2comp).equals(FileName) 
+                    && !ListOrigin[j].isDirectory())
+               ListOrigin[j]=null; 
+            }
+        }
+    }
+PDDocs Do=new PDDocs(getDrv());
+HashMap<String, Record> TitleDoc=new HashMap();
+Cursor listContainedDocs = Do.getListContainedDocs(ParentId);
+Record Res=getDrv().NextRec(listContainedDocs);
+while (Res!=null)
+    {
+    String FileName=(String)Res.getAttr(PDDocs.fNAME).getValue();
+    boolean Deleted=true;
+    for (int i = 0; i < ListOrigin.length; i++)
+        {
+        if (ListOrigin[i]==null)
+            continue;
+        File SubDoc = (File) ListOrigin[i];
+        if (SubDoc.getName().equalsIgnoreCase(FileName))
+            {
+            Deleted=false;
+            break;
+            }  
+        }
+    if (Deleted)
+        {
+        Do.setPDId((String)Res.getAttr(PDDocs.fPDID).getValue());
+        Do.delete();
+        }
+    else
+        {
+        TitleDoc.put(FileName, Res);
+        }
+    Res=getDrv().NextRec(listContainedDocs);
+    }
+
+for (File ListElement : ListOrigin)
+    {
+    if (ListElement==null) // deleted by double reference opd + doc
+        continue;
+    PDDocs NewDoc=new PDDocs(getDrv(), DefDocType);
+    NewDoc.setTitle(ListElement.getName());
+    NewDoc.setFile(ListElement.getAbsolutePath());
+    NewDoc.setDocDate(new Date(ListElement.lastModified()));
+    NewDoc.setParentId(ParentId);
+    Res=TitleDoc.get(ListElement.getName());
+    if (Res==null)
+        NewDoc.insert();  
+    else
+        {
+        Date InsDate=(Date)Res.getAttr(PDDocs.fPDDATE).getValue();
+        if (InsDate.before(new Date(ListElement.lastModified())))
+            {
+            NewDoc.Checkout();
+            NewDoc.update();
+            NewDoc.Checkin(Long.toString(ListElement.lastModified()));
+            }
+        }
+    }
+ListOrigin=null; // to help gc and save memory during recursivity
+PDFolders Targ=new PDFolders(getDrv());
+HashSet<String> listDirectDescendList = Targ.getListDirectDescendList(ParentId);
+HashMap<String, String> Titles=new HashMap(listDirectDescendList.size());
+for (Iterator<String> iterator = listDirectDescendList.iterator(); iterator.hasNext();)
+    {
+    String FoldId = iterator.next(); 
+    Targ.Load(FoldId);
+    boolean Deleted=true;
+    for (int i = 0; i < DirList.size(); i++)
+        {
+        File SubDir = (File) DirList.get(i);
+        if (SubDir.getName().equalsIgnoreCase(Targ.getTitle()))
+            {
+            Deleted=false;
+            break;
+            }  
+        }
+    if (Deleted)
+        Targ.delete();
+    else
+        Titles.put(Targ.getTitle(), FoldId);
+    }
+if (Recursive)
+    {
+    for (int i = 0; i < DirList.size(); i++)
+        {
+        File SubDir = (File) DirList.get(i);
+        String FId=Titles.get(SubDir.getName());
+        if (FId==null || FId.length()==0)
+            {
+            PDFolders f=new PDFolders(getDrv(), getObjType());
+            f.setTitle(SubDir.getName());
+            f.setParentId(ParentId);
+            f.insert();
+            FId=f.getPDId();
+            }
+        LocalSync(DefDocType, FId, SubDir.getAbsolutePath(), Recursive);    
+        }
+    }
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksExec.LocalSync <"+getPDId());
 }
 //-------------------------------------------------------------------------
 /**
