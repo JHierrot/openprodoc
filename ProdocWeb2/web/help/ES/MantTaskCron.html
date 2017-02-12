@@ -25,6 +25,7 @@
         <li>"EXPORT": Exporta documentos y carpetas creados recientemente hacia un sistema de archivos.</li>
         <li>"DOCSREPORT": Genera un informe de los documentos  de un tipo (y subtipos) contenidos en una estructura de carpetas y genera un informe como documento html que almacena en la carpeta de cada usuario.</li>
         <li>"FOLDSREPORT": Genera un informe de las carpetas/expedientes de un tipo (y subtipos) contenidos en una estructura de carpetas y genera un informe como documento html que almacena en la carpeta de cada usuario.</li>
+        <li>"LOCALSYNC": "Sincroniza" el contenido de dos árboles de carpetas completos (una en OpenProdoc y otra en el ordnador local) de forma que por cada archivo local se crea una ficha del tipo documental indicado y se <b>referencia</b> (o se <b>incluye</b> según el tipo de repositorio del tipo documental) el archivo local y por cada carpeeta en disco se crea una carpeta OpenProdoc del tipo indicado.</li>
         </ul>
     </li>    
     <li><b>Tipo de objeto</b> (Carpetas o Documentos) sobre los que se aplicará la tarea. Dependiendo de otros parámetros, podrá aplicarse tambien a subtipos.</li>    
@@ -79,7 +80,15 @@
                 <li>Param1: Indicador booleano (0/1) que indica si debe recorrerse recursivamente todas las carpetas contenidas en la carpeta origen (Ej: "0").</li>
                 <li>Param2: Rango de dias desde la actualización.(Ej: para informe los expedientes creados hace 3 semanas "21|14")</li>
                 <li>Param3: Grupo de usuarios al que se remitirá el informe como documento html (Ej: "Suscritores"). No se incluye subgrupos para la notificación del informe</li>
-                <li>Param3: Carpeta origen en OpenProdoc sobre la que se analiza las novedades. No es necesario incluir "Rootfolder"(Ej."/Expedientes/Compras").</li>
+                <li>Param4: Carpeta origen en OpenProdoc sobre la que se analiza las novedades. No es necesario incluir "Rootfolder"(Ej."/Expedientes/Compras").</li>
+            </ul>
+        </li>
+        <li>"LOCALSYNC":            
+            <ul>
+                <li>Param1: Indicador booleano (0/1) que indica si debe recorrerse recursivamente todas las carpetas contenidas en la carpeta origen (Ej: "0").</li>
+                <li>Param2: Tipo Documental a asignar a los documentos importados.(Ej: "Informe"). El tipo de las carpeas viene dado por el tipo asignado a la tarea.</li>
+                <li>Param3: Carpeta destino en OpenProdoc en la que se sincronizará la estructura de carpetas y documentos. No es necesario incluir "Rootfolder"(Ej."/Expedientes/Compras").</li>
+                <li>Param4: Carpeta origen desde la que se sincronizará. (Ej."/CarpetaImportación/Expedientes"). s recomendable usar la notación con '/' en lugar de '\' aunque se trabaje sobre Windows.</li>
             </ul>
         </li>
         </ul>

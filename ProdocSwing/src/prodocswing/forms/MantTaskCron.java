@@ -558,6 +558,8 @@ switch (TypeComboBox.getSelectedIndex())
         break;
     case PDTasksDef.fTASK_FOLDSREPORT: LU = new TCFoldsReport(this, true);
         break;
+    case PDTasksDef.fTASK_LOCALSYNC: LU = new TCFoldsLocalSync(this, true);
+        break;
     default: PDExceptionFunc.GenPDException("Unexpected_Task", "");
         break;
 }
