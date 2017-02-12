@@ -81,9 +81,11 @@ while (NextDoc!=null)
     FolderDocs.append("<cell>").append(AttrD.getValue()).append("</cell>");       
     AttrD=NextDoc.getAttr(PDDocs.fTITLE);
     FolderDocs.append("<cell>").append(AttrD.getValue()).append("^SendDoc?Id=").append(DocId).append("^_blank").append("</cell>");       
+    AttrD=NextDoc.getAttr(PDDocs.fDOCDATE);
+    FolderDocs.append("<cell>").append(AttrD.Export()).append("</cell>");
     AttrD=NextDoc.getAttr(PDDocs.fLOCKEDBY);
     FolderDocs.append("<cell>").append((AttrD.getValue()==null?"":AttrD.getValue())).append("</cell>");       
-    AttrD=NextDoc.getAttr(PDDocs.fDOCDATE);
+    AttrD=NextDoc.getAttr(PDDocs.fPDDATE);
     FolderDocs.append("<cell>").append(AttrD.Export()).append("</cell></row>");
     NextDoc=PDSession.NextRec(ListDocs);
     }

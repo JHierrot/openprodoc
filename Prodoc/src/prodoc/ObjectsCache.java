@@ -66,6 +66,8 @@ CacheValues.put(Key, new CacheObject(Value));
  */
 public Object get(Object Key)
 {
+if (Key==null)
+    return(null);    
 CacheObject CO=(CacheObject)CacheValues.get(Key);
 if (CO==null)
     return (null);

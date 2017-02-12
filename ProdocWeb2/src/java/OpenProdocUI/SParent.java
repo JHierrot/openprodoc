@@ -1365,7 +1365,7 @@ return(Head.toString());
 public static String GenRowGrid(HttpServletRequest Req, String Id, Record NextRec, boolean IsXML)
 {
 boolean IsDoc;
-if (NextRec.ContainsAttr(PDDocs.fDOCTYPE))
+if (NextRec.ContainsAttr(PDDocs.fDOCTYPE) || Id.contains("|"))
     IsDoc=true;
 else
     IsDoc=false;

@@ -538,7 +538,13 @@ for (File ListElement : ListOrigin)
         Date InsDate=(Date)Res.getAttr(PDDocs.fPDDATE).getValue();
         if (InsDate.before(new Date(ListElement.lastModified())))
             {
+            NewDoc.setPDId((String)Res.getAttr(PDDocs.fPDID).getValue());
             NewDoc.Checkout();
+            NewDoc.LoadFull((String)Res.getAttr(PDDocs.fPDID).getValue());
+            NewDoc.setTitle(ListElement.getName());
+            NewDoc.setFile(ListElement.getAbsolutePath());
+            NewDoc.setDocDate(new Date(ListElement.lastModified()));
+            NewDoc.setParentId(ParentId);
             NewDoc.update();
             NewDoc.Checkin(Long.toString(ListElement.lastModified()));
             }

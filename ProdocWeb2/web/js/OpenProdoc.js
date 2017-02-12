@@ -151,12 +151,12 @@ menu.attachEvent("onClick", function(id, zoneId, cas)
     ExecMenu(id);    
     });
 DocsGrid = layout.cells("c").attachGrid();
-DocsGrid.setHeader(LocaleTrans("Document_Type")+","+LocaleTrans("Document_Title")+","+LocaleTrans("Lock_user")+","+LocaleTrans("Date"));   //sets the headers of columns
-DocsGrid.setColumnIds("Type,Title,Lock,Date");         
-DocsGrid.setInitWidths("130,500,170,*");   
-DocsGrid.setColAlign("left,left,left,left");    
-DocsGrid.setColTypes("ro,link,ro,ro");            
-DocsGrid.setColSorting("str,str,str,str"); 
+DocsGrid.setHeader(LocaleTrans("Document_Type")+","+LocaleTrans("Document_Title")+","+LocaleTrans("Document_Date")+","+LocaleTrans("Lock_user")+","+LocaleTrans("Date"));   //sets the headers of columns
+DocsGrid.setColumnIds("Type,Title,Date,Lock,RepDate");         
+DocsGrid.setInitWidths("120,460,120,80,*");   
+DocsGrid.setColAlign("left,left,left,left,left");    
+DocsGrid.setColTypes("ro,link,ro,ro,ro");            
+DocsGrid.setColSorting("str,str,str,str,str"); 
 DocsGrid.load("DocList?FoldId="+ROOTFOLD);
 DocsGrid.init();
 DocsGrid.attachEvent("onRowSelect",function(rowId,cellIndex)
@@ -1865,7 +1865,7 @@ id:"ListVerDoc",
 left:20,
 top:30,
 width:650,
-height:500,
+height:300,
 center:true,
 modal:true,
 resize:true});   
