@@ -56,6 +56,7 @@ String CurrDoc=Req.getParameter("D");
 String RO=Req.getParameter("RO");
 String Vers=Req.getParameter("Vers");
 String Title;
+try {
 if (CurrDoc!=null)
     {
     if (Vers!=null&&Vers.length()!=0)       
@@ -69,7 +70,7 @@ if (CurrDoc!=null)
     out.println( GenerateCompleteDocForm(Title, Req, PDSession, TmpDoc.getParentId(), TmpDoc.getDocType(), TmpDoc.getRecSum(), RO.equalsIgnoreCase("true"), !RO.equalsIgnoreCase("true"), null) );   
     }
 else
-    { 
+    {
     HashMap <String, String>ListFields=new HashMap(); 
     ListFields.put("CurrFold", Req.getParameter("CurrFold"));
     ListFields.put(PDDocs.fPDID, Req.getParameter(PDDocs.fPDID));
@@ -127,6 +128,12 @@ else
     TmpDoc.setParentId(ListFields.get("CurrFold"));
     TmpDoc.update();
     out.println("OK");    
+    }
+} catch (Exception Ex)
+    {
+    out.print("KO");
+    PrepareError(Req, Ex.getLocalizedMessage(), out);
+    out.println();
     }
 }
 //-----------------------------------------------------------------------------------------------

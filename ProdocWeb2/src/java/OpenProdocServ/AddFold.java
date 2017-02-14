@@ -71,9 +71,9 @@ else
     TmpFold.setPDId(IdParent);
     String ChildId = TmpFold.CreateChild(NewFolder);
     out.println("OK"+ChildId);
-    } catch (PDException ex)
+    } catch (PDException Ex)
         {
-        out.println(ex.getLocalizedMessage());
+        PrepareError(Req, Ex.getLocalizedMessage(), out);
         }
     }
 }

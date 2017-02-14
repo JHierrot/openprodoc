@@ -25,10 +25,7 @@ import static OpenProdocUI.SParent.TT;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import javax.servlet.http.*;
-import prodoc.Attribute;
 import prodoc.DriverGeneric;
-import prodoc.PDDocs;
-import prodoc.PDFolders;
 
 
 /**

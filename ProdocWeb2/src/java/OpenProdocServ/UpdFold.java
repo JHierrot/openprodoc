@@ -74,9 +74,9 @@ else
     TmpFold.setTitle(NewFolder);
     TmpFold.update();
     out.println("OK");
-    } catch (PDException ex)
+    } catch (PDException Ex)
         {
-        out.println(ex.getLocalizedMessage());
+        PrepareError(Req, Ex.getLocalizedMessage(), out);
         }
     }
 }

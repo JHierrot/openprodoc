@@ -72,6 +72,7 @@ if (CurrFold!=null)
     }
 else
     {
+    try {    
     HashMap <String, String>ListFields=new HashMap(); 
     ListFields.put("CurrFold", Req.getParameter("CurrFold"));
     String NewType=Req.getParameter(PDDocs.fDOCTYPE); 
@@ -96,7 +97,6 @@ else
             }
         Attr=Rec.nextAttr();
         }
-//    if (!ListFields.containsKey(PDDocs.fNAME))
     if (Req.getParameter(PDDocs.fNAME)==null || Req.getParameter(PDDocs.fNAME).length()==0)
         {
         StoreDat(Req, ListFields);
@@ -137,6 +137,12 @@ else
     Doc.setMimeType(mt.SolveName(ListFields.get(PDDocs.fNAME)));
     Doc.insert();
     out.println("OK");
+    } catch (Exception Ex)
+        {
+        PrepareError(Req, Ex.getLocalizedMessage(), out);
+        out.println();
+        }
+
     }
 }
 //-----------------------------------------------------------------------------------------------

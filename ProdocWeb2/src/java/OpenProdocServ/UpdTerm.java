@@ -104,7 +104,7 @@ else
         {    
         if (PDSession.isInTransaction())
             PDSession.AnularTrans();
-        out.println(ex.getLocalizedMessage());
+        PrepareError(Req, ex.getLocalizedMessage(), out);
         }
     }
 }

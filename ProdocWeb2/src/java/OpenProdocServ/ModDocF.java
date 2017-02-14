@@ -129,6 +129,10 @@ else
     out.println(UpFileStatus.SetResultKo(Req, e.getLocalizedMessage()));
     throw e;
     }
+finally
+    {
+    out.close();    
+    }
 }
 //-----------------------------------------------------------------------------------------------
 

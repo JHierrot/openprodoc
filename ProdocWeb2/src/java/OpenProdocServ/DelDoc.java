@@ -54,14 +54,13 @@ if (CurrDoc!=null)
 else
     {
     try {    
-//    String IdDel=Req.getParameter("CurrDoc");     
     String IdDel=Req.getParameter(PDDocs.fPDID);
     TmpDoc.setPDId(IdDel);
     TmpDoc.delete();
     out.println("OK");
-    } catch (PDException ex)
+    } catch (PDException Ex)
         {
-        out.println(ex.getLocalizedMessage());
+        PrepareError(Req, Ex.getLocalizedMessage(), out);
         }
     }
 }

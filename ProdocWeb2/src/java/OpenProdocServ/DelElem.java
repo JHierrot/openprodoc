@@ -63,10 +63,15 @@ for (int i = 0; i < ListId.length; i++)
         {
         S=Ex.getLocalizedMessage();
         }
-StringBuilder Resp=new StringBuilder(200);
-Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-Resp.append("<status>").append(S==null?"":S).append("</status>");
-out.println(Resp.toString());
+out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+if (S==null)
+    out.println("<status></status>");
+else
+    {
+    out.println("<status>");
+    PrepareError(Req, S, out);
+    out.println("</status>");   
+    }
 out.close();
 }
 //-----------------------------------------------------------------------------------------------

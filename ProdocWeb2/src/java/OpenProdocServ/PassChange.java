@@ -72,9 +72,9 @@ else
     DriverGeneric PDSession=SParent.getSessOPD(Req);
     PDSession.ChangePassword(PDSession.getUser().getName(), OldPass, NewPass1);
     out.println("OK");
-    } catch (PDException ex)
+    } catch (PDException Ex)
         {
-        out.println(ex.getLocalizedMessage());
+        PrepareError(Req, Ex.getLocalizedMessage(), out);
         }
     }
 }

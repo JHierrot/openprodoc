@@ -68,9 +68,9 @@ else
     TmpThes.setSCN(NewSCN);        
     TmpThes.insert();
     out.println("OK"+TmpThes.getPDId());
-    } catch (PDException ex)
+    } catch (PDException Ex)
         {
-        out.println(ex.getLocalizedMessage());
+        PrepareError(Req, Ex.getLocalizedMessage(), out);
         }
     }
 }

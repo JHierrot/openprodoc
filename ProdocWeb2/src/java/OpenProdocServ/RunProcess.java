@@ -92,7 +92,7 @@ TC.Execute();
 Resp.append("<status>OK</status>");
 } catch (Exception Ex)
     {
-    Resp.append("<status>"+Ex.getLocalizedMessage()+"</status>");    
+    Resp.append("<status>"+TT(Req,Ex.getLocalizedMessage())+"</status>");    
     Ex.printStackTrace();
     }
 finally 

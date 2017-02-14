@@ -114,9 +114,9 @@ else
             out.print(",");
         }
     out.println("] };\n");
-    } catch (PDException ex)
+    } catch (PDException Ex)
         {
-        out.println(ex.getLocalizedMessage());
+        PrepareError(Req, Ex.getLocalizedMessage(), out);
         }
     finally 
         {

@@ -20,11 +20,8 @@
 package OpenProdocServ;
 
 import OpenProdocUI.SParent;
-import static OpenProdocUI.SParent.TT;
-import java.io.File;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import javax.servlet.http.*;
@@ -38,9 +35,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import prodoc.DriverGeneric;
 import prodoc.ObjPD;
-import prodoc.PDDocs;
-import prodoc.PDFolders;
-import prodoc.PDLog;
 
 
 /**

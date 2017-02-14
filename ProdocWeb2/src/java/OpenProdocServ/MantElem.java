@@ -203,7 +203,7 @@ else
         {
         if (PDSession!=null)    
             PDSession.AnularTrans();
-        out.println(Ex.getLocalizedMessage());
+        PrepareError(Req, Ex.getLocalizedMessage(), out);
         }
     }
 }

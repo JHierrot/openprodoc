@@ -24,10 +24,7 @@ import static OpenProdocUI.SParent.TT;
 import static OpenProdocUI.SParent.getComboModel;
 import java.io.PrintWriter;
 import javax.servlet.http.*;
-import prodoc.Attribute;
 import prodoc.DriverGeneric;
-import prodoc.PDDocs;
-import prodoc.PDFolders;
 
 
 /**

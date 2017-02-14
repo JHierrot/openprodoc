@@ -101,9 +101,9 @@ else
     TmpFold.assignValues(Rec);
     TmpFold.update();
     out.println("OK"+TmpFold.getPDId());
-    } catch (PDException ex)
+    } catch (PDException Ex)
         {
-        out.println(ex.getLocalizedMessage());
+        PrepareError(Req, Ex.getLocalizedMessage(), out);
         }
     }
 }

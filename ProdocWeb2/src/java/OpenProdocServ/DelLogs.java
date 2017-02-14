@@ -25,10 +25,6 @@ import java.io.PrintWriter;
 import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
-import prodoc.Attribute;
-import prodoc.Condition;
-import prodoc.Conditions;
-import prodoc.Cursor;
 import prodoc.DriverGeneric;
 import prodoc.PDTrace;
 
@@ -72,10 +68,15 @@ TraceLogs.DeleteRange(ObjType, D1, D2);
         {
         S=Ex.getLocalizedMessage();
         }
-StringBuilder Resp=new StringBuilder(200);
-Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-Resp.append("<status>").append(S==null?"":S).append("</status>");
-out.println(Resp.toString());
+out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+if (S==null)
+    out.println("<status></status>");
+else
+    {
+    out.println("<status>");
+    PrepareError(Req, S, out);
+    out.println("</status>");   
+    }
 out.close();
 }
 //-----------------------------------------------------------------------------------------------

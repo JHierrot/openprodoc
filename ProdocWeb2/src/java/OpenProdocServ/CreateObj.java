@@ -64,8 +64,10 @@ else
 out.println(Resp.toString());
 } catch (Exception Ex)
         {
-        Resp.append("<status>").append(Ex.getLocalizedMessage()).append("</status>");
-        out.println(Resp.toString());
+        out.println(Resp);    
+        out.println("<status>");
+        PrepareError(Req, Ex.getLocalizedMessage(), out);
+        out.println("</status>");
         }
 finally {
 out.close();

@@ -27,7 +27,6 @@ import prodoc.Attribute;
 import prodoc.DriverGeneric;
 import prodoc.PDDocs;
 import prodoc.PDException;
-import prodoc.PDFolders;
 
 /**
  *
@@ -75,9 +74,9 @@ else
     TmpDoc.Load(CurrDoc);
     TmpDoc.Checkin(Verlabel);
     out.println("OK");
-    } catch (PDException ex)
+    } catch (PDException Ex)
         {
-        out.println(ex.getLocalizedMessage());
+        PrepareError(Req, Ex.getLocalizedMessage(), out);
         }
     }
 }

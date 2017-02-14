@@ -67,12 +67,19 @@ if (CurrFold!=null)
     }
 else
     {
+    try {    
     HashMap <String, String>ListFields=new HashMap(); 
     ListFields.put("CurrFold", Req.getParameter("CurrFold"));
     ListFields.put(PDDocs.fTITLE, Req.getParameter(PDDocs.fTITLE)); 
     ListFields.put(PDDocs.fDOCDATE, Req.getParameter(PDDocs.fDOCDATE)); 
     StoreDat(Req, ListFields);
     out.println("OK");
+    } catch (Exception Ex)
+        {
+        out.print("KO");
+        PrepareError(Req, Ex.getLocalizedMessage(), out);
+        out.println();
+        }
     }
 }
 //-----------------------------------------------------------------------------------------------

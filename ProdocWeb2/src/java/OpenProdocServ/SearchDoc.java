@@ -114,9 +114,9 @@ else
         NextDoc=PDSession.NextRec(c);
         }
     out.println("</rows>");
-    } catch (PDException ex)
+    } catch (PDException Ex)
         {
-        out.println(ex.getLocalizedMessage());
+        PrepareError(Req, Ex.getLocalizedMessage(), out);
         }
     finally 
         {

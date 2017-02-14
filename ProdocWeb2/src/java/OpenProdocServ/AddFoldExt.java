@@ -100,9 +100,9 @@ else
     TmpFold.setParentId(IdParent);
     TmpFold.insert();
     out.println("OK"+TmpFold.getPDId());
-    } catch (PDException ex)
+    } catch (PDException Ex)
         {
-        out.println(ex.getLocalizedMessage());
+        PrepareError(Req, Ex.getLocalizedMessage(), out);
         }
     }
 }

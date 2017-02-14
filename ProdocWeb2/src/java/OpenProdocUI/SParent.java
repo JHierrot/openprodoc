@@ -1509,5 +1509,12 @@ public static HashMap<String, String> GetDat(HttpServletRequest Req )
 return((HashMap)Req.getSession().getAttribute("PENDING_DATA")); 
 }
 //-----------------------------------------------------------------------------------------------
+public static void PrepareError(HttpServletRequest Req, String Msg, PrintWriter out)
+{
+String[] ListMsg = Msg.split(":");
+for (int i = 0; i < ListMsg.length; i++)
+    out.println(TT(Req, ListMsg[i]));       
+}
+//-----------------------------------------------------------------------------------------------
 
 }

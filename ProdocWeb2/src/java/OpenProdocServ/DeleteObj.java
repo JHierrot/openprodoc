@@ -20,20 +20,13 @@
 package OpenProdocServ;
 
 import OpenProdocUI.SParent;
-import static OpenProdocUI.SParent.TT;
 import static OpenProdocUI.SParent.getSessOPD;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import prodoc.Attribute;
-import prodoc.Cursor;
-import prodoc.DriverGeneric;
-import prodoc.PDDocs;
-import prodoc.PDException;
 import prodoc.PDObjDefs;
-import prodoc.Record;
 
 /**
  *
@@ -76,8 +69,10 @@ else
 out.println(Resp.toString());
 } catch (Exception Ex)
         {
-        Resp.append("<status>").append(Ex.getLocalizedMessage()).append("</status>");
-        out.println(Resp.toString());
+        out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        out.print("<status>");
+        PrepareError(Req, Ex.getLocalizedMessage(), out);
+        out.println("</status>");
         }
 finally {
 out.close();

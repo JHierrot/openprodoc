@@ -1763,7 +1763,7 @@ String Id=getPDId();
 PDDocs TobeUpdated=new PDDocs(getDrv());
 TobeUpdated.LoadCurrent(Id);
 if (TobeUpdated.getLockedBy()==null || !TobeUpdated.getLockedBy().equalsIgnoreCase(getDrv().getUser().getName()))
-   PDExceptionFunc.GenPDException("Document_not_locked_by_user", getPDId());
+   PDExceptionFunc.GenPDException("Document_not_locked_by_user:", getPDId());
 AddLogFields();
 setReposit(TobeUpdated.getReposit());
 PDRepository FinalRep=new PDRepository(getDrv());
@@ -1831,8 +1831,11 @@ getObjCache().put(getKey(), getRecord());
         Ex.printStackTrace();
     PDExceptionFunc.GenPDException("Error_updating_Document",Ex.getLocalizedMessage());
     }
+finally 
+    {
 if (InTransLocal)
     getDrv().CerrarTrans();
+    }
 if (PDLog.isDebug())
     PDLog.Debug("PDDocs.update <");
 }

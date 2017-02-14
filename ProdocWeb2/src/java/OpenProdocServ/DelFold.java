@@ -48,20 +48,8 @@ PDFolders TmpFold=new PDFolders(PDSession);
 String CurrFold=Req.getParameter("F");
 if (CurrFold!=null)
     {
-//    Attribute Attr;
     TmpFold.LoadFull(CurrFold);
     out.println( GenerateCompleteFoldForm("Delete_Folder", Req, PDSession, CurrFold, TmpFold.getFolderType(), TmpFold.getRecSum(), true, false, null) );   
-//    Attr=TmpFold.getRecord().getAttr(PDFolders.fTITLE);
-//    out.println(
-//    "[" +
-//    "{type: \"label\", label: \""+TT(Req, "Delete_Folder")+"\"}," +
-//    "{type: \"input\", name: \""+PDFolders.fTITLE+"\", label: \""+TT(Req, Attr.getUserName())+"\", value:\""+Attr.getValue()+"\", disabled: true}," +
-//    "{type: \"block\", width: 250, list:[" +
-//        "{type: \"button\", name: \"OK\", value: \""+TT(Req, "Ok")+"\"}," +
-//        "{type: \"newcolumn\", offset:20 }," +
-//        "{type: \"button\", name: \"CANCEL\", value: \""+TT(Req, "Cancel")+"\"}," +
-//        "{type: \"hidden\", name:\"CurrFold\", value: \""+CurrFold+"\"}" +
-//    "]} ];");
     }
 else
     {
@@ -70,9 +58,9 @@ else
     TmpFold.setPDId(IdDel);
     TmpFold.delete();
     out.println("OK");
-    } catch (PDException ex)
+    } catch (PDException Ex)
         {
-        out.println(ex.getLocalizedMessage());
+        PrepareError(Req, Ex.getLocalizedMessage(), out);
         }
     }
 }

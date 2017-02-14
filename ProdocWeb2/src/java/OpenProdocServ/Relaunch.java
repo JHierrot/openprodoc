@@ -64,7 +64,7 @@ Resp.append("<status>").append(TT(Req, "Task_relaunched")).append("</status>");
 out.println(Resp.toString());
 } catch (Exception Ex)
         {
-        Resp.append("<status>").append(Ex.getLocalizedMessage()).append("</status>");
+        Resp.append("<status>").append(TT(Req,Ex.getLocalizedMessage())).append("</status>");
         out.println(Resp.toString());
         }
 finally {

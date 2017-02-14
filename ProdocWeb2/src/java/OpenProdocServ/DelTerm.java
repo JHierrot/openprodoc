@@ -23,7 +23,6 @@ import OpenProdocUI.SParent;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import prodoc.DriverGeneric;
-import prodoc.PDException;
 import prodoc.PDThesaur;
 
 /**
@@ -66,7 +65,7 @@ else
     if (CurrThes!=null) //return Form
         SParent.GenErrorForm(ex.getLocalizedMessage());
     else    
-        out.println(ex.getLocalizedMessage());
+        PrepareError(Req, ex.getLocalizedMessage(), out);
     }
 }
 //-----------------------------------------------------------------------------------------------
