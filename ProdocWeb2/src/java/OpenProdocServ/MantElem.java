@@ -609,7 +609,15 @@ else if (ElemType.equals(ListElem.MANTCUST))
     Attr=Rec.getAttr(PDCustomization.fDESCRIPTION);
     SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
     Attr=Rec.getAttr(PDCustomization.fLANGUAGE);
-    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    String Value=(String)Attr.getValue();
+    SB.append("{type: \"combo\", label: \"").append(TT(Req, Attr.getUserName())).append("\", name: \"").append(Attr.getName()).append("\",").append((Oper.equals(OPERDELETE))?"disabled:1,":"").append(" inputWidth:\"auto\", options:[");
+    SB.append("{text:\"English\", value:\"EN\"").append((Value!=null&&Value.equalsIgnoreCase("EN"))?", selected:true":"").append("},");
+    SB.append("{text:\"Español\", value:\"ES\"").append((Value!=null&&Value.equalsIgnoreCase("ES"))?", selected:true":"").append("},");
+    SB.append("{text:\"Português\", value:\"PT\"").append((Value!=null&&Value.equalsIgnoreCase("PT"))?", selected:true":"").append("},");
+    SB.append("{text:\"Català\", value:\"CT\"").append((Value!=null&&Value.equalsIgnoreCase("CT"))?", selected: true":"").append("},");
+    SB.append("{text:\"Deutsch\", value:\"DE\"").append((Value!=null&&Value.equalsIgnoreCase("DE"))?", selected:true":"").append("}");
+    SB.append("]},");
+//    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
     Attr=Rec.getAttr(PDCustomization.fDATEFORMAT);
     SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
     Attr=Rec.getAttr(PDCustomization.fTIMEFORMAT);

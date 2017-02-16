@@ -105,7 +105,7 @@ else
         }
     out.println("OK"+GenHeader(Req, Rec, true));
     out.print("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rows>");
-    SaveConds(Req, "Doc", CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")),(IncludeVers.equals("1")), CurrentFold, null, Rec, null);
+    SaveConds(Req, "Doc", CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")),(IncludeVers.equals("1")), CurrentFold, null, Rec, FullTextSearch);
     c=TmpDoc.Search(FullTextSearch, CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")),(IncludeVers.equals("1")), CurrentFold, null);
     Record NextDoc=PDSession.NextRec(c);
     while (NextDoc!=null)
