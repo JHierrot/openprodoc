@@ -214,14 +214,14 @@ while (Line!=null && (Line.length()>0 && Line.charAt(0)==COMMENT))
 while (Line!=null)
     {
 //    Line=Line.trim(); only trim for "reserved words". Spaces nneded in RIS
-    if (Line.startsWith(R_LOOPDOCS_S))
+    if (Line.trim().startsWith(R_LOOPDOCS_S))
         {
         RecLoopStart=RepLines.size();
         EvalIgTypes(Line.trim());
         }
-    else if (Line.equals(R_LOOPDOCS_E))
+    else if (Line.trim().equals(R_LOOPDOCS_E))
         RecLoopEnd=RepLines.size();
-    else if (Line.startsWith(R_LOOPATTR_S))
+    else if (Line.trim().startsWith(R_LOOPATTR_S))
         {
         AttrLoopStart=RepLines.size();
         if (Line.contains("*"))
@@ -233,11 +233,11 @@ while (Line!=null)
             }
         EvalIgFields(Line.trim());
         }
-    else if (Line.equals(R_LOOPATTR_E))
+    else if (Line.trim().equals(R_LOOPATTR_E))
         AttrLoopEnd=RepLines.size();
-    else if (Line.equals(R_LOOPVAL_S))
+    else if (Line.trim().equals(R_LOOPVAL_S))
         ValLoopStart=RepLines.size();
-    else if (Line.equals(R_LOOPVAL_E))
+    else if (Line.trim().equals(R_LOOPVAL_E))
         ValLoopEnd=RepLines.size();
     else
         RepLines.add(Line);
