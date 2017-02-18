@@ -155,7 +155,7 @@ else
     if( TypeElem.equals(ListElem.MANTUSERS) )
         {
         String NewPass=(String)Rec.getAttr(PDUser.fPASSWORD).getValue();    
-        if (NewPass.equals("="))    
+        if (Oper.equals(OPERMODIF) && (NewPass.equals("=") || NewPass.equals("")))    
             {
             ((PDUser)Obj).Load(((PDUser)Obj).getName());
             Rec.getAttr(PDUser.fPASSWORD).setValue(((PDUser)Obj).getPassword());
@@ -406,7 +406,9 @@ else if (ElemType.equals(ListElem.MANTUSERS))
     SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", options:[");
     SB.append(getComboModel("Roles",PDSession, (String)Attr.getValue()) );
     SB.append("]},"); 
-    Attr=Rec.getAttr(PDUser.fPASSWORD);
+    Attr=Rec.getAttr(PDUser.fPASSWORD).Copy();
+    Attr.setValue("");
+    Attr.setRequired(false);
     SB.append(GenInput(Req, Attr, ReadOnly, Modif)); 
     Attr=Rec.getAttr(PDUser.fCUSTOM);
     SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", options:[");

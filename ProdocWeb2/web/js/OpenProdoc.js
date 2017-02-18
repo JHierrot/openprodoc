@@ -2661,7 +2661,7 @@ id:"AddDoc",
 left:20,
 top:30,
 width:450,
-height:350,
+height:220,
 center:true,
 modal:true,
 resize:false});  
