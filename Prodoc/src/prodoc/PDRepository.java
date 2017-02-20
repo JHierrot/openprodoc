@@ -486,8 +486,8 @@ return(getRepType().equals(tREFURL));
 protected String GetUrl(String DocName)
 {
 String S=getURL()+DocName;  
-S=S.replace("=", "%3D");
-S=S.replace("?", "%3F");
+//S=S.replace("=", "%3D");
+//S=S.replace("?", "%3F");
 return(S);    
 }        
 //-----------------------------------------------------------------

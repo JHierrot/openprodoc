@@ -91,10 +91,14 @@ if (doc.IsUrl())
         UrlTmp=doc.getUrl();   
     if (UrlTmp.substring(0,4).equalsIgnoreCase("http"))
         {
-        PrintWriter out = response.getWriter();
-        String HeadRefresh="<META http-equiv=\"refresh\" content=\"0; URL="+UrlTmp +"\">";                
-        out.println("<!DOCTYPE html><head><head>"+HeadRefresh+"</head><html><body>Opening.....</body></html>");
-        out.close();
+//        PrintWriter out = response.getWriter();
+//        String HeadRefresh="<META http-equiv=\"refresh\" content=\"1; URL="+UrlTmp +"\">";                
+//        out.println("<!DOCTYPE html><head>"+HeadRefresh+"</head><html><body>Opening....."+UrlTmp+"</body></html>");
+//        out.println("<!DOCTYPE html><body onload=\"window.location = '"+UrlTmp+"'\"></body>");
+        response.setStatus(302);
+        response.setHeader("Location", UrlTmp);
+        response.setHeader("Connection", "close");
+//        out.close();
         }
     else
         {
