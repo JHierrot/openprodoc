@@ -61,7 +61,7 @@ return "ThesTree Servlet";
 private String GenTreeThes(HttpServletRequest Req) 
 {
 StringBuilder ThesTree=new StringBuilder(3000);
-ThesTree.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+//ThesTree.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 DriverGeneric PDSession=getSessOPD(Req);
 String ThesaurId=Req.getParameter("ThesId");
 String ThesId=Req.getParameter("id");

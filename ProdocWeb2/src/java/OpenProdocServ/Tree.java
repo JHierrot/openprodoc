@@ -61,7 +61,7 @@ return "Tree Servlet";
 private String GenTree(HttpServletRequest Req) 
 {
 StringBuilder FolderTree=new StringBuilder(3000);
-FolderTree.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+//FolderTree.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 DriverGeneric PDSession=getSessOPD(Req);
 String FoldId=Req.getParameter("id");
 try {

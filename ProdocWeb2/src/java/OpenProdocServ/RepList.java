@@ -64,7 +64,8 @@ private String GenListDoc(HttpServletRequest Req)
 {
 StringBuilder FolderDocs=new StringBuilder(3000);
 String Type=Req.getParameter("Type");
-FolderDocs.append("<?xml version=\"1.0\" encoding=\"iso-8859-1\"?><rows>");
+//FolderDocs.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rows>");
+FolderDocs.append("<rows>");
 DriverGeneric PDSession=getSessOPD(Req);
 Attribute AttrD;
 try {

@@ -51,7 +51,7 @@ response.setContentType("text/xml;charset=UTF-8");
 response.setStatus(HttpServletResponse.SC_OK);
 PrintWriter out = response.getWriter();  
 StringBuilder Resp=new StringBuilder(100);
-Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+//Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 String DocId=Req.getParameter("Id");  
 try {
 String[] Ids = DocId.split("\\|");

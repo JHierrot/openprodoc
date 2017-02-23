@@ -51,7 +51,8 @@ response.setContentType("text/xml;charset=UTF-8");
 response.setStatus(HttpServletResponse.SC_OK);
 PrintWriter out = response.getWriter();  
 StringBuilder Resp=new StringBuilder(2000);
-Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><row>");
+// Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><row>");
+Resp.append("<row>");
 try {
 PDThesaur Term=new PDThesaur(PDSession);
 String CurrTerm=Req.getParameter("Term");

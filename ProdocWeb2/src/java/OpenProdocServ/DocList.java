@@ -62,7 +62,8 @@ return "DocList Servlet";
 private String GenListDoc(HttpServletRequest Req) 
 {
 StringBuilder FolderDocs=new StringBuilder(3000);
-FolderDocs.append("<?xml version=\"1.0\" encoding=\"iso-8859-1\"?><rows>");
+//FolderDocs.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rows>");
+FolderDocs.append("<rows>");
 DriverGeneric PDSession=getSessOPD(Req);
 String FoldId=Req.getParameter("FoldId");
 Attribute AttrD;

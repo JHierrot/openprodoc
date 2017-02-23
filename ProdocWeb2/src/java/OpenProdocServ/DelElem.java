@@ -63,7 +63,7 @@ for (int i = 0; i < ListId.length; i++)
         {
         S=Ex.getLocalizedMessage();
         }
-out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+//out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 if (S==null)
     out.println("<status></status>");
 else

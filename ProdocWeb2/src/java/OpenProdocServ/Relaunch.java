@@ -50,7 +50,7 @@ response.setContentType("text/xml;charset=UTF-8");
 response.setStatus(HttpServletResponse.SC_OK);
 PrintWriter out = response.getWriter();  
 StringBuilder Resp=new StringBuilder(200);
-Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+//Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 try {
 String Id=Req.getParameter("Id");
 PDTasksExecEnded TE=new PDTasksExecEnded(getSessOPD(Req));

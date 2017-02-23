@@ -54,28 +54,12 @@ response.setContentType("text/xml;charset=UTF-8");
 response.setStatus(HttpServletResponse.SC_OK);
 PrintWriter out = response.getWriter();  
 StringBuilder Resp=new StringBuilder(3000);
-Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rows><head>");
+// Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rows><head>");
+Resp.append("<rows><head>");
 try {
 String DocType=Req.getParameter("DT");
 PDDocs TmpDoc=new PDDocs(PDSession, DocType);
 Record Rec=TmpDoc.getRecSum().CopyMono();
-//StringBuilder Head=new StringBuilder(300);
-//StringBuilder Edit=new StringBuilder(300);
-//StringBuilder Type=new StringBuilder(300);
-//Rec.initList();
-//while (Attr!=null)
-//    {
-//    if (!Attr.isMultivalued()) 
-//        {
-//        Head.append(TT(Req,Attr.getUserName())).append(",");
-//        if (Attr.getName().equals(PDDocs.fLOCKEDBY))
-//            Edit.append("rotxt,");
-//        else        
-//            Edit.append("ro,");
-//        Type.append("str,");
-//        }
-//    Attr=Rec.nextAttr();
-//    }
 Rec.delAttr(PDDocs.fSTATUS);
 Rec.delAttr(PDDocs.fDOCTYPE);
 Rec.initList();

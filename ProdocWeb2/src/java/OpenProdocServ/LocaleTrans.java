@@ -50,7 +50,7 @@ else if (Par.equals("_User"))
     S="@"+PDSession.getUser().getName()+" ( "+PDSession.getUser().getDescription()+" )";
 else
     S=TT(Req, Par);
-Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+//Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 Resp.append("<tr>").append(S).append("</tr>");
 out.println(Resp.toString());
 } catch (Exception Ex)

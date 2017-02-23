@@ -142,7 +142,8 @@ else
 response.setStatus(HttpServletResponse.SC_OK);
 PrintWriter out = response.getWriter();  
 if (!CSV)
-    Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rows><head>");
+    Resp.append("<rows><head>");
+//    Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rows><head>");
 Cursor ListObj=null;
 try {
 Record Rec;

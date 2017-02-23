@@ -63,10 +63,10 @@ response.setContentType("text/xml;charset=UTF-8");
 response.setStatus(HttpServletResponse.SC_OK);
 PrintWriter out = response.getWriter();  
 StringBuilder Resp=new StringBuilder(3000);
-Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rows><head>");
+//Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rows><head>");
+Resp.append("<rows><head>");
 Cursor listParentAttr=null;
 try {
-//Record Rec;
 String ObjDefId=Req.getParameter("Id");
 String Oper=Req.getParameter("Oper");
 String Own=Req.getParameter("Own");

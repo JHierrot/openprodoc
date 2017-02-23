@@ -66,7 +66,8 @@ return "TestProcess Servlet";
 private String GenListDoc(HttpServletRequest Req) 
 {
 StringBuilder Resp=new StringBuilder(3000);
-Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rows><head>");
+//Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rows><head>");
+Resp.append("<rows><head>");
 DriverGeneric PDSession=getSessOPD(Req);
 int Task=Integer.parseInt(Req.getParameter("Task"));
 String T1=Req.getParameter("T1");

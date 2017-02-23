@@ -53,7 +53,7 @@ response.setContentType("text/xml;charset=UTF-8");
 response.setStatus(HttpServletResponse.SC_OK);
 PrintWriter out = response.getWriter();  
 StringBuilder Resp=new StringBuilder(3000);
-Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+//Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 DriverGeneric PDSession=getSessOPD(Req);
 int Task=Integer.parseInt(Req.getParameter("Task"));
 String T1=Req.getParameter("T1");

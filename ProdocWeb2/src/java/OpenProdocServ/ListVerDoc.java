@@ -55,8 +55,8 @@ response.setContentType("text/xml;charset=UTF-8");
 response.setStatus(HttpServletResponse.SC_OK);
 PrintWriter out = response.getWriter();  
 StringBuilder Resp=new StringBuilder(3000);
-//Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><row>");
-Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rows><head>");
+//Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rows><head>");
+Resp.append("<rows><head>");
 try {
 PDDocs TmpDoc=new PDDocs(PDSession);
 String CurrDoc=Req.getParameter("Id");

@@ -50,7 +50,7 @@ PrintWriter out = response.getWriter();
 StringBuilder Resp=new StringBuilder(200);
 try {
 String S;
-Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+//Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 String Id=Req.getParameter("Id");
 if (Id==null || Id.length()==0)
     Resp.append("<status>Undefined Type Id</status>");

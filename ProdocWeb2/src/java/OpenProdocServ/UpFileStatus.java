@@ -49,7 +49,7 @@ PrintWriter out = response.getWriter();
 try {
 String S=(String)Req.getSession().getAttribute(RESULT_UPFILE);
 StringBuilder Resp=new StringBuilder(200);
-Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+//Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 Resp.append("<status>").append(S==null?"":S).append("</status>");
 out.println(Resp.toString());
 } catch (Exception Ex)
