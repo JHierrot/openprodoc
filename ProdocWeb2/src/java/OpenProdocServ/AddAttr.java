@@ -62,9 +62,17 @@ for (int i = 0; i < ListAttrInherited.LTyp.length; i++)
         }
     }
 String Required=Req.getParameter("Req"); 
-String LongStr=Req.getParameter("LongStr");    
-if (LongStr.equals("_") || LongStr.length()==0)
-    LongStr="0";
+String LongStr;
+if (TypeN==Attribute.tTHES)
+    {
+    LongStr=Req.getParameter("ThesSel");      
+    }
+else
+    {
+    LongStr=Req.getParameter("LongStr");  
+    if (LongStr.equals("_") || LongStr.length()==0)
+        LongStr="0";
+    }
 String Unique=Req.getParameter("UniKey"); 
 String ModifAllow=Req.getParameter("ModAllow"); 
 String Multival=Req.getParameter("Multi"); 

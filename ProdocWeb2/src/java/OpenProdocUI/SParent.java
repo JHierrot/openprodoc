@@ -1111,8 +1111,11 @@ if (!ReadOnly)
     PDRepository Rep=new PDRepository(PDSession);
     Rep.Load(Rp);
     if (Rep.IsRef())
-        {   
-        Form.append("]},{type: \"input\", name: \""+PDDocs.fNAME+"\", label: \"URL\",").append(" required: ").append(!Modif?"true":"false").append(", inputWidth: 300}];");
+        {
+        String Path=(String)FR.getAttr(PDDocs.fNAME).getValue(); 
+        if (Path==null)
+            Path="";
+        Form.append("]},{type: \"input\", name: \""+PDDocs.fNAME+"\", label: \"URL\",").append(" required: ").append(!Modif?"true":"false").append(", inputWidth: 300, value:\""+Path+"\"}];");
         }
     else
         {
@@ -1212,8 +1215,8 @@ switch (Attr.getType())
     case Attribute.tSTRING:
         if (Attr.isMultivalued())
         {
-            FormField.append("{type: \"block\", width: 450, list:[");
-            FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\", labelWidth: \"auto\", readonly: \"true\",value:\"").append(Attr.Export()).append("\", tooltip:\"").append(TT(Req, Attr.getDescription())).append("\"},");
+            FormField.append("{type: \"block\", width: 550, offsetLeft:1, list:[");
+            FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\", readonly: \"true\",value:\"").append(Attr.Export()).append("\", tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", labelWidth: 180, inputWidth: 250},");
             FormField.append("{type: \"newcolumn\", offset:2 },");
             FormField.append("{type: \"button\",").append(ReadOnly?"disabled:1,":"").append(" name:  \"M_").append(Attr.getName()).append("\", value: \"*\", width: 20}]},");
         }
@@ -1227,8 +1230,8 @@ switch (Attr.getType())
            TmpThes.Load((String)Attr.getValue());
         else
             TmpThes.setPDId("");
-        FormField.append("{type: \"block\", width: 500, list:[");
-        FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\", labelWidth: \"auto\", readonly: \"true\",value:\"").append(TmpThes.getName()==null?"":TmpThes.getName()).append("\", tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", userdata: {ThesId:").append(Attr.getLongStr()).append("}}, ");
+        FormField.append("{type: \"block\", width: 550, offsetLeft:1, list:[");
+        FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\", labelWidth: 180, inputWidth: 250, readonly: \"true\",value:\"").append(TmpThes.getName()==null?"":TmpThes.getName()).append("\", tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", userdata: {ThesId:").append(Attr.getLongStr()).append("}},");
         FormField.append("{type: \"hidden\", name:\"TH_").append(Attr.getName()).append("\", value: \"").append(TmpThes.getPDId()).append("\"},");
         FormField.append("{type: \"newcolumn\" },");
         FormField.append("{type: \"button\",").append(ReadOnly?"disabled:1,":"").append(" name:  \"T_").append(Attr.getName()).append("\", value: \"T\", width: 20},");
