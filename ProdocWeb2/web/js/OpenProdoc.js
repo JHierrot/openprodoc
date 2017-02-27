@@ -1477,7 +1477,7 @@ var WinMD=myWins.createWindow({
     height:420,
     center:true,
     modal:true,
-    resize:false
+    resize:true
 });  
 WinMD.setText("OpenProdoc");
 var FormModDoc=WinMD.attachForm();
