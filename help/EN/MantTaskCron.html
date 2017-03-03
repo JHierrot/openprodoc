@@ -5,6 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management"/>
         <meta name="author" content="Joaquin Hierro" />
+        <link rel="shortcut icon" href="img/OpenProdoc.ico" type="image/x-icon"/> 
         <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
     </head>
     <body>
@@ -24,6 +25,7 @@
         <li>"EXPORT": Exports automatically from OpenProdoc to a filesystem,</li>
         <li>"DOCSREPORT": Creates a report about documents of a document type (and subtypes) updated under a folder estructure and saves the report as document html in the home folder of each user of defined group.</li>
         <li>"FOLDSREPORT": Creates a report about folders of a folder type (and subtypes) updated under a folder estructure and saves the report as document html in the home folder of each user of defined group.</li>
+        <li>"LOCALSYNC": "Synchronizes" the contents of two complete folder trees (one in OpenProdoc and one in the local computer) so that for each local file a record of the indicated document type is created and <b>referenced</b> (or <b>included</b> according to the type of repository of the Document type) the local file and for each folder on disk an OpenProdoc folder of the indicated type is created.</li>
         </ul>
     </li>    
     <li><b>Object type</b> (one of Folder or Document types) that apply the task.</li>    
@@ -59,7 +61,7 @@
         </li>
         <li>"EXPORT":            
             <ul>
-                <li>Param1: Boolean value (0/1) indicating whether the task should travel recursively by all the folders conatined int the source folder (I.e.: "0").</li>
+                <li>Param1: Boolean value (0/1) indicating whether the task should travel recursively by all the folders contained int the source folder (I.e.: "0").</li>
                 <li>Param2: Number of days from updating.(I.e. For exporting the documents inserted during the last week: "7")</li>
                 <li>Param3: Source folder in OpenProdoc from which all the structure of folders and documents will be exported. You don't need to include "Rootfolder"(I.e.."/Administration/HR").</li>
                 <li>Param4: Target folder where all the structure will be exported. (I.e.."/tmp/NewDocuments").</li>
@@ -67,7 +69,7 @@
         </li>
         <li>"DOCSREPORT":            
             <ul>
-                <li>Param1: Boolean value (0/1) indicating whether the task should travel recursively by all the folders conatined int the source folder (I.e.: "0").</li>
+                <li>Param1: Boolean value (0/1) indicating whether the task should travel recursively by all the folders contained int the source folder (I.e.: "0").</li>
                 <li>Param2: Range of days .(I.e. For reporting the documents updated three weeks ago: "21|14")</li>
                 <li>Param3: Group of users who will receive the document with the report of new documents (i.e. 2"Suscriptors"). The subgroups will be ignored.</li>
                 <li>Param4: Source folder in OpenProdoc. The documents updated under this structure will be inclued in report. You don't need to include "Rootfolder"(I.e.."/Administration/HR").</li>
@@ -75,10 +77,18 @@
         </li>
         <li>"FOLDSREPORT":            
             <ul>
-                <li>Param1: Boolean value (0/1) indicating whether the task should travel recursively by all the folders conatined int the source folder (I.e.: "0").</li>
+                <li>Param1: Boolean value (0/1) indicating whether the task should travel recursively by all the folders contained int the source folder (I.e.: "0").</li>
                 <li>Param2: Range of days .(I.e. For reporting the documents updated three weeks ago: "21|14")</li>
                 <li>Param3: Group of users who will receive the document with the report of new documents (i.e. 2"Suscriptors"). The subgroups will be ignored.</li>
                 <li>Param4: Source folder in OpenProdoc. The documents updated under this structure will be inclued in report. You don't need to include "Rootfolder"(I.e.."/Administration/HR").</li>
+            </ul>
+        </li>
+        <li>"LOCALSYNC":            
+            <ul>
+                <li>Param1: Boolean value (0/1) indicating whether the task should travel recursively by all the folders contained int the source folder (I.e.: "0").</li>
+                <li>Param2: Document Type to by asigned to the imported documents.(I.e.: "FinantialReport"). The Folder type is defined in the task.</li>
+                <li>Param3: Target folder in OpenProdoc where all the external structure of folders and documents will be synchronized. You don't need to include "Rootfolder"(I.e."/Administration/HR").</li>
+                <li>Param4: Source folder from which all the structure will be imported. (I.e."/ImporFolder"). It's recommended to use the notation '/' and not '\' even for Windows.</li>
             </ul>
         </li>
         </ul>
@@ -91,6 +101,7 @@
     <li><b>Active</b>: Flag indicating whether the task is active (and will be executed) or not.</li>    
     <li><b>Transaccionality</b>: Flag indicating whether the task is transactional (and affect to all the objects or none) or not.</li>    
 </ul>
+<p style="text-align:center;"><img alt="Screenshot MantTaskCron Web" src="img/MantTaskCronW.png"/></p>
 <p>This form includes two additional buttons:<b>Test</b> y <b>Run</b>.</p> 
 <p>Selecting <b>Test</b> OPD runs a search for the elements that fill the criteria specified (Document type, folders, dates,. ) and shows a list with the elements found so you can check that the criteria is correct and returns the expected set of documents or folders.
 This search doesn't apply to operations as import that don't manage existing objects in the repository.</p>
