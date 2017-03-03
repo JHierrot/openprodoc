@@ -405,7 +405,7 @@ WinMT=myWins.createWindow({
 id:"mantTerm",
 left:20,
 top:30,
-width:500,
+width:600,
 height:600,
 center:true,
 modal:true,
@@ -481,7 +481,11 @@ FormAddTerm.attachEvent("onButtonClick", function (name)
                             if (Url=="AddTerm")
                                 {
                                 NewThesId=response.substring(2,30);
-                                ThesTree.insertNewChild(idCurrTerm, NewThesId, NewThesName);
+//                                ThesTree.insertNewChild(idCurrTerm, NewThesId, NewThesName);
+                                if (ThesTree.getOpenState(idCurrTerm))
+                                    ThesTree.insertNewChild(idCurrTerm, NewThesId, NewThesName);
+                                else 
+                                    ThesTree.refreshItem(idCurrTerm);
                                 }
                             else if (Url=="UpdTerm")
                                 {
@@ -838,7 +842,10 @@ FormAddFold.attachEvent("onButtonClick", function (name)
                         else
                             {
                             NewFoldId=response.substring(2,30);
-                            DocsTree.insertNewChild(CurrFold, NewFoldId, NewFoldName);
+                            if (DocsTree.getOpenState(CurrFold))
+                                DocsTree.insertNewChild(CurrFold, NewFoldId, NewFoldName);
+                            else 
+                                DocsTree.refreshItem(CurrFold);
                             FormAddFold.unload();
                             WinAF.close();  
                             }
@@ -899,7 +906,10 @@ FormAddFold.attachEvent("onButtonClick", function (name)
                         else
                             {
                             NewFoldId=response.substring(2,30);
-                            DocsTree.insertNewChild(CurrFold, NewFoldId, NewFoldName);
+                            if (DocsTree.getOpenState(CurrFold))
+                                DocsTree.insertNewChild(CurrFold, NewFoldId, NewFoldName);
+                            else 
+                                DocsTree.refreshItem(CurrFold);
                             FormAddFold.unload();
                             WinAF.close();    
                             }
@@ -1180,7 +1190,7 @@ var WinDF=myWins.createWindow({
     id:"DelFold",
     left:20,
     top:30,
-    width:500,
+    width:750,
     height:420,
     center:true,
     modal:true,

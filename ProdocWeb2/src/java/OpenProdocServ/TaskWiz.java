@@ -60,8 +60,8 @@ if (TE.equals(ListElem.MANTTASKCRON))
             ParamTexts[3]="";
             break;
         case PDTasksDef.fTASK_PURGEDOC:
-            ParamTexts[0]=TT(Req, "Days_to_Maintain");
-            ParamTexts[1]="";
+            ParamTexts[0]="";
+            ParamTexts[1]=TT(Req, "Days_to_Maintain");
             ParamTexts[2]="";
             ParamTexts[3]="";
             break;
