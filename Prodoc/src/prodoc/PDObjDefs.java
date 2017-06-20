@@ -708,7 +708,7 @@ if (!getDrv().getUser().getName().equals("Install"))
  * @return
  * @throws PDException
  */
-protected Record GetAttrDef() throws PDException
+public Record GetAttrDef() throws PDException
 {
 Record AttrsDef=(Record)getObjCacheAtr().get(getName());
 if (AttrsDef==null)
@@ -717,7 +717,9 @@ if (AttrsDef==null)
     Conditions Conds=new Conditions();
     Conds.addCondition(new Condition(fTYPNAME, Condition.cEQUAL, getName()));
     Query LoadAct=new Query(getTabNameAttrs(), getRecordAttrsStruct(), Conds);
-    Cursor Cur=getDrv().OpenCursor(LoadAct);
+    Cursor Cur=null;
+    try {
+    Cur=getDrv().OpenCursor(LoadAct);
     Record r=getDrv().NextRec(Cur);
     while (r!=null)
         {
@@ -727,6 +729,12 @@ if (AttrsDef==null)
     getDrv().CloseCursor(Cur);
     getObjCacheAtr().put(getName(), AttrsDef);
     return(AttrsDef);
+    } catch (PDException Ex)
+        {
+        if (Cur!=null)
+           getDrv().CloseCursor(Cur);
+        throw Ex;
+        }
     }
 return(AttrsDef);
 }

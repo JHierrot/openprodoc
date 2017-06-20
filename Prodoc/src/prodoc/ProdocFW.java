@@ -72,6 +72,7 @@ static private void ReadConfiguration(String FileConf) throws PDException
 {
 try {
 ProdocProperties.load(new FileInputStream(FileConf));
+ExtConf.AssignConf(ProdocProperties);
     } catch (Exception e)
         {
         PDException.GenPDException("Error_reading_OpenProdoc_configuration", FileConf);

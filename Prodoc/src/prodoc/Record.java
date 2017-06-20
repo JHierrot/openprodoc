@@ -503,7 +503,8 @@ for (int j = 0; j < AttrLst.getLength(); j++)
         boolean UniKey=Integer.parseInt(XMLAttrName.getNodeValue())==1;
         String Value=DriverGeneric.DeCodif(Attr.getTextContent());
         Attribute At=new Attribute(AttrName, "", "", Type, Req, null, LongStr, false, UniKey, ModAllow, Multi);
-        if (Type==Attribute.tSTRING || Value.length()!=0)
+        // if (Type==Attribute.tSTRING || Value.length()!=0)
+        if (Value.length()!=0)
             At.Import(Value);
         R.addAttr(At);
         }
