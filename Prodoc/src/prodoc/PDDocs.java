@@ -2510,18 +2510,26 @@ for (int i = 0; i < childNodes.getLength(); i++)
          if (!MaintainId)
             NewDoc.setPDId(null);
         NewDoc.setParentId(DestFold);
-//        StoreGeneric Rep=getDrv().getRepository(NewDoc.getReposit());
         PDRepository Rep=new PDRepository(getDrv());
         Rep.Load(NewDoc.getReposit());
         if (!Rep.IsRef())
-//        if (!Rep.IsURL())
             {
             Attribute DocName=r.getAttr(fNAME);
             String Path=(String)DocName.getValue();
             if (Path.contains(File.separator)) // if absolute reference, maintain
                 NewDoc.setFile(Path);
             else
+                {
+                if (Path.contains("&amp;") || Path.contains("&gt;") || Path.contains("&lt;") ) 
+                    { // Testing name conversion
+                    File f=new File(FolderPath+Path);
+                    if (!f.exists()) // perhaps converted
+                        {
+                        Path=Path.replace("&lt;", "<").replace("&gt;", ">" ).replace("&amp;", "&");   
+                        }
+                    }
                 NewDoc.setFile(FolderPath+Path);
+                }
             NewDoc.setName(null); // calculated by when inserting
             }
         }

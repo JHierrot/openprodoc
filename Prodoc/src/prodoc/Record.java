@@ -469,7 +469,7 @@ for (int j = 0; j < AttrLst.getLength(); j++)
         String Value=DriverGeneric.DeCodif(Attr.getTextContent());        
         Attribute At=R.getAttr(AttrName);
         if (At!=null)
-            At.Import(Value);
+            At.ImportXML(Value);
         }
     }
 if (PDLog.isDebug())
@@ -505,7 +505,7 @@ for (int j = 0; j < AttrLst.getLength(); j++)
         Attribute At=new Attribute(AttrName, "", "", Type, Req, null, LongStr, false, UniKey, ModAllow, Multi);
         // if (Type==Attribute.tSTRING || Value.length()!=0)
         if (Value.length()!=0)
-            At.Import(Value);
+            At.ImportXML(Value);
         R.addAttr(At);
         }
     }

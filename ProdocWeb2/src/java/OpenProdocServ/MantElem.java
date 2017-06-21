@@ -382,7 +382,7 @@ else if (ElemType.equals(ListElem.MANTGROUPS))
     Attr=Rec.getAttr(PDGroups.fDESCRIPTION);
     SB.append(GenInput(Req, Attr, ReadOnly, Modif)); 
     Attr=Rec.getAttr(PDGroups.fACL);
-    SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" options:[");
+    SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.ExportXML()+"\","):"").append(" options:[");
     SB.append(getComboModel("ACL",PDSession, (String)Attr.getValue()) );
     SB.append("]},"); 
     SB.append("{type: \"hidden\", name:\"Users\", value: \"").append(GenGUsers(PDSession, Id)).append("\"},");
@@ -530,7 +530,7 @@ else if (ElemType.equals(ListElem.MANTOBJ))
     Attr=Rec.getAttr(PDObjDefs.fDESCRIPTION);
     SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
     Attr=Rec.getAttr(PDObjDefs.fACL);
-    SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" options:[");
+    SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.ExportXML()+"\","):"").append(" options:[");
     if (ObjId!=null)
         SB.append(getComboModel("ACL",PDSession, Parent.getACL()) );
     else
@@ -540,7 +540,7 @@ else if (ElemType.equals(ListElem.MANTOBJ))
              || ((String)Rec.getAttr(PDObjDefs.fCLASSTYPE).getValue()).equals(PDObjDefs.CT_DOC))
         {
         Attr=Rec.getAttr(PDObjDefs.fREPOSIT);
-        SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" options:[");
+        SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.ExportXML()+"\","):"").append(" options:[");
         if (ObjId!=null)
             SB.append(getComboModel("Reposit",PDSession, Parent.getReposit()) );
         else

@@ -81,7 +81,7 @@ while (NextDoc!=null)
     AttrD=NextDoc.getAttr(PDDocs.fDOCTYPE);
     FolderDocs.append("<cell>").append(AttrD.getValue()).append("</cell>");       
     AttrD=NextDoc.getAttr(PDDocs.fTITLE);
-    FolderDocs.append("<cell>").append(AttrD.getValue()).append("^SendDoc?Id=").append(DocId).append("^_blank").append("</cell>");       
+    FolderDocs.append("<cell>").append(AttrD.ExportXML()).append("^SendDoc?Id=").append(DocId).append("^_blank").append("</cell>");       
     AttrD=NextDoc.getAttr(PDDocs.fDOCDATE);
     FolderDocs.append("<cell>").append(AttrD.Export()).append("</cell>");
     AttrD=NextDoc.getAttr(PDDocs.fLOCKEDBY);

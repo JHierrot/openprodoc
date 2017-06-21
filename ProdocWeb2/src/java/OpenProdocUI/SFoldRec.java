@@ -87,7 +87,7 @@ while (Attr!=null)
                 }
             }
         else
-            Html.append(Attr.Export());
+            Html.append(Attr.ExportXML());
         }
     Attr=Rec.nextAttr();
     }

@@ -2268,7 +2268,7 @@ return(Tmp);
  */
 static public String getVersion()
 {
-return("2.0");  
+return("2.1");  
 }
 //---------------------------------------------------------------------
 
@@ -2326,6 +2326,8 @@ if (!IsOneLevel)
 private void Import(PDFolders FoldAct, String OriginPath, boolean IsOneLevel, boolean IncludeMetadata, boolean IncludeDocs, String FoldType, String DocType, boolean Strict) throws PDException
 {
 PDFolders NewFold=new PDFolders(FoldAct.getDrv(), FoldType); 
+if (OriginPath.lastIndexOf(File.separatorChar)==OriginPath.length()-1) // ends with separtos
+   OriginPath=OriginPath.substring(0, OriginPath.length()-1);
 boolean FoldExist=false;
 if (!Strict)
     {

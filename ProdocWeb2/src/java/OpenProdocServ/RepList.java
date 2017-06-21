@@ -80,7 +80,7 @@ while (NextDoc!=null)
     DocId=(String)AttrD.getValue();
     FolderDocs.append("<row id=\"").append(DocId).append("\">");       
     AttrD=NextDoc.getAttr(PDDocs.fTITLE);
-    FolderDocs.append("<cell>").append(AttrD.getValue()).append("^GenReport?Id=").append(DocId).append("^_blank").append("</cell>");       
+    FolderDocs.append("<cell>").append(AttrD.ExportXML()).append("^GenReport?Id=").append(DocId).append("^_blank").append("</cell>");       
     AttrD=NextDoc.getAttr(PDDocs.fMIMETYPE);
     FolderDocs.append("<cell>").append(AttrD.Export()).append("</cell>");       
     AttrD=NextDoc.getAttr(PDReport.fDOCSPAGE);

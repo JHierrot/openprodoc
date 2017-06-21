@@ -541,9 +541,35 @@ else
     {
     if (getValue()==null)
         return("");
-//    if (PDLog.isDebug())
-//        PDLog.Debug("Attribute.Export:"+getValue()+"-->"+FormatExport(getValue()));
     return(FormatExport(getValue()));
+    }
+}
+//--------------------------------------------------------------------------
+/**
+ *
+ * @return
+ */
+public String ExportXML()
+{
+if (isMultivalued())    
+    {
+    if (ValuesList==null)
+        return("");
+    StringBuilder Tot=new StringBuilder();
+    for (Iterator it = ValuesList.iterator(); it.hasNext();)
+        {
+        if (Tot.length()!=0)
+            Tot.append(ListSeparator);
+        Object Val = it.next();
+        Tot.append(FormatExportXML(Val));
+        }
+    return(Tot.toString());
+    }
+else
+    {
+    if (getValue()==null)
+        return("");
+    return(FormatExportXML(getValue()));
     }
 }
 //--------------------------------------------------------------------------
@@ -555,7 +581,30 @@ else
 private String FormatExport(Object Val)
 {
 if (getType()==Attribute.tSTRING)
+    return(DriverGeneric.DeCodif((String)Val));
+else if (getType()==Attribute.tTHES)
     return((String)Val);
+else if (getType()==Attribute.tINTEGER)
+    return(""+Val);
+else if (getType()==Attribute.tBOOLEAN)
+    return(toBooleanString((Boolean)Val));
+else if (getType()==Attribute.tDATE)
+    return(formatterDate.format((Date)Val));
+else if (getType()==Attribute.tTIMESTAMP)
+    return(formatterTS.format((Date)Val));
+else
+    return(Val.toString());            
+}
+//--------------------------------------------------------------------------
+/**
+ * Formats values for export
+ * @param Val Object to be formated
+ * @return String containing the formated object
+ */
+private String FormatExportXML(Object Val)
+{
+if (getType()==Attribute.tSTRING)
+    return(((String)Val).replace("<", "&lt;").replace(">", "&gt;").replace("&", "&amp;"));
 else if (getType()==Attribute.tTHES)
     return((String)Val);
 else if (getType()==Attribute.tINTEGER)
@@ -574,6 +623,44 @@ private Object FormatImport(String Val) throws PDException
 {
 if (getType()==Attribute.tSTRING)
     return(DriverGeneric.Codif(Val));
+else if (getType()==Attribute.tTHES)
+    return(Val);
+else if (getType()==Attribute.tINTEGER)
+    return(Integer.parseInt(Val));
+else if (getType()==Attribute.tBOOLEAN)
+    {
+    if (Val.equals("1"))
+        return(true);
+    else
+        return(false);
+    }
+else if (getType()==Attribute.tDATE)
+    {
+    try {
+    if (Val!=null && Val.length()!=0)
+        return(formatterDate.parse(Val));
+    } catch (ParseException ex)
+        {
+        PDException.GenPDException(ex.getLocalizedMessage(), Val);
+        }
+    }
+else if (getType()==Attribute.tTIMESTAMP)
+    {
+    try {
+    if (Val!=null && Val.length()!=0)
+        return(formatterTS.parse(Val));
+    } catch (ParseException ex)
+        {
+        PDException.GenPDException(ex.getLocalizedMessage(), Val);
+        }
+    }
+return(null);
+}
+//--------------------------------------------------------------------------
+private Object FormatImportXML(String Val) throws PDException
+{
+if (getType()==Attribute.tSTRING)
+    return(Val.replace("&lt;", "<").replace("&gt;", ">" ).replace("&amp;", "&"));
 else if (getType()==Attribute.tTHES)
     return(Val);
 else if (getType()==Attribute.tINTEGER)
@@ -627,6 +714,28 @@ if (isMultivalued())
 else
     {
     setValue(FormatImport(Val));    
+    }
+}
+//-----------------------------------------------------------------------------------
+/**
+ *
+ * @param Val
+ * @throws PDException
+ */
+public void ImportXML(String Val) throws PDException
+{
+if (isMultivalued())    
+    {
+    ClearValues();
+    StringTokenizer St=new StringTokenizer(Val, StringListSeparator);
+    while (St.hasMoreTokens())
+        {
+        AddValue(FormatImportXML(St.nextToken()));
+        }
+    }   
+else
+    {
+    setValue(FormatImportXML(Val));    
     }
 }
 //-----------------------------------------------------------------------------------
@@ -693,7 +802,7 @@ StringBuilder S=new StringBuilder(200);
 S.append("<"+ObjPD.XML_Attr+" Name=\"");
 S.append(getName());
 S.append("\">");
-S.append(Export());
+S.append(ExportXML());
 S.append("</"+ObjPD.XML_Attr+">\n");
 return(S.toString());
 }
@@ -721,7 +830,7 @@ S.append(isUnique()?"1":"0");
 S.append("\" ModAllow=\"");
 S.append(isModifAllowed()?"1":"0");
 S.append("\">");
-S.append(Export());
+S.append(ExportXML());
 S.append("</"+ObjPD.XML_Attr+">\n");
 return(S.toString());
 }
@@ -753,7 +862,7 @@ S.append("<LongStr>");
 S.append(getLongStr());
 S.append("</LongStr>");
 S.append("<Value>");
-S.append(Export());
+S.append(ExportXML());
 S.append("</Value>");
 S.append("<PrimKey>");
 S.append(isPrimKey()?"1":"0");

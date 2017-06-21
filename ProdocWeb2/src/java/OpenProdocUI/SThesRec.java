@@ -82,13 +82,13 @@ Attr=Rec.getAttr(PDThesaur.fDESCRIP);
 if (Attr.getValue()!=null & Attr.Export().length()>0)
     {
     Html.append(TT(Req, Attr.getUserName())).append("= <b>");
-    Html.append(Attr.Export()+"</b><br>");
+    Html.append(Attr.ExportXML()+"</b><br>");
     }
 Attr=Rec.getAttr(PDThesaur.fSCN);
 if (Attr.getValue()!=null & Attr.Export().length()>0)
     {
     Html.append(TT(Req, Attr.getUserName())).append("= <b>");
-    Html.append(Attr.Export()+"</b><br>");
+    Html.append(Attr.ExportXML()+"</b><br>");
     }
 Attr=Rec.getAttr(PDThesaur.fLANG);
 if (Attr.getValue()!=null & Attr.Export().length()>0)

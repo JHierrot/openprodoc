@@ -1414,13 +1414,13 @@ while (Attr!=null)
             }
         }
     else if (IsXML && IsDoc && Attr.getName().equals(PDDocs.fTITLE))
-        Row.append("<cell>").append(Attr.Export()).append("^SendDoc?Id=").append(Id).append("^_blank</cell>");
+        Row.append("<cell>").append(Attr.ExportXML()).append("^SendDoc?Id=").append(Id).append("^_blank</cell>");
     else    
         {
         if (IsXML)
-            Row.append("<cell>").append(Attr.Export()).append("</cell>");
+            Row.append("<cell>").append(Attr.ExportXML()).append("</cell>");
         else
-            Row.append("\"").append(Attr.Export()).append("\",");
+            Row.append("\"").append(Attr.ExportXML()).append("\",");
         }
     Attr=NextRec.nextAttr();
     }
