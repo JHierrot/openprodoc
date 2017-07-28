@@ -328,6 +328,10 @@
         <servlet-name>OPAC</servlet-name>
         <servlet-class>OpenProdocUI.OPAC</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>OPAC2</servlet-name>
+        <servlet-class>OpenProdocUI.OPAC2</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SParent</servlet-name>
         <url-pattern>/SParent</url-pattern>
@@ -655,6 +659,10 @@
     <servlet-mapping>
         <servlet-name>OPAC</servlet-name>
         <url-pattern>/OPAC</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OPAC2</servlet-name>
+        <url-pattern>/OPAC2</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

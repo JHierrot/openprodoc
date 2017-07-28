@@ -42,6 +42,7 @@ static private String User=null;
 static private String Pass=null;
 static private String Title=null;
 static private String DTLabel=null;
+static private String FTLabel=null;
 
 //----------------------------------------------------------------------------    
 static void AssignConf(Properties ProdocProperties)
@@ -62,7 +63,7 @@ if (ConfDocTipesList!=null && ConfDocTipesList.trim().length()!=0)
 String ConfFieldsToInclude=ProdocProperties.getProperty("FieldsToInclude");
 if (ConfFieldsToInclude!=null && ConfFieldsToInclude.trim().length()!=0)
     {
-    String[] FTL = ConfDocTipesList.trim().split("\\|");
+    String[] FTL = ConfFieldsToInclude.trim().split("\\|");
     for (int i = 0; i < FTL.length; i++)
         getFieldsToInclude().add(FTL[i]);    
     }
@@ -115,6 +116,11 @@ String ConfDTLabel=ProdocProperties.getProperty("DTLabel");
 if (ConfDTLabel!=null && ConfDTLabel.trim().length()!=0)
     {
     DTLabel=ConfDTLabel.trim();
+    }    
+String ConfFTLabel=ProdocProperties.getProperty("FTLabel");
+if (ConfFTLabel!=null && ConfFTLabel.trim().length()!=0)
+    {
+    FTLabel=ConfFTLabel.trim();
     }    
 }
 //----------------------------------------------------------------------------    
@@ -246,4 +252,34 @@ public static String getDTLabel()
 return DTLabel;
 }
 //----------------------------------------------------------------------------    
+
+/**
+* @return the FTLabel
+*/
+public static String getFTLabel()
+{
+return FTLabel;
 }
+}
+/**
+
+#########################################################################
+####            OPAC  Example                                        ####
+#########################################################################
+OpacActive=1
+WebInactive=0
+DocTipesList=PD_DOCS|Fabricante
+FieldsToInclude=Title|MimeType|DocDate|Descripcion|Telefono
+BaseFolder=\Temp
+Inheritance=1
+ResultForm=150c9be080c-3fe46f69eb1b2cb7
+MaxResults=0
+# FormSearchCSS=
+FormSearchLogo=SendDoc?Id=15d8a225786-3fe11b750cd2517e
+User=root
+Pass=root
+Title=OPAC OpenProdoc
+DTLabel=Elegir Tipo Documento
+FTLabel=Introducir palabras de b&uacute;squeda
+
+ */

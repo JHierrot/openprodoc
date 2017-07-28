@@ -91,14 +91,9 @@ if (doc.IsUrl())
         UrlTmp=doc.getUrl();   
     if (UrlTmp.substring(0,4).equalsIgnoreCase("http"))
         {
-//        PrintWriter out = response.getWriter();
-//        String HeadRefresh="<META http-equiv=\"refresh\" content=\"1; URL="+UrlTmp +"\">";                
-//        out.println("<!DOCTYPE html><head>"+HeadRefresh+"</head><html><body>Opening....."+UrlTmp+"</body></html>");
-//        out.println("<!DOCTYPE html><body onload=\"window.location = '"+UrlTmp+"'\"></body>");
         response.setStatus(302);
         response.setHeader("Location", UrlTmp);
         response.setHeader("Connection", "close");
-//        out.close();
         }
     else
         {
@@ -106,7 +101,7 @@ if (doc.IsUrl())
         PDMimeType mt=new PDMimeType(getSessOPD(Req));
         mt.Load(doc.getMimeType());
         response.setContentType(mt.getMimeCode());
-        response.setHeader("Content-disposition", "inline; filename=" + doc.getName());
+        response.setHeader("Content-disposition", "inline; filename=\"" + doc.getName()+"\"");
         response.setCharacterEncoding("UTF-8"); // just for text family docs
         FileInputStream Is=null;
         byte Buffer[]=new byte[TAMBUFF];
@@ -138,7 +133,7 @@ else
     PDMimeType mt=new PDMimeType(getSessOPD(Req));
     mt.Load(doc.getMimeType());
     response.setContentType(mt.getMimeCode());
-    response.setHeader("Content-disposition", "inline; filename=" + doc.getName());
+    response.setHeader("Content-disposition", "inline; filename=\"" + doc.getName()+"\"");
     response.setCharacterEncoding("UTF-8"); // just for text family docs
     try {
     if (Ver!=null && Ver.length()!=0)

@@ -23,6 +23,9 @@ import static OpenProdocUI.SParent.getProdocProperRef;
 import static OpenProdocUI.SParent.setSessOPD;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Vector;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +34,7 @@ import prodoc.Attribute;
 import prodoc.Cursor;
 import prodoc.DriverGeneric;
 import prodoc.ExtConf;
+import prodoc.PDDocs;
 import prodoc.PDObjDefs;
 import prodoc.ProdocFW;
 import prodoc.Record;
@@ -45,33 +49,40 @@ private static String HtmlFinal=null;
 private static final String HtmlBase="<!DOCTYPE html>\n" +
 "<html>" +
     "<head>" +
-        "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>" +
+        "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>" +
         "<title>OpenProdoc2 Web OPAC</title>" +
+        "<script>"+
+        "function ExecMenu(IdType)\n" +
+        "{\n" +
+        "switch (IdType)\n" +
+          "{\n" +
+          "@SWITCH@"+
+           "}\n"+
+        "}\n"+
+        "</script>"+
          // "<script src=\"js/OpenProdoc.js\" type=\"text/javascript\"></script>" +
          // "<script src=\"js/dhtmlx.js\" type=\"text/javascript\"></script>" +
         "<link rel=\"shortcut icon\" href=\"img/OpenProdoc.ico\" type=\"image/x-icon\"/>" +       
          // "<link rel=\"STYLESHEET\" type=\"text/css\" href=\"js/dhtmlx.css\"/>" +
         "@CSS@"+
-    "</head>" +
-    "<body>" +
+    "</head>\n" +
+    "<body class=\"OPACBODY\" onload=\"ExecMenu(\'@FIRSTTYPE@\');\" >\n" +
        "<form action=\"OPAC2\"  target=\"_blank\" method=\"post\" class=\"OPACFORM\">" +
-"        <table align=\"center\"  width=\"300\" class=\"OPACTABLE\">" +
-"        <tr><td>&nbsp</td></tr>" +
-"        <tr><td>@LOGO@<H3>OpenProdoc</H3></td></tr>\n" +
-"        <tr><td>\n"+
-        "  <fieldset class=\"OPACFS\"><legend class=\"OPACLEG\">@TITLE@</legend><table>" +
-        
-        "  <tr><td width=\"100\"><div class=\"OPACDT\" >@DTLABEL@</div></td>" +
-        "  <td><select class=\"OPACCOMB\">@DTVALS@</select></td></tr>" +
-        
-        "  <tr><td width=\"100\"><div class=\"OPACLAB\" >User:</div></td>" +
-        "  <td><input class=\"OPACINP\" type=\"text\" name=\"User\"></td></tr>" +
-
-        "  <tr><td></td><td><input  class=\"OPACBUT\" type=\"submit\" value=\"  Ok  \"></td></tr>" +
-        "  </table></fieldset>" +
-"        </td></tr>" +
-"    </table>\n"+        
-        "</form>\n" +
+       "<table align=\"center\"  class=\"OPACTABLE\">\n" +
+        "<tr><td>&nbsp</td></tr>" +
+        "<tr><td>@LOGO@<H3>OpenProdoc</H3></td></tr>" +
+        "<tr><td>"+
+        "<fieldset class=\"OPACFS\"><legend class=\"OPACLEG\">&nbsp;&nbsp;@TITLE@&nbsp;&nbsp;</legend>\n"+
+         "<table>\n" +   
+          "<tr><td><div class=\"OPACDT\" >@DTLABEL@</div></td><td><select class=\"OPACCOMB\" onChange=\"ExecMenu(this.options[this.selectedIndex].value)\">@DTVALS@</select></td></tr>\n" +
+          "<tr><td><div class=\"OPACFTLAB\" >@FTLABEL@</div></td><td><input class=\"OPACFTINP\" type=\"text\" name=\"FT\"></td></tr>\n" +
+          "@OPACFIELDS@"+
+          "<tr><td></td><td><input  class=\"OPACBUT\" type=\"submit\" value=\"  Ok  \"></td></tr>" +
+          "</table>\n" +
+         "</fieldset>" +
+        "</td></tr>" +
+       "</table>\n"+        
+     "</form>\n" +
     "</body>" +
 "</html>";
 
@@ -89,19 +100,16 @@ response.setContentType("text/html;charset=UTF-8");
 DriverGeneric sessOPD = getSessOPD(Req);
 PrintWriter out = response.getWriter();  
 try {
-if (sessOPD==null)
+ProdocFW.InitProdoc("PD", getProdocProperRef());
+if (ExtConf.isOpacActive())
     {
-    if (ExtConf.isOpacActive())
-        {
-        ProdocFW.InitProdoc("PD", getProdocProperRef());
-        DriverGeneric D=ProdocFW.getSession("PD", ExtConf.getUser(), ExtConf.getPass());
-        setSessOPD(Req, D);
-        out.println(GenHtml( sessOPD ));        
-        }
-    else
-        {
-        AskLogin(Req, out);
-        }
+    DriverGeneric D=ProdocFW.getSession("PD", ExtConf.getUser(), ExtConf.getPass());
+    setSessOPD(Req, D);
+    out.println(GenHtml( D ));        
+    }
+else
+    {
+    AskLogin(Req, out);
     }
 } catch (Exception Ex)
     {
@@ -124,49 +132,76 @@ return "OPAC Servlet";
 
 static synchronized private String GenHtml(DriverGeneric sessOPD)
 {
-if (HtmlFinal!=null)    
-    return(HtmlFinal);
+//if (HtmlFinal!=null)    
+//    return(HtmlFinal);
 if (ExtConf.getFormSearchCSS()!=null)
-    HtmlFinal=HtmlBase.replace("@CSS@", "<link rel=\"STYLESHEET\" type=\"text/css\" href=\"/SendDoc?Id="+ExtConf.getFormSearchCSS()+"\"/>");
+    HtmlFinal=HtmlBase.replace("@CSS@", "<link rel=\"STYLESHEET\" type=\"text/css\" href=\"SendDoc?Id="+ExtConf.getFormSearchCSS()+"\"/>");
 else
     HtmlFinal=HtmlBase.replace("@CSS@", "");
 if (ExtConf.getFormSearchLogo()!=null) // <img src=\"/SendDoc?Id="+ExtConf.getFormSearchLogo()+"\">"
-    HtmlFinal=HtmlBase.replace("@LOGO@", "<img "+ExtConf.getFormSearchLogo()+">");
+    HtmlFinal=HtmlFinal.replace("@LOGO@", "<img src=\""+ExtConf.getFormSearchLogo()+"\">");
 else
-    HtmlFinal=HtmlBase.replace("@LOGO@", "");
+    HtmlFinal=HtmlFinal.replace("@LOGO@", "");
 if (ExtConf.getTitle()!=null) // "OPAC  OpenProdoc"
-    HtmlFinal=HtmlBase.replace("@TITLE@", ExtConf.getTitle());
+    HtmlFinal=HtmlFinal.replace("@TITLE@", ExtConf.getTitle());
 else
-    HtmlFinal=HtmlBase.replace("@TITLE@", "");
+    HtmlFinal=HtmlFinal.replace("@TITLE@", "Title");
 if (ExtConf.getDTLabel()!=null) // "Select DocType"
-    HtmlFinal=HtmlBase.replace("@DTLABEL@", ExtConf.getDTLabel());
+    HtmlFinal=HtmlFinal.replace("@DTLABEL@", ExtConf.getDTLabel());
 else
-    HtmlFinal=HtmlBase.replace("@DTLABEL@", "");
+    HtmlFinal=HtmlFinal.replace("@DTLABEL@", "DocTipes");
+if (ExtConf.getDTLabel()!=null) // "Intro search words"
+    HtmlFinal=HtmlFinal.replace("@FTLABEL@", ExtConf.getFTLabel());
+else
+    HtmlFinal=HtmlFinal.replace("@FTLABEL@", "Intro search words");
 Vector<String> DocTipesList = ExtConf.getDocTipesList();
+HtmlFinal=HtmlFinal.replace("@FIRSTTYPE@",DocTipesList.elementAt(0));
 Vector<String> FieldsToInclude = ExtConf.getFieldsToInclude();
+HashMap <String, Boolean> FieldsIncForm=new HashMap(FieldsToInclude.size());
+for (int i = 0; i < FieldsToInclude.size(); i++)
+    FieldsIncForm.put(FieldsToInclude.elementAt(i), false);
 StringBuilder DTVals=new StringBuilder(1000);
+StringBuilder Fields=new StringBuilder(3000);
+StringBuilder SwitchDT=new StringBuilder(3000);
 for (int NDT = 0; NDT < DocTipesList.size(); NDT++)
     {
     String DT = DocTipesList.elementAt(NDT);
-    PDObjDefs  Def=new PDObjDefs(sessOPD);
+    HashMap <String, Boolean> FieldsVisib=new HashMap(FieldsToInclude.size());
+    for (int i = 0; i < FieldsToInclude.size(); i++)
+        FieldsVisib.put(FieldsToInclude.elementAt(i), false);
+    SwitchDT.append("case \"").append(DT).append("\":\n");
     try {
-    Def.Load(DT);
-    Record AttrDef = Def.GetAttrDef();
+    PDObjDefs  Def=new PDObjDefs(sessOPD);
+    Def.Load(DT);  
+    PDDocs  Doc=new PDDocs(sessOPD, DT);
+    Record AttrDef = Doc.getRecSum();
     AttrDef.initList();
     for (int NAT = 0; NAT < AttrDef.NumAttr(); NAT++)
         {
         Attribute Attr = AttrDef.nextAttr();  
-        if (FieldsToInclude.contains(Attr.getName()))
+        if (FieldsToInclude.contains(Attr.getName()) )
             {
-            
+            if (!FieldsIncForm.get(Attr.getName())) // to avoid duplicates in form
+                {
+                Fields.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"OPACLAB\" >").append(Attr.getUserName()).append("</div></td><td><input class=\"OPACINP\" type=\"text\" name=\"").append(Attr.getName()).append("\"></td></tr>\n");
+                FieldsIncForm.put(Attr.getName(), true);
+                }
+            FieldsVisib.put(Attr.getName(), true); // to enable when changing doctype
             }
+        }
+    DTVals.append("<option value=\"").append(Def.getName()).append("\">").append(Def.getDescription()).append("</option>");
+    for (Map.Entry<String, Boolean> FieldVis : FieldsVisib.entrySet())
+        {
+        SwitchDT.append("document.getElementById(\"").append(FieldVis.getKey()).append("\").style.visibility=\"").append(FieldVis.getValue()?"visible":"collapse").append("\";\n");
         }
     } catch (Exception Ex)
         {        
         }
-    DTVals.append("<option value=\"").append(Def.getName()).append("\">").append(Def.getDescription()).append("</option>");
+    SwitchDT.append("break;\n");
     }
-HtmlFinal=HtmlBase.replace("@DTVALS@", DTVals);
+HtmlFinal=HtmlFinal.replace("@DTVALS@", DTVals);
+HtmlFinal=HtmlFinal.replace("@OPACFIELDS@", Fields);
+HtmlFinal=HtmlFinal.replace("@SWITCH@", SwitchDT);
 return(HtmlFinal);
 }
 //-----------------------------------------------------------------------------------------------
