@@ -20,16 +20,29 @@
 package OpenProdocUI;
 
 import static OpenProdocUI.SParent.PrepareError;
+import static OpenProdocUI.SParent.ShowMessage;
 import static OpenProdocUI.SParent.TT;
+import static OpenProdocUI.SParent.getActFolderId;
 import static OpenProdocUI.SParent.getSessOPD;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import prodoc.Attribute;
 import prodoc.Conditions;
 import prodoc.Cursor;
 import prodoc.DriverGeneric;
+import prodoc.ExtConf;
 import prodoc.PDException;
 import prodoc.PDDocs;
+import prodoc.PDFolders;
+import prodoc.PDMimeType;
+import prodoc.PDReport;
 import prodoc.Record;
 
 /**
@@ -38,7 +51,18 @@ import prodoc.Record;
  */
 public class OPAC2 extends SParent
 {
-
+protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+{
+try {
+    ProcessPage(request, response);
+} catch (Exception e)
+    {
+    PrintWriter out = response.getWriter();
+    ShowMessage(request, out, e.getLocalizedMessage());
+    e.printStackTrace();
+    AddLog(e.getMessage());
+    }
+}
 //-----------------------------------------------------------------------------------------------
 /**
  *
@@ -46,84 +70,85 @@ public class OPAC2 extends SParent
  * @param out
  * @throws Exception
  */
-@Override
-protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
+protected void ProcessPage(HttpServletRequest Req, HttpServletResponse response) throws Exception
 {   
 DriverGeneric PDSession=getSessOPD(Req);
 PDDocs TmpDoc;
-String CurrFold=Req.getParameter("F");
-if (CurrFold!=null)
+
+Cursor Cur=null;    
+try {      
+PDFolders F=new PDFolders(PDSession);
+String CurrFoldId=F.getIdPath(ExtConf.getBaseFolder());
+String CurrType=Req.getParameter("DT"); 
+String FullTextSearch=Req.getParameter("FT"); 
+String ReportId=ExtConf.getResultForm();
+TmpDoc=new PDDocs(PDSession, CurrType);
+Record Rec=TmpDoc.getRecSum();
+Conditions Cond=new Conditions();
+Rec.initList();
+Attribute Attr=Rec.nextAttr();
+while (Attr!=null)
     {
-    String NewType=Req.getParameter("Ty");
-    if (NewType!=null && NewType.length()!=0)
-        TmpDoc=new PDDocs(PDSession, NewType);
-    else
+    if (Attr.getName().equals(PDDocs.fDOCTYPE))
         {
-        TmpDoc=new PDDocs(PDSession);
-        TmpDoc.LoadFull(CurrFold);
-        NewType=TmpDoc.getDocType();
-        }
-    Record R=TmpDoc.getRecSum();
-    out.println( GenSearchDocForm("Search_Documents", Req, PDSession, CurrFold, NewType, TmpDoc.getRecSum(), false, false) );    
-    }
-else
-    {
-    Cursor c=null;    
-    try {    
-    String CurrentFold=Req.getParameter("CurrFold");   
-    String CurrType=Req.getParameter("OPDNewType"); 
-    String SubTypes=Req.getParameter("Subtypes"); 
-    String SubFolders=Req.getParameter("SubFolders"); 
-    String IncludeVers=Req.getParameter("IncludeVers"); 
-    String FullTextSearch=Req.getParameter("FullTextSearch"); 
-    TmpDoc=new PDDocs(PDSession, CurrType);
-    Record Rec=TmpDoc.getRecSum();
-    Conditions Cond=new Conditions();
-    Rec.initList();
-    Attribute Attr=Rec.nextAttr();
-    while (Attr!=null)
-        {
-        if (Attr.getName().equals(PDDocs.fDOCTYPE))
-            {
-            Attr=Rec.nextAttr();
-            continue;
-            }
-        String Val=Req.getParameter(Attr.getName());
-        String Comp=Req.getParameter("Comp_"+Attr.getName());
-        if (Attr.getType()==Attribute.tTHES)
-                {
-                Val=Req.getParameter("TH_"+Attr.getName());   
-                if (Val != null && Val.length()!=0)
-                    Cond.addCondition(SParent.FillCond(Req, Attr, Val, Comp));
-                }
-        else if (!(Val == null || Val.length()==0 || Attr.getName().equals(PDDocs.fACL) && Val.equals("null") 
-              || Attr.getType()==Attribute.tBOOLEAN && Val.equals("0") ) )
-            {
-            Cond.addCondition(SParent.FillCond(Req, Attr, Val, Comp));
-            }
         Attr=Rec.nextAttr();
+        continue;
         }
-    out.println("OK"+GenHeader(Req, Rec, true));
-//    out.print("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rows>");
-    out.print("<rows>");
-    SaveConds(Req, "Doc", CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")),(IncludeVers.equals("1")), CurrentFold, null, Rec, FullTextSearch);
-    c=TmpDoc.Search(FullTextSearch, CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")),(IncludeVers.equals("1")), CurrentFold, null);
-    Record NextDoc=PDSession.NextRec(c);
-    while (NextDoc!=null)
+    String Val=Req.getParameter(Attr.getName());
+    String Comp="EQ";
+    if (Attr.getType()==Attribute.tTHES)
+            {
+            Val=Req.getParameter("TH_"+Attr.getName());   
+            if (Val != null && Val.length()!=0)
+                Cond.addCondition(SParent.FillCond(Req, Attr, Val, Comp));
+            }
+    else if (!(Val == null || Val.length()==0 || Attr.getName().equals(PDDocs.fACL) && Val.equals("null") 
+          || Attr.getType()==Attribute.tBOOLEAN && Val.equals("0") ) )
         {
-        out.print(SParent.GenRowGrid(Req, (String)NextDoc.getAttr(PDDocs.fPDID).getValue(), NextDoc, true));    
-        NextDoc=PDSession.NextRec(c);
+        Cond.addCondition(SParent.FillCond(Req, Attr, Val, Comp));
         }
-    out.println("</rows>");
-    } catch (PDException Ex)
-        {
-        PrepareError(Req, Ex.getLocalizedMessage(), out);
-        }
-    finally 
-        {
-        if (c!=null)
-           PDSession.CloseCursor(c);
-        }
+    Attr=Rec.nextAttr();
+    }
+Cur=TmpDoc.Search(FullTextSearch, CurrType, Cond, ExtConf.isInheritance(), true,false, CurrFoldId, null);
+PDReport Rep=new PDReport(PDSession);
+Rep.LoadFull(ReportId);
+ArrayList<String> GeneratedRep= Rep.GenerateRep(getActFolderId(Req), Cur, null, 0, 0, SParent.getIO_OSFolder());
+String File2Send=GeneratedRep.get(0);
+PDMimeType mt=new PDMimeType(PDSession);
+mt.Load(Rep.getMimeType());
+response.setHeader("Content-disposition", "inline; filename=" + Rep.getName());    
+response.setContentType(mt.getMimeCode()+";charset=UTF-8");
+response.setCharacterEncoding("UTF-8");
+FileInputStream in=null;
+byte Buffer[]=new byte[64*1024];
+ServletOutputStream out=null;
+try {
+out=response.getOutputStream();
+in = new FileInputStream(File2Send);
+int readed=in.read(Buffer);
+while (readed!=-1)
+    {
+    out.write(Buffer, 0, readed);
+    readed=in.read(Buffer);
+    }
+in.close();
+out.flush();
+out.close();
+File f=new File(File2Send);
+f.delete();
+} catch (Exception e)
+    {
+    if (out!=null)
+        out.close();
+    if (in!=null)
+        in.close();
+    throw e;
+    }
+}
+finally 
+    {
+    if (Cur!=null)
+       PDSession.CloseCursor(Cur);
     }
 }
 //-----------------------------------------------------------------------------------------------

@@ -74,7 +74,7 @@ private static final String HtmlBase="<!DOCTYPE html>\n" +
         "<tr><td>"+
         "<fieldset class=\"OPACFS\"><legend class=\"OPACLEG\">&nbsp;&nbsp;@TITLE@&nbsp;&nbsp;</legend>\n"+
          "<table>\n" +   
-          "<tr><td><div class=\"OPACDT\" >@DTLABEL@</div></td><td><select class=\"OPACCOMB\" onChange=\"ExecMenu(this.options[this.selectedIndex].value)\">@DTVALS@</select></td></tr>\n" +
+          "<tr><td><div class=\"OPACDT\" >@DTLABEL@</div></td><td><select class=\"OPACCOMB\" name=\"DT\" onChange=\"ExecMenu(this.options[this.selectedIndex].value)\">@DTVALS@</select></td></tr>\n" +
           "<tr><td><div class=\"OPACFTLAB\" >@FTLABEL@</div></td><td><input class=\"OPACFTINP\" type=\"text\" name=\"FT\"></td></tr>\n" +
           "@OPACFIELDS@"+
           "<tr><td></td><td><input  class=\"OPACBUT\" type=\"submit\" value=\"  Ok  \"></td></tr>" +
