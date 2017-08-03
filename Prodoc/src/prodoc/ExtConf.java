@@ -34,7 +34,7 @@ private static final Vector<String> DocTipesList=new Vector();
 private static final Vector<String> FieldsToInclude=new Vector();
 static private String BaseFolder=null;
 static private boolean Inheritance=false;
-static private String ResultForm=null;
+static private final Vector<String> ResultForm=new Vector();
 static private int MaxResults;
 static private String FormSearchCSS=null;
 static private String FormSearchLogo=null;
@@ -43,6 +43,7 @@ static private String Pass=null;
 static private String Title=null;
 static private String DTLabel=null;
 static private String FTLabel=null;
+static private String FormatLabel=null;
 
 //----------------------------------------------------------------------------    
 static void AssignConf(Properties ProdocProperties)
@@ -80,7 +81,9 @@ if (ConfInheritance!=null && ConfInheritance.trim().equals("1"))
 String ConfResultForm=ProdocProperties.getProperty("ResultForm");
 if (ConfResultForm!=null && ConfResultForm.trim().length()!=0)
     {
-    ResultForm=ConfResultForm.trim();
+    String[] FTL = ConfResultForm.trim().split("\\|");
+    for (int i = 0; i < FTL.length; i++)
+        getResultForm().add(FTL[i]);    
     }
 String ConfMaxResults=ProdocProperties.getProperty("MaxResults");
 if (ConfMaxResults!=null && ConfMaxResults.trim().length()!=0)
@@ -121,6 +124,11 @@ String ConfFTLabel=ProdocProperties.getProperty("FTLabel");
 if (ConfFTLabel!=null && ConfFTLabel.trim().length()!=0)
     {
     FTLabel=ConfFTLabel.trim();
+    }    
+String ConfFormatLabel=ProdocProperties.getProperty("FormatLabel");
+if (ConfFormatLabel!=null && ConfFormatLabel.trim().length()!=0)
+    {
+    FormatLabel=ConfFormatLabel.trim();
     }    
 }
 //----------------------------------------------------------------------------    
@@ -175,7 +183,7 @@ return Inheritance;
 /**
 * @return the ResultForm
 */
-public static String getResultForm()
+public static Vector<String> getResultForm()
 {
 return ResultForm;
 }
@@ -260,17 +268,25 @@ public static String getFTLabel()
 {
 return FTLabel;
 }
+
+/**
+ * @return the FormatLabel
+ */
+public static String getFormatLabel()
+{
+return FormatLabel;
+}
 }
 /**
 
 #########################################################################
-####            OPAC  Example                                        ####
+####            OPAC                                                 ####
 #########################################################################
 OpacActive=1
 WebInactive=0
-DocTipesList=PD_DOCS|Fabricante
-FieldsToInclude=Title|MimeType|DocDate|Descripcion|Telefono
-BaseFolder=\Temp
+DocTipesList=DocsRemoto|Fabricante
+FieldsToInclude=Title|MimeType|DocDate|Descripcion|Telefono|Requerido
+BaseFolder=/
 Inheritance=1
 ResultForm=150c9be080c-3fe46f69eb1b2cb7
 MaxResults=0
@@ -281,5 +297,7 @@ Pass=root
 Title=OPAC OpenProdoc
 DTLabel=Elegir Tipo Documento
 FTLabel=Introducir palabras de b&uacute;squeda
+FormatLabel=Elegir Formato salida
+
 
  */
