@@ -28,25 +28,48 @@ import java.util.Vector;
  */
 public class ExtConf
 {
-static private boolean OpacActive=false;
-static private boolean WebInactive=false;
-private static final Vector<String> DocTipesList=new Vector();
-private static final Vector<String> FieldsToInclude=new Vector();
-static private String BaseFolder=null;
-static private boolean Inheritance=false;
-static private final Vector<String> ResultForm=new Vector();
-static private int MaxResults;
-static private String FormSearchCSS=null;
-static private String FormSearchLogo=null;
-static private String User=null;
-static private String Pass=null;
-static private String Title=null;
-static private String DTLabel=null;
-static private String FTLabel=null;
-static private String FormatLabel=null;
+
+private boolean OpacActive=false;
+private boolean WebInactive=false;
+private final Vector<String> DocTipesList=new Vector();
+private final Vector<String> FieldsToInclude=new Vector();
+private String BaseFolder=null;
+private boolean Inheritance=false;
+private final Vector<String> ResultForm=new Vector();
+private int MaxResults;
+private String FormSearchCSS=null;
+private String FormSearchLogo=null;
+private String User=null;
+private String Pass=null;
+private String Title=null;
+private String DTLabel=null;
+private String FTLabel=null;
+private String FormatLabel=null;
+private static final ExtConf DefExtConf=new ExtConf();
 
 //----------------------------------------------------------------------------    
-static void AssignConf(Properties ProdocProperties)
+static void AssignDefConf(Properties ProdocProperties)
+{
+DefExtConf.AssignConf(ProdocProperties);
+}
+//----------------------------------------------------------------------------    
+/**
+* @return the User
+*/
+public static String getDefUser()
+{
+return DefExtConf.getUser();
+}
+//----------------------------------------------------------------------------    
+/**
+* @return the Pass
+*/
+public static String getDefPass()
+{
+return DefExtConf.getPass();
+}
+//----------------------------------------------------------------------------    
+public void AssignConf(Properties ProdocProperties)
 {
 String ConfOpacActive=ProdocProperties.getProperty("OpacActive");
 if (ConfOpacActive!=null && ConfOpacActive.trim().equals("1"))
@@ -135,7 +158,7 @@ if (ConfFormatLabel!=null && ConfFormatLabel.trim().length()!=0)
 /**
 * @return the OpacActive
 */
-public static boolean isOpacActive()
+public boolean isOpacActive()
 {
 return OpacActive;
 }
@@ -143,7 +166,7 @@ return OpacActive;
 /**
 * @param aOpacActive the OpacActive to set
 */
-public static void setOpacActive(boolean aOpacActive)
+public void setOpacActive(boolean aOpacActive)
 {
 OpacActive = aOpacActive;
 }
@@ -151,7 +174,7 @@ OpacActive = aOpacActive;
 /**
 * @return the DocTipesList
 */
-public static Vector<String> getDocTipesList()
+public Vector<String> getDocTipesList()
 {
 return DocTipesList;
 }
@@ -159,7 +182,7 @@ return DocTipesList;
 /**
 * @return the FieldsToInclude
 */
-public static Vector<String> getFieldsToInclude()
+public Vector<String> getFieldsToInclude()
 {
 return FieldsToInclude;
 }
@@ -167,7 +190,7 @@ return FieldsToInclude;
 /**
 * @return the BaseFolder
 */
-public static String getBaseFolder()
+public String getBaseFolder()
 {
 return BaseFolder;
 }
@@ -175,7 +198,7 @@ return BaseFolder;
 /**
 * @return the Inheritance
 */
-public static boolean isInheritance()
+public boolean isInheritance()
 {
 return Inheritance;
 }
@@ -183,7 +206,7 @@ return Inheritance;
 /**
 * @return the ResultForm
 */
-public static Vector<String> getResultForm()
+public Vector<String> getResultForm()
 {
 return ResultForm;
 }
@@ -191,7 +214,7 @@ return ResultForm;
 /**
 * @return the MaxResults
 */
-public static int getMaxResults()
+public int getMaxResults()
 {
 return MaxResults;
 }
@@ -199,7 +222,7 @@ return MaxResults;
 /**
 * @return the FormSearchCSS
 */
-public static String getFormSearchCSS()
+public String getFormSearchCSS()
 {
 return FormSearchCSS;
 }
@@ -207,7 +230,7 @@ return FormSearchCSS;
 /**
 * @return the WebInactive
 */
-public static boolean isWebInactive()
+public boolean isWebInactive()
 {
 return WebInactive;
 }
@@ -215,7 +238,7 @@ return WebInactive;
 /**
 * @param aWebInactive the WebInactive to set
 */
-public static void setWebInactive(boolean aWebInactive)
+public void setWebInactive(boolean aWebInactive)
 {
 WebInactive = aWebInactive;
 }
@@ -223,7 +246,7 @@ WebInactive = aWebInactive;
 /**
 * @return the User
 */
-public static String getUser()
+public String getUser()
 {
 return User;
 }
@@ -231,7 +254,7 @@ return User;
 /**
 * @return the Pass
 */
-public static String getPass()
+public String getPass()
 {
 return Pass;
 }
@@ -239,7 +262,7 @@ return Pass;
 /**
 * @return the FormSearchLogo
 */
-public static String getFormSearchLogo()
+public String getFormSearchLogo()
 {
 return FormSearchLogo;
 }
@@ -247,7 +270,7 @@ return FormSearchLogo;
 /**
 * @return the Title
 */
-public static String getTitle()
+public String getTitle()
 {
 return Title;
 }
@@ -255,7 +278,7 @@ return Title;
 /**
 * @return the DTLabel
 */
-public static String getDTLabel()
+public String getDTLabel()
 {
 return DTLabel;
 }
@@ -264,7 +287,7 @@ return DTLabel;
 /**
 * @return the FTLabel
 */
-public static String getFTLabel()
+public String getFTLabel()
 {
 return FTLabel;
 }
@@ -272,7 +295,7 @@ return FTLabel;
 /**
  * @return the FormatLabel
  */
-public static String getFormatLabel()
+public String getFormatLabel()
 {
 return FormatLabel;
 }

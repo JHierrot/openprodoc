@@ -23,17 +23,17 @@ import static OpenProdocUI.SParent.getProdocProperRef;
 import static OpenProdocUI.SParent.setSessOPD;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.StringReader;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Vector;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import prodoc.Attribute;
-import prodoc.Cursor;
 import prodoc.DriverGeneric;
 import prodoc.ExtConf;
 import prodoc.PDDocs;
@@ -49,7 +49,9 @@ import prodoc.Record;
  */
 public class OPAC extends SParent
 {
-private static String HtmlFinal=null;    
+private static final HashMap<String,String> OPACs=new HashMap(); 
+private static Date LastCacheUpdate=null;
+private static final long CacheCaducity=30*60*1000;
 private static final String HtmlBase="<!DOCTYPE html>\n" +
 "<html>" +
     "<head>" +
@@ -102,24 +104,30 @@ response.setContentType("text/html;charset=UTF-8");
 PrintWriter out = response.getWriter();  
 try {
 ProdocFW.InitProdoc("PD", getProdocProperRef());
-if (ExtConf.isOpacActive())
+String IdOPAC=Req.getParameter("Id"); 
+if (IdOPAC==null)
+    throw new Exception("Inexistent OPAC");
+if (IsCacheExpired()) 
+    CleanCache();
+ExtConf ConfOPAC=SParent.getOPACConf(Req);
+if (ConfOPAC==null)
     {
-    DriverGeneric D=ProdocFW.getSession("PD", ExtConf.getUser(), ExtConf.getPass());
-    setSessOPD(Req, D);
-    out.println(GenHtml(Req, D ));        
+    ConfOPAC=new ExtConf();
+    ConfOPAC.AssignConf(getOPACProperties(IdOPAC));
+    SParent.setOPACConf(Req, ConfOPAC);
     }
+DriverGeneric LocalSess=ProdocFW.getSession("PD", ConfOPAC.getUser(), ConfOPAC.getPass()); // just for translation   
+setSessOPD(Req, LocalSess);
+if (OPACs.containsKey(IdOPAC))
+    out.println(OPACs.get(IdOPAC));   
 else
-    {
-    AskLogin(Req, out);
-    }
+    out.println(GenHtml(Req, ConfOPAC, LocalSess, IdOPAC)); 
 } catch (Exception Ex)
     {
     throw new ServletException(Ex.getLocalizedMessage());
     }
-//response.setStatus(HttpServletResponse.SC_OK);
 }
 //-----------------------------------------------------------------------------------------------
-
 /** 
  * Returns a short description of the servlet.
  * @return a String containing servlet description
@@ -130,44 +138,50 @@ public String getServletInfo()
 return "OPAC Servlet";
 }
 //-----------------------------------------------------------------------------------------------
-
-static synchronized private String GenHtml(HttpServletRequest Req, DriverGeneric sessOPD)
+static synchronized private boolean IsCacheExpired()
 {
-//if (HtmlFinal!=null)    
-//    return(HtmlFinal);
-if (ExtConf.getFormSearchCSS()!=null)
+if (LastCacheUpdate==null || (new Date().getTime()-LastCacheUpdate.getTime())>CacheCaducity) 
+    return(true);
+else
+    return(false);
+}
+//-----------------------------------------------------------------------------------------------
+static synchronized private String GenHtml(HttpServletRequest Req, ExtConf ConfOPAC, DriverGeneric LocalSess, String IdOPAC) throws Exception
+{
+String HtmlFinal=HtmlBase;   
+if (ConfOPAC.getFormSearchCSS()!=null)
     {
-    if (ExtConf.getFormSearchCSS().startsWith("http"))    
-       HtmlFinal=HtmlBase.replace("@CSS@", "<link rel=\"STYLESHEET\" type=\"text/css\" href=\""+ExtConf.getFormSearchCSS()+"\"/>");
+    if (ConfOPAC.getFormSearchCSS().startsWith("http"))    
+       HtmlFinal=HtmlFinal.replace("@CSS@", "<link rel=\"STYLESHEET\" type=\"text/css\" href=\""+ConfOPAC.getFormSearchCSS()+"\"/>");
     else
-       HtmlFinal=HtmlBase.replace("@CSS@", GenCSS(sessOPD, ExtConf.getFormSearchCSS()));
+       HtmlFinal=HtmlFinal.replace("@CSS@", GenCSS(LocalSess, ConfOPAC.getFormSearchCSS()));
     }
 else
-    HtmlFinal=HtmlBase.replace("@CSS@", "");
-if (ExtConf.getFormSearchLogo()!=null) // <img src=\"/SendDoc?Id="+ExtConf.getFormSearchLogo()+"\">"
-    HtmlFinal=HtmlFinal.replace("@LOGO@", "<img src=\""+ExtConf.getFormSearchLogo()+"\">");
+    HtmlFinal=HtmlFinal.replace("@CSS@", "");
+if (ConfOPAC.getFormSearchLogo()!=null) // <img src=\"/SendDoc?Id="+ExtConf.getFormSearchLogo()+"\">"
+    HtmlFinal=HtmlFinal.replace("@LOGO@", "<img src=\""+ConfOPAC.getFormSearchLogo()+"\">");
 else
     HtmlFinal=HtmlFinal.replace("@LOGO@", "");
-if (ExtConf.getTitle()!=null) // "OPAC  OpenProdoc"
-    HtmlFinal=HtmlFinal.replace("@TITLE@", ExtConf.getTitle());
+if (ConfOPAC.getTitle()!=null) // "OPAC  OpenProdoc"
+    HtmlFinal=HtmlFinal.replace("@TITLE@", ConfOPAC.getTitle());
 else
     HtmlFinal=HtmlFinal.replace("@TITLE@", "Title");
-if (ExtConf.getDTLabel()!=null) // "Select DocType"
-    HtmlFinal=HtmlFinal.replace("@DTLABEL@", ExtConf.getDTLabel());
+if (ConfOPAC.getDTLabel()!=null) // "Select DocType"
+    HtmlFinal=HtmlFinal.replace("@DTLABEL@", ConfOPAC.getDTLabel());
 else
     HtmlFinal=HtmlFinal.replace("@DTLABEL@", "DocTipes");
-if (ExtConf.getDTLabel()!=null) // "Intro search words"
-    HtmlFinal=HtmlFinal.replace("@FTLABEL@", ExtConf.getFTLabel());
+if (ConfOPAC.getDTLabel()!=null) // "Intro search words"
+    HtmlFinal=HtmlFinal.replace("@FTLABEL@", ConfOPAC.getFTLabel());
 else
     HtmlFinal=HtmlFinal.replace("@FTLABEL@", "Intro search words");
-if (ExtConf.getFormatLabel()!=null) // "Output Format"
-    HtmlFinal=HtmlFinal.replace("@FormatLabel@", ExtConf.getFormatLabel());
+if (ConfOPAC.getFormatLabel()!=null) // "Output Format"
+    HtmlFinal=HtmlFinal.replace("@FormatLabel@", ConfOPAC.getFormatLabel());
 else
     HtmlFinal=HtmlFinal.replace("@FormatLabel@", "Output Format");
-Vector<String> DocTipesList = ExtConf.getDocTipesList();
+Vector<String> DocTipesList = ConfOPAC.getDocTipesList();
 HtmlFinal=HtmlFinal.replace("@FIRSTTYPE@",DocTipesList.elementAt(0));
-Vector<String> FieldsToInclude = ExtConf.getFieldsToInclude();
-Vector<String> FormatsToInclude = ExtConf.getResultForm();
+Vector<String> FieldsToInclude = ConfOPAC.getFieldsToInclude();
+Vector<String> FormatsToInclude = ConfOPAC.getResultForm();
 HashMap <String, Boolean> FieldsIncForm=new HashMap(FieldsToInclude.size());
 for (int i = 0; i < FieldsToInclude.size(); i++)
     FieldsIncForm.put(FieldsToInclude.elementAt(i), false);
@@ -177,7 +191,7 @@ for (int NFT = 0; NFT < FormatsToInclude.size(); NFT++)
     {
     String FT = FormatsToInclude.elementAt(NFT); 
     try {
-    PDReport  Rep=new PDReport(sessOPD);
+    PDReport  Rep=new PDReport(LocalSess);
     Rep.Load(FT);  
     FormatVals.append("<option value=\"").append(Rep.getPDId()).append("\">").append(Rep.getTitle()).append("</option>");
     } catch (Exception Ex)
@@ -195,9 +209,9 @@ for (int NDT = 0; NDT < DocTipesList.size(); NDT++)
         FieldsVisib.put(FieldsToInclude.elementAt(i), false);
     SwitchDT.append("case \"").append(DT).append("\":\n");
     try {
-    PDObjDefs  Def=new PDObjDefs(sessOPD);
+    PDObjDefs  Def=new PDObjDefs(LocalSess);
     Def.Load(DT);  
-    PDDocs  Doc=new PDDocs(sessOPD, DT);
+    PDDocs  Doc=new PDDocs(LocalSess, DT);
     Record AttrDef = Doc.getRecSum();
     AttrDef.initList();
     for (int NAT = 0; NAT < AttrDef.NumAttr(); NAT++)
@@ -226,6 +240,8 @@ for (int NDT = 0; NDT < DocTipesList.size(); NDT++)
 HtmlFinal=HtmlFinal.replace("@DTVALS@", DTVals);
 HtmlFinal=HtmlFinal.replace("@OPACFIELDS@", Fields);
 HtmlFinal=HtmlFinal.replace("@SWITCH@", SwitchDT);
+OPACs.put(IdOPAC, HtmlFinal);
+LastCacheUpdate=new Date();
 return(HtmlFinal);
 }
 //-----------------------------------------------------------------------------------------------
@@ -244,6 +260,24 @@ CSS.append(OutBytes.toString());
         }
 CSS.append("</style>\n");
 return(CSS.toString());
+}
+//-----------------------------------------------------------------------------------------------
+private static void CleanCache()
+{
+OPACs.clear();
+}
+//-----------------------------------------------------------------------------------------------
+private static Properties getOPACProperties(String IdOPAC) throws Exception
+{
+DriverGeneric sessOPD=ProdocFW.getSession("PD", ExtConf.getDefUser(), ExtConf.getDefPass());    
+Properties P=new Properties();
+PDDocs DocCSS=new PDDocs(sessOPD);
+DocCSS.setPDId(IdOPAC);
+ByteArrayOutputStream OutBytes = new ByteArrayOutputStream();
+DocCSS.getStream(OutBytes);
+P.load(new StringReader(OutBytes.toString()));
+ProdocFW.freeSesion("PD", sessOPD);
+return P;
 }
 //-----------------------------------------------------------------------------------------------
 

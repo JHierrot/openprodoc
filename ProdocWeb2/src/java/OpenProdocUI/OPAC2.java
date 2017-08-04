@@ -51,6 +51,7 @@ import prodoc.Record;
  */
 public class OPAC2 extends SParent
 {
+@Override
 protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 {
 try {
@@ -78,7 +79,8 @@ PDDocs TmpDoc;
 Cursor Cur=null;    
 try {      
 PDFolders F=new PDFolders(PDSession);
-String CurrFoldId=F.getIdPath(ExtConf.getBaseFolder());
+ExtConf ConfOPAC=SParent.getOPACConf(Req);
+String CurrFoldId=F.getIdPath(ConfOPAC.getBaseFolder());
 String CurrType=Req.getParameter("DT"); 
 String FullTextSearch=Req.getParameter("FT"); 
 String ReportId=Req.getParameter("FORMAT_REP");
@@ -109,7 +111,7 @@ while (Attr!=null)
         }
     Attr=Rec.nextAttr();
     }
-Cur=TmpDoc.Search(FullTextSearch, CurrType, Cond, ExtConf.isInheritance(), true,false, CurrFoldId, null);
+Cur=TmpDoc.Search(FullTextSearch, CurrType, Cond, ConfOPAC.isInheritance(), true,false, CurrFoldId, null);
 PDReport Rep=new PDReport(PDSession);
 Rep.LoadFull(ReportId);
 ArrayList<String> GeneratedRep= Rep.GenerateRep(getActFolderId(Req), Cur, null, 0, 0, SParent.getIO_OSFolder());

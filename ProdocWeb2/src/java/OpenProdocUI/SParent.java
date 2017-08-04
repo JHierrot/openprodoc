@@ -34,6 +34,7 @@ import prodoc.Condition;
 import prodoc.Conditions;
 import prodoc.Cursor;
 import prodoc.DriverGeneric;
+import prodoc.ExtConf;
 import prodoc.ObjPD;
 import prodoc.PDACL;
 import prodoc.PDAuthenticators;
@@ -1519,5 +1520,14 @@ for (int i = 0; i < ListMsg.length; i++)
     out.println(TT(Req, ListMsg[i]));       
 }
 //-----------------------------------------------------------------------------------------------
-
+protected static void setOPACConf(HttpServletRequest Req, ExtConf ConfOPAC)
+{
+Req.getSession().setAttribute("OPAC_CONF", ConfOPAC); 
+}
+//-----------------------------------------------------------------------------------------------
+protected static ExtConf getOPACConf(HttpServletRequest Req)
+{
+return((ExtConf)Req.getSession().getAttribute("OPAC_CONF")); 
+}
+//-----------------------------------------------------------------------------------------------
 }
