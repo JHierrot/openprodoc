@@ -45,6 +45,9 @@ private String Title=null;
 private String DTLabel=null;
 private String FTLabel=null;
 private String FormatLabel=null;
+private String HelpForDocType=null;
+private String HelpForFullText=null;
+private String HelpForFormatType=null;
 private static final ExtConf DefExtConf=new ExtConf();
 
 //----------------------------------------------------------------------------    
@@ -152,6 +155,21 @@ String ConfFormatLabel=ProdocProperties.getProperty("FormatLabel");
 if (ConfFormatLabel!=null && ConfFormatLabel.trim().length()!=0)
     {
     FormatLabel=ConfFormatLabel.trim();
+    }    
+String ConfHelpForDocType=ProdocProperties.getProperty("HelpForDocType");
+if (ConfHelpForDocType!=null && ConfHelpForDocType.trim().length()!=0)
+    {
+    HelpForDocType=ConfHelpForDocType.trim();
+    }    
+String ConfHelpForFullText=ProdocProperties.getProperty("HelpForFullText");
+if (ConfHelpForFullText!=null && ConfHelpForFullText.trim().length()!=0)
+    {
+    HelpForFullText=ConfHelpForFullText.trim();
+    }    
+String ConfHelpForFormatType=ProdocProperties.getProperty("HelpForFormatType");
+if (ConfHelpForFormatType!=null && ConfHelpForFormatType.trim().length()!=0)
+    {
+    HelpForFormatType=ConfHelpForFormatType.trim();
     }    
 }
 //----------------------------------------------------------------------------    
@@ -299,6 +317,30 @@ public String getFormatLabel()
 {
 return FormatLabel;
 }
+
+/**
+* @return the HelpForDocType
+*/
+public String getHelpForDocType()
+{
+return HelpForDocType;
+}
+
+/**
+* @return the HelpForFullText
+*/
+public String getHelpForFullText()
+{
+return HelpForFullText;
+}
+
+/**
+* @return the HelpForFormatType
+*/
+public String getHelpForFormatType()
+{
+return HelpForFormatType;
+}
 }
 /**
 
@@ -307,20 +349,23 @@ return FormatLabel;
 #########################################################################
 OpacActive=1
 WebInactive=0
-DocTipesList=DocsRemoto|Fabricante
-FieldsToInclude=Title|MimeType|DocDate|Descripcion|Telefono|Requerido
+DocTipesList=DocsRemoto|Fabricante|Picture
+FieldsToInclude=Title|MimeType|DocDate|Descripcion|Telefono|Requerido|Keywords
 BaseFolder=/
 Inheritance=1
-ResultForm=150c9be080c-3fe46f69eb1b2cb7
+ResultForm=150c9be080c-3fe46f69eb1b2cb7|150c9be8462-3fd76612bb72fece
 MaxResults=0
-# FormSearchCSS=
-FormSearchLogo=SendDoc?Id=15d8a225786-3fe11b750cd2517e
+FormSearchCSS=15db73b6628-3fee99cd40e27fee
+#FormSearchLogo=SendDoc?Id=15d8a225786-3fe11b750cd2517e
+FormSearchLogo=img/LogoProdoc.jpg
 User=root
 Pass=root
-Title=OPAC OpenProdoc
-DTLabel=Elegir Tipo Documento
-FTLabel=Introducir palabras de b&uacute;squeda
-FormatLabel=Elegir Formato salida
-
+Title=Punto de Consulta Simplificada
+DTLabel=Seleccionar tipo de documento a buscar
+FTLabel=Introducir algunas palabras de b&uacute;squeda
+FormatLabel=Seleccionar formato de salida de los resultados
+HelpForDocType=Ayuda Tipos Documentales
+HelpForFullText=Ayuda B&uacute;squeda Texto Completo<br>Introduzca cualquier palabra(s) del contenido de documento para recuperar por criterios aproximados. Si se desea que el docuemnto contenga la palabra, debe incluirse un signo +. Si desea buscar literalmente debe incluirse la palabra entre comillas. Para buscar documentos que NO contengan una palabra debe incluirse un signo menos -<br>Puede combinarse con la b&uacute;sqeda por metadatos de los documentos.
+HelpForFormatType=Ayuda Formatos Salida
 
  */

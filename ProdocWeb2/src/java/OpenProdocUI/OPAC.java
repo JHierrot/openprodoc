@@ -37,7 +37,6 @@ import prodoc.Attribute;
 import prodoc.DriverGeneric;
 import prodoc.ExtConf;
 import prodoc.PDDocs;
-import prodoc.PDException;
 import prodoc.PDObjDefs;
 import prodoc.PDReport;
 import prodoc.ProdocFW;
@@ -50,8 +49,10 @@ import prodoc.Record;
 public class OPAC extends SParent
 {
 private static final HashMap<String,String> OPACs=new HashMap(); 
+private static final HashMap<String,ExtConf> Confs=new HashMap(); 
 private static Date LastCacheUpdate=null;
-private static final long CacheCaducity=30*60*1000;
+private static final long CacheCaducity=1*1*1000;
+//private static final long CacheCaducity=30*60*1000;
 private static final String HtmlBase="<!DOCTYPE html>\n" +
 "<html>" +
     "<head>" +
@@ -77,10 +78,10 @@ private static final String HtmlBase="<!DOCTYPE html>\n" +
         "<tr><td>"+
         "<fieldset class=\"OPACFS\"><legend class=\"OPACLEG\">&nbsp;&nbsp;@TITLE@&nbsp;&nbsp;</legend>\n"+
          "<table>\n" +   
-          "<tr><td><div class=\"OPACDT\" >@DTLABEL@</div></td><td><select class=\"OPACCOMB\" name=\"DT\" onChange=\"ExecMenu(this.options[this.selectedIndex].value)\">@DTVALS@</select></td></tr>\n" +
-          "<tr><td><div class=\"OPACFTLAB\" >@FTLABEL@</div></td><td><input class=\"OPACFTINP\" type=\"text\" name=\"FT\"></td></tr>\n" +
+          "<tr><td><div class=\"OPACDT\" >@DTLABEL@</div></td><td  class=\"TD_OPACCOMB\"><select class=\"OPACCOMB\" name=\"DT\" onChange=\"ExecMenu(this.options[this.selectedIndex].value)\">@DTVALS@</select><span class=\"tooltiptext\">@HelpForDocType@</span></td></tr>\n" +
+          "<tr><td><div class=\"OPACFTLAB\" >@FTLABEL@</div></td><td class=\"TD_OPACFTINP\"><input class=\"OPACFTINP\" type=\"text\" name=\"FT\"><span class=\"tooltiptext\">@HelpForFullText@</span></td></tr>\n" +
           "@OPACFIELDS@"+
-          "<tr><td><div class=\"OPACFORMATLAB\" >@FormatLabel@</div></td><td><select class=\"OPACFORMATCOMB\" name=\"FORMAT_REP\">@FORMATVALS@</select></td></tr>\n" +
+          "<tr><td><div class=\"OPACFORMATLAB\" >@FormatLabel@</div></td><td class=\"TD_PACFORMATCOMB\"><select class=\"OPACFORMATCOMB\" name=\"FORMAT_REP\">@FORMATVALS@</select><span class=\"tooltiptext\">@HelpForFormatType@</span></td></tr>\n" +
           "<tr><td></td><td><input  class=\"OPACBUT\" type=\"submit\" value=\"  Ok  \"></td></tr>" +
           "</table>\n" +
          "</fieldset>" +
@@ -109,15 +110,20 @@ if (IdOPAC==null)
     throw new Exception("Inexistent OPAC");
 if (IsCacheExpired()) 
     CleanCache();
-ExtConf ConfOPAC=SParent.getOPACConf(Req);
+ExtConf ConfOPAC=Confs.get(IdOPAC);
 if (ConfOPAC==null)
     {
     ConfOPAC=new ExtConf();
     ConfOPAC.AssignConf(getOPACProperties(IdOPAC));
-    SParent.setOPACConf(Req, ConfOPAC);
+    Confs.put(IdOPAC, ConfOPAC);
     }
-DriverGeneric LocalSess=ProdocFW.getSession("PD", ConfOPAC.getUser(), ConfOPAC.getPass()); // just for translation   
-setSessOPD(Req, LocalSess);
+setOPACConf(Req, ConfOPAC);
+DriverGeneric LocalSess=getSessOPD(Req);
+if (LocalSess==null)
+    {
+    LocalSess=ProdocFW.getSession("PD", ConfOPAC.getUser(), ConfOPAC.getPass()); // just for translation   
+    setSessOPD(Req, LocalSess);
+    }
 if (OPACs.containsKey(IdOPAC))
     out.println(OPACs.get(IdOPAC));   
 else
@@ -178,6 +184,19 @@ if (ConfOPAC.getFormatLabel()!=null) // "Output Format"
     HtmlFinal=HtmlFinal.replace("@FormatLabel@", ConfOPAC.getFormatLabel());
 else
     HtmlFinal=HtmlFinal.replace("@FormatLabel@", "Output Format");
+if (ConfOPAC.getHelpForDocType()!=null) 
+    HtmlFinal=HtmlFinal.replace("@HelpForDocType@", ConfOPAC.getHelpForDocType());
+else
+    HtmlFinal=HtmlFinal.replace("@HelpForDocType@", "");
+if (ConfOPAC.getHelpForFullText()!=null) 
+    HtmlFinal=HtmlFinal.replace("@HelpForFullText@", ConfOPAC.getHelpForFullText());
+else
+    HtmlFinal=HtmlFinal.replace("@HelpForFullText@", "");
+if (ConfOPAC.getHelpForFormatType()!=null) 
+    HtmlFinal=HtmlFinal.replace("@HelpForFormatType@", ConfOPAC.getHelpForFormatType());
+else
+    HtmlFinal=HtmlFinal.replace("@HelpForFormatType@", "");
+
 Vector<String> DocTipesList = ConfOPAC.getDocTipesList();
 HtmlFinal=HtmlFinal.replace("@FIRSTTYPE@",DocTipesList.elementAt(0));
 Vector<String> FieldsToInclude = ConfOPAC.getFieldsToInclude();
@@ -221,7 +240,7 @@ for (int NDT = 0; NDT < DocTipesList.size(); NDT++)
             {
             if (!FieldsIncForm.get(Attr.getName())) // to avoid duplicates in form
                 {
-                Fields.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"OPACLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td><input class=\"OPACINP\" type=\"text\" name=\"").append(Attr.getName()).append("\"></td></tr>\n");
+                Fields.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"OPACLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td class=\"TD_OPACINP\"><input class=\"OPACINP\" type=\"text\" name=\"").append(Attr.getName()).append("\"><span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
                 FieldsIncForm.put(Attr.getName(), true);
                 }
             FieldsVisib.put(Attr.getName(), true); // to enable when changing doctype
@@ -265,6 +284,7 @@ return(CSS.toString());
 private static void CleanCache()
 {
 OPACs.clear();
+Confs.clear();
 }
 //-----------------------------------------------------------------------------------------------
 private static Properties getOPACProperties(String IdOPAC) throws Exception
