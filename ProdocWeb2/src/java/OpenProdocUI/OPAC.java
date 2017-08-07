@@ -27,6 +27,8 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
@@ -37,8 +39,10 @@ import prodoc.Attribute;
 import prodoc.DriverGeneric;
 import prodoc.ExtConf;
 import prodoc.PDDocs;
+import prodoc.PDException;
 import prodoc.PDObjDefs;
 import prodoc.PDReport;
+import prodoc.PDThesaur;
 import prodoc.ProdocFW;
 import prodoc.Record;
 
@@ -53,6 +57,9 @@ private static final HashMap<String,ExtConf> Confs=new HashMap();
 private static Date LastCacheUpdate=null;
 private static final long CacheCaducity=1*1*1000;
 //private static final long CacheCaducity=30*60*1000;
+private final static String ThesTree="╚════════════════════════════════";
+//private final static String ThesTree="└───────────────────────────────";
+//private final static String ThesTree="+-------------------------------------------------";
 private static final String HtmlBase="<!DOCTYPE html>\n" +
 "<html>" +
     "<head>" +
@@ -240,7 +247,10 @@ for (int NDT = 0; NDT < DocTipesList.size(); NDT++)
             {
             if (!FieldsIncForm.get(Attr.getName())) // to avoid duplicates in form
                 {
-                Fields.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"OPACLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td class=\"TD_OPACINP\"><input class=\"OPACINP\" type=\"text\" name=\"").append(Attr.getName()).append("\"><span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
+                if (Attr.getType()==Attribute.tTHES)
+                    Fields.append(GenThesVals(Req, LocalSess, Attr)); 
+                else
+                    Fields.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"OPACLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td class=\"TD_OPACINP\"><input class=\"OPACINP\" type=\"text\" name=\"").append(Attr.getName()).append("\"><span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
                 FieldsIncForm.put(Attr.getName(), true);
                 }
             FieldsVisib.put(Attr.getName(), true); // to enable when changing doctype
@@ -298,6 +308,32 @@ DocCSS.getStream(OutBytes);
 P.load(new StringReader(OutBytes.toString()));
 ProdocFW.freeSesion("PD", sessOPD);
 return P;
+}
+//-----------------------------------------------------------------------------------------------
+private static StringBuilder GenThesVals(HttpServletRequest Req, DriverGeneric LocalSess, Attribute Attr) throws PDException
+{
+StringBuilder SB=new StringBuilder(2000);
+StringBuilder Ops=new StringBuilder(2000);
+CalcOps(Ops, String.valueOf(Attr.getLongStr()), LocalSess, 0);
+SB.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"OPACLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td class=\"TD_OPACINP\"><select class=\"OPACFORMATTHES\" name=\"").append(Attr.getName()).append("\">").append(Ops).append("</select><span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
+return(SB);
+}
+//-----------------------------------------------------------------------------------------------
+private static StringBuilder CalcOps(StringBuilder Ops, String TermId, DriverGeneric LocalSess, int Level) throws PDException
+{
+PDThesaur T=new PDThesaur(LocalSess);
+T.Load(TermId);
+String SLev=ThesTree.substring(0, Level);
+if (Level==0)
+    Ops.append("<option value=\"\" selected> </option>");
+else
+    Ops.append("<option value=\"").append(T.getPDId()).append("\">").append(SLev).append(" ").append(T.getName()).append("</option>");
+HashSet listDirectDescendList = T.getListDirectDescendList(TermId);
+for (Iterator iterator = listDirectDescendList.iterator(); iterator.hasNext();)
+    {
+    CalcOps(Ops,(String)iterator.next(), LocalSess, Level+1 );    
+    }
+return(Ops);
 }
 //-----------------------------------------------------------------------------------------------
 

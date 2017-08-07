@@ -100,7 +100,6 @@ while (Attr!=null)
     String Comp="EQ";
     if (Attr.getType()==Attribute.tTHES)
             {
-            Val=Req.getParameter("TH_"+Attr.getName());   
             if (Val != null && Val.length()!=0)
                 Cond.addCondition(SParent.FillCond(Req, Attr, Val, Comp));
             }
