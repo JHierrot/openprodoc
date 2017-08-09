@@ -97,13 +97,20 @@ while (Attr!=null)
         continue;
         }
     String Val=Req.getParameter(Attr.getName());
+    if (Val == null || Val.length()==0)
+        {
+        Attr=Rec.nextAttr();
+        continue;
+        }
     String Comp="EQ";
+    int PosField=ConfOPAC.getFieldsToInclude().indexOf(Attr.getName());
+    if (PosField!=-1 && PosField<ConfOPAC.getFieldsComp().size())
+        {
+        Comp=ConfOPAC.getFieldsComp().elementAt(PosField);
+        }
     if (Attr.getType()==Attribute.tTHES)
-            {
-            if (Val != null && Val.length()!=0)
-                Cond.addCondition(SParent.FillCond(Req, Attr, Val, Comp));
-            }
-    else if (!(Val == null || Val.length()==0 || Attr.getName().equals(PDDocs.fACL) && Val.equals("null") 
+        Cond.addCondition(SParent.FillCond(Req, Attr, Val, Comp));
+    else if (!(Attr.getName().equals(PDDocs.fACL) && Val.equals("null") 
           || Attr.getType()==Attribute.tBOOLEAN && Val.equals("0") ) )
         {
         Cond.addCondition(SParent.FillCond(Req, Attr, Val, Comp));
@@ -161,7 +168,7 @@ finally
 @Override
 public String getServletInfo()
 {
-return "SearchDoc Servlet";
+return "OPAC2 Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 

@@ -477,6 +477,7 @@ return(FillCond(Req, Attr, Val, "EQ"));
  */
 static public Condition FillCond(HttpServletRequest Req, Attribute Attr, String Val, String OperS) throws PDException
 {
+Val=Val.trim();
 Condition Cond = null;
 int Oper;
 if (OperS.equals("EQ"))

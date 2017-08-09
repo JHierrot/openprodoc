@@ -57,7 +57,8 @@ private static final HashMap<String,ExtConf> Confs=new HashMap();
 private static Date LastCacheUpdate=null;
 private static final long CacheCaducity=1*1*1000;
 //private static final long CacheCaducity=30*60*1000;
-private final static String ThesTree="╚════════════════════════════════";
+//private final static String ThesTree=".........................................╚ ";
+//private final static String ThesTree="╚════════════════════════════════";
 //private final static String ThesTree="└───────────────────────────────";
 //private final static String ThesTree="+-------------------------------------------------";
 private static final String HtmlBase="<!DOCTYPE html>\n" +
@@ -89,7 +90,7 @@ private static final String HtmlBase="<!DOCTYPE html>\n" +
           "<tr><td><div class=\"OPACFTLAB\" >@FTLABEL@</div></td><td class=\"TD_OPACFTINP\"><input class=\"OPACFTINP\" type=\"text\" name=\"FT\"><span class=\"tooltiptext\">@HelpForFullText@</span></td></tr>\n" +
           "@OPACFIELDS@"+
           "<tr><td><div class=\"OPACFORMATLAB\" >@FormatLabel@</div></td><td class=\"TD_PACFORMATCOMB\"><select class=\"OPACFORMATCOMB\" name=\"FORMAT_REP\">@FORMATVALS@</select><span class=\"tooltiptext\">@HelpForFormatType@</span></td></tr>\n" +
-          "<tr><td></td><td><input  class=\"OPACBUT\" type=\"submit\" value=\"  Ok  \"></td></tr>" +
+          "<tr><td><a class=\"OPACHELP\" href=\"@URLHELP@\" target=\"_blank\">?</a></td><td><input  class=\"OPACBUT\" type=\"submit\" value=\"  Ok  \"></td></tr>" +
           "</table>\n" +
          "</fieldset>" +
         "</td></tr>" +
@@ -203,7 +204,10 @@ if (ConfOPAC.getHelpForFormatType()!=null)
     HtmlFinal=HtmlFinal.replace("@HelpForFormatType@", ConfOPAC.getHelpForFormatType());
 else
     HtmlFinal=HtmlFinal.replace("@HelpForFormatType@", "");
-
+if (ConfOPAC.getUrlHelp()!=null) 
+    HtmlFinal=HtmlFinal.replace("@URLHELP@", ConfOPAC.getUrlHelp());
+else
+    HtmlFinal=HtmlFinal.replace("@URLHELP@", "");
 Vector<String> DocTipesList = ConfOPAC.getDocTipesList();
 HtmlFinal=HtmlFinal.replace("@FIRSTTYPE@",DocTipesList.elementAt(0));
 Vector<String> FieldsToInclude = ConfOPAC.getFieldsToInclude();
@@ -249,6 +253,8 @@ for (int NDT = 0; NDT < DocTipesList.size(); NDT++)
                 {
                 if (Attr.getType()==Attribute.tTHES)
                     Fields.append(GenThesVals(Req, LocalSess, Attr)); 
+                else if (Attr.getType()==Attribute.tBOOLEAN)
+                    Fields.append(GenBoolVals(Req, Attr)); 
                 else
                     Fields.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"OPACLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td class=\"TD_OPACINP\"><input class=\"OPACINP\" type=\"text\" name=\"").append(Attr.getName()).append("\"><span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
                 FieldsIncForm.put(Attr.getName(), true);
@@ -310,6 +316,13 @@ ProdocFW.freeSesion("PD", sessOPD);
 return P;
 }
 //-----------------------------------------------------------------------------------------------
+private static StringBuilder GenBoolVals(HttpServletRequest Req, Attribute Attr)
+{
+StringBuilder SB=new StringBuilder(2000);
+SB.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"OPACLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td class=\"TD_OPACINP\"><select class=\"OPACFORMATTHES\" name=\"").append(Attr.getName()).append("\">").append("<option value=\"\" selected></option><option value=\"1\">true</option></option><option value=\"0\">false</option>").append("</select><span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
+return(SB);
+}
+//-----------------------------------------------------------------------------------------------
 private static StringBuilder GenThesVals(HttpServletRequest Req, DriverGeneric LocalSess, Attribute Attr) throws PDException
 {
 StringBuilder SB=new StringBuilder(2000);
@@ -323,11 +336,16 @@ private static StringBuilder CalcOps(StringBuilder Ops, String TermId, DriverGen
 {
 PDThesaur T=new PDThesaur(LocalSess);
 T.Load(TermId);
-String SLev=ThesTree.substring(0, Level);
+
+StringBuilder SLev=new StringBuilder(100);
+for (int i = 0; i < Level-1; i++)
+    SLev.append("&nbsp;&nbsp;");
+SLev.append("└ ");
+//String SLev=ThesTree.substring(0, Level);
 if (Level==0)
     Ops.append("<option value=\"\" selected> </option>");
 else
-    Ops.append("<option value=\"").append(T.getPDId()).append("\">").append(SLev).append(" ").append(T.getName()).append("</option>");
+    Ops.append("<option value=\"").append(T.getPDId()).append("\">").append(SLev).append(T.getName()).append("</option>");
 HashSet listDirectDescendList = T.getListDirectDescendList(TermId);
 for (Iterator iterator = listDirectDescendList.iterator(); iterator.hasNext();)
     {

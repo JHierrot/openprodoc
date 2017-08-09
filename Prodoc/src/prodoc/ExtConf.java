@@ -33,6 +33,7 @@ private boolean OpacActive=false;
 private boolean WebInactive=false;
 private final Vector<String> DocTipesList=new Vector();
 private final Vector<String> FieldsToInclude=new Vector();
+private final Vector<String> FieldsComp=new Vector();
 private String BaseFolder=null;
 private boolean Inheritance=false;
 private final Vector<String> ResultForm=new Vector();
@@ -49,6 +50,7 @@ private String HelpForDocType=null;
 private String HelpForFullText=null;
 private String HelpForFormatType=null;
 private static final ExtConf DefExtConf=new ExtConf();
+private String UrlHelp=null;
 
 //----------------------------------------------------------------------------    
 static void AssignDefConf(Properties ProdocProperties)
@@ -85,14 +87,21 @@ if (ConfDocTipesList!=null && ConfDocTipesList.trim().length()!=0)
     {
     String[] DTL = ConfDocTipesList.trim().split("\\|");
     for (int i = 0; i < DTL.length; i++)
-        getDocTipesList().add(DTL[i]);
+        getDocTipesList().add(DTL[i].trim());
     }
 String ConfFieldsToInclude=ProdocProperties.getProperty("FieldsToInclude");
 if (ConfFieldsToInclude!=null && ConfFieldsToInclude.trim().length()!=0)
     {
     String[] FTL = ConfFieldsToInclude.trim().split("\\|");
     for (int i = 0; i < FTL.length; i++)
-        getFieldsToInclude().add(FTL[i]);    
+        getFieldsToInclude().add(FTL[i].trim());    
+    }
+String ConfFieldsComp=ProdocProperties.getProperty("FieldsComp");
+if (ConfFieldsComp!=null && ConfFieldsComp.trim().length()!=0)
+    {
+    String[] FTL = ConfFieldsComp.trim().split("\\|");
+    for (int i = 0; i < FTL.length; i++)
+        getFieldsComp().add(FTL[i].trim());    
     }
 String ConfBaseFolder=ProdocProperties.getProperty("BaseFolder");
 if (ConfBaseFolder!=null && ConfBaseFolder.trim().length()!=0)
@@ -109,7 +118,7 @@ if (ConfResultForm!=null && ConfResultForm.trim().length()!=0)
     {
     String[] FTL = ConfResultForm.trim().split("\\|");
     for (int i = 0; i < FTL.length; i++)
-        getResultForm().add(FTL[i]);    
+        getResultForm().add(FTL[i].trim());    
     }
 String ConfMaxResults=ProdocProperties.getProperty("MaxResults");
 if (ConfMaxResults!=null && ConfMaxResults.trim().length()!=0)
@@ -170,6 +179,11 @@ String ConfHelpForFormatType=ProdocProperties.getProperty("HelpForFormatType");
 if (ConfHelpForFormatType!=null && ConfHelpForFormatType.trim().length()!=0)
     {
     HelpForFormatType=ConfHelpForFormatType.trim();
+    }    
+String ConfUrlHelp=ProdocProperties.getProperty("UrlHelp");
+if (ConfUrlHelp!=null && ConfUrlHelp.trim().length()!=0)
+    {
+    UrlHelp=ConfUrlHelp.trim();
     }    
 }
 //----------------------------------------------------------------------------    
@@ -341,6 +355,22 @@ public String getHelpForFormatType()
 {
 return HelpForFormatType;
 }
+
+    /**
+     * @return the FieldsComp
+     */
+    public Vector<String> getFieldsComp()
+    {
+        return FieldsComp;
+    }
+
+    /**
+     * @return the UrlHelp
+     */
+    public String getUrlHelp()
+    {
+        return UrlHelp;
+    }
 }
 /**
 
