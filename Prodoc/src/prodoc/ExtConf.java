@@ -372,15 +372,20 @@ return HelpForFormatType;
         return UrlHelp;
     }
 }
-/**
+
+/***************************
 
 #########################################################################
 ####            OPAC                                                 ####
 #########################################################################
 OpacActive=1
 WebInactive=0
-DocTipesList=DocsRemoto|Fabricante|Picture
-FieldsToInclude=Title|MimeType|DocDate|Descripcion|Telefono|Requerido|Keywords
+DocTipesList=Article|ECM_Standards|InternetProfile|MusicRecords|Picture
+FieldsToInclude=Author|Authors|Keywords|Player|Title|Country|CreativeCommons
+## Operators for search. 1 for each field. Default EQ
+## = EQ, <> NE, > GT, >= GE, < LT, <= LE, Contains CT 
+FieldsComp=EQ|EQ|EQ|EQ|CT|EQ|EQ
+// BaseFolder=/Examples - Ejemplos
 BaseFolder=/
 Inheritance=1
 ResultForm=150c9be080c-3fe46f69eb1b2cb7|150c9be8462-3fd76612bb72fece
@@ -397,5 +402,6 @@ FormatLabel=Seleccionar formato de salida de los resultados
 HelpForDocType=Ayuda Tipos Documentales
 HelpForFullText=Ayuda B&uacute;squeda Texto Completo<br>Introduzca cualquier palabra(s) del contenido de documento para recuperar por criterios aproximados. Si se desea que el docuemnto contenga la palabra, debe incluirse un signo +. Si desea buscar literalmente debe incluirse la palabra entre comillas. Para buscar documentos que NO contengan una palabra debe incluirse un signo menos -<br>Puede combinarse con la b&uacute;sqeda por metadatos de los documentos.
 HelpForFormatType=Ayuda Formatos Salida
+UrlHelp=help/EN/HelpIndex.html
 
- */
+*****************************/

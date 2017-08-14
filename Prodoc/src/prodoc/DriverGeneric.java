@@ -1655,7 +1655,7 @@ if (PDLog.isDebug())
 PDRepository RepDesc=new PDRepository(this);
 RepDesc.Load(RepName);
 Rep=ConstrucStore(RepDesc);
-getListReposit().put(RepName, Rep);
+//getListReposit().put(RepName, Rep);
 if (PDLog.isDebug())
     PDLog.Debug("DriverGeneric.getRepository<:"+RepName);
 return(Rep);
