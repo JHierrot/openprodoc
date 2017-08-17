@@ -23,8 +23,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import org.apache.commons.codec.binary.Base64InputStream;
 
 /**
  *
@@ -139,42 +141,6 @@ finally
     }
 return(Tot);
 }
-//-----------------------------------------------------------------
-/**
- * 
- * @param Id
- * @param Ver
- * @param fo
- * @return
- * @throws PDException 
- */
-@Override
-protected int Retrieve(String Id, String Ver, OutputStream fo) throws PDException
-{
-int Tot=0;
-VerifyId(Id);    
-FileInputStream in=null;
-try {
-in = new FileInputStream(getPath() + GenPath(Id, Ver) + Id+"_"+Ver);
-int readed=in.read(Buffer);
-while (readed!=-1)
-    {
-    if (isEncript())
-       DecriptPass(Buffer, readed);
-    fo.write(Buffer, 0, readed);
-    Tot+=readed;
-    readed=in.read(Buffer);
-    }
-in.close();
-fo.flush();
-fo.close();
-} catch (Exception ex)
-    {
-    PDException.GenPDException("Error_retrieving_file",Id+"/"+Ver+"="+ex.getLocalizedMessage());
-    }
-return(Tot);
-}
-
 //-----------------------------------------------------------------
 /**
  *

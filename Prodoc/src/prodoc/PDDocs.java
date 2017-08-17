@@ -1011,6 +1011,35 @@ if (MustTrace(fOPERVIE))
  * @param OutBytes 
  * @throws PDException
  */
+public void getStreamB64(OutputStream OutBytes) throws PDException
+{
+LoadCurrent(getPDId());
+StoreGeneric Rep=getDrv().getRepository(getReposit());
+PDRepository Rep1=new PDRepository(getDrv());
+Rep1.Load(getReposit());
+if (Rep1.IsRef())
+    throw new UnsupportedOperationException("Not supported.");   
+try {    
+Rep.Connect();
+Rep.RetrieveB64(getPDId(), getVersion(), OutBytes);
+Rep.Disconnect();
+Rep=null;
+if (MustTrace(fOPERVIE))
+    Trace(fOPERVIE, true);
+} catch(Exception ex)
+    {
+    Rep.Disconnect();
+    if (MustTrace(fOPERVIE))
+        Trace(fOPERVIE, false);
+    throw new PDException(ex.getLocalizedMessage());
+    }
+}
+//-------------------------------------------------------------------------
+/**
+ * "Download" a file referenced by the PDID-
+ * @param OutBytes 
+ * @throws PDException
+ */
 public void getStreamVer(OutputStream OutBytes) throws PDException
 {
 LoadVersion(getPDId(), getVersion());
@@ -1022,6 +1051,7 @@ if (Rep1.IsRef())
 try {    
 Rep.Connect();
 Rep.Retrieve(getPDId(), getVersion(), OutBytes);
+Rep.Disconnect();
 if (MustTrace(fOPERVIE))
     Trace(fOPERVIE, true);
 } catch(Exception ex)
@@ -1032,36 +1062,34 @@ if (MustTrace(fOPERVIE))
     throw new PDException(ex.getLocalizedMessage());
     }
 }
+//--------------------------------------------------------------------------
 /**
  * "Download" a file referenced by the PDID-
  * @param OutBytes 
  * @throws PDException
- *
-public void getStreamVer(OutputStream OutBytes) throws PDException
+ */
+public void getStreamVerB64(OutputStream OutBytes) throws PDException
 {
-InputStream InBytes=null;
 LoadVersion(getPDId(), getVersion());
 StoreGeneric Rep=getDrv().getRepository(getReposit());
-if (Rep.IsURL())
+PDRepository Rep1=new PDRepository(getDrv());
+Rep1.Load(getReposit());
+if (Rep1.IsRef())
     throw new UnsupportedOperationException("Not supported.");   
+try {    
 Rep.Connect();
-InBytes=Rep.Retrieve(getPDId(), getVersion());
-byte[] buffer = new byte[BUFFSIZE];
-int bytesLeidos;
-try {
-while ((bytesLeidos = InBytes.read(buffer,0,BUFFSIZE)) != -1)
-    {
-    OutBytes.write(buffer,0,bytesLeidos);
-    }
-InBytes.close();
-OutBytes.flush();
-OutBytes.close();
+Rep.RetrieveB64(getPDId(), getVersion(), OutBytes);
+Rep.Disconnect();
+if (MustTrace(fOPERVIE))
+    Trace(fOPERVIE, true);
 } catch(Exception ex)
     {
     Rep.Disconnect();
+    if (MustTrace(fOPERVIE))
+       Trace(fOPERVIE, false);
     throw new PDException(ex.getLocalizedMessage());
     }
-}**/
+}
 //-------------------------------------------------------------------------
 /**
  *
@@ -2440,7 +2468,7 @@ throw new UnsupportedOperationException("Not Supported. Use ImportXMLNode");
 /**
  * Builds an XML of the object including the fileto be printed or exported
  * @param FolderPath Path to store Metadata and Document
- * @param AbsPath If tru, include fullpath (FolderPath) in the XML, otherwirse, only name
+ * @param AbsPath If true, include fullpath (FolderPath) in the XML, otherwise, only name
  * @throws PDException in any error 
  */
 public void ExportXML(String FolderPath, boolean AbsPath) throws PDException
@@ -2479,6 +2507,25 @@ FMetadataXML=null;
         FMetadataXML.close();
     throw new PDException(e.getLocalizedMessage());
     }
+}
+//-------------------------------------------------------------------------
+/**
+ * Builds an XML of the object to be printed or exported
+ * @return the XML
+ * @throws PDException  
+ */
+public String toXML(boolean IncludeContent) throws PDException
+{   
+StringBuilder XML=new StringBuilder("<"+XML_OPDObject+" type=\""+getTabName()+"\">\n");
+XML.append("<"+XML_ListAttr+">\n");
+XML.append(getRecord().toXML());
+XML.append(toXML2());
+if (IncludeContent)
+    {
+    
+    }
+XML.append("</"+XML_OPDObject+">\n");
+return XML.toString();
 }
 //-------------------------------------------------------------------------
 /**

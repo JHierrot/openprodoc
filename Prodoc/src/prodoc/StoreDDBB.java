@@ -245,37 +245,37 @@ return(null);
  * @return
  * @throws PDException
  */
-protected int Retrieve(String Id, String Ver, OutputStream fo) throws PDException
-{
-VerifyId(Id);
-int Tot=0;
-try {
-String SQL = "SELECT PDCONT FROM "+getTable()+" where PDId='"+Id+"' and PDVersion='"+Ver+"'";
-PreparedStatement BlobStmt = con.prepareStatement(SQL);
-ResultSet resultSet = BlobStmt.executeQuery();
-if (resultSet.next())
-    {
-    InputStream in=resultSet.getBinaryStream(1);
-    int readed=in.read(Buffer);
-    while (readed!=-1)
-        {
-        if (isEncript())
-           DecriptPass(Buffer, readed);
-        fo.write(Buffer, 0, readed);
-        Tot+=readed;
-        readed=in.read(Buffer);
-        }
-    in.close();
-    fo.flush();
-    fo.close();
-    }
-resultSet.close();
-} catch (Exception ex)
-    {
-    PDException.GenPDException("Error_retrieving_content", ex.getLocalizedMessage());
-    }
-return(Tot);
-}
+//protected int Retrieve(String Id, String Ver, OutputStream fo) throws PDException
+//{
+//VerifyId(Id);
+//int Tot=0;
+//try {
+//String SQL = "SELECT PDCONT FROM "+getTable()+" where PDId='"+Id+"' and PDVersion='"+Ver+"'";
+//PreparedStatement BlobStmt = con.prepareStatement(SQL);
+//ResultSet resultSet = BlobStmt.executeQuery();
+//if (resultSet.next())
+//    {
+//    InputStream in=resultSet.getBinaryStream(1);
+//    int readed=in.read(Buffer);
+//    while (readed!=-1)
+//        {
+//        if (isEncript())
+//           DecriptPass(Buffer, readed);
+//        fo.write(Buffer, 0, readed);
+//        Tot+=readed;
+//        readed=in.read(Buffer);
+//        }
+//    in.close();
+//    fo.flush();
+//    fo.close();
+//    }
+//resultSet.close();
+//} catch (Exception ex)
+//    {
+//    PDException.GenPDException("Error_retrieving_content", ex.getLocalizedMessage());
+//    }
+//return(Tot);
+//}
 //-----------------------------------------------------------------
 
 /**

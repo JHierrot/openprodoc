@@ -152,4 +152,10 @@ protected int Retrieve(String Id, String Ver, OutputStream fo) throws PDExceptio
 throw new UnsupportedOperationException("Not supported yet.");
 }
 //-----------------------------------------------------------------
+//@Override
+//protected int RetrieveB64(String Id, String Ver, OutputStream fo) throws PDException
+//{
+//throw new UnsupportedOperationException("Not supported yet.");
+//}
+////-----------------------------------------------------------------
 }

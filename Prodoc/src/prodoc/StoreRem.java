@@ -19,28 +19,21 @@
 
 package prodoc;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
+import org.apache.commons.codec.binary.Base64InputStream;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.InputStreamBody;
-import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HttpContext;
@@ -233,56 +226,114 @@ return (null);
  * @return
  * @throws PDException
  */
-protected int Retrieve(String Id, String Ver, OutputStream fo) throws PDException
-{
-VerifyId(Id);
-CloseableHttpResponse response2 = null;
-int Tot=0;
-InputStream in=null;
-HttpEntity Resp=null;
-try {
-List <NameValuePair> nvps = new ArrayList <NameValuePair>();
-nvps.add(new BasicNameValuePair(ORDER, DriverRemote.S_RETRIEVEFILE));
-nvps.add(new BasicNameValuePair(DriverRemote.PARAM, "<OPD><Id>"+Id+"</Id><Ver>"+Ver+"</Ver></OPD>"));
-UrlPost.setEntity(new UrlEncodedFormEntity(nvps));
-response2 = httpclient.execute(UrlPost, context);
-Resp=response2.getEntity();
-in=Resp.getContent();
-int readed=in.read(Buffer);
-while (readed!=-1)
-    {
-    fo.write(Buffer, 0, readed);
-    Tot+=readed;
-    readed=in.read(Buffer);
-    }
-} catch (Exception ex)
-    {
-    PDException.GenPDException(ex.getLocalizedMessage(), "");
-    }
-finally
-    {
-    if (in!=null)
-        {
-        try{
-        in.close();
-        } catch (IOException ex)
-            {
-            ex.printStackTrace();
-            }
-        }
-    if (response2!=null)
-        {
-        try {
-        response2.close();
-        } catch (IOException ex)
-            {
-            ex.printStackTrace();
-            }        
-        }
-    }
-return(Tot);
-}
-//-----------------------------------------------------------------
+//protected int Retrieve(String Id, String Ver, OutputStream fo) throws PDException
+//{
+//VerifyId(Id);
+//CloseableHttpResponse response2 = null;
+//int Tot=0;
+//InputStream in=null;
+//HttpEntity Resp=null;
+//try {
+//List <NameValuePair> nvps = new ArrayList <NameValuePair>();
+//nvps.add(new BasicNameValuePair(ORDER, DriverRemote.S_RETRIEVEFILE));
+//nvps.add(new BasicNameValuePair(DriverRemote.PARAM, "<OPD><Id>"+Id+"</Id><Ver>"+Ver+"</Ver></OPD>"));
+//UrlPost.setEntity(new UrlEncodedFormEntity(nvps));
+//response2 = httpclient.execute(UrlPost, context);
+//Resp=response2.getEntity();
+//in=Resp.getContent();
+//int readed=in.read(Buffer);
+//while (readed!=-1)
+//    {
+//    fo.write(Buffer, 0, readed);
+//    Tot+=readed;
+//    readed=in.read(Buffer);
+//    }
+//} catch (Exception ex)
+//    {
+//    PDException.GenPDException(ex.getLocalizedMessage(), "");
+//    }
+//finally
+//    {
+//    if (in!=null)
+//        {
+//        try{
+//        in.close();
+//        } catch (IOException ex)
+//            {
+//            ex.printStackTrace();
+//            }
+//        }
+//    if (response2!=null)
+//        {
+//        try {
+//        response2.close();
+//        } catch (IOException ex)
+//            {
+//            ex.printStackTrace();
+//            }        
+//        }
+//    }
+//return(Tot);
+//}
+////-----------------------------------------------------------------
+//@Override
+//protected int RetrieveB64(String Id, String Ver, OutputStream fo) throws PDException
+//{
+//VerifyId(Id);
+//CloseableHttpResponse response2 = null;
+//int Tot=0;
+//InputStream in=null;
+//Base64InputStream b=null;
+//HttpEntity Resp=null;
+//try {
+//List <NameValuePair> nvps = new ArrayList <NameValuePair>();
+//nvps.add(new BasicNameValuePair(ORDER, DriverRemote.S_RETRIEVEFILE));
+//nvps.add(new BasicNameValuePair(DriverRemote.PARAM, "<OPD><Id>"+Id+"</Id><Ver>"+Ver+"</Ver></OPD>"));
+//UrlPost.setEntity(new UrlEncodedFormEntity(nvps));
+//response2 = httpclient.execute(UrlPost, context);
+//Resp=response2.getEntity();
+//in=Resp.getContent();
+//b=new Base64InputStream(in,true);
+//int readed=b.read(Buffer);
+//while (readed!=-1)
+//    {
+//    fo.write(Buffer, 0, readed);
+//    Tot+=readed;
+//    readed=b.read(Buffer);
+//    }
+//} catch (Exception ex)
+//    {
+//    PDException.GenPDException(ex.getLocalizedMessage(), "");
+//    }
+//finally
+//    {
+//    try {
+//    if (b!=null)
+//        b.close();
+//    } catch (IOException ex)
+//        {}
+//    if (in!=null)
+//        {
+//        try{
+//        in.close();
+//        } catch (IOException ex)
+//            {
+//            ex.printStackTrace();
+//            }
+//        }
+//    if (response2!=null)
+//        {
+//        try {
+//        response2.close();
+//        } catch (IOException ex)
+//            {
+//            ex.printStackTrace();
+//            }        
+//        }
+//    }
+//return(Tot);
+//}
+//-----------------------------------------------------------------   
 /**
  * 
  * @param Id1 Original Identifier
@@ -356,4 +407,5 @@ finally
 return(OPDObject);
 }
 //-----------------------------------------------------------------   
+
 }

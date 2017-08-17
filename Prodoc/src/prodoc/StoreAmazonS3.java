@@ -171,31 +171,31 @@ return(null);
  * @return
  * @throws PDException
  */
-protected int Retrieve(String Id, String Ver, OutputStream fo) throws PDException
-{
-VerifyId(Id);
-int Tot=0;
-try {
-S3Object object = s3.getObject(new GetObjectRequest(BucketName, GenKey(Id, Ver)));
-InputStream in=object.getObjectContent();
-int readed=in.read(Buffer);
-while (readed!=-1)
-    {
-    if (isEncript())
-       DecriptPass(Buffer, readed);
-    fo.write(Buffer, 0, readed);
-    Tot+=readed;
-    readed=in.read(Buffer);
-    }
-in.close();
-fo.flush();
-fo.close();
-} catch (Exception ex)
-    {
-    PDException.GenPDException("Error_retrieving_content", ex.getLocalizedMessage());
-    }
-return(Tot);
-}
+//protected int Retrieve(String Id, String Ver, OutputStream fo) throws PDException
+//{
+//VerifyId(Id);
+//int Tot=0;
+//try {
+//S3Object object = s3.getObject(new GetObjectRequest(BucketName, GenKey(Id, Ver)));
+//InputStream in=object.getObjectContent();
+//int readed=in.read(Buffer);
+//while (readed!=-1)
+//    {
+//    if (isEncript())
+//       DecriptPass(Buffer, readed);
+//    fo.write(Buffer, 0, readed);
+//    Tot+=readed;
+//    readed=in.read(Buffer);
+//    }
+//in.close();
+//fo.flush();
+//fo.close();
+//} catch (Exception ex)
+//    {
+//    PDException.GenPDException("Error_retrieving_content", ex.getLocalizedMessage());
+//    }
+//return(Tot);
+//}
 //-----------------------------------------------------------------
 /**
  * 

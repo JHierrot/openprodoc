@@ -19,11 +19,15 @@
 
 package prodoc;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import org.apache.commons.codec.binary.Base64InputStream;
+import org.apache.commons.io.IOUtils;
 
 /**
  *
@@ -129,7 +133,16 @@ abstract protected InputStream Retrieve(String Id, String Ver) throws PDExceptio
  * @return
  * @throws PDException
  */
-abstract protected int Retrieve(String Id, String Ver, OutputStream fo) throws PDException;
+//abstract protected int Retrieve(String Id, String Ver, OutputStream fo) throws PDException;
+/**
+ *
+ * @param Id
+ * @param Ver
+ * @param fo
+ * @return
+ * @throws PDException
+ */
+//abstract protected int RetrieveB64(String Id, String Ver, OutputStream fo) throws PDException;
 /**
  *
  * @param Id1
@@ -387,6 +400,137 @@ for (int i = 0; i < readed; i++)
     {
     Buffer[i] = (byte)(Buffer[i] ^ Pass[ i % Pass.length]); 
     }
+}
+//-----------------------------------------------------------------
+/**
+ * 
+ * @param Id
+ * @param Ver
+ * @param fo
+ * @return
+ * @throws PDException 
+ */
+protected int Retrieve(String Id, String Ver, OutputStream fo) throws PDException
+{
+int Tot=0;
+VerifyId(Id);    
+InputStream in=null;
+try {
+in = Retrieve(Id, Ver);
+int readed=in.read(Buffer);
+while (readed!=-1)
+    {
+    if (isEncript())
+       DecriptPass(Buffer, readed);
+    fo.write(Buffer, 0, readed);
+    Tot+=readed;
+    readed=in.read(Buffer);
+    }
+} catch (Exception ex)
+    {
+    PDException.GenPDException("Error_retrieving_file",Id+"/"+Ver+"="+ex.getLocalizedMessage());
+    }
+finally 
+    {
+    try {
+    if (in!=null)
+        in.close();
+    } catch (IOException ex)
+        {}
+    try {
+    fo.flush();
+    } catch (IOException ex)
+        {}
+    try {
+        fo.close();
+    } catch (IOException ex)
+        {}
+    }
+return(Tot);
+}
+//-----------------------------------------------------------------
+
+/**
+ *
+ * @param Id
+ * @param Ver
+ * @param fo
+ * @return
+ * @throws PDException
+ */
+protected int RetrieveB64(String Id, String Ver, OutputStream fo) throws PDException
+{
+int Tot=0;
+VerifyId(Id);    
+InputStream in=null;
+Base64InputStream b=null;
+try {
+in = Retrieve(Id, Ver);
+byte[] bytes = IOUtils.toByteArray(in);
+if (isEncript())
+   DecriptPass(bytes, bytes.length);
+b=new Base64InputStream(new ByteArrayInputStream(bytes),true);
+int readed=b.read(Buffer);
+while (readed!=-1)
+    {
+    fo.write(Buffer, 0, readed);
+    Tot+=readed;
+    readed=b.read(Buffer);
+    }
+} catch (Exception ex)
+    {
+    PDException.GenPDException("Error_retrieving_file",Id+"/"+Ver+"="+ex.getLocalizedMessage());
+    }
+finally 
+    {
+    try {
+    if (b!=null)
+        b.close();
+    } catch (IOException ex)
+        {}
+    try {
+    if (in!=null)
+        in.close();
+    } catch (IOException ex)
+        {}
+    try {
+    fo.flush();
+    } catch (IOException ex)
+        {}
+    try {
+    fo.close();
+    } catch (IOException ex)
+        {}
+    }
+return(Tot);
+}
+//-----------------------------------------------------------------
+/**
+ *
+ * @param Id
+ * @param Ver
+ * @param Bytes
+ * @return
+ * @throws PDException
+ */
+protected int InsertB64(String Id, String Ver, InputStream Bytes) throws PDException
+{
+int Res =0;
+Base64InputStream b=new Base64InputStream(Bytes,false);
+try {
+Res = Insert(Id,Ver,b);
+} catch (PDException Ex)
+    {
+    throw Ex;
+    }
+finally
+    {
+    try {
+    b.close();
+    } catch (Exception Ex)
+        {}
+    }
+return(Res);    
 }
 //-----------------------------------------------------------------
 }
