@@ -332,6 +332,18 @@
         <servlet-name>OPAC2</servlet-name>
         <servlet-class>OpenProdocUI.OPAC2</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SendDocXML</servlet-name>
+        <servlet-class>OpenProdocServ.SendDocXML</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ImpDoc</servlet-name>
+        <servlet-class>OpenProdocServ.ImpDoc</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ImpDocXML</servlet-name>
+        <servlet-class>OpenProdocServ.ImpDocXML</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SParent</servlet-name>
         <url-pattern>/SParent</url-pattern>
@@ -663,6 +675,18 @@
     <servlet-mapping>
         <servlet-name>OPAC2</servlet-name>
         <url-pattern>/OPAC2</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SendDocXML</servlet-name>
+        <url-pattern>/SendDocXML</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImpDoc</servlet-name>
+        <url-pattern>/ImpDoc</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImpDocXML</servlet-name>
+        <url-pattern>/ImpDocXML</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

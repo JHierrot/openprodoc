@@ -112,8 +112,10 @@ Men.append("<item id=\"file_sep_06\" type=\"separator\"/>");
 Men.append("<item id=\"SearchDoc\" text=\"").append(TT(Req, "Search_Documents")).append("\" img=\"img/search.png\" imgdis=\"img/search.png\" />");
 if (R.isAllowMaintainDoc())
     {
-Men.append("<item id=\"file_sep_07\" type=\"separator\"/>");
+    Men.append("<item id=\"file_sep_07\" type=\"separator\"/>");
     Men.append("<item id=\"ImportRIS\" text=\"").append(TT(Req, "Import_RIS")).append("\"/>");
+    Men.append("<item id=\"ExportDoc\" text=\"").append(TT(Req, "Export_Doc")).append("\"/>");
+    Men.append("<item id=\"ImportDoc\" text=\"").append(TT(Req, "Import_Doc")).append("\"/>");
     }
 Men.append("</item>");
 Men.append("<item id=\"Other\" text=\"").append(TT(Req, "Other_Tasks")).append("\">");

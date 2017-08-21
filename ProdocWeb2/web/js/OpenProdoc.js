@@ -233,6 +233,11 @@ switch (IdMenu)
         break;
     case "ImportRIS": ImportRIS(CurrFold);
         break;
+    case "ExportDoc": if (CurrDoc!="") 
+                        ExportDoc(CurrDoc);   
+        break;            
+    case "ImportDoc": ImportDoc(CurrFold);   
+        break;            
     case "ListVer": if (CurrDoc!="") 
                         ListVer(CurrDoc);
         break;
@@ -352,6 +357,53 @@ switch (IdMenu)
     default:     
         printLog("<b>Menu onClick</b> id="+IdMenu+"<br>");
     }
+}
+//-----------------------------------
+function ExportDoc(CurrDoc)
+{
+window.open("SendDocXML?Id="+CurrDoc);    
+}
+//-----------------------------------
+function ImportDoc(CurrFold)
+{
+var Url="ImpElem";
+WinAF=myWins.createWindow({
+id:"AddDoc",
+left:20,
+top:30,
+width:450,
+height:220,
+center:true,
+modal:true,
+resize:false});  
+WinAF.setText("OpenProdoc");
+var FormImpElem=WinAF.attachForm();
+FormImpElem.loadStruct("ImpDoc?F="+CurrFold, function(){
+    FormImpElem.setFocusOnFirstActive();
+    });
+FormImpElem.attachEvent("onButtonClick", function (name)
+    {if (name==CANCEL || name==OK)
+        {   
+        FormImpElem.unload();
+        WinAF.close();
+        }
+     });
+FormImpElem.attachEvent("onUploadFile",function(realName,serverName){
+    window.dhx4.ajax.get("UpFileStatus", function(r)
+    {
+    var xml = r.xmlDoc.responseXML;
+    var nodes = xml.getElementsByTagName("status");
+    alert(nodes[0].textContent);
+    });
+    });
+FormImpElem.attachEvent("onUploadFail",function(realName){
+    window.dhx4.ajax.get("UpFileStatus", function(r)
+    {
+    var xml = r.xmlDoc.responseXML;
+    var nodes = xml.getElementsByTagName("status");
+    alert(nodes[0].textContent);
+    });
+    });  
 }
 //-----------------------------------
 function AddThes()

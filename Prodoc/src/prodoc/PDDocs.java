@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.apache.commons.codec.binary.Base64InputStream;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -192,6 +193,8 @@ private String FilePath=null;
 private InputStream FileStream=null;
 
 static private ObjectsCache DocsObjectsCache = null;
+
+static public final String XML_CONTENT="OPD_CONTENT";
 
 //-------------------------------------------------------------------------
 /**
@@ -975,6 +978,11 @@ return(Rep.GetUrl(d.getName()));
 public void setStream(InputStream Bytes) throws PDException
 {
 FileStream=Bytes;
+}
+//-------------------------------------------------------------------------
+private void setStreamB64(InputStream B64InputStream)
+{
+FileStream=new Base64InputStream(B64InputStream,false);
 }
 //-------------------------------------------------------------------------
 /**
@@ -2517,14 +2525,23 @@ FMetadataXML=null;
 public String toXML(boolean IncludeContent) throws PDException
 {   
 StringBuilder XML=new StringBuilder("<"+XML_OPDObject+" type=\""+getTabName()+"\">\n");
-XML.append("<"+XML_ListAttr+">\n");
+XML.append("<").append(XML_ListAttr).append(">\n");
 XML.append(getRecord().toXML());
 XML.append(toXML2());
 if (IncludeContent)
     {
-    
+    try {    
+    XML.append("<").append(XML_CONTENT).append(">\n");
+    ByteArrayOutputStream Bytes=new ByteArrayOutputStream();
+    this.getStreamB64(Bytes);
+    XML.append(Bytes.toString("UTF-8"));
+    XML.append("</").append(XML_CONTENT).append(">\n");
+    } catch (Exception Ex)
+        {
+        PDLog.Error(Ex.getLocalizedMessage());
+        }
     }
-XML.append("</"+XML_OPDObject+">\n");
+XML.append("</").append(XML_OPDObject).append(">\n");
 return XML.toString();
 }
 //-------------------------------------------------------------------------
@@ -2579,6 +2596,53 @@ for (int i = 0; i < childNodes.getLength(); i++)
                 }
             NewDoc.setName(null); // calculated by when inserting
             }
+        }
+    }
+if (PDLog.isDebug())
+    PDLog.Debug("PDDocs.ImportXMLNode<");    
+NewDoc.insert();
+}    
+//-------------------------------------------------------------------------
+/**
+ * Import a Doc described by an XML with content referenced
+ * @param OPDObject XMLNode to process
+ * @param FolderPath Path where the original xlml file was readed. Use to resolve the absolute file position
+ * @param DestFold OPD destination folder
+ * @param MaintainId When true, the Original Id is maintained, else a new one is assigned
+ * @throws PDException
+ */
+public void ImportXMLNode(Node OPDObject, String DestFold, boolean MaintainId) throws PDException
+{
+if (PDLog.isInfo())
+    PDLog.Debug("PDDocs.ImportXMLNode>:B64. DestFold="+DestFold+" MaintainId="+MaintainId+" OPDObject="+OPDObject);    
+NodeList childNodes = OPDObject.getChildNodes();
+PDDocs NewDoc=null;
+for (int i = 0; i < childNodes.getLength(); i++)
+    {
+    Node item = childNodes.item(i);
+    if (item.getNodeName().equalsIgnoreCase(XML_ListAttr)) 
+        {
+        Record r=Record.FillFromXML(item, getRecord());
+        String DocTypReaded=(String)r.getAttr(PDDocs.fDOCTYPE).getValue();
+        NewDoc=new PDDocs(getDrv(), DocTypReaded); // to be improved to analize the type BEFORE
+        r=Record.FillFromXML(item, NewDoc.getRecSum());
+        NewDoc.assignValues(r);
+        if (!MaintainId)
+            NewDoc.setPDId(null);
+        NewDoc.setParentId(DestFold);
+        PDRepository Rep=new PDRepository(getDrv());
+        Rep.Load(NewDoc.getReposit());
+        if (!Rep.IsRef())
+            {
+            Attribute DocName=r.getAttr(fNAME);
+            String Path=(String)DocName.getValue();
+            if (!Path.contains(File.separator)) // if absolute reference, maintain
+                NewDoc.setName(null); // calculated by when inserting
+            }
+        }
+    else if (item.getNodeName().equalsIgnoreCase(XML_CONTENT)) 
+        {
+        NewDoc.setStreamB64(new ByteArrayInputStream(item.getTextContent().getBytes()));
         }
     }
 if (PDLog.isDebug())

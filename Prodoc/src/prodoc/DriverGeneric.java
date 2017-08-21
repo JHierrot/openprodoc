@@ -2159,6 +2159,54 @@ return(Tot);
     }
 }
 //---------------------------------------------------------------------
+/**
+ * 
+ * @param XMLFile
+ * @param ParentFolderId
+ * @return Num of elements processed
+ * @throws PDException
+ */
+public int ProcessXML(InputStream XMLFile, String ParentFolderId) throws PDException
+{
+if (PDLog.isInfo())
+    PDLog.Debug("DriverGeneric.ProcessXML>:InputStream. ParentFolderId="+ParentFolderId);        
+try {
+DocumentBuilder DB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+Document XMLObjects = DB.parse(XMLFile);
+NodeList OPDObjectList = XMLObjects.getElementsByTagName(ObjPD.XML_OPDObject);
+Node OPDObject = null;
+ObjPD Obj2Build=null;
+int Tot=0;
+if (PDLog.isDebug())
+    PDLog.Debug("DriverGeneric.ProcessXML:Elements="+OPDObjectList.getLength());        
+for (int i=0; i<OPDObjectList.getLength(); i++)
+    {
+    OPDObject = OPDObjectList.item(i);
+    Obj2Build=BuildObj(OPDObject);
+    if (Obj2Build instanceof PDDocs)
+        {
+        ((PDDocs)Obj2Build).ImportXMLNode(OPDObject, ParentFolderId, false);
+        Tot++;
+        }
+    else if (Obj2Build instanceof PDFolders)
+            ;  // ((PDFolders)Obj2Build).ImportXMLNode(OPDObject, ParentFolderId, false);
+    else
+        {
+        Obj2Build.ProcesXMLNode(OPDObject);
+        Tot++;
+        }
+    }
+DB.reset();
+if (PDLog.isDebug())
+    PDLog.Debug("DriverGeneric.ProcessXML<");        
+return(Tot);
+}catch(Exception ex)
+    {
+    PDLog.Error(ex.getLocalizedMessage());
+    throw new PDException(ex.getLocalizedMessage());
+    }
+}
+//---------------------------------------------------------------------
 public ObjPD BuildObj(Node OPDObject) throws PDException
 {           
 NamedNodeMap attributes = OPDObject.getAttributes();
