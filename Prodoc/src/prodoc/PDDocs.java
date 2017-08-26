@@ -2606,12 +2606,11 @@ NewDoc.insert();
 /**
  * Import a Doc described by an XML with content referenced
  * @param OPDObject XMLNode to process
- * @param FolderPath Path where the original xlml file was readed. Use to resolve the absolute file position
  * @param DestFold OPD destination folder
  * @param MaintainId When true, the Original Id is maintained, else a new one is assigned
  * @throws PDException
  */
-public void ImportXMLNode(Node OPDObject, String DestFold, boolean MaintainId) throws PDException
+public String ImportXMLNode(Node OPDObject, String DestFold, boolean MaintainId) throws PDException
 {
 if (PDLog.isInfo())
     PDLog.Debug("PDDocs.ImportXMLNode>:B64. DestFold="+DestFold+" MaintainId="+MaintainId+" OPDObject="+OPDObject);    
@@ -2648,6 +2647,7 @@ for (int i = 0; i < childNodes.getLength(); i++)
 if (PDLog.isDebug())
     PDLog.Debug("PDDocs.ImportXMLNode<");    
 NewDoc.insert();
+return(NewDoc.getPDId());
 }    
 //-------------------------------------------------------------------------
 /**

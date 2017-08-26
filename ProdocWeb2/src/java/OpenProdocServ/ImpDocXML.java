@@ -25,17 +25,10 @@ import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
 import javax.servlet.http.*;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import prodoc.DriverGeneric;
-import prodoc.ObjPD;
-import prodoc.PDFolders;
 
 
 /**
@@ -62,7 +55,6 @@ ServletFileUpload upload = new ServletFileUpload(factory);
 boolean isMultipart = ServletFileUpload.isMultipartContent(Req);
 List items = upload.parseRequest(Req);
 Iterator iter = items.iterator();
-String CurrFold=PDFolders.ROOTFOLDER;
 while (iter.hasNext())
     {
     FileItem item = (FileItem) iter.next();
@@ -71,13 +63,10 @@ while (iter.hasNext())
         FileName=item.getName();
         FileData=item.getInputStream();
         }
-    else if (item.getName().equalsIgnoreCase("CurrFold"))
-        {
-        CurrFold=item.getString();
-        }
-    }        
+    }   
+String CurrFold=getActFolderId(Req);
 DriverGeneric PDSession=SParent.getSessOPD(Req);  
-int Tot=PDSession.ProcessXML(FileData, CurrFold);
+int Tot=PDSession.ProcessXMLB64(FileData, CurrFold);
 FileData.close();
 out.println(UpFileStatus.SetResultOk(Req, "Total="+Tot));
 } catch (Exception e)

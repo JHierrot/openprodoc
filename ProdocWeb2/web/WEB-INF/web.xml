@@ -344,6 +344,10 @@
         <servlet-name>ImpDocXML</servlet-name>
         <servlet-class>OpenProdocServ.ImpDocXML</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SendFoldXML</servlet-name>
+        <servlet-class>OpenProdocServ.SendFoldXML</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SParent</servlet-name>
         <url-pattern>/SParent</url-pattern>
@@ -687,6 +691,10 @@
     <servlet-mapping>
         <servlet-name>ImpDocXML</servlet-name>
         <url-pattern>/ImpDocXML</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SendFoldXML</servlet-name>
+        <url-pattern>/SendFoldXML</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

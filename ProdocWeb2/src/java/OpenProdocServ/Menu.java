@@ -87,6 +87,12 @@ if (R.isAllowMaintainFolder())
 Men.append("<item id=\"RefreshFold\" text=\"").append(TT(Req, "Refresh")).append("\"  img=\"img/refresh.png\" imgdis=\"img/refresh.png\" />");
 Men.append("<item id=\"file_sep_02\" type=\"separator\"/>");
 Men.append("<item id=\"SearchFold\" text=\"").append(TT(Req, "Search_Folders")).append("\" img=\"img/search.png\" imgdis=\"img/search.png\" />");
+if (R.isAllowMaintainDoc())
+    {
+    Men.append("<item id=\"file_sep_02a\" type=\"separator\"/>");
+    Men.append("<item id=\"ExportFold\" text=\"").append(TT(Req, "Export_Folders")).append("\"/>");
+    Men.append("<item id=\"ImportFold\" text=\"").append(TT(Req, "Import_Folders")).append("\"/>");
+    }
 Men.append("<item id=\"file_sep_03\" type=\"separator\"/>");
 Men.append("<item id=\"Exit\" text=\"").append(TT(Req, "Exit")).append("\" img=\"img/close.gif\" imgdis=\"img/close_dis.gif\"/></item>");
 Men.append("<item id=\"Documentos\" text=\"").append(TT(Req, "Documents")).append("\">");

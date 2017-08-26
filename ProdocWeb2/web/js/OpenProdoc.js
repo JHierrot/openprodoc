@@ -207,6 +207,10 @@ switch (IdMenu)
         break;
     case "RefreshFold": DocsTree.refreshItem(CurrFold);
         break;
+    case "ExportFold": ExportFold(CurrFold);   
+        Break;
+    case "ImportFold": ImportFold(CurrFold); 
+        Break;
     case "AddDoc": AddDoc(CurrFold);
         break;
     case "AddExtDoc": AddExtDoc(CurrFold);
@@ -364,9 +368,14 @@ function ExportDoc(CurrDoc)
 window.open("SendDocXML?Id="+CurrDoc);    
 }
 //-----------------------------------
+function ExportFold(CurrFold)
+{
+window.open("SendFoldXML?Id="+CurrFold);    
+}
+//-----------------------------------
 function ImportDoc(CurrFold)
 {
-var Url="ImpElem";
+//var Url="ImpElem";
 WinAF=myWins.createWindow({
 id:"AddDoc",
 left:20,
@@ -394,6 +403,52 @@ FormImpElem.attachEvent("onUploadFile",function(realName,serverName){
     var xml = r.xmlDoc.responseXML;
     var nodes = xml.getElementsByTagName("status");
     alert(nodes[0].textContent);
+    WinAF.close();
+    DocsGrid.clearAndLoad("DocList?FoldId="+CurrFold);
+    });
+    });
+FormImpElem.attachEvent("onUploadFail",function(realName){
+    window.dhx4.ajax.get("UpFileStatus", function(r)
+    {
+    var xml = r.xmlDoc.responseXML;
+    var nodes = xml.getElementsByTagName("status");
+    alert(nodes[0].textContent);
+    });
+    });  
+}
+//-----------------------------------
+function ImportFold(CurrFold)
+{
+//var Url="ImpElem";
+WinAF=myWins.createWindow({
+id:"AddDoc",
+left:20,
+top:30,
+width:450,
+height:220,
+center:true,
+modal:true,
+resize:false});  
+WinAF.setText("OpenProdoc");
+var FormImpElem=WinAF.attachForm();
+FormImpElem.loadStruct("ImpDoc?F="+CurrFold, function(){
+    FormImpElem.setFocusOnFirstActive();
+    });
+FormImpElem.attachEvent("onButtonClick", function (name)
+    {if (name==CANCEL || name==OK)
+        {   
+        FormImpElem.unload();
+        WinAF.close();
+        }
+     });
+FormImpElem.attachEvent("onUploadFile",function(realName,serverName){
+    window.dhx4.ajax.get("UpFileStatus", function(r)
+    {
+    var xml = r.xmlDoc.responseXML;
+    var nodes = xml.getElementsByTagName("status");
+    alert(nodes[0].textContent);
+    WinAF.close();
+    DocsGrid.clearAndLoad("DocList?FoldId="+CurrFold);
     });
     });
 FormImpElem.attachEvent("onUploadFail",function(realName){

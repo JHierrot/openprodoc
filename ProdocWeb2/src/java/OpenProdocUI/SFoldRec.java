@@ -21,7 +21,6 @@ package OpenProdocUI;
 
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import prodoc.Attribute;
 import prodoc.DriverGeneric;
 import prodoc.PDException;
@@ -50,6 +49,7 @@ protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Excep
 {
 DriverGeneric PDSession=getSessOPD(Req);
 String FoldId=Req.getParameter("FoldId");
+setActFoldId(Req, FoldId);
 PDFolders Fold=new PDFolders(PDSession);
 Fold.LoadFull(FoldId);
 out.println(CreateForm(Req, Fold));

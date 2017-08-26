@@ -1023,7 +1023,6 @@ if (Serv.getVersion().equalsIgnoreCase("1.1") || Serv.getVersion().equalsIgnoreC
         FileImp=new File("ex/PD_TASKSFTDEFEVEN.opd");
         ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);  
         Trace.add("Full Text Tasks Added (Disabled)");
-    
         }
     } catch (PDException pDException)
         {
@@ -2189,7 +2188,61 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
         Tot++;
         }
     else if (Obj2Build instanceof PDFolders)
-            ;  // ((PDFolders)Obj2Build).ImportXMLNode(OPDObject, ParentFolderId, false);
+        {
+//        ((PDFolders)Obj2Build).ImportXMLNode(OPDObject, ParentFolderId, false);
+//        Tot++;
+        }
+    else
+        {
+        Obj2Build.ProcesXMLNode(OPDObject);
+        Tot++;
+        }
+    }
+DB.reset();
+if (PDLog.isDebug())
+    PDLog.Debug("DriverGeneric.ProcessXML<");        
+return(Tot);
+}catch(Exception ex)
+    {
+    PDLog.Error(ex.getLocalizedMessage());
+    throw new PDException(ex.getLocalizedMessage());
+    }
+}
+//---------------------------------------------------------------------
+/**
+ * 
+ * @param XMLFile
+ * @param ParentFolderId
+ * @return Num of elements processed
+ * @throws PDException
+ */
+public int ProcessXMLB64(InputStream XMLFile, String ParentFolderId) throws PDException
+{
+if (PDLog.isInfo())
+    PDLog.Debug("DriverGeneric.ProcessXML>:InputStream. ParentFolderId="+ParentFolderId);        
+try {
+DocumentBuilder DB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+Document XMLObjects = DB.parse(XMLFile);
+NodeList OPDObjectList = XMLObjects.getElementsByTagName(ObjPD.XML_OPDObject);
+Node OPDObject = null;
+ObjPD Obj2Build=null;
+int Tot=0;
+if (PDLog.isDebug())
+    PDLog.Debug("DriverGeneric.ProcessXML:Elements="+OPDObjectList.getLength());        
+for (int i=0; i<OPDObjectList.getLength(); i++)
+    {
+    OPDObject = OPDObjectList.item(i);
+    Obj2Build=BuildObj(OPDObject);
+    if (Obj2Build instanceof PDDocs)
+        {
+        ((PDDocs)Obj2Build).ImportXMLNode(OPDObject, ParentFolderId, false);
+        Tot++;
+        }
+    else if (Obj2Build instanceof PDFolders)
+        {
+        ParentFolderId=((PDFolders)Obj2Build).ImportXMLNode(OPDObject, ParentFolderId, false).getPDId();
+        Tot++;
+        }
     else
         {
         Obj2Build.ProcesXMLNode(OPDObject);
