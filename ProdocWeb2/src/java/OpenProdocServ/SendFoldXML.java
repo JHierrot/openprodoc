@@ -22,18 +22,14 @@ package OpenProdocServ;
 import OpenProdocUI.SParent;
 import static OpenProdocUI.SParent.ShowMessage;
 import static OpenProdocUI.SParent.getSessOPD;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashSet;
-import java.util.Iterator;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import prodoc.Cursor;
 import prodoc.DriverGeneric;
 import prodoc.PDDocs;
 import prodoc.PDFolders;
-import prodoc.PDMimeType;
 import prodoc.Record;
 
 /**

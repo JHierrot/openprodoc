@@ -1443,7 +1443,7 @@ for (int i = 0; i < childNodes.getLength(); i++)
         NewFold=new PDFolders(getDrv(), FoldTypReaded); // to be improved to analize the type BEFORE
         r=Record.FillFromXML(item, NewFold.getRecSum());
         NewFold.assignValues(r);
-        if (!MaintainId)
+        if (!MaintainId && ExistId(NewFold.getPDId()))
             NewFold.setPDId(null);
         NewFold.setParentId(ParentFolderId);
         }
@@ -1657,6 +1657,34 @@ Attribute A=this.getRecord().getAttr(fPDDATE );
 A.setValue(new Date());
 r.addAttr(A);
 getDrv().UpdateRecord(this.getTabName(), r, getConditionsMaint());
+}
+//-------------------------------------------------------------------------
+private boolean ExistId(String pdId)
+{
+if (getObjCache().get(pdId)!=null)
+    return(true);
+Cursor Cur=null;
+Record r=null;
+try {
+Query LoadAct=new Query(getTabName(), getRecordStruct(),getConditions());
+Cur=getDrv().OpenCursor(LoadAct);
+r=getDrv().NextRec(Cur);
+} catch (Exception Ex)
+    {
+    PDLog.Error("ExistId."+pdId+"="+Ex.getLocalizedMessage());        
+    }
+finally
+    {
+    if (Cur!=null)
+       try {
+       getDrv().CloseCursor(Cur);
+       } catch (Exception Ex)
+        {}
+    }
+if (r!=null)
+    return(true);
+else
+    return(false);
 }
 //-------------------------------------------------------------------------
 }

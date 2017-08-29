@@ -2626,8 +2626,8 @@ for (int i = 0; i < childNodes.getLength(); i++)
         NewDoc=new PDDocs(getDrv(), DocTypReaded); // to be improved to analize the type BEFORE
         r=Record.FillFromXML(item, NewDoc.getRecSum());
         NewDoc.assignValues(r);
-        if (!MaintainId)
-            NewDoc.setPDId(null);
+        if (!MaintainId && ExistId(NewDoc.getPDId()))
+           NewDoc.setPDId(null);
         NewDoc.setParentId(DestFold);
         PDRepository Rep=new PDRepository(getDrv());
         Rep.Load(NewDoc.getReposit());
@@ -3019,4 +3019,34 @@ FTConn.Disconnect();
 return (FTRes);
 }
 //-------------------------------------------------------------------------
+
+private boolean ExistId(String pdId)
+{
+if (getObjCache().get(pdId)!=null)
+    return(true);
+Cursor Cur=null;
+Record r=null;
+try {
+Query LoadAct=new Query(getTabName(), getRecordStruct(),getConditions());
+Cur=getDrv().OpenCursor(LoadAct);
+r=getDrv().NextRec(Cur);
+} catch (Exception Ex)
+    {
+    PDLog.Error("ExistId."+pdId+"="+Ex.getLocalizedMessage());        
+    }
+finally
+    {
+    if (Cur!=null)
+       try {
+       getDrv().CloseCursor(Cur);
+       } catch (Exception Ex)
+        {}
+    }
+if (r!=null)
+    return(true);
+else
+    return(false);
+}
+//-------------------------------------------------------------------------
+
 }
