@@ -28,9 +28,6 @@ import java.util.Vector;
  */
 public class ExtConf
 {
-
-private boolean OpacActive=false;
-private boolean WebInactive=false;
 private final Vector<String> DocTipesList=new Vector();
 private final Vector<String> FieldsToInclude=new Vector();
 private final Vector<String> FieldsComp=new Vector();
@@ -76,12 +73,6 @@ return DefExtConf.getPass();
 //----------------------------------------------------------------------------    
 public void AssignConf(Properties ProdocProperties)
 {
-String ConfOpacActive=ProdocProperties.getProperty("OpacActive");
-if (ConfOpacActive!=null && ConfOpacActive.trim().equals("1"))
-        setOpacActive(true);
-String ConfWebInactive=ProdocProperties.getProperty("WebInactive");
-if (ConfWebInactive!=null && ConfWebInactive.trim().equals("1"))
-        setWebInactive(true);
 String ConfDocTipesList=ProdocProperties.getProperty("DocTipesList");
 if (ConfDocTipesList!=null && ConfDocTipesList.trim().length()!=0)
     {
@@ -188,22 +179,6 @@ if (ConfUrlHelp!=null && ConfUrlHelp.trim().length()!=0)
 }
 //----------------------------------------------------------------------------    
 /**
-* @return the OpacActive
-*/
-public boolean isOpacActive()
-{
-return OpacActive;
-}
-//----------------------------------------------------------------------------    
-/**
-* @param aOpacActive the OpacActive to set
-*/
-public void setOpacActive(boolean aOpacActive)
-{
-OpacActive = aOpacActive;
-}
-//----------------------------------------------------------------------------    
-/**
 * @return the DocTipesList
 */
 public Vector<String> getDocTipesList()
@@ -257,22 +232,6 @@ return MaxResults;
 public String getFormSearchCSS()
 {
 return FormSearchCSS;
-}
-//----------------------------------------------------------------------------    
-/**
-* @return the WebInactive
-*/
-public boolean isWebInactive()
-{
-return WebInactive;
-}
-//----------------------------------------------------------------------------    
-/**
-* @param aWebInactive the WebInactive to set
-*/
-public void setWebInactive(boolean aWebInactive)
-{
-WebInactive = aWebInactive;
 }
 //----------------------------------------------------------------------------    
 /**

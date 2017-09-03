@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Punto de Consulta</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="shortcut icon" href="img/OpenProdoc.ico" type="image/x-icon"/> 
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+<H4>Punto de Consulta</H4><hr>
+<p>El Punto de Consulta OpenProdoc (en ocasiones denominado en esta documentación con el término tradicional <a href="https://es.wikipedia.org/wiki/Cat%C3%A1logo_en_l%C3%ADnea" target="_blank">OPAC</a> por analogía), permite a personas externas al sistema consultar de forma sencilla los documentos del mismo sin necesidad de disponer de usuario o autenticarse. Básicamente el Punto de Consulta permitirá elegir el tipo de documento a buscar, introducir los crierios de consulta y elegir el formato de presentacion de los resultados.</p>
+<p>Esto requiere parametrización para simplificar el uso y también para añadir seguridad, ya que estamos permitiendo el acceso a personas a las que no hemos dado una identificación y que podrían acceder a documentación confidencial o causar daños por error o intencionadamente. La parametrización se hace por medio de un fichero de propiedades con una apariencia como la siguiente (las líneas que empiezan por # se toman como comentarios y se ignoran) :</p>
+<em>
+#############################################<br>
+####&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+OPAC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;####<br>
+#############################################<br>
+# Nombres de los Tipos de documentos por lo que podrá buscar un usuario<br>
+DocTipesList=Article|ECM_Standards|InternetProfile|MusicRecords|Picture<br>
+# Nombres (Internos) de los Metadatos/Campos (de cualquiera de los tipos de documentos) por lo que podrá buscar un usuario<br>
+FieldsToInclude=Author|Authors|Keywords|Player|Title|Country|CreativeCommons<br>
+# Operators de búsqueda/comparacion. 1 for cada metadato. Por defecto es igualdad EQ<br>
+# Posibles valores  = EQ, <> NE, > GT, >= GE, < LT, <= LE, Contains CT<br>
+FieldsComp=EQ|EQ|EQ|EQ|CT|EQ|EQ<br>
+# Carpeta por debajo de la cual se realziarán las búsquedas<br>
+BaseFolder=/Examples - Ejemplos<br>
+#Búsqueda ampiada a los subtipos<br>
+Inheritance=1<br>
+# Códigos identificadores (PDId) de los documentos de tipo PD_REPORTS que se utilizaran para presentar los resultados. Debe inckuirse al menos 1.<br>
+ResultForm=150c9be080c-3fe46f69eb1b2cb7|150c9be8462-3fd76612bb72fece|15dc854acbf-3fedc1977572a008<br>
+# Máximo numero de resultados que se devolverá. (0=sin límite)<br>
+MaxResults=0<br>
+# Código identificador (PDId) de la hoja de estilo (CSS) que se utilizará para el punto de consulta<br>
+FormSearchCSS=15db73b6628-3fee99cd40e27fee<br>
+# Url (interno o externo) de la imagen utilizada como logo<br>
+FormSearchLogo=img/LogoProdoc.jpg<br>
+# Usuario con el que se realizaá la consulta<br>
+User=Invitado<br>
+# Clave de acceso del Usuario con el que se realizaá la consulta<br>
+Pass=PassInvit<br>
+# Cabecera del formulario de consulta<br>
+Title=Punto de Consulta Simplificada<br>
+# Etiqueta de la lista desplegable de tipos documentales buscar<br>
+DTLabel=Seleccionar tipo de documento a buscar<br>
+# Etiqueta del campo de búsqueda por texto completo de lso documentos.<br>
+FTLabel=Introducir algunas palabras de b&uacute;squeda<br>
+# Etiqueta de la lista desplegable de formatos de salida.<br>
+FormatLabel=Seleccionar formato de salida de los resultados<br>
+# Texto de la ayuda emergente al situarse en el combo de selección de tipos de documento<br> 
+HelpForDocType=Ayuda Tipos Documentales<br>
+# Texto de la ayuda emergente al situarse en el campo de búsqueda por texto completo de lso documentos.<br>  
+HelpForFullText=Ayuda B&uacute;squeda Texto Completo&lt;br>Introduzca cualquier palabra(s) del contenido de documento para recuperar por criterios aproximados. Si se desea que el docuemnto contenga la palabra, debe incluirse un signo +. Si desea buscar literalmente debe incluirse la palabra entre comillas. Para buscar documentos que NO contengan una palabra debe incluirse un signo menos -&lt;br>Puede combinarse con la b&uacute;sqeda por metadatos de los documentos.<br>
+# Texto de la ayuda emergente al situarse en el combo de selección de formatos de salida<br>  
+HelpForFormatType=Ayuda Formatos Salida<br>
+# Url de la página de ayuda<br>
+UrlHelp=help/EN/HelpIndex.html <br>   
+</em>
+<p>Este fichero sigue el estandar habitual de los ficheros de propiedades (etiqueta+"="+Valor), admitiendo comentarios (líneas que empiezan con el caracter '#'). El significado de cada etiqueta (que no puede repetirse) es el siguiente:</p>
+<ul>
+    <li><b>DocTipesList : </b>Nombres de los Tipos de documentos por lo que podrá buscar un usuario. Debe tenerse en cuenta que si el parámetro <b>Inheritance</b> está activado ( es igual a 1), se buscará automáticamente por todos los subtipos de cualquiera de los tipos elegios.</li>
+    <li><b>FieldsToInclude : </b>Nombres (Internos, no los nombres de usuario) de los Metadatos/Campos (de cualquiera de los tipos de documentos) por lo que podrá buscarse documentos. Solo se presentarán en el formulario de consulta (y se buscará por) los metadatos de cada tipo documental incluidos en la lista. Los metadatos presentados  y el gformato de los resultados dependen de los informes elegidos en <b>ResultForm</b>.</li>
+    <li><b>FieldsComp : </b> Operadores de búsqueda/comparacion para cada metadato. Por defecto es igualdad (EQ) es decir se busca todos aquellos documentos cuyo valor de ese metadato es igual al introducido. Los posibles valores son caracteres de 2 letras:  = EQ, <> NE, > GT, >= GE, < LT, <= LE, Contains CT . Puede asignarse valores diferentes de forma que ppor ejemplo un metadato de tipo fecha se busque por valores superiores al introducido usando GE. El operador CT permite buscar metadatos que CONTENGAN el valor introducido, lo que facilita la búsqueda pero la hace más lenta y puede generar demasiados resultados.</li>
+    <li><b>BaseFolder : </b> Arbol de carpetas por debajo de la cual se realizarán las búsquedas. El resto de los documentos no se devolverán.</li>
+    <li><b>Inheritance : </b> Si este parámetro está activado (1) la búsqueda incluirá todos los subtipos de documentos del tipo documental seleccionado. Si está desactivado solo incluirá el tipo seleccionado. Esta opción NO afecta al rendimiento, por lo que el criterio para usarlo es puramente documental.</li>
+    <li><b>ResultForm : </b> Códigos identificadores (PDId) de los documentos de tipo <a href="Reports.html">Informes (PD_REPORTS)</a> que se utilizaran para presentar los resultados. Debe inckuirse al menos 1.</li>
+    <li><b>MaxResults : </b> Máximo numero de resultados que se devolverá (0 = "sin límite", realmente 1 millón).</li>
+    <li><b>FormSearchCSS : </b></li>
+    <li><b>FormSearchLogo : </b></li>
+    <li><b>User : </b></li>
+    <li><b>Pass : </b></li>
+    <li><b>Title : </b></li>
+    <li><b>DTLabel : </b></li>
+    <li><b>FTLabel : </b></li>
+    <li><b>FormatLabel : </b></li>
+    <li><b>HelpForDocType : </b></li>
+    <li><b>HelpForFullText : </b></li>
+    <li><b>HelpForFormatType : </b></li>
+    <li><b>UrlHelp : </b></li>
+</ul>
+<hr>
+<a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>
+    </body>
+</html>

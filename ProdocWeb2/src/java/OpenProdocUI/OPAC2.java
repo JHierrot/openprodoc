@@ -120,7 +120,7 @@ while (Attr!=null)
 Cur=TmpDoc.Search(FullTextSearch, CurrType, Cond, ConfOPAC.isInheritance(), true,false, CurrFoldId, null);
 PDReport Rep=new PDReport(PDSession);
 Rep.LoadFull(ReportId);
-ArrayList<String> GeneratedRep= Rep.GenerateRep(getActFolderId(Req), Cur, null, 0, 0, SParent.getIO_OSFolder());
+ArrayList<String> GeneratedRep= Rep.GenerateRep(getActFolderId(Req), Cur, null, 0, 0, SParent.getIO_OSFolder(),ConfOPAC.getMaxResults());
 String File2Send=GeneratedRep.get(0);
 PDMimeType mt=new PDMimeType(PDSession);
 mt.Load(Rep.getMimeType());

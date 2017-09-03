@@ -109,6 +109,22 @@ super(pDrv,getTableName());
  */
 public ArrayList<String> GenerateRep(String pIdParent, Cursor pListDocs, Vector pVectRec, int pRecsPag, int pPagsDoc, String OSFolder) throws PDException
 {
+return(GenerateRep(pIdParent, pListDocs, pVectRec, pRecsPag, pPagsDoc, OSFolder, 0));    
+}
+/**
+ * generates a report with the current PDId
+ * @param pIdParent Parent of the "cursor". Can be null
+ * @param pListDocs Cursor with the list of docs
+ * @param pVectRec
+ * @param pRecsPag Number oc record by page
+ * @param pPagsDoc Number of pages by Archive
+ * @param OSFolder Folder for saving reports
+ * @param MaxResults
+ * @return path to the generated Report.
+ * @throws prodoc.PDException
+ */
+public ArrayList<String> GenerateRep(String pIdParent, Cursor pListDocs, Vector pVectRec, int pRecsPag, int pPagsDoc, String OSFolder, int MaxResults) throws PDException
+{
 if (pListDocs!=null)    
     ListDocs=pListDocs;
 else if (pVectRec!=null)
@@ -140,7 +156,9 @@ else
     else
         Res=VectRec.get(CountVect++);
     }
-while (Res!=null)    
+if (MaxResults<=0)
+    MaxResults=1000000;
+while (Res!=null && TotalRecsCount<MaxResults)    
     {
     if (CanInclude(Res))
         {
