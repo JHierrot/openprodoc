@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Public Access Catalog</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="shortcut icon" href="img/OpenProdoc.ico" type="image/x-icon"/> 
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+<H4>Public Access Catalog</H4><hr>
+<p>The OpenProdoc Public Access Catalog (sometimes refered in this documentation with the traditional term <a href="https://en.wikipedia.org/wiki/Online_public_access_catalog" target="_blank">OPAC</a> ), allows people foreign to the company institution to look for in an easy way the documents stored in OpenProdoc without the need of an user. 
+   Public Access Catalog allows to select the document type to search for, to key in the search criteria and select the format to list the results.</p>
+<p>The use of the OPAC requires to adjust parámeters for and easy use and also for adding security,because we are allowing access to unkown people that could access to confidential documentation or damage something by error or intentionally. 
+    The parameters are defined by means of a properties file with the elements defined in the next list. At the end of the page it's include an example (The lines starting by # are comments and are ignored, as the blank lines) :</p>
+<p>This file follows the standard format of the properties files (label/element+"="+Value), with comments ( the lines starting wiith the character '#'). The meaning of each entry (that can't be repeated) is:</p>
+<ul>
+    <li><b>DocTipesList : </b> Names of the Document types by which the user is allowed to search. 
+        It must be noted that if the param <b>Inheritance</b> is enabled ( equal to 1), automatically all the subtipes of any of the selected document types will be included in the search.</li>
+    <li><b>FieldsToInclude : </b> Names (Internal names not the user names) of the metadata/fields (of any document type included in the previous list) by which the user is allowed to search. 
+        In the form will be showed (and searched for) the subset of the listed metadata of the document type selected. Es decir, cada vez que se elija un tipo documental, se actualizará el formulario para presentar, de todos los metadatos del tipo documental, los incluidos en la lista.
+        Esto no tiene relación con los metadatos presentados de los resultados de búsqueda ni el formato de los resultados, que dependen de los informes elegidos en <b>ResultForm</b>.</li>
+    <li><b>FieldsComp : </b> Operadores de búsqueda/comparacion para cada metadato. Por defecto es igualdad (EQ) es decir se busca todos aquellos documentos cuyo valor de ese metadato es igual al introducido. Los posibles valores son caracteres de 2 letras:  = EQ, <> NE, > GT, >= GE, < LT, <= LE, Contains CT . Puede asignarse valores diferentes de forma que ppor ejemplo un metadato de tipo fecha se busque por valores superiores al introducido usando GE. El operador CT permite buscar metadatos que CONTENGAN el valor introducido, lo que facilita la búsqueda pero la hace más lenta y puede generar demasiados resultados.</li>
+    <li><b>BaseFolder : </b> Arbol de carpetas por debajo de la cual se realizarán las búsquedas. El resto de los documentos almacenados fuera de ese árbol no se devolverán.</li>
+    <li><b>Inheritance : </b> Si este parámetro está activado (1) la búsqueda incluirá todos los subtipos de documentos del tipo documental seleccionado. Si está desactivado solo incluirá el tipo seleccionado. Esta opción NO afecta al rendimiento, por lo que el criterio para usarlo es puramente documental.</li>
+    <li><b>ResultForm : </b> Códigos identificadores (PDId) de los documentos de tipo <a href="Reports.html">Informes (PD_REPORTS)</a> que se utilizaran para presentar los resultados. Debe incluirse al menos 1.</li>
+    <li><b>MaxResults : </b> Máximo numero de resultados que se devolverá (0 = "sin límite", realmente 1 millón).</li>
+    <li><b>FormSearchCSS : </b> Código identificador (PDId) del fichero CSS a utilizar para la pantalla de consulta. Los estilos predefinidos en la página se detallan en <a href="OPAC_CSS.html"> Estilos OPAC CSS</a> </li>
+    <li><b>FormSearchLogo : </b> URL del logo a presentar en la pantalla de consulta. Puede ser externo (ej. intranet.empres.com/img/Logo.jpg) o interno (Ej. SendDoc?Id=44345543-757656 ) utiilizando como valor del parámetro Id, el código único PDId de una imagen almadenada en OpenProdoc. Debe verificarse que ese documento es visible para todos los usuarios.</li>
+    <li><b>User : </b> Usuario con el que se realizarán las consultas a OpenProdoc. Debe comprobarse que ese usuario tiene acceso a los documentos pero no permisos de otro tipo, ya que el Punto de Consulta realiza una conexión real que podría permitirle reaizar operaciones. La recomendación es crear un usuario especifico para consultar y asignarle un <a href="MantRoles.html">Rol</a> sin ningún permiso (con lo que solo podra consulltar)</li>
+    <li><b>Pass : </b> Clave (en claro) del usuario de consulta.</li>
+    <li><b>Title : </b> Cabecera del formulario de consulta.</li>
+    <li><b>DTLabel : </b> Etiqueta de la lista desplegable de tipos documentales sobre los que podrá realizarse la búsqueda-</li>
+    <li><b>FTLabel : </b> Etiqueta del campo de búsqueda por texto completo de los documentos.</li>
+    <li><b>FormatLabel : </b> Etiqueta de la lista desplegable de formatos de salida (definidos en el parámetro <b>ResultForm</b></li>
+    <li><b>HelpForDocType : </b> Texto de la ayuda emergente que se presentará al situarse en el combo de selección de tipos de documento. Puede contener caracteres de control html.</li>
+    <li><b>HelpForFullText : </b> Texto de la ayuda emergente al situarse en el campo de búsqueda por texto completo de los documentos. Puede contener caracteres de control html.</li>
+    <li><b>HelpForFormatType : </b> Texto de la ayuda emergente al situarse en el combo de selección de formatos de salida. Puede contener caracteres de control html, como &lt;b>, &lt;br></li>
+    <li><b>UrlHelp : </b> Url de la página de ayuda personalizada para el punto de consulta que se presentará a los usuarios al pulsar el botón de ayuda</li>
+</ul>
+<p>El proceso de parametrizar un punto de consulta consiste en crear un archivo de texto con el contenido citado (puede utilizarse como base el ejemplo incluido y modificarlo), introduciendo los valores adecuados a la instalación de OpenProdoc concreta. 
+    A continuación debe crearse (o modificarse el ejemplo incluido) el CSS para adaptarlo al estilo de la instituciñon o empresa correspondiente. Luego deberá añadirse el CSS al repositorio OpenProdoc y anotar el PdId generado. 
+    Ese PdId es el que deberá referenciarse como parámetro <b>FormSearchCSS</b> del fichero de configuración del punto de consulta. A continuacion se subirá ese fichero de configuración de consulta. 
+    Con el Id generado deberá invocarse la url de OpenProdoc (Ej.: <i>http://localhost:8080/ProdocWeb2/OPAC?Id=</i> + el identificador del nuevo documento subido, por ejemplo <i>http://localhost:8080/ProdocWeb2/OPAC?Id=566b6464a654-9696e68d686</i> )</p>
+<p>OpenProdoc presentará una página de acuerdo a los parámetros definidos en ese fichero, incluido hoja de estilo, literales, tipos documentaes, etc. 
+    En ella, los usuarios, sin introducir datos de acceso (usuario/password), podrán elegir uno de los tipos documentales por los que quieren buscar, introducir palabras del contenido o metadatos conocidos, elegir el formato de los resultados y buscar.
+Al pulsar el botón de búsqueda, Openprodoc se conectará con el usuario indicado en la parametrización, buscará de acuerdo a los criterios incluidos y devolverá lo sresultados en el formato elegido.
+El formato puede ser html para presentar con un formato más estético, txt o csv para un tratamiento automático, o xml para poder intercambiar o procesar.</p>
+<p>Dado que toda la apariecia es parametrizable, incluidas tipologías documentales, metadatos, etc, y que está orientado a usuarios esporádicos, es razonable asumir que sea necesaria una ayuda peronalizada. Para eso se dispone de un botón que abrirá la página html cuya url se indique en a configuración. Podría ser una página externa o un documento html almacenado en OpenProdoc.</p>
+<p>Hay que resaltar que el fichero de configuración, como cualquier documento de Openprodoc puede ser editado y versionado, utilizándose siempre para componer el punto de consulta la última versi´n publicada. 
+    No obstante la actualización puede llevar cierto tiempo, ya que para mejorar el rendimiento la configuración no se actualiza inmediatamente.</p>
+<p>Dado que la parametrización se basa en un documento de Openprodoc y el estilo en otro, es posible tener diversas parametrizaciones simultaneamente, que presenten diferentes conjunts de documentos, distinto idioma del interfaz, distinto estilo o diferente usuario de consulta.
+Suministrando a cada colectivo de usuarios la url adecuada (que solo se diferenciará en el Identificador de documento, puede ofrecerse simultaneamente muchos puntos de consulta distintos con muy poco esfuerzo.</p>
+<p><b>Ejemplo de Archivo de configuración de punto de consulta:</b></p>Pd
+<em>
+#############################################<br>
+####&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+OPAC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;####<br>
+#############################################<br>
+# Nombres de los Tipos de documentos por lo que podrá buscar un usuario<br>
+DocTipesList=Article|ECM_Standards|InternetProfile|MusicRecords|Picture<br>
+# Nombres (Internos) de los Metadatos/Campos (de cualquiera de los tipos de documentos) por lo que podrá buscar un usuario<br>
+FieldsToInclude=Author|Authors|Keywords|Player|Title|Country|CreativeCommons<br>
+# Operators de búsqueda/comparacion. 1 for cada metadato. Por defecto es igualdad EQ<br>
+# Posibles valores  = EQ, <> NE, > GT, >= GE, < LT, <= LE, Contains CT<br>
+FieldsComp=EQ|EQ|EQ|EQ|CT|EQ|EQ<br>
+# Carpeta por debajo de la cual se realziarán las búsquedas<br>
+BaseFolder=/Examples - Ejemplos<br>
+#Búsqueda ampiada a los subtipos<br>
+Inheritance=1<br>
+# Códigos identificadores (PDId) de los documentos de tipo PD_REPORTS que se utilizaran para presentar los resultados. Debe inckuirse al menos 1.<br>
+ResultForm=150c9be080c-3fe46f69eb1b2cb7|150c9be8462-3fd76612bb72fece|15dc854acbf-3fedc1977572a008<br>
+# Máximo numero de resultados que se devolverá. (0=sin límite)<br>
+MaxResults=0<br>
+# Código identificador (PDId) de la hoja de estilo (CSS) que se utilizará para el punto de consulta<br>
+FormSearchCSS=15db73b6628-3fee99cd40e27fee<br>
+# Url (interno o externo) de la imagen utilizada como logo<br>
+FormSearchLogo=img/LogoProdoc.jpg<br>
+# Usuario con el que se realizaá la consulta<br>
+User=Invitado<br>
+# Clave de acceso del Usuario con el que se realizaá la consulta<br>
+Pass=PassInvit<br>
+# Cabecera del formulario de consulta<br>
+Title=Punto de Consulta Simplificada<br>
+# Etiqueta de la lista desplegable de tipos documentales a buscar<br>
+DTLabel=Seleccionar tipo de documento a buscar<br>
+# Etiqueta del campo de búsqueda por texto completo de los documentos.<br>
+FTLabel=Introducir algunas palabras de b&uacute;squeda<br>
+# Etiqueta de la lista desplegable de formatos de salida.<br>
+FormatLabel=Seleccionar formato de salida de los resultados<br>
+# Texto de la ayuda emergente al situarse en el combo de selección de tipos de documento<br> 
+HelpForDocType=Ayuda Tipos Documentales<br>
+# Texto de la ayuda emergente al situarse en el campo de búsqueda por texto completo de los documentos.<br>  
+HelpForFullText=Ayuda B&uacute;squeda Texto Completo&lt;br>Introduzca cualquier palabra(s) del contenido de documento para recuperar por criterios aproximados. Si se desea que el docuemnto contenga la palabra, debe incluirse un signo +. Si desea buscar literalmente debe incluirse la palabra entre comillas. Para buscar documentos que NO contengan una palabra debe incluirse un signo menos -&lt;br>Puede combinarse con la b&uacute;squeda por metadatos de los documentos.<br>
+# Texto de la ayuda emergente al situarse en el combo de selección de formatos de salida<br>  
+HelpForFormatType=Ayuda Formatos Salida<br>
+# Url de la página de ayuda<br>
+UrlHelp=help/EN/HelpIndex.html <br>   
+</em>
+<hr>
+<a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>
+    </body>
+</html>

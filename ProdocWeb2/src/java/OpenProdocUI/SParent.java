@@ -813,18 +813,21 @@ if (ProdocProperRef==null)
     {
     InputStream Is=null;    
     File f=new File("../conf/Prodoc.properties");
+System.out.println("OpenProdoc Properties 1=["+f.getAbsolutePath()+"]");    
     if (f.exists())
         {
         ProdocProperRef=f.getAbsolutePath();    
         return(ProdocProperRef);
         }
     f=new File("conf/Prodoc.properties");
+System.out.println("OpenProdoc Properties 2=["+f.getAbsolutePath()+"]");    
     if (f.exists())
         {
         ProdocProperRef=f.getAbsolutePath();    
         return(ProdocProperRef);
         }
     String Path=System.getProperty("user.home");    
+System.out.println("OpenProdoc Properties 3=["+Path+"]");    
     try {
     Is  = new FileInputStream(Path+File.separator+"OPDWeb.properties");        
     } catch (Exception ex)
@@ -834,7 +837,8 @@ if (ProdocProperRef==null)
     if (Is==null)
         {
         Path=System.getenv("OPDWeb");
-        try {
+ System.out.println("OpenProdoc Properties 4=["+Path+"]");    
+       try {
         Is  = new FileInputStream(Path+File.separator+"OPDWeb.properties");
         } catch (Exception ex)
             {
@@ -846,6 +850,7 @@ if (ProdocProperRef==null)
     Is.close();
     ProdocProperRef=p.getProperty("OPDConfig");
     }
+System.out.println("ProdocProperRef=["+ProdocProperRef+"]");
 return(ProdocProperRef);
 }
 //----------------------------------------------------------   

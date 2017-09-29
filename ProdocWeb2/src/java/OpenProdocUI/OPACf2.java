@@ -19,7 +19,6 @@
 
 package OpenProdocUI;
 
-import static OpenProdocUI.SParent.PrepareError;
 import static OpenProdocUI.SParent.ShowMessage;
 import static OpenProdocUI.SParent.TT;
 import static OpenProdocUI.SParent.getActFolderId;
@@ -49,7 +48,7 @@ import prodoc.Record;
  *
  * @author jhierrot
  */
-public class OPAC2 extends SParent
+public class OPACf2 extends SParent
 {
 @Override
 protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -74,7 +73,7 @@ try {
 protected void ProcessPage(HttpServletRequest Req, HttpServletResponse response) throws Exception
 {   
 DriverGeneric PDSession=getSessOPD(Req);
-PDDocs TmpDoc;
+PDFolders TmpFold;
 
 Cursor Cur=null;    
 try {      
@@ -84,8 +83,8 @@ String CurrFoldId=F.getIdPath(ConfOPAC.getBaseFolder());
 String CurrType=Req.getParameter("DT"); 
 String FullTextSearch=Req.getParameter("FT"); 
 String ReportId=Req.getParameter("FORMAT_REP");
-TmpDoc=new PDDocs(PDSession, CurrType);
-Record Rec=TmpDoc.getRecSum();
+TmpFold=new PDFolders(PDSession, CurrType);
+Record Rec=TmpFold.getRecSum();
 Conditions Cond=new Conditions();
 Rec.initList();
 Attribute Attr=Rec.nextAttr();
@@ -117,7 +116,7 @@ while (Attr!=null)
         }
     Attr=Rec.nextAttr();
     }
-Cur=TmpDoc.Search(FullTextSearch, CurrType, Cond, ConfOPAC.isInheritance(), true,false, CurrFoldId, null);
+Cur=TmpFold.Search(CurrType, Cond, ConfOPAC.isInheritance(), true, CurrFoldId, null);
 PDReport Rep=new PDReport(PDSession);
 Rep.LoadFull(ReportId);
 ArrayList<String> GeneratedRep= Rep.GenerateRep(getActFolderId(Req), Cur, null, 0, 0, SParent.getIO_OSFolder(),ConfOPAC.getMaxResults());
@@ -168,7 +167,7 @@ finally
 @Override
 public String getServletInfo()
 {
-return "OPAC2 Servlet";
+return "OPACf2 Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 

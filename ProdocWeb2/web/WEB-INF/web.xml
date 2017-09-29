@@ -348,6 +348,14 @@
         <servlet-name>SendFoldXML</servlet-name>
         <servlet-class>OpenProdocServ.SendFoldXML</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>OPACf</servlet-name>
+        <servlet-class>OpenProdocUI.OPACf</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>OPACf2</servlet-name>
+        <servlet-class>OpenProdocUI.OPACf2</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SParent</servlet-name>
         <url-pattern>/SParent</url-pattern>
@@ -695,6 +703,14 @@
     <servlet-mapping>
         <servlet-name>SendFoldXML</servlet-name>
         <url-pattern>/SendFoldXML</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OPACf</servlet-name>
+        <url-pattern>/OPACf</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OPACf2</servlet-name>
+        <url-pattern>/OPACf2</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

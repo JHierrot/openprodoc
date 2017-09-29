@@ -19,8 +19,6 @@
 
 package OpenProdocUI;
 
-import static OpenProdocUI.SParent.getProdocProperRef;
-import static OpenProdocUI.SParent.setSessOPD;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -40,6 +38,7 @@ import prodoc.DriverGeneric;
 import prodoc.ExtConf;
 import prodoc.PDDocs;
 import prodoc.PDException;
+import prodoc.PDFolders;
 import prodoc.PDObjDefs;
 import prodoc.PDReport;
 import prodoc.PDThesaur;
@@ -50,7 +49,7 @@ import prodoc.Record;
  *
  * @author jhierrot
  */
-public class OPAC extends SParent
+public class OPACf extends SParent
 {
 private static final HashMap<String,String> OPACs=new HashMap(); 
 private static final HashMap<String,ExtConf> Confs=new HashMap(); 
@@ -60,7 +59,7 @@ private static final String HtmlBase="<!DOCTYPE html>\n" +
 "<html>" +
     "<head>" +
         "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>" +
-        "<title>OpenProdoc2 Web OPAC</title>\n" +
+        "<title>OpenProdoc2 Web OPAC Fold</title>\n" +
         "<script>\n"+
         "function ExecMenu(IdType)\n" +
         "{\n" +
@@ -82,7 +81,6 @@ private static final String HtmlBase="<!DOCTYPE html>\n" +
         "<fieldset class=\"OPACFS\"><legend class=\"OPACLEG\">&nbsp;&nbsp;@TITLE@&nbsp;&nbsp;</legend>\n"+
          "<table>\n" +   
           "<tr><td><div class=\"OPACDT\" >@DTLABEL@</div></td><td  class=\"TD_OPACCOMB\"><select class=\"OPACCOMB\" name=\"DT\" onChange=\"ExecMenu(this.options[this.selectedIndex].value)\">@DTVALS@</select><span class=\"tooltiptext\">@HelpForDocType@</span></td></tr>\n" +
-          "<tr><td><div class=\"OPACFTLAB\" >@FTLABEL@</div></td><td class=\"TD_OPACFTINP\"><input class=\"OPACFTINP\" type=\"text\" name=\"FT\"><span class=\"tooltiptext\">@HelpForFullText@</span></td></tr>\n" +
           "@OPACFIELDS@"+
           "<tr><td><div class=\"OPACFORMATLAB\" >@FormatLabel@</div></td><td class=\"TD_PACFORMATCOMB\"><select class=\"OPACFORMATCOMB\" name=\"FORMAT_REP\">@FORMATVALS@</select><span class=\"tooltiptext\">@HelpForFormatType@</span></td></tr>\n" +
           "<tr><td><a class=\"OPACHELP\" href=\"@URLHELP@\" target=\"_blank\">?</a></td><td><input  class=\"OPACBUT\" type=\"submit\" value=\"  Ok  \"></td></tr>" +
@@ -144,7 +142,7 @@ else
 @Override
 public String getServletInfo()
 {
-return "OPAC Servlet";
+return "OPACf Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 static synchronized private boolean IsCacheExpired()
@@ -179,10 +177,6 @@ if (ConfOPAC.getDTLabel()!=null) // "Select DocType"
     HtmlFinal=HtmlFinal.replace("@DTLABEL@", ConfOPAC.getDTLabel());
 else
     HtmlFinal=HtmlFinal.replace("@DTLABEL@", "DocTipes");
-if (ConfOPAC.getDTLabel()!=null) // "Intro search words"
-    HtmlFinal=HtmlFinal.replace("@FTLABEL@", ConfOPAC.getFTLabel());
-else
-    HtmlFinal=HtmlFinal.replace("@FTLABEL@", "Intro search words");
 if (ConfOPAC.getFormatLabel()!=null) // "Output Format"
     HtmlFinal=HtmlFinal.replace("@FormatLabel@", ConfOPAC.getFormatLabel());
 else
@@ -191,10 +185,6 @@ if (ConfOPAC.getHelpForDocType()!=null)
     HtmlFinal=HtmlFinal.replace("@HelpForDocType@", ConfOPAC.getHelpForDocType());
 else
     HtmlFinal=HtmlFinal.replace("@HelpForDocType@", "");
-if (ConfOPAC.getHelpForFullText()!=null) 
-    HtmlFinal=HtmlFinal.replace("@HelpForFullText@", ConfOPAC.getHelpForFullText());
-else
-    HtmlFinal=HtmlFinal.replace("@HelpForFullText@", "");
 if (ConfOPAC.getHelpForFormatType()!=null) 
     HtmlFinal=HtmlFinal.replace("@HelpForFormatType@", ConfOPAC.getHelpForFormatType());
 else
@@ -236,8 +226,8 @@ for (int NDT = 0; NDT < DocTipesList.size(); NDT++)
     try {
     PDObjDefs  Def=new PDObjDefs(LocalSess);
     Def.Load(DT);  
-    PDDocs  Doc=new PDDocs(LocalSess, DT);
-    Record AttrDef = Doc.getRecSum();
+    PDFolders  Fold=new PDFolders(LocalSess, DT);
+    Record AttrDef = Fold.getRecSum();
     AttrDef.initList();
     for (int NAT = 0; NAT < AttrDef.NumAttr(); NAT++)
         {
