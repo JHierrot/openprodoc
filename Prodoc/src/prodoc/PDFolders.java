@@ -541,21 +541,30 @@ for (int NumDefTyp = 0; NumDefTyp<getTypeDefs().size(); NumDefTyp++)
 protected void VerifyAllowedIns() throws PDException
 {
 if (!getDrv().getUser().getName().equals("Install"))  
+    return;
 if (!getDrv().getUser().getRol().isAllowCreateFolder() )
    PDExceptionFunc.GenPDException("Folder_creation_not_allowed_to_user", null);
+PDObjDefs D=new PDObjDefs(getDrv());
+D.Load(getFolderType());    
+if (!getDrv().getUser().getAclList().containsKey(D.getACL()))
+    PDExceptionFunc.GenPDException("Document_creation_not_allowed_to_user",getDrv().getUser().getName()+" / "+getFolderType());
+Integer Perm=(Integer)getDrv().getUser().getAclList().get(D.getACL());
+if (Perm.intValue()<PDACL.pUPDATE)
+    PDExceptionFunc.GenPDException("Document_creation_not_allowed_to_user",getDrv().getUser().getName()+" / "+getFolderType());
+
 }
 //-------------------------------------------------------------------------
 protected void VerifyAllowedDel() throws PDException
 {
-    if (!getDrv().getUser().getRol().isAllowMaintainFolder() )
-       PDExceptionFunc.GenPDException("Folder_delete_not_allowed_to_user", null);
-    PDFolders TobeDeleted=new PDFolders(getDrv());
-    TobeDeleted.Load(getPDId());
-    if (!getDrv().getUser().getAclList().containsKey(TobeDeleted.getACL()))
-       PDExceptionFunc.GenPDException("User_without_permissions_over_folder", null);
-    Integer Perm=(Integer)getDrv().getUser().getAclList().get(TobeDeleted.getACL());
-    if (Perm.intValue()!=PDACL.pDELETE)
-       PDExceptionFunc.GenPDException("User_without_permissions_over_folder", null);
+if (!getDrv().getUser().getRol().isAllowMaintainFolder() )
+   PDExceptionFunc.GenPDException("Folder_delete_not_allowed_to_user", null);
+PDFolders TobeDeleted=new PDFolders(getDrv());
+TobeDeleted.Load(getPDId());
+if (!getDrv().getUser().getAclList().containsKey(TobeDeleted.getACL()))
+   PDExceptionFunc.GenPDException("User_without_permissions_over_folder", null);
+Integer Perm=(Integer)getDrv().getUser().getAclList().get(TobeDeleted.getACL());
+if (Perm.intValue()!=PDACL.pDELETE)
+   PDExceptionFunc.GenPDException("User_without_permissions_over_folder", null);
 }
 //-------------------------------------------------------------------------
 protected void VerifyAllowedUpd() throws PDException

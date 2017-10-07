@@ -74,14 +74,12 @@ protected void ProcessPage(HttpServletRequest Req, HttpServletResponse response)
 {   
 DriverGeneric PDSession=getSessOPD(Req);
 PDFolders TmpFold;
-
 Cursor Cur=null;    
 try {      
 PDFolders F=new PDFolders(PDSession);
 ExtConf ConfOPAC=SParent.getOPACConf(Req);
 String CurrFoldId=F.getIdPath(ConfOPAC.getBaseFolder());
 String CurrType=Req.getParameter("DT"); 
-String FullTextSearch=Req.getParameter("FT"); 
 String ReportId=Req.getParameter("FORMAT_REP");
 TmpFold=new PDFolders(PDSession, CurrType);
 Record Rec=TmpFold.getRecSum();

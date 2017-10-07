@@ -73,7 +73,7 @@ private static final String HtmlBase="<!DOCTYPE html>\n" +
         "@CSS@"+
     "</head>\n" +
     "<body class=\"OPACBODY\" onload=\"ExecMenu(\'@FIRSTTYPE@\');\" >\n" +
-       "<form action=\"OPAC2\"  target=\"_blank\" method=\"post\" class=\"OPACFORM\">" +
+       "<form action=\"OPACf2\"  target=\"_blank\" method=\"post\" class=\"OPACFORM\">" +
        "<table align=\"center\"  class=\"OPACTABLE\">\n" +
         "<tr><td>&nbsp</td></tr>" +
         "<tr><td>@LOGO@<H3>OpenProdoc</H3></td></tr>" +
@@ -321,7 +321,6 @@ private static StringBuilder CalcOps(StringBuilder Ops, String TermId, DriverGen
 {
 PDThesaur T=new PDThesaur(LocalSess);
 T.Load(TermId);
-
 StringBuilder SLev=new StringBuilder(100);
 for (int i = 0; i < Level-1; i++)
     SLev.append("&nbsp;&nbsp;");

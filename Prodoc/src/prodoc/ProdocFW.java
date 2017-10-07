@@ -96,6 +96,7 @@ if (ConectList.isEmpty())
         PDLog.Info("ProdocFW.InitProdoc:"+ConectorName+"="+FileConf);
         PDLog.Info("os.arch="+System.getProperty("os.arch"));
         PDLog.Info("os.name="+System.getProperty("os.name"));
+        PDLog.Info("user.home="+System.getProperty("user.home"));
         PDLog.Info("sun.desktop="+System.getProperty("sun.desktop"));
         PDLog.Info("java.runtime.name="+System.getProperty("java.runtime.name"));
         PDLog.Info("java.runtime.version="+System.getProperty("java.runtime.version"));
