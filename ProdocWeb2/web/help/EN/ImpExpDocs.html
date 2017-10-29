@@ -12,10 +12,16 @@
 <H4>Export and Import Documents</H4>
 <hr>
 <p>When you want to import or export a <b>single</b> document, use the options Documents-> Import or Documents-> Export </p>
-<p>The option <b>Export</b>, exports the current document with all its metadata. The metadata is exported in opd format (an XML text file with UTF-8) and the document in its original format. </p>
-<p>OPD presents a dialog box to choose the directory where you store both the document and the metadata. </p>
-<p>Should be noted that to avoid unwanted effects on import, does not feed definitions to export. Therefore, the definitions of elements such as document type (with metadata correspondence), ACL, mime type, etc.. must exist at the time of import (in the current system or at a different location). To export the definitions should be used explicitly maintenance functions of the administration screens. </p>
-<p>The option <b>Import</b> load a document with all its metadata in the current folder. OPD presents a dialog box to choose the file of type".Opd" where metadata is stored and which contains the file reference to the document. At the time of import must exist the following definitions: </p>
+<p>The option <b>Export</b>, exports the current document with all its metadata.</p>
+<p>In the <b>Swing version</b>, the metadata is exported in opd format (an XML text file with UTF-8) and the document in its original format. OPD presents a dialog box to choose the directory where you store both the document and the metadata.</p>
+<p>In the <b>Web version</b>, the metadata is exported in opd format (an XML text file with UTF-8) and the document is embedded in Base64 format in the xml. OpenProdoc will send the ".opd" file to the browser.</p>
+<p>Should be noted that to avoid unwanted effects on import, does not include definitions to export. 
+    Therefore, the definitions of elements such as document type (with metadata correspondence), ACL, mime type, etc.. must exist at the time of import (in the current system or at a different location). 
+    To export the definitions should be used explicitly maintenance functions of the administration screens. </p>
+<p>The option <b>Import</b> load a document with all its metadata in the current folder.</p>
+<p>In the <b>Swing version</b>, OpenProdoc shows a dialog box to choose the file of type".Opd" where metadata is stored and which contains the file reference to the document. At the time of import must exist the following definitions: </p>
+<p>In the <b>Web version</b>, OpenProdoc shows a dialog box to choose (or drag) the file of type".opd" with metadata and the document embedded.</p>
+<p> At the time of import must exist the following definitions: </p>
 <ul>
 <li><b>Document Type</b>: Although not necessarily be identical, must contain at least the same metadata.</li>
 <li><b>ACL</b>: Similarly should exist but does not have to match the definition.</li>
