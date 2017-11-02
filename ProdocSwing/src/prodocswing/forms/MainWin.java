@@ -1379,7 +1379,14 @@ Ab.dispose();
 
     private void contentsMenuItem1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_contentsMenuItem1ActionPerformed
     {//GEN-HEADEREND:event_contentsMenuItem1ActionPerformed
-Execute("doc"+OSSep()+DriverGeneric.getHelpLang(getLang())+OSSep()+"MainWin.html");   
+File f=new File ("doc"+OSSep()+DriverGeneric.getHelpLang(getLang())+OSSep()+"MainWin.html");
+if (f.exists())
+   Execute(f.getAbsolutePath());  
+else
+    {
+    f=new File ("webapps"+OSSep()+"ProdocWeb2"+OSSep()+"help"+OSSep()+DriverGeneric.getHelpLang(getLang())+OSSep()+"MainWin.html");
+    Execute(f.getAbsolutePath());  
+    }
     }//GEN-LAST:event_contentsMenuItem1ActionPerformed
 
     private void DocsTableMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_DocsTableMouseClicked
