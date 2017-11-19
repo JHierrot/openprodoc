@@ -360,6 +360,10 @@
         <servlet-name>MoveDoc</servlet-name>
         <servlet-class>OpenProdocServ.MoveDoc</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>MoveFold</servlet-name>
+        <servlet-class>OpenProdocServ.MoveFold</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SParent</servlet-name>
         <url-pattern>/SParent</url-pattern>
@@ -719,6 +723,10 @@
     <servlet-mapping>
         <servlet-name>MoveDoc</servlet-name>
         <url-pattern>/MoveDoc</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MoveFold</servlet-name>
+        <url-pattern>/MoveFold</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

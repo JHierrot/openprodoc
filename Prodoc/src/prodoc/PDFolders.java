@@ -450,7 +450,6 @@ else
         if (getACL()==null || getACL().equals(""))
             setACL(Parent.getACL());
         Parent.TouchDate(); // due the nulls update
-//        Parent.update();
         }
     }
 AddLogFields();
@@ -1694,6 +1693,69 @@ if (r!=null)
     return(true);
 else
     return(false);
+}
+//-------------------------------------------------------------------------
+public boolean Move(String NewParentId)
+{
+DriverGeneric drv=null;    
+try {    
+drv = getDrv();  
+boolean InTransLocal;
+if (PDLog.isDebug())
+    PDLog.Debug("PDFolders.Move>:"+getPDId()+ ">>"+NewParentId);
+getObjCache().remove(getKey());
+VerifyAllowedUpd();
+InTransLocal=!drv.isInTransaction();
+if (InTransLocal)
+    drv.IniciarTrans();
+PDFolders TobeUpdated=new PDFolders(getDrv());
+TobeUpdated.Load(getPDId()); 
+if (!getDrv().getUser().getAclList().containsKey(TobeUpdated.getACL()))
+   PDExceptionFunc.GenPDException("User_without_permissions_to_checkout_document", getPDId());
+Integer Perm=(Integer)getDrv().getUser().getAclList().get(TobeUpdated.getACL());
+if (Perm.intValue()<=PDACL.pREAD)
+   PDExceptionFunc.GenPDException("User_without_permissions_to_checkout_document", getPDId());
+Record R =getRecordStruct();
+R.getAttr(fPARENTID).setValue(NewParentId);
+getDrv().UpdateRecord(getTableName(), R,  getConditions());
+setParentId(NewParentId);;
+DeleteFoldLevelParents();
+ActFoldLev();
+UpdateParentChilds(getPDId());
+if (InTransLocal)
+    drv.CerrarTrans();
+getObjCache().remove(getKey());
+if (PDLog.isDebug())
+    PDLog.Debug("PDFolders.Move<:"+getPDId());
+} catch (Exception Ex)
+    {
+    PDLog.Error("PDFolders.Move ("+NewParentId+")="+Ex.getLocalizedMessage());       
+    if (drv!=null && drv.isInTransaction())
+        try {
+        drv.AnularTrans();
+        } catch (Exception E)
+            {
+            PDLog.Error("PDFolders.Move ("+NewParentId+")="+E.getLocalizedMessage());       
+            }
+    return(false);    
+    }
+return(true);    
+}
+//-------------------------------------------------------------------------
+
+private void UpdateParentChilds(String pdId) throws PDException
+{
+PDFolders TmpFold=new PDFolders(getDrv());
+HashSet listDirectDescendList = TmpFold.getListDirectDescendList(pdId);
+for (Iterator iterator = listDirectDescendList.iterator(); iterator.hasNext();)
+    {
+    String NextId = (String)iterator.next();
+    PDFolders Tmp2Fold=new PDFolders(getDrv()); 
+    Tmp2Fold.Load(NextId);
+    Tmp2Fold.DeleteFoldLevelParents();
+    Tmp2Fold.ActFoldLev();
+    Tmp2Fold.UpdateParentChilds(NextId);
+    }
 }
 //-------------------------------------------------------------------------
 }

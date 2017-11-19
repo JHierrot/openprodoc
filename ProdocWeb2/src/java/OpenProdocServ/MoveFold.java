@@ -25,14 +25,14 @@ import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import prodoc.DriverGeneric;
-import prodoc.PDDocs;
+import prodoc.PDFolders;
 
 
 /**
  *
  * @author jhierrot
  */
-public class MoveDoc extends SParent
+public class MoveFold extends SParent
 {   
 //-----------------------------------------------------------------------------------------------
 /**
@@ -50,16 +50,16 @@ PrintWriter out = response.getWriter();
 StringBuilder Resp=new StringBuilder(200);
 Resp.append("<status>");
 try {
-String IdDoc=Req.getParameter("D");
+String F1=Req.getParameter("F1");
 String IdFold=Req.getParameter("F");
-if (IdDoc==null || IdDoc.length()==0)
+if (F1==null || F1.length()==0)
    Resp.append(TT(Req, "Document_unselected")).append("</status>"); 
 else
     {
     DriverGeneric Sess=getSessOPD(Req);
-    PDDocs Doc=new PDDocs(Sess);
-    Doc.setPDId(IdDoc);
-    Doc.Move(IdFold);
+    PDFolders FoldTmp=new PDFolders(Sess);
+    FoldTmp.setPDId(F1);
+    FoldTmp.Move(IdFold);
     Resp.append("OK</status>"); 
     }
 out.println(Resp.toString());
@@ -85,7 +85,7 @@ out.close();
 @Override
 public String getServletInfo()
 {
-return "MoveDoc Servlet";
+return "MoveFold Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 }

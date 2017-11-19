@@ -92,6 +92,9 @@ if (R.isAllowMaintainDoc())
     Men.append("<item id=\"file_sep_02a\" type=\"separator\"/>");
     Men.append("<item id=\"ExportFold\" text=\"").append(TT(Req, "Export_Folders")).append("\"/>");
     Men.append("<item id=\"ImportFold\" text=\"").append(TT(Req, "Import_Folders")).append("\"/>");
+    Men.append("<item id=\"file_sep_02b\" type=\"separator\"/>");
+    Men.append("<item id=\"CopyFold\" text=\"").append(TT(Req, "Copy_Fold")).append("\"/>");
+    Men.append("<item id=\"PasteFold\" text=\"").append(TT(Req, "Paste_Fold")).append("\" enabled=\"false\"/>");
     }
 Men.append("<item id=\"file_sep_03\" type=\"separator\"/>");
 Men.append("<item id=\"Exit\" text=\"").append(TT(Req, "Exit")).append("\" img=\"img/close.gif\" imgdis=\"img/close_dis.gif\"/></item>");

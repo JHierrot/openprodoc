@@ -98,7 +98,9 @@ var CSVFORMAT="CSV";
 var T_EDIT;
 var T_DEL;
 var CpDoc="";
+var CpFold="";
 var CurrTitle="";
+var CurrFoldTitle="";
        
 function doOnLoadLogin() 
 {   
@@ -180,6 +182,7 @@ DocsTree.showItemSign("System",true);
 DocsTree.attachEvent("onClick",function(id)
     {
     CurrFold=id;
+    CurrFoldTitle=DocsTree.getItemText(id);
     layout.cells("b").attachURL("SFoldRec", true, {FoldId: CurrFold});
     DocsGrid.clearAndLoad("DocList?FoldId="+CurrFold, function ()
         {
@@ -216,6 +219,12 @@ switch (IdMenu)
         Break;
     case "ImportFold": ImportFold(CurrFold); 
         Break;
+    case "CopyFold": if (CurrFold!="") 
+                        CopyF(CurrFold);
+        break;
+    case "PasteFold": if (CpFold!="") 
+                        PasteF(CpFold);
+        break;
     case "AddDoc": AddDoc(CurrFold);
         break;
     case "AddExtDoc": AddExtDoc(CurrFold);
@@ -3288,7 +3297,7 @@ function Copy(CurrDoc)
 {
 CpDoc=CurrDoc;
 menu.setItemEnabled("PasteDoc");
-menu.setItemText("PasteDoc", LocaleTrans("Paste_Doc")+"="+CurrTitle+"("+CpDoc+")");
+menu.setItemText("PasteDoc", LocaleTrans("Paste_Doc")+"="+CurrTitle+" ("+CpDoc+")");
 }
 //--------------------------------------------------
 function Paste(CpDoc)
@@ -3313,6 +3322,33 @@ window.dhx4.ajax.get("MoveDoc?D="+CpDoc+"&F="+CurrFold, function(r)
 CpDoc="";
 menu.setItemText("PasteDoc", LocaleTrans("Paste_Doc"));
 menu.setItemDisabled("PasteDoc");
+}
+//--------------------------------------------------
+function CopyF(CurrFold)
+{
+CpFold=CurrFold;
+menu.setItemEnabled("PasteFold");
+menu.setItemText("PasteFold", LocaleTrans("Paste_Fold")+"="+CurrFoldTitle+" ("+CpFold+")");
+}
+//--------------------------------------------------
+function PasteF(CpFold)
+{
+window.dhx4.ajax.get("MoveFold?F1="+CpFold+"&F="+CurrFold, function(r)
+    {
+    var xml = r.xmlDoc.responseXML;
+    var nodes = xml.getElementsByTagName("status");
+    if (nodes[0].textContent.substring(0,2)!=OK)
+        {
+        alert(nodes[0].textContent);    
+        }
+    else
+        {
+        DocsTree.refreshItem(CurrFold);
+        }
+    });    
+CpDoc="";
+menu.setItemText("PasteFold", LocaleTrans("Paste_Fold"));
+menu.setItemDisabled("PasteFold");
 }
 //--------------------------------------------------
 
