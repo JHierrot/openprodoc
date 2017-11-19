@@ -3048,5 +3048,50 @@ else
     return(false);
 }
 //-------------------------------------------------------------------------
-
+public boolean Move(String NewParentId)
+{
+DriverGeneric drv=null;    
+try {    
+drv = getDrv();  
+boolean InTransLocal;
+if (PDLog.isDebug())
+    PDLog.Debug("PDDocs.Move>:"+getPDId()+ ">>"+NewParentId);
+getObjCache().remove(getKey());
+VerifyAllowedUpd();
+InTransLocal=!drv.isInTransaction();
+if (InTransLocal)
+    drv.IniciarTrans();
+PDDocs TobeUpdated=new PDDocs(getDrv());
+TobeUpdated.Load(getPDId()); 
+if (!getDrv().getUser().getAclList().containsKey(TobeUpdated.getACL()))
+   PDExceptionFunc.GenPDException("User_without_permissions_to_checkout_document", getPDId());
+Integer Perm=(Integer)getDrv().getUser().getAclList().get(TobeUpdated.getACL());
+if (Perm.intValue()<=PDACL.pREAD)
+   PDExceptionFunc.GenPDException("User_without_permissions_to_checkout_document", getPDId());
+if (TobeUpdated.getLockedBy()!=null && TobeUpdated.getLockedBy().length()!=0)
+   PDExceptionFunc.GenPDException("Document_previously_checkout", getPDId());
+Record R =getRecordStruct();
+R.getAttr(fPARENTID).setValue(NewParentId);
+getDrv().UpdateRecord(DEFTABNAME, R,  getConditions());
+UpdateVersion(getPDId(), TobeUpdated.getVersion(), R);
+if (InTransLocal)
+    drv.CerrarTrans();
+getObjCache().remove(getKey());
+if (PDLog.isDebug())
+    PDLog.Debug("PDDocs.Move<:"+getPDId());
+} catch (Exception Ex)
+    {
+    PDLog.Error("PDDocs.Move ("+NewParentId+")="+Ex.getLocalizedMessage());       
+    if (drv!=null && drv.isInTransaction())
+        try {
+        drv.AnularTrans();
+        } catch (Exception E)
+            {
+            PDLog.Error("PDDocs.Move ("+NewParentId+")="+E.getLocalizedMessage());       
+            }
+    return(false);    
+    }
+return(true);    
+}
+//-------------------------------------------------------------------------
 }

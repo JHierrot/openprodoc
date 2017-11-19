@@ -617,7 +617,7 @@ else if (ElemType.equals(ListElem.MANTCUST))
     SB.append("{text:\"Español\", value:\"ES\"").append((Value!=null&&Value.equalsIgnoreCase("ES"))?", selected:true":"").append("},");
     SB.append("{text:\"Português\", value:\"PT\"").append((Value!=null&&Value.equalsIgnoreCase("PT"))?", selected:true":"").append("},");
     SB.append("{text:\"Català\", value:\"CT\"").append((Value!=null&&Value.equalsIgnoreCase("CT"))?", selected: true":"").append("},");
-    SB.append("{text:\"Deutsch\", value:\"DE\"").append((Value!=null&&Value.equalsIgnoreCase("DE"))?", selected:true":"").append("}");
+//    SB.append("{text:\"Deutsch\", value:\"DE\"").append((Value!=null&&Value.equalsIgnoreCase("DE"))?", selected:true":"").append("}");
     SB.append("]},");
 //    SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
     Attr=Rec.getAttr(PDCustomization.fDATEFORMAT);

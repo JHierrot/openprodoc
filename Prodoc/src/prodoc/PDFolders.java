@@ -540,7 +540,7 @@ for (int NumDefTyp = 0; NumDefTyp<getTypeDefs().size(); NumDefTyp++)
 //-------------------------------------------------------------------------
 protected void VerifyAllowedIns() throws PDException
 {
-if (!getDrv().getUser().getName().equals("Install"))  
+if (!getDrv().getUser().getName().equalsIgnoreCase("Install"))  
     return;
 if (!getDrv().getUser().getRol().isAllowCreateFolder() )
    PDExceptionFunc.GenPDException("Folder_creation_not_allowed_to_user", null);

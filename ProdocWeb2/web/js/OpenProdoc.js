@@ -97,6 +97,8 @@ var COMBODOCS="ObjType2";
 var CSVFORMAT="CSV";
 var T_EDIT;
 var T_DEL;
+var CpDoc="";
+var CurrTitle="";
        
 function doOnLoadLogin() 
 {   
@@ -164,6 +166,9 @@ DocsGrid.init();
 DocsGrid.attachEvent("onRowSelect",function(rowId,cellIndex)
     {
     CurrDoc=rowId;    
+    CurrTitle=DocsGrid.cells(rowId,1).getValue();
+    var n = CurrTitle.indexOf("^");
+    CurrTitle=CurrTitle.substr(0, n);
     return(true);
     });
 DocsGrid.selectRow(0, true, false, true);
@@ -244,6 +249,12 @@ switch (IdMenu)
         break;            
     case "ListVer": if (CurrDoc!="") 
                         ListVer(CurrDoc);
+        break;
+    case "CopyDoc": if (CurrDoc!="") 
+                        Copy(CurrDoc);
+        break;
+    case "PasteDoc": if (CpDoc!="") 
+                        Paste(CpDoc);
         break;
     case "PasswordChange": PassChange();
         break;
@@ -379,7 +390,7 @@ function ImportDoc(CurrFold)
 WinAF=myWins.createWindow({
 id:"AddDoc",
 left:20,
-top:30,
+top:1,
 width:450,
 height:220,
 center:true,
@@ -423,7 +434,7 @@ function ImportFold(CurrFold)
 WinAF=myWins.createWindow({
 id:"AddDoc",
 left:20,
-top:30,
+top:1,
 width:450,
 height:220,
 center:true,
@@ -467,7 +478,7 @@ var Url="AddThes";
 WinAF=myWins.createWindow({
 id:"AddThes",
 left:20,
-top:30,
+top:1,
 width:500,
 height:300,
 center:true,
@@ -511,7 +522,7 @@ if (idCurrTerm==ROOTTHES || idCurrTerm==null || idCurrTerm=="")
 WinMT=myWins.createWindow({
 id:"mantTerm",
 left:20,
-top:30,
+top:1,
 width:600,
 height:600,
 center:true,
@@ -665,7 +676,7 @@ var Url="ModThes";
 WinAF=myWins.createWindow({
 id:"UpdThes",
 left:20,
-top:30,
+top:1,
 width:500,
 height:300,
 center:true,
@@ -709,7 +720,7 @@ var Url="DelThes";
 WinAF=myWins.createWindow({
 id:"DelThes",
 left:20,
-top:30,
+top:1,
 width:500,
 height:300,
 center:true,
@@ -753,7 +764,7 @@ var Url="SearchTerm";
 WinAF=myWins.createWindow({
 id:"SearchTerm",
 left:20,
-top:30,
+top:1,
 width:600,
 height:500,
 center:true,
@@ -833,7 +844,7 @@ Url="ExportThes";
 WinAF=myWins.createWindow({
 id:"AddThes",
 left:20,
-top:30,
+top:1,
 width:500,
 height:250,
 center:true,
@@ -859,7 +870,7 @@ function ImportThes()
 WinAF=myWins.createWindow({
 id:"ImportThes",
 left:20,
-top:30,
+top:1,
 width:500,
 height:450,
 center:true,
@@ -908,7 +919,7 @@ function About()
 var WinA=myWins.createWindow({
     id:"About",
     left:20,
-    top:30,
+    top:1,
     width:540,
     height:420,
     center:true,
@@ -926,7 +937,7 @@ var Url="AddFold";
 WinAF=myWins.createWindow({
 id:"AddFold",
 left:20,
-top:30,
+top:1,
 width:500,
 height:160,
 center:true,
@@ -972,7 +983,7 @@ var Url="AddFoldExt";
 WinAF=myWins.createWindow({
 id:"AddFold",
 left:20,
-top:30,
+top:1,
 width:750,
 height:500,
 center:true,
@@ -1042,7 +1053,7 @@ var Url="ModFoldExt";
 WinAF=myWins.createWindow({
 id:"ModFold",
 left:20,
-top:30,
+top:1,
 width:600,
 height:420,
 center:true,
@@ -1096,7 +1107,7 @@ function ShowMulti(Form, AttName)
 var WinMulti=myWins.createWindow({
 id:"Multi",
 left:20,
-top:30,
+top:1,
 width:300,
 height:250,
 center:true,
@@ -1205,7 +1216,7 @@ var TermId=Form.getItemValue("TH_"+AttName);
 var WinSelThes=myWins.createWindow({
 id:"SelThes",
 left:20,
-top:30,
+top:1,
 width:400,
 height:350,
 center:true,
@@ -1250,7 +1261,7 @@ var ThesId=CurrThes;
 var WinSelTerm=myWins.createWindow({
 id:"SelThes",
 left:20,
-top:30,
+top:1,
 width:400,
 height:350,
 center:true,
@@ -1296,7 +1307,7 @@ function DelFold(DelFold)
 var WinDF=myWins.createWindow({
     id:"DelFold",
     left:20,
-    top:30,
+    top:1,
     width:750,
     height:420,
     center:true,
@@ -1336,7 +1347,7 @@ function UpdFold(EditFold)
 var WinUF=myWins.createWindow({
     id:"UpdFold",
     left:20,
-    top:30,
+    top:1,
     width:500,
     height:160,
     center:true,
@@ -1388,11 +1399,11 @@ function SearchFold()
 var Url="SearchFold";
 WinAF=myWins.createWindow({
 id:"SearchFold",
-left:20,
-top:30,
+left:100,
+top:1,
 width:750,
 height:650,
-center:true,
+center:false,
 modal:true,
 resize:true}); 
 WinAF.setText("OpenProdoc");
@@ -1498,7 +1509,7 @@ var Url="AddDoc";
 WinAF=myWins.createWindow({
 id:"AddDoc",
 left:20,
-top:30,
+top:1,
 width:550,
 height:300,
 center:true,
@@ -1548,7 +1559,7 @@ function DelDoc(Doc2Del)
 var WinDD=myWins.createWindow({
     id:"DelDoc",
     left:20,
-    top:30,
+    top:1,
     width:500,
     height:420,
     center:true,
@@ -1589,7 +1600,7 @@ function ModDoc(Doc2Mod, ReadOnly, Vers)
 var WinMD=myWins.createWindow({
     id:"ModDoc",
     left:20,
-    top:30,
+    top:1,
     width:600,
     height:420,
     center:true,
@@ -1730,7 +1741,7 @@ var Url="CheckIn";
 WinAF=myWins.createWindow({
 id:"CheckInDoc",
 left:20,
-top:30,
+top:1,
 width:400,
 height:230,
 center:true,
@@ -1779,7 +1790,7 @@ var Url="AddDocExt";
 WinAF=myWins.createWindow({
 id:"AddExtDoc",
 left:20,
-top:30,
+top:1,
 width:750,
 height:500,
 center:true,
@@ -1861,11 +1872,11 @@ function SearchDoc()
 var Url="SearchDoc";
 WinAF=myWins.createWindow({
 id:"SearchDoc",
-left:20,
-top:30,
+left:100,
+top:1,
 width:750,
 height:680,
-center:true,
+center:false,
 modal:true,
 resize:true}); 
 WinAF.setText("OpenProdoc");
@@ -1982,7 +1993,7 @@ function ListVer(Doc2List)
 WinAF=myWins.createWindow({
 id:"ListVerDoc",
 left:20,
-top:30,
+top:1,
 width:650,
 height:300,
 center:true,
@@ -2010,7 +2021,7 @@ function PassChange()
 WinAF=myWins.createWindow({
 id:"PassChange",
 left:20,
-top:30,
+top:1,
 width:350,
 height:230,
 center:true,
@@ -2048,9 +2059,9 @@ function TrashBin()
 WinAF=myWins.createWindow({
 id:"TrashBin",
 left:20,
-top:30,
+top:1,
 width:600,
-height:600,
+height:500,
 center:true,
 modal:true,
 resize:true}); 
@@ -2124,11 +2135,11 @@ function Admin(TypeElem)
 {
 WinListElem=myWins.createWindow({
 id:"Admin",
-left:20,
-top:30,
+left:100,
+top:1,
 width:((TypeElem==ELEMOBJ||TypeElem==ELEMTASKCRON||TypeElem==ELEMTASKEVENT||TypeElem==ELEMPENDTASK||TypeElem==ELEMTASKEND)?1000:600),
 height:600,
-center:true,
+center:false,
 modal:true,
 resize:true}); 
 WinListElem.setText(TypeElem);
@@ -2386,7 +2397,7 @@ function EditWiz(FormEl, TypeElem, TaskType)
 var WinWizard=myWins.createWindow({
 id:"WinWizard",
 left:20,
-top:30,
+top:1,
 width:500,
 height:260,
 center:true,
@@ -2419,7 +2430,7 @@ function ShowTest(FormEl, TypeElem, TaskType)
 var WinWizard=myWins.createWindow({
 id:"WinWizard",
 left:20,
-top:30,
+top:1,
 width:500,
 height:260,
 center:true,
@@ -2780,7 +2791,7 @@ var Url="ImpElem";
 WinAF=myWins.createWindow({
 id:"AddDoc",
 left:20,
-top:30,
+top:1,
 width:450,
 height:220,
 center:true,
@@ -2821,11 +2832,11 @@ function CreateWin(TypeElem)
 {
 WinElem=myWins.createWindow({
 id:"WinElem",
-left:20,
-top:30,
+left:100,
+top:1,
 width:600,
 height:600,
-center:true,
+center:false,
 modal:true,
 resize:true});  
 WinElem.setText(TypeElem);
@@ -2906,14 +2917,20 @@ else if (TypeElem==ELEMOBJ)
 else
     FormElem=WinElem.attachForm();   
 if (TypeElem==ELEMMIME)
+    {
     WinElem.setDimension(500, 250);
+    WinElem.center();
+    }
 else if (TypeElem==ELEMREPOS || TypeElem==ELEMAUTH || TypeElem==ELEMCUST || TypeElem==ELEMUSERS )
+    {
     WinElem.setDimension(500, 400);
+    WinElem.center();
+    }
 else if (TypeElem==ELEMTASKCRON)
-        WinElem.setDimension(600, 660);
+        WinElem.setDimension(800, 660);
 else if (TypeElem==ELEMTASKEVENT)
-        WinElem.setDimension(600, 580);
-WinElem.center();
+        WinElem.setDimension(800, 580);
+//WinElem.center();
 }
 //--------------------------------------------------------------
 function CompleteForm(Oper, TypeElem)
@@ -2955,7 +2972,7 @@ function MantAttr(OperA, Id)
 WinAttr=myWins.createWindow({
 id:"WinAttr",
 left:20,
-top:30,
+top:1,
 width:500,
 height:420,
 center:true,
@@ -3133,7 +3150,7 @@ function GroupPerm(Oper, Type)
 var WEPerm=myWins.createWindow({
 id:"WEPerm",
 left:20,
-top:30,
+top:1,
 width:500,
 height:150,
 center:true,
@@ -3165,7 +3182,7 @@ function GroupAddE(Oper, Type)
 var WEPerm=myWins.createWindow({
 id:"WEPerm",
 left:20,
-top:30,
+top:1,
 width:500,
 height:150,
 center:true,
@@ -3221,7 +3238,7 @@ var Url="ImportRIS";
 WinAF=myWins.createWindow({
 id:"ImportRIS",
 left:20,
-top:30,
+top:1,
 width:500,
 height:300,
 center:true,
@@ -3267,3 +3284,35 @@ FormImportRIS.attachEvent("onUploadFail",function(realName){
     
 }
 //--------------------------------------------------
+function Copy(CurrDoc)
+{
+CpDoc=CurrDoc;
+menu.setItemEnabled("PasteDoc");
+menu.setItemText("PasteDoc", LocaleTrans("Paste_Doc")+"="+CurrTitle+"("+CpDoc+")");
+}
+//--------------------------------------------------
+function Paste(CpDoc)
+{
+window.dhx4.ajax.get("MoveDoc?D="+CpDoc+"&F="+CurrFold, function(r)
+    {
+    var xml = r.xmlDoc.responseXML;
+    var nodes = xml.getElementsByTagName("status");
+    if (nodes[0].textContent.substring(0,2)!=OK)
+        {
+        alert(nodes[0].textContent);    
+        }
+    else
+        {
+        DocsGrid.clearAndLoad("DocList?FoldId="+CurrFold, function ()
+            {
+            if (DocsGrid.getRowsNum()>0)
+                DocsGrid.selectRow(0, true, false, true);
+            });
+        }
+    });    
+CpDoc="";
+menu.setItemText("PasteDoc", LocaleTrans("Paste_Doc"));
+menu.setItemDisabled("PasteDoc");
+}
+//--------------------------------------------------
+
