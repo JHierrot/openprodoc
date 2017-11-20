@@ -99,6 +99,7 @@ var T_EDIT;
 var T_DEL;
 var CpDoc="";
 var CpFold="";
+var CpParentFold="";
 var CurrTitle="";
 var CurrFoldTitle="";
        
@@ -3327,6 +3328,7 @@ menu.setItemDisabled("PasteDoc");
 function CopyF(CurrFold)
 {
 CpFold=CurrFold;
+CpParentFold=DocsTree.getParentId(CpFold);
 menu.setItemEnabled("PasteFold");
 menu.setItemText("PasteFold", LocaleTrans("Paste_Fold")+"="+CurrFoldTitle+" ("+CpFold+")");
 }
@@ -3343,6 +3345,11 @@ window.dhx4.ajax.get("MoveFold?F1="+CpFold+"&F="+CurrFold, function(r)
         }
     else
         {
+//        DocsTree.selectItem(ROOTFOLD);
+//        DocsTree.refreshItem(ROOTFOLD);
+//        CurrFold=ROOTFOLD;
+//        layout.cells("b").attachURL("SFoldRec", true, {FoldId: CurrFold});
+        DocsTree.refreshItem(CpParentFold);
         DocsTree.refreshItem(CurrFold);
         }
     });    
