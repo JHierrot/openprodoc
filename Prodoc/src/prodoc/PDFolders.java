@@ -1695,7 +1695,7 @@ else
     return(false);
 }
 //-------------------------------------------------------------------------
-public boolean Move(String NewParentId)
+public boolean Move(String NewParentId) throws PDExceptionFunc
 {
 DriverGeneric drv=null;    
 try {    
@@ -1708,13 +1708,24 @@ VerifyAllowedUpd();
 InTransLocal=!drv.isInTransaction();
 if (InTransLocal)
     drv.IniciarTrans();
-PDFolders TobeUpdated=new PDFolders(getDrv());
-TobeUpdated.Load(getPDId()); 
-if (!getDrv().getUser().getAclList().containsKey(TobeUpdated.getACL()))
-   PDExceptionFunc.GenPDException("User_without_permissions_to_checkout_document", getPDId());
-Integer Perm=(Integer)getDrv().getUser().getAclList().get(TobeUpdated.getACL());
+
+PDFolders TobeMoved=new PDFolders(getDrv());
+TobeMoved.Load(getPDId()); 
+if (!getDrv().getUser().getAclList().containsKey(TobeMoved.getACL()))
+   PDExceptionFunc.GenPDException("User_without_permissions_to_move_folder", getPDId());
+Integer Perm=(Integer)getDrv().getUser().getAclList().get(TobeMoved.getACL());
+if (Perm.intValue()<=PDACL.pUPDATE)
+   PDExceptionFunc.GenPDException("User_without_permissions_to_move_folder", getPDId());
+PDFolders ToDest=new PDFolders(getDrv());
+ToDest.Load(NewParentId); 
+if (!getDrv().getUser().getAclList().containsKey(ToDest.getACL()))
+   PDExceptionFunc.GenPDException("User_without_permissions_to_move_folder", getPDId());
+Perm=(Integer)getDrv().getUser().getAclList().get(ToDest.getACL());
 if (Perm.intValue()<=PDACL.pREAD)
-   PDExceptionFunc.GenPDException("User_without_permissions_to_checkout_document", getPDId());
+   PDExceptionFunc.GenPDException("User_without_permissions_to_move_folder", getPDId());
+HashSet listGrandParentList = ToDest.getListGrandParentList(NewParentId);
+if (listGrandParentList.contains(getPDId()))
+   PDExceptionFunc.GenPDException("Parent_folder_moved_to_subfolder_not_allowed", getPDId());    
 Record R =getRecordStruct();
 R.getAttr(fPARENTID).setValue(NewParentId);
 getDrv().UpdateRecord(getTableName(), R,  getConditions());
@@ -1737,6 +1748,7 @@ if (PDLog.isDebug())
             {
             PDLog.Error("PDFolders.Move ("+NewParentId+")="+E.getLocalizedMessage());       
             }
+    PDExceptionFunc.GenPDException("Parent_folder_moved_moved_to_subfolder", getPDId());
     return(false);    
     }
 return(true);    
