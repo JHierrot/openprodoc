@@ -20,7 +20,6 @@
 package OpenProdocServ;
 
 import OpenProdocUI.SParent;
-import static OpenProdocUI.SParent.StoreDat;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
@@ -55,7 +54,9 @@ PDDocs TmpDoc=new PDDocs(PDSession);
 String CurrDoc=Req.getParameter("D");
 String RO=Req.getParameter("RO");
 String Vers=Req.getParameter("Vers");
+String AclMode=Req.getParameter("AclMode");
 String Title;
+boolean IsAclMode=false;
 try {
 if (CurrDoc!=null)
     {
@@ -63,11 +64,17 @@ if (CurrDoc!=null)
         TmpDoc.LoadVersion(CurrDoc, Vers);
     else
         TmpDoc.LoadFull(CurrDoc);
-    if (RO.equalsIgnoreCase("true"))    
+    if (AclMode!=null && AclMode.equals("1"))
+        {
+        Title="Change_ACL";
+        IsAclMode=true;
+        RO="true";
+        }
+    else if (RO.equalsIgnoreCase("true"))    
         Title="Document_Attributes";
     else
         Title="Update_Document";
-    out.println( GenerateCompleteDocForm(Title, Req, PDSession, TmpDoc.getParentId(), TmpDoc.getDocType(), TmpDoc.getRecSum(), RO.equalsIgnoreCase("true"), !RO.equalsIgnoreCase("true"), null) );   
+    out.println( GenerateCompleteDocForm(Title, Req, PDSession, TmpDoc.getParentId(), TmpDoc.getDocType(), TmpDoc.getRecSum(), RO.equalsIgnoreCase("true"), !RO.equalsIgnoreCase("true"), null, IsAclMode) );   
     }
 else
     {

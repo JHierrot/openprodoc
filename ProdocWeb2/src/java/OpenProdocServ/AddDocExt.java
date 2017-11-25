@@ -68,7 +68,7 @@ if (CurrFold!=null)
         }
     PDFolders F=new PDFolders(PDSession);
     F.Load(CurrFold);
-    out.println( GenerateCompleteDocForm("Add_Document", Req, PDSession, CurrFold, NewType, TmpDoc.getRecSum(), false, false, F.getACL()) );    
+    out.println( GenerateCompleteDocForm("Add_Document", Req, PDSession, CurrFold, NewType, TmpDoc.getRecSum(), false, false, F.getACL(), false) );    
     }
 else
     {

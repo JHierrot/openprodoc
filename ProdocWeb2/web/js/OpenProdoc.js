@@ -233,6 +233,9 @@ switch (IdMenu)
     case "ModExtDoc" : if (CurrDoc!="") 
                         ModDoc(CurrDoc, false, "");
         break;
+    case "ChangeACL" : if (CurrDoc!="") 
+                        ModACLDoc(CurrDoc);
+        break;   
     case "DocMetadata": if (CurrDoc!="") 
                         ModDoc(CurrDoc, true, "");
         break;
@@ -1570,7 +1573,7 @@ var WinDD=myWins.createWindow({
     id:"DelDoc",
     left:20,
     top:1,
-    width:500,
+    width:600,
     height:420,
     center:true,
     modal:true,
@@ -1681,7 +1684,7 @@ FormModDoc.attachEvent("onUploadFail",function(realName){
         alert(nodes[0].textContent);
         });
     });
- }
+}
 //------------------------------------------------------------
 function CheckOut (Doc2CheckOut)
 {   
@@ -3345,10 +3348,6 @@ window.dhx4.ajax.get("MoveFold?F1="+CpFold+"&F="+CurrFold, function(r)
         }
     else
         {
-//        DocsTree.selectItem(ROOTFOLD);
-//        DocsTree.refreshItem(ROOTFOLD);
-//        CurrFold=ROOTFOLD;
-//        layout.cells("b").attachURL("SFoldRec", true, {FoldId: CurrFold});
         DocsTree.refreshItem(CpParentFold);
         DocsTree.refreshItem(CurrFold);
         }
@@ -3356,6 +3355,43 @@ window.dhx4.ajax.get("MoveFold?F1="+CpFold+"&F="+CurrFold, function(r)
 CpDoc="";
 menu.setItemText("PasteFold", LocaleTrans("Paste_Fold"));
 menu.setItemDisabled("PasteFold");
+}
+//--------------------------------------------------
+function ModACLDoc(Doc2Change)
+{
+var WinMD=myWins.createWindow({
+    id:"ModACLDoc",
+    left:20,
+    top:1,
+    width:600,
+    height:420,
+    center:true,
+    modal:true,
+    resize:true
+});  
+WinMD.setText("OpenProdoc");
+var FormModDoc=WinMD.attachForm();
+FormModDoc.loadStruct("ModDoc?D="+Doc2Change+"&AclMode=1", function(){
+    FormModDoc.setFocusOnFirstActive();
+    });
+FormModDoc.enableLiveValidation(true);     
+FormModDoc.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {    
+        FormModDoc.send("ModACLDoc", function(loader, response)
+                        { // Asynchronous 
+                        if (response.substring(0,2)!=OK)  
+                            alert(response.substring(2)); 
+                        FormModDoc.unload();
+                        WinMD.close();
+                        });
+        }
+    else if (name==CANCEL) 
+        {   
+        FormModDoc.unload();
+        WinMD.close();
+        }
+    });
 }
 //--------------------------------------------------
 

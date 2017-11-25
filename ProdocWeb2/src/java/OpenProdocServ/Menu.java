@@ -107,7 +107,10 @@ Men.append("<item id=\"file_sep_04\" type=\"separator\"/>");
 if (R.isAllowCreateDoc())
     Men.append("<item id=\"AddExtDoc\" text=\"").append(TT(Req, "Extended_Add")).append("\"/>");    
 if (R.isAllowMaintainDoc())    
+    {
     Men.append("<item id=\"ModExtDoc\" text=\"").append(TT(Req, "Update_Extended")).append("\" img=\"img/edit.png\" imgdis=\"img/edit.png\" />");
+    Men.append("<item id=\"ChangeACL\" text=\"").append(TT(Req, "Change_ACL")).append("\"/>");
+    }
 Men.append("<item id=\"DocMetadata\" text=\"").append(TT(Req, "Document_Attributes")).append("\" img=\"img/data.png\" imgdis=\"img/data.png\" />");
 Men.append("<item id=\"file_sep_05\" type=\"separator\"/>");
 if (R.isAllowMaintainDoc())

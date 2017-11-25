@@ -3064,10 +3064,10 @@ if (InTransLocal)
 PDDocs TobeUpdated=new PDDocs(getDrv());
 TobeUpdated.Load(getPDId()); 
 if (!getDrv().getUser().getAclList().containsKey(TobeUpdated.getACL()))
-   PDExceptionFunc.GenPDException("User_without_permissions_to_checkout_document", getPDId());
+   PDExceptionFunc.GenPDException("User_without_permissions_to_move_document", getPDId());
 Integer Perm=(Integer)getDrv().getUser().getAclList().get(TobeUpdated.getACL());
-if (Perm.intValue()<=PDACL.pREAD)
-   PDExceptionFunc.GenPDException("User_without_permissions_to_checkout_document", getPDId());
+if (Perm<=PDACL.pREAD)
+   PDExceptionFunc.GenPDException("User_without_permissions_to_move_document", getPDId());
 if (TobeUpdated.getLockedBy()!=null && TobeUpdated.getLockedBy().length()!=0)
    PDExceptionFunc.GenPDException("Document_previously_checkout", getPDId());
 Record R =getRecordStruct();
@@ -3088,6 +3088,57 @@ if (PDLog.isDebug())
         } catch (Exception E)
             {
             PDLog.Error("PDDocs.Move ("+NewParentId+")="+E.getLocalizedMessage());       
+            }
+    return(false);    
+    }
+return(true);    
+}
+//-------------------------------------------------------------------------
+public boolean ChangeACL(String NewACL)
+{
+DriverGeneric drv=null;    
+try {    
+drv = getDrv();  
+boolean InTransLocal;
+if (PDLog.isDebug())
+    PDLog.Debug("PDDocs.ChangeACL>:"+getPDId()+ ">>"+NewACL);
+getObjCache().remove(getKey());
+VerifyAllowedUpd();
+InTransLocal=!drv.isInTransaction();
+if (InTransLocal)
+    drv.IniciarTrans();
+PDDocs TobeUpdated=new PDDocs(getDrv());
+TobeUpdated.Load(getPDId()); 
+if (!getDrv().getUser().getAclList().containsKey(TobeUpdated.getACL()))
+   PDExceptionFunc.GenPDException("User_without_permissions_to_change_document", getPDId());
+Integer Perm=(Integer)getDrv().getUser().getAclList().get(TobeUpdated.getACL());
+if (Perm<=PDACL.pUPDATE)
+   PDExceptionFunc.GenPDException("User_without_permissions_to_change_document", getPDId());
+if (TobeUpdated.getLockedBy()!=null && TobeUpdated.getLockedBy().length()!=0)
+   PDExceptionFunc.GenPDException("Document_previously_checkout", getPDId());
+Record R =new Record();
+R.addAttr(getRecordStruct().getAttr(fACL));
+R.addAttr(getRecordStruct().getAttr(fDOCTYPE));
+R.addAttr(getRecordStruct().getAttr(fPDDATE));
+R.getAttr(fACL).setValue(NewACL);
+R.getAttr(fDOCTYPE).setValue(TobeUpdated.getDocType());
+R.getAttr(fPDDATE).setValue(new Date());
+getDrv().UpdateRecord(DEFTABNAME, R,  getConditions());
+UpdateVersion(getPDId(), TobeUpdated.getVersion(), R);
+if (InTransLocal)
+    drv.CerrarTrans();
+getObjCache().remove(getKey());
+if (PDLog.isDebug())
+    PDLog.Debug("PDDocs.ChangeACL<:"+getPDId());
+} catch (Exception Ex)
+    {
+    PDLog.Error("PDDocs.ChangeACL ("+NewACL+")="+Ex.getLocalizedMessage());       
+    if (drv!=null && drv.isInTransaction())
+        try {
+        drv.AnularTrans();
+        } catch (Exception E)
+            {
+            PDLog.Error("PDDocs.ChangeACL ("+NewACL+")="+E.getLocalizedMessage());       
             }
     return(false);    
     }

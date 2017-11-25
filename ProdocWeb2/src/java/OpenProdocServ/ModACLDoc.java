@@ -21,18 +21,24 @@ package OpenProdocServ;
 
 import OpenProdocUI.SParent;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
+import prodoc.Attribute;
 import prodoc.DriverGeneric;
 import prodoc.PDDocs;
-import prodoc.PDException;
+import prodoc.Record;
 
 /**
  *
  * @author jhierrot
  */
-public class DelDoc extends SParent
+public class ModACLDoc extends SParent
 {
 
+final static private String List=PDDocs.fPARENTID
+                    +"/"+PDDocs.fPDAUTOR+"/"+PDDocs.fPDDATE
+                    +"/"+PDDocs.fLOCKEDBY+"/"+PDDocs.fVERSION+"/"+PDDocs.fPURGEDATE
+                    +"/"+PDDocs.fREPOSIT+"/"+PDDocs.fSTATUS;
 //-----------------------------------------------------------------------------------------------
 /**
  *
@@ -45,23 +51,17 @@ protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Excep
 {   
 DriverGeneric PDSession=SParent.getSessOPD(Req);
 PDDocs TmpDoc=new PDDocs(PDSession);
-String CurrDoc=Req.getParameter("D");
-if (CurrDoc!=null)
+String CurrDoc=Req.getParameter(PDDocs.fPDID);
+String ACL=Req.getParameter(PDDocs.fACL);
+try {
+TmpDoc.setPDId(CurrDoc);
+TmpDoc.ChangeACL(ACL);
+out.println("OK");    
+} catch (Exception Ex)
     {
-    TmpDoc.LoadFull(CurrDoc);
-    out.println( GenerateCompleteDocForm("Delete_Document", Req, PDSession, CurrDoc, TmpDoc.getDocType(), TmpDoc.getRecSum(), true, false, null, false) );   
-    }
-else
-    {
-    try {    
-    String IdDel=Req.getParameter(PDDocs.fPDID);
-    TmpDoc.setPDId(IdDel);
-    TmpDoc.delete();
-    out.println("OK");
-    } catch (PDException Ex)
-        {
-        PrepareError(Req, Ex.getLocalizedMessage(), out);
-        }
+    out.print("KO");
+    PrepareError(Req, Ex.getLocalizedMessage(), out);
+    out.println();
     }
 }
 //-----------------------------------------------------------------------------------------------
@@ -73,7 +73,7 @@ else
 @Override
 public String getServletInfo()
 {
-return "DelDoc Servlet";
+return "ModDoc Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 }

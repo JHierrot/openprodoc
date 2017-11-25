@@ -1061,7 +1061,7 @@ Form.append("];");
 return(Form.toString());
 }
 //-----------------------------------------------------------------------------------------------
-protected String GenerateCompleteDocForm(String Title, HttpServletRequest Req, DriverGeneric PDSession, String CurrFold, String NewType, Record FR, boolean ReadOnly, boolean Modif, String DefACL) throws PDException
+protected String GenerateCompleteDocForm(String Title, HttpServletRequest Req, DriverGeneric PDSession, String CurrFold, String NewType, Record FR, boolean ReadOnly, boolean Modif, String DefACL, boolean AclMode) throws PDException
 {
 StringBuilder Form= new StringBuilder(3000);
 Attribute Attr;
@@ -1070,7 +1070,7 @@ Form.append("{type: \"label\", label: \"").append(TT(Req, Title)).append("\", la
 Attr=FR.getAttr(PDFolders.fTITLE);
 Form.append(GenInput(Req, Attr,  ReadOnly, Modif));
 Attr=FR.getAttr(PDFolders.fACL);
-Form.append("{type: \"combo\", name: \"" + PDFolders.fACL + "\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" options:[");
+Form.append("{type: \"combo\", name: \"" + PDDocs.fACL + "\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly&&!AclMode?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" options:[");
 if (Attr.getValue()==null)
     Form.append(getComboModel("ACL",PDSession,DefACL) );
 else
