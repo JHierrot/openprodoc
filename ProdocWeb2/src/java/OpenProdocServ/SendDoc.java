@@ -46,12 +46,17 @@ static final int TAMBUFF=1024*64;
 protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 {
 try {    
+if (!Connected(request))
+    {
+    PrintWriter out = response.getWriter();    
+    AskLogin(request, out);
+    }
+else    
     ProcessPage(request, response);
 } catch (Exception e)
     {
     PrintWriter out = response.getWriter();
     ShowMessage(request, out, e.getLocalizedMessage());
-    e.printStackTrace();
     AddLog(e.getMessage());
     }
 }

@@ -45,8 +45,14 @@
     <li><b>HelpForFormatType : </b> Texto de la ayuda emergente al situarse en el combo de selección de formatos de salida. Puede contener caracteres de control html, como &lt;b>, &lt;br></li>
     <li><b>UrlHelp : </b> Url de la página de ayuda personalizada para el punto de consulta que se presentará a los usuarios al pulsar el botón de ayuda.</li>
 </ul>
-<p>El proceso de parametrizar un punto de consulta consiste en crear un archivo de texto con el contenido citado (puede utilizarse como base el ejemplo incluido y modificarlo), introduciendo los valores adecuados a la instalación de OpenProdoc concreta. 
-    A continuación debe crearse (o modificarse el ejemplo incluido) el CSS para adaptarlo al estilo de la institución o empresa correspondiente. 
+<p>El proceso de parametrizar un punto de consulta consiste en crear un archivo de texto con el contenido citado (puede utilizarse como base el ejemplo incluido y modificarlo), introduciendo los valores adecuados a la instalación de OpenProdoc concreta.</p>
+<p>Previamente debe modificarse el fichero de configuración de OpenProdoc (Prodoc.properties o el nombre utilizado) y añadirse 2 líneas:</p>
+<p>User=<I>Usuario1</i></p>
+<p>Pass=<I>ClaveUsuario1</I></p>
+<p>Donde <I>Usuario1</i> y <I>ClaveUsuario1</I> serán datos de un usuario que tenga acceso a los distintos documentos que configuración (OPAC y OPAC_CS) que se describen a continuación.
+Se recomienda que sea un usuario con un rol (perfil) limitado y con un mínimo de permisos, ya que solo debe poder acceder en modo lectura a los ficheros de configuración de las consultas.
+<b>Como todo cambio en el fichero de configuración (Prodoc.properties), debe reiniciarse el servidor para que se lea de nuevo.</b></p>
+<p>A continuación debe crearse (o modificarse el ejemplo incluido) el CSS para adaptarlo al estilo de la institución o empresa correspondiente. 
     Luego deberá añadirse el CSS al repositorio OpenProdoc y anotar el PdId generado. 
     Ese PdId es el que deberá referenciarse como parámetro <b>FormSearchCSS</b> del fichero de configuración del punto de consulta. 
     A continuacion se subirá ese fichero de configuración de consulta.</p>

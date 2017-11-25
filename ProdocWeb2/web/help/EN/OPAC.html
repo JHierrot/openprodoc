@@ -49,8 +49,15 @@
     <li><b>HelpForFormatType : </b> Text of the pop-up help that will be displayed when you are in the reports format selection combo box. Can contain html control characters.</li>
     <li><b>UrlHelp : </b> Url of the personalized help page for the OPAC that will be presented to the users by clicking the help button.</li>
 </ul>
-<p>The process of parameterizing the OPAC is to create a text file with the indicated parameters (you can use as base the included example and modify it), entering the appropriate values to the installation of OpenProdoc.
-     Next, you must create (or modify the included example) the CSS to adapt it to the style of the corresponding institution or company. Then add the CSS to the OpenProdoc repository and note the generated PdId.
+<p>The process of parameterizing the OPAC is to create a text file with the indicated parameters (you can use as base the included example and modify it), entering the appropriate values to the installation of OpenProdoc.</p>
+<p>It's necessary to modify the configuration file (Prodoc.properties or the name used) and add two lines:</p>
+<p>User=<I>User1</i></p>
+<p>Pass=<I>PassUsr1</I></p>
+<p>Where <I>User1</i> y <I>PassUsr1</I> would be the data of a user with access to the configuration documents (OPAC y OPAC_CS) described in the next point.
+It's recommended that the user used had a limited rol and a mimimum of permissions, becaue it's only needed read access to the configuration files.
+<b>As any other change in the configuration file (Prodoc.properties), dthe server MUST be restarted so it can read the new configuration.</b></p>
+
+<p>Next, you must create (or modify the included example) the CSS to adapt it to the style of the corresponding institution or company. Then add the CSS to the OpenProdoc repository and note the generated PdId.
      That PdId is the one that should be referenced as parameter <b> FormSearchCSS </b> in the OPAC configuration file. You should then upload that query configuration file.</p>
 <p>With the generated ID, the OpenProdoc url (eg <i>http://localhost:8080/ProdocWeb2/OPAC?Id=</i> + the new document ID uploaded, for example <i>http://localhost:8080/ProdocWeb2/OPAC?Id=566b6464a654-9696e68d686</i>)</p>
 <p>For searching folders use the OpenProdoc url (eg <i>http://localhost:8080/ProdocWeb2/OPACf?Id=</i> + the new document ID uploaded, for example <i>http://localhost:8080/ProdocWeb2/OPACf?Id=566b6464a654-9696e68d686</i>)</p>
