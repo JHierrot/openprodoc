@@ -1726,10 +1726,14 @@ if (Perm.intValue()<=PDACL.pREAD)
 HashSet listGrandParentList = ToDest.getListGrandParentList(NewParentId);
 if (listGrandParentList.contains(getPDId()))
    PDExceptionFunc.GenPDException("Parent_folder_moved_to_subfolder_not_allowed", getPDId());    
-Record R =getRecordStruct();
+//Record R =getRecordStruct();
+Record R =new Record();
+R.addAttr(getRecordStruct().getAttr(fPARENTID));
 R.getAttr(fPARENTID).setValue(NewParentId);
+R.addAttr(getRecordStruct().getAttr(fPDDATE));
+R.getAttr(fPDDATE).setValue(new Date());
 getDrv().UpdateRecord(getTableName(), R,  getConditions());
-setParentId(NewParentId);;
+setParentId(NewParentId);
 DeleteFoldLevelParents();
 ActFoldLev();
 UpdateParentChilds(getPDId());
