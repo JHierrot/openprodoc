@@ -34,7 +34,7 @@ import prodoc.ProdocFW;
  */
 public class Login extends SParent
 {
-
+private static boolean OPDFWLoaded=false;
 //-----------------------------------------------------------------------------------------------
 /**
  *
@@ -55,7 +55,11 @@ if (User==null || User.length()==0 ||Password==null || Password.length()==0)
     out.println(new FLogin(Sess).toHtml());
     return;
     }
-ProdocFW.InitProdoc("PD", getProdocProperRef());
+if (!OPDFWLoaded)
+    {
+    ProdocFW.InitProdoc("PD", getProdocProperRef());
+    OPDFWLoaded=true;
+    }
 DriverGeneric D=ProdocFW.getSession("PD", User, Password);
 setSessOPD(Req, D);
 out.println(new FMain(Sess).toHtml());

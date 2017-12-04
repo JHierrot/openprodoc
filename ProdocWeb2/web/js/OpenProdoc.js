@@ -551,8 +551,8 @@ TermTabBar.addTab("RT", "RT", null, null, true);
 if (Url!="DelTerm")
     {
     var RTTB=TermTabBar.tabs("RT").attachToolbar();
-    RTTB.addButton("Add", 0, "Add", "img/add.png", "img/add.png");
-    RTTB.addButton("Del", 1, "Del", "img/del.png", "img/del.png");
+    RTTB.addButton("Add", 0, LocaleTrans("Add"), "img/add.png", "img/add.png");
+    RTTB.addButton("Del", 1, LocaleTrans("Delete"), "img/del.png", "img/del.png");
     RTTB.attachEvent("onClick", function(id)
         {
         CurrThes=FormAddTerm.getUserData("TES_USE", "ThesId");          
@@ -562,12 +562,12 @@ if (Url!="DelTerm")
 var RTGrid=TermTabBar.tabs("RT").attachGrid();
 PrepTermGrid(RTGrid);
 RTGrid.init();
-TermTabBar.addTab("Lang", "Lang");
+TermTabBar.addTab("Lang", LocaleTrans("Language"));
 if (Url!="DelTerm")
     {
     var LangTB=TermTabBar.tabs("Lang").attachToolbar();
-    LangTB.addButton("Add", 0, "Add", "img/add.png", "img/add.png");
-    LangTB.addButton("Del", 1, "Del", "img/del.png", "img/del.png");
+    LangTB.addButton("Add", 0, LocaleTrans("Add"), "img/add.png", "img/add.png");
+    LangTB.addButton("Del", 1, LocaleTrans("Delete"), "img/del.png", "img/del.png");
     LangTB.attachEvent("onClick", function(id)
         {
         CurrThes=FormAddTerm.getUserData("TES_USE", "ThesId");          
@@ -785,11 +785,11 @@ modal:true,
 resize:true}); 
 WinAF.setText("OpenProdoc");
 TabBar=WinAF.attachTabbar();
-TabBar.addTab("Search", "Search", null, null, true);
-TabBar.addTab("Results", "Results");
+TabBar.addTab("Search", LocaleTrans("Search"), null, null, true);
+TabBar.addTab("Results", LocaleTrans("Search_Results"));
 ToolBar = TabBar.tabs("Results").attachToolbar();
-ToolBar.addButton(T_EDIT, 0, T_EDIT, "img/edit.png", "img/edit.png");
-ToolBar.addButton(T_DEL, 1, T_DEL, "img/del.png", "img/del.png");
+ToolBar.addButton(T_EDIT, 0, LocaleTrans("Edit"), "img/edit.png", "img/edit.png");
+ToolBar.addButton(T_DEL, 1, LocaleTrans("Delete"), "img/del.png", "img/del.png");
 ToolBar.attachEvent("onClick", function(id)
     {
     if (GridResults.getSelectedRowId()!=null)     
@@ -1445,8 +1445,8 @@ GridReports.init();
 TabBar.tabs("Reports").disable();
 FormSearchFold = TabBar.tabs("Search").attachForm();
 ToolBar = TabBar.tabs("Results").attachToolbar();
-ToolBar.addButton(T_EDIT, 0, T_EDIT, "img/edit.png", "img/edit.png");
-ToolBar.addButton(T_DEL, 1, T_DEL, "img/del.png", "img/del.png");
+ToolBar.addButton(T_EDIT, 0, LocaleTrans("Edit"), "img/edit.png", "img/edit.png");
+ToolBar.addButton(T_DEL, 1, LocaleTrans("Delete"), "img/del.png", "img/del.png");
 ToolBar.addButton(CSVFORMAT, 2, "CSV", "img/expCSV.png", "img/expCSV.png");
 ToolBar.attachEvent("onClick", function(id)
     {
@@ -1916,8 +1916,8 @@ GridReports.load("RepList?Type=Fold");
 GridReports.init();
 TabBar.tabs("Reports").disable();
 ToolBar = TabBar.tabs("Results").attachToolbar();
-ToolBar.addButton(T_EDIT, 0, T_EDIT, "img/edit.png", "img/edit.png");
-ToolBar.addButton(T_DEL, 1, T_DEL, "img/del.png", "img/del.png");
+ToolBar.addButton(T_EDIT, 0, LocaleTrans("Edit"), "img/edit.png", "img/edit.png");
+ToolBar.addButton(T_DEL, 1, LocaleTrans("Delete"), "img/del.png", "img/del.png");
 ToolBar.addButton("CheckOut", 2, "CheckOut", "img/checkout.png", "img/checkout.png");
 ToolBar.addButton("CheckIn", 3, "CheckIn", "img/checkin.png", "img/checkin.png");
 ToolBar.addButton("CancelCheckOut", 4, "CancelCheckOut", "img/cancelcheckout.png", "img/cancelcheckout.png");
@@ -2091,7 +2091,7 @@ ToolBar = b.attachToolbar();
 GridResults = b.attachGrid();
 GridResults.enableMultiselect(true);
 ToolBar.addButton("Undelete", 0, "Undelete", "img/undel.png", "img/undel.png");
-ToolBar.addButton(T_DEL, 1, T_DEL, "img/del.png", "img/del.png");
+ToolBar.addButton(T_DEL, 1, LocaleTrans("Delete"), "img/del.png", "img/del.png");
 ToolBar.attachEvent("onClick", function(id)
     {
     if (GridResults.getSelectedRowId()!=null)    
@@ -2150,7 +2150,7 @@ WinListElem=myWins.createWindow({
 id:"Admin",
 left:100,
 top:1,
-width:((TypeElem==ELEMOBJ||TypeElem==ELEMTASKCRON||TypeElem==ELEMTASKEVENT||TypeElem==ELEMPENDTASK||TypeElem==ELEMTASKEND)?1000:600),
+width:((TypeElem==ELEMOBJ||TypeElem==ELEMTASKCRON||TypeElem==ELEMTASKEVENT||TypeElem==ELEMPENDTASK||TypeElem==ELEMTASKEND)?1000:700),
 height:600,
 center:false,
 modal:true,
@@ -2180,28 +2180,28 @@ formFilter.attachEvent("onButtonClick",  function(name)
     });        
 if (TypeElem!=ELEMPENDTASK && TypeElem!=ELEMTASKEND && TypeElem!=ELEMTRACELOGS)
     {
-    ToolBar.addButton(EOPERNEW, 0, "New", "img/add.png", "img/add.png");
-    ToolBar.addButton(EOPERMOD, 1, "Modif", "img/edit.png", "img/edit.png");
-    ToolBar.addButton(EOPERDEL, 2, T_DEL, "img/del.png", "img/del.png");
-    ToolBar.addButton(EOPERCOP, 3, "Copy", "img/copy.png", "img/copy.png");
-    ToolBar.addButton(EOPEREXP, 4, "Export", "img/export.png", "img/export.png");
-    ToolBar.addButton(EOPEREXA, 5, "ExportAll", "img/export_all.png", "img/export_all.png");
-    ToolBar.addButton(EOPERIMP, 6, "Import", "img/import.png", "img/import.png");
-    ToolBar.addButton(EOPEREXPCSV, 7, "ExportCSV", "img/expCSV.png", "img/expCSV.png");
+    ToolBar.addButton(EOPERNEW, 0, LocaleTrans("New"), "img/add.png", "img/add.png");
+    ToolBar.addButton(EOPERMOD, 1, LocaleTrans("Edit"), "img/edit.png", "img/edit.png");
+    ToolBar.addButton(EOPERDEL, 2, LocaleTrans("Delete"), "img/del.png", "img/del.png");
+    ToolBar.addButton(EOPERCOP, 3, LocaleTrans("Copy"), "img/copy.png", "img/copy.png");
+    ToolBar.addButton(EOPEREXP, 4, LocaleTrans("Export"), "img/export.png", "img/export.png");
+    ToolBar.addButton(EOPEREXA, 5, LocaleTrans("Export_All"), "img/export_all.png", "img/export_all.png");
+    ToolBar.addButton(EOPERIMP, 6, LocaleTrans("Import"), "img/import.png", "img/import.png");
+    ToolBar.addButton(EOPEREXPCSV, 7, "CSV", "img/expCSV.png", "img/expCSV.png");
     }
 else if ( TypeElem==ELEMTASKEND)
     {
-    ToolBar.addButton(EOPERRELAUN, 0, "Relaunch", "img/relaunch.png", "img/relaunch.png"); 
-    ToolBar.addButton(EOPERDEL, 1, T_DEL, "img/del.png", "img/del.png");
-    ToolBar.addButton(EOPEREXPCSV, 2, "ExportCSV", "img/expCSV.png", "img/expCSV.png");
+    ToolBar.addButton(EOPERRELAUN, 0, LocaleTrans("Relaunch"), "img/relaunch.png", "img/relaunch.png"); 
+    ToolBar.addButton(EOPERDEL, 1, LocaleTrans("Delete"), "img/del.png", "img/del.png");
+    ToolBar.addButton(EOPEREXPCSV, 2, "CSV", "img/expCSV.png", "img/expCSV.png");
     }    
 else if ( TypeElem==ELEMTRACELOGS)
     {
-    ToolBar.addButton(EOPERDEL, 0, T_DEL, "img/del.png", "img/del.png");    
-    ToolBar.addButton(EOPEREXPCSV, 1, "ExportCSV", "img/expCSV.png", "img/expCSV.png");    
+    ToolBar.addButton(EOPERDEL, 0, LocaleTrans("Delete"), "img/del.png", "img/del.png");    
+    ToolBar.addButton(EOPEREXPCSV, 1, "CSV", "img/expCSV.png", "img/expCSV.png");    
     }
 else
-    ToolBar.addButton(EOPEREXPCSV, 0, "ExportCSV", "img/expCSV.png", "img/expCSV.png");    
+    ToolBar.addButton(EOPEREXPCSV, 0, "CSV", "img/expCSV.png", "img/expCSV.png");    
 GridResults.attachEvent("onRowDblClicked", function(rId,cInd){
     GridResults.selectRow(rId);
     ElemMod(TypeElem, GridResults.getSelectedRowId());
@@ -2860,22 +2860,22 @@ if (TypeElem==ELEMACL)
     FormElem=ElemLayout.cells('a').attachForm(); 
     ElemLayout.cells('a').setHeight(180);
     ElemTabBar=ElemLayout.cells('b').attachTabbar();
-    ElemTabBar.addTab("Groups", "Groups", null, null, true); //---
+    ElemTabBar.addTab("Groups", LocaleTrans("Groups"), null, null, true); //---
     TBG = ElemTabBar.tabs("Groups").attachToolbar();
-    TBG.addButton(EOPERNEW, 0, "New", "img/add.png", "img/add.png");
-    TBG.addButton(EOPERMOD, 1, "Modif", "img/edit.png", "img/edit.png");
-    TBG.addButton(EOPERDEL, 2, T_DEL, "img/del.png", "img/del.png");
+    TBG.addButton(EOPERNEW, 0, LocaleTrans("New"), "img/add.png", "img/add.png");
+    TBG.addButton(EOPERMOD, 1, LocaleTrans("Edit"), "img/edit.png", "img/edit.png");
+    TBG.addButton(EOPERDEL, 2, LocaleTrans("Delete"), "img/del.png", "img/del.png");
     GGroups = ElemTabBar.tabs("Groups").attachGrid();
     GGroups.setHeader("Groups, Perm");
     GGroups.setColAlign("left,left");     
     GGroups.setColTypes("ro,ro");              
     GGroups.setColSorting("str,str");
     GGroups.init();
-    ElemTabBar.addTab("Users", "Users");                    //---
+    ElemTabBar.addTab("Users", LocaleTrans("Users"));                    //---
     TBU = ElemTabBar.tabs("Users").attachToolbar();
-    TBU.addButton(EOPERNEW, 0, "New", "img/add.png", "img/add.png");
-    TBU.addButton(EOPERMOD, 1, "Modif", "img/edit.png", "img/edit.png");
-    TBU.addButton(EOPERDEL, 2, T_DEL, "img/del.png", "img/del.png");
+    TBU.addButton(EOPERNEW, 0, LocaleTrans("New"), "img/add.png", "img/add.png");
+    TBU.addButton(EOPERMOD, 1, LocaleTrans("Edit"), "img/edit.png", "img/edit.png");
+    TBU.addButton(EOPERDEL, 2, LocaleTrans("Delete"), "img/del.png", "img/del.png");
     GUsers = ElemTabBar.tabs("Users").attachGrid();
     GUsers.setHeader("Users, Perm");
     GUsers.setColAlign("left,left");     
@@ -2890,20 +2890,20 @@ else if (TypeElem==ELEMGROUPS )
     FormElem=ElemLayout.cells('a').attachForm(); 
     ElemLayout.cells('a').setHeight(180);
     ElemTabBar=ElemLayout.cells('b').attachTabbar();
-    ElemTabBar.addTab("Groups", "Groups", null, null, true); //---
+    ElemTabBar.addTab("Groups", LocaleTrans("Groups"), null, null, true); //---
     TBG = ElemTabBar.tabs("Groups").attachToolbar();
-    TBG.addButton(EOPERNEW, 0, "New", "img/add.png", "img/add.png");
-    TBG.addButton(EOPERDEL, 1, T_DEL, "img/del.png", "img/del.png");
+    TBG.addButton(EOPERNEW, 0, LocaleTrans("New"), "img/add.png", "img/add.png");
+    TBG.addButton(EOPERDEL, 1, LocaleTrans("Delete"), "img/del.png", "img/del.png");
     GGroups = ElemTabBar.tabs("Groups").attachGrid();
     GGroups.setHeader("Groups");
     GGroups.setColAlign("left");     
     GGroups.setColTypes("ro");              
     GGroups.setColSorting("str");
     GGroups.init();
-    ElemTabBar.addTab("Users", "Users");                    //---
+    ElemTabBar.addTab("Users", LocaleTrans("Users"));                    //---
     TBU = ElemTabBar.tabs("Users").attachToolbar();
-    TBU.addButton(EOPERNEW, 0, "New", "img/add.png", "img/add.png");
-    TBU.addButton(EOPERDEL, 1, T_DEL, "img/del.png", "img/del.png");
+    TBU.addButton(EOPERNEW, 0, LocaleTrans("New"), "img/add.png", "img/add.png");
+    TBU.addButton(EOPERDEL, 1, LocaleTrans("Delete"), "img/del.png", "img/del.png");
     GUsers = ElemTabBar.tabs("Users").attachGrid();
     GUsers.setHeader("Users");
     GUsers.setColAlign("left");     
@@ -2920,11 +2920,11 @@ else if (TypeElem==ELEMOBJ)
     ElemTabBar=ElemLayout.cells('b').attachTabbar();
     ElemTabBar.addTab("Metadata", "Metadata", null, null, true); //---
     TBG = ElemTabBar.tabs("Metadata").attachToolbar();
-    TBG.addButton(EOPERNEW, 0, "New", "img/add.png", "img/add.png");
-    TBG.addButton(EOPERMOD, 1, "Modif", "img/edit.png", "img/edit.png");
-    TBG.addButton(EOPERDEL, 2, T_DEL, "img/del.png", "img/del.png");
+    TBG.addButton(EOPERNEW, 0, LocaleTrans("New"), "img/add.png", "img/add.png");
+    TBG.addButton(EOPERMOD, 1, LocaleTrans("Edit"), "img/edit.png", "img/edit.png");
+    TBG.addButton(EOPERDEL, 2, LocaleTrans("Delete"), "img/del.png", "img/del.png");
     GMetadata = ElemTabBar.tabs("Metadata").attachGrid();
-    ElemTabBar.addTab("Inherited", "Inherited");                    //---
+    ElemTabBar.addTab("Inherited", LocaleTrans("Inherited_Attributes"));                    //---
     GInherited = ElemTabBar.tabs("Inherited").attachGrid();
     }
 else
@@ -2967,8 +2967,8 @@ else if(Oper==EOPERMOD)
     if (FormElem.isItem("DeleteObj") && FormElem.isItemEnabled("DeleteObj"))
         {
         TBG.clearAll(); 
-        TBG.addButton("AddAttr", 0, "NewA", "img/add.png", "img/add.png");
-        TBG.addButton("DelAttr", 1, "DelA", "img/del.png", "img/del.png"); 
+        TBG.addButton("AddAttr", 0, LocaleTrans("Add_Attribute"), "img/add.png", "img/add.png");
+        TBG.addButton("DelAttr", 1, LocaleTrans("Del_Attribute"), "img/del.png", "img/del.png"); 
         }
     }
 TBG.attachEvent("onClick", function(OperA)  
