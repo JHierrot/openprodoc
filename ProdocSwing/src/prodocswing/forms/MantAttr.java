@@ -43,6 +43,7 @@ private boolean Cancel;
 private ThesField ThesSelect=null;
 private PDThesaur SelectedThes=null;
 private String MaxLongLabel;
+private boolean ModeDelete=false;
 
 /** Creates new form MantUsers
  * @param parent
@@ -300,6 +301,12 @@ this.dispose();
 
     private void ButtonAceptActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ButtonAceptActionPerformed
     {//GEN-HEADEREND:event_ButtonAceptActionPerformed
+if (isModeDelete())
+    {
+    Cancel = false;
+    this.dispose();    
+    return;
+    }
 try {
 Attribute Attr;
 Attr = AttrEdit.getAttr(PDObjDefs.fATTRNAME);
@@ -459,6 +466,7 @@ LabelOperation.setText(MainWin.TT("Add_Attribute"));
 */
 public void DelMode()
 {
+setModeDelete(true);
 LabelOperation.setText(MainWin.TT("Delete_Attribute"));
 AttrNameTextField.setEditable(false);
 AttrUserNameTextField.setEditable(false);
@@ -630,8 +638,8 @@ else
     getThesSelect().setVisible(false);
     if (SelType==Attribute.tTHES)
         {
-        MultivalCheckBox.setEnabled(false);
-        MultivalCheckBox.setSelected(false);
+//        MultivalCheckBox.setEnabled(false);
+//        MultivalCheckBox.setSelected(false);
         getThesSelect().setVisible(true);
         LongLabel.setVisible(true);
         LongLabel.setText("Thesaur");
@@ -639,10 +647,26 @@ else
     else
         {
         LongLabel.setVisible(false);
-        MultivalCheckBox.setEnabled(true);
+//        MultivalCheckBox.setEnabled(true);
         }
     }
 }
 //----------------------------------------------------------------
+
+    /**
+     * @return the ModeDelete
+     */
+    public boolean isModeDelete()
+    {
+        return ModeDelete;
+    }
+
+    /**
+     * @param ModeDelete the ModeDelete to set
+     */
+    public void setModeDelete(boolean ModeDelete)
+    {
+        this.ModeDelete = ModeDelete;
+    }
 
 }
