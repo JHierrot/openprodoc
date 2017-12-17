@@ -68,10 +68,9 @@ String ThesId=Req.getParameter("id");
 try {
 PDThesaur CurThes = new PDThesaur(PDSession);
 if (ThesaurId!=null)
-    { 
-//    ThesId=PDThesaur.ROOTTERM;  
+    {  
     CurThes.Load(ThesaurId);
-    ThesTree.append("<tree id=\"0\" radio=\"1\"><item child=\"1\" id=\"").append(CurThes.getPDId()).append("\" text=\"").append(CurThes.getName()).append("\" open=\"1\">");
+    ThesTree.append("<tree id=\"0\" radio=\"1\"><item child=\"1\" id=\"").append(EscapeTree(CurThes.getPDId())).append("\" text=\"").append(EscapeTree(CurThes.getName())).append("\" open=\"1\">");
     }
 else
     ThesTree.append("<tree id=\"").append(ThesId).append("\" open=\"1\">");
@@ -83,12 +82,11 @@ for (Iterator it = Child.iterator(); it.hasNext();)
         continue;
     PDThesaur ChildTerm=new PDThesaur(PDSession);
     ChildTerm.Load(ChildId);
-    ThesTree.append("<item child=\"1\" id=\"").append(ChildTerm.getPDId()).append("\" text=\"").append(ChildTerm.getName()).append("\"></item>");
+    ThesTree.append("<item child=\"1\" id=\"").append(EscapeTree(ChildTerm.getPDId())).append("\" text=\"").append(EscapeTree(ChildTerm.getName())).append("\"></item>");
     }
 } catch(Exception Ex)
     {  
     }
-//if (ThesId.equals(PDThesaur.ROOTTERM))
 if (ThesaurId!=null)
     ThesTree.append("</item>");
 ThesTree.append("</tree>");

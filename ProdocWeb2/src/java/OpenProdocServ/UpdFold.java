@@ -57,7 +57,7 @@ if (CurrFold!=null)
     "[" +
     "{type: \"label\", label: \""+TT(Req, "Update_Folder")+"\"}," +
     "{type: \"input\", name: \""+PDFolders.fTITLE+"\", label: \""+TT(Req, Attr.getUserName())+"\", value:\""
-            +Attr.getValue()+"\", required: true, tooltip:\""+TT(Req, Attr.getDescription())+"\", inputWidth: 300, maxLength:"+Attr.getLongStr()+"}," +
+            +EscapeHtmlJson((String)Attr.getValue())+"\", required: true, tooltip:\""+EscapeHtmlJson(TT(Req, Attr.getDescription()))+"\", inputWidth: 300, maxLength:"+Attr.getLongStr()+"}," +
     "{type: \"block\", width: 250, list:[" +
         "{type: \"button\", name: \"OK\", value: \""+TT(Req, "Ok")+"\"}," +
         "{type: \"newcolumn\", offset:20 }," +

@@ -155,14 +155,14 @@ while (Attr!=null)
             try {    
             PDThesaur TmpTerm=new PDThesaur(PDSession);
             TmpTerm.Load((String)Attr.getValue());
-            Row.append("\"").append(TmpTerm.getName()).append("\",");
+            Row.append("\"").append(EscapeHtmlJson(TmpTerm.getName())).append("\",");
             } catch (Exception Ex)
                 {
                 Row.append("\"Error:"+Ex.getLocalizedMessage()+"\",");
                 }
             }
         else
-            Row.append("\"").append(Attr.Export()).append("\",");
+            Row.append("\"").append(EscapeHtmlJson(Attr.Export())).append("\",");
         }
     Attr=NextTerm.nextAttr();
     }

@@ -40,6 +40,7 @@ import prodoc.DriverGeneric;
 import prodoc.ExtConf;
 import prodoc.PDDocs;
 import prodoc.PDException;
+import prodoc.PDLog;
 import prodoc.PDObjDefs;
 import prodoc.PDReport;
 import prodoc.PDThesaur;
@@ -54,6 +55,7 @@ public class OPAC extends SParent
 {
 private static final HashMap<String,String> OPACs=new HashMap(); 
 private static final HashMap<String,ExtConf> Confs=new HashMap(); 
+private static boolean FWInit=false;
 private static Date LastCacheUpdate=null;
 private static final long CacheCaducity=1*1*1000;
 private static final String HtmlBase="<!DOCTYPE html>\n" +
@@ -107,7 +109,11 @@ protected void processRequest(HttpServletRequest Req, HttpServletResponse respon
 response.setContentType("text/html;charset=UTF-8");
 PrintWriter out = response.getWriter();  
 try {
-ProdocFW.InitProdoc("PD", getProdocProperRef());
+if (!FWInit)  
+    {
+    ProdocFW.InitProdoc("PD", getProdocProperRef());
+    FWInit=true;
+    }
 String IdOPAC=Req.getParameter("Id"); 
 if (IdOPAC==null)
     throw new Exception("Inexistent OPAC");
@@ -124,6 +130,15 @@ setOPACConf(Req, ConfOPAC);
 DriverGeneric LocalSess=getSessOPD(Req);
 if (LocalSess==null)
     {
+    if (ConfOPAC.getUser()==null || ConfOPAC.getUser().length()==0)
+        {
+        String Er="ERROR NO OPAC Configured User";    
+        PDLog.Error(Er); 
+        out.println(Er);
+        out.flush();
+        }
+    else if(PDLog.isDebug())
+        PDLog.Debug("OPACUser: "+ConfOPAC.getUser());        
     LocalSess=ProdocFW.getSession("PD", ConfOPAC.getUser(), ConfOPAC.getPass()); // just for translation   
     setSessOPD(Req, LocalSess);
     }
@@ -133,8 +148,12 @@ else
     out.println(GenHtml(Req, ConfOPAC, LocalSess, IdOPAC)); 
 } catch (Exception Ex)
     {
-    throw new ServletException(Ex.getLocalizedMessage());
+    out.println("Error:="+Ex.getLocalizedMessage());
+    Ex.printStackTrace();
     }
+finally {
+        out.close();
+        }
 }
 //-----------------------------------------------------------------------------------------------
 /** 

@@ -73,7 +73,6 @@ if (FoldId==null)
     }
 else
     FolderTree.append("<tree id=\"").append(FoldId).append("\" open=\"1\">");
-// FolderTree.append("<item text=\"").append(CurFold.getTitle()).append("\" id=\"").append(FoldId).append("\" open=\"1\">");
 HashSet Child =CurFold.getListDirectDescendList(FoldId);
 for (Iterator it = Child.iterator(); it.hasNext();)
     {
@@ -82,7 +81,7 @@ for (Iterator it = Child.iterator(); it.hasNext();)
         continue;
     PDFolders ChildFolder=new PDFolders(PDSession);
     ChildFolder.Load(ChildId);
-    FolderTree.append("<item child=\"1\" id=\"").append(ChildFolder.getPDId()).append("\" text=\"").append(ChildFolder.getTitle()).append("\"></item>");
+    FolderTree.append("<item child=\"1\" id=\"").append(ChildFolder.getPDId()).append("\" text=\"").append(EscapeTree(ChildFolder.getTitle())).append("\"></item>");
     }
 } catch(Exception Ex)
     {  

@@ -1223,12 +1223,12 @@ switch (Attr.getType())
         if (Attr.isMultivalued())
         {
             FormField.append("{type: \"block\", width: 550, offsetLeft:1, list:[");
-            FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\", readonly: \"true\",value:\"").append(Attr.Export()).append("\", tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", labelWidth: 180, inputWidth: 250},");
+            FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\", readonly: \"true\",value:\"").append(EscapeHtmlJson(Attr.Export())).append("\", tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", labelWidth: 180, inputWidth: 250},");
             FormField.append("{type: \"newcolumn\", offset:2 },");
             FormField.append("{type: \"button\",").append(ReadOnly?"disabled:1,":"").append(" name:  \"M_").append(Attr.getName()).append("\", value: \"*\", width: 20}]},");
         }
         else
-            FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: ").append(Attr.isRequired()?"true":"false").append(",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", inputWidth: 300, maxLength:").append(Attr.getLongStr()).append("},");
+            FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: ").append(Attr.isRequired()?"true":"false").append(",").append(Attr.getValue()!=null?("value:\""+EscapeHtmlJson(Attr.Export())+"\","):"").append(" tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", inputWidth: 300, maxLength:").append(Attr.getLongStr()).append("},");
         break;
     case Attribute.tTHES:
         {
@@ -1401,9 +1401,9 @@ while (Attr!=null)
             PDThesaur TmpThes=new PDThesaur(SParent.getSessOPD(Req));
             TmpThes.Load((String)Attr.getValue());
             if (IsXML)
-                Row.append("<cell>").append(TmpThes.getName()).append("</cell>");
+                Row.append("<cell>").append(EscapeTree(TmpThes.getName())).append("</cell>");
             else
-                Row.append("\"").append(TmpThes.getName()).append("\",");
+                Row.append("\"").append(EscapeHtmlJson(TmpThes.getName())).append("\",");
             } catch(Exception ex)
                 {    
                 if (IsXML)
@@ -1421,13 +1421,13 @@ while (Attr!=null)
             }
         }
     else if (IsXML && IsDoc && Attr.getName().equals(PDDocs.fTITLE))
-        Row.append("<cell>").append(Attr.ExportXML()).append("^SendDoc?Id=").append(Id).append("^_blank</cell>");
+        Row.append("<cell>").append(EscapeTree(Attr.ExportXML())).append("^SendDoc?Id=").append(Id).append("^_blank</cell>");
     else    
         {
         if (IsXML)
-            Row.append("<cell>").append(Attr.ExportXML()).append("</cell>");
+            Row.append("<cell>").append(EscapeTree(Attr.ExportXML())).append("</cell>");
         else
-            Row.append("\"").append(Attr.ExportXML()).append("\",");
+            Row.append("\"").append(EscapeHtmlJson(Attr.ExportXML())).append("\",");
         }
     Attr=NextRec.nextAttr();
     }
@@ -1534,6 +1534,22 @@ Req.getSession().setAttribute("OPAC_CONF", ConfOPAC);
 protected static ExtConf getOPACConf(HttpServletRequest Req)
 {
 return((ExtConf)Req.getSession().getAttribute("OPAC_CONF")); 
+}
+//-----------------------------------------------------------------------------------------------
+protected static String EscapeHtmlJson(String Text)
+{
+if (Text==null)  
+    return(Text);
+return(Text.replace("\"", "\\\"")); 
+//return(Text.replace("\"", "&quot;")); 
+}
+//-----------------------------------------------------------------------------------------------
+protected static String EscapeTree(String Text)
+{
+if (Text==null)  
+    return(Text);
+return(Text.replace("\"", "&quot;")); 
+// return(Text.replace("\"", "&quot;").replace("<", "&lt;")); 
 }
 //-----------------------------------------------------------------------------------------------
 }

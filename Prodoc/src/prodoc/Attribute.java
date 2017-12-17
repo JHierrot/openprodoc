@@ -604,7 +604,7 @@ else
 private String FormatExportXML(Object Val)
 {
 if (getType()==Attribute.tSTRING)
-    return(((String)Val).replace("<", "&lt;").replace(">", "&gt;").replace("&", "&amp;"));
+    return(((String)Val).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"));
 else if (getType()==Attribute.tTHES)
     return((String)Val);
 else if (getType()==Attribute.tINTEGER)
