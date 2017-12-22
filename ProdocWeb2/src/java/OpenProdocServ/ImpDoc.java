@@ -48,8 +48,6 @@ out.println("[" +
     "]},"+  
     "{type: \"block\", width: 250, list:[" +
         "{type: \"button\", name: \"OK\", value: \""+TT(Req, "Ok")+"\"}" +
-//        "{type: \"newcolumn\", offset:20 }," +
-//        "{type: \"button\", name: \"CANCEL\", value: \""+TT(Req, "Cancel")+"\"}" +
     "]} ];");
 }
 //-----------------------------------------------------------------------------------------------

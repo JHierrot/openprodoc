@@ -82,7 +82,7 @@ else
         doc.LoadVersion(Id, Ver);
         }
     else    
-        doc.LoadCurrent(Id);
+        doc.LoadFull(Id);
     }
 if (doc.IsUrl())
     {
