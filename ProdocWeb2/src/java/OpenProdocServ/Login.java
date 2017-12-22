@@ -34,7 +34,6 @@ import prodoc.ProdocFW;
  */
 public class Login extends SParent
 {
-private static boolean OPDFWLoaded=false;
 //-----------------------------------------------------------------------------------------------
 /**
  *

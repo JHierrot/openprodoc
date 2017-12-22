@@ -105,7 +105,11 @@ protected void processRequest(HttpServletRequest Req, HttpServletResponse respon
 response.setContentType("text/html;charset=UTF-8");
 PrintWriter out = response.getWriter();  
 try {
-ProdocFW.InitProdoc("PD", getProdocProperRef());
+if (!OPDFWLoaded)  
+    {
+    ProdocFW.InitProdoc("PD", getProdocProperRef());
+    OPDFWLoaded=true;
+    }
 String IdOPAC=Req.getParameter("Id"); 
 if (IdOPAC==null)
     throw new Exception("Inexistent OPAC");

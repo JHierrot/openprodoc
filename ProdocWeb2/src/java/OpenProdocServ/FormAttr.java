@@ -45,7 +45,7 @@ protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Excep
 StringBuilder SB=new StringBuilder(1000);    
 String Oper=Req.getParameter("Oper");
 boolean ReadOnly;
-if (Oper.equals("Delete"))
+if (Oper.equals("Delete") || Oper.equals("DelAttr"))
     ReadOnly=true;
 else
     ReadOnly=false;

@@ -94,6 +94,8 @@ public final static String SD_Rec="SD_Rec";
 public final static String SD_OperComp="SD_OperComp";
 public final static String SD_FTQ="SD_FTQ";
 
+protected static boolean OPDFWLoaded=false;
+
 /** Initializes the servlet.
  * @param config 
  * @throws ServletException 
@@ -1232,18 +1234,28 @@ switch (Attr.getType())
         break;
     case Attribute.tTHES:
         {
-        PDThesaur TmpThes=new PDThesaur(getSessOPD(Req));
-        if (Attr.getValue()!=null && ((String)Attr.getValue()).length()!=0)
-           TmpThes.Load((String)Attr.getValue());
+        if (Attr.isMultivalued())
+            {
+            FormField.append("{type: \"block\", width: 550, offsetLeft:1, list:[");
+            FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\", readonly: \"true\",value:\"").append(EscapeHtmlJson(Attr.Export())).append("\", tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", labelWidth: 180, inputWidth: 250},");
+            FormField.append("{type: \"newcolumn\", offset:2 },");
+            FormField.append("{type: \"button\",").append(ReadOnly?"disabled:1,":"").append(" name:  \"M_").append(Attr.getName()).append("\", value: \"*\", width: 20}]},");
+            }
         else
-            TmpThes.setPDId("");
-        FormField.append("{type: \"block\", width: 550, offsetLeft:1, list:[");
-        FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\", labelWidth: 180, inputWidth: 250, readonly: \"true\",value:\"").append(TmpThes.getName()==null?"":TmpThes.getName()).append("\", tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", userdata: {ThesId:").append(Attr.getLongStr()).append("}},");
-        FormField.append("{type: \"hidden\", name:\"TH_").append(Attr.getName()).append("\", value: \"").append(TmpThes.getPDId()).append("\"},");
-        FormField.append("{type: \"newcolumn\" },");
-        FormField.append("{type: \"button\",").append(ReadOnly?"disabled:1,":"").append(" name:  \"T_").append(Attr.getName()).append("\", value: \"T\", width: 20},");
-        FormField.append("{type: \"newcolumn\" },");
-        FormField.append("{type: \"button\",").append(ReadOnly?"disabled:1,":"").append(" name:  \"TD_").append(Attr.getName()).append("\", value: \"-\", width: 20}]},");
+            {
+            PDThesaur TmpThes=new PDThesaur(getSessOPD(Req));
+            if (Attr.getValue()!=null && ((String)Attr.getValue()).length()!=0)
+               TmpThes.Load((String)Attr.getValue());
+            else
+                TmpThes.setPDId("");
+            FormField.append("{type: \"block\", width: 550, offsetLeft:1, list:[");
+            FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\", labelWidth: 180, inputWidth: 250, readonly: \"true\",value:\"").append(TmpThes.getName()==null?"":TmpThes.getName()).append("\", tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", userdata: {ThesId:").append(Attr.getLongStr()).append("}},");
+            FormField.append("{type: \"hidden\", name:\"TH_").append(Attr.getName()).append("\", value: \"").append(TmpThes.getPDId()).append("\"},");
+            FormField.append("{type: \"newcolumn\" },");
+            FormField.append("{type: \"button\",").append(ReadOnly?"disabled:1,":"").append(" name:  \"T_").append(Attr.getName()).append("\", value: \"T\", width: 20},");
+            FormField.append("{type: \"newcolumn\" },");
+            FormField.append("{type: \"button\",").append(ReadOnly?"disabled:1,":"").append(" name:  \"TD_").append(Attr.getName()).append("\", value: \"-\", width: 20}]},");
+            }
         }
         break;
     default:

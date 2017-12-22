@@ -20,6 +20,8 @@
 package OpenProdocUI;
 
 import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import prodoc.Attribute;
 import prodoc.DriverGeneric;
@@ -79,11 +81,32 @@ while (Attr!=null)
         Html.append("<br><b>").append(TT(Req, Attr.getUserName())).append("= </b>");
         if (Attr.getType()==Attribute.tTHES)
             {
-            PDThesaur Term=new PDThesaur(FoldAct.getDrv());
-            if (Attr.getValue()!=null)
+            if (Attr.isMultivalued())
                 {
-                Term.Load((String)Attr.getValue());
-                Html.append(Term.getName());
+                TreeSet valuesList = Attr.getValuesList();
+                String Sum="";
+                for (Iterator iterator = valuesList.iterator(); iterator.hasNext();)
+                    {
+                    String Val = (String)iterator.next();
+                    PDThesaur Term=new PDThesaur(FoldAct.getDrv());
+                    if (Val!=null)
+                        {
+                        Term.Load(Val);
+                        if (Sum.length()!=0)
+                            Sum+="|";
+                        Sum+=Term.getName();
+                        }  
+                    }
+                Html.append(Sum);
+                }
+            else
+                {
+                PDThesaur Term=new PDThesaur(FoldAct.getDrv());
+                if (Attr.getValue()!=null)
+                    {
+                    Term.Load((String)Attr.getValue());
+                    Html.append(Term.getName());
+                    }
                 }
             }
         else

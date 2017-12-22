@@ -3070,8 +3070,13 @@ if (Perm<=PDACL.pREAD)
    PDExceptionFunc.GenPDException("User_without_permissions_to_move_document", getPDId());
 if (TobeUpdated.getLockedBy()!=null && TobeUpdated.getLockedBy().length()!=0)
    PDExceptionFunc.GenPDException("Document_previously_checkout", getPDId());
-Record R =getRecordStruct();
+Record R =new Record();
+R.addAttr(getRecordStruct().getAttr(fPARENTID));
+R.addAttr(getRecordStruct().getAttr(fPDDATE));
+R.addAttr(getRecordStruct().getAttr(fDOCTYPE));
 R.getAttr(fPARENTID).setValue(NewParentId);
+R.getAttr(fPDDATE).setValue(new Date());
+R.getAttr(fDOCTYPE).setValue(TobeUpdated.getDocType());
 getDrv().UpdateRecord(DEFTABNAME, R,  getConditions());
 UpdateVersion(getPDId(), TobeUpdated.getVersion(), R);
 if (InTransLocal)
