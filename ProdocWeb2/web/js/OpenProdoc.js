@@ -1055,6 +1055,8 @@ FormAddFold.attachEvent("onButtonClick", function (name)
         ShowMulti(FormAddFold, name.substring(2));    
     else if (name.substring(0,2)=="T_") 
         ShowThes(FormAddFold, name.substring(2));  
+    else if (name.substring(0,3)=="MT_") 
+        ShowMultiThes(FormAddFold, name.substring(3));  
     else if (name.substring(0,3)=="TD_") 
         DelTerm(FormAddFold, name.substring(3)); 
     });   
@@ -1108,11 +1110,132 @@ FormAddFold.attachEvent("onButtonClick", function (name)
         }
     else if (name.substring(0,2)=="T_") 
         ShowThes(FormAddFold, name.substring(2));  
+    else if (name.substring(0,3)=="MT_") 
+        ShowMultiThes(FormAddFold, name.substring(3));  
     else if (name.substring(0,3)=="TD_") 
         DelTerm(FormAddFold, name.substring(3)); 
     else 
         ShowMulti(FormAddFold, name.substring(2));    
     });   
+}
+//----------------------------------
+function ShowMultiThes(Form, AttName)
+{
+var WinMulti=myWins.createWindow({
+id:"MultiThes",
+left:20,
+top:1,
+width:300,
+height:260,
+center:true,
+modal:true,
+resize:true});   
+WinMulti.setText("OpenProdoc");  
+var MultiFormData = [
+				{type: "settings", position: "label-left", labelWidth: 100, inputWidth: 250},
+                {type: "block", width: 250, list:[
+                    {type: "button", name: "add", value: "+"},
+                    {type: "newcolumn", offset:20 },
+                    {type: "button", name: "del", value: "-"}
+                    ]},
+                {type: "multiselect", name: "Vals", size:6},
+                {type: "block", width: 250, list:[
+                    {type: "button", name: "OK", value: "Ok"},
+                    {type: "newcolumn", offset:20 },
+                    {type: "button", name: "CANCEL", value: "Cancel"}]
+			        }];
+var MultiForm=WinMulti.attachForm(MultiFormData);
+var Vals=MultiForm.getSelect("Vals");
+if (Form.getItemValue(AttName).trim().length!=0)
+    {
+    var CurNames=Form.getItemValue(AttName).split("|"); 
+    var CurVals=Form.getItemValue("TH_"+AttName).split("|"); 
+    for (var i=0; i<CurVals.length; i++)
+        Vals.options.add(new Option(CurNames[i], CurVals[i]));
+    }
+MultiForm.setItemFocus("Val");    
+MultiForm.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {
+        var SumId="";
+        var SumText="";
+        for (var i=0; i<Vals.options.length; i++)
+            {
+            if (i!=0)    
+                {
+                SumId+="|";
+                SumText+="|";
+                }
+            SumId+=Vals.options[i].value;
+            SumText+=Vals.options[i].text;
+            }
+        Form.setItemValue("TH_"+AttName, SumId);    
+        Form.setItemValue(AttName, SumText);    
+        MultiForm.unload();
+        WinMulti.close();
+        }
+    else if (name==CANCEL) 
+        {   
+        MultiForm.unload();
+        WinMulti.close();
+        }
+    else if (name=='add') 
+        {   
+        SelectThesMult(Form.getUserData(AttName, "ThesId"), MultiForm)
+        }
+    else if (name=='del') 
+        { 
+        var ListO=Vals.options;  
+        ListO.remove(ListO.selectedIndex);
+        }      
+    });        
+}
+//----------------------------------
+function SelectThesMult(ThesId, Form)
+{   
+var TermId="";    
+var WinSelThes=myWins.createWindow({
+id:"SelThes",
+left:20,
+top:1,
+width:400,
+height:350,
+center:true,
+modal:true,
+resize:true});   
+WinSelThes.setText("OpenProdoc");  
+var Theslayout=WinSelThes.attachLayout("2U");
+Theslayout.cells("a").setText("Thesaurus"); 
+Theslayout.cells("a").setWidth(200);
+Theslayout.cells("b").setText("Current Term"); 
+var STToolBar = Theslayout.attachToolbar();
+STToolBar.addButton("Select", 0, LocaleTrans("Selection"), "img/select.png", "img/select.png");
+var SelThesTree = Theslayout.cells("a").attachTree();
+SelThesTree.setImagePath("js/imgs/dhxtree_skyblue/");
+SelThesTree.setXMLAutoLoading("ThesTree");
+SelThesTree.load("ThesTree?ThesId="+ThesId);
+SelThesTree.showItemSign("System",true);
+var SelTerm;
+SelThesTree.attachEvent("onClick",function(id)
+    {
+    SelTerm=id;
+    Theslayout.cells("b").attachURL("SThesRec", true, {ThesId: SelTerm});
+    });
+if (TermId!="")    
+    Theslayout.cells("b").attachURL("SThesRec?ThesId="+TermId);
+else
+    Theslayout.cells("b").attachURL("SThesRec?ThesId="+ThesId);
+STToolBar.attachEvent("onClick", function(id)
+    {
+    TermId=SelThesTree.getSelectedItemId();  
+    var Text=SelThesTree.getSelectedItemText();
+    var Vals=Form.getSelect("Vals");
+    var ListO=Vals.options;    
+    ListO.add(new Option(Text, TermId));
+    Vals.options.selectedIndex=ListO.length-1;
+    WinSelThes.close();
+    WinSelThes.unload();
+    });
 }
 //----------------------------------
 function ShowMulti(Form, AttName)

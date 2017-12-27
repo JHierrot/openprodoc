@@ -25,7 +25,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Properties;
+import java.util.TreeSet;
 import java.util.Vector;
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -1052,13 +1054,14 @@ for (int i = 0; i < FL.size(); i++)
     Attr = FL.get(i);
     Form.append(GenInput(Req, Attr,  ReadOnly, Modif));
     }
-Form.append("{type: \"block\", width: 250, list:[" +
-    "{type: \"button\", name: \"OK\", value: \""+TT(Req, "Ok")+"\"}," +
-    "{type: \"newcolumn\", offset:20 }," +
-    "{type: \"button\", name: \"CANCEL\", value: \""+TT(Req, "Cancel")+"\"}," +
-    "{type: \"hidden\", name:\"OPDNewType\", value: \""+NewType+"\"}," +
-    "{type: \"hidden\", name:\"CurrFold\", value: \""+CurrFold+"\"}" +
-"]}");
+Form.append("{type: \"block\", width: 250, list:[{type: \"button\", name: \"OK\", value: \"").
+    append(TT(Req, "Ok")).
+    append("\"},{type: \"newcolumn\", offset:20 },{type: \"button\", name: \"CANCEL\", value: \"").
+    append(TT(Req, "Cancel")).
+    append("\"},{type: \"hidden\", name:\"OPDNewType\", value: \"").
+    append(NewType).
+    append("\"},{type: \"hidden\", name:\"CurrFold\", value: \"").
+    append(CurrFold).append("\"}]}");
 Form.append("];");
 return(Form.toString());
 }
@@ -1236,10 +1239,30 @@ switch (Attr.getType())
         {
         if (Attr.isMultivalued())
             {
+            StringBuilder SBNames=new StringBuilder();
+            StringBuilder SBId=new StringBuilder();
+            TreeSet<String> ThesTermsList = Attr.getValuesList();
+            if (!ThesTermsList.isEmpty())
+                {
+                PDThesaur TmpThes=new PDThesaur(getSessOPD(Req));
+                for (Iterator<String> iterator = ThesTermsList.iterator(); iterator.hasNext();)
+                    {
+                    String NextTerm = iterator.next();
+                    TmpThes.Load(NextTerm);
+                    SBId.append(TmpThes.getPDId());
+                    SBNames.append(TmpThes.getName());
+                    if (iterator.hasNext())
+                        {
+                        SBId.append(Attribute.StringListSeparator);
+                        SBNames.append(Attribute.StringListSeparator);                
+                        }
+                    }
+                }
             FormField.append("{type: \"block\", width: 550, offsetLeft:1, list:[");
-            FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\", readonly: \"true\",value:\"").append(EscapeHtmlJson(Attr.Export())).append("\", tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", labelWidth: 180, inputWidth: 250},");
+            FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\", readonly: \"true\",value:\"").append(EscapeHtmlJson(SBNames.toString())).append("\", tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", labelWidth: 180, inputWidth: 250, userdata: {ThesId:").append(Attr.getLongStr()).append("}},");
             FormField.append("{type: \"newcolumn\", offset:2 },");
-            FormField.append("{type: \"button\",").append(ReadOnly?"disabled:1,":"").append(" name:  \"M_").append(Attr.getName()).append("\", value: \"*\", width: 20}]},");
+            FormField.append("{type: \"hidden\", name:\"TH_").append(Attr.getName()).append("\", value: \"").append(SBId).append("\"},");
+            FormField.append("{type: \"button\",").append(ReadOnly?"disabled:1,":"").append(" name:  \"MT_").append(Attr.getName()).append("\", value: \"*T\", width: 20}]},");
             }
         else
             {
