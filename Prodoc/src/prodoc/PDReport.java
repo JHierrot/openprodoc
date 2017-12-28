@@ -483,14 +483,28 @@ if (AttrName.equals(PDDocs.fPARENTID))
     } 
 else if (Attr1.getType()==Attribute.tTHES)
     {
-    PDThesaur Thes=new PDThesaur(getDrv());
-    if (Attr1.getValue()!=null)
+    if (Attr1.isMultivalued())
         {
-        Thes.Load((String)Attr1.getValue());
-        ResVal=Thes.getName();
+        PDThesaur Thes=new PDThesaur(getDrv());
+        if (CurVal!=null)
+            {
+            Thes.Load((String)CurVal);
+            ResVal=Thes.getName();
+            }
+        else
+            ResVal="";
         }
     else
-        ResVal="";
+        {
+        PDThesaur Thes=new PDThesaur(getDrv());
+        if (Attr1.getValue()!=null)
+            {
+            Thes.Load((String)Attr1.getValue());
+            ResVal=Thes.getName();
+            }
+        else
+            ResVal="";
+        }
     }
 else if (AttrName.equals(PDDocs.fMIMETYPE))
     {
