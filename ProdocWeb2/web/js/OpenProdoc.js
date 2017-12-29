@@ -1786,7 +1786,7 @@ FormModDoc.attachEvent("onButtonClick", function (name)
     else if (name.substring(0,2)=="T_") 
         ShowThes(FormModDoc, name.substring(2));  
     else if (name.substring(0,3)=="MT_") 
-        ShowMultiThes(FormAddFold, name.substring(3));  
+        ShowMultiThes(FormModDoc, name.substring(3));  
     else if (name.substring(0,3)=="TD_") 
         DelTerm(FormModDoc, name.substring(3)); 
     else if (name==CANCEL) 

@@ -821,10 +821,13 @@ if (NewAttr.isMultivalued())
     {
     Record RecTab=new Record();
     Attribute PdId=new Attribute(PDDocs.fPDID, PDDocs.fPDID, "Unique_identifier", Attribute.tSTRING, true, null, 32, true, false, false);
-    Attribute IdVer=PDDocs.getRecordStructPDDocs().getAttr(PDDocs.fVERSION).Copy();
     RecTab.addAttr(PdId);
     if (!isFolder)
+        {
+        Attribute IdVer=PDDocs.getRecordStructPDDocs().getAttr(PDDocs.fVERSION).Copy();
+        IdVer.setPrimKey(true);
         RecTab.addAttr(IdVer);
+        }
     Attribute A=NewAttr.Copy();
     A.setUnique(false); // to avoid double restriction
     RecTab.addAttr(A); 
