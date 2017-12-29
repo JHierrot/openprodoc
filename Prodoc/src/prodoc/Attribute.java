@@ -705,6 +705,8 @@ public void Import(String Val) throws PDException
 if (isMultivalued())    
     {
     ClearValues();
+    if (Val==null)
+        return;
     StringTokenizer St=new StringTokenizer(Val, StringListSeparator);
     while (St.hasMoreTokens())
         {

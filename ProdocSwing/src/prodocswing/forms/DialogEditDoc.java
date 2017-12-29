@@ -29,6 +29,8 @@ import java.awt.Component;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.TreeSet;
 import java.util.Vector;
 import javax.swing.*;
 import prodoc.*;
@@ -685,7 +687,22 @@ private JComponent genComponent(Attribute Attr, boolean Modif) throws PDExceptio
 JComponent JTF;
 if (Attr.isMultivalued())
     {
-    JTF=new MultiField(Attr.Export());
+    if (Attr.getType()==Attribute.tTHES) 
+        {
+        StringBuilder SB=new StringBuilder(128);
+        TreeSet ListTerms = Attr.getValuesList();
+        PDThesaur Term=new PDThesaur(MainWin.getSession());
+        for (Iterator iterator = ListTerms.iterator(); iterator.hasNext();)
+            {
+            Term.Load((String)iterator.next());
+            SB.append(Term.getName());
+            if (iterator.hasNext())
+                SB.append(Attribute.StringListSeparator);    
+            }
+        JTF=new MultiField(SB.toString());
+        }
+    else    
+        JTF=new MultiField(Attr.Export());    
     ((MultiField)JTF).setAttr(Attr);
     if (!(ViewMode || Modif&&!Attr.isModifAllowed()))
         {

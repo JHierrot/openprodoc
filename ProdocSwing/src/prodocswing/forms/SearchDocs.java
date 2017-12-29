@@ -477,11 +477,17 @@ private void FillAttr(Attribute Attr, JComponent JTF) throws PDException
 {
 if (Attr.getType()==Attribute.tSTRING)
     {
-    Attr.setValue(((JTextField)JTF).getText());
+    if (Attr.isMultivalued())
+        Attr.Import(((JTextField)JTF).getText());
+    else
+        Attr.setValue(((JTextField)JTF).getText());
     }
 else if (Attr.getType()==Attribute.tTHES)
     {
-    Attr.setValue(((ThesField)JTF).getUseTerm().getPDId());
+    if (Attr.isMultivalued())
+        Attr.Import( ((ThesField)JTF).getUseTerm().getPDId());
+    else    
+        Attr.setValue( ((ThesField)JTF).getUseTerm().getPDId());
     }
 else if (Attr.getType()==Attribute.tDATE)
     {

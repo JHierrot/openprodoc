@@ -410,7 +410,8 @@ Cancel=true;
     {//GEN-HEADEREND:event_MultivalCheckBoxActionPerformed
 if (MultivalCheckBox.isSelected())
     {
-    TypeComboBox.setSelectedItem("String");    
+    if (!TypeComboBox.getSelectedItem().equals("String") && !TypeComboBox.getSelectedItem().equals("Thesaur"))    
+        TypeComboBox.setSelectedItem("String");    
     UniqueCheckBox.setSelected(false);
     UniqueCheckBox.setEnabled(false);
     ReqCheckBox.setSelected(false);
@@ -638,8 +639,6 @@ else
     getThesSelect().setVisible(false);
     if (SelType==Attribute.tTHES)
         {
-//        MultivalCheckBox.setEnabled(false);
-//        MultivalCheckBox.setSelected(false);
         getThesSelect().setVisible(true);
         LongLabel.setVisible(true);
         LongLabel.setText("Thesaur");
@@ -647,7 +646,6 @@ else
     else
         {
         LongLabel.setVisible(false);
-//        MultivalCheckBox.setEnabled(true);
         }
     }
 }

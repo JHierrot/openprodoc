@@ -409,13 +409,10 @@ else if (Attr.getType()==Attribute.tTHES)
 else if (Attr.getType()==Attribute.tDATE)
     {
     JTF=new JFormattedTextField(MainWin.getFormatterDate());
- //   ((JFormattedTextField)JTF).setFocusLostBehavior(JFormattedTextField.COMMIT);
     }
 else if (Attr.getType()==Attribute.tTIMESTAMP)
     {
     JTF=new JFormattedTextField(MainWin.getFormatterTS());
-//    ((JFormattedTextField)JTF).setFocusLostBehavior(JFormattedTextField.COMMIT);
-//    ((JFormattedTextField)JTF).setValue(new Date());
     }
 else if (Attr.getType()==Attribute.tBOOLEAN)
     {
@@ -473,7 +470,10 @@ if (Attr.getType()==Attribute.tSTRING)
     }
 else if (Attr.getType()==Attribute.tTHES)
     {
-    Attr.setValue(((ThesField)JTF).getUseTerm().getPDId());
+    if (Attr.isMultivalued())
+        Attr.Import( ((ThesField)JTF).getUseTerm().getPDId());
+    else    
+        Attr.setValue( ((ThesField)JTF).getUseTerm().getPDId());
     }
 else if (Attr.getType()==Attribute.tDATE)
     {

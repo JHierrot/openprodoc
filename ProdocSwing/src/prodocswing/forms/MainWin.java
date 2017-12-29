@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.TreeSet;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -2117,11 +2118,26 @@ while (Attr!=null)
         Html.append("<br><b>").append(DrvTT(Attr.getUserName())).append("= </b>");
         if (Attr.getType()==Attribute.tTHES)
             {
-            PDThesaur Term=new PDThesaur(Session);
-            if (Attr.getValue()!=null)
+            if (Attr.isMultivalued())   
                 {
-                Term.Load((String)Attr.getValue());
-                Html.append(Term.getName());
+                TreeSet ListTerms = Attr.getValuesList();
+                PDThesaur Term=new PDThesaur(Session);
+                for (Iterator iterator = ListTerms.iterator(); iterator.hasNext();)
+                    {
+                    Term.Load((String)iterator.next());
+                    Html.append(Term.getName());
+                    if (iterator.hasNext())
+                        Html.append(Attribute.StringListSeparator);    
+                    }
+                }
+            else
+                {
+                PDThesaur Term=new PDThesaur(Session);
+                if (Attr.getValue()!=null)
+                    {
+                    Term.Load((String)Attr.getValue());
+                    Html.append(Term.getName());
+                    }
                 }
             }
         else
