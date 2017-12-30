@@ -664,6 +664,33 @@ layout.setHorizontalGroup(hGroup);
 layout.setVerticalGroup(vGroup);
 }
 //----------------------------------------------------------------------
+private void ShowEditThesList(java.awt.event.InputEvent evt)
+{
+try {    
+AttrMultiThesEdit MultAttrDlg = new AttrMultiThesEdit(new javax.swing.JFrame(), true);
+Attribute Attr=((MultiField)evt.getComponent()).getAttr();
+MultAttrDlg.setAttr(Attr);
+MultAttrDlg.setLocationRelativeTo(null);
+MultAttrDlg.setVisible(true);
+if (MultAttrDlg.isCancel())
+    return;
+TreeSet ListTerms = Attr.getValuesList();
+StringBuilder SB=new StringBuilder();
+PDThesaur Term=new PDThesaur(MainWin.getSession());
+for (Iterator iterator = ListTerms.iterator(); iterator.hasNext();)
+    {
+    Term.Load((String)iterator.next());
+    SB.append(Term.getName()); 
+    if (iterator.hasNext())
+        SB.append(Attribute.StringListSeparator);
+    }    
+((MultiField)evt.getComponent()).setText(SB.toString());
+} catch(PDException Ex)
+    {
+    MainWin.Message(Ex.getLocalizedMessage());
+    }
+}
+//----------------------------------------------------------------------
 private void ShowEditList(java.awt.event.InputEvent  evt)
 {
 AttrMultiEdit MultAttrDlg = new AttrMultiEdit(new javax.swing.JFrame(), true);
@@ -706,22 +733,44 @@ if (Attr.isMultivalued())
     ((MultiField)JTF).setAttr(Attr);
     if (!(ViewMode || Modif&&!Attr.isModifAllowed()))
         {
-        JTF.addKeyListener(
-            new java.awt.event.KeyAdapter() 
+        if (Attr.getType()==Attribute.tTHES)
             {
-            public void keyTyped(java.awt.event.KeyEvent evt) 
-            {
-            ShowEditList(evt);
+            JTF.addKeyListener(
+                new java.awt.event.KeyAdapter() 
+                {
+                public void keyTyped(java.awt.event.KeyEvent evt) 
+                {               
+                ShowEditThesList(evt);
+                }
+                });
+            JTF.addMouseListener(
+                new java.awt.event.MouseAdapter() 
+                {
+                public void mouseClicked(java.awt.event.MouseEvent evt) 
+                {
+                ShowEditThesList(evt);
+                }
+                }); 
             }
-            });
-        JTF.addMouseListener(
-            new java.awt.event.MouseAdapter() 
+        else
             {
-            public void mouseClicked(java.awt.event.MouseEvent evt) 
-            {
-            ShowEditList(evt);
+            JTF.addKeyListener(
+                new java.awt.event.KeyAdapter() 
+                {
+                public void keyTyped(java.awt.event.KeyEvent evt) 
+                {
+                ShowEditList(evt);
+                }
+                });
+            JTF.addMouseListener(
+                new java.awt.event.MouseAdapter() 
+                {
+                public void mouseClicked(java.awt.event.MouseEvent evt) 
+                {
+                ShowEditList(evt);
+                }
+                }); 
             }
-            }); 
         }
     }
 else if (Attr.getType()==Attribute.tSTRING)
