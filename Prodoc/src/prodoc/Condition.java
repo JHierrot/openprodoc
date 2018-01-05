@@ -416,6 +416,8 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
                 }
             else if (TypeVal==Attribute.tBOOLEAN)
                 Value=OPDObject.getTextContent().equals("1");
+            else if (TypeVal==Attribute.tTHES)
+                Value=Cont;
             else
                 Value=new Integer(Cont);
             }
