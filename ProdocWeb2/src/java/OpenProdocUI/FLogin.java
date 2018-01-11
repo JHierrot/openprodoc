@@ -31,7 +31,7 @@ private static final String Html="<!DOCTYPE html>" +
         "<head>\n" +
         "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n" +
         "<title>OpenProdoc2 Web</title>\n" +
-        "<script src=\"js/OpenProdoc.js\" type=\"text/javascript\"></script>\n" +
+        "<script src=\"js/OpenProdoc2.1.js\" type=\"text/javascript\"></script>\n" +
         "<script src=\"js/dhtmlx.js\" type=\"text/javascript\"/></script>\n" +
 "        <link rel=\"shortcut icon\" href=\"img/OpenProdoc.ico\" type=\"image/x-icon\">" +       
         "<link rel=\"STYLESHEET\" type=\"text/css\" href=\"js/dhtmlx.css\">\n" +
