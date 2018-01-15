@@ -5,7 +5,7 @@
  * this work for additional information regarding copyright ownership.
  * Joaquin Hierro licenses this file to You under:
  *
- * License GNU GPL v3 http://www.gnu.org/licenses/gpl.html
+ * License GNU Affero GPL v3 http://www.gnu.org/licenses/agpl.html
  *
  * you may not use this file except in compliance with the License.  
  * Unless agreed to in writing, software is distributed on an "AS IS" BASIS,
