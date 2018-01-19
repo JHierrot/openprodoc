@@ -1825,7 +1825,8 @@ else
         }
     else
         {
-        Attr.setValue(TobeUpdated.getName());
+        if (Attr.getValue()==null || ((String)Attr.getValue()).length()==0)
+            Attr.setValue(TobeUpdated.getName());
         }
     }
 if (FilePath!=null)
