@@ -79,9 +79,11 @@ public final static int SEARCHDOC_FORM =2;
 /**
  * 
  */
-private static final String ListAttrFold=PDFolders.fACL+"/"+PDFolders.fFOLDTYPE+"/"+PDFolders.fPARENTID+"/"+PDFolders.fPDID+"/"+PDFolders.fTITLE+"/"+PDFolders.fPDAUTOR+"/"+PDFolders.fPDDATE;
-private static final String ListAttrDoc=PDDocs.fACL+"/"+PDDocs.fDOCTYPE+"/"+PDDocs.fPARENTID+"/"+PDDocs.fPDID+"/"+PDDocs.fTITLE+"/"+"/"+PDDocs.fPDID+"/"+PDDocs.fPDAUTOR+"/"+PDDocs.fPDDATE+"/"+PDDocs.fLOCKEDBY+"/"+PDDocs.fVERSION+"/"+PDDocs.fPURGEDATE+"/"+PDDocs.fREPOSIT+"/"+PDDocs.fSTATUS+"/"+PDDocs.fMIMETYPE+"/"+PDDocs.fNAME;
-
+//private static final String ListAttrFold=PDFolders.fACL+"/"+PDFolders.fFOLDTYPE+"/"+PDFolders.fPARENTID+"/"+PDFolders.fPDID+"/"+PDFolders.fTITLE+"/"+PDFolders.fPDAUTOR+"/"+PDFolders.fPDDATE;
+//private static final String ListAttrDoc=PDDocs.fACL+"/"+PDDocs.fDOCTYPE+"/"+PDDocs.fPARENTID+"/"+PDDocs.fPDID+"/"+PDDocs.fTITLE+"/"+"/"+PDDocs.fPDID+"/"+PDDocs.fPDAUTOR+"/"+PDDocs.fPDDATE+"/"+PDDocs.fLOCKEDBY+"/"+PDDocs.fVERSION+"/"+PDDocs.fPURGEDATE+"/"+PDDocs.fREPOSIT+"/"+PDDocs.fSTATUS+"/"+PDDocs.fMIMETYPE+"/"+PDDocs.fNAME;
+private static HashSet ListAttrFold=null;
+private static HashSet ListAttrDoc=null;
+        
 public static HashSet ListThes=null;
 
 public final static String SD_QType="SD_QType";
@@ -1043,7 +1045,7 @@ Attr=FR.nextAttr();
 ArrayList<Attribute> FL=new ArrayList();
 while (Attr!=null)
     {
-    if (!ListAttrFold.contains(Attr.getName()))
+    if (!getListAttrFold().contains(Attr.getName()))
         {
         FL.add(Attr);
         }
@@ -1086,7 +1088,7 @@ Attr=FR.nextAttr();
 ArrayList<Attribute> FL=new ArrayList();
 while (Attr!=null)
     {
-    if (!ListAttrDoc.contains(Attr.getName()))
+    if (!getListAttrDoc().contains(Attr.getName()))
         {
         FL.add(Attr);
         }
@@ -1587,4 +1589,50 @@ return(Text.replace("\"", "&quot;"));
 // return(Text.replace("\"", "&quot;").replace("<", "&lt;")); 
 }
 //-----------------------------------------------------------------------------------------------
+/**
+ * @return the ListAttrFold
+ */
+public synchronized static HashSet getListAttrFold()
+{
+if (ListAttrFold==null)
+    {
+    ListAttrFold=new HashSet(7);
+    ListAttrFold.add(PDFolders.fACL);
+    ListAttrFold.add(PDFolders.fFOLDTYPE);
+    ListAttrFold.add(PDFolders.fPARENTID);
+    ListAttrFold.add(PDFolders.fPDID);
+    ListAttrFold.add(PDFolders.fTITLE);
+    ListAttrFold.add(PDFolders.fPDAUTOR);
+    ListAttrFold.add(PDFolders.fPDDATE);
+    }
+return ListAttrFold;
+}
+
+/**
+ * @return the ListAttrDoc
+ */
+public synchronized static HashSet getListAttrDoc()
+{
+if (ListAttrDoc==null)    
+    {
+    ListAttrDoc=new HashSet(15);
+    ListAttrDoc.add(PDDocs.fACL);
+    ListAttrDoc.add(PDDocs.fDOCTYPE);
+    ListAttrDoc.add(PDDocs.fPARENTID);
+    ListAttrDoc.add(PDDocs.fPDID);
+    ListAttrDoc.add(PDDocs.fTITLE);
+    ListAttrDoc.add(PDDocs.fPDID);
+    ListAttrDoc.add(PDDocs.fPDAUTOR);
+    ListAttrDoc.add(PDDocs.fPDDATE);
+    ListAttrDoc.add(PDDocs.fLOCKEDBY);
+    ListAttrDoc.add(PDDocs.fVERSION);
+    ListAttrDoc.add(PDDocs.fPURGEDATE);
+    ListAttrDoc.add(PDDocs.fREPOSIT);
+    ListAttrDoc.add(PDDocs.fSTATUS);
+    ListAttrDoc.add(PDDocs.fMIMETYPE);
+    ListAttrDoc.add(PDDocs.fNAME);
+    }
+return ListAttrDoc;
+}
+
 }
