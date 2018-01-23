@@ -38,7 +38,6 @@
                           <Component id="DescripLabel" linkSize="1" alignment="0" min="-2" pref="89" max="-2" attributes="0"/>
                           <Component id="TypeLabel" linkSize="1" alignment="0" min="-2" pref="89" max="-2" attributes="0"/>
                           <Component id="LongLabel" linkSize="1" alignment="0" min="-2" pref="89" max="-2" attributes="0"/>
-                          <Component id="AttrUserNameLabel" linkSize="1" alignment="0" min="-2" pref="89" max="-2" attributes="0"/>
                           <Component id="AttrNameLabel" linkSize="1" alignment="0" min="-2" pref="132" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -61,6 +60,7 @@
                           <Component id="AllowModLabel" linkSize="1" alignment="0" min="-2" pref="208" max="-2" attributes="0"/>
                           <Component id="UniqueLabel" linkSize="1" alignment="0" min="-2" pref="89" max="-2" attributes="0"/>
                           <Component id="MultivalLabel" alignment="0" min="-2" pref="208" max="-2" attributes="0"/>
+                          <Component id="AttrUserNameLabel" linkSize="1" alignment="0" min="-2" pref="89" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -89,14 +89,13 @@
               <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="AttrNameLabel" min="-2" max="-2" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
-                      <Component id="AttrUserNameLabel" min="-2" max="-2" attributes="0"/>
-                  </Group>
                   <Group type="102" attributes="0">
                       <Component id="AttrNameTextField" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="AttrUserNameTextField" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="AttrUserNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="AttrUserNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="DescripTextField" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -177,13 +176,6 @@
         </Property>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="AttrNameTextField">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="MainWin.getFontDialog()" type="code"/>
-        </Property>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JLabel" name="AttrUserNameLabel">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -191,6 +183,13 @@
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="MainWin.TT(&quot;Visible_Name_of_attribute&quot;)" type="code"/>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="AttrNameTextField">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="MainWin.getFontDialog()" type="code"/>
         </Property>
       </Properties>
     </Component>

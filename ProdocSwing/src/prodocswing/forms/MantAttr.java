@@ -68,8 +68,8 @@ initComponents();
 
         LabelOperation = new javax.swing.JLabel();
         AttrNameLabel = new javax.swing.JLabel();
-        AttrNameTextField = new javax.swing.JTextField();
         AttrUserNameLabel = new javax.swing.JLabel();
+        AttrNameTextField = new javax.swing.JTextField();
         AttrUserNameTextField = new javax.swing.JTextField();
         DescripLabel = new javax.swing.JLabel();
         DescripTextField = new javax.swing.JTextField();
@@ -106,10 +106,10 @@ initComponents();
         AttrNameLabel.setFont(MainWin.getFontDialog());
         AttrNameLabel.setText(MainWin.TT("Name"));
 
-        AttrNameTextField.setFont(MainWin.getFontDialog());
-
         AttrUserNameLabel.setFont(MainWin.getFontDialog());
         AttrUserNameLabel.setText(MainWin.TT("Visible_Name_of_attribute"));
+
+        AttrNameTextField.setFont(MainWin.getFontDialog());
 
         AttrUserNameTextField.setFont(MainWin.getFontDialog());
 
@@ -196,7 +196,6 @@ initComponents();
                             .addComponent(DescripLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(TypeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(LongLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(AttrUserNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(AttrNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(369, 369, 369)
@@ -213,19 +212,19 @@ initComponents();
                             .addComponent(ReqLabel)
                             .addComponent(AllowModLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(UniqueLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(MultivalLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(MultivalLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(AttrUserNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(TypeComboBox, 0, 370, Short.MAX_VALUE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(DescripTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
-                                .addComponent(AttrUserNameTextField, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(MultivalCheckBox, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(ReqCheckBox, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(AllowModCheckBox, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(UniqueCheckBox, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(LongMaxTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(AttrNameTextField, javax.swing.GroupLayout.Alignment.LEADING)))
+                            .addComponent(DescripTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
+                            .addComponent(AttrUserNameTextField)
+                            .addComponent(MultivalCheckBox)
+                            .addComponent(ReqCheckBox)
+                            .addComponent(AllowModCheckBox)
+                            .addComponent(UniqueCheckBox)
+                            .addComponent(LongMaxTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(AttrNameTextField))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -241,12 +240,11 @@ initComponents();
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(AttrNameLabel)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addComponent(AttrUserNameLabel))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(AttrNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(AttrUserNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(AttrUserNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(AttrUserNameLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(DescripTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -310,10 +308,16 @@ if (isModeDelete())
 try {
 Attribute Attr;
 Attr = AttrEdit.getAttr(PDObjDefs.fATTRNAME);
+if (AttrNameTextField.getText().length()==0 || AttrNameTextField.getText().length()>Attr.getLongStr())
+    throw new PDException("Incorrect_attribute_name");
 Attr.setValue(AttrNameTextField.getText());
 Attr = AttrEdit.getAttr(PDObjDefs.fATTRUSERNAME);
+if (AttrUserNameTextField.getText().length()==0 || AttrUserNameTextField.getText().length()>Attr.getLongStr())
+    throw new PDException("Incorrect_attribute_name");
 Attr.setValue(AttrUserNameTextField.getText());
 Attr = AttrEdit.getAttr(PDObjDefs.fATTRDESCRIPTION);
+if (DescripTextField.getText().length()==0 || DescripTextField.getText().length()>Attr.getLongStr())
+    throw new PDException("Description_Length_Incorrect");
 Attr.setValue(DescripTextField.getText());
 Attr = AttrEdit.getAttr(PDObjDefs.fATTRTYPE);
 Attr.setValue(TypeComboBox.getSelectedIndex());
