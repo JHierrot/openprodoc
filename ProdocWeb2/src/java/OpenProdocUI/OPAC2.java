@@ -19,7 +19,6 @@
 
 package OpenProdocUI;
 
-import static OpenProdocUI.SParent.PrepareError;
 import static OpenProdocUI.SParent.ShowMessage;
 import static OpenProdocUI.SParent.TT;
 import static OpenProdocUI.SParent.getActFolderId;
@@ -96,7 +95,7 @@ while (Attr!=null)
         Attr=Rec.nextAttr();
         continue;
         }
-    String Val=Req.getParameter(Attr.getName());
+    String Val=Req.getParameter(CurrType+"_"+Attr.getName());
     if (Val == null || Val.length()==0)
         {
         Attr=Rec.nextAttr();

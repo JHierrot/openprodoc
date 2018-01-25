@@ -29,7 +29,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
 import javax.servlet.ServletException;
@@ -63,12 +62,17 @@ private static final String HtmlBase="<!DOCTYPE html>\n" +
         "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>" +
         "<title>OpenProdoc2 Web OPAC</title>\n" +
         "<script>\n"+
+        "@LISTFIELDS@\n"+
         "function ExecMenu(IdType)\n" +
         "{\n" +
-        "switch (IdType)\n" +
-          "{\n" +
-          "@SWITCH@"+
-           "}\n"+
+"var L=IdType.length;\n"+        
+"for (i = 0; i < ListF.length; i++)\n"+ 
+    "{\n"+
+    "if ((ListF[i].substring(0,L)+\"_\")!=(IdType+\"_\"))\n"+
+        "document.getElementById(ListF[i]).style.visibility=\"collapse\";\n"+
+    "else\n"+    
+        "document.getElementById(ListF[i]).style.visibility=\"visible\";\n"+
+    "}\n"+
         "}\n"+
         "</script>\n"+
         "<link rel=\"shortcut icon\" href=\"img/OpenProdoc.ico\" type=\"image/x-icon\"/>\n" +       
@@ -243,14 +247,11 @@ for (int NFT = 0; NFT < FormatsToInclude.size(); NFT++)
     }
 HtmlFinal=HtmlFinal.replace("@FORMATVALS@", FormatVals);
 StringBuilder Fields=new StringBuilder(3000);
-StringBuilder SwitchDT=new StringBuilder(3000);
+HashSet <String> FieldsVisib=new HashSet(FieldsToInclude.size()*DocTipesList.size());
+StringBuilder FieldsArray=new StringBuilder("var ListF=[");
 for (int NDT = 0; NDT < DocTipesList.size(); NDT++)
     {
     String DT = DocTipesList.elementAt(NDT);
-    HashMap <String, Boolean> FieldsVisib=new HashMap(FieldsToInclude.size());
-    for (int i = 0; i < FieldsToInclude.size(); i++)
-        FieldsVisib.put(FieldsToInclude.elementAt(i), false);
-    SwitchDT.append("case \"").append(DT).append("\":\n");
     try {
     PDObjDefs  Def=new PDObjDefs(LocalSess);
     Def.Load(DT);  
@@ -262,32 +263,33 @@ for (int NDT = 0; NDT < DocTipesList.size(); NDT++)
         Attribute Attr = AttrDef.nextAttr();  
         if (FieldsToInclude.contains(Attr.getName()) )
             {
-            if (!FieldsIncForm.get(Attr.getName())) // to avoid duplicates in form
-                {
-                if (Attr.getType()==Attribute.tTHES)
-                    Fields.append(GenThesVals(Req, LocalSess, Attr)); 
-                else if (Attr.getType()==Attribute.tBOOLEAN)
-                    Fields.append(GenBoolVals(Req, Attr)); 
-                else
-                    Fields.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"OPACLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td class=\"TD_OPACINP\"><input class=\"OPACINP\" type=\"text\" name=\"").append(Attr.getName()).append("\"><span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
-                FieldsIncForm.put(Attr.getName(), true);
-                }
-            FieldsVisib.put(Attr.getName(), true); // to enable when changing doctype
+            if (Attr.getType()==Attribute.tTHES)
+                Fields.append(GenThesVals(Req, LocalSess, DT, Attr)); 
+            else if (Attr.getType()==Attribute.tBOOLEAN)
+                Fields.append(GenBoolVals(Req, DT, Attr)); 
+            else
+                Fields.append("<tr id=\"").append(DT+"_"+Attr.getName()).append("\"><td><div class=\"OPACLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td class=\"TD_OPACINP\"><input class=\"OPACINP\" type=\"text\" name=\"").append(DT+"_"+Attr.getName()).append("\"><span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
+            FieldsIncForm.put(DT+"_"+Attr.getName(), true);
+            FieldsVisib.add(DT+"_"+Attr.getName()); // to enable when changing doctype
             }
         }
     DTVals.append("<option value=\"").append(Def.getName()).append("\">").append(Def.getDescription()).append("</option>");
-    for (Map.Entry<String, Boolean> FieldVis : FieldsVisib.entrySet())
-        {
-        SwitchDT.append("document.getElementById(\"").append(FieldVis.getKey()).append("\").style.visibility=\"").append(FieldVis.getValue()?"visible":"collapse").append("\";\n");
-        }
     } catch (Exception Ex)
         {        
         }
-    SwitchDT.append("break;\n");
     }
+//for (String NextField : FieldsVisib)
+for (Iterator<String> iterator = FieldsVisib.iterator(); iterator.hasNext();)
+    {
+    String NextField = iterator.next();
+    FieldsArray.append("\"").append(NextField).append("\"");
+    if (iterator.hasNext())
+        FieldsArray.append(",");
+    }
+FieldsArray.append("];");
 HtmlFinal=HtmlFinal.replace("@DTVALS@", DTVals);
 HtmlFinal=HtmlFinal.replace("@OPACFIELDS@", Fields);
-HtmlFinal=HtmlFinal.replace("@SWITCH@", SwitchDT);
+HtmlFinal=HtmlFinal.replace("@LISTFIELDS@", FieldsArray);
 OPACs.put(IdOPAC, HtmlFinal);
 LastCacheUpdate=new Date();
 return(HtmlFinal);
@@ -329,19 +331,19 @@ ProdocFW.freeSesion("PD", sessOPD);
 return P;
 }
 //-----------------------------------------------------------------------------------------------
-private static StringBuilder GenBoolVals(HttpServletRequest Req, Attribute Attr)
+private static StringBuilder GenBoolVals(HttpServletRequest Req, String DT, Attribute Attr)
 {
 StringBuilder SB=new StringBuilder(2000);
-SB.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"OPACLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td class=\"TD_OPACINP\"><select class=\"OPACFORMATTHES\" name=\"").append(Attr.getName()).append("\">").append("<option value=\"\" selected></option><option value=\"1\">true</option></option><option value=\"0\">false</option>").append("</select><span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
+SB.append("<tr id=\"").append(DT+"_"+Attr.getName()).append("\"><td><div class=\"OPACLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td class=\"TD_OPACINP\"><select class=\"OPACFORMATTHES\" name=\"").append(DT+"_"+Attr.getName()).append("\">").append("<option value=\"\" selected></option><option value=\"1\">true</option></option><option value=\"0\">false</option>").append("</select><span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
 return(SB);
 }
 //-----------------------------------------------------------------------------------------------
-private static StringBuilder GenThesVals(HttpServletRequest Req, DriverGeneric LocalSess, Attribute Attr) throws PDException
+private static StringBuilder GenThesVals(HttpServletRequest Req, DriverGeneric LocalSess, String DT, Attribute Attr) throws PDException
 {
 StringBuilder SB=new StringBuilder(2000);
 StringBuilder Ops=new StringBuilder(2000);
 CalcOps(Ops, String.valueOf(Attr.getLongStr()), LocalSess, 0);
-SB.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"OPACLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td class=\"TD_OPACINP\"><select class=\"OPACFORMATTHES\" name=\"").append(Attr.getName()).append("\">").append(Ops).append("</select><span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
+SB.append("<tr id=\"").append(DT+"_"+Attr.getName()).append("\"><td><div class=\"OPACLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td class=\"TD_OPACINP\"><select class=\"OPACFORMATTHES\" name=\"").append(DT+"_"+Attr.getName()).append("\">").append(Ops).append("</select><span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
 return(SB);
 }
 //-----------------------------------------------------------------------------------------------
