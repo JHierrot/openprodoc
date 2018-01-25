@@ -201,7 +201,7 @@ if (ConfOPAC.getDTLabel()!=null) // "Select DocType"
     HtmlFinal=HtmlFinal.replace("@DTLABEL@", ConfOPAC.getDTLabel());
 else
     HtmlFinal=HtmlFinal.replace("@DTLABEL@", "DocTipes");
-if (ConfOPAC.getDTLabel()!=null) // "Intro search words"
+if (ConfOPAC.getFTLabel()!=null) // "Intro search words"
     HtmlFinal=HtmlFinal.replace("@FTLABEL@", ConfOPAC.getFTLabel());
 else
     HtmlFinal=HtmlFinal.replace("@FTLABEL@", "Intro search words");

@@ -93,7 +93,7 @@ while (Attr!=null)
         Attr=Rec.nextAttr();
         continue;
         }
-    String Val=Req.getParameter(Attr.getName());
+    String Val=Req.getParameter(CurrType+"_"+Attr.getName());
     if (Val == null || Val.length()==0)
         {
         Attr=Rec.nextAttr();
