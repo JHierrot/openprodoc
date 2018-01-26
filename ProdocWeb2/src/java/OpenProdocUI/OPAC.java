@@ -39,6 +39,7 @@ import prodoc.DriverGeneric;
 import prodoc.ExtConf;
 import prodoc.PDDocs;
 import prodoc.PDException;
+import prodoc.PDFolders;
 import prodoc.PDLog;
 import prodoc.PDObjDefs;
 import prodoc.PDReport;
@@ -255,8 +256,8 @@ for (int NDT = 0; NDT < DocTipesList.size(); NDT++)
     try {
     PDObjDefs  Def=new PDObjDefs(LocalSess);
     Def.Load(DT);  
-    PDDocs  Doc=new PDDocs(LocalSess, DT);
-    Record AttrDef = Doc.getRecSum();
+    PDFolders  Fold=new PDFolders(LocalSess, DT);
+    Record AttrDef = Fold.getRecSum();
     AttrDef.initList();
     for (int NAT = 0; NAT < AttrDef.NumAttr(); NAT++)
         {
