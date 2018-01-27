@@ -256,8 +256,8 @@ for (int NDT = 0; NDT < DocTipesList.size(); NDT++)
     try {
     PDObjDefs  Def=new PDObjDefs(LocalSess);
     Def.Load(DT);  
-    PDFolders  Fold=new PDFolders(LocalSess, DT);
-    Record AttrDef = Fold.getRecSum();
+    PDDocs  Doc=new PDDocs(LocalSess, DT);
+    Record AttrDef = Doc.getRecSum();
     AttrDef.initList();
     for (int NAT = 0; NAT < AttrDef.NumAttr(); NAT++)
         {
