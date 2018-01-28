@@ -72,10 +72,11 @@ for (Iterator iterator = listThes.iterator(); iterator.hasNext();)
     if (!Id.equals(PDThesaur.ROOTTERM))
         {
         Thes.Load(Id);
-        SB.append("{text: \"").append(Thes.getName()).append("\", value: \"").append(Id).append("\"},");    
+        SB.append("{text: \"").append(Thes.getName()).append("\", value: \"").append(Id).append("\"}");    
+        if (iterator.hasNext())
+            SB.append(",");
         }
     }
-SB.deleteCharAt(SB.length()-1);
 SB.append("]},");
 SB.append("{type: \"checkbox\", name: \"Req\", label: \"").append(TT(Req, "Required")).append("\",").append(ReadOnly?"readonly:1,":"").append("},");
 SB.append("{type: \"checkbox\", name: \"UniKey\", label: \"").append(TT(Req, "Unique_value")).append("\",").append(ReadOnly?"readonly:1,":"").append("},");

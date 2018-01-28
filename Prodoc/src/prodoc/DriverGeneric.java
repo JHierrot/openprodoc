@@ -623,9 +623,9 @@ public void Update(boolean UpMetadataInc, Vector Trace)  throws PDException
 {
 PDServer Serv=new PDServer(this);
 Serv.Load("Prodoc");
-if (Serv.getVersion().equalsIgnoreCase("2.0"))
+if (Serv.getVersion().equalsIgnoreCase("2.1"))
     {
-    Trace.add("NO Update possible. Already 2.0 version");    
+    Trace.add("NO Update possible. Already 2.1 version");    
     return;
     }
 Trace.add("Update started");    
@@ -1069,6 +1069,27 @@ if (Serv.getVersion().equalsIgnoreCase("1.2") || Serv.getVersion().equalsIgnoreC
             Trace.add(pDException.getLocalizedMessage());            
         }
     Trace.add("Updated to 2.0");    
+    }
+Serv.Load("Prodoc");
+if (Serv.getVersion().equalsIgnoreCase("2.0") )
+    {
+        // -- Updating Repository version -----    
+    try {
+    Record RecServ=new Record();    
+    Attribute RV=Serv.getRecord().getAttr(PDServer.fVERSION).Copy();
+    RV.setValue("2.1");
+    RecServ.addAttr(RV);
+    Conditions ServDef=new Conditions();
+    ServDef.addCondition(new Condition(PDServer.fNAME, Condition.cEQUAL, "Prodoc"));
+    UpdateRecord(Serv.getTabName(), RecServ, ServDef);    
+    } catch (PDException pDException)
+        {
+        if (!UpMetadataInc)
+            throw pDException;
+        else
+            Trace.add(pDException.getLocalizedMessage());            
+        }
+    Trace.add("Updated to 2.1");    
     }
 Trace.add("Update finished");
 }
