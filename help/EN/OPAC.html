@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Public Access Catalog</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="shortcut icon" href="img/OpenProdoc.ico" type="image/x-icon"/> 
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+<H4>Public Access Catalog</H4><hr>
+<p>The OpenProdoc Public Access Catalog (sometimes refered in this documentation with the traditional term <a href="https://en.wikipedia.org/wiki/Online_public_access_catalog" target="_blank">OPAC</a> ), 
+    allows people external to the company institution to look for in an easy way the documents (or folders) stored in OpenProdoc without the need of an user. 
+   Public Access Catalog allows to select the document (or folder) type to search for, to key in the search criteria and select the format to list the results.</p>
+<p>The use of the OPAC requires to adjust parameters for and easy use and also for adding security,because we are allowing access to unkown people that could access to confidential documentation or damage something by error or intentionally. 
+    The parameters are defined by means of a properties file with the elements defined in the next list. At the end of the page it's include an example (The lines starting by # are comments and are ignored, as the blank lines) :</p>
+<p>With the "OPAC" functionality it's possible to create forms as:</p>
+<p style="text-align:center;"><img alt="OPAC Example" src="img/OPAC1.png"/></p>
+<p style="text-align:center;"><img alt="OPAC Example2" src="img/OPACExample.png"/></p>
+<p>This file follows the standard format of the properties files (label/element+"="+Value), with comments ( the lines starting wiith the character '#'). The meaning of each entry (that can't be repeated) is:</p>
+<ul>
+    <li><b>DocTipesList : </b> Names of the Document types by which the user is allowed to search. 
+        It must be noted that if the param <b>Inheritance</b> is enabled ( equal to 1), automatically all the subtipes of any of the selected document types will be included in the search.
+    For searching folder (using Url OPACf), you must include folders types.</li>
+    <li><b>FieldsToInclude : </b> Names (Internal names not the user names) of the metadata/fields (of any type included in the previous list) by which the user is allowed to search. 
+        In the form will be showed (and searched for) the subset of the listed metadata of the type selected. 
+        That is each time you select a  type, the form will be updated showing the subset of fields of the type included in the list.
+        This list has no relation with the fields shown in the results form, that depend on the reports selected in <b>ResultForm</b>.</li>
+    <li><b>FieldsComp : </b> Search / compare operators for each metadata. By default it is equality (EQ) ie it searches for all documents (or folders) whose value of that metadata is equal to the one entered.
+         The possible values are 2 letter characters: = EQ, <> NE,> GT,> = GE,  < LT, <= LE, Contains CT.
+         Different values can be assigned such that for example a date-type metadata is searched for values greater than that entered using GE.
+         The CT operator allows you to search for metadata that CONTAINS the entered value, which facilitates the search but slows it down and can generate too many results.</li>
+    <li><b>BaseFolder : </b> Folder tree below which searches will be performed. The rest of the documents stored outside that tree will not be returned.</li>
+    <li><b>Inheritance : </b> If this parameter is enabled (1) the search will include all subtypes of documents of the selected document type. If it is disabled, it will only include the selected type. This option does NOT affect performance, so the criteria for using it is purely functional.</li>
+    <li><b>ResultForm : </b> Identifier codes (PDId) of documents of type <a href="Reports.html"> Reports (PD_REPORTS) </a> that will be used to present the results. At least 1 must be included.</li>
+    <li><b>MaxResults : </b> Maximum number of results to be returned (0 = "no limit", actually 1 million).</li>
+    <li><b>FormSearchCSS : </b> Identifier code (PDId) of the CSS file to be used for the query form. The predefined styles on the page are detailed in <a href="OPAC_CSS.html">OPAC CSS Styles</a> </li>
+    <li><b>FormSearchLogo : </b> URL of the logo to be presented in the query form. It can be external (eg: "http://intranet.empres.com/img/Logo.jpg") or internal (eg "SendDoc?Id = 44345543-757656") using as the value of the Id parameter, the unique code PDId of an image in OpenProdoc. It should be verified that this document is visible to all users.</li>
+    <li><b>User : </b> User with which the OpenProdoc queries will be performed. It should be checked that this user has access to the documents but no permissions of another type, since the Query Point makes a real connection that could allow you to perform operations.
+         The recommendation is to create a specific user to query and assign a <a href="MantRoles.html">Role</a> without any permission (with which he can only search)</li>
+    <li><b>Pass : </b> Password (clear) of the query user.</li>
+    <li><b>Title : </b> Header of the search form.</li>
+    <li><b>DTLabel : </b> Label of the drop-down list of document types(or folder types) on which the search can be performed.</li>
+    <li><b>FTLabel : </b> label of the full text search field for documents. (Only for searching documents)</li>
+    <li><b>FormatLabel : </b> Label of the results Reports drop-down list (defined in the <b>ResultForm</b> parameter)</li>
+    <li><b>HelpForDocType : </b> Text of the pop-up help that will be displayed when you are in the document (or folder) type selection combo box. Can contain html control characters.</li>
+    <li><b>HelpForFullText : </b> Text of the pop-up help in the field of full text search of the documents. Can contain html control characters.(Only for searching documents)</li>
+    <li><b>HelpForFormatType : </b> Text of the pop-up help that will be displayed when you are in the reports format selection combo box. Can contain html control characters.</li>
+    <li><b>UrlHelp : </b> Url of the personalized help page for the OPAC that will be presented to the users by clicking the help button.</li>
+</ul>
+<p>The process of parameterizing the OPAC is to create a text file with the indicated parameters (you can use as base the included example and modify it), entering the appropriate values to the installation of OpenProdoc.</p>
+<p>It's necessary to modify the configuration file (Prodoc.properties or the name used) and add two lines:</p>
+<p>User=<I>User1</i></p>
+<p>Pass=<I>PassUsr1</I></p>
+<p>Where <I>User1</i> y <I>PassUsr1</I> would be the data of a user with access to the configuration documents (OPAC y OPAC_CS) described in the next point.
+It's recommended that the user used had a limited rol and a mimimum of permissions, becaue it's only needed read access to the configuration files.
+<b>As any other change in the configuration file (Prodoc.properties), dthe server MUST be restarted so it can read the new configuration.</b></p>
+
+<p>Next, you must create (or modify the included example) the CSS to adapt it to the style of the corresponding institution or company. Then add the CSS to the OpenProdoc repository and note the generated PdId.
+     That PdId is the one that should be referenced as parameter <b> FormSearchCSS </b> in the OPAC configuration file. You should then upload that query configuration file.</p>
+<p>With the generated ID, the OpenProdoc url (eg <i>http://localhost:8080/ProdocWeb2/OPAC?Id=</i> + the new document ID uploaded, for example <i>http://localhost:8080/ProdocWeb2/OPAC?Id=566b6464a654-9696e68d686</i>)</p>
+<p>For searching folders use the OpenProdoc url (eg <i>http://localhost:8080/ProdocWeb2/OPACf?Id=</i> + the new document ID uploaded, for example <i>http://localhost:8080/ProdocWeb2/OPACf?Id=566b6464a654-9696e68d686</i>)</p>
+<p>OpenProdoc will present a page according to the parameters defined in that file, including style sheet, literals, document types, etc.
+     In that page the users, without entering access data (user / password), can choose one of the document types they want to search for, enter words from the content or known metadata, choose the format of the results and search.
+When the search button is clicked, Openprodoc will connect using the user indicated in the parameterization, will search according to the included criteria and return the results in the chosen format.
+The format can be html to present with a more aesthetic format, txt or csv for an automatic treatment, or xml to be able to interchange or to process.</p>
+<p>Since all appearance is parametrizable, including typologies of documents, metadata, etc., and is aimed at sporadic users, it is reasonable to assume that a personalized help is needed.
+   For that you have a button that will open the html page whose url is indicated in a configuration. It could be an external page or an html document stored in OpenProdoc.</p>
+<p>It should be noted that the configuration file, like any Openprodoc document can be edited and versioned, always being used to compose the OPAC the last published version.
+     However the upgrade may take some time, because to improve performance the configuration is not updated immediately.</p>
+<p>Since the parameterization is based on one Openprodoc document and the style in another, it is possible to have several parameterizations simultaneously, presenting different document sets, different interface language, different style or different query user.
+Providing each group of users with the appropriate url (which will only differ in the Document Identifier) many different OPACSs can be simultaneously offered with very little effort.</p>
+<p><b>OPAC Configuration File Example:</b></p>
+<em>
+#############################################<br>
+####&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+OPAC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;####<br>
+#############################################<br>
+# Names of the types of documents a user could search for<br>
+DocTipesList=Article|ECM_Standards|InternetProfile|MusicRecords|Picture<br>
+# Metadata/Fields (of any of the document types) internal names that a user can search for<br>
+FieldsToInclude=Author|Authors|Keywords|Player|Title|Country|CreativeCommons<br>
+# Search / comparison operators. 1 for each metadata. Default is EQ equality<br>
+# Possible values  = EQ, <> NE, > GT, >= GE, < LT, <= LE, Contains CT<br>
+FieldsComp=EQ|EQ|EQ|EQ|CT|EQ|EQ<br>
+# Folder below which searches will be performed<br>
+BaseFolder=/Examples - Ejemplos<br>
+# Search Extended to subtypes of selected document types<br>
+Inheritance=1<br>
+# Identification codes (PDId) of documents of type PD_REPORTS that will be used to display the results. Must be at least 1.<br>
+ResultForm=150c9be080c-3fe46f69eb1b2cb7|150c9be8462-3fd76612bb72fece|15dc854acbf-3fedc1977572a008<br>
+# Maximum number of results to be returned. (0 = unlimited)<br>
+MaxResults=0<br>
+# Code identifier (PDId) of the style sheet (CSS) to be used for the OPAC<br>
+FormSearchCSS=15db73b6628-3fee99cd40e27fee<br>
+# Url (internal or external) of the image used as logo<br>
+FormSearchLogo=img/LogoProdoc.jpg<br>
+# User with whom the query will be made<br>
+User=Invitado<br>
+# Login password of the user with whom the query will be made<br>
+Pass=PassInvit<br>
+# Search Form Header<br>
+Title=OpenProdoc OPAC Example<br>
+# Label of the drop-down list of document types to search<br>
+DTLabel=Select document type for search<br>
+# Full text search field label for documents.<br>
+FTLabel=Key in some words for search documents<br>
+# Label from the drop-down list of output formats.<br>
+FormatLabel=Select results format<br>
+# Text of the pop-up help that will be displayed when you are in the document type selection combo box. Can contain html control characters.<br> 
+HelpForDocType=List of document types you can look for<br>
+# Text of the pop-up help that will be displayed when you are in the fulltext search field. Can contain html control characters.<br>  
+HelpForFullText=Help FullText&lt;br>Please, wriet any word(s) that you now are included in the docuemnts you are lookin for.<br>
+# Text of the pop-up help that will be displayed when you are in the report type selection combo box. Can contain html control characters.<br>  
+HelpForFormatType=Select the tormat you want to receive the results of the search.<br>
+# Url pf the complete help page for the configured OPAC<br>
+UrlHelp=help/EN/HelpIndex.html <br>   
+</em>
+<hr>
+<a href="HelpIndex.html">OpenProdoc Help Index</a>
+    </body>
+</html>

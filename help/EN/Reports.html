@@ -12,6 +12,7 @@
 <H4>Reports OpenProdoc</H4><hr>
 <H5>1- Introduction</H5>
 <p>The "Reports" function is developed for showing or exporting metadata from documents and folders in the desired format. The reports cover both functions because depending on the report file is possible to generate an html document formatted for good visibility or documents in CSV or XML format for exporting to other systems.</p>
+<p>With the "Reports" function it's possible to obtain pages as:</p><p><img style="border:2px solid grey" alt="Report Example" src="img/Resultados2-1.png"/></p>
 <p>The operation is as follows:</p>
 <ul> 
 <li>A template document whose usual format is text (HTML, XML, CSV, TXT) must be created. "Reports" generated have the same extension / mime type that the document template. That is a template with html extension will generate HTML documents that must meet that standard in their internal structure.</li>
@@ -24,7 +25,7 @@
 <li>the records/objects in the list</li>
 <li>and, for each object, a loop for all the metadata.</li>
 <li>and, for each metadata, a loop for all the values.</li>
-</ul></ul></li></li>
+</ul></ul></li>
 <li>Templates are not specific to a document or folder type and can be applied to various types. Depending on the use of specific metadata, or the use of a loop for all metadata, the report may be applied to a document type, a type and all its subtypes or is valid for all types of objects (including both folders and documents).</li>
 <li>Once created the template, it must be stored in OpenProdoc, preferably in the "/ System" folder (where already some examples are included) as PD_REPORT document type.</li>
 <li>This document type includes 2 additional metadata, the "number of documents per page" and the "number of pages per file." The reporting function will write the "report header" (content elements between the beginning of the document and the start of the loop of records), then repeat loop region record as many times as "documents per page" are defined, then write the report footer (content elements between the end of the loop of records and the end of the document) and then return to start another "page" with the same procedure. When you have write "number of pages per file", the file will be closed and a new one will be created, and so on until you have write all records from the list. Some examples are included at the end of this page.</li>
