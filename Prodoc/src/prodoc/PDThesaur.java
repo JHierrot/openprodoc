@@ -563,7 +563,7 @@ StringBuilder genId = new StringBuilder(29); // so it can be possible to add _XX
 genId.append(Long.toHexString(System.currentTimeMillis()));
 genId.append("-");
 genId.append(Long.toHexString(Double.doubleToLongBits(Math.random())));
-return genId.toString();
+return genId.toString().substring(0,25); // less chars - more levels for language
 }
 //-------------------------------------------------------------------------
 /**
@@ -2148,7 +2148,8 @@ for (int NumNod=0; NumNod<SubConceptObjectList.getLength(); NumNod++)
     else if (SkosObjectSub.getNodeName().equalsIgnoreCase(PDThesaur.SKOS_ALTLABEL))
         {
         String SourceId=SkosObjectSub.getTextContent();    
-        PDThesaur UseTerm=ObtainTerm(SourceId, RetainCodes);     
+        // PDThesaur UseTerm=ObtainTerm(SourceId, RetainCodes);     
+        PDThesaur UseTerm=ObtainTerm(SourceId, false); // ALTLABEL has no code    
         UseTerm.setName(SkosObjectSub.getTextContent());    
         Node Res=SkosObjectSub.getAttributes().getNamedItem(PDThesaur.XML_LANG);    
         if (Res!=null)  
