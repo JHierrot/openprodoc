@@ -658,6 +658,9 @@ if (PDLog.isInfo())
 boolean InTransLocal;
 Load(getPDId());
 VerifyAllowedDel();
+HashSet listUF = getListUF(getPDId());
+if (!listUF.isEmpty())
+    PDExceptionFunc.GenPDException("Term_USED_FOR", listUF.toString()); 
 InTransLocal=!getDrv().isInTransaction();
 if (InTransLocal)
     getDrv().IniciarTrans();
@@ -1218,7 +1221,9 @@ HashSet ListUF=new HashSet();
 Conditions Conds=new Conditions();
 Conds.addCondition(new Condition(fUSE, Condition.cEQUAL, TermId));
 Query Q=new Query(getTabName(), getRecordStructPDThesaur(), Conds, fNAME);
-Cursor CursorId=getDrv().OpenCursor(Q);
+Cursor CursorId=null;
+try {
+CursorId=getDrv().OpenCursor(Q);
 Record Res=getDrv().NextRec(CursorId);
 while (Res!=null)
     {
@@ -1226,25 +1231,24 @@ while (Res!=null)
     ListUF.add(PD1);
     Res=getDrv().NextRec(CursorId);
     }
-getDrv().CloseCursor(CursorId);
+} 
+finally
+    {
+    if (CursorId!=null)    
+        getDrv().CloseCursor(CursorId);
+    }
 if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.getListUF<:"+TermId);
 return(ListUF);
 }
 //---------------------------------------------------------------------
-/* Obtain a CURSOR  of the records of Used For terms
- * 
+/**
+ *
  * @param TermId
  * @return
  * @throws PDException
  */
-    /**
-     *
-     * @param TermId
-     * @return
-     * @throws PDException
-     */
-    public Cursor ListUF(String TermId) throws PDException
+public Cursor ListUF(String TermId) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.ListUF>:"+PDId);
@@ -1301,13 +1305,11 @@ return(ListAtr);
 //---------------------------------------------------------------------
 /* For the current PDID of a term, return the Id of the container thesaur.
  * 
+ *
+ * @return
+ * @throws PDException
  */
-    /**
-     *
-     * @return
-     * @throws PDException
-     */
-    public String getIDThesaur() throws PDException
+public String getIDThesaur() throws PDException
 {
 if (getParentId().equals(PDThesaur.ROOTTERM))
     return(getPDId());

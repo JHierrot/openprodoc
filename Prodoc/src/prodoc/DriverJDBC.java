@@ -712,6 +712,8 @@ public void CloseCursor(Cursor CursorIdent) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("DriverJDBC.CloseCursor:"+CursorIdent);
+if (CursorIdent==null)
+    return;
 ResultSet rs=(ResultSet)CursorIdent.getResultSet();
 try {
 rs.close();
