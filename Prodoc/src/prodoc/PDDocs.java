@@ -2562,6 +2562,7 @@ if (FolderPath.charAt(FolderPath.length()-1)!=File.separatorChar)
     FolderPath+=File.separatorChar; 
 NodeList childNodes = OPDObject.getChildNodes();
 PDDocs NewDoc=null;
+PDObjDefs DefDoc=new PDObjDefs(getDrv());
 for (int i = 0; i < childNodes.getLength(); i++)
     {
     Node item = childNodes.item(i);
@@ -2569,10 +2570,12 @@ for (int i = 0; i < childNodes.getLength(); i++)
         {
         Record r=Record.FillFromXML(item, getRecord());
         String DocTypReaded=(String)r.getAttr(PDDocs.fDOCTYPE).getValue();
+        if (DefDoc.Load(DocTypReaded)==null)
+           throw new PDException("Unknown_DocType"+":"+DocTypReaded);  
         NewDoc=new PDDocs(getDrv(), DocTypReaded); // to be improved to analize the type BEFORE
         r=Record.FillFromXML(item, NewDoc.getRecSum());
         NewDoc.assignValues(r);
-         if (!MaintainId)
+        if (!MaintainId)
             NewDoc.setPDId(null);
         NewDoc.setParentId(DestFold);
         PDRepository Rep=new PDRepository(getDrv());

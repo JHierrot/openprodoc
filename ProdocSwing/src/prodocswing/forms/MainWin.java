@@ -2291,7 +2291,7 @@ return(Tmp);
  */
 static public String getVersion()
 {
-return("2.1");  
+return("2.1.1");  
 }
 //---------------------------------------------------------------------
 
@@ -2367,7 +2367,12 @@ if (Strict || (!Strict && !FoldExist))
     {
     if (IncludeMetadata)   
         {
+        try{    
         NewFold=NewFold.ProcessXML(new File(OriginPath+".opd"), FoldAct.getPDId()); 
+        } catch (PDException ex)
+            {
+            throw new PDException(ex.getLocalizedMessage()+"->"+OriginPath+".opd");    
+            }
         }   
     else
         {

@@ -1440,6 +1440,7 @@ public PDFolders ImportXMLNode(Node OPDObject, String ParentFolderId, boolean Ma
 {
 NodeList childNodes = OPDObject.getChildNodes();
 PDFolders NewFold=null;
+PDObjDefs DefDoc=new PDObjDefs(getDrv());
 for (int i = 0; i < childNodes.getLength(); i++)
     {
     Node item = childNodes.item(i);
@@ -1447,6 +1448,8 @@ for (int i = 0; i < childNodes.getLength(); i++)
         {
         Record r=Record.FillFromXML(item, getRecord());
         String FoldTypReaded=(String)r.getAttr(PDFolders.fFOLDTYPE).getValue();
+        if (DefDoc.Load(FoldTypReaded)==null)
+           throw new PDException("Unknown_FoldType"+":"+FoldTypReaded);          
         NewFold=new PDFolders(getDrv(), FoldTypReaded); // to be improved to analize the type BEFORE
         r=Record.FillFromXML(item, NewFold.getRecSum());
         NewFold.assignValues(r);
