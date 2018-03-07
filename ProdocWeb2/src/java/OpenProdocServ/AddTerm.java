@@ -92,7 +92,7 @@ else
         TmpTerm.AddLang(HListLang);
         }
     PDSession.CerrarTrans();
-    out.println("OK"+TmpTerm.getPDId());
+    out.print("OK"+TmpTerm.getPDId());
     }
 } catch (Exception ex)
     {
