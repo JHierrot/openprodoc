@@ -38,7 +38,7 @@ public class StoreRefURL extends StoreGeneric
  * @param pPassword
  * @param pParam
  */
-protected StoreRefURL(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt)
+protected StoreRefURL(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt) throws PDExceptionFunc
 {
 super(pServer, pUser, pPassword, pParam, pEncrypt);
 }

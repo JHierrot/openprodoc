@@ -26,7 +26,6 @@ import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 
 /**
@@ -49,7 +48,7 @@ AmazonS3 s3 = null;
  * @param pPassword
  * @param pParam
  */
-protected StoreAmazonS3(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt)
+protected StoreAmazonS3(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt) throws PDExceptionFunc
 {
 super(pServer, pUser, pPassword, pParam, pEncrypt);
 BucketName=pServer;

@@ -38,7 +38,7 @@ public class StoreRefFS extends StoreGeneric
  * @param pPassword
  * @param pParam
  */
-protected StoreRefFS(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt)
+protected StoreRefFS(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt) throws PDExceptionFunc
 {
 super(pServer, pUser, pPassword, pParam, pEncrypt);
 }

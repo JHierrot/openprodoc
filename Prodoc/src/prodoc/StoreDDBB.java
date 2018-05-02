@@ -20,7 +20,6 @@
 package prodoc;
 
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -62,7 +61,7 @@ private String Driver=null;
  * @param pPassword
  * @param pParam
  */
-protected StoreDDBB(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt)
+protected StoreDDBB(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt) throws PDExceptionFunc
 {
 super(pServer, pUser, pPassword, pParam, pEncrypt);
 StringTokenizer st = new StringTokenizer(pParam, ";");    

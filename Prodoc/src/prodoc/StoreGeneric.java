@@ -72,13 +72,15 @@ protected byte Buffer[]=new byte[TAMBUFF];
  * @param pPassword
  * @param pParam
  */
-StoreGeneric(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt)
+StoreGeneric(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt) throws PDExceptionFunc
 {
 Server=pServer;
 User=pUser;
 Password=pPassword;
 Param=pParam;
 Encrypt=pEncrypt;
+if (Encrypt && (Param==null || Param.length()==0) )
+    PDExceptionFunc.GenPDException("Encript_Pass_Required_as_Param", Server);
 }
 //-------------------------------------------------------------------------
 /**

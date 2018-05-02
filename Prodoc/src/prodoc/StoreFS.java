@@ -23,10 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import org.apache.commons.codec.binary.Base64InputStream;
 
 /**
  *
@@ -42,7 +39,7 @@ public class StoreFS extends StoreGeneric
  * @param pPassword
  * @param pParam
  */
-protected StoreFS(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt)
+protected StoreFS(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt) throws PDExceptionFunc
 {
 super(pServer, pUser, pPassword, pParam, pEncrypt);
 if (!getServer().substring(getServer().length()-2).equals(getSeparator()) )

@@ -21,7 +21,6 @@ package prodoc;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 
@@ -43,7 +42,7 @@ FTPClient ftpCon = new FTPClient();
  * @param pPassword
  * @param pParam
  */
-protected Storeftp(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt)
+protected Storeftp(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt) throws PDExceptionFunc
 {
 super(pServer, pUser, pPassword, pParam, pEncrypt);
 }

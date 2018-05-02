@@ -2927,7 +2927,10 @@ Rep1.Load(getReposit());
 if (!Rep1.IsRef())
     {
     Rep.Connect();
-    Is=Rep.Retrieve(getPDId(), getVersion());
+    // Is=Rep.Retrieve(getPDId(), getVersion());
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    Rep.Retrieve(getPDId(), getVersion(), baos);
+    Is=new ByteArrayInputStream(baos.toByteArray());
     FTConn.Insert(getDocType(), getPDId(), Is, getRecSum());
     Is.close();
     Rep.Disconnect();
@@ -2971,7 +2974,10 @@ if (!Rep1.IsRef())
 //if (!Rep.IsURL())
     {
     Rep.Connect();
-    Is=Rep.Retrieve(getPDId(), getVersion());
+    // Is=Rep.Retrieve(getPDId(), getVersion());
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    Rep.Retrieve(getPDId(), getVersion(), baos);
+    Is=new ByteArrayInputStream(baos.toByteArray());
     FTConn.Update(getDocType(), getPDId(), Is, getRecSum());
     Is.close();
     Rep.Disconnect();

@@ -21,12 +21,10 @@ package prodoc;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
-import org.apache.commons.codec.binary.Base64InputStream;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -65,7 +63,7 @@ final static String NEWLINE="\r\n";
  * @param pPassword
  * @param pParam
  */
-protected StoreRem(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt, HttpPost pUrlPost, CloseableHttpClient phttpclient, HttpContext pcontext, DocumentBuilder pDB)
+protected StoreRem(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt, HttpPost pUrlPost, CloseableHttpClient phttpclient, HttpContext pcontext, DocumentBuilder pDB) throws PDExceptionFunc
 {
 super(pServer, pUser, pPassword, pParam, pEncrypt);
 context=pcontext;
