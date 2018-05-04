@@ -164,7 +164,15 @@ else
 //-----------------------------------------------------------------------------------------------
 static synchronized private String GenHtml(HttpServletRequest Req, ExtConf ConfOPAC, DriverGeneric LocalSess, String IdOPAC) throws Exception
 {
-String HtmlFinal=HtmlBase;   
+String HtmlFinal;   
+String Agent=Req.getHeader("User-Agent");
+String DimHtml=ConfOPAC.SolveHtml(Agent);
+if (DimHtml!=null) 
+    {
+    HtmlFinal=OPAC.getHtml(LocalSess, DimHtml);
+    }
+else
+    HtmlFinal=HtmlBase;
 if (ConfOPAC.getFormSearchCSS()!=null)
     {
     if (ConfOPAC.getFormSearchCSS().startsWith("http"))    

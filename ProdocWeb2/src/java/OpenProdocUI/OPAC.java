@@ -39,7 +39,6 @@ import prodoc.DriverGeneric;
 import prodoc.ExtConf;
 import prodoc.PDDocs;
 import prodoc.PDException;
-import prodoc.PDFolders;
 import prodoc.PDLog;
 import prodoc.PDObjDefs;
 import prodoc.PDReport;
@@ -180,7 +179,15 @@ else
 //-----------------------------------------------------------------------------------------------
 static synchronized private String GenHtml(HttpServletRequest Req, ExtConf ConfOPAC, DriverGeneric LocalSess, String IdOPAC) throws Exception
 {
-String HtmlFinal=HtmlBase;   
+String HtmlFinal;   
+String Agent=Req.getHeader("User-Agent");
+String DimHtml=ConfOPAC.SolveHtml(Agent);
+if (DimHtml!=null) 
+    {
+    HtmlFinal=getHtml(LocalSess, DimHtml);
+    }
+else
+    HtmlFinal=HtmlBase;
 if (ConfOPAC.getFormSearchCSS()!=null)
     {
     if (ConfOPAC.getFormSearchCSS().startsWith("http"))    
@@ -306,11 +313,28 @@ DocCSS.setPDId(formSearchCSS);
 ByteArrayOutputStream OutBytes = new ByteArrayOutputStream();
 DocCSS.getStream(OutBytes);
 CSS.append(OutBytes.toString());
-    } catch (Exception Ex)
-        {        
-        }
+} catch (Exception Ex)
+    {    
+    Ex.printStackTrace();
+    }
 CSS.append("</style>\n");
 return(CSS.toString());
+}
+//-----------------------------------------------------------------------------------------------
+protected static String getHtml(DriverGeneric sessOPD, String idHtmlOpac)
+{
+StringBuilder Html=new StringBuilder();
+try {
+PDDocs DocCSS=new PDDocs(sessOPD);
+DocCSS.setPDId(idHtmlOpac);
+ByteArrayOutputStream OutBytes = new ByteArrayOutputStream();
+DocCSS.getStream(OutBytes);
+Html.append(OutBytes.toString());
+} catch (Exception Ex)
+    {   
+    Ex.printStackTrace();
+    }
+return(Html.toString());
 }
 //-----------------------------------------------------------------------------------------------
 private static void CleanCache()

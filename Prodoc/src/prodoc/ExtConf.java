@@ -48,6 +48,9 @@ private String HelpForFullText=null;
 private String HelpForFormatType=null;
 private static final ExtConf DefExtConf=new ExtConf();
 private String UrlHelp=null;
+private int NumHtmlOpac=0;
+private Vector<String[]> ListAgent=null;
+private Vector<String> HtmlAgent=null;
 
 //----------------------------------------------------------------------------    
 static void AssignDefConf(Properties ProdocProperties)
@@ -176,8 +179,42 @@ if (ConfUrlHelp!=null && ConfUrlHelp.trim().length()!=0)
     {
     UrlHelp=ConfUrlHelp.trim();
     }    
+String ConfNumHtmlOpac=ProdocProperties.getProperty("NumHtmlOpac");
+if (ConfNumHtmlOpac!=null && ConfNumHtmlOpac.trim().length()!=0)
+    {
+    NumHtmlOpac=Integer.parseInt(ConfNumHtmlOpac.trim());
+    }    
+ListAgent=new Vector(NumHtmlOpac);
+HtmlAgent=new Vector(NumHtmlOpac);
+for (int NHO = 0; NHO < NumHtmlOpac; NHO++)
+    {
+    String LAgent=ProdocProperties.getProperty("ListAgent"+NHO);
+    if (LAgent!=null && LAgent.trim().length()!=0)
+        {
+        String[] LA = LAgent.trim().toUpperCase().split("\\|");
+        ListAgent.add(LA);
+        }    
+    String HAgent=ProdocProperties.getProperty("HtmlAgent"+NHO);
+    HtmlAgent.add(HAgent);
+    }
 }
-//----------------------------------------------------------------------------    
+//---------------------------------------------------------------------------- 
+public String SolveHtml(String Agent)
+{
+Agent=Agent.toUpperCase();
+for (int NHO = 0; NHO < NumHtmlOpac; NHO++)
+    {
+    String[] LA =ListAgent.get(NHO);    
+    for (int i = 0; i < LA.length; i++)
+        {
+        String Age = LA[i];
+        if (Age.equals("*") || Agent.contains(Age))
+           return(HtmlAgent.get(NHO)); 
+        }
+    }
+return(null);    
+}
+//---------------------------------------------------------------------------- 
 /**
 * @return the DocTipesList
 */
@@ -315,21 +352,30 @@ public String getHelpForFormatType()
 return HelpForFormatType;
 }
 
-    /**
-     * @return the FieldsComp
-     */
-    public Vector<String> getFieldsComp()
-    {
-        return FieldsComp;
-    }
-
-    /**
-     * @return the UrlHelp
-     */
-    public String getUrlHelp()
-    {
-        return UrlHelp;
-    }
+/**
+* @return the FieldsComp
+*/
+public Vector<String> getFieldsComp()
+{
+return FieldsComp;
+}
+//---------------------------------------------------------
+/**
+* @return the UrlHelp
+*/
+public String getUrlHelp()
+{
+return UrlHelp;
+}
+//---------------------------------------------------------
+/**
+* @return the NumHtmlOpac
+*/
+public int getNumHtmlOpac()
+{
+return NumHtmlOpac;
+}
+//---------------------------------------------------------
 }
 
 /***************************
