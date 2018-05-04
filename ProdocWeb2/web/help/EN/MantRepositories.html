@@ -26,7 +26,7 @@
         </ul>
     </li>  
     <li><b>URL or reference to the Repository</b>:The URI or URL that references the repository. For FS will be a path accessible to the computer or computers that use it (Ej.:"D:\\OPD\\Reposit\\": Note the double \\ in Windows. "/opt/OpenProdoc/Rep/"), in the case of database will be a JDBC url, in the case of FTP, name or ip address. For S3, the bucket name.</li>    
-    <li><b>Additional parameters of the Repository (specific for every type)</b>: In the case of databases, the additional parameter is "driver; table_name". The rest does not require parameters.</li>    
+    <li><b>Additional parameters of the Repository (specific for every type)</b>: In the case of databases, the additional parameter is "driver; table_name". For all the kinds of repositories, is the key for encription. For including encription in databases blob, use: "driver;table_name;EncriptionKey"</li>    
     <li><b>Repository User.</b>: User required to connect to remote server, not required for FS. For S3 the "Access Key Id".</li>    
     <li><b>Repository Password</b>: Password required to connect to remote server, not required for FS. For S3 the "Secret Access Key".</li>    
     <li><b>Flag indicating whether the repository is encrypted</b>: If this option is checked, documents will be encrypted when stored and decrypted when recover. This ensures that even if someone has access to documents through the disc, the documents are readable only through OPD. Keep in mind that this process introduces a small overhead and OPD do not use a sophisticated encryption system, so if there are highly confidential documents should be evaluated using additional measures.</li>    
