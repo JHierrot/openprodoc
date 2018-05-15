@@ -71,6 +71,17 @@ The format can be html to present with a more aesthetic format, txt or csv for a
      However the upgrade may take some time, because to improve performance the configuration is not updated immediately.</p>
 <p>Since the parameterization is based on one Openprodoc document and the style in another, it is possible to have several parameterizations simultaneously, presenting different document sets, different interface language, different style or different query user.
 Providing each group of users with the appropriate url (which will only differ in the Document Identifier) many different OPACSs can be simultaneously offered with very little effort.</p>
+<p>If you need to modify the default html template for OPAC more than just using CSS, or to adapt the html to different browsers, it's possible to use different html templates. For using this functionality you must include additional entries in the OPAC confguration file:</p>
+<ul>
+    <li><b>NumHtmlOpac: </b> Number of alternatives HTML for supporting specific needs or formats of browsers or just for using a different template form the internal one. After this parameter, you must include the same numbers defined in <b>NumHtmlOpac</b> of pairs of the next parameters.</li> 
+    <li><b>ListAgent[i]=Text1|Text2|...: </b> You must include as many entris as defined in <b>NumHtmlOpac</b> starting in 0, that is: ListAgent0, ListAgent1, ListAgent2,.. .
+    If the description of "User-Agent" of the browser CONTAINS any of the text "Text1", "Text2",.., then the html template for the OPAC will be a document stored in OpenProdoc with PDID spedified in <b>HtmlAgent[i]</b>. 
+    If the Text is *, then OpenProdoc will not check other values and will return the html specified in HtmlAgent[i] for any browser.</li>
+    <li><b>HtmlAgent[i]=PDID Document: </b> Identifier of the html document to use of template uf the User-Agent contains any of the text specified in <b>ListAgent</b>. 
+        The numbers must be start in 0, that is: HtmlAgent0, HtmlAgent1, HtmlAgent2,...</li>
+</ul>
+<p>If the User-Agent of the browser do nt contains any of the texts of the entries, then OpenProdoc will use the internal html template.</p>
+
 <p><b>OPAC Configuration File Example:</b></p>
 <em>
 #############################################<br>
@@ -116,6 +127,16 @@ HelpForFullText=Help FullText&lt;br>Please, wriet any word(s) that you now are i
 HelpForFormatType=Select the tormat you want to receive the results of the search.<br>
 # Url pf the complete help page for the configured OPAC<br>
 UrlHelp=help/EN/HelpIndex.html <br>   
+#OPTIONAL, it is possible to use additional html templates  for the OPAC as alternatie to the internal one.
+#Number of Htmls alternatives<br>
+NumHtmlOpac=2<br>
+#2 entries for each number of html, starting in 0<br>
+#------- 0 --<br>
+ListAgent0=Edge|Explorer<br>
+HtmlAgent0=1632c1c280b-3fa2b6496a3c3250<br>
+#------- 1 --<br>
+ListAgent1=Firefox<br>
+HtmlAgent1=1632c1dd6a2-3fe55f2e09ab3605<br>
 </em>
 <hr>
 <a href="HelpIndex.html">OpenProdoc Help Index</a>

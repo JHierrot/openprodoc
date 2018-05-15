@@ -298,7 +298,7 @@ FieldsArray.append("];");
 HtmlFinal=HtmlFinal.replace("@DTVALS@", DTVals);
 HtmlFinal=HtmlFinal.replace("@OPACFIELDS@", Fields);
 HtmlFinal=HtmlFinal.replace("@LISTFIELDS@", FieldsArray);
-OPACs.put(IdOPAC, HtmlFinal);
+//OPACs.put(IdOPAC, HtmlFinal);
 LastCacheUpdate=new Date();
 return(HtmlFinal);
 }
