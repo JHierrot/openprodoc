@@ -27,6 +27,7 @@ package prodocswing.forms;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashSet;
@@ -43,6 +44,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import prodoc.Attribute;
+import static prodoc.Attribute.DECIMALPATTERN;
 import prodoc.Condition;
 import prodoc.Conditions;
 import prodoc.Cursor;
@@ -422,6 +424,10 @@ else if (Attr.getType()==Attribute.tINTEGER)
     {
     JTF=new JFormattedTextField(new DecimalFormat());
     }
+else if (Attr.getType()==Attribute.tFLOAT)
+    {
+    JTF=new JFormattedTextField(new DecimalFormat(DECIMALPATTERN));
+    }
 else
      JTF=new JTextField("Error");
 //JTF.setEnabled(true);
@@ -499,6 +505,12 @@ else if (Attr.getType()==Attribute.tINTEGER)
     Long l=(Long)((JFormattedTextField)JTF).getValue();
     if (l!=null)
         Attr.setValue(new Integer(l.intValue()));
+    }
+else if (Attr.getType()==Attribute.tFLOAT)
+    {
+    BigDecimal BD=(BigDecimal)((JFormattedTextField)JTF).getValue();
+    if (BD!=null)
+        Attr.setValue(BD);
     }
 else
     Attr.setValue("Error");

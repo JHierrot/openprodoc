@@ -179,7 +179,7 @@ if (OrderList!=null)
         {
         XOrders+=(String)OrderList.elementAt(i)+StringListSeparator;
         }
-    XOrders="</Ord>";
+    XOrders+="</Ord>";
     }
 else if (Order!=null)
     XOrders="<Ord>"+Order+"</Ord>";

@@ -20,6 +20,8 @@
 
 package prodoc;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,6 +29,7 @@ import java.util.HashSet;
 import java.util.StringTokenizer;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import static prodoc.Attribute.DECIMALPATTERN;
 import static prodoc.Attribute.StringListSeparator;
 
 /**
@@ -114,7 +117,7 @@ private boolean Invert=false;
 
 final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyyMMddHHmmss");
 final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyyMMdd");
-
+final DecimalFormat DF=new DecimalFormat(DECIMALPATTERN);
 
 private int TypeVal=-1;
 //-------------------------------------------------------------------------
@@ -168,6 +171,8 @@ else if (pValue instanceof Date)
     TypeVal=Attribute.tDATE;
 else if (pValue instanceof Integer)
     TypeVal=Attribute.tINTEGER;    
+else if (pValue instanceof BigDecimal)
+    TypeVal=Attribute.tFLOAT;    
 }
 //-------------------------------------------------------------------------
 /**
@@ -291,6 +296,8 @@ switch (cType)
             XML.append(formatterDate.format((Date)Value));
         else if (TypeVal==Attribute.tBOOLEAN)
             XML.append(((Boolean)Value)?"1":"0");
+        else if (TypeVal==Attribute.tFLOAT)
+            XML.append(DF.format((BigDecimal)Value));
         else
             XML.append(Value);
         XML.append("</Val>");
@@ -387,6 +394,13 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
                     }
                 else if (TypeVal==Attribute.tBOOLEAN)
                     List.add(ValS.equals("1"));
+                 else if (TypeVal==Attribute.tFLOAT && ValS.length()!=0)
+                    try {
+                    List.add(new BigDecimal(ValS.replace(',','.').replace("_", "")));
+                    } catch (Exception ex)
+                        {
+                        PDException.GenPDException(ex.getLocalizedMessage(), ValS) ;
+                        }
                 else
                     List.add(new Integer(ValS));
                 }
@@ -410,6 +424,15 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
                 try {
                     Value=formatterDate.parse(Cont);
                 } catch (ParseException ex)
+                    {
+                    PDException.GenPDException(ex.getLocalizedMessage(), Cont) ;
+                    }
+                }
+            else if (TypeVal==Attribute.tFLOAT&& Cont.length()!=0)
+                {
+                try {
+                    Value=new BigDecimal(Cont.replace(',','.').replace("_", ""));
+                } catch (Exception ex)
                     {
                     PDException.GenPDException(ex.getLocalizedMessage(), Cont) ;
                     }

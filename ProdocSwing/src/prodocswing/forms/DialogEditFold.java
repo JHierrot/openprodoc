@@ -26,6 +26,7 @@
 package prodocswing.forms;
 
 import java.awt.Component;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashSet;
@@ -34,6 +35,7 @@ import java.util.TreeSet;
 import java.util.Vector;
 import javax.swing.*;
 import prodoc.*;
+import static prodoc.Attribute.DECIMALPATTERN;
 import prodocswing.ThesField;
 
 /**
@@ -688,9 +690,6 @@ else if (Attr.getType()==Attribute.tTIMESTAMP)
             }
             });
         }        
-//    JTF=new JFormattedTextField(MainWin.getFormatterTS());
-//    if (Attr.getValue()!=null)
-//        ((JFormattedTextField)JTF).setValue((Date)Attr.getValue());
     }
 else if (Attr.getType()==Attribute.tBOOLEAN)
     {
@@ -708,6 +707,14 @@ else if (Attr.getType()==Attribute.tINTEGER)
         ((JFormattedTextField)JTF).setValue((Integer)Attr.getValue());
     else
         ((JFormattedTextField)JTF).setValue((Integer)0);
+    }
+else if (Attr.getType()==Attribute.tFLOAT)
+    {
+    JTF=new JFormattedTextField(new DecimalFormat(DECIMALPATTERN));
+    if (Attr.getValue()!=null)
+        ((JFormattedTextField)JTF).setValue((BigDecimal)Attr.getValue());
+    else
+        ((JFormattedTextField)JTF).setValue(new BigDecimal("00000000000.00"));
     }
 else
      JTF=new JTextField("Error, unimplemented field type");
@@ -808,8 +815,10 @@ else if (Attr.getType()==Attribute.tBOOLEAN)
     }
 else if (Attr.getType()==Attribute.tINTEGER)
     {
-//    Long l=(Long)((JFormattedTextField)JTF).getValue();
-//    Attr.setValue(new Integer(l.intValue()));
+    Attr.setValue(((JFormattedTextField)JTF).getValue());
+    }
+else if (Attr.getType()==Attribute.tFLOAT)
+    {
     Attr.setValue(((JFormattedTextField)JTF).getValue());
     }
 else

@@ -19,16 +19,19 @@
 
 package prodoc;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Vector;
+import static prodoc.Attribute.DECIMALPATTERN;
 
 
 
@@ -56,6 +59,8 @@ final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyyMMddHHmmss");
  */
 //static final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
 final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyyMMdd");
+final DecimalFormat DF=new DecimalFormat(DECIMALPATTERN);
+
 /**
  * Constructor
  * @param pURL Url to DDBB Server
@@ -272,6 +277,8 @@ for (int i = 0; i < NumAttr; i++)
             }
         else if (At.getType()==Attribute.tDATE)
             Vals+=toDate((Date)At.getValue());
+        else if (At.getType()==Attribute.tFLOAT)
+            Vals+=toFloat((BigDecimal)At.getValue());
         else if (At.getType()==Attribute.tTIMESTAMP)
             Vals+=toTimeStamp((Date)At.getValue());
         else if (At.getType()==Attribute.tBOOLEAN)
@@ -340,6 +347,8 @@ for (int i = 0; i < NumAttr; i++)
 
         else if (At.getType()==Attribute.tDATE)
             SQL+=toDate((Date)At.getValue());
+         else if (At.getType()==Attribute.tDATE)
+            SQL+=toFloat((BigDecimal)At.getValue());
         else if (At.getType()==Attribute.tTIMESTAMP)
             SQL+=toTimeStamp((Date)At.getValue());
         else if (At.getType()==Attribute.tBOOLEAN)
@@ -493,6 +502,19 @@ protected String toDate(Date Fec)
 {
 if (Fec!=null)    
     return("'"+ formatterDate.format(Fec)+"'");
+else
+    return("''");
+}
+/**
+ * Formats date for storage
+ * @param Fec
+ * @return
+ */
+//----------------------------------------------
+protected String toFloat(BigDecimal BD)
+{
+if (BD!=null)    
+    return("'"+DF.format(BD)+"'");
 else
     return("''");
 }
@@ -786,7 +808,17 @@ for (int i = 0; i < Fields.NumAttr(); i++)
     else if (Attr.getType()==Attribute.tINTEGER)
         Attr.setValue(rs.getInt(Attr.getName()));
     else if (Attr.getType()==Attribute.tFLOAT)
-        Attr.setValue(rs.getFloat(Attr.getName()));
+            {
+            String BD=rs.getString(Attr.getName());
+            if (BD!=null && BD.length()==8)
+                { try {
+                Attr.setValue(new BigDecimal(BD.replace(',','.').replace("_", "")));
+                } catch (Exception ex)
+                    {Attr.setValue(null);}
+                }
+            else
+                Attr.setValue(null);
+            }
     else if (Attr.getType()==Attribute.tBOOLEAN)
         Attr.setValue(rs.getBoolean(Attr.getName()));
     } catch(Exception ex)
@@ -893,6 +925,8 @@ else if (NewAttr.getType()==Attribute.tTIMESTAMP)
     SQL=" VARCHAR(14) "; //SQL=" CHAR(14) "; SQL+=" TIMESTAMP ";
 else if (NewAttr.getType()==Attribute.tTHES)
     SQL=" VARCHAR(32) ";
+else if (NewAttr.getType()==Attribute.tFLOAT)
+    SQL=" VARCHAR(14) ";  // 
 else 
     SQL=" VARCHAR("+ NewAttr.getLongStr()+") ";
 if (NewAttr.getValue()!=null)
@@ -913,6 +947,8 @@ if (NewAttr.getValue()!=null)
         SQL+=toTimeStamp((Date)NewAttr.getValue());
     else if (NewAttr.getType()==Attribute.tBOOLEAN)
         SQL+=toBooleanString((Boolean)NewAttr.getValue());
+    else if (NewAttr.getType()==Attribute.tFLOAT)
+        SQL+=toFloat((BigDecimal)NewAttr.getValue());
     else
         SQL+=NewAttr.getValue();
     }

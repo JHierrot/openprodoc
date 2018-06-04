@@ -3157,6 +3157,24 @@ FormAttr.attachEvent("onChange", function(name, value, is_checked){
         else
             FormAttr.showItem("ThesSel");
         }
+    else if (name=="Req") 
+        {
+        if (FormAttr.isItemChecked("Req"))
+            FormAttr.uncheckItem("Multi");
+        }
+    else if (name=="UniKey") 
+        {
+        if (FormAttr.isItemChecked("UniKey"))
+            FormAttr.uncheckItem("Multi");
+        }
+    else if (name=="Multi") 
+        {
+        if (FormAttr.isItemChecked("Multi"))
+            {
+            FormAttr.uncheckItem("Req");
+            FormAttr.uncheckItem("UniKey");
+            }
+        }
     }); 
 FormAttr.attachEvent("onButtonClick", function (name)
     {

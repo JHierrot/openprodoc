@@ -72,7 +72,6 @@ initComponents();
         Engine1 = new javax.swing.JLabel();
         Author1 = new javax.swing.JLabel();
         Logo = new javax.swing.JLabel();
-        Author2 = new javax.swing.JLabel();
         Author3 = new javax.swing.JLabel();
         Author4 = new javax.swing.JLabel();
         Author5 = new javax.swing.JLabel();
@@ -135,9 +134,6 @@ initComponents();
 
         Logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/LogoProdoc.jpg"))); // NOI18N
 
-        Author2.setFont(new java.awt.Font("Dialog", 2, 12)); // NOI18N
-        Author2.setText("httpclient, httpcore, httpmime, Lucene :");
-
         Author3.setFont(MainWin.getFontDialog());
         Author3.setText("licence Apache Software Foundation");
 
@@ -154,7 +150,7 @@ initComponents();
         Author7.setText("Eli Ramirez");
 
         Author8.setFont(new java.awt.Font("Dialog", 2, 12)); // NOI18N
-        Author8.setText("log4j, commons-net.ftp, commons-fileupload, Tika,");
+        Author8.setText("Lucene, commons-net.ftp, commons-fileupload, Tika,");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -166,9 +162,7 @@ initComponents();
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(ButtonAcept)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(Author2, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(Author8, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(Author8, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(Author3)
                             .addComponent(Author5))
                         .addGap(0, 0, Short.MAX_VALUE))
@@ -231,11 +225,9 @@ initComponents();
                     .addComponent(Author7))
                 .addGap(18, 18, 18)
                 .addComponent(Author8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Author2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Author3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addComponent(Author4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Author5)
@@ -262,7 +254,6 @@ Cancel=true;
     private javax.swing.JLabel Application1;
     private javax.swing.JLabel Author;
     private javax.swing.JLabel Author1;
-    private javax.swing.JLabel Author2;
     private javax.swing.JLabel Author3;
     private javax.swing.JLabel Author4;
     private javax.swing.JLabel Author5;

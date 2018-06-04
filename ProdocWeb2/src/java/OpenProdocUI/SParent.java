@@ -20,6 +20,7 @@
 package OpenProdocUI;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -452,6 +453,13 @@ else if (Attr.getType()==Attribute.tINTEGER)
     else
         Attr.setValue(null);
     }
+else if (Attr.getType()==Attribute.tFLOAT)
+    {
+    if (Val.length()>0)
+        Attr.setValue(new BigDecimal(Val.replace(',','.').replace("_", "")));
+    else
+        Attr.setValue(null);
+    }
 else
     Attr.setValue("Error");
 } catch (Exception ex)
@@ -517,6 +525,11 @@ else if (Attr.getType()==Attribute.tDATE)
 else if (Attr.getType()==Attribute.tTIMESTAMP)
     {
     Attr.setValue(getFormatterTS(Req).parse(Val));
+    Cond=new Condition(Attr, Oper);
+    }
+else if (Attr.getType()==Attribute.tFLOAT)
+    {
+    Attr.setValue(new BigDecimal(Val.replace(',','.').replace("_", "")));   
     Cond=new Condition(Attr, Oper);
     }
 else if (Attr.getType()==Attribute.tBOOLEAN)
@@ -790,7 +803,7 @@ while (Attr!=null)
  */
 static public String getVersion()
 {
-return("2.1.3");
+return("2.2");
 }
 //-----------------------------------------------------------------------------------------------
 /**

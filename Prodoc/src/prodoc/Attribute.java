@@ -19,6 +19,8 @@
 
 package prodoc;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -135,21 +137,23 @@ final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
  * Default formater, used to store in DDBB, export, etc
  */
 final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
+static public final String DECIMALPATTERN="\"_0000000000.00;-#";
+final DecimalFormat DF=new DecimalFormat(DECIMALPATTERN);
 //--------------------------------------------------------------------------
 /**
- *
- * @param pName
- * @param pUserName
- * @param pDescription
- * @param pType
- * @param pRequired
- * @param pValue
- * @param pLongStr
- * @param pPrimKey
- * @param pUnique 
- * @param pModifAllowed
- * @param pMultivalued 
- * @throws PDException
+ * Default constructor of an Attribute for MONO or MULTI valued Attributes
+ * @param pName        Internal/Technical name used for importing, exporting and table columns
+ * @param pUserName    Name visible for user
+ * @param pDescription Description, used also as toooltip in user interface
+ * @param pType        Physical tipe of attribute. One of the internal types tSTRING, tDATE,..
+ * @param pRequired    Required when creating or modifying any object
+ * @param pValue       optional value
+ * @param pLongStr     Max length for String, Id Thesaur for tTHES type
+ * @param pPrimKey     Is primary key
+ * @param pUnique      Is unique value
+ * @param pModifAllowed Is Allowed to modify after interting element 
+ * @param pMultivalued Allows to store many values
+ * @throws PDException In any error
  */
 public Attribute(String pName, String pUserName, String pDescription, int pType,
                 boolean pRequired, Object pValue, int pLongStr,
@@ -169,18 +173,18 @@ setMultivalued(pMultivalued);
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @param pName
- * @param pUserName
- * @param pDescription
- * @param pType
- * @param pRequired
- * @param pValue
- * @param pLongStr
- * @param pPrimKey
- * @param pUnique 
- * @param pModifAllowed
- * @throws PDException
+ * Constructor of an Attribute for MONO valued Attributes
+ * @param pName        Internal/Technical name used for importing, exporting and table columns
+ * @param pUserName    Name visible for user
+ * @param pDescription Description, used also as toooltip in user interface
+ * @param pType        Physical tipe of attribute. One of the internal types tSTRING, tDATE,..
+ * @param pRequired    Required when creating or modifying any object
+ * @param pValue       optional value
+ * @param pLongStr     Max length for String, Id Thesaur for tTHES type
+ * @param pPrimKey     Is primary key
+ * @param pUnique      Is unique value
+ * @param pModifAllowed Is Allowed to modify after interting element 
+ * @throws PDException In any error
  */
 public Attribute(String pName, String pUserName, String pDescription, int pType,
                 boolean pRequired, Object pValue, int pLongStr,
@@ -198,6 +202,12 @@ setUnique(pUnique);
 setModifAllowed(pModifAllowed);
 }
 //--------------------------------------------------------------------------
+/**
+ * Constructs an attribute from a XML node.
+ * Used when importing from an .OPD file
+ * @param OPDObject XML Node form org.w3c.dom
+ * @throws PDException in any error in parsing oor values
+ */
 public Attribute(Node OPDObject) throws PDException
 {
 NodeList OPDObjectList = OPDObject.getChildNodes();
@@ -230,8 +240,9 @@ for (int i = 0; i < OPDObjectList.getLength(); i++)
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @return
+ * Creates a copy of the current Attribute. 
+ * If the atrribute is multivalued, creates a new collection for the values
+ * @return the a copy of the current Attribute or null if there is any error
  */
 public Attribute Copy()
 {
@@ -254,9 +265,9 @@ return(Attr);
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @param Attr
- * @return
+ * Compares if the current Attribute is equals in all elements (including values an definition) to the Attribute parameter
+ * @param Attr Attribute to compare with
+ * @return True if Attributes are equal, False otherwise.
  */
 public boolean equals(Attribute Attr)
 {
@@ -281,16 +292,16 @@ if (getName().equals(Attr.getName())
             if (getValuesList().equals(Attr.getValuesList()))
                 return (true);
         } catch (PDException ex)
-            {
+            {ex.printStackTrace();
             }    
     }
 return (false);
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @param Attr
- * @return
+ * Compares if the current Attribute is equals in DEFINITION to the Attribute parameter
+ * @param Attr Attribute to compare definition with
+ * @return True if Attributes are equal in definition, indepedently of values, False otherwise.
  */
 public boolean equalDef(Attribute Attr)
 {
@@ -474,9 +485,10 @@ this.Unique = Unique;
 }
 //--------------------------------------------------------------------------
 /**
- * 
- * @return
+ * Overrides default toString method, returning 
+ * @return "{"+getName()+"("+getType()+")"+"="+Export()+"}"
  */
+@Override
 public String toString()
 {
 if (getValue()==null)
@@ -518,8 +530,9 @@ UserName = pUserName;
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @return
+ * Exports the Attribute value(s) in a fixed format so it can be included in any export process
+ * and imported later (in example to/from an .opd file)
+ * @return Formated value
  */
 public String Export()
 {
@@ -546,8 +559,8 @@ else
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @return
+ * Exports the Attribute to XML (for inclusion in .opd file or otherexport processes)
+ * @return The Attribute in XML format
  */
 public String ExportXML()
 {
@@ -592,6 +605,8 @@ else if (getType()==Attribute.tDATE)
     return(formatterDate.format((Date)Val));
 else if (getType()==Attribute.tTIMESTAMP)
     return(formatterTS.format((Date)Val));
+else if (getType()==Attribute.tFLOAT)
+    return(DF.format((BigDecimal)Val));
 else
     return(Val.toString());            
 }
@@ -605,20 +620,16 @@ private String FormatExportXML(Object Val)
 {
 if (getType()==Attribute.tSTRING)
     return(((String)Val).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;"));
-else if (getType()==Attribute.tTHES)
-    return((String)Val);
-else if (getType()==Attribute.tINTEGER)
-    return(""+Val);
-else if (getType()==Attribute.tBOOLEAN)
-    return(toBooleanString((Boolean)Val));
-else if (getType()==Attribute.tDATE)
-    return(formatterDate.format((Date)Val));
-else if (getType()==Attribute.tTIMESTAMP)
-    return(formatterTS.format((Date)Val));
-else
-    return(Val.toString());            
+else 
+    return(FormatExport(Val));            
 }
 //--------------------------------------------------------------------------
+/**
+ * Parses a SINGLE String value depending of the Attribute type and returns the Value as object
+ * @param Val String to be parsed
+ * @return  A consructed object of the correct type
+ * @throws PDException in any parsing error
+ */
 private Object FormatImport(String Val) throws PDException
 {
 if (getType()==Attribute.tSTRING)
@@ -654,51 +665,30 @@ else if (getType()==Attribute.tTIMESTAMP)
         PDException.GenPDException(ex.getLocalizedMessage(), Val);
         }
     }
-return(null);
-}
-//--------------------------------------------------------------------------
-private Object FormatImportXML(String Val) throws PDException
-{
-if (getType()==Attribute.tSTRING)
-    return(Val.replace("&lt;", "<").replace("&gt;", ">" ).replace("&amp;", "&"));
-else if (getType()==Attribute.tTHES)
-    return(Val);
-else if (getType()==Attribute.tINTEGER)
-    return(Integer.parseInt(Val));
-else if (getType()==Attribute.tBOOLEAN)
-    {
-    if (Val.equals("1"))
-        return(true);
-    else
-        return(false);
-    }
-else if (getType()==Attribute.tDATE)
-    {
-    try {
-    if (Val!=null && Val.length()!=0)
-        return(formatterDate.parse(Val));
-    } catch (ParseException ex)
-        {
-        PDException.GenPDException(ex.getLocalizedMessage(), Val);
-        }
-    }
-else if (getType()==Attribute.tTIMESTAMP)
-    {
-    try {
-    if (Val!=null && Val.length()!=0)
-        return(formatterTS.parse(Val));
-    } catch (ParseException ex)
-        {
-        PDException.GenPDException(ex.getLocalizedMessage(), Val);
-        }
-    }
+else if (getType()==Attribute.tFLOAT)
+    return(new BigDecimal(Val.replace(',','.').replace("_", "")));
 return(null);
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @param Val
- * @throws PDException
+ * Parses a SINGLE String value dependng of the Attribute type and retuns the Value as object
+ * The strings will come from an XML, so the can have escaped chars
+ * @param Val String to be parsed
+ * @return  A consructed object of the correct type
+ * @throws PDException in any parsing error
+ */
+private Object FormatImportXML(String Val) throws PDException
+{
+if (getType()==Attribute.tSTRING)
+    return(Val.replace("&lt;", "<").replace("&gt;", ">" ).replace("&amp;", "&"));
+else 
+    return(FormatImport(Val));
+}
+//--------------------------------------------------------------------------
+/**
+ * Parses a MULTIPLE or SINGLE String value depending of the Attribute type and ASSIGNS the Value to the object
+ * @param Val String to be parsed
+ * @throws PDException in any parsing error
  */
 public void Import(String Val) throws PDException
 {
@@ -720,9 +710,10 @@ else
 }
 //-----------------------------------------------------------------------------------
 /**
- *
- * @param Val
- * @throws PDException
+ * Parses a MULTIPLE or SINGLE String value depending of the Attribute type and ASSIGNS the Value to the object
+ * The strings will come from an XML, so the can have escaped chars
+ * @param Val String to be parsed
+ * @throws PDException in any parsing error
  */
 public void ImportXML(String Val) throws PDException
 {
@@ -742,9 +733,9 @@ else
 }
 //-----------------------------------------------------------------------------------
 /**
- *
- * @param Val
- * @return
+ * Converts a Boolean value to String
+ * @param Val Boolean 
+ * @return "1" (true) or "0" (false)
  */
 protected String toBooleanString(Boolean Val)
 {
@@ -755,8 +746,8 @@ else
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @throws PDException
+ * Checks if the current values of the object fullfil the definition
+ * @throws PDException if the values don't fullfil the Attribute definition
  */
 public void Verify() throws PDException
 {
@@ -796,7 +787,7 @@ else
 /**
  * Converts name and value of the attribute to XML
  * @return the XML with the elements Name and value.
- * @throws PDException
+ * @throws PDException In any error
  */
 public String toXML() throws PDException
 {
@@ -810,9 +801,9 @@ return(S.toString());
 }
 //--------------------------------------------------------------------------
 /**
- * Converts name and value of the attribute to XML
- * @return the XML with the elements Name, Type and value.
- * @throws PDException
+ * Converts all the definition of the attribute to XML
+ * @return All the definition of the attribute, including value as ONE Tag
+ * @throws PDException in any error
  */
 public String toXMLt() throws PDException
 {
@@ -838,9 +829,9 @@ return(S.toString());
 }
 //--------------------------------------------------------------------------
 /**
- * Converts all the attributes of the record to XML
- * @return the XML with the elements.
- * @throws PDException
+ * Converts all the definition of the attribute to XML
+ * @return All the definition of the attribute, including value as MANY Tags
+ * @throws PDException in any error
  */
 public String toXMLFull() throws PDException
 {
@@ -900,8 +891,8 @@ this.Multivalued = Multivalued;
 //--------------------------------------------------------------------------
 /**
  * @return the ValuesList
- * @throws PDException  
-*/
+ * @throws PDException  In any error
+*/ 
 public TreeSet getValuesList() throws PDException
 {
 if (!isMultivalued())    
@@ -914,8 +905,8 @@ return ValuesList;
 /**
  * Add a value to the set of values
  * @param pValue new value to add
- * @return true if it's not null correctly added
- * @throws PDException
+ * @return true if it's not null and is correctly added
+ * @throws PDException in ay error
  */
 public boolean AddValue(Object pValue) throws PDException
 {
@@ -943,7 +934,7 @@ else
  * Remove a value from the set of values
  * @param pValue to remove
  * @return true if the value was in the set and is removed
- * @throws PDException
+ * @throws PDException in ay error
  */
 public boolean RemoveValue(Object pValue) throws PDException
 {
@@ -956,7 +947,7 @@ return(false);
 //--------------------------------------------------------------------------
 /**
  * Clear of the values in multivalued attributes
- * @throws PDException
+ * @throws PDException If it's not multivalued Attribute
  */
 public void ClearValues() throws PDException
 {
@@ -967,7 +958,7 @@ if (ValuesList!=null)
 }        
 //--------------------------------------------------------------------------
 /**
- * Returns tghe Value formated for CSV export
+ * Returns the Value formated for CSV export
  * @return String with value formated
  */
 public String ToCSV()

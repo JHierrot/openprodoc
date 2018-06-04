@@ -48,7 +48,7 @@ public class FTConnLucene extends FTConnector
 {
 static private IndexWriter iwriter;
 static private Directory directory;
-private IndexSearcher isearcher;
+//private IndexSearcher isearcher;
 static private Analyzer analyzer;
 static private IndexWriterConfig iwc;
 static private SearcherManager SM=null;
@@ -90,7 +90,7 @@ directory = FSDirectory.open(SerPath);
 iwc = new IndexWriterConfig(analyzer);
 iwc.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
 iwriter = new IndexWriter(directory, iwc);
-SM=new SearcherManager(iwriter, false, null);    
+SM=new SearcherManager(iwriter, false, false, null);    
 }
 //-------------------------------------------------------------------------
 @Override
@@ -218,6 +218,7 @@ SM.maybeRefresh();
 protected ArrayList<String> Search(String Type, String sDocMetadata, String sBody, String sMetadata) throws PDException
 {
 ArrayList<String> Res=new ArrayList();   
+IndexSearcher isearcher=null;
 try {  
 isearcher=SM.acquire();
 sBody=sBody.toLowerCase();
@@ -230,6 +231,10 @@ SM.release(isearcher);
 //directory.close();
 } catch (Exception ex)
     {
+    try {    
+    SM.release(isearcher);   
+    } catch (Exception e)
+    {}
     PDException.GenPDException("Error_Searching_doc_FT:", ex.getLocalizedMessage());
     }
 return(Res);
