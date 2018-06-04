@@ -456,7 +456,7 @@ else if (Attr.getType()==Attribute.tINTEGER)
 else if (Attr.getType()==Attribute.tFLOAT)
     {
     if (Val.length()>0)
-        Attr.setValue(new BigDecimal(Val.replace(',','.').replace("_", "")));
+        Attr.setValue(Attribute.String2BD(Val));
     else
         Attr.setValue(null);
     }
@@ -529,7 +529,7 @@ else if (Attr.getType()==Attribute.tTIMESTAMP)
     }
 else if (Attr.getType()==Attribute.tFLOAT)
     {
-    Attr.setValue(new BigDecimal(Val.replace(',','.').replace("_", "")));   
+    Attr.setValue(Attribute.String2BD(Val));   
     Cond=new Condition(Attr, Oper);
     }
 else if (Attr.getType()==Attribute.tBOOLEAN)

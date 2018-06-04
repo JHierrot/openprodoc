@@ -59,7 +59,6 @@ final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyyMMddHHmmss");
  */
 //static final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
 final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyyMMdd");
-final DecimalFormat DF=new DecimalFormat(DECIMALPATTERN);
 
 /**
  * Constructor
@@ -347,7 +346,7 @@ for (int i = 0; i < NumAttr; i++)
 
         else if (At.getType()==Attribute.tDATE)
             SQL+=toDate((Date)At.getValue());
-         else if (At.getType()==Attribute.tDATE)
+         else if (At.getType()==Attribute.tFLOAT)
             SQL+=toFloat((BigDecimal)At.getValue());
         else if (At.getType()==Attribute.tTIMESTAMP)
             SQL+=toTimeStamp((Date)At.getValue());
@@ -514,7 +513,7 @@ else
 protected String toFloat(BigDecimal BD)
 {
 if (BD!=null)    
-    return("'"+DF.format(BD)+"'");
+    return("'"+Attribute.BD2String(BD)+"'");
 else
     return("''");
 }
@@ -654,6 +653,8 @@ if (Condit.getcType()==Condition.ctNORMAL)
         SQLWhere+=toDate((Date)O);
     else if (Condit.getTypeVal()==Attribute.tBOOLEAN || O instanceof Boolean)
         SQLWhere+=toBooleanString((Boolean)O);
+    else if (Condit.getTypeVal()==Attribute.tFLOAT)
+        SQLWhere+=toFloat((BigDecimal)O);
     else
         SQLWhere+=O;
     }
@@ -810,9 +811,9 @@ for (int i = 0; i < Fields.NumAttr(); i++)
     else if (Attr.getType()==Attribute.tFLOAT)
             {
             String BD=rs.getString(Attr.getName());
-            if (BD!=null && BD.length()==8)
+            if (BD!=null && BD.length()!=0)
                 { try {
-                Attr.setValue(new BigDecimal(BD.replace(',','.').replace("_", "")));
+                Attr.setValue(Attribute.String2BD(BD));
                 } catch (Exception ex)
                     {Attr.setValue(null);}
                 }
@@ -926,7 +927,7 @@ else if (NewAttr.getType()==Attribute.tTIMESTAMP)
 else if (NewAttr.getType()==Attribute.tTHES)
     SQL=" VARCHAR(32) ";
 else if (NewAttr.getType()==Attribute.tFLOAT)
-    SQL=" VARCHAR(14) ";  // 
+    SQL=" VARCHAR(15) ";  // 
 else 
     SQL=" VARCHAR("+ NewAttr.getLongStr()+") ";
 if (NewAttr.getValue()!=null)

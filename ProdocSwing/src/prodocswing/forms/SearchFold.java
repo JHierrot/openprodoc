@@ -44,7 +44,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import prodoc.Attribute;
-import static prodoc.Attribute.DECIMALPATTERN;
+import static prodoc.Attribute.SWINGDECIMALPATTERN;
 import prodoc.Condition;
 import prodoc.Conditions;
 import prodoc.Cursor;
@@ -426,7 +426,7 @@ else if (Attr.getType()==Attribute.tINTEGER)
     }
 else if (Attr.getType()==Attribute.tFLOAT)
     {
-    JTF=new JFormattedTextField(new DecimalFormat(DECIMALPATTERN));
+    JTF=new JFormattedTextField(new DecimalFormat(SWINGDECIMALPATTERN));
     }
 else
      JTF=new JTextField("Error");
@@ -507,10 +507,10 @@ else if (Attr.getType()==Attribute.tINTEGER)
         Attr.setValue(new Integer(l.intValue()));
     }
 else if (Attr.getType()==Attribute.tFLOAT)
-    {
-    BigDecimal BD=(BigDecimal)((JFormattedTextField)JTF).getValue();
-    if (BD!=null)
-        Attr.setValue(BD);
+    {   
+//    BigDecimal BD=(BigDecimal)((JFormattedTextField)JTF).getValue();
+    if (((JFormattedTextField)JTF).getValue()!=null)
+        Attr.setValue(Attribute.String2BD(((JFormattedTextField)JTF).getValue().toString()));
     }
 else
     Attr.setValue("Error");

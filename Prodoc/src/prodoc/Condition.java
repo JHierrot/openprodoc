@@ -117,7 +117,6 @@ private boolean Invert=false;
 
 final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyyMMddHHmmss");
 final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyyMMdd");
-final DecimalFormat DF=new DecimalFormat(DECIMALPATTERN);
 
 private int TypeVal=-1;
 //-------------------------------------------------------------------------
@@ -297,7 +296,7 @@ switch (cType)
         else if (TypeVal==Attribute.tBOOLEAN)
             XML.append(((Boolean)Value)?"1":"0");
         else if (TypeVal==Attribute.tFLOAT)
-            XML.append(DF.format((BigDecimal)Value));
+            XML.append(Attribute.BD2String((BigDecimal)Value));
         else
             XML.append(Value);
         XML.append("</Val>");
@@ -396,7 +395,7 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
                     List.add(ValS.equals("1"));
                  else if (TypeVal==Attribute.tFLOAT && ValS.length()!=0)
                     try {
-                    List.add(new BigDecimal(ValS.replace(',','.').replace("_", "")));
+                    List.add(Attribute.String2BD(ValS));
                     } catch (Exception ex)
                         {
                         PDException.GenPDException(ex.getLocalizedMessage(), ValS) ;
@@ -431,7 +430,7 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
             else if (TypeVal==Attribute.tFLOAT&& Cont.length()!=0)
                 {
                 try {
-                    Value=new BigDecimal(Cont.replace(',','.').replace("_", ""));
+                    Value=Attribute.String2BD(Cont);
                 } catch (Exception ex)
                     {
                     PDException.GenPDException(ex.getLocalizedMessage(), Cont) ;

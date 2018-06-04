@@ -34,7 +34,7 @@ import java.util.HashSet;
 import java.util.Vector;
 import javax.swing.*;
 import prodoc.*;
-import static prodoc.Attribute.DECIMALPATTERN;
+import static prodoc.Attribute.SWINGDECIMALPATTERN;
 import prodocswing.ThesField;
 
 /**
@@ -440,7 +440,7 @@ else if (Attr.getType()==Attribute.tINTEGER)
     }
 else if (Attr.getType()==Attribute.tFLOAT)
     {
-    JTF=new JFormattedTextField(new DecimalFormat(DECIMALPATTERN));
+    JTF=new JFormattedTextField(new DecimalFormat(SWINGDECIMALPATTERN));
     }
 else
      JTF=new JTextField("Error");
@@ -520,9 +520,8 @@ else if (Attr.getType()==Attribute.tINTEGER)
     }
 else if (Attr.getType()==Attribute.tFLOAT)
     {
-    BigDecimal BD=(BigDecimal)((JFormattedTextField)JTF).getValue();
-    if (BD!=null)
-        Attr.setValue(BD);
+    if (((JFormattedTextField)JTF).getValue()!=null)
+        Attr.setValue(Attribute.String2BD(((JFormattedTextField)JTF).getValue().toString()));
     }
 else
     Attr.setValue("Error");

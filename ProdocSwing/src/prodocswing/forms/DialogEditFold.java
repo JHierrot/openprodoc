@@ -35,7 +35,7 @@ import java.util.TreeSet;
 import java.util.Vector;
 import javax.swing.*;
 import prodoc.*;
-import static prodoc.Attribute.DECIMALPATTERN;
+import static prodoc.Attribute.SWINGDECIMALPATTERN;
 import prodocswing.ThesField;
 
 /**
@@ -710,11 +710,11 @@ else if (Attr.getType()==Attribute.tINTEGER)
     }
 else if (Attr.getType()==Attribute.tFLOAT)
     {
-    JTF=new JFormattedTextField(new DecimalFormat(DECIMALPATTERN));
+    JTF=new JFormattedTextField(new DecimalFormat(SWINGDECIMALPATTERN));
     if (Attr.getValue()!=null)
         ((JFormattedTextField)JTF).setValue((BigDecimal)Attr.getValue());
     else
-        ((JFormattedTextField)JTF).setValue(new BigDecimal("00000000000.00"));
+        ((JFormattedTextField)JTF).setValue(Attribute.String2BD("0.00"));
     }
 else
      JTF=new JTextField("Error, unimplemented field type");
@@ -819,7 +819,7 @@ else if (Attr.getType()==Attribute.tINTEGER)
     }
 else if (Attr.getType()==Attribute.tFLOAT)
     {
-    Attr.setValue(((JFormattedTextField)JTF).getValue());
+    Attr.setValue(Attribute.String2BD(((JFormattedTextField)JTF).getValue().toString()));
     }
 else
     Attr.setValue("Error");

@@ -137,8 +137,9 @@ final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
  * Default formater, used to store in DDBB, export, etc
  */
 final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
-static public final String DECIMALPATTERN="\"_0000000000.00;-#";
-final DecimalFormat DF=new DecimalFormat(DECIMALPATTERN);
+static public final String DECIMALPATTERN="_0000000000.00;-#";
+static public final String SWINGDECIMALPATTERN="0000000000.00;-#";
+//final DecimalFormat DF=new DecimalFormat(DECIMALPATTERN);
 //--------------------------------------------------------------------------
 /**
  * Default constructor of an Attribute for MONO or MULTI valued Attributes
@@ -606,7 +607,7 @@ else if (getType()==Attribute.tDATE)
 else if (getType()==Attribute.tTIMESTAMP)
     return(formatterTS.format((Date)Val));
 else if (getType()==Attribute.tFLOAT)
-    return(DF.format((BigDecimal)Val));
+    return(BD2String((BigDecimal)Val));
 else
     return(Val.toString());            
 }
@@ -666,7 +667,7 @@ else if (getType()==Attribute.tTIMESTAMP)
         }
     }
 else if (getType()==Attribute.tFLOAT)
-    return(new BigDecimal(Val.replace(',','.').replace("_", "")));
+    return(String2BD(Val));
 return(null);
 }
 //--------------------------------------------------------------------------
@@ -969,6 +970,18 @@ if (getType()==Attribute.tSTRING)
     return("\""+FormatExport(getValue())+"\"");
 else
     return(FormatExport(getValue()));
+}
+//--------------------------------------------------------------------------
+public static String BD2String(BigDecimal BD)
+{
+DecimalFormat DF=new DecimalFormat(DECIMALPATTERN);
+return(DF.format(BD));
+}
+//--------------------------------------------------------------------------
+public static BigDecimal String2BD(String SBD)
+{
+DecimalFormat DF=new DecimalFormat(DECIMALPATTERN);
+return(new BigDecimal(DF.format(new BigDecimal(SBD.replace(',','.').replace("_", ""))).replace(',','.').replace("_", "")));
 }
 //--------------------------------------------------------------------------
 }
