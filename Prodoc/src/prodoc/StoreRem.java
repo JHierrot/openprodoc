@@ -113,7 +113,7 @@ protected void Disconnect() throws PDException
  * @return
  * @throws PDException
  */
-protected int Insert(String Id, String Ver, InputStream Bytes) throws PDException
+protected int Insert(String Id, String Ver, InputStream Bytes, Record Rec, String OPDPath) throws PDException
 {
 VerifyId(Id);
 CloseableHttpResponse response2 = null;
@@ -169,7 +169,7 @@ return (Tot);
  * @param Ver
  * @throws PDException
  */
-protected void Delete(String Id, String Ver) throws PDException
+protected void Delete(String Id, String Ver, Record Rec) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("StoreRem.Delete:"+Id+"/"+Ver);
@@ -182,7 +182,7 @@ ReadWrite(DriverGeneric.S_DELFILE, "<OPD><Id>"+Id+"</Id><Ver>"+Ver+"</Ver></OPD>
  * @param Ver
  * @throws PDException
  */
-protected void Delete(String Reposit, String Id, String Ver) throws PDException
+protected void Delete(String Reposit, String Id, String Ver, Record Rec) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("StoreRem.Delete:"+Id+"/"+Ver);
@@ -197,7 +197,7 @@ ReadWrite(DriverGeneric.S_DELFILE, "<OPD><Rep>"+Reposit+"</Rep><Id>"+Id+"</Id><V
  * @throws PDException
  */
 @Override
-protected InputStream Retrieve(String Id, String Ver) throws PDException
+protected InputStream Retrieve(String Id, String Ver, Record Rec) throws PDException
 {
 VerifyId(Id);
 CloseableHttpResponse response2 = null;
@@ -405,5 +405,4 @@ finally
 return(OPDObject);
 }
 //-----------------------------------------------------------------   
-
 }

@@ -106,7 +106,7 @@ ftpCon.disconnect();
  * @return
  * @throws PDException
  */
-protected int Insert(String Id, String Ver, InputStream Bytes) throws PDException
+protected int Insert(String Id, String Ver, InputStream Bytes, Record Rec, String OPDPath) throws PDException
 {
 try {
 String NPath=GenPath(Id, Ver);
@@ -130,7 +130,7 @@ return(0);
  * @param Ver
  * @throws PDException
  */
-protected void Delete(String Id, String Ver) throws PDException
+protected void Delete(String Id, String Ver, Record Rec) throws PDException
 {
 try {
 VerifyId(Id);
@@ -148,7 +148,7 @@ ftpCon.deleteFile(GenPath(Id, Ver) + Id);
  * @return
  * @throws PDException
  */
-protected InputStream Retrieve(String Id, String Ver) throws PDException
+protected InputStream Retrieve(String Id, String Ver, Record Rec) throws PDException
 {
 VerifyId(Id);
 InputStream in=null;

@@ -154,7 +154,7 @@ con.close();
  * @return
  * @throws PDException
  */
-protected int Insert(String Id, String Ver, InputStream Bytes) throws PDException
+protected int Insert(String Id, String Ver, InputStream Bytes, Record Rec, String OPDPath) throws PDException
 {
 VerifyId(Id);
 try {
@@ -199,7 +199,7 @@ return (-1);
  * @param Ver
  * @throws PDException
  */
-protected void Delete(String Id, String Ver) throws PDException
+protected void Delete(String Id, String Ver, Record Rec) throws PDException
 {
 VerifyId(Id);
 String SQL="delete from "+getTable()+" where PDId='"+Id+"' and PDVersion='"+Ver+"'";
@@ -218,7 +218,7 @@ stmt. execute(SQL);
  * @return
  * @throws PDException
  */
-protected InputStream Retrieve(String Id, String Ver) throws PDException
+protected InputStream Retrieve(String Id, String Ver, Record Rec) throws PDException
 {
 VerifyId(Id);
 try {

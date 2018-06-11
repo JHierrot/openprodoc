@@ -28,8 +28,6 @@ import java.io.OutputStream;
  */
 public class StoreRefFS extends StoreGeneric
 {
-
-
 //-----------------------------------------------------------------
 /**
  *
@@ -51,7 +49,7 @@ super(pServer, pUser, pPassword, pParam, pEncrypt);
  * @return
  * @throws PDException
  */
-protected int Insert(String Id, String Ver, InputStream Bytes) throws PDException
+protected int Insert(String Id, String Ver, InputStream Bytes, Record Rec, String OPDPath) throws PDException
 {
 throw new UnsupportedOperationException("Not supported.");
 }
@@ -62,7 +60,7 @@ throw new UnsupportedOperationException("Not supported.");
  * @param Ver
  * @throws PDException
  */
-protected void Delete(String Id, String Ver) throws PDException
+protected void Delete(String Id, String Ver, Record Rec) throws PDException
 {
 throw new UnsupportedOperationException("Not supported.");
 }
@@ -74,11 +72,10 @@ throw new UnsupportedOperationException("Not supported.");
  * @return
  * @throws PDException
  */
-protected InputStream Retrieve(String Id, String Ver) throws PDException
+protected InputStream Retrieve(String Id, String Ver, Record Rec) throws PDException
 {
 throw new UnsupportedOperationException("Not supported.");
 }
-
 //-----------------------------------------------------------------
 /**
  *
@@ -126,7 +123,7 @@ return(true);
 }
 //-----------------------------------------------------------------
 @Override
-protected int Retrieve(String Id, String Ver, OutputStream fo) throws PDException
+protected int Retrieve(String Id, String Ver, OutputStream fo, Record Rec) throws PDException
 {
 throw new UnsupportedOperationException("Not supported yet.");
 }

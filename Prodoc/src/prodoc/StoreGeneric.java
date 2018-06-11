@@ -111,22 +111,23 @@ abstract protected void Disconnect() throws PDException;
  * @return
  * @throws PDException
  */
-abstract protected int Insert(String Id, String Ver, InputStream Bytes) throws PDException;
+abstract protected int Insert(String Id, String Ver, InputStream Bytes, Record Rec, String OPDPath) throws PDException;
 /**
  *
  * @param Id
  * @param Ver
  * @throws PDException
  */
-abstract protected void Delete(String Id, String Ver) throws PDException;
+abstract protected void Delete(String Id, String Ver, Record Rec) throws PDException;
 /**
  *
  * @param Id
  * @param Ver
+ * @param Rec
  * @return
  * @throws PDException
  */
-abstract protected InputStream Retrieve(String Id, String Ver) throws PDException;
+abstract protected InputStream Retrieve(String Id, String Ver, Record Rec) throws PDException;
 /**
  *
  * @param Id
@@ -298,13 +299,13 @@ if (Id==null || Id.length()==0)
  * @return
  * @throws PDException
  */
-protected int Insert(String Id, String Ver, String FileName) throws PDException
+protected int Insert(String Id, String Ver, String FileName, Record Rec, String OPDPath) throws PDException
 {
 try {
 if (PDLog.isDebug())
     PDLog.Debug("StoreGeneric.Insert"+FileName);
 FileInputStream in = new FileInputStream(FileName);
-return(Insert(Id, Ver, in));
+return(Insert(Id, Ver, in, Rec, OPDPath));
 } catch (FileNotFoundException ex)
     {
     PDException.GenPDException("Error_inserting_content", FileName+"="+ex.getLocalizedMessage());
@@ -323,8 +324,8 @@ return(Insert(Id, Ver, in));
 protected void Copy(String Id1, String Ver1, String Id2, String Ver2) throws PDException
 {
 try {
-InputStream Bytes=Retrieve(Id1, Ver1);
-Insert(Id2, Ver2, Bytes);
+InputStream Bytes=Retrieve(Id1, Ver1, null);
+Insert(Id2, Ver2, Bytes, null, null);
 } catch (Exception ex)
     {
     PDException.GenPDException("Error_copying_content", ex.getLocalizedMessage());
@@ -409,16 +410,17 @@ for (int i = 0; i < readed; i++)
  * @param Id
  * @param Ver
  * @param fo
+ * @param Rec
  * @return
  * @throws PDException 
  */
-protected int Retrieve(String Id, String Ver, OutputStream fo) throws PDException
+protected int Retrieve(String Id, String Ver, OutputStream fo, Record Rec) throws PDException
 {
 int Tot=0;
 VerifyId(Id);    
 InputStream in=null;
 try {
-in = Retrieve(Id, Ver);
+in = Retrieve(Id, Ver, Rec);
 int readed=in.read(Buffer);
 while (readed!=-1)
     {
@@ -451,7 +453,53 @@ finally
 return(Tot);
 }
 //-----------------------------------------------------------------
-
+/**
+ * 
+ * @param Id
+ * @param Ver
+ * @param fo
+ * @return
+ * @throws PDException 
+ */
+//protected int Retrieve(String Id, String Ver, OutputStream fo, Record Rec) throws PDException
+//{
+//int Tot=0;
+//VerifyId(Id);    
+//InputStream in=null;
+//try {
+//in = Retrieve(Id, Ver, Rec);
+//int readed=in.read(Buffer);
+//while (readed!=-1)
+//    {
+//    if (isEncript())
+//       DecriptPass(Buffer, readed);
+//    fo.write(Buffer, 0, readed);
+//    Tot+=readed;
+//    readed=in.read(Buffer);
+//    }
+//} catch (Exception ex)
+//    {
+//    PDException.GenPDException("Error_retrieving_file",Id+"/"+Ver+"="+ex.getLocalizedMessage());
+//    }
+//finally 
+//    {
+//    try {
+//    if (in!=null)
+//        in.close();
+//    } catch (IOException ex)
+//        {}
+//    try {
+//    fo.flush();
+//    } catch (IOException ex)
+//        {}
+//    try {
+//        fo.close();
+//    } catch (IOException ex)
+//        {}
+//    }
+//return(Tot);
+//}
+//-----------------------------------------------------------------
 /**
  *
  * @param Id
@@ -460,14 +508,69 @@ return(Tot);
  * @return
  * @throws PDException
  */
-protected int RetrieveB64(String Id, String Ver, OutputStream fo) throws PDException
+//protected int RetrieveB64(String Id, String Ver, OutputStream fo) throws PDException
+//{
+//int Tot=0;
+//VerifyId(Id);    
+//InputStream in=null;
+//Base64InputStream b=null;
+//try {
+//in = Retrieve(Id, Ver);
+//byte[] bytes = IOUtils.toByteArray(in);
+//if (isEncript())
+//   DecriptPass(bytes, bytes.length);
+//b=new Base64InputStream(new ByteArrayInputStream(bytes),true);
+//int readed=b.read(Buffer);
+//while (readed!=-1)
+//    {
+//    fo.write(Buffer, 0, readed);
+//    Tot+=readed;
+//    readed=b.read(Buffer);
+//    }
+//} catch (Exception ex)
+//    {
+//    PDException.GenPDException("Error_retrieving_file",Id+"/"+Ver+"="+ex.getLocalizedMessage());
+//    }
+//finally 
+//    {
+//    try {
+//    if (b!=null)
+//        b.close();
+//    } catch (IOException ex)
+//        {}
+//    try {
+//    if (in!=null)
+//        in.close();
+//    } catch (IOException ex)
+//        {}
+//    try {
+//    fo.flush();
+//    } catch (IOException ex)
+//        {}
+//    try {
+//    fo.close();
+//    } catch (IOException ex)
+//        {}
+//    }
+//return(Tot);
+//}
+//-----------------------------------------------------------------
+/**
+ *
+ * @param Id
+ * @param Ver
+ * @param fo
+ * @return
+ * @throws PDException
+ */
+protected int RetrieveB64(String Id, String Ver, OutputStream fo, Record Rec) throws PDException
 {
 int Tot=0;
 VerifyId(Id);    
 InputStream in=null;
 Base64InputStream b=null;
 try {
-in = Retrieve(Id, Ver);
+in = Retrieve(Id, Ver, Rec);
 byte[] bytes = IOUtils.toByteArray(in);
 if (isEncript())
    DecriptPass(bytes, bytes.length);
@@ -515,12 +618,32 @@ return(Tot);
  * @return
  * @throws PDException
  */
-protected int InsertB64(String Id, String Ver, InputStream Bytes) throws PDException
+//protected int InsertB64(String Id, String Ver, InputStream Bytes) throws PDException
+//{
+//int Res =0;
+//Base64InputStream b=new Base64InputStream(Bytes,false);
+//try {
+//Res = Insert(Id,Ver,b);
+//} catch (PDException Ex)
+//    {
+//    throw Ex;
+//    }
+//finally
+//    {
+//    try {
+//    b.close();
+//    } catch (Exception Ex)
+//        {}
+//    }
+//return(Res);    
+//}
+//-----------------------------------------------------------------
+protected int InsertB64(String Id, String Ver, InputStream Bytes, Record Rec, String OPDPath) throws PDException
 {
 int Res =0;
 Base64InputStream b=new Base64InputStream(Bytes,false);
 try {
-Res = Insert(Id,Ver,b);
+Res = Insert(Id,Ver,b, Rec, OPDPath);
 } catch (PDException Ex)
     {
     throw Ex;
@@ -535,4 +658,30 @@ finally
 return(Res);    
 }
 //-----------------------------------------------------------------
+//public boolean IsExtended()
+//{
+//return(false);    
+//}    
+//-----------------------------------------------------------------
+//public int Insert(String PDId, String version, InputStream FileStream, Record Rec)  throws PDException
+//{
+//throw new UnsupportedOperationException("Not supported."); 
+//}
+//-----------------------------------------------------------------
+//public int Insert(String PDId, String version, String FilePath, Record Rec) throws PDException
+//{
+//throw new UnsupportedOperationException("Not supported."); 
+//}
+//-----------------------------------------------------------------
+//public InputStream Retrieve(String Id, String Ver, Record Rec) throws PDException
+//{
+//throw new UnsupportedOperationException("Not supported."); 
+//}
+//-----------------------------------------------------------------
+//public void Delete(String Id, String Ver, Record Rec) throws PDException
+//{
+//throw new UnsupportedOperationException("Not supported."); 
+//}
+//-----------------------------------------------------------------
+
 }

@@ -117,7 +117,7 @@ protected void Disconnect() throws PDException
  * @return
  * @throws PDException
  */
-protected int Insert(String Id, String Ver, InputStream Bytes) throws PDException
+protected int Insert(String Id, String Ver, InputStream Bytes, Record Rec, String OPDPath) throws PDException
 {
 try {
 s3.putObject(BucketName, GenKey(Id, Ver), Bytes, new ObjectMetadata());
@@ -134,7 +134,7 @@ return (-1);
  * @param Ver
  * @throws PDException
  */
-protected void Delete(String Id, String Ver) throws PDException
+protected void Delete(String Id, String Ver, Record Rec) throws PDException
 {
 try {
 s3.deleteObject(BucketName, GenKey(Id, Ver));
@@ -151,7 +151,7 @@ s3.deleteObject(BucketName, GenKey(Id, Ver));
  * @return
  * @throws PDException
  */
-protected InputStream Retrieve(String Id, String Ver) throws PDException
+protected InputStream Retrieve(String Id, String Ver, Record Rec) throws PDException
 {
 try {
 S3Object object = s3.getObject(new GetObjectRequest(BucketName, GenKey(Id, Ver)));

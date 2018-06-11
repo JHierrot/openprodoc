@@ -101,7 +101,7 @@ protected void Disconnect() throws PDException
  * @return
  * @throws PDException
  */
-protected int Insert(String Id, String Ver, InputStream Bytes) throws PDException
+protected int Insert(String Id, String Ver, InputStream Bytes, Record Rec, String OPDPath) throws PDException
 {
 VerifyId(Id);
 FileOutputStream fo=null;
@@ -146,7 +146,7 @@ return(Tot);
  * @throws PDException
  */
 @Override
-protected void Delete(String Id, String Ver) throws PDException
+protected void Delete(String Id, String Ver, Record Rec) throws PDException
 {
 VerifyId(Id);
 File f=new File(getPath()+ GenPath(Id, Ver)+Id+"_"+Ver);
@@ -161,7 +161,7 @@ f.delete();
  * @throws PDException
  */
 @Override
-protected InputStream Retrieve(String Id, String Ver) throws PDException
+protected InputStream Retrieve(String Id, String Ver, Record Rec) throws PDException
 {
 VerifyId(Id);    
 FileInputStream in=null;

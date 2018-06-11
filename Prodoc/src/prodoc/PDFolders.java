@@ -488,7 +488,7 @@ for (int i = getTypeDefs().size()-1; i >=0; i--)
         DatParc.addAttr(getRecSum().getAttr(fPDID));
         }
     DatParc.assign(getRecSum().CopyMono());
-    getDrv().InsertRecord((String)TypDef.getAttr(PDObjDefs.fNAME).getValue(), DatParc);
+    getDrv().InsertRecord((String)TypDef.getAttr(PDObjDefs.fNAME).getValue(), DatParc.CopyMono());
     }
 }
 //-------------------------------------------------------------------------

@@ -1612,6 +1612,8 @@ else if (RepTyp.equals(PDRepository.tREFURL))
     st=new StoreRefURL(Rep.getURL(), Rep.getUser(), /*Decode*/(Rep.getPassword()), Rep.getParam(), Rep.isEncrypted());
 else if (RepTyp.equals(PDRepository.tS3))
     st=new StoreAmazonS3(Rep.getURL(), Rep.getUser(), /*Decode*/(Rep.getPassword()), Rep.getParam(), Rep.isEncrypted());
+else if (RepTyp.equals(PDRepository.tCUSTOM))
+    st=new StoreCustom(Rep.getURL(), Rep.getUser(), /*Decode*/(Rep.getPassword()), Rep.getParam(), Rep.isEncrypted(), this);
 else
     PDException.GenPDException("Repository_type_unsuported", RepTyp);
 if (PDLog.isDebug())
@@ -2625,7 +2627,7 @@ StoreGeneric Rep=getRepository(RepName);
 if (!Rep.IsRef())
     {
     Rep.Connect();
-    Rep.Delete(Id, Ver);
+    Rep.Delete(Id, Ver, D.getRecSum());
     Rep.Disconnect();
     }
 return("");
@@ -2677,7 +2679,7 @@ public void InsertFile(String Id, String Ver, InputStream FileData) throws PDExc
 PDDocs Doc=new PDDocs(this);
 Doc.Load(Id);
 StoreGeneric St=getRepository(Doc.getReposit());
-St.Insert(Id, Ver, FileData);
+St.Insert(Id, Ver, FileData, Doc.getRecSum(), null);
 }
 //-----------------------------------------------------------------   
 static public String Codif(String Text)

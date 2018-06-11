@@ -1000,7 +1000,7 @@ if (Rep1.IsRef())
     throw new UnsupportedOperationException("Not supported.");   
 try {    
 Rep.Connect();
-Rep.Retrieve(getPDId(), getVersion(), OutBytes);
+Rep.Retrieve(getPDId(), getVersion(), OutBytes, getRecSum());
 Rep.Disconnect();
 Rep=null;
 if (MustTrace(fOPERVIE))
@@ -1029,7 +1029,7 @@ if (Rep1.IsRef())
     throw new UnsupportedOperationException("Not supported.");   
 try {    
 Rep.Connect();
-Rep.RetrieveB64(getPDId(), getVersion(), OutBytes);
+Rep.RetrieveB64(getPDId(), getVersion(), OutBytes, getRecSum());
 Rep.Disconnect();
 Rep=null;
 if (MustTrace(fOPERVIE))
@@ -1058,7 +1058,7 @@ if (Rep1.IsRef())
     throw new UnsupportedOperationException("Not supported.");   
 try {    
 Rep.Connect();
-Rep.Retrieve(getPDId(), getVersion(), OutBytes);
+Rep.Retrieve(getPDId(), getVersion(), OutBytes, getRecSum());
 Rep.Disconnect();
 if (MustTrace(fOPERVIE))
     Trace(fOPERVIE, true);
@@ -1086,7 +1086,7 @@ if (Rep1.IsRef())
     throw new UnsupportedOperationException("Not supported.");   
 try {    
 Rep.Connect();
-Rep.RetrieveB64(getPDId(), getVersion(), OutBytes);
+Rep.RetrieveB64(getPDId(), getVersion(), OutBytes, getRecSum());
 Rep.Disconnect();
 if (MustTrace(fOPERVIE))
     Trace(fOPERVIE, true);
@@ -1136,8 +1136,8 @@ if (!Rep.IsRef())
     Rep.Rename(PDId, getDrv().getUser().getName(), PDId, VersionName);
     Rep.Disconnect();
     }
-updateFragments(RecTot, Id);
-UpdateVersion(Id, getDrv().getUser().getName(), RecTot);
+updateFragments(RecTot.CopyMono(), Id);
+UpdateVersion(Id, getDrv().getUser().getName(), RecTot.CopyMono());
 MultiDelete(Id, getDrv().getUser().getName());
 MultiInsert(RecTot);
 getObjCache().remove(getKey());
@@ -1250,7 +1250,7 @@ if (!Rep.IsRef())
     {
     Rep.Connect();
     MultiDelete(getPDId(), getDrv().getUser().getName());
-    Rep.Delete(PDId, getDrv().getUser().getName());
+    Rep.Delete(PDId, getDrv().getUser().getName(), getRecSum());
     Rep.Disconnect();
     }
 DeleteVersion(getDocType(), Id, getDrv().getUser().getName());
@@ -1370,9 +1370,9 @@ if (!FinalRep.IsRef())
    {
     Rep.Connect();
     if (FileStream!=null)
-        Rep.Insert(PDId, getVersion(), FileStream);
+        Rep.Insert(PDId, getVersion(), FileStream, getRecSum(), null);
     else if (FilePath!=null)
-        Rep.Insert(PDId, getVersion(), FilePath);
+        Rep.Insert(PDId, getVersion(), FilePath, getRecSum(), null);
     Rep.Disconnect();
    }
 ExecuteTransThreads(PDTasksDefEvent.fMODEINS);
@@ -1727,6 +1727,7 @@ protected void UpdateVersion(String Id, String Ver, Record Rec) throws PDExcepti
 // Not using getConditionsVer() because version pased  as parameter (User lock sometimes)
 if (PDLog.isDebug())
    PDLog.Debug("PDDocs.UpdateVersion >:"+Id+"/"+Ver);
+Rec=Rec.CopyMono();
 Conditions ListCond=new Conditions();
 if (Id==null || Id.length()==0 )
     PDExceptionFunc.GenPDException("Required_document_Id", null);
@@ -1844,9 +1845,9 @@ if (!Rep.IsRef())
     {
     Rep.Connect();
     if (FileStream!=null)
-        Rep.Insert(PDId, getDrv().getUser().getName(), FileStream);
+        Rep.Insert(PDId, getDrv().getUser().getName(), FileStream, getRecSum(), null);
     else if (FilePath!=null)
-        Rep.Insert(PDId, getDrv().getUser().getName(), FilePath);
+        Rep.Insert(PDId, getDrv().getUser().getName(), FilePath, getRecSum(), null);
     else
         {
         String OriginalVers=TobeUpdated.getVersion();
@@ -1895,7 +1896,7 @@ for (int i = getTypeDefs().size()-1; i >=0; i--)
         DatParc.addAttr(RecTot.getAttr(fPDID));
         }
     DatParc.assign(RecTot);
-    getDrv().InsertRecord((String)TypDef.getAttr(PDObjDefs.fNAME).getValue(), DatParc);
+    getDrv().InsertRecord((String)TypDef.getAttr(PDObjDefs.fNAME).getValue(), DatParc.CopyMono());
     }
 if (PDLog.isDebug())
     PDLog.Debug("PDDocs.insertFragments<");
@@ -1941,7 +1942,7 @@ for (int i = getTypeDefs().size()-1; i >=0; i--)
         }
     DatParc.assign(RecTot);
     if (DatParc.NumAttr()>1) // PDID alone
-        getDrv().UpdateRecord((String)TypDef.getAttr(PDObjDefs.fNAME).getValue(), DatParc,  getConditions());
+        getDrv().UpdateRecord((String)TypDef.getAttr(PDObjDefs.fNAME).getValue(), DatParc.CopyMono(),  getConditions());
     }
 if (PDLog.isDebug())
     PDLog.Debug("PDDocs.updateFragments<");
@@ -2123,9 +2124,9 @@ while (Rec!=null)
         {
         Rep.Connect();
         if (Rep instanceof StoreRem)
-            ((StoreRem)Rep).Delete((String)Rec.getAttr(fREPOSIT).getValue(), Id, Ver2Del);
-        else    
-            Rep.Delete(Id, Ver2Del);
+            ((StoreRem)Rep).Delete((String)Rec.getAttr(fREPOSIT).getValue(), Id, Ver2Del, Rec);
+        else        
+           Rep.Delete(Id, Ver2Del, Rec);
         Rep.Disconnect();
         }
     
@@ -2929,7 +2930,7 @@ if (!Rep1.IsRef())
     Rep.Connect();
     // Is=Rep.Retrieve(getPDId(), getVersion());
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    Rep.Retrieve(getPDId(), getVersion(), baos);
+    Rep.Retrieve(getPDId(), getVersion(), baos, getRecSum());
     Is=new ByteArrayInputStream(baos.toByteArray());
     FTConn.Insert(getDocType(), getPDId(), Is, getRecSum());
     Is.close();
@@ -2976,7 +2977,7 @@ if (!Rep1.IsRef())
     Rep.Connect();
     // Is=Rep.Retrieve(getPDId(), getVersion());
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    Rep.Retrieve(getPDId(), getVersion(), baos);
+    Rep.Retrieve(getPDId(), getVersion(), baos, getRecSum());
     Is=new ByteArrayInputStream(baos.toByteArray());
     FTConn.Update(getDocType(), getPDId(), Is, getRecSum());
     Is.close();
