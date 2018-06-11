@@ -426,7 +426,8 @@ else if (Attr.getType()==Attribute.tINTEGER)
     }
 else if (Attr.getType()==Attribute.tFLOAT)
     {
-    JTF=new JFormattedTextField(new DecimalFormat(SWINGDECIMALPATTERN));
+    JTF=new JTextField();    
+//    JTF=new JFormattedTextField(new DecimalFormat(SWINGDECIMALPATTERN));
     }
 else
      JTF=new JTextField("Error");
@@ -508,9 +509,8 @@ else if (Attr.getType()==Attribute.tINTEGER)
     }
 else if (Attr.getType()==Attribute.tFLOAT)
     {   
-//    BigDecimal BD=(BigDecimal)((JFormattedTextField)JTF).getValue();
-    if (((JFormattedTextField)JTF).getValue()!=null)
-        Attr.setValue(Attribute.String2BD(((JFormattedTextField)JTF).getValue().toString()));
+    if (((JTextField)JTF).getText()!=null)
+        Attr.setValue(Attribute.String2BD(((JTextField)JTF).getText()));
     }
 else
     Attr.setValue("Error");

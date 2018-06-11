@@ -520,8 +520,8 @@ else if (Attr.getType()==Attribute.tINTEGER)
     }
 else if (Attr.getType()==Attribute.tFLOAT)
     {
-    if (((JFormattedTextField)JTF).getValue()!=null)
-        Attr.setValue(Attribute.String2BD(((JFormattedTextField)JTF).getValue().toString()));
+    if (((JTextField)JTF).getText()!=null)
+        Attr.setValue(Attribute.String2BD(((JTextField)JTF).getText()));
     }
 else
     Attr.setValue("Error");
