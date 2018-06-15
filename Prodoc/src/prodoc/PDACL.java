@@ -353,6 +353,7 @@ if (PDLog.isDebug())
 boolean InTransLocal;
 if (Permision<pNOTHING || Permision>pDELETE)
     PDException.GenPDException("Incorrect_permission", ""+Permision);
+VerifyAllowedDel();
 InTransLocal=!getDrv().isInTransaction();
 Record AclUser=getRecordAclUsersStruct();
 AclUser.getAttr(fACLNAME).setValue(getName());
@@ -367,6 +368,7 @@ getDrv().InsertRecord(getTabNameAclUsers(), AclUser);
     getDrv().AnularTrans();
     throw Ex;
     }
+getDrv().getUser().RefreshAuth();
 if (InTransLocal)
     getDrv().CerrarTrans();
 if (PDLog.isDebug())
@@ -384,6 +386,7 @@ public void addGroup(String GroupName, int Permision)  throws PDException
 if (PDLog.isDebug())
     PDLog.Debug("PDACL.addGroup>:"+getName()+"/"+GroupName+"="+Permision);
 boolean InTransLocal;
+VerifyAllowedDel();
 if (Permision<pNOTHING || Permision>pDELETE)
     PDException.GenPDException("Incorrect_permission", ""+Permision);
 InTransLocal=!getDrv().isInTransaction();
@@ -400,6 +403,7 @@ getDrv().InsertRecord(getTabNameAclGroups(), AclGroup);
     getDrv().AnularTrans();
     throw Ex;
     }
+getDrv().getUser().RefreshAuth();
 if (InTransLocal)
     getDrv().CerrarTrans();
 if (PDLog.isDebug())
@@ -415,6 +419,7 @@ public void delUser( String UserName)  throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDACL.delUser>:"+getName()+"/"+UserName);
+VerifyAllowedDel();
 boolean InTransLocal;
 InTransLocal=!getDrv().isInTransaction();
 Conditions ListCond=new Conditions();
@@ -429,6 +434,7 @@ getDrv().DeleteRecord(getTabNameAclUsers(), ListCond);
     getDrv().AnularTrans();
     throw Ex;
     }
+getDrv().getUser().RefreshAuth();
 if (InTransLocal)
     getDrv().CerrarTrans();
 if (PDLog.isDebug())
@@ -444,6 +450,7 @@ public void delGroup(String GroupName)  throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDACL.delGroup>:"+getName()+"/"+GroupName);
+VerifyAllowedDel();
 boolean InTransLocal;
 InTransLocal=!getDrv().isInTransaction();
 Conditions ListCond=new Conditions();
@@ -458,6 +465,7 @@ getDrv().DeleteRecord(getTabNameAclGroups(), ListCond);
     getDrv().AnularTrans();
     throw Ex;
     }
+getDrv().getUser().RefreshAuth();
 if (InTransLocal)
     getDrv().CerrarTrans();
 if (PDLog.isDebug())
@@ -541,6 +549,7 @@ getDrv().DeleteRecord(getTabNameAclGroups(), ListCond);
     getDrv().AnularTrans();
     throw Ex;
     }
+getDrv().getUser().RefreshAuth();
 if (InTransLocal)
     getDrv().CerrarTrans();
 if (PDLog.isDebug())
@@ -820,6 +829,7 @@ public void DelAllUsers() throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDACL.DelAllUsers>:"+getName());
+VerifyAllowedUpd();
 boolean InTransLocal;
 InTransLocal=!getDrv().isInTransaction();
 Conditions ListCond=new Conditions();
@@ -833,6 +843,7 @@ getDrv().DeleteRecord(getTabNameAclUsers(), ListCond);
     getDrv().AnularTrans();
     throw Ex;
     }
+getDrv().getUser().RefreshAuth();
 if (InTransLocal)
     getDrv().CerrarTrans();
 if (PDLog.isDebug())
@@ -843,6 +854,7 @@ public void DelAllGroups() throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDACL.DelAllGroups>:"+getName());
+VerifyAllowedUpd();
 boolean InTransLocal;
 InTransLocal=!getDrv().isInTransaction();
 Conditions ListCond=new Conditions();
@@ -856,6 +868,7 @@ getDrv().DeleteRecord(getTabNameAclGroups(), ListCond);
     getDrv().AnularTrans();
     throw Ex;
     }
+getDrv().getUser().RefreshAuth();
 if (InTransLocal)
     getDrv().CerrarTrans();
 if (PDLog.isDebug())

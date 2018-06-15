@@ -36,7 +36,7 @@ public class Record
 /**
  *
  */
-private ArrayList VAttr=new ArrayList();
+private final ArrayList<Attribute> VAttr=new ArrayList();
 /**
  *
  */

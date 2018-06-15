@@ -21,7 +21,6 @@
 package prodoc;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,11 +28,10 @@ import java.util.HashSet;
 import java.util.StringTokenizer;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import static prodoc.Attribute.DECIMALPATTERN;
 import static prodoc.Attribute.StringListSeparator;
 
 /**
- *
+ * Class for managing simple search conditions in OpenProdoc
  * @author jhierrot
  */
 public class Condition
@@ -121,8 +119,8 @@ final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyyMMdd");
 private int TypeVal=-1;
 //-------------------------------------------------------------------------
 /**
- *
- * @param Attr
+ * Constructor that creates a condition where name_of_attribute = "value of attribute"
+ * @param Attr Attribute to use for comparation
  */
 public Condition(Attribute Attr)
 {
@@ -133,8 +131,16 @@ TypeVal=Attr.getType();
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Attr
+ * Constructor that creates a condition where name_of_attribute COMPARATION "value of attribute"
+ * @param Attr Attribute to use for comparation
+ * @param pComparation Kind of comparation
+ * cEQUAL   =0;
+ * cGT      =1;
+ * cLT      =2;
+ * cGET     =3;
+ * cLET     =4;
+ * cNE      =5;
+ * cLIKE    =8;
  */
 public Condition(Attribute Attr, int pComparation)
 {

@@ -564,19 +564,28 @@ if (Load(UserName)==null)
     Error+=pDException.getLocalizedMessage();
     NumErrors++;
     }
+//try {
+//PDGroups G = new PDGroups(getDrv());
+//setGroupList(G.FullUserMemberShip(UserName));
+//} catch (PDException pDException)
+//    {
+//    if (!UserName.equals("Install"))
+//        throw pDException;
+//    Error+="/"+pDException.getLocalizedMessage();
+//    NumErrors++;
+//    }
+//try {
+//PDACL A = new PDACL(getDrv());
+//setAclList(A.FullUserMemberShip(this));
+//} catch (PDException pDException)
+//    {
+//    if (!UserName.equals("Install"))
+//        throw pDException;
+//    Error+="/"+pDException.getLocalizedMessage();
+//    NumErrors++;
+//    }
 try {
-PDGroups G = new PDGroups(getDrv());
-setGroupList(G.FullUserMemberShip(UserName));
-} catch (PDException pDException)
-    {
-    if (!UserName.equals("Install"))
-        throw pDException;
-    Error+="/"+pDException.getLocalizedMessage();
-    NumErrors++;
-    }
-try {
-PDACL A = new PDACL(getDrv());
-setAclList(A.FullUserMemberShip(this));
+NumErrors+=RefreshAuth();
 } catch (PDException pDException)
     {
     if (!UserName.equals("Install"))
@@ -604,6 +613,34 @@ getCustomData().Load(getCustom());
 if (PDLog.isDebug())
     PDLog.Debug("PDUser.LoadAll<:"+UserName);
 }
+//------------------------------------------------
+protected int RefreshAuth() throws PDException
+{
+int NumErrors=0;
+String Error="";    
+try {
+PDGroups G = new PDGroups(getDrv());
+setGroupList(G.FullUserMemberShip(getName()));
+} catch (PDException pDException)
+    {
+    if (!getName().equals("Install"))
+        throw pDException;
+    Error+="/"+pDException.getLocalizedMessage();
+    NumErrors++;
+    }
+try {
+PDACL A = new PDACL(getDrv());
+setAclList(A.FullUserMemberShip(this));
+} catch (PDException pDException)
+    {
+    if (!getName().equals("Install"))
+        throw pDException;
+    Error+="/"+pDException.getLocalizedMessage();
+    NumErrors++;
+    }    
+return(NumErrors);
+}
+//---------------------------------------------------------------------
 /**
  * Creates rol for install o task users
  * @param drv Session of rol

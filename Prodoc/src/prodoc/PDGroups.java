@@ -377,6 +377,7 @@ getDrv().InsertRecord(getTabNameGroupUsers(), GroupUser);
     getDrv().AnularTrans();
     throw Ex;
     }
+getDrv().getUser().RefreshAuth();
 if (InTransLocal)
     getDrv().CerrarTrans();
 if (PDLog.isDebug())
@@ -438,6 +439,7 @@ getDrv().InsertRecord(getTabNameGroupGroups(), GroupGroup);
     getDrv().AnularTrans();
     throw Ex;
     }
+getDrv().getUser().RefreshAuth();
 if (InTransLocal)
     getDrv().CerrarTrans();
 if (PDLog.isDebug())
@@ -923,6 +925,7 @@ public void DelAllSubGroups() throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDGroups.DelAllSubGroups>:"+getName());
+VerifyAllowedUpd();
 boolean InTransLocal;
 InTransLocal=!getDrv().isInTransaction();
 Conditions ListCond=new Conditions();
@@ -936,6 +939,7 @@ getDrv().DeleteRecord(this.getTabNameGroupGroups(), ListCond);
     getDrv().AnularTrans();
     throw Ex;
     }
+getDrv().getUser().RefreshAuth();
 if (InTransLocal)
     getDrv().CerrarTrans();
 if (PDLog.isDebug())
@@ -947,6 +951,7 @@ public void DelAllUsers() throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDGroups.DelAllSubGroups>:"+getName());
+VerifyAllowedUpd();
 boolean InTransLocal;
 InTransLocal=!getDrv().isInTransaction();
 Conditions ListCondUser=new Conditions();
@@ -960,6 +965,7 @@ getDrv().DeleteRecord(this.getTabNameGroupUsers(), ListCondUser);
     getDrv().AnularTrans();
     throw Ex;
     }
+getDrv().getUser().RefreshAuth();
 if (InTransLocal)
     getDrv().CerrarTrans();
 if (PDLog.isDebug())

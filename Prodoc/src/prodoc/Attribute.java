@@ -31,10 +31,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- *
+ * Class for managing the attributes in any point of OpenProdoc
+ * An attribute contains name, type of value, description, an optional value (if it has been filled) and other parammeters
  * @author jhierrot
  */
-public class Attribute
+public final class Attribute
 {
 /**
  *
@@ -139,7 +140,7 @@ final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
 static public final String DECIMALPATTERN="_0000000000.00;-#";
 static public final String SWINGDECIMALPATTERN="0000000000.00;-#";
-//final DecimalFormat DF=new DecimalFormat(DECIMALPATTERN);
+
 //--------------------------------------------------------------------------
 /**
  * Default constructor of an Attribute for MONO or MULTI valued Attributes
@@ -972,12 +973,22 @@ else
     return(FormatExport(getValue()));
 }
 //--------------------------------------------------------------------------
+/**
+ * Converts a BigDecimal to a OPD formatted String
+ * @param BD value t be converted
+ * @return formated string
+ */
 public static String BD2String(BigDecimal BD)
 {
 DecimalFormat DF=new DecimalFormat(DECIMALPATTERN);
 return(DF.format(BD));
 }
 //--------------------------------------------------------------------------
+/**
+ * Evaluates a string in any format with decimals to a DBigDecimal in OPD format
+ * @param SBD String to e evaluated
+ * @return a new BigDecimal
+ */
 public static BigDecimal String2BD(String SBD)
 {
 DecimalFormat DF=new DecimalFormat(DECIMALPATTERN);

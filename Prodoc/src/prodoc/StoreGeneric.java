@@ -26,6 +26,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Properties;
 import org.apache.commons.codec.binary.Base64InputStream;
 import org.apache.commons.io.IOUtils;
 
@@ -64,6 +65,7 @@ static final int TAMBUFF=1024*64;
  *
  */
 protected byte Buffer[]=new byte[TAMBUFF];
+private Properties Prop=null;
 
 /**
  *
@@ -72,7 +74,7 @@ protected byte Buffer[]=new byte[TAMBUFF];
  * @param pPassword
  * @param pParam
  */
-StoreGeneric(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt) throws PDExceptionFunc
+protected StoreGeneric(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt) throws PDExceptionFunc
 {
 Server=pServer;
 User=pUser;
@@ -683,5 +685,22 @@ return(Res);
 //throw new UnsupportedOperationException("Not supported."); 
 //}
 //-----------------------------------------------------------------
-
+/**
+* @return the Prop
+*/
+protected Properties getProp()
+{
+if (Prop==null)    
+    Prop=new Properties();
+return Prop;
+}
+//-----------------------------------------------------------------
+/**
+* @param Prop the Prop to set
+*/
+protected void setProp(Properties Prop)
+{
+this.Prop = Prop;
+}
+//-----------------------------------------------------------------
 }

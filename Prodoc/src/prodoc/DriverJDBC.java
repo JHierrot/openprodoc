@@ -25,13 +25,11 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Vector;
-import static prodoc.Attribute.DECIMALPATTERN;
 
 
 
@@ -717,7 +715,8 @@ return(SQLWhere);
  * @return String identifier of the cursor
  * @throws PDException
  */
-public Cursor OpenCursor(Query Search) throws PDException
+@Override
+protected Cursor OpenCursor(Query Search) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("DriverJDBC.OpenCursor:"+Search);

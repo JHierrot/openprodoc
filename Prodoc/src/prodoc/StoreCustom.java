@@ -19,11 +19,15 @@
 
 package prodoc;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.HashMap;
+import java.util.Properties;
 
 /**
  *
@@ -33,8 +37,8 @@ public class StoreCustom extends StoreGeneric
 {
 private StoreCustom Bin=null;    
 static private HashMap<String, Class> DownloadedClasses=new HashMap();
-private String PDId=null;
-private String ClassName=null;
+static private HashMap<String, Properties> DownloadedProp=new HashMap();
+
 //-----------------------------------------------------------------
 public StoreCustom(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt) throws PDExceptionFunc
 {
@@ -45,14 +49,21 @@ public StoreCustom(String pServer, String pUser, String pPassword, String pParam
 {
 super(pServer, pUser, pPassword, pParam, pEncrypt);
 String[] Params = pParam.split("\\|");
-PDId=Params[0];
-ClassName=Params[1];
+String PDId=Params[0];
+String ClassName=Params[1];
+String PDIdProps=null;
+if ( Params.length>=3)
+   PDIdProps=Params[2];
 try {
 if (!DownloadedClasses.containsKey(ClassName))
     DownloadBin(Drv, PDId, ClassName);
+if (PDIdProps!=null && !DownloadedProp.containsKey(PDIdProps))
+    DownloadProp(Drv, PDIdProps);
 Class CustomStore=DownloadedClasses.get(ClassName);
 Constructor DefCons=CustomStore.getDeclaredConstructor(String.class, String.class, String.class, String.class, boolean.class);
 Bin=(StoreCustom)DefCons.newInstance(pServer, pUser, pPassword, pParam, pEncrypt);
+if (PDIdProps!=null)
+    Bin.setProp(DownloadedProp.get(PDIdProps));
 } catch (Exception Ex)
     {
     PDExceptionFunc.GenPDException("Unable_Instantiate_Custom_Repository"+":"+ClassName, Ex.getLocalizedMessage());
@@ -122,16 +133,20 @@ URLClassLoader CL=new URLClassLoader(new URL[]{new URL("file:"+DownFile)}, getCl
 Class CustomStore=Class.forName(ClassName, true, CL);
 DownloadedClasses.put(ClassName, CustomStore);
 }
-////-----------------------------------------------------------------
-//public int Insert(String PDId, String version, InputStream FileStream, Record Rec) throws PDException
-//{
-//return(Bin.Insert( PDId, version, FileStream, Rec));
-//}
-////-----------------------------------------------------------------
-//public int Insert(String PDId, String version, String FilePath, Record Rec)  throws PDException
-//{
-//return(Bin.Insert(PDId, version, FilePath, Rec));
-//}
+//-----------------------------------------------------------------
+
+private synchronized void DownloadProp(DriverGeneric Drv, String PDIdProps) throws Exception
+{
+if (DownloadedProp.containsKey(PDIdProps))
+    return;
+PDDocs D=new PDDocs(Drv);
+D.setPDId(PDIdProps);
+ByteArrayOutputStream OutBytes=new ByteArrayOutputStream();
+D.getStream(OutBytes);
+Properties Proper=new Properties();
+Proper.load(new ByteArrayInputStream(OutBytes.toByteArray()) );
+DownloadedProp.put(PDIdProps, Proper);
+}
 //-----------------------------------------------------------------
 
 }

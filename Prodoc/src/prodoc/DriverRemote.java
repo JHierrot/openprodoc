@@ -369,7 +369,7 @@ setInTransaction(false);
  * @throws PDException
  */
 @Override
-public Cursor OpenCursor(Query Search) throws PDException
+protected Cursor OpenCursor(Query Search) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.OpenCursor:"+Search);

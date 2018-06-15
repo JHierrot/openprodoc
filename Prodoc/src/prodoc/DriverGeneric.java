@@ -330,7 +330,7 @@ abstract protected void AddIntegrity(String TableName1, String Field1, String Ta
 public void Install(String RootPassword, String DefLang, String DefTimeFormat, 
                     String DefDateFormat, String MainKey, String RepName,
                     boolean RepEncrypt, String RepUrl, String RepUser,
-                    String RepPassword, String RepType, String RepParam, Vector Trace) throws PDException
+                    String RepPassword, String RepType, String RepParam, Vector<String> Trace) throws PDException
 {
 //-------- Tables creation ---------------------------------------------------
 Trace.add("Starting Installation....");
@@ -619,7 +619,7 @@ CerrarTrans();
 Trace.add("Installation finished");
 }
 //--------------------------------------------------------------------------
-public void Update(boolean UpMetadataInc, Vector Trace)  throws PDException
+public void Update(boolean UpMetadataInc, Vector<String> Trace)  throws PDException
 {
 PDServer Serv=new PDServer(this);
 Serv.Load("Prodoc");
@@ -1288,7 +1288,7 @@ abstract public void AnularTrans() throws PDException;
  * @return a CursorCode, stored by the drivers
  * @throws PDException
  */
-abstract public Cursor OpenCursor(Query Search) throws PDException;
+abstract protected Cursor OpenCursor(Query Search) throws PDException;
 //-----------------------------------------------------------------------------------
 /**
  *
@@ -1448,7 +1448,7 @@ return User;
  * @param TypeRecs
  * @throws PDException
  */
-protected void LoadDef(String tableName, ArrayList TypeDef, ArrayList TypeRecs) throws PDException
+protected void LoadDef(String tableName, ArrayList<Record> TypeDef, ArrayList<Record> TypeRecs) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("DriverGeneric.LoadDef>:"+tableName);
