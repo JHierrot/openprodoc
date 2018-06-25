@@ -199,6 +199,7 @@ if (PDLog.isInfo())
  * Modifies a table adding a field
  * @param TableName
  * @param NewAttr New field to add
+     * @param IsVer
  * @throws PDException
  */
 protected void AlterTableAdd(String TableName, Attribute NewAttr, boolean IsVer) throws PDException
@@ -504,6 +505,7 @@ else
 }
 /**
  * Formats date for storage
+     * @param BD
  * @param Fec
  * @return
  */

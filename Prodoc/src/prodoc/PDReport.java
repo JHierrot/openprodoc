@@ -80,8 +80,16 @@ private boolean ExpandObject=false;
 private boolean DelNull=false;
 private HashSet<String> ListIgnTypes=null; 
 private HashSet<String> ListIgnFields=null; 
-public static final String fDOCSPAGE="DOCSPAGE";
-public static final String fPAGESDOC="PAGESDOCS";
+
+    /**
+     *
+     */
+    public static final String fDOCSPAGE="DOCSPAGE";
+
+    /**
+     *
+     */
+    public static final String fPAGESDOC="PAGESDOCS";
 private TreeSet AttrValuesList=null;
 private Object CurVal=null;
 private Vector<Record> VectRec=null;
@@ -738,11 +746,23 @@ if (Attr!=null)
 return(true);
 }    
 //-------------------------------------------------------------------------
+
+    /**
+     *
+     * @return
+     * @throws PDException
+     */
 public int getDocsPerPage() throws PDException
 {
 return(Integer)getRecSum().getAttr(PDReport.fDOCSPAGE).getValue();    
 }
 //-------------------------------------------------------------------------
+
+    /**
+     *
+     * @return
+     * @throws PDException
+     */
 public int getPagesPerFile() throws PDException
 {
 return(Integer)getRecSum().getAttr(PDReport.fPAGESDOC).getValue();   

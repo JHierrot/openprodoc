@@ -44,11 +44,26 @@ final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy/MM/dd");
 
 private HashMap<String, String> ListEquiv=null; 
 //-------------------------------------------------------------------------    
+
+    /**
+     *
+     * @param Drv
+     * @param pDocType
+     * @throws PDException
+     */
 public PDDocsRIS(DriverGeneric Drv, String pDocType) throws PDException
 {
 super(Drv, pDocType);
 }
 //------------------------------------------------------------------------
+
+    /**
+     *
+     * @param ActFolderId
+     * @param RISFilepath
+     * @return
+     * @throws PDException
+     */
 public int ImportFileRIS(String ActFolderId, String RISFilepath) throws PDException
 {
 int NumDocs=0;
@@ -120,6 +135,14 @@ Metadata.close();
 return(NumDocs);
 }
 //-------------------------------------------------------------------------    
+
+    /**
+     *
+     * @param ActFolderId
+     * @param RISFile
+     * @return
+     * @throws PDException
+     */
 public int ImportFileRIS(String ActFolderId, InputStream RISFile) throws PDException
 {
 int NumDocs=0;

@@ -73,6 +73,8 @@ private Properties Prop=null;
  * @param pUser
  * @param pPassword
  * @param pParam
+     * @param pEncrypt
+     * @throws prodoc.PDExceptionFunc
  */
 protected StoreGeneric(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt) throws PDExceptionFunc
 {
@@ -110,6 +112,8 @@ abstract protected void Disconnect() throws PDException;
  * @param Id
  * @param Ver
  * @param Bytes
+     * @param Rec
+     * @param OPDPath
  * @return
  * @throws PDException
  */
@@ -118,6 +122,7 @@ abstract protected int Insert(String Id, String Ver, InputStream Bytes, Record R
  *
  * @param Id
  * @param Ver
+     * @param Rec
  * @throws PDException
  */
 abstract protected void Delete(String Id, String Ver, Record Rec) throws PDException;
@@ -298,6 +303,8 @@ if (Id==null || Id.length()==0)
  * @param Id
  * @param Ver
  * @param FileName
+     * @param Rec
+     * @param OPDPath
  * @return
  * @throws PDException
  */
@@ -389,6 +396,12 @@ public void setEncriptPass(String EncriptPass)
 this.EncriptPass = EncriptPass;
 }
 //-----------------------------------------------------------------
+
+    /**
+     *
+     * @param Buffer
+     * @param readed
+     */
 protected void EncriptPass(byte[] Buffer, int readed)
 {
 byte[] Pass=EncriptPass.getBytes();    
@@ -398,6 +411,12 @@ for (int i = 0; i < readed; i++)
     }
 }
 //-----------------------------------------------------------------
+
+    /**
+     *
+     * @param Buffer
+     * @param readed
+     */
 protected void DecriptPass(byte[] Buffer, int readed)
 {
 byte[] Pass=EncriptPass.getBytes();    
@@ -562,6 +581,7 @@ return(Tot);
  * @param Id
  * @param Ver
  * @param fo
+     * @param Rec
  * @return
  * @throws PDException
  */
@@ -617,6 +637,8 @@ return(Tot);
  * @param Id
  * @param Ver
  * @param Bytes
+     * @param Rec
+     * @param OPDPath
  * @return
  * @throws PDException
  */

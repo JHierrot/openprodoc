@@ -38,96 +38,99 @@ import org.w3c.dom.NodeList;
 public final class Attribute
 {
 /**
- *
+ * Technical/interal name of the Attribute
  */
 private String Name;
 /**
- *
+ * Public name of the Attribute
  */
 private String UserName;
 /**
- *
+ * Description and comments for the Attribute
  */
 private String Description;
 /**
- *
+ * Physical type 8String, Integer, Date,..)
  */
 private int Type;
 /**
- *
+ * Constant for Type Integer
  */
 public static final int tINTEGER  =0;
 /**
- *
+ * Constant for Type "float" (BigDecimal actually for portability)
  */
 public static final int tFLOAT    =1;
 /**
- *
+ * Constant for Type String
  */
 public static final int tSTRING   =2;
 /**
- *
+ * Constant for Type Date
  */
 public static final int tDATE     =3;
 /**
- *
+ * Constant for Type Boolean
  */
 public static final int tBOOLEAN  =4;
 /**
- *
+ * Constant for Type TimeStamp
  */
 public static final int tTIMESTAMP=5;
+/**
+ * Constant for Type reference to a Thesaurus Term
+ */
 public static final int tTHES=6;
 /**
- *
+ * Minimum value of types
  */
 public static final int tMIN  =tINTEGER;
 /**
- *
+ * Maximum value of types
  */
 public static final int tMAX  =tTHES;
 /**
- *
+ * When true, the Attribute must be filled before saving to any Object (Doc, Folder, User, etc.)
  */
 private boolean Required = false;
 /**
- *
+ * Value of the ttribute
  */
 private Object Value = null;
 /**
- *
+ * Max Length for String or number of Thesarus for tipe tTHES
  */
 private int LongStr=0;
 /**
- *
+ * When true the Attribute is part of the Primary Key
  */
 private boolean PrimKey=false;
 /**
- *
+ * When true the Attribute has unique value in the database
  */
 private boolean Unique=false;
 /**
- *
+ * When true the Attribute can be modified after inserted, otherwise becomes fixed
  */
 private boolean ModifAllowed=true;
 /**
- *
+ * When true the Attribute allows to add multiple values (Keywords, authors, etc)
  */
 private boolean Multivalued=false;
-
 /**
- * 
+ * Constants for message error
  */
 static final String Attribute_is_not_Multivalued="Attribute_is_not_Multivalued";
 /**
- * 
+ * Constants for message error
  */
 static final String Incorrect_attribute_length="Incorrect_attribute_length";
-static final char ListSeparator='|';
-static public final String StringListSeparator="|";
-
 /**
- * 
+ * Separator when exporting and importing multiple values of an Attribute
+ */
+static public final String StringListSeparator="|";
+/**
+ * Set of values to assign to an Attribute.
  */
 private TreeSet ValuesList=null;
 /**
@@ -138,7 +141,13 @@ final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
  * Default formater, used to store in DDBB, export, etc
  */
 final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
+/**
+ * Formatters for reading, importing, exporting and storing BigDecimal
+ */
 static public final String DECIMALPATTERN="_0000000000.00;-#";
+/**
+ * Formatters for reading, importing, exporting and storing BigDecimal
+ */
 static public final String SWINGDECIMALPATTERN="0000000000.00;-#";
 
 //--------------------------------------------------------------------------
@@ -332,7 +341,7 @@ return Name;
 //--------------------------------------------------------------------------
 /**
  * @param pName the Name to set
- * @throws PDException
+ * @throws PDException in any error
 */
 public void setName(String pName) throws PDException
 {
@@ -365,7 +374,7 @@ return Type;
 //--------------------------------------------------------------------------
 /**
  * @param pType the Type to set
- * @throws PDException
+ * @throws PDException  inf the type is not a correct one
 */
 public void setType(int pType)  throws PDException
 {
@@ -402,8 +411,8 @@ return Value;
 }
 //--------------------------------------------------------------------------
 /**
- * @param pValue the Value to set
- * @throws PDException
+ * @param pValue the Value 
+ * @throws prodoc.PDException if Attribute is multivalued
 */
 public void setValue(Object pValue) throws PDException
 {
@@ -434,7 +443,7 @@ return LongStr;
 //--------------------------------------------------------------------------
 /**
  * @param pLongStr the LongStr to set
- * @throws PDException
+ * @throws PDException  if parameter is longer that current value
 */
 public void setLongStr(int pLongStr) throws PDException
 {
@@ -458,7 +467,7 @@ return PrimKey;
 //--------------------------------------------------------------------------
 /**
  * @param PrimKey the PrimKey to set
- * @throws PDException  
+ * @throws PDException  in any error
 */
 public void setPrimKey(boolean PrimKey) throws PDException
 {
@@ -477,7 +486,7 @@ return Unique;
 //--------------------------------------------------------------------------
 /**
  * @param Unique the Unique to set
- * @throws PDException  
+ * @throws PDException if Attribute is multivalued 
 */
 public void setUnique(boolean Unique) throws PDException
 {
@@ -546,7 +555,7 @@ if (isMultivalued())
     for (Iterator it = ValuesList.iterator(); it.hasNext();)
         {
         if (Tot.length()!=0)
-            Tot.append(ListSeparator);
+            Tot.append(StringListSeparator);
         Object Val = it.next();
         Tot.append(FormatExport(Val));
         }
@@ -574,7 +583,7 @@ if (isMultivalued())
     for (Iterator it = ValuesList.iterator(); it.hasNext();)
         {
         if (Tot.length()!=0)
-            Tot.append(ListSeparator);
+            Tot.append(StringListSeparator);
         Object Val = it.next();
         Tot.append(FormatExportXML(Val));
         }

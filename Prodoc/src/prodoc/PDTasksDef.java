@@ -27,20 +27,71 @@ import java.util.Vector;
  */
 public class PDTasksDef extends ObjPD
 {
-public static final String fNAME="Name";
-public static final String fCATEGORY="Category";
-public static final String fDESCRIPTION="Description";
-public static final String fTYPE="TaskType";
-public static final String fOBJTYPE="ObjType";
-public static final String fFILTER="ObjFilter";
-public static final String fPARAM="TaskParam";
-public static final String fPARAM2="TaskParam2";
-public static final String fPARAM3="TaskParam3";
-public static final String fPARAM4="TaskParam4";
-public static final String fACTIVE="Active";
-public static final String fTRANSACT="Transact";
 
-public static final String fMODETIM="TIM";
+    /**
+     *
+     */
+    public static final String fNAME="Name";
+
+    /**
+     *
+     */
+    public static final String fCATEGORY="Category";
+
+    /**
+     *
+     */
+    public static final String fDESCRIPTION="Description";
+
+    /**
+     *
+     */
+    public static final String fTYPE="TaskType";
+
+    /**
+     *
+     */
+    public static final String fOBJTYPE="ObjType";
+
+    /**
+     *
+     */
+    public static final String fFILTER="ObjFilter";
+
+    /**
+     *
+     */
+    public static final String fPARAM="TaskParam";
+
+    /**
+     *
+     */
+    public static final String fPARAM2="TaskParam2";
+
+    /**
+     *
+     */
+    public static final String fPARAM3="TaskParam3";
+
+    /**
+     *
+     */
+    public static final String fPARAM4="TaskParam4";
+
+    /**
+     *
+     */
+    public static final String fACTIVE="Active";
+
+    /**
+     *
+     */
+    public static final String fTRANSACT="Transact";
+
+    /**
+     *
+     */
+    public static final String fMODETIM="TIM";
 
 /**
  *
@@ -61,16 +112,46 @@ private String Description;
  */
 
 public static final int fTASK_DELETE_OLD_FOLD=0;
-public static final int fTASK_DELETE_OLD_DOC=1;
-public static final int fTASK_PURGEDOC=2;
-public static final int fTASK_IMPORT=3;
-public static final int fTASK_EXPORT=4;
-public static final int fTASK_DOCSREPORT=5;
-public static final int fTASK_FOLDSREPORT=6;
-public static final int fTASK_LOCALSYNC=7;
 
+    /**
+     *
+     */
+    public static final int fTASK_DELETE_OLD_DOC=1;
 
-public static final int fTASK_MAXCRON=7;
+    /**
+     *
+     */
+    public static final int fTASK_PURGEDOC=2;
+
+    /**
+     *
+     */
+    public static final int fTASK_IMPORT=3;
+
+    /**
+     *
+     */
+    public static final int fTASK_EXPORT=4;
+
+    /**
+     *
+     */
+    public static final int fTASK_DOCSREPORT=5;
+
+    /**
+     *
+     */
+    public static final int fTASK_FOLDSREPORT=6;
+
+    /**
+     *
+     */
+    public static final int fTASK_LOCALSYNC=7;
+
+    /**
+     *
+     */
+    public static final int fTASK_MAXCRON=7;
 
 private static final String[] LisTypeTask= {"DELETE_OLD_FOLD",
                                             "DELETE_OLD_DOC",
@@ -200,7 +281,9 @@ throw new PDException("PDTasksDef getRecoedStruct null");
 //-------------------------------------------------------------------------
 /**
 *
+     * @param R
 * @return
+     * @throws prodoc.PDException
 */
 static synchronized protected void CreateRecordStructBase(Record R) throws PDException
 {
@@ -265,19 +348,19 @@ this.Description = Description;
 protected void VerifyAllowedIns() throws PDException
 {
 if (!getDrv().getUser().getName().equals("Install"))  
-    if (!getDrv().getUser().getRol().isAllowCreateRepos() )
+    if (!getDrv().getUser().getRol().isAllowCreateTask() )
    PDException.GenPDException("Tasks_creation_not_allowed_to_user",getName());
 }
 //-----------------------------------------------------------------------
 protected void VerifyAllowedDel() throws PDException
 {
-if (!getDrv().getUser().getRol().isAllowMaintainRepos() )
+if (!getDrv().getUser().getRol().isAllowMaintainTask() )
    PDException.GenPDException("Tasks_delete_not_allowed_to_user",getName());
 }
 //-----------------------------------------------------------------------
 protected void VerifyAllowedUpd() throws PDException
 {
-if (!getDrv().getUser().getRol().isAllowMaintainRepos() )
+if (!getDrv().getUser().getRol().isAllowMaintainTask() )
    PDException.GenPDException("Tasks_modification_not_allowed_to_user",getName());
 }
 //-------------------------------------------------------------------------
@@ -592,6 +675,7 @@ this.Param4 = Param4;
  * 
  * @param Conds
  * @return 
+     * @throws prodoc.PDException 
  */    
 public Cursor Search(Conditions Conds) throws PDException
 {

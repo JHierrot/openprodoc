@@ -62,6 +62,12 @@ final static String NEWLINE="\r\n";
  * @param pUser
  * @param pPassword
  * @param pParam
+     * @param pEncrypt
+     * @param pUrlPost
+     * @param pDB
+     * @param pcontext
+     * @param phttpclient
+     * @throws prodoc.PDExceptionFunc
  */
 protected StoreRem(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt, HttpPost pUrlPost, CloseableHttpClient phttpclient, HttpContext pcontext, DocumentBuilder pDB) throws PDExceptionFunc
 {
@@ -110,6 +116,8 @@ protected void Disconnect() throws PDException
  * @param Id
  * @param Ver
  * @param Bytes
+     * @param Rec
+     * @param OPDPath
  * @return
  * @throws PDException
  */
@@ -167,6 +175,7 @@ return (Tot);
  *
  * @param Id
  * @param Ver
+     * @param Rec
  * @throws PDException
  */
 protected void Delete(String Id, String Ver, Record Rec) throws PDException
@@ -178,8 +187,10 @@ ReadWrite(DriverGeneric.S_DELFILE, "<OPD><Id>"+Id+"</Id><Ver>"+Ver+"</Ver></OPD>
 //-----------------------------------------------------------------
 /**
  *
+     * @param Reposit
  * @param Id
  * @param Ver
+     * @param Rec
  * @throws PDException
  */
 protected void Delete(String Reposit, String Id, String Ver, Record Rec) throws PDException

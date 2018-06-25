@@ -39,7 +39,11 @@ public static final String fOBJECTID="ObjectId";
  *
  */
 public static final String fOPERATION="Operation";
-public static final String fRESULT="Result";
+
+    /**
+     *
+     */
+    public static final String fRESULT="Result";
 
 /**
  *
@@ -292,6 +296,7 @@ Result = pResult;
  * 
  * @param Conds
  * @return 
+     * @throws prodoc.PDException 
  */    
 public Cursor Search(Conditions Conds) throws PDException
 {
@@ -303,6 +308,14 @@ if (PDLog.isDebug())
 return(getDrv().OpenCursor(QBE));
 }
 //-------------------------------------------------------------------------
+
+    /**
+     *
+     * @param ObjType
+     * @param D1
+     * @param D2
+     * @throws PDException
+     */
 public void DeleteRange(String ObjType, Date D1, Date D2) throws PDException
 {
 boolean InTransLocal;

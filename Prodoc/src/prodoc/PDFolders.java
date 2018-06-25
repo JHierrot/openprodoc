@@ -16,7 +16,6 @@
  * author: Joaquin Hierro      2011
  * 
  */
-
 package prodoc;
 
 import java.io.File;
@@ -27,100 +26,112 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
 /**
- *
+ * Main public class that manages all the operations for Folders in OpenProdoc
  * @author jhierrot
  */
 public class PDFolders extends ObjPD
 {
 /**
- *
+ * Name of the attribute identifier of the Folder
  */
 public static final String fPDID="PDId";
 /**
- *
+ * Name of the attribute containing the "name" of the folder
  */
 public static final String fTITLE="Title";
 /**
- *
+ * Name of the attribute containing the ACL of the folder
  */
 public static final String fACL="ACL";
 /**
- *
+ * Name of the attribute containing the document type of the document
  */
 public static final String fFOLDTYPE="FolderType";
 /**
- *
+ * Name of the attribute containing the Identifier of the folder that "contains" the folder
  */
 public static final String fPARENTID="ParentId";
 /**
- *
+ * Name of the attribute containing the Identifier of ANY of the folders that "contains" the folder
  */
 public static final String fGRANTPARENTID="GrantParentId";
 /**
- *
+ * Constant with the value of the base folder, that is folder containing ALL the folders 
  */
 public static final String ROOTFOLDER="RootFolder";
 /**
- *
+ * Constant with the value of the folder containing users personal folders
  */
 public static final String USERSFOLDER="Users";
+/**
+ * Constant with the value of the folderdefined for storing tchnical/system documents and elements
+ */
 public static final String SYSTEMFOLDER="System";
 /**
- *
+ * Default table name for defauls folder type
+ */    
+private static final String DEFTABNAME="PD_FOLDERS";
+
+/**
+ * Internal Record for managing a copy of the structure of a Folder
  */
 static private Record FoldersStruct=null;
 /**
- *
+ * Internal Record for managing a copy of the structure of folder levels table
  */
 static private Record FoldersLevStruct=null;
 /**
- *
+ * Field identifier
  */
 private String PDId=null;
 /**
- *
+ * Field name/title of folder
  */
 private String Title=null;
 /**
- *
+ * Field ACL
  */
 private String ACL=null;
 /**
- *
+ * Field Folder type
  */
-private String FolderType=null;
+private String FolderType=DEFTABNAME;
 /**
- *
+ * Field identifier of Folder containing the folder
  */
 private String ParentId=null;
 /**
- *
+ * Boolean field that return true when current folder is root folder
+ * that is PdId=Title=ROOTFOLDER
  */
 private boolean IsRootFolder=false;
 /**
- *
+ * Collection of type definitions that compound the current document type
  */
-private ArrayList TypeDefs=null;
+private ArrayList<Record> TypeDefs=null;
 /**
- *
+ * Collection of type definitions Attributes that compound the current document type
  */
-private ArrayList TypeRecs=null;
+private ArrayList<Record> TypeRecs=null;
 /**
- *
+ * Collection of ALL the attributes defined for a folder type (including inherited Attributes)
  */
 private Record RecSum=null;
-
+/**
+ * Cache of PDDolders managed in JVM the last minutes
+ */
 static private ObjectsCache FoldObjectsCache = null;
-
+/**
+ * Characters not allowed in Folders name (potential problems when exporting or searching)
+ */
 static private final String NotAllowedChars="/\\:*?";
 
 //-------------------------------------------------------------------------
 /**
- *
- * @param Drv
- * @throws PDException
+ * Default constructor that creates a Folder of the default Foldertype
+ * @param Drv Driver generic to use for reading and writing
+ * @throws PDException In any error
  */
 public PDFolders(DriverGeneric Drv) throws PDException
 {
@@ -129,10 +140,10 @@ setFolderType(getTableName());
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Drv
- * @param pFoldType
- * @throws PDException
+ * Default constructor that creates a document of the specified foldertype
+ * @param Drv Driver generic to use for reading and writing
+ * @param pFoldType Type of folder to create
+ * @throws PDException In any error
  */
 public PDFolders(DriverGeneric Drv, String pFoldType) throws PDException
 {
@@ -141,6 +152,11 @@ setFolderType(pFoldType);
 getTypeDefs();
 }
 //-------------------------------------------------------------------------
+/**
+ * Assign the values of the record to the fields of the object
+ * @param Rec values to assign
+ * @throws PDException In any error
+*/
 @Override
 public void assignValues(Record Rec) throws PDException
 {
@@ -155,16 +171,17 @@ getRecSum().assign(Rec);
 }
 //-------------------------------------------------------------------------
 /**
-* @return the PDId
-*/
+ * @return the PDId
+ */
 public String getPDId()
 {
 return PDId;
 }
 //-------------------------------------------------------------------------
 /**
- * @param pPDId
- * @throws PDExceptionFunc  
+ * Sets the unique identifier
+ * @param pPDId Identifier to set
+ * @throws PDExceptionFunc  In any error
  */
 public void setPDId(String pPDId) throws PDExceptionFunc
 {
@@ -172,17 +189,18 @@ this.PDId = pPDId;
 }
 //-------------------------------------------------------------------------
 /**
-* @return the Title
-*/
+ * @return the Title
+ */
 public String getTitle()
 {
 return Title;
 }
 //-------------------------------------------------------------------------
 /**
- * @param pTitle
- * @throws PDExceptionFunc  
-*/
+ * Sets the Folder title/name
+ * @param pTitle Value to set
+ * @throws PDExceptionFunc in any error
+ */
 public void setTitle(String pTitle) throws PDExceptionFunc
 {
 if (pTitle==null)    
@@ -198,12 +216,11 @@ for (int i=0; i<pTitle.length(); i++)
        PDExceptionFunc.GenPDException("Character_not_included_in_the_allowed_set",AllowedChars);
     }
 this.Title = pTitle;
-
 }
 //-------------------------------------------------------------------------
 /**
  * object "method" needed because static overloading doesn't work in java
- * @return
+ * @return the name of the table for the default folder type
  */
 @Override
 public String getTabName()
@@ -212,28 +229,28 @@ return(getTableName());
 }
 //-------------------------------------------------------------------------
 /**
- * static equivalent method
- * @return
+ * static equivalent method to getTabName() that returns the name
+ * @return the name of the table for the default folder type
  */
 static public String getTableName()
 {
-return("PD_FOLDERS");
+return(DEFTABNAME);
 }
 //-------------------------------------------------------------------------
 /**
- * static method
- * @return
+ * Returns the name of the table containing the compiledinformation of folders hierarchy
+ * @return The name of the table
  */
-static public String getTableNameFoldLev()
+static private String getTableNameFoldLev()
 {
 return("PD_FOLD_LEV");
 }
 //-------------------------------------------------------------------------
 /**
- * The install method is generic becaus for instantiate a object, the class
+ * The install method is generic because for instantiate a object, the class
  * need to access to the tables for definition
- * @param Drv
- * @throws PDException
+ * @param Drv Genereric driver
+ * @throws PDException in any error
  */
 static public void Install(DriverGeneric Drv) throws PDException
 {
@@ -241,8 +258,10 @@ Drv.CreateTable(getTableName(), getRecordStructPDFolder());
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @throws PDException
+ * Constructs a record with all the attributes of the folder type and the values
+ * of the attributes asigned using the setter of the class.
+ * @throws PDException in any error
+ * @return a record with all the attributes of the folder type
  */
 @Override
 synchronized public Record getRecord() throws PDException
@@ -250,6 +269,11 @@ synchronized public Record getRecord() throws PDException
 return(getRecSum());
 }
 //-------------------------------------------------------------------------
+/**
+ * Return a copy of the static structure of attributes for the class
+ * @throws PDException in any error
+ * @return a copy of the static structure of attributes for the class
+ */
 @Override
 protected Record getRecordStruct() throws PDException
 {
@@ -257,9 +281,9 @@ return( getRecSum().Copy());
 }
 //-------------------------------------------------------------------------
 /**
- * Returns the fixed structure
- * @return
- * @throws PDException
+ * Return a copy of the static structure of attributes for the class
+ * @throws PDException In any error
+ * @return a copy of the static structure of attributes for the class
  */
 static public Record getRecordStructPDFolder() throws PDException
 {
@@ -269,9 +293,9 @@ return(FoldersStruct.Copy());
 }
 //-------------------------------------------------------------------------
 /**
- * Returns the fixed structure
- * @return
- * @throws PDException
+ * Returns the structure of the default folder type, creating it if neeeded
+ * @return a Record with all the Attributes
+ * @throws PDException In any error
  */
 static private synchronized Record CreateRecordStructPDFolder() throws PDException
 {
@@ -291,9 +315,9 @@ else
 }
 //-------------------------------------------------------------------------
 /**
- * Returns the fixed structure for levels of folders
- * @return
- * @throws PDException
+ * Returns the fixed structure for levels/hierachy of folders
+ * @return a Record with all the Attributes
+ * @throws PDException In any error
  */
 static protected Record getRecordStructPDFolderLev() throws PDException
 {
@@ -303,9 +327,9 @@ return(FoldersLevStruct.Copy());
 }
 //-------------------------------------------------------------------------
 /**
- * Returns the fixed structure for levels of folders
- * @return
- * @throws PDException
+ * Returns the structure of the folder levels, creating it if neeeded
+ * @return a Record with all the Attributes
+ * @throws PDException In any error
  */
 static private synchronized Record CreateRecordStructPDFolderLev() throws PDException
 {
@@ -321,9 +345,12 @@ else
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @throws PDException
+ * Construct the conditions for a query to retrieve the actual object from the database
+ * the constructed query searchs by the unique id/index PDID
+ * @throws PDException if there is no PDID value
+ * @return the constructed conditions
  */
+@Override
 protected Conditions getConditions() throws PDException
 {
 Conditions ListCond=new Conditions();
@@ -336,7 +363,7 @@ return(ListCond);
 /**
  * Builds the default conditions identifying the folder: Id="id"
  * @return List of conditions
- * @throws PDException
+ * @throws PDException in any error
  */
 protected Conditions getConditionsMaint() throws PDException
 {
@@ -345,24 +372,33 @@ ListCond.addCondition(new Condition(fPDID, Condition.cEQUAL, getPDId()));
 return(ListCond);
 }
 //-------------------------------------------------------------------------
+/**
+ * Creates a contions object for searching with like criteria
+ * @param Name value of title to search containing wildcards
+ * @return List of conditions
+ * @throws PDException In any error
+ */
+@Override
 protected Conditions getConditionsLike(String Name) throws PDException
 {
 Conditions ListCond=new Conditions();
-ListCond.addCondition(new Condition(fPDID, Condition.cLIKE, VerifyWildCards(Name)));
+ListCond.addCondition(new Condition(fTITLE, Condition.cLIKE, VerifyWildCards(Name)));
 Condition CondAcl=new Condition(PDFolders.fACL, new HashSet(getDrv().getUser().getAclList().keySet()));
 ListCond.addCondition(CondAcl);
 return(ListCond);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Ident
- * @throws PDExceptionFunc  
+ * Assign the unique identifier (PDId in foldrs) to the object
+ * @param Ident value to assign
+ * @throws PDExceptionFunc in any error
  */
+@Override
 protected void AsignKey(String Ident) throws PDExceptionFunc
 {
 setPDId(Ident);
 }
+//-------------------------------------------------------------------------
 /**
 * @return the ACL
 */
@@ -370,15 +406,16 @@ public String getACL()
 {
 return ACL;
 }
-
+//-------------------------------------------------------------------------
 /**
- * @param pACL
-*/
+ * Sets the name of the ACL
+ * @param pACL ACL to assign
+ */
 public void setACL(String pACL)
 {
 this.ACL = pACL;
 }
-
+//-------------------------------------------------------------------------
 /**
 * @return the FolderType
 */
@@ -386,23 +423,29 @@ public String getFolderType()
 {
 return FolderType;
 }
-
+//-------------------------------------------------------------------------
 /**
- * @param pFolderType
+ * Assigns the Folder Type, forcing to reload the definition of type and metadata
+ * @param pFolderType Type to assign
  */
-public void setFolderType(String pFolderType)
+public void setFolderType(String pFolderType) throws PDException
 {
-this.FolderType = pFolderType;
-//RecSum.getAttr(fFOLDTYPE).setValue(pFolderType);
-this.TypeDefs=null;
-this.TypeRecs=null;
+if (PDLog.isDebug())
+    PDLog.Debug("PDFolders.setFolderType:"+FolderType);
+if (!FolderType.equalsIgnoreCase(pFolderType))
+    {
+    FolderType = pFolderType;
+    LoadDef(FolderType);
+    }
+//this.TypeDefs=null;
+//this.TypeRecs=null;
 }
 //-------------------------------------------------------------------------
 /**
-* The install method is generic becaus for instantiate a object, the class
+* The install method is generic because for instantiate a object, the class
 * need to access to the tables for definition
- * @param Drv
- * @throws PDException
+* @param Drv Drive to use
+* @throws PDException in any error
 */
 static protected void InstallMulti(DriverGeneric Drv) throws PDException
 {
@@ -413,9 +456,10 @@ Drv.CreateTable(getTableNameFoldLev(), getRecordStructPDFolderLev());
 Drv.AddIntegrity(getTableNameFoldLev(), fPDID,          getTableName(), fPDID);
 Drv.AddIntegrity(getTableNameFoldLev(), fGRANTPARENTID, getTableName(), fPDID);
 }
+//-------------------------------------------------------------------------
 /**
- *
- * @throws PDException
+ * Creates a folder
+ * @throws PDException In any error
  */
 public void insert() throws PDException
 {
@@ -480,8 +524,8 @@ protected void MonoInsert()  throws PDException
 {
 for (int i = getTypeDefs().size()-1; i >=0; i--)
     {
-    Record TypDef=(Record)getTypeDefs().get(i);
-    Record DatParc=((Record)getTypeRecs().get(i)).CopyMono();
+    Record TypDef=getTypeDefs().get(i);
+    Record DatParc=(getTypeRecs().get(i)).CopyMono();
 //    if (i!=getTypeDefs().size()-1)
     if (!DatParc.ContainsAttr(fPDID))
         {
@@ -507,8 +551,8 @@ Record RecSave=new Record();
 Object Val2Ins;
 for (int NumDefTyp = 0; NumDefTyp<getTypeDefs().size(); NumDefTyp++)
     {
-    TypDef=((Record)getTypeRecs().get(NumDefTyp)).CopyMulti();
-    String TabName=(String) ((Record)getTypeDefs().get(NumDefTyp)).getAttr(PDObjDefs.fNAME).getValue();
+    TypDef=(getTypeRecs().get(NumDefTyp)).CopyMulti();
+    String TabName=(String) (getTypeDefs().get(NumDefTyp)).getAttr(PDObjDefs.fNAME).getValue();
     TypDef.initList();
     for (int NumAttr = 0; NumAttr < TypDef.NumAttr(); NumAttr++)
         {
@@ -537,6 +581,11 @@ for (int NumDefTyp = 0; NumDefTyp<getTypeDefs().size(); NumDefTyp++)
      }
 }
 //-------------------------------------------------------------------------
+/**
+ * Checks if the user is granted to create a folder (by role limitations of by ACL of parent folder)
+ * @throws PDException If he user is nos allowed
+ */
+@Override
 protected void VerifyAllowedIns() throws PDException
 {
 if (getDrv().getUser().getName().equalsIgnoreCase("Install"))  
@@ -548,10 +597,15 @@ D.Load(getFolderType());
 if (!getDrv().getUser().getAclList().containsKey(D.getACL()))
     PDExceptionFunc.GenPDException("Folder_creation_not_allowed_to_user",getDrv().getUser().getName()+" / "+getFolderType());
 Integer Perm=(Integer)getDrv().getUser().getAclList().get(D.getACL());
-if (Perm.intValue()<PDACL.pUPDATE)
+if (Perm<PDACL.pUPDATE)
     PDExceptionFunc.GenPDException("Folder_creation_not_allowed_to_user",getDrv().getUser().getName()+" / "+getFolderType());
 }
 //-------------------------------------------------------------------------
+/**
+ * Checks if the user is granted to DELETE a folder (by role limitations of by ACL of parent folder)
+ * @throws PDException If he user is nos allowed
+ */
+@Override
 protected void VerifyAllowedDel() throws PDException
 {
 if (!getDrv().getUser().getRol().isAllowMaintainFolder() )
@@ -561,10 +615,15 @@ TobeDeleted.Load(getPDId());
 if (!getDrv().getUser().getAclList().containsKey(TobeDeleted.getACL()))
    PDExceptionFunc.GenPDException("User_without_permissions_over_folder", null);
 Integer Perm=(Integer)getDrv().getUser().getAclList().get(TobeDeleted.getACL());
-if (Perm.intValue()!=PDACL.pDELETE)
+if (Perm!=PDACL.pDELETE)
    PDExceptionFunc.GenPDException("User_without_permissions_over_folder", null);
 }
 //-------------------------------------------------------------------------
+/**
+ * Checks if the user is granted to UPDATE a folder (by role limitations of by ACL of parent folder)
+ * @throws PDException If he user is nos allowed
+ */
+@Override
 protected void VerifyAllowedUpd() throws PDException
 {
 if (!getDrv().getUser().getRol().isAllowMaintainFolder() )
@@ -574,20 +633,21 @@ TobeUpdated.Load(getPDId());
 if (!getDrv().getUser().getAclList().containsKey(TobeUpdated.getACL()))
    PDExceptionFunc.GenPDException("User_without_permissions_over_folder", null);
 Integer Perm=(Integer)getDrv().getUser().getAclList().get(TobeUpdated.getACL());
-if (Perm.intValue()<=PDACL.pREAD)
+if (Perm<=PDACL.pREAD)
    PDExceptionFunc.GenPDException("User_without_permissions_over_folder", null);
 }
 //-------------------------------------------------------------------------
 /**
-* @return the ParentId
-*/
+ * @return the ParentId
+ */
 public String getParentId()
 {
 return ParentId;
 }
 //-------------------------------------------------------------------------
 /**
- * @param pParentId
+ * Sets the parent folder of the current object
+ * @param pParentId Id of parent folder
  */
 public void setParentId(String pParentId)
 {
@@ -595,22 +655,22 @@ this.ParentId = pParentId;
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @throws PDException
+ * Creates the root folder, base of all the other folders
+ * @throws PDException In any error
  */
-public void CreateRootFolder() throws PDException
+private void CreateRootFolder() throws PDException
 {
 IsRootFolder=true;
 insert();
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
+ * Generates an unique identifier
+ * @return The identifier generated
  */
 public String GenerateId()
 {
-StringBuffer genId = new StringBuffer();
+StringBuilder genId = new StringBuilder();
 genId.append(Long.toHexString(System.currentTimeMillis()));
 genId.append("-");
 genId.append(Long.toHexString(Double.doubleToLongBits(Math.random())));
@@ -618,9 +678,9 @@ return genId.toString();
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param tableName
- * @throws PDException
+ * Loads the definition of a folder type
+ * @param tableName name of folder type
+ * @throws PDException in any error
  */
 private void LoadDef(String tableName) throws PDException
 {
@@ -638,11 +698,12 @@ for (int i = 0; i < getTypeRecs().size(); i++)
 RecSum.getAttr(fFOLDTYPE).setValue(getFolderType());
 }
 //-------------------------------------------------------------------------
-/** Return an ordered list of types
- * @return the TypeDefs
- * @throws PDException
+/** Return an ordered list of the hierarchy of folder types from whom this
+ * folder type inherit its attributes
+ * @return the TypeDefs the array list with the names of folder types
+ * @throws PDException if there is a problem comunicating with the server
 */
-public ArrayList getTypeDefs() throws PDException
+public ArrayList<Record> getTypeDefs() throws PDException
 {
 if (TypeDefs==null)
     LoadDef(getFolderType());
@@ -650,10 +711,12 @@ return TypeDefs;
 }
 //-------------------------------------------------------------------------
 /**
- * @return the TypeRecs
- * @throws PDException
+ * Returns the collection of attributes of the folder type and its ancestors
+ *   loads the definition if there are not loaded
+ * @return the TypeRecs Array with all the definitions
+ * @throws PDException In any error
 */
-public ArrayList getTypeRecs() throws PDException
+public ArrayList<Record> getTypeRecs() throws PDException
 {
 if (TypeRecs==null)
     LoadDef(getFolderType());
@@ -661,8 +724,8 @@ return TypeRecs;
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @throws PDException
+ * Insert a set of records in folder level table publising the "hierachy of folders of current folder
+ * @throws PDException In any error
  */
 private void ActFoldLev() throws PDException
 {
@@ -681,10 +744,10 @@ for (Iterator it = GrandParentList.iterator(); it.hasNext();)
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Parent
+ * Search the list of folders that contain the specified folder
+ * @param Parent Folder Id to lok for the hierachy
  * @return a Set containing the parents of Parent
- * @throws PDException
+ * @throws PDException In any error
  */
 public HashSet getListGrandParentList(String Parent) throws PDException
 {
@@ -695,7 +758,9 @@ Condition CondParents=new Condition( fPDID, Condition.cEQUAL, Parent);
 Conditions Conds=new Conditions();
 Conds.addCondition(CondParents);
 Query Q=new Query(getTableNameFoldLev(), getRecordStructPDFolderLev(), Conds);
-Cursor CursorId=getDrv().OpenCursor(Q);
+Cursor CursorId=null;
+try {
+CursorId=getDrv().OpenCursor(Q);
 Record Res=getDrv().NextRec(CursorId);
 while (Res!=null)
     {
@@ -704,16 +769,22 @@ while (Res!=null)
     Res=getDrv().NextRec(CursorId);
     }
 getDrv().CloseCursor(CursorId);
+} catch (Exception Ex)
+    {
+    if (CursorId!=null)
+        getDrv().CloseCursor(CursorId);
+    PDException.GenPDException("Error_retrieving_folder_hierarchy", Ex.getLocalizedMessage());
+    }
 if (PDLog.isDebug())
     PDLog.Debug("PDFolders.getListGrandParentList<:"+Parent);
 return(Result);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param PDId
- * @return a Set containing the parents of Parent
- * @throws PDException
+ * return a list of folders contained (at any level) in the forlder specified
+ * @param PDId Identifier of folder to look for descendant
+ * @return a Set containing the descendant of PDId folder
+ * @throws PDException In any error
  */
 public HashSet getListDescendList(String PDId) throws PDException
 {
@@ -724,7 +795,9 @@ Condition CondParents=new Condition( fGRANTPARENTID, Condition.cEQUAL, PDId);
 Conditions Conds=new Conditions();
 Conds.addCondition(CondParents);
 Query Q=new Query(getTableNameFoldLev(), getRecordStructPDFolderLev(), Conds);
-Cursor CursorId=getDrv().OpenCursor(Q);
+Cursor CursorId=null;
+try {
+CursorId=getDrv().OpenCursor(Q);
 Record Res=getDrv().NextRec(CursorId);
 while (Res!=null)
     {
@@ -733,15 +806,24 @@ while (Res!=null)
     Res=getDrv().NextRec(CursorId);
     }
 getDrv().CloseCursor(CursorId);
+} catch (Exception Ex)
+    {
+    if (CursorId!=null)
+        getDrv().CloseCursor(CursorId);
+    PDException.GenPDException("Error_retrieving_folder_hierarchy", Ex.getLocalizedMessage());
+    }
 if (PDLog.isDebug())
     PDLog.Debug("PDFolders.getListDescendList<:"+PDId);
 return(Result);
 }
 //-------------------------------------------------------------------------
 /**
- * @return the RecSum
- * @throws PDException
-*/
+ * Return all the Attributes for the current folder type
+ *   empty or filled (depending if it has been used)
+ *   if needed loads the definition
+ * @return the Record with all the attributes
+ * @throws PDException in any error
+ */
 public Record getRecSum() throws PDException
 {
 if (RecSum==null)
@@ -760,7 +842,7 @@ return RecSum;
  * Deletes the folder and all the documents and subfolders contained recursively
  * If the number of folders, documents and levels is too big, this method can 
  * create problems in the rollback of the database storing the metadata
- * @throws PDException in any problem and cancels the Transaction. When enough permissions throws PDFuncException.
+ * @throws PDException in any problem and cancels the Transaction. When not enough permissions throws PDFuncException.
  */
 @Override
 public void delete() throws PDException
@@ -786,11 +868,9 @@ DelFoldMetadata();
 GenerateNoTransThreads(PDTasksDefEvent.fMODEDEL);
 getObjCache().remove(getKey());
 } catch (PDException Ex)
-    {
-    Ex.printStackTrace();    
+    {  
     getDrv().AnularTrans();
     PDException.GenPDException("Error_deleting_folder",Ex.getLocalizedMessage());
-    throw Ex;
     }
 if (InTransLocal)
     getDrv().CerrarTrans();
@@ -802,7 +882,7 @@ if (PDLog.isDebug())
  * Deletes all the multivalued atributes of the current element
  * @param Id2Del PDId of document to delete
  * @param Vers  Version of Document to delete. When null, deletes ALL versions
- * @throws PDException
+ * @throws PDException In any error
  */
 private void MultiDelete(String Id2Del) throws PDException
 {
@@ -812,8 +892,8 @@ Attribute Atr;
 Conditions Conds;
 for (int NumDefTyp = 0; NumDefTyp<getTypeDefs().size(); NumDefTyp++)
     {
-    TypDef=((Record)getTypeRecs().get(NumDefTyp)).CopyMulti();
-    String TabName=(String)((Record)getTypeDefs().get(NumDefTyp)).getAttr(PDObjDefs.fNAME).getValue();
+    TypDef=(getTypeRecs().get(NumDefTyp)).CopyMulti();
+    String TabName=(String)(getTypeDefs().get(NumDefTyp)).getAttr(PDObjDefs.fNAME).getValue();
     TypDef.initList();
     for (int NumAttr = 0; NumAttr < TypDef.NumAttr(); NumAttr++)
         {
@@ -890,22 +970,24 @@ getDrv().CloseCursor(ListFoldersContained);
     }
 }
 //-------------------------------------------------------------------------
+/**
+ * Deletes all the Attbitues of the folder in all the tables
+ * @throws PDException In any error 
+ */
 private void DelFoldMetadata() throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDFolders.DelFoldMetadata:"+getPDId());  
 for (int i = 0; i < getTypeDefs().size(); i++)
     {
-    Record TypDef=(Record)getTypeDefs().get(i);
-//    Record DatParc=(Record)F.getTypeRecs().get(i);
-//    DatParc.assign(this.getRecSum());
+    Record TypDef=getTypeDefs().get(i);
     getDrv().DeleteRecord((String)TypDef.getAttr(PDObjDefs.fNAME).getValue(), getConditionsMaint());
     }
 }
 //-------------------------------------------------------------------------
 /**
  * Deletes all the references in upper levels to this folder
- * @throws PDException
+ * @throws PDException In any error
  */
 private void DeleteFoldLevelParents()  throws PDException
 {
@@ -919,7 +1001,7 @@ getDrv().DeleteRecord(getTableNameFoldLev(), Conds);
 //-------------------------------------------------------------------------
 /**
  * Updates the metadata of the folder
- * @throws PDException
+ * @throws PDException In any error
  */
 @Override
 public void update()  throws PDException
@@ -960,8 +1042,8 @@ protected void MonoUpdate()  throws PDException
 {
 for (int i = getTypeDefs().size()-1; i >=0; i--)
     {
-    Record TypDef=(Record)getTypeDefs().get(i);
-    Record DatParc=(Record)getTypeRecs().get(i);
+    Record TypDef=getTypeDefs().get(i);
+    Record DatParc=getTypeRecs().get(i);
     if (i!=getTypeDefs().size()-1)
         {
         if (DatParc.getAttr(fPDID)==null)    
@@ -980,7 +1062,7 @@ for (int i = getTypeDefs().size()-1; i >=0; i--)
  * Creates the main folder used by all the elements as "infraestructure", 
  * the "Users" folder and the "System" folder
  * @param Drv to be used
- * @throws PDException
+ * @throws PDException In any error
  */
 protected static void CreateBaseRootFold(DriverGeneric Drv) throws PDException
 {
@@ -1027,6 +1109,7 @@ Record r=new Record();
 r.addAttr(PDFolders.getRecordStructPDFolder().getAttr(PDFolders.fPDID));
 Query Q=new Query(getTabName(), r, Conds, fTITLE);
 Cursor CursorId=getDrv().OpenCursor(Q);
+try {
 Record Res=getDrv().NextRec(CursorId);
 while (Res!=null)
     {
@@ -1035,16 +1118,21 @@ while (Res!=null)
     Res=getDrv().NextRec(CursorId);
     }
 getDrv().CloseCursor(CursorId);
+} catch (Exception Ex)
+    {
+    getDrv().CloseCursor(CursorId);
+    PDException.GenPDException("Error_retrieving_folder_hierarchy", Ex.getLocalizedMessage());
+    }
 if (PDLog.isDebug())
     PDLog.Debug("PDFolders.getListDirectDescendList<:"+PDId);
 return(Result);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Ident
- * @return
- * @throws PDException
+ * Loads the standard attributes of folder identified by Ident
+ * @param Ident Identifier of folder to load
+ * @return A record with the loaded values
+ * @throws PDException In any error
  */
 public Record Load(String Ident)  throws PDException
 {
@@ -1056,8 +1144,12 @@ if (r==null)
     {
     Query LoadAct=new Query(getTabName(), getRecordStructPDFolder(),getConditions());
     Cursor Cur=getDrv().OpenCursor(LoadAct);
+    try {
     r=getDrv().NextRec(Cur);
-    getDrv().CloseCursor(Cur);
+    } finally
+        {
+        getDrv().CloseCursor(Cur);
+        }
     getObjCache().put(Ident, r);
     }
 if (r!=null)
@@ -1066,10 +1158,10 @@ return(r);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Ident
- * @return
- * @throws PDException
+ * Load to memory all the elements of a Folder, including all the inherited attributes and multivalued
+ * @param Ident Identifier (PDId) of Folder
+ * @return a record with ALL the Attributes of the Folder type
+ * @throws PDException In any error
  */
 public Record LoadFull(String Ident)  throws PDException
 {
@@ -1082,7 +1174,7 @@ if (getTypeDefs().size()>1)
     Vector ListTabs=new Vector();
     for (int i = 0; i<getTypeDefs().size(); i++)
         {
-        Record TypDef=(Record)getTypeDefs().get(i);
+        Record TypDef=getTypeDefs().get(i);
         ListTabs.add((String)TypDef.getAttr(PDObjDefs.fNAME).getValue());
         if (! ((String)ListTabs.elementAt(i)).equals(PDFolders.getTableName()))
             {
@@ -1095,17 +1187,20 @@ if (getTypeDefs().size()>1)
     Rec.getAttr(fPDID).setName(PDFolders.getTableName()+"."+fPDID);
     Query LoadAct=new Query(ListTabs, Rec, Conds, null);
     Cursor Cur=getDrv().OpenCursor(LoadAct);
+    try {
     r=getDrv().NextRec(Cur);
+    } finally 
+        {
+        getDrv().CloseCursor(Cur);
+        }
     if (r!=null)
         {
         MultiLoad(r);    
         assignValues(r);
         }
-    getDrv().CloseCursor(Cur);
     }
 return(r);
 }
-//-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
 /**
  * Loads all the multivalued attributed during the LoadFull
@@ -1125,8 +1220,8 @@ Cursor Cur;
 Record RecLoad=new Record();
 for (int NumDefTyp = 0; NumDefTyp<getTypeDefs().size(); NumDefTyp++)
     {
-    TypDef=((Record)getTypeRecs().get(NumDefTyp)).CopyMulti();
-    String TabName=(String)((Record)getTypeDefs().get(NumDefTyp)).getAttr(PDObjDefs.fNAME).getValue();
+    TypDef=getTypeRecs().get(NumDefTyp).CopyMulti();
+    String TabName=(String)getTypeDefs().get(NumDefTyp).getAttr(PDObjDefs.fNAME).getValue();
     TypDef.initList();
     for (int NumAttr = 0; NumAttr < TypDef.NumAttr(); NumAttr++)
         {
@@ -1147,26 +1242,36 @@ for (int NumDefTyp = 0; NumDefTyp<getTypeDefs().size(); NumDefTyp++)
         RecLoad.addAttr(Attr2Load);
         LoadAct=new Query(MultiName, RecLoad, Conds, null);
         Cur=getDrv().OpenCursor(LoadAct);
+        try {
         r=getDrv().NextRec(Cur);
         while (r!=null)
             {
             Rec.getAttr(Atr.getName()).AddValue(r.getAttr(Atr.getName()).getValue());    
             r=getDrv().NextRec(Cur);            
             }
-        getDrv().CloseCursor(Cur);
+        } finally 
+            {
+            getDrv().CloseCursor(Cur);
+            }
         }
      }
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
+ * Returns the default order for queries
+ * @return The deafult order (TITLE)
  */
+@Override
 protected String getDefaultOrder()
 {
 return(fTITLE);
 }
 //-------------------------------------------------------------------------
+/**
+ * Overloaded method for converting to String
+ * @return the string representing Folder (title)
+ */
+@Override
 public String toString()
 {
 return this.getTitle();
@@ -1177,7 +1282,7 @@ return this.getTitle();
  *      default folder type and the name FoldName
  * @param FoldName Name of the new folder
  * @return Id of the new folder
- * @throws PDException
+ * @throws PDException In any error
  */
 public String CreateChild(String FoldName) throws PDException
 {
@@ -1239,7 +1344,7 @@ return(Id);
 /**
  * From a Id generates the "path" as a Filesystem
  * @param Id PDID of child folder
- * @return the String representig the complete path excludig rootfolder
+ * @return the String representing the complete path excludig rootfolder
  * @throws PDException if the folder doesn't exist or the user it'snt allowed
  */
 public String getPathId(String Id) throws PDException
@@ -1256,18 +1361,6 @@ return(CompPath);
 }
 //-------------------------------------------------------------------------
 /**
- * Travels by and create all the necesari folders
- * @param FoldName name of child folder
- * @return the Id of the last folder in the path
- * @throws PDException if the folder dosen't exist or the user it'snt allowed
- */
-public String CreatePath(String FoldName)  throws PDException
-{
-String Path="";
-return(Path);
-}
-//-------------------------------------------------------------------------
-/**
  * Search for Folders returning a cursor with the results of folders with the
  * indicated values of fields. Only return the folders alowed for the user, as defined by ACL.
  * @param FolderType Type of folder to search. Can return folders of subtype.
@@ -1275,7 +1368,7 @@ return(Path);
  * @param SubTypes if true, returns results of the indicated type AND susbtipes
  * @param SubFolders if true seach in actual folder AND subfolders, if false, serach in ALL the structure
  * @param IdActFold Folder to start the search. if null, start in the root level
- * @param Ord
+ * @param Ord Vector of String with the ascending order
  * @return a Cursor with the results of the query to use o send to NextFold()
  * @throws PDException when occurs any problem
  */
@@ -1398,6 +1491,7 @@ return(NextF);
  * Create if necesary and Assign the Cache for the objects of this type of object
  * @return the cache object for the type
  */
+@Override
 protected ObjectsCache getObjCache()
 {
 if (FoldObjectsCache==null)
@@ -1429,12 +1523,12 @@ return(RFull.toXML()+"</ListAttr>");
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param OPDObject
- * @param ParentFolderId
- * @param MaintainId
- * @return
- * @throws PDException
+ * Import a Folder(s) described by an XML with content referenced
+ * @param OPDObject XMLNode to process
+ * @param ParentFolderId OPD destination folder
+ * @param MaintainId When true, the Original Id is maintained, else a new one is assigned
+ * @return The PDFolder of the imported Folder
+ * @throws PDException In any error
  */
 public PDFolders ImportXMLNode(Node OPDObject, String ParentFolderId, boolean MaintainId) throws PDException
 {
@@ -1463,11 +1557,11 @@ return NewFold;
 }
 //---------------------------------------------------------------------
 /**
- * 
- * @param XMLFile
- * @param ParentFolderId
- * @return 
- * @throws PDException
+ * Process and XML file
+ * @param XMLFile File to process
+ * @param ParentFolderId Flder where the new Folde()s) will be created
+ * @return the last object created
+ * @throws PDException In any error
  */
 public PDFolders ProcessXML(File XMLFile, String ParentFolderId) throws PDException
 {
@@ -1491,8 +1585,10 @@ return(NewFold); // returned LAST Folder when opd file contains several.
 }
 //---------------------------------------------------------------------
 /**
- * Exports the 
- * @param Path path to the place to star exporting
+ * Exports all the folders contained under IdTopLevel
+ * @param IdTopLevel Identifier in OpenProdoc of top level folder where start 
+ * @param Path path to the place to start exporting
+ * @throws PDException In any error
  */
 void ExportPath(String IdTopLevel, String Path) throws Exception
 {
@@ -1525,10 +1621,10 @@ ExportDocs(Destpath);
 //---------------------------------------------------------------------
 /**
  * Returns a Collection containing an ordered set of parent, from father to root.
- * Excludeing Id
+ *     Excluding Id
  * @param Id Identifier of folder
- * @return 
- * @throws prodoc.PDException
+ * @return list of ancestors
+ * @throws PDException In any error
  */
 public ArrayList OrderedGrandParents(String Id) throws PDException
 {
@@ -1546,6 +1642,7 @@ return(Family);
 /**
  * Export All documents in folder
  * @param Path OS path to export to
+ * @throws PDException In any error
  */
 public void ExportDocs(String Path) throws PDException
 {
@@ -1562,8 +1659,9 @@ while (Res!=null)
 getDrv().CloseCursor(ListDocs);
 }
 //---------------------------------------------------------------------
-/** Executes all the transactional defined threads
- * 
+/** Executes, in the current folder, all the transactional defined threads for a specific MODE (INS, UPD, DEL) 
+ * @param MODE CKind of operation (INSert, UPDater, DELete)
+ * @throws PDException In any error
  */
 private void ExecuteTransThreads(String MODE) throws PDException
 {
@@ -1576,7 +1674,7 @@ for (PDTasksDefEvent L1 : L)
 //---------------------------------------------------------------------
 /** Generates all the NO transactional defined threads
  * @param MODE Kind of operation (INSert, UPDater, DELete)
- * @throws prodoc.PDException in any error
+ * @throws PDException in any error
  */
 private void GenerateNoTransThreads(String MODE) throws PDException
 {
@@ -1648,6 +1746,11 @@ SHtml.append("</p>");
 return(SHtml.toString());
 }
 //---------------------------------------------------------------------
+/**
+ * Overrided method in generic OpenProdoc object.
+ * @return null always
+ * @throws PDException  Always
+ */
 @Override
 public Cursor getAll() throws PDException
 {
@@ -1656,7 +1759,8 @@ return(null);
 }
 //-------------------------------------------------------------------------
 /** updates the "uodated date" of the folder after adding a folder or document.
- * Id mus be assigned
+ * Id must be assigned
+ * @throws prodoc.PDException
  */
 protected void TouchDate() throws PDException
 {
@@ -1669,6 +1773,11 @@ r.addAttr(A);
 getDrv().UpdateRecord(this.getTabName(), r, getConditionsMaint());
 }
 //-------------------------------------------------------------------------
+/**
+ * Check if the folder identified by the parameter exists
+ * @param pdId Identifier of folder to check
+ * @return true if the forlder exist
+ */
 private boolean ExistId(String pdId)
 {
 if (getObjCache().get(pdId)!=null)
@@ -1697,6 +1806,12 @@ else
     return(false);
 }
 //-------------------------------------------------------------------------
+/**
+ * Move a Folder from its current forlder to another one
+ * @param NewParentId Id of the target folder
+ * @return true if the document has been moved
+ * @throws PDExceptionFunc In any error
+ */
 public boolean Move(String NewParentId) throws PDExceptionFunc
 {
 DriverGeneric drv=null;    
@@ -1710,7 +1825,6 @@ VerifyAllowedUpd();
 InTransLocal=!drv.isInTransaction();
 if (InTransLocal)
     drv.IniciarTrans();
-
 PDFolders TobeMoved=new PDFolders(getDrv());
 TobeMoved.Load(getPDId()); 
 if (!getDrv().getUser().getAclList().containsKey(TobeMoved.getACL()))
@@ -1754,13 +1868,17 @@ if (PDLog.isDebug())
             {
             PDLog.Error("PDFolders.Move ("+NewParentId+")="+E.getLocalizedMessage());       
             }
-    PDExceptionFunc.GenPDException("Parent_folder_moved_moved_to_subfolder", getPDId());
+    PDExceptionFunc.GenPDException("Parent_folder_moved_to_subfolder_not_allowed", getPDId());
     return(false);    
     }
 return(true);    
 }
 //-------------------------------------------------------------------------
-
+/**
+ * Updates all the levels of childs of a Folder
+ * @param pdId identifer of foler to update
+ * @throws PDException in any error
+ */
 private void UpdateParentChilds(String pdId) throws PDException
 {
 PDFolders TmpFold=new PDFolders(getDrv());

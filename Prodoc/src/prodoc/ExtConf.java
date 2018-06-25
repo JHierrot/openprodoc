@@ -74,6 +74,11 @@ public static String getDefPass()
 return DefExtConf.getPass();
 }
 //----------------------------------------------------------------------------    
+
+    /**
+     *
+     * @param ProdocProperties
+     */
 public void AssignConf(Properties ProdocProperties)
 {
 String ConfDocTipesList=ProdocProperties.getProperty("DocTipesList");
@@ -199,6 +204,12 @@ for (int NHO = 0; NHO < NumHtmlOpac; NHO++)
     }
 }
 //---------------------------------------------------------------------------- 
+
+    /**
+     *
+     * @param Agent
+     * @return
+     */
 public String SolveHtml(String Agent)
 {
 Agent=Agent.toUpperCase();

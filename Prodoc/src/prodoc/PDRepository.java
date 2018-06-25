@@ -76,8 +76,16 @@ public static final String tFTP="FTP";
  *
  */
 public static final String tREFURL="REFURL";
-public static final String tS3="S3";
-public static final String tCUSTOM="CUSTOM";
+
+    /**
+     *
+     */
+    public static final String tS3="S3";
+
+    /**
+     *
+     */
+    public static final String tCUSTOM="CUSTOM";
 /**
  *
  */
@@ -475,6 +483,11 @@ if (IsRef())
 throw new UnsupportedOperationException("Unsupported");
 }
 //-----------------------------------------------------------------
+
+    /**
+     *
+     * @return
+     */
 public boolean IsRef()
 {
 return(getRepType().equals(tREFURL));    

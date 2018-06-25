@@ -16,7 +16,6 @@
  * author: Joaquin Hierro      2011
  * 
  */
-
 package prodoc;
 
 import java.io.*;
@@ -28,179 +27,186 @@ import org.apache.commons.codec.binary.Base64InputStream;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
 /**
- *
+ * Main public class that manages all the operations for Documents in OpenProdoc
  * @author jhierrot
  */
 public class PDDocs extends ObjPD
 {
+/**
+ * Default table name for defauls document type
+ */    
 private static final String DEFTABNAME="PD_DOCS";
 /**
- *
+ * Name of the attribute identifier of the document
  */
 public static final String fPDID="PDId";
 /**
- *
+ * Name of the attribute containing the "name" of the document
  */
 public static final String fTITLE="Title";
 /**
- *
+ * Name of the attribute containing the functional date of the document
  */
 public static final String fDOCDATE="DocDate";
 /**
- *
+ * Name of the attribute containing the name of de user currently locking of the document (checked out)
  */
 public static final String fLOCKEDBY="LockedBy";
 /**
- *
+ * Name of the attribute containing the date for purge of the document
  */
 public static final String fPURGEDATE="PurgeDate";
 /**
- *
+ * Name of the attribute containing the document type of the document
  */
 public static final String fDOCTYPE="DocType";
 /**
- *
+ * Name of the attribute containing the name of the reposit containing the binary of each document
  */
 public static final String fREPOSIT="Reposit";
 /**
- *
+ * Name of the attribute containing the ACL of the document
  */
 public static final String fACL="ACL";
 /**
- *
+ * Name of the attribute containing the Mime Type of the document
  */
 public static final String fMIMETYPE="MimeType";
 /**
- *
+ * Name of the attribute containing the File name of the document
  */
 public static final String fNAME="Name";
 /**
- *
+ * Name of the attribute containing the Identifier of the folder that "contains" the document
  */
 public static final String fPARENTID="ParentId";
 /**
- *
+ * Name of the attribute containing the current version of the document
  */
 public static final String fVERSION="Version";
 /**
- *
+ * Name of the attribute used internally for managing versions, cheking out the document and deleting
  */
 public static final String fSTATUS="Status";
 /**
- *
+ * Status constant for delete
  */
 public static final String fSTATUS_DEL="DELETED";
 /**
- *
+ * Status constant for delete all
  */
 public static final String fSTATUS_LASTDEL="DELETE_A";
-
-private static final String fOPERINS="INSERT";
-private static final String fOPERDEL="DELETE";
-private static final String fOPERUPD="UPDATE";
-private static final String fOPERVIE="VIEW";
-
 /**
- *
+ * Constant for trace of operations
  */
-private PDDocs PreviousVals=null;
+private static final String fOPERINS="INSERT";
 /**
- *
+ * Constant for trace of operations
+ */
+private static final String fOPERDEL="DELETE";
+/**
+ * Constant for trace of operations
+ */
+private static final String fOPERUPD="UPDATE";
+/**
+ * Constant for trace of operations
+ */
+private static final String fOPERVIE="VIEW";
+/**
+ * Internal Record for managing a copy of the structure of a document
  */
 static private Record DocsStruct=null;
 /**
- *
+ * Internal Record for managing a copy of the structure of a document version
  */
 static private Record RecVer=null;
 /**
- *
+ *Field identifier
  */
 private String PDId;
 /**
- *
+ * Field Title (public name)
  */
 private String Title;
 /**
- *
+ * Field Document date
  */
 private Date   DocDate;
 /**
- *
- */
-private Date   PDDate;
-/**
- *
+ * Field User of locking
  */
 private String LockedBy;
 /**
- *
+ * Field date for deleting the document
  */
 private Date   PurgeDate;
 /**
- *
+ * Field Docuemnt ACL
  */
 private String ACL;
 /**
- *
+ * Field Document Type
  */
 private String DocType=DEFTABNAME;
 /**
- *
+ * Field Reposit
  */
 private String Reposit;
 /**
- *
+ * Field Mime type
  */
 private String MimeType;
 /**
- *
+ * Field File name of the document
  */
 private String Name;
 /**
- *
+ * Field identifier of Folder containing the document
  */
 private String ParentId;
 /**
- *
+ * Field containing the document version
  */
 private String Version;
 /**
- *
+ * Field status for internal processing
  */
 private String Status;
-
 /**
- *
+ * Collection of type definitions that compound the current document type
  */
-private ArrayList TypeDefs=null;
+private ArrayList<Record> TypeDefs=null;
 /**
- *
+ * Collection of type definitions Attributes that compound the current document type
  */
-private ArrayList TypeRecs=null;
+private ArrayList<Record> TypeRecs=null;
 /**
- *
+ * Collection of ALL the attributes defined for a document type (including inherited Attributes)
  */
 private Record RecSum=null;
 /**
- *
+ * path of the file too be imported
  */
 private String FilePath=null;
 /**
- *
+ * InputStream of the file to be imported
  */
 private InputStream FileStream=null;
-
+/**
+ * Cache of PDDocs managed in JVM the last minutes
+ */
 static private ObjectsCache DocsObjectsCache = null;
-
+/**
+ * Constant for Import/Export in XML
+ */
 static public final String XML_CONTENT="OPD_CONTENT";
 
 //-------------------------------------------------------------------------
 /**
- *
- * @param Drv
- * @throws PDException  
+ * Default constructor that creates a document of the default doctype
+ * @param Drv Driver generic to use for reading and writing
+ * @throws PDException In any error
  */
 public PDDocs(DriverGeneric Drv) throws PDException
 {
@@ -210,7 +216,10 @@ setDocType(getTableName());
 //-------------------------------------------------------------------------
 /**
  * Assign the values of the record to the fields of the object
+ * @param Rec values to assign
+ * @throws PDException In any error
  */
+@Override
 public void assignValues(Record Rec) throws PDException
 {
 if (PDLog.isDebug())
@@ -238,8 +247,8 @@ if (PDLog.isDebug())
 //-------------------------------------------------------------------------
 /**
  * returns the unique identifier of the document
-* @return the PDId
-*/
+ * @return the PDId
+ */
 public String getPDId()
 {
 return PDId;
@@ -248,7 +257,7 @@ return PDId;
 /**
  * Sets the unique identifier of the document
  * @param pPDId the new identifier to set.
- * @throws PDExceptionFunc  
+ * @throws PDExceptionFunc in any error
  */
 public void setPDId(String pPDId) throws PDExceptionFunc
 {
@@ -317,7 +326,7 @@ return(DEFTABNAME);
 /**
  * Constructs a record with all the attributes of the document type and the values
  * of the attributes asigned using the setter of the class.
- * @throws PDException
+ * @throws PDException in any error
  * @return a record with all the attributes of the document type
  */
 @Override
@@ -328,7 +337,7 @@ return(getRecSum());
 //-------------------------------------------------------------------------
 /**
  * Return a copy of the static structure of attributes for the class
- * @throws PDException
+ * @throws PDException in any error
  * @return a copy of the static structure of attributes for the class
  */
 @Override
@@ -341,7 +350,7 @@ return(DocsStruct.Copy());
 //-------------------------------------------------------------------------
 /**
  * Return a copy of the static structure of attributes for the class
- * @throws PDException
+ * @throws PDException In any error
  * @return a copy of the static structure of attributes for the class
  */
 static public Record getRecordStructPDDocs() throws PDException
@@ -373,6 +382,7 @@ return(RecVer.Copy());
  * @throws PDException if there is no PDID value
  * @return the constructed conditions
  */
+@Override
 protected Conditions getConditions() throws PDException
 {
 Conditions ListCond=new Conditions();
@@ -406,6 +416,7 @@ protected void AsignKey(String Ident) throws PDExceptionFunc
 {
 setPDId(Ident);
 }
+//-------------------------------------------------------------------------
 /**
 * @return the DocDate
 */
@@ -413,6 +424,7 @@ public Date getDocDate()
 {
 return DocDate;
 }
+//-------------------------------------------------------------------------
 /**
 * @param DocDate the DocDate to set
 */
@@ -420,6 +432,7 @@ public void setDocDate(Date DocDate)
 {
 this.DocDate = DocDate;
 }
+//-------------------------------------------------------------------------
 /**
 * @return the LockedBy
 */
@@ -427,6 +440,7 @@ public String getLockedBy()
 {
 return LockedBy;
 }
+//-------------------------------------------------------------------------
 /**
 * @param LockedBy the LockedBy to set
 */
@@ -434,6 +448,7 @@ public void setLockedBy(String LockedBy)
 {
 this.LockedBy = LockedBy;
 }
+//-------------------------------------------------------------------------
 /**
 * @return the PurgeDate
 */
@@ -441,6 +456,7 @@ public Date getPurgeDate()
 {
 return PurgeDate;
 }
+//-------------------------------------------------------------------------
 /**
 * @param PurgeDate the PurgeDate to set
 */
@@ -448,6 +464,7 @@ public void setPurgeDate(Date PurgeDate)
 {
 this.PurgeDate = PurgeDate;
 }
+//-------------------------------------------------------------------------
 /**
 * @return the ACL
 */
@@ -455,6 +472,7 @@ public String getACL()
 {
 return ACL;
 }
+//-------------------------------------------------------------------------
 /**
 * @param ACL the ACL to set
 */
@@ -462,6 +480,7 @@ public void setACL(String ACL)
 {
 this.ACL = ACL;
 }
+//-------------------------------------------------------------------------
 /**
 * @return the DocType
 */
@@ -509,6 +528,7 @@ public String getReposit()
 {
 return Reposit;
 }
+//-------------------------------------------------------------------------
 /**
 * @param Reposit the Reposit to set
 */
@@ -554,9 +574,10 @@ else
 //-------------------------------------------------------------------------
 /**
  * This method verifies if the user has permissions to create documents in general.
- * The permision to store the document in a folder depends of the foilder's ACL
+ * The permision to store the document in a folder depends of the folder's ACL
  * @throws PDException is the user can't create documents
  */
+@Override
 protected void VerifyAllowedIns() throws PDException
 {
 if (PDLog.isDebug())
@@ -581,6 +602,7 @@ if (PDLog.isDebug())
  * The permision to delete the document from a folder depends of the foilder's ACL
  * @throws PDException is the user can't delete documents
  */
+@Override
 protected void VerifyAllowedDel() throws PDException
 {
 // TOD?O: to control permisions over document types
@@ -592,6 +614,7 @@ if (!getDrv().getUser().getRol().isAllowMaintainDoc() )
  * This method verifies if the user has permissions to modify documents in general.
  * @throws PDException is the user can't modify documents
  */
+@Override
 protected void VerifyAllowedUpd() throws PDException
 {
 // TOD?O: to control permisions over document types
@@ -651,8 +674,6 @@ if (!DocType.equalsIgnoreCase(pDocType))
     DocType = pDocType;
     LoadDef(DocType);
     }
-//this.TypeDefs=null;
-//this.TypeRecs=null;
 }
 //-------------------------------------------------------------------------
 /** Return an ordered list of the hierarchy of document types from whom this
@@ -660,7 +681,7 @@ if (!DocType.equalsIgnoreCase(pDocType))
  * @return the TypeDefs the array list with the names of document types
  * @throws PDException if there is a problem comunicating with the server
 */
-public ArrayList getTypeDefs() throws PDException
+protected ArrayList<Record> getTypeDefs() throws PDException
 {
 if (TypeDefs==null)
     LoadDef(getDocType());
@@ -668,10 +689,12 @@ return TypeDefs;
 }
 //-------------------------------------------------------------------------
 /**
- * @return the TypeRecs
- * @throws PDException
+ * Returns the collection of attributes of the document type and its ancestors
+ *   loads the definition if there are not loaded
+ * @return the TypeRecs Array with all the definitions
+ * @throws PDException In any error
 */
-public ArrayList getTypeRecs() throws PDException
+private ArrayList<Record> getTypeRecs() throws PDException
 {
 if (TypeRecs==null)
     LoadDef(getDocType());
@@ -679,9 +702,9 @@ return TypeRecs;
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param tableName
- * @throws PDException
+ * Loads the definition of a document type
+ * @param tableName name of document type
+ * @throws PDException in any error
  */
 private void LoadDef(String tableName) throws PDException
 {
@@ -694,7 +717,7 @@ getDrv().LoadDef(tableName, getTypeDefs(), getTypeRecs());
 RecSum=new Record();
 for (int i = 0; i < getTypeRecs().size(); i++)
     {
-    RecSum.addRecord(((Record)getTypeRecs().get(i)).Copy());
+    RecSum.addRecord((getTypeRecs().get(i)).Copy());
     }
 RecSum.getAttr(fDOCTYPE).setValue(getDocType());
 if (PDLog.isDebug())
@@ -702,9 +725,12 @@ if (PDLog.isDebug())
 }
 //-------------------------------------------------------------------------
 /**
- * @return the RecSum
- * @throws PDException
-*/
+ * Return all the Attributes for the current document type
+ *   empty or filled (depending if it has been used)
+ *   if needed loads the definition
+ * @return the Record with all the attributes
+ * @throws PDException in any error
+ */
 public Record getRecSum() throws PDException
 {
 if (PDLog.isDebug())
@@ -733,9 +759,9 @@ return RecSum;
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * Returns the structure of the default document type, creating it if neeeded
+ * @return a Record with all the Attributes
+ * @throws PDException In any error
  */
 static private synchronized Record CreateRecordStructPDDocs() throws PDException
 {
@@ -764,9 +790,9 @@ else
 //-------------------------------------------------------------------------
 /**
  * Return the docs in a folder
- * @param PDIdFold
+ * @param PDIdFold Folder to look for
  * @return a Cursor with the docs contained in the Folder
- * @throws PDException
+ * @throws PDException In any error
  */
 public Cursor getListContainedDocs(String PDIdFold) throws PDException
 {
@@ -784,8 +810,8 @@ return(CursorId);
 //-------------------------------------------------------------------------
 /**
  * Assign the file to be uploaded when called insert or update.
- * @param pFilePath
- * @throws PDException
+ * @param pFilePath path to assign
+ * @throws PDException  In any error
  */
 public void setFile(String pFilePath) throws PDException
 {
@@ -796,7 +822,7 @@ FilePath=pFilePath;
  * "Download" a file referenced by the PDID-
  * @param FolderPath path to recover/download the file
  * @return The complete name of the downloaded file
- * @throws PDException
+ * @throws PDException  In any error
  */
 public String getFile(String FolderPath) throws PDException
 {
@@ -808,7 +834,7 @@ return(getFileOpt(FolderPath, true));
  * @param FolderPath path to recover/download the file
  * @param Overwrite If true, the content is overwrited, else maintain the existing file
  * @return The complete name of the downloaded file
- * @throws PDException
+ * @throws PDException  In any error
  */
 public String getFileOpt(String FolderPath, boolean Overwrite) throws PDException
 {
@@ -862,9 +888,9 @@ return(FolderPath);
 /**
  * "Download" a file referenced by the PDID-
  * @param FolderPath path to recover/download the file
- * @param Ver 
+ * @param Ver  versión identifier
  * @return The complete name of the downloaded file
- * @throws PDException
+ * @throws PDException  In any error
  */
 public String getFileVer(String FolderPath, String Ver) throws PDException
 {
@@ -872,12 +898,13 @@ return(getFileVerOpt(FolderPath, Ver, true));
 }
 //-------------------------------------------------------------------------
 /**
- * "Download" a file referenced by the PDID-
+ * "Download" a file version referenced by the current PDID and document version. 
+ * Optimized so that if file exist, don't download
  * @param FolderPath path to recover/download the file
- * @param Ver 
- * @param Overwrite 
+ * @param Ver Version of the document to download
+ * @param Overwrite If true, the content is overwrited, else maintain the existing file
  * @return The complete name of the downloaded file
- * @throws PDException
+ * @throws PDException  In any error
  */
 public String getFileVerOpt(String FolderPath, String Ver, boolean Overwrite) throws PDException
 {
@@ -925,9 +952,9 @@ return(FolderPath);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * Check if the kind of Repository of the current document is referenced
+ * @return true when referenced ( doo nnot contains buinary, just url)
+ * @throws PDException In any error
  */
 public boolean IsUrl() throws PDException
 {
@@ -935,14 +962,13 @@ PDDocs d=new PDDocs(getDrv());
 d.Load(getPDId());
 PDRepository Rep=new PDRepository(getDrv());
 Rep.Load(d.getReposit());
-//StoreGeneric Rep=getDrv().getRepository(d.getReposit());
 return(Rep.IsRef());
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * Build the url of a document combining with reference repository
+ * @return the complete URL
+ * @throws PDException  In any error
  */
 public String getUrl() throws PDException
 {
@@ -950,15 +976,14 @@ PDDocs d=new PDDocs(getDrv());
 d.Load(getPDId());
 PDRepository Rep=new PDRepository(getDrv());
 Rep.Load(d.getReposit());
-//StoreGeneric Rep=getDrv().getRepository(d.getReposit());
 return(Rep.GetUrl(d.getName()));
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Ver
- * @return
- * @throws PDException
+ * Build the url of a document combining with reference repository
+ * @param Ver Version of the the document to retrieve
+ * @return the complete URL
+ * @throws PDException  In any error
  */
 public String getUrlVer(String Ver) throws PDException
 {
@@ -972,14 +997,19 @@ return(Rep.GetUrl(d.getName()));
 //-------------------------------------------------------------------------
 /**
  * Assign the file to be uploaded when called insert or update.
- * @param Bytes
- * @throws PDException
+ * @param Bytes  Binary content of the document to import
+ * @throws PDException In any error
  */
 public void setStream(InputStream Bytes) throws PDException
 {
 FileStream=Bytes;
 }
 //-------------------------------------------------------------------------
+/**
+ * Assign the file IN BASE 64 to be uploaded when called insert or update.
+ * @param B64InputStream  Binary content in Base64 of the document to import
+ * @throws PDException In any error
+ */
 private void setStreamB64(InputStream B64InputStream)
 {
 FileStream=new Base64InputStream(B64InputStream,false);
@@ -987,8 +1017,9 @@ FileStream=new Base64InputStream(B64InputStream,false);
 //-------------------------------------------------------------------------
 /**
  * "Download" a file referenced by the PDID-
- * @param OutBytes 
- * @throws PDException
+ * the OutputStream will be closed at the end
+ * @param OutBytes OutputStream where OpenProdoc will write the binary content
+ * @throws PDException  In any error
  */
 public void getStream(OutputStream OutBytes) throws PDException
 {
@@ -1015,9 +1046,10 @@ if (MustTrace(fOPERVIE))
 }
 //-------------------------------------------------------------------------
 /**
- * "Download" a file referenced by the PDID-
- * @param OutBytes 
- * @throws PDException
+ * "Download" AS BASE64 file referenced by the PDID
+ * the OutputStream will be closed at the end
+ * @param OutBytes OutputStream where OpenProdoc will write the binary content AS BASE64
+ * @throws PDException  In any error
  */
 public void getStreamB64(OutputStream OutBytes) throws PDException
 {
@@ -1044,9 +1076,10 @@ if (MustTrace(fOPERVIE))
 }
 //-------------------------------------------------------------------------
 /**
- * "Download" a file referenced by the PDID-
- * @param OutBytes 
- * @throws PDException
+ * "Download" a file referenced by the PDID and the current assigned version
+ * the OutputStream will be closed at the end
+ * @param OutBytes OutputStream where OpenProdoc will write the binary content
+ * @throws PDException  In any error
  */
 public void getStreamVer(OutputStream OutBytes) throws PDException
 {
@@ -1072,9 +1105,10 @@ if (MustTrace(fOPERVIE))
 }
 //--------------------------------------------------------------------------
 /**
- * "Download" a file referenced by the PDID-
- * @param OutBytes 
- * @throws PDException
+ * "Download" AS BASE64 file referenced by the PDID and assigned version
+ * the OutputStream will be closed at the end
+ * @param OutBytes OutputStream where OpenProdoc will write the binary content AS BASE64
+ * @throws PDException  In any error
  */
 public void getStreamVerB64(OutputStream OutBytes) throws PDException
 {
@@ -1100,9 +1134,10 @@ if (MustTrace(fOPERVIE))
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param VersionName
- * @throws PDException
+ * Checkin the document, commiting the private working copy of he user, with the temporal metadata and content,
+ * unloking the document and publisihng a new version with the specified version label
+ * @param VersionName Label for the new version
+ * @throws PDException In any error
  */
 public void Checkin(String VersionName) throws PDException
 {
@@ -1155,8 +1190,8 @@ if (PDLog.isDebug())
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @throws PDException
+ * Locks the current document, creating a private working copy 
+ * @throws PDException In any error
  */
 public void Checkout() throws PDException
 {
@@ -1213,8 +1248,8 @@ if (PDLog.isDebug())
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @throws PDException
+ * Unlocks the document, deleting the PWC and all the changes made
+ * @throws PDException In any error
  */
 public void CancelCheckout() throws PDException
 {
@@ -1270,7 +1305,7 @@ if (PDLog.isDebug())
  * Deletes all the multivalued atributes of the current element
  * @param Id2Del PDId of document to delete
  * @param Vers  Version of Document to delete. When null, deletes ALL versions
- * @throws PDException
+ * @throws PDException in any error
  */
 private void MultiDelete(String Id2Del, String Vers) throws PDException
 {
@@ -1280,8 +1315,8 @@ Attribute Atr;
 Conditions Conds;
 for (int NumDefTyp = 0; NumDefTyp<getTypeDefs().size(); NumDefTyp++)
     {
-    TypDef=((Record)getTypeRecs().get(NumDefTyp)).CopyMulti();
-    String TabName=(String)((Record)getTypeDefs().get(NumDefTyp)).getAttr(PDObjDefs.fNAME).getValue();
+    TypDef=(getTypeRecs().get(NumDefTyp)).CopyMulti();
+    String TabName=(String)(getTypeDefs().get(NumDefTyp)).getAttr(PDObjDefs.fNAME).getValue();
     TypDef.initList();
     for (int NumAttr = 0; NumAttr < TypDef.NumAttr(); NumAttr++)
         {
@@ -1298,7 +1333,7 @@ for (int NumDefTyp = 0; NumDefTyp<getTypeDefs().size(); NumDefTyp++)
 //-------------------------------------------------------------------------
 /**
  * Create a document, including metadata and the path o strean asigned previously
- * @throws PDException
+ * @throws PDException In any error
  */
 @Override
 public void insert() throws PDException
@@ -1335,7 +1370,8 @@ if (getReposit()==null || getReposit().length()==0 )
 PDRepository FinalRep=new PDRepository(getDrv());
 FinalRep.Load(getReposit());
 AddLogFields();
-setVersion("1.0");
+if (getVersion()==null || getVersion().length()==0)
+    setVersion("1.0");
 getRecSum().CheckDef();
 StoreGeneric Rep=getDrv().getRepository(getReposit());
 if (getName()==null || getName().length()==0)
@@ -1412,8 +1448,8 @@ Record RecSave=new Record();
 Object Val2Ins;
 for (int NumDefTyp = 0; NumDefTyp<getTypeDefs().size(); NumDefTyp++)
     {
-    TypDef=((Record)getTypeRecs().get(NumDefTyp)).CopyMulti();
-    String TabName=(String) ((Record)getTypeDefs().get(NumDefTyp)).getAttr(PDObjDefs.fNAME).getValue();
+    TypDef=(getTypeRecs().get(NumDefTyp)).CopyMulti();
+    String TabName=(String) (getTypeDefs().get(NumDefTyp)).getAttr(PDObjDefs.fNAME).getValue();
     TypDef.initList();
     for (int NumAttr = 0; NumAttr < TypDef.NumAttr(); NumAttr++)
         {
@@ -1447,7 +1483,7 @@ for (int NumDefTyp = 0; NumDefTyp<getTypeDefs().size(); NumDefTyp++)
  * @param Id PDId of Document to insert
  * @param Ver Version of Document to insert
  * @param Rec Complete Record of metadata to insert
- * @throws PDException
+ * @throws PDException In any error
  */
 private void InsertVersion(String Id, String Ver, Record Rec) throws PDException
 {
@@ -1476,10 +1512,11 @@ return genId.toString();
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Ident
- * @return
- * @throws PDException
+ * Loads a document identified by the PDId
+ * for the user that locked the document, loads the PWC
+ * @param Ident identifier (PDID) of the document to load
+ * @return a Record with the COMMON attributes of all documents (attributes of base docuemnt type)
+ * @throws PDException In any error
  */
 @Override
 public Record Load(String Ident)  throws PDException
@@ -1494,8 +1531,12 @@ if (r==null) // maintained in cache only the "common" values, not the "under edi
     {
     LoadAct=new Query(getTabName(), getRecordStruct(),getConditions());
     Cur=getDrv().OpenCursor(LoadAct);
+    try {
     r=getDrv().NextRec(Cur);
-    getDrv().CloseCursor(Cur);
+    } finally
+        {
+        getDrv().CloseCursor(Cur);
+        }
     getObjCache().put(Ident, r);
     }
 String ActACL=(String)r.getAttr(fACL).getValue();
@@ -1512,8 +1553,12 @@ if (UsuBloq.getValue()!=null && ((String)UsuBloq.getValue()).length()!=0 && ((St
     Attribute Attr=r.getAttr(fDOCTYPE);
     LoadAct=new Query(getTabNameVer((String)Attr.getValue()), getRecordStruct(), Cond, null);
     Cur=getDrv().OpenCursor(LoadAct);
+    try {
     r=getDrv().NextRec(Cur);
-    getDrv().CloseCursor(Cur);
+    } finally
+        {
+        getDrv().CloseCursor(Cur);
+        }
     }
 if (r!=null)
     assignValues(r);
@@ -1523,10 +1568,10 @@ return(r);
 }
 //-------------------------------------------------------------------------
 /**
- * Load the published document, in edition or not
- * @param Ident
- * @return
- * @throws PDException
+ * Loads a document identified by the PDId. The version returned is always the publisehd/current one
+ * @param Ident identifier (PDID) of the document to load
+ * @return a Record with the COMMON attributes of all documents (attributes of base docuemnt type)
+ * @throws PDException In any error
  */
 public Record LoadCurrent(String Ident)  throws PDException
 {
@@ -1550,11 +1595,11 @@ return(r);
 }
 //-------------------------------------------------------------------------
 /**
- * Load the published document, in edition or not
- * @param Ident
- * @param Vers 
- * @return
- * @throws PDException
+ * Loads a document version identified by the PDId.
+ * @param Ident identifier (PDID) of the document to load
+ * @param Vers Version to load
+ * @return a Record with ALL the  attributes of document type)
+ * @throws PDException In any error
  */
 public Record LoadVersion(String Ident, String Vers)  throws PDException
 {
@@ -1585,9 +1630,9 @@ return(r);
 //-------------------------------------------------------------------------
 /**
  * Load to memory all the elements of a Doc, including all the inherited attributes and multivalued
- * @param Ident
- * @return
- * @throws PDException
+ * @param Ident Identifier (PDId) of document
+ * @return a record with ALL the Attributes of the document type
+ * @throws PDException In any error
  */
 public Record LoadFull(String Ident) throws PDException
 {
@@ -1603,8 +1648,12 @@ if (UsuBloq.getValue()!=null &&  ((String)UsuBloq.getValue()).equalsIgnoreCase(g
      Attribute Attr=r.getAttr(fDOCTYPE);
     Query LoadAct=new Query(getTabNameVer((String)Attr.getValue()), getRecSum().CopyMono(), Cond, null);
     Cursor Cur=getDrv().OpenCursor(LoadAct);
+    try {
     r=getDrv().NextRec(Cur);
-    getDrv().CloseCursor(Cur);
+    } finally 
+        {
+        getDrv().CloseCursor(Cur);
+        }
     if (r!=null)
         {
         MultiLoad(r);
@@ -1620,7 +1669,7 @@ if (getTypeDefs().size()>1) // If size==1, Load is enough
     Vector ListTabs=new Vector();
     for (int i = 0; i<getTypeDefs().size(); i++)
         {
-        Record TypDef=(Record)getTypeDefs().get(i);
+        Record TypDef=getTypeDefs().get(i);
         ListTabs.add((String)TypDef.getAttr(PDObjDefs.fNAME).getValue());
         if (! ((String)ListTabs.elementAt(i)).equals(PDDocs.getTableName()))
             {
@@ -1666,7 +1715,7 @@ Record RecLoad=new Record();
 for (int NumDefTyp = 0; NumDefTyp<getTypeDefs().size(); NumDefTyp++)
     {
     TypDef=((Record)getTypeRecs().get(NumDefTyp)).CopyMulti();
-    String TabName=(String)((Record)getTypeDefs().get(NumDefTyp)).getAttr(PDObjDefs.fNAME).getValue();
+    String TabName=(String)(getTypeDefs().get(NumDefTyp)).getAttr(PDObjDefs.fNAME).getValue();
     TypDef.initList();
     for (int NumAttr = 0; NumAttr < TypDef.NumAttr(); NumAttr++)
         {
@@ -1717,10 +1766,10 @@ Version = pVersion;
 //-------------------------------------------------------------------------
 /**
  * Updates a new Version in the version table
- * @param Id PDIe of Document to Update
+ * @param Id PDId of Document to Update
  * @param Ver Version of Document to Update
  * @param Rec Complete Record of metadata to Update
- * @throws PDException
+ * @throws PDException In any error
  */
 protected void UpdateVersion(String Id, String Ver, Record Rec) throws PDException
 {
@@ -1745,7 +1794,7 @@ if (PDLog.isDebug())
  * Deletes a new Version in the version table
  * @param Id PDId of Document to delete
  * @param Ver Version of Document to delete
- * @throws PDException
+ * @throws PDException In any error
  */
 private void DeleteVersion(String DocTypeName, String Id, String Ver) throws PDException
 {
@@ -1763,9 +1812,9 @@ if (PDLog.isDebug())
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * Clculates the conditions for searching the current Id and version
+ * @return Created conditions
+ * @throws PDException in any error
  */
 private Conditions getConditionsVer() throws PDException
 {
@@ -1782,7 +1831,7 @@ return(ListCond);
 }
 //-------------------------------------------------------------------------
 /**
- * update a locked document, including metadata and the path o strean asigned previously
+ * update a locked document, including metadata and the path o stream asigned previously
  * @throws PDException
  */
 @Override
@@ -1879,9 +1928,9 @@ if (PDLog.isDebug())
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param RecTot
- * @throws PDException
+ * Receives a Record and inserts each fragment of the record in the table of each corresponding document type (ancestors oof the current document type)
+ * @param RecTot Record to save
+ * @throws PDException In any error
  */
 private void insertFragments(Record RecTot)  throws PDException
 {
@@ -1889,8 +1938,8 @@ if (PDLog.isDebug())
     PDLog.Debug("PDDocs.insertFragments>:"+RecTot);
 for (int i = getTypeDefs().size()-1; i >=0; i--)
     {
-    Record TypDef=(Record)getTypeDefs().get(i);
-    Record DatParc=(Record)getTypeRecs().get(i);
+    Record TypDef=getTypeDefs().get(i);
+    Record DatParc=getTypeRecs().get(i);
     if (DatParc.getAttr(fPDID)==null)
         {
         DatParc.addAttr(RecTot.getAttr(fPDID));
@@ -1903,10 +1952,10 @@ if (PDLog.isDebug())
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Tables
- * @param Id
- * @throws PDException
+ * Deletes all the references to an Id in all the tables
+ * @param Tables Collection of tables where deleting
+ * @param Id Identifier of document to delete
+ * @throws PDException In any error
  */
 private void DeleteFragments(ArrayList Tables, String Id) throws PDException
 {
@@ -1914,7 +1963,7 @@ if (PDLog.isDebug())
     PDLog.Debug("PDDocs.DeleteFragments>:"+Tables+"-"+Id);
 for (int i = 0; i <getTypeDefs().size(); i++)
     {
-    Record TypDef=(Record)getTypeDefs().get(i);
+    Record TypDef=getTypeDefs().get(i);
     getDrv().DeleteRecord((String)TypDef.getAttr(PDObjDefs.fNAME).getValue(), getConditions());
     }
 if (PDLog.isDebug())
@@ -1922,10 +1971,10 @@ if (PDLog.isDebug())
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param RecTot
- * @param Id
- * @throws PDException
+ * Updates all the references to an Id in all the tables
+ * @param RecTot Record with ALL he attributes of the document type
+ * @param Id  Identifier of document to update
+ * @throws PDException In any error
  */
 protected void updateFragments(Record RecTot, String Id) throws PDException
 {
@@ -1933,8 +1982,8 @@ if (PDLog.isDebug())
     PDLog.Debug("PDDocs.updateFragments>:"+RecTot+"-"+Id);
 for (int i = getTypeDefs().size()-1; i >=0; i--)
     {
-    Record TypDef=(Record)getTypeDefs().get(i);
-    Record DatParc=(Record)getTypeRecs().get(i);
+    Record TypDef=getTypeDefs().get(i);
+    Record DatParc=getTypeRecs().get(i);
 //    if (i!=getTypeDefs().size()-1) // Base
     if (!DatParc.ContainsAttr(fPDID))
         {
@@ -1949,9 +1998,9 @@ if (PDLog.isDebug())
 }
 //-------------------------------------------------------------------------
 /**
- * Logically deletes de actual (with actual Id) documents
+ * Logically deletes the actual (with actual Id) document
  * Move the documents to trashbin
- * @throws PDException
+ * @throws PDException In any error
  */
 @Override
 public void delete() throws PDException
@@ -2013,9 +2062,9 @@ if (PDLog.isDebug())
 /**
  * Logically UNdeletes de actual (with actual Id) documents
  * Move the documents FROM trashbin to original folder (o user folder if original folder deleted)
- * @param Id
- * @param DocTypename
- * @throws PDException
+ * @param Id Identifier of document to undelete
+ * @param DocTypename Document type
+ * @throws PDException in any error
  */
 public void UnDelete(String DocTypename, String Id) throws PDException
 {
@@ -2065,11 +2114,11 @@ if (PDLog.isDebug())
 }
 //------------------------------------------------------------------------------
 /**
- * Load to memory the elements of a deleted Doc, only to obtainf a complete definition
- * @param DocTypename 
- * @param Ident
- * @return
- * @throws PDException
+ * Load to memory the elements of a deleted Doc, only to obtain a complete definition
+ * @param DocTypename Document type to load
+ * @param Ident  identifier of the deleted document type to load
+ * @return ALL the attributes of the deleted document
+ * @throws PDException In any error
  */
 private Record LoadDeleted(String DocTypename, String Ident) throws PDException
 {
@@ -2090,13 +2139,12 @@ if (PDLog.isDebug())
    PDLog.Debug("PDDocs.LoadDeleted<:"+DocTypename+"/"+Ident);
 return(r);
 }
-
 //-------------------------------------------------------------------------
 /**
  * Permanently Destroy document and metadata
- * @param Id
- * @param DocTypename
- * @throws PDException
+ * @param Id Identifier of document to destroy
+ * @param DocTypename Document type of document to destroy
+ * @throws PDException In any error
  */
 public void Purge(String DocTypename, String Id) throws PDException
 {
@@ -2147,27 +2195,28 @@ if (PDLog.isDebug())
 }
 //-------------------------------------------------------------------------
 /**
-* @return the Status
-*/
+ * @return the Status
+ */
 public String getStatus()
 {
 return Status;
 }
 //-------------------------------------------------------------------------
 /**
-* @param Status the Status to set
-*/
+ * @param Status the Status to set
+ */
 public void setStatus(String Status)
 {
 this.Status = Status;
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param DocTypename
- * @param Id
- * @return
- * @throws PDException
+ * Generates a Cursor containing all the Attributes of all the versions of a Document
+ * The returned versions are ORDERED by date and FILTERED by ACL so certain user would NOT retrieve ALL the versions
+ * @param DocTypename Dcument Type
+ * @param Id   Identifier PDId
+ * @return  Created cursor
+ * @throws PDException In any error
  */
 public Cursor ListVersions(String DocTypename, String Id) throws PDException
 {
@@ -2185,10 +2234,11 @@ return(Cur);
 }
 //-------------------------------------------------------------------------
 /**
- * Creates a cursor with documents deleted of DocTypeName
- * @param DocTypename
+ * Creates a cursor with documents deleted of DocTypeName 
+ * FILTERED by ACL so certain user would NOT retrieve ALL the deleted documents
+ * @param DocTypename Document type to look for
  * @return Created Cursor
- * @throws PDException
+ * @throws PDException In any error
  */
 public Cursor ListDeleted(String DocTypename) throws PDException
 {
@@ -2205,10 +2255,12 @@ return(Cur);
 }
 //-------------------------------------------------------------------------
 /**
- * Creates a cursor with documents deleted of DocTypeName
- * @param DocTypename
+ * Creates a cursor with documents deleted of DocTypeName BEFORE a date
+ * FILTERED by ACL so certain user would NOT retrieve ALL the deleted documents
+ * @param DocTypename Document type to look for
+ * @param DateBefore Date of deleting limit for retrieving documents
  * @return Created Cursor
- * @throws PDException
+ * @throws PDException In any error
  */
 public Cursor ListDeletedBefore(String DocTypename, Date DateBefore) throws PDException
 {
@@ -2226,17 +2278,17 @@ return(Cur);
 }
 //-------------------------------------------------------------------------
 /**
- * Search for Folders returning a cursor with the results of folders with the
- * indicated values of fields. Only return the folders alowed for the user, as defined by ACL.
-     * @param FTQuery
- * @param DocType Type of folder to search. Can return folders of subtype.
- * @param AttrConds Conditions over the fields ofthe FolderType
+ * Search for Documents returning a cursor with the results of Documents with the
+ * indicated values of fields. Only returns the folders allowed for the user, as defined by ACL.
+ * @param FTQuery Fultext search criteria
+ * @param DocType Type of Document to search. Can return Documents of subtypes.
+ * @param AttrConds Conditions over the fields of the Document Type
  * @param SubTypes if true, returns results of the indicated type AND susbtipes
- * @param SubFolders if true seach in actual folder AND subfolders, if false, serach in ALL the structure
+ * @param SubFolders if true seach in actual folder AND subfolders, if false, search in ALL the structure
  * @param IncludeVers if true, includes in the searching ALL versions of documents. Not posible with subtypes
  * @param IdActFold Folder to start the search. if null, start in the root level
- * @param Ord 
- * @return a Cursor with the results of the query to use o send to NextFold()
+ * @param Ord Vector of Strings with the ASCENDING order
+ * @return a Cursor with the results of the query to use o send to {@link #NextDoc(prodoc.Cursor)}
  * @throws PDException when occurs any problem
  */
 public Cursor Search(String FTQuery, String DocType, Conditions AttrConds, boolean SubTypes, boolean SubFolders, boolean IncludeVers, String IdActFold, Vector Ord) throws PDException
@@ -2262,16 +2314,16 @@ return(Search(DocType, WithFT, SubTypes, SubFolders, IncludeVers, IdActFold, Ord
 }
 //-------------------------------------------------------------------------
 /**
- * Search for Folders returning a cursor with the results of folders with the
- * indicated values of fields. Only return the folders alowed for the user, as defined by ACL.
- * @param DocType Type of folder to search. Can return folders of subtype.
- * @param AttrConds Conditions over the fields ofthe FolderType
+ * Search for Documents returning a cursor with the results of Documents with the
+ * indicated values of fields. Only return the folders allowed for the user, as defined by ACL.
+ * @param DocType Type of Documents to search. Can return Documents of subtype.
+ * @param AttrConds Conditions over the fields of the Document Type
  * @param SubTypes if true, returns results of the indicated type AND susbtipes
  * @param SubFolders if true seach in actual folder AND subfolders, if false, serach in ALL the structure
  * @param IncludeVers if true, includes in the searching ALL versions of documents. Not posible with subtypes
  * @param IdActFold Folder to start the search. if null, start in the root level
- * @param Ord 
- * @return a Cursor with the results of the query to use o send to NextFold()
+ * @param Ord Vector of Strings with the ASCENDING order
+ * @return a Cursor with the results of the query to use o send to {@link #NextDoc(prodoc.Cursor)}
  * @throws PDException when occurs any problem
  */
 public Cursor Search(String DocType, Conditions AttrConds, boolean SubTypes, boolean SubFolders, boolean IncludeVers, String IdActFold, Vector Ord) throws PDException
@@ -2293,11 +2345,11 @@ if (/*!SubTypes ||*/ IncludeVers) //!SubTypes valid if adding condition limiting
     {
     TypList.add(getTabNameVer(DocType));
     Conditions CondTyps=new Conditions();
-    ArrayList ListTip=Doc.getTypeDefs();
-    ArrayList ListAttr=Doc.getTypeRecs();
+    ArrayList<Record> ListTip=Doc.getTypeDefs();
+    ArrayList<Record> ListAttr=Doc.getTypeRecs();
     for (int NumTabsDef = 0; NumTabsDef < ListTip.size(); NumTabsDef++)
         { 
-        Record AttrsTab= ((Record)ListAttr.get(NumTabsDef)).Copy();
+        Record AttrsTab= (ListAttr.get(NumTabsDef)).Copy();
         AttrsTab.initList();
         Attribute Attr;
         for (int i = 0; i < AttrsTab.NumAttr(); i++)
@@ -2329,11 +2381,11 @@ else
     if (!DocType.equalsIgnoreCase(getTableName()))
         {
         Conditions CondTyps=new Conditions();
-        ArrayList ListTip=Doc.getTypeDefs();
-        ArrayList ListAttr=Doc.getTypeRecs();
+        ArrayList<Record> ListTip=Doc.getTypeDefs();
+        ArrayList<Record> ListAttr=Doc.getTypeRecs();
         for (int NumTabsDef = 0; NumTabsDef < ListTip.size(); NumTabsDef++)
             {
-            Record R= (Record)ListTip.get(NumTabsDef);
+            Record R= ListTip.get(NumTabsDef);
             Attribute AttrNomTab=R.getAttr(PDObjDefs.fNAME);
             String Typ =(String) AttrNomTab.getValue();
             if (!Typ.equalsIgnoreCase(getTableName()))
@@ -2343,7 +2395,7 @@ else
                 }
             if (!Typ.equalsIgnoreCase(DocType))
                 TypList.add(Typ);
-            Record AttrsTab= ((Record)ListAttr.get(NumTabsDef)).Copy();
+            Record AttrsTab= (ListAttr.get(NumTabsDef)).Copy();
             AttrsTab.initList();
             Attribute Attr;
             for (int i = 0; i < AttrsTab.NumAttr(); i++)
@@ -2417,14 +2469,6 @@ Record Rec=getDrv().NextRec(Res);
 if (Rec==null)
     return(NextD);
 String Typ=(String)Rec.getAttr(fDOCTYPE).getValue();
-//Rec.initList();
-//Attribute Attr;
-//for (int i = 0; i < Rec.NumAttr(); i++)
-//    {
-//    Attr=Rec.nextAttr();
-//    if (Attr.getName().contains("."+fVERSION))
-//        Attr.setName(fVERSION);
-//    }
 NextD=new PDDocs(getDrv(), Typ);
 NextD.assignValues(Rec);
 return(NextD);
@@ -2454,7 +2498,7 @@ return(getPDId());
 /**
  * Add aditional information, oriented a "extended" object with childrn nodes
  * @return The aditional XML
- * @throws PDException
+ * @throws PDException In any error
  */
 @Override
 protected String toXML2() throws PDException
@@ -2466,8 +2510,8 @@ return(RFull.toXML()+"</ListAttr>");
 //-------------------------------------------------------------------------
 /**
  * Process the object definition inserting a new object
- * @param OPDObject XML node containing theobject data
- * @throws PDException if object name/index duplicated or in any error
+ * @param OPDObject XML node containing the object data
+ * @throws PDException allways
  */
 @Override
 public void ProcesXMLNode(Node OPDObject) throws PDException
@@ -2476,7 +2520,7 @@ throw new UnsupportedOperationException("Not Supported. Use ImportXMLNode");
 }    
 //-------------------------------------------------------------------------
 /**
- * Builds an XML of the object including the fileto be printed or exported
+ * Builds an XML of the object including the file to be printed or exported
  * @param FolderPath Path to store Metadata and Document
  * @param AbsPath If true, include fullpath (FolderPath) in the XML, otherwise, only name
  * @throws PDException in any error 
@@ -2521,8 +2565,9 @@ FMetadataXML=null;
 //-------------------------------------------------------------------------
 /**
  * Builds an XML of the object to be printed or exported
- * @return the XML
- * @throws PDException  
+ * @param IncludeContent When true, the content of the doc will be included
+ * @return the XML with the metadata and, optionally the contet
+ * @throws PDException In any error
  */
 public String toXML(boolean IncludeContent) throws PDException
 {   
@@ -2553,7 +2598,7 @@ return XML.toString();
  * @param FolderPath Path where the original xlml file was readed. Use to resolve the absolute file position
  * @param DestFold OPD destination folder
  * @param MaintainId When true, the Original Id is maintained, else a new one is assigned
- * @throws PDException
+ * @throws PDException In any error
  */
 public void ImportXMLNode(Node OPDObject, String FolderPath, String DestFold, boolean MaintainId) throws PDException
 {
@@ -2613,7 +2658,8 @@ NewDoc.insert();
  * @param OPDObject XMLNode to process
  * @param DestFold OPD destination folder
  * @param MaintainId When true, the Original Id is maintained, else a new one is assigned
- * @throws PDException
+ * @return The Id of the imported document
+ * @throws PDException In any error
  */
 public String ImportXMLNode(Node OPDObject, String DestFold, boolean MaintainId) throws PDException
 {
@@ -2656,14 +2702,14 @@ return(NewDoc.getPDId());
 }    
 //-------------------------------------------------------------------------
 /**
- *
- * @param Sess
- * @param XMLFile
- * @param ParentFoldId
- * @param DateFormat
- * @param TimeStampFormat
- * @return
- * @throws PDException
+ * Imports all the documents referenced in a XML file in ABBY FlexyCapture format
+ * @param Sess OpenProdoc session
+ * @param XMLFile XML File
+ * @param ParentFoldId OpenProdoc folder where do th import
+ * @param DateFormat format of dates in the XML
+ * @param TimeStampFormat Format of timestamps in the XML
+ * @return The File object of the (last) "OCRed" image referenced in the XML
+ * @throws PDException In any Error
  */
 static public File ProcessXMLAbby(DriverGeneric Sess, File XMLFile, String ParentFoldId, String DateFormat, String TimeStampFormat) throws PDException
 {
@@ -2747,14 +2793,14 @@ return(ImageFile);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Sess
- * @param TxtFile
- * @param ParentFoldId
- * @param DateFormat
- * @param TimeStampFormat
- * @return
- * @throws PDException
+ * Imports all the documents referenced in a Text file in Kofax Capture format
+ * @param Sess OpenProdoc session
+ * @param TxtFile Text File in Kofax format
+ * @param ParentFoldId OpenProdoc folder where do th import
+ * @param DateFormat format of dates in the XML
+ * @param TimeStampFormat Format of timestamps in the XML
+ * @return The File object of the (last) "OCRed" image referenced in the XML
+ * @throws PDException In any Error
  */
 public static File ProcessXMLKofax(DriverGeneric Sess, File TxtFile, String ParentFoldId, String DateFormat, String TimeStampFormat)  throws PDException
 {
@@ -2811,10 +2857,9 @@ return(ImageFile);
     }
 }
 //-------------------------------------------------------------------------
-/** Executes all the transactional defined threads
- * 
- * @param MODE
- * @throws prodoc.PDException
+/** Executes, in the current document, all the transactional defined threads for a specific MODE (INS, UPD, DEL) 
+ * @param MODE CKind of operation (INSert, UPDater, DELete)
+ * @throws PDException In any error
  */
 private void ExecuteTransThreads(String MODE) throws PDException
 {
@@ -2825,9 +2870,9 @@ for (PDTasksDefEvent L1 : L)
     L1.Execute(this);
 }
 //---------------------------------------------------------------------
-/** Generates all the NO transactional defined threads
+/** Generates, for the current document, all the NO transactional defined threads
  * @param MODE Kind of operation (INSert, UPDater, DELete)
- * @throws prodoc.PDException in any error
+ * @throws PDException in any error
  */
 private void GenerateNoTransThreads(String MODE) throws PDException
 {
@@ -2849,7 +2894,7 @@ for (PDTasksDefEvent L1 : L)
 /**
  * Returns all the data of the doc as html
  * @return String with the html
- * @throws prodoc.PDException in any error
+ * @throws PDException in any error
  */
 public String toHtml() throws PDException
 {
@@ -2877,6 +2922,12 @@ SHtml.append("</p>");
 return(SHtml.toString());
 }
 //---------------------------------------------------------------------
+/**
+ * Return true if the configuration of the document types includes functional trace
+ * @param Oper Operation to verify the trace requirement
+ * @return true when the operaion must be traced
+ * @throws PDException In any error
+ */
 private boolean MustTrace(String Oper) throws PDException
 {
 PDObjDefs Def=new PDObjDefs(getDrv());
@@ -2892,6 +2943,12 @@ if (Oper.equals(fOPERUPD))
 return(false);
 }
 //---------------------------------------------------------------------
+/**
+ * Saves the functional trace for the current document
+ * @param Oper Operation 
+ * @param Allowed boolean indication, true when teh opeeration ws allowed
+ * @throws PDException In any error
+ */
 private void Trace(String Oper, boolean Allowed) throws PDException
 {
 PDTrace tr=new PDTrace(getDrv());
@@ -2904,7 +2961,7 @@ tr.insert();
 //---------------------------------------------------------------------
 /**
  * Overloading of abstract method. Not valid for documents
- * @return null 
+ * @return null Always
  * @throws PDException Always
  */
 @Override
@@ -2914,7 +2971,10 @@ PDException.GenPDException("ERROR", null);
 return(null);
 }
 //-------------------------------------------------------------------------
-
+/**
+ * Executes the Full Text indexing on the current document
+ * @throws PDException In any error
+ */
 protected void ExecuteFTAdd()  throws PDException
 {
 LoadFull(getPDId());
@@ -2961,6 +3021,10 @@ FTConn.Disconnect();
     }
 }
 //-------------------------------------------------------------------------
+/**
+ * Executes the Full Text updating of the index on the current document
+ * @throws PDException In any error
+ */
 protected void ExecuteFTUpd() throws PDException
 {
 LoadFull(getPDId());
@@ -2999,6 +3063,10 @@ FTConn.Disconnect();
     }
 }
 //-------------------------------------------------------------------------
+/**
+ * Executes the deleting from the Full Text index of the current document
+ * @throws PDException In any error
+ */
 protected void ExecuteFTDel() throws PDException
 {
 FTConnector FTConn=getDrv().getFTRepository(getDocType());
@@ -3013,7 +3081,14 @@ FTConn.Disconnect();
     }
 }
 //-------------------------------------------------------------------------
-
+/**
+ * Search in thee Fulltexxt repository using the received query
+ * @param pDocType Currently ignored (but filtered when joined with metadata query)
+ * @param SubTypes Currently ignored (but filtered when joined with metadata query)
+ * @param FTQuery Full text quury using standar Lucene notation
+ * @return An arrayList with the Id of the documents
+ * @throws PDException In any error
+ */
 private ArrayList SearchFT(String pDocType, boolean SubTypes, String FTQuery) throws PDException
 {
 ArrayList FTRes=null;    
@@ -3030,7 +3105,11 @@ FTConn.Disconnect();
 return (FTRes);
 }
 //-------------------------------------------------------------------------
-
+/**
+ * Checks if any document exist with the specified Id
+ * @param pdId Id of document to check
+ * @return true if the document exist
+ */
 private boolean ExistId(String pdId)
 {
 if (getObjCache().get(pdId)!=null)
@@ -3059,6 +3138,11 @@ else
     return(false);
 }
 //-------------------------------------------------------------------------
+/**
+ * Move a document from its current folder to another one
+ * @param NewParentId Id of the target folder
+ * @return true if the document has been moved
+ */
 public boolean Move(String NewParentId)
 {
 DriverGeneric drv=null;    
@@ -3110,6 +3194,11 @@ if (PDLog.isDebug())
 return(true);    
 }
 //-------------------------------------------------------------------------
+/**
+ * Changes the ACL of the document
+ * @param NewACL New ACL to apply
+ * @return true if the ACL has been changed
+ */
 public boolean ChangeACL(String NewACL)
 {
 DriverGeneric drv=null;    

@@ -253,6 +253,7 @@ return("PD_THES_LANG");
 //-------------------------------------------------------------------------
 /**
  *
+     * @return 
  * @throws PDException
  */
 @Override
@@ -408,6 +409,7 @@ else
 //-------------------------------------------------------------------------
 /**
  *
+     * @return 
  * @throws PDException
  */
 protected Conditions getConditions() throws PDException
@@ -539,6 +541,7 @@ this.ParentId = pParentId;
 //-------------------------------------------------------------------------
 /**
  *
+     * @param DefLang
  * @throws PDException
  */
 protected void CreateRootThesaur(String DefLang) throws PDException
@@ -1309,6 +1312,13 @@ return(ListAtr);
  * @return
  * @throws PDException
  */
+
+    /**
+     *
+     * @return
+     * @throws PDException
+     */
+
 public String getIDThesaur() throws PDException
 {
 if (getParentId().equals(PDThesaur.ROOTTERM))
@@ -1427,6 +1437,7 @@ return Lang;
 }
 //---------------------------------------------------------------------
 /**
+     * @param pLang
  * @param Lang the Lang to set
  */
 public void setLang(String pLang)
@@ -1667,6 +1678,9 @@ if (PDLog.isDebug())
  * @param XMLFile 
  * @param Root Root to be included in the RDF (i.e. :http://metadataregistry.org/uri/FTWG/ )
  * @param MainLang Language that defines the ID of terms and "walking" of thesaur
+     * @param SubThesLang
+     * @param Transact
+     * @param RetainCodes
  * @return 
  * @throws PDException  
  */
@@ -1809,6 +1823,9 @@ return(Tot);
  * @param XMLFile 
  * @param Root Root to be included in the RDF (i.e. :http://metadataregistry.org/uri/FTWG/ )
  * @param MainLang Language that defines the ID of terms and "walking" of thesaur
+     * @param SubThesLang
+     * @param Transact
+     * @param RetainCodes
  * @return 
  * @throws PDException  
  */
@@ -2398,7 +2415,11 @@ return (NewId);
 }
 //---------------------------------------------------------------------
 
-static public String getImportReport()
+    /**
+     *
+     * @return
+     */
+    static public String getImportReport()
 {
 return(ImportReport);
 }

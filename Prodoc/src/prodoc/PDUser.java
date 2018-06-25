@@ -22,6 +22,7 @@ package prodoc;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import static prodoc.PDACL.fGROUPNAME;
 
 /**
  *
@@ -324,6 +325,7 @@ return("PD_USERS");
 //-------------------------------------------------------------------------
 /**
  *
+     * @return 
  * @throws PDException 
  */
 @Override
@@ -393,6 +395,8 @@ this.Active = Active;
 //-------------------------------------------------------------------------
 /**
  *
+     * @return 
+     * @throws prodoc.PDException
  */
 protected Conditions getConditions() throws PDException
 {
@@ -410,6 +414,7 @@ return(ListCond);
 //-------------------------------------------------------------------------
 /**
  *
+     * @throws prodoc.PDException
  */
 protected void DeleteMulti() throws PDException
 {
@@ -614,6 +619,12 @@ if (PDLog.isDebug())
     PDLog.Debug("PDUser.LoadAll<:"+UserName);
 }
 //------------------------------------------------
+
+    /**
+     *
+     * @return
+     * @throws PDException
+     */
 protected int RefreshAuth() throws PDException
 {
 int NumErrors=0;
@@ -682,6 +693,7 @@ return Rol1;
 /**
  * Creates special user for task
  * @return Creates PDUser
+     * @throws prodoc.PDException
  */
 protected void CreateTaskUser() throws PDException
 {

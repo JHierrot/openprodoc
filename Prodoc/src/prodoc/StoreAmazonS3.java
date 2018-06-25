@@ -47,6 +47,8 @@ AmazonS3 s3 = null;
  * @param pUser
  * @param pPassword
  * @param pParam
+     * @param pEncrypt
+     * @throws prodoc.PDExceptionFunc
  */
 protected StoreAmazonS3(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt) throws PDExceptionFunc
 {
@@ -114,6 +116,8 @@ protected void Disconnect() throws PDException
  * @param Id
  * @param Ver
  * @param Bytes
+     * @param Rec
+     * @param OPDPath
  * @return
  * @throws PDException
  */
@@ -132,6 +136,7 @@ return (-1);
  *
  * @param Id
  * @param Ver
+     * @param Rec
  * @throws PDException
  */
 protected void Delete(String Id, String Ver, Record Rec) throws PDException

@@ -63,8 +63,16 @@ private HttpPost UrlPost;
 static final String charset="UTF-8";
 OutputStreamWriter output;
 //private static final String NEWLINE = "\r\n";
+
+    /**
+     *
+     */
 public static final String ORDER="Order";
-public static final String PARAM="Param";
+
+    /**
+     *
+     */
+    public static final String PARAM="Param";
 boolean Conected=false;
 StringBuilder Answer=new StringBuilder(3000);
 //private List<String> cookies =null;
@@ -373,7 +381,6 @@ protected Cursor OpenCursor(Query Search) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.OpenCursor:"+Search);
-Cursor C=new Cursor();
 Node N=ReadWrite(S_SELECT, "<OPD><Query>"+Search.toXML()+"</Query></OPD>");
 Vector Res=new Vector();
 NodeList RecLst = N.getChildNodes();
@@ -421,9 +428,7 @@ if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.CloseCursor:"+CursorIdent);
 if (CursorIdent==null)
     return;
-if (CursorIdent.getResultSet()!=null)
-    ((Vector)CursorIdent.getResultSet()).clear();
-CursorIdent.setResultSet(null);
+CursorIdent.CleanResultSet();
 delCursor(CursorIdent);
 }
 //-----------------------------------------------------------------------------------
@@ -590,6 +595,7 @@ return(cm);
 /**
  * Returns an object of type Fulltext indexer
  * if the repository is yet constructed, returns the constructed one
+     * @param pDocType
  * @return object of type repository
  * @throws PDException in any error
  */

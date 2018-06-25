@@ -16,7 +16,6 @@
  * author: Joaquin Hierro      2011
  * 
  */
-
 package prodoc;
 
 import java.io.*;
@@ -33,107 +32,195 @@ import static prodoc.PDFolders.getTableName;
 import prodoc.security.*;
 
 /**
- *
+ * Abstract class that represent a session that manages  the access to ALL the data and metadata, 
+ * by means of JDBC or a remote connection, both implemented as subclasses
  * @author jhierrot
  */
 abstract public class DriverGeneric
 {
 /**
- *
+ * Url of the connection
  */
 private String URL;
 /**
- *
+ * Aditional param
  */
 private String PARAM;
 /**
- *
+ * Connection user to the Database
  */
 private String DBUser;
 /**
- *
+ * Password of the database
  */
 private String DBPassword;
 /**
- *
+ * When true, the session is locked by an user/thread/http session
  */
 private boolean Locked=false;
 /**
- *
+ * Last time the session was used
  */
 private Date TimeUsed;
 /**
- *
+ * Time when teh session was locked
  */
 private Date TimeLocked;
 /**
- *
+ * OpenProdoc user owner/authenticated in the session
  */
 private PDUser User=null;
 /**
- *
+ * The session has a transaction started
  */
 private boolean InTransaction=false;
 /**
- *
+ * Container for all the opened cursors, with key=CursorId and Value=Cursor
  */
-private HashMap OpenCur=null;
+private HashMap<String, Cursor> OpenCur=null;
 /**
- *
+ * Contaner for cache of Repositories by type, with key=DocType and Value=RepositName
  */
-private HashMap Class2Reposit=null;
+private HashMap<String, String> Class2Reposit=null;
+//private HashMap ListReposit=null;
 /**
- *
+ * Container for all the instantiated authenticators, with key=AuthName and Value=Authenticater
  */
-private HashMap ListReposit=null;
+private HashMap<String, AuthGeneric> ListAuth=null;
 /**
- *
+ * Encription default key
  */
-private HashMap ListAuth=null;
 private final char[] ServerKey = "Esta es la clave".toCharArray();
-private static HashMap TransList=new HashMap();
-private String AppLang=null;
-private static String DefAppLang=null;
-private PDCustomization PDCust=null;
-
-static final public String S_LOGIN   ="LOGIN";  // Ok
-static final public String S_LOGOUT  ="LOGOUT"; // Ok
-static final public String S_SELECT  ="SELECT";  // Ok
-static final public String S_INSERT  ="INSERT";  // Ok
-static final public String S_DELETE  ="DELETE";   // Ok
-static final public String S_UPDATE  ="UPDATE";   // Ok
-static final public String S_CREATE  ="CREATE";    // Ok
-static final public String S_DROP    ="DROP";     // Ok
-static final public String S_ALTER   ="ALTER";    // Ok
-static final public String S_ALTERDEL="ALTERDEL";   // Ok
-static final public String S_INTEGRIT="INTEGRIT";  // Ok
-static final public String S_INTEGRIT2="INTEGRIT2";  // Ok
-static final public String S_INITTRANS="INITTRANS";  // Ok
-static final public String S_COMMIT   ="COMMIT";    // Ok
-static final public String S_CANCEL   ="CANCEL";    // Ok
-static final public String S_UNLOCK   ="UNLOCK"; // Ok
-
-static final public String S_DELFILE   ="DELFILE";    
-static final public String S_RENFILE   ="RENFILE";    
-static final public String S_RETRIEVEFILE   ="RETRIEVEFILE";    
-static final public String S_INSFILE   ="INSFILE";    
-
-static final public String S_FTINS   ="FTINS";    
-static final public String S_FTUPD   ="FTUPD";    
-static final public String S_FTDEL   ="FTDEL";    
-static final public String S_FTSEARCH ="FTSEARCH";    
-
-private TreeMap AllTaskTrans=null;
-private TreeMap AllTaskNoTrans=null;
-
-protected static FTConnector FTConn=null;
-
 /**
- *
- * @param pURL
- * @param pPARAM
- * @param pUser
- * @param pPassword
+ * Container for all the translations, with key=language and Value=properties with trnaslated values
+ */
+private static HashMap<String, Properties> TransList=new HashMap();
+/**
+ * Language of the session for translation
+ */
+private String AppLang=null;
+/**
+ * Defaut laanguage for translation
+ */
+private static String DefAppLang=null;
+/**
+ * Customization assigned to session (current user)
+ */
+private PDCustomization PDCust=null;
+/**
+ * Order for remote session
+ */
+static final public String S_LOGIN   ="LOGIN";  // Ok
+/**
+ * Order for remote session
+ */
+static final public String S_LOGOUT  ="LOGOUT"; // Ok
+/**
+ * Order for remote session
+ */
+static final public String S_SELECT  ="SELECT";  // Ok
+/**
+ * Order for remote session
+ */
+static final public String S_INSERT  ="INSERT";  // Ok
+/**
+ * Order for remote session
+ */
+static final public String S_DELETE  ="DELETE";   // Ok
+/**
+ * Order for remote session
+ */
+static final public String S_UPDATE  ="UPDATE";   // Ok
+/**
+ * Order for remote session
+ */
+static final public String S_CREATE  ="CREATE";    // Ok
+/**
+ * Order for remote session
+ */
+static final public String S_DROP    ="DROP";     // Ok
+/**
+ * Order for remote session
+ */
+static final public String S_ALTER   ="ALTER";    // Ok
+/**
+ * Order for remote session
+ */
+static final public String S_ALTERDEL="ALTERDEL";   // Ok
+/**
+ * Order for remote session
+ */
+static final public String S_INTEGRIT="INTEGRIT";  // Ok
+/**
+ * Order for remote session
+ */
+static final public String S_INTEGRIT2="INTEGRIT2";  // Ok
+/**
+ * Order for remote session
+ */
+static final public String S_INITTRANS="INITTRANS";  // Ok
+/**
+ * Order for remote session
+ */
+static final public String S_COMMIT   ="COMMIT";    // Ok
+/**
+ * Order for remote session
+ */
+static final public String S_CANCEL   ="CANCEL";    // Ok
+/**
+ * Order for remote session
+ */
+static final public String S_UNLOCK   ="UNLOCK"; // Ok
+/**
+ * Order for remote session
+ */
+static final public String S_DELFILE   ="DELFILE";    
+/**
+ * Order for remote session
+ */
+static final public String S_RENFILE   ="RENFILE";    
+/**
+ * Order for remote session
+ */
+static final public String S_RETRIEVEFILE   ="RETRIEVEFILE";    
+/**
+ * Order for remote session
+ */
+static final public String S_INSFILE   ="INSFILE";    
+/**
+ * Order for remote session
+ */
+static final public String S_FTINS   ="FTINS";    
+/**
+ * Order for remote session
+ */
+static final public String S_FTUPD   ="FTUPD";    
+/**
+ * Order for remote session
+ */
+static final public String S_FTDEL   ="FTDEL";    
+/**
+ * Order for remote session
+ */
+static final public String S_FTSEARCH ="FTSEARCH";    
+/**
+ * ORDERED Container of all the transactional Tasks, with key=Doctype+event+order and value=Tasks definition
+ */
+private TreeMap<String, PDTasksDefEvent> AllTaskTrans=null;
+/**
+ * ORDERED Container of all the NON-transactional Tasks, with key=Doctype+event+order and value=Tasks definition
+ */
+private TreeMap<String, PDTasksDefEvent> AllTaskNoTrans=null;
+/**
+ * Connector for FullText indexing
+ */
+protected static FTConnector FTConn=null;
+/**
+ * Defualt constructor
+ * @param pURL    url of database or OPD server when remote
+ * @param pPARAM  Additional params
+ * @param pUser   User of connnection
+ * @param pPassword password of connection
  */
 public DriverGeneric(String pURL, String pPARAM, String pUser, String pPassword)
 {
@@ -144,39 +231,39 @@ DBPassword=Decode(pPassword);
 }
 //--------------------------------------------------------------------------
 /**
-* @return the URL
-*/
+ * @return the URL
+ */
 public String getURL()
 {
 return URL;
 }
 //--------------------------------------------------------------------------
 /**
-* @return the PARAM
-*/
+ * @return the PARAM
+ */
 public String getPARAM()
 {
 return PARAM;
 }
 //--------------------------------------------------------------------------
 /**
-* @return the DBUser
-*/
+ * @return the DBUser
+ */
 public String getDBUser()
 {
 return DBUser;
 }
 //--------------------------------------------------------------------------
 /**
-* @return the DBPassword
-*/
+ * @return the DBPassword
+ */
 protected String getDBPassword()
 {
 return DBPassword;
 }
 //--------------------------------------------------------------------------
 /**
- * 
+ * Returs true when tteh session is locked (by a thread/http session)
  * @return
  */
 public boolean isLocked()
@@ -185,7 +272,7 @@ return(Locked);
 }
 //--------------------------------------------------------------------------
 /**
- *
+ * Locks the session, setting the timestamp 
  */
 public void Lock()
 {
@@ -194,7 +281,7 @@ TimeLocked=new Date();
 }
 //--------------------------------------------------------------------------
 /**
- *
+ * Unlocks the session
  */
 public void UnLock()
 {
@@ -203,129 +290,130 @@ TimeLocked=null;
 }
 //--------------------------------------------------------------------------
 /**
-* @return the TimeUsed
-*/
+ * Returns the last tme the session was used
+ * @return the TimeUsed
+ */
 public Date getTimeUsed()
 {
 return TimeUsed;
 }
 //--------------------------------------------------------------------------
-
 /**
-* @return the TimeLocked
-*/
+ * Returns when the session was locked
+ * @return the TimeLocked
+ */
 public Date getTimeLocked()
 {
 return TimeLocked;
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @throws PDException
+ * Deletes e sesion
+ * @throws PDException in any error
  */
 abstract public void delete() throws PDException;
 //--------------------------------------------------------------------------
 /**
- *
- * @return
+ * Returns if the session is connected
+ * @return true when session is connected
  */
 abstract public boolean isConnected();
 //--------------------------------------------------------------------------
 /**
- *
- * @param TableName
- * @param Fields
- * @throws PDException
+ * Creates a table for storing all or part of the mmetadata of the docuemnt type
+ * @param TableName name of the table
+ * @param Fields    Record with the attributes
+ * @throws PDException in any error
  */
 abstract protected void CreateTable(String TableName, Record Fields) throws PDException;
 //--------------------------------------------------------------------------
 /**
- *
- * @param TableName
- * @throws PDException
+ * deletes a table
+ * @param TableName Name of the table to drop
+ * @throws PDException in any error
  */
 abstract protected void DropTable(String TableName) throws PDException;
 //--------------------------------------------------------------------------
 /**
- *
- * @param TableName
+ * Modifies a table adding an Attribute
+ * @param TableName name of the table
  * @param NewAttr New field to add
- * @throws PDException
+ * @param IsVer indictes if the table is a version table in order to add idex or not
+ * @throws PDException in any error
  */
 abstract protected void AlterTableAdd(String TableName, Attribute NewAttr, boolean IsVer) throws PDException;
 //--------------------------------------------------------------------------
 /**
- *
- * @param TableName
+ * Modifies a table removing an Attribute
+ * @param TableName Name of the table
  * @param OldAttr old field to delete
- * @throws PDException
+ * @throws PDException in any error
  */
 abstract protected void AlterTableDel(String TableName, String OldAttr) throws PDException;
 //--------------------------------------------------------------------------
 /**
- *
- * @param TableName
- * @param Fields
- * @throws PDException
+ * Inserts a row in the table
+ * @param TableName Name of the table
+ * @param Fields   Attributs to add
+ * @throws PDException in any error
  */
 abstract protected void InsertRecord(String TableName, Record Fields) throws PDException;
 //--------------------------------------------------------------------------
 /**
- *
- * @param TableName
- * @param DelConds 
- * @throws PDException
+ * Deletes a row (or several)
+ * @param TableName Name of the table
+ * @param DelConds conditions (where) for deleting
+ * @throws PDException in any error
  */
 abstract protected void DeleteRecord(String TableName, Conditions DelConds) throws PDException;
 //--------------------------------------------------------------------------
 /**
- *
- * @param TableName
- * @param NewFields
- * @param UpConds 
- * @throws PDException
+ * Updates a rw 8or several)
+ * @param TableName Name of the table
+ * @param NewFields new values so assign
+ * @param UpConds   conditions (where) for updating
+ * @throws PDException in any error
  */
 abstract protected void UpdateRecord(String TableName, Record NewFields, Conditions UpConds) throws PDException;
 //--------------------------------------------------------------------------
 /**
- *
- * @param TableName1
- * @param Field1
- * @param TableName2
- * @param Field2 
- * @throws PDException
+ * Adds referential integrity (foreign key) between tables
+ * @param TableName1 Name of the Table Origin
+ * @param Field1   Name of Field Origin
+ * @param TableName2 Name of the Table Target
+ * @param Field2   Name of Field Target
+ * @throws PDException  in any error
  */
 abstract protected void AddIntegrity(String TableName1, String Field1, String TableName2, String Field2) throws PDException;
 //--------------------------------------------------------------------------
-
-    /**
-     *
-     * @param TableName1
-     * @param Field11
-     * @param Field12
-     * @param TableName2
-     * @param Field21
-     * @param Field22
-     * @throws PDException
-     */
-    abstract protected void AddIntegrity(String TableName1, String Field11, String Field12, String TableName2, String Field21, String Field22) throws PDException;
-
 /**
- * 
- * @param RootPassword 
- * @param DefLang 
- * @param RepUrl 
- * @param DefTimeFormat 
- * @param DefDateFormat 
- * @param RepName 
- * @param MainKey 
- * @param RepEncrypt 
- * @param Trace 
- * @param RepUser 
- * @param RepParam 
- * @param RepType 
- * @param RepPassword 
- * @throws PDException
+ * Adds referential integrity (foreign key) between tables combining fields
+ * @param TableName1 Name of the Table Origin
+ * @param Field11  Name of Field1 Origin
+ * @param Field12  Name of Field2 Origin
+ * @param TableName2 Name of the Table Target
+ * @param Field21  Name of Field1 Target
+ * @param Field22  Name of Field2 Target
+ * @throws PDException  in any error
+ */
+abstract protected void AddIntegrity(String TableName1, String Field11, String Field12, String TableName2, String Field21, String Field22) throws PDException;
+/**
+ * Installs OpenProdoc in the current/configured session database, creating all the datamodel
+ * and inserting the base definitions and elements (document types, users, folders, roles, groups, acl,...)
+ * @param RootPassword  Password for "root" user
+ * @param DefLang       Default language
+ * @param RepUrl        Url of the default documents repository
+ * @param DefTimeFormat Default TimeStamp format for Swing interface 
+ * @param DefDateFormat Default Date format for Swing interface 
+ * @param RepName       name of the default repository
+ * @param MainKey       Key for encription oof documents
+ * @param RepEncrypt    When true, the repository is encripted
+ * @param Trace         Vector for storing the messages of the installation in order to show the evolution or final result of the installation
+ * @param RepUser       Name of the Repository user (i.e. name for a database-blob repository)
+ * @param RepParam      Additional parameter of the repository
+ * @param RepType       Kind of rspository (FileSystem, blob, S3, Custom,..)
+ * @param RepPassword   Repository Password
+ * @throws PDException in any error
  */
 public void Install(String RootPassword, String DefLang, String DefTimeFormat, 
                     String DefDateFormat, String MainKey, String RepName,
@@ -619,6 +707,12 @@ CerrarTrans();
 Trace.add("Installation finished");
 }
 //--------------------------------------------------------------------------
+/**
+ * Updates the version and structure of repository database
+ * @param UpMetadataInc when tru, the updating will be incremental, doing as much as posible, even afcter error, otherwise the process stops at the first error
+ * @param Trace Vector for storing the messages of the installation in order to show the evolution or final result of the installation
+ * @throws PDException In any error
+ */
 public void Update(boolean UpMetadataInc, Vector<String> Trace)  throws PDException
 {
 PDServer Serv=new PDServer(this);
@@ -1095,8 +1189,8 @@ Trace.add("Update finished");
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @throws PDException 
+ * Uninstall OpenProdoc from the database
+ * @throws PDException In any Error
  */
 public void Uninstall() throws PDException
 {
@@ -1249,107 +1343,87 @@ Ro.unInstall();
 }
 //--------------------------------------------------------------------------
 /**
-* @return the InTransaction
-*/
+ * When true the session is in a transaction
+ * @return the InTransaction
+ */
 public boolean isInTransaction()
 {
 return InTransaction;
 }
 //--------------------------------------------------------------------------
 /**
+ * Assign the transaction status to a the session
  * @param pInTransaction 
-*/
+ */
 public void setInTransaction(boolean pInTransaction)
 {
 InTransaction = pInTransaction;
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @throws PDException
+ * Ends/commit a transaction
+ * @throws PDException In any error
  */
 abstract public void IniciarTrans() throws PDException;
 //-----------------------------------------------------------------------------------
 /**
- *
- * @throws PDException
+ * Starts a transaction
+ * @throws PDException In any error
  */
 abstract public void CerrarTrans() throws PDException;
 //-----------------------------------------------------------------------------------
 /**
- * 
- * @throws PDException
+ * Stops/roolback a transaction
+ * @throws PDException In any error
  */
 abstract public void AnularTrans() throws PDException;
 //-----------------------------------------------------------------------------------
 /**
- *
- * @param Search
+ * Opens a cursor with the information included in Query
+ * @param Search Query information
  * @return a CursorCode, stored by the drivers
- * @throws PDException
+ * @throws PDException In any error
  */
 abstract protected Cursor OpenCursor(Query Search) throws PDException;
 //-----------------------------------------------------------------------------------
 /**
- *
- * @return
+ * Generates a cursor identifier
+ * @return the generated random name
  */
 private String genCursorName()
 {
 return ("Cursor"+Math.random());
 }
-////-----------------------------------------------------------------------------------
-//private int IdentifyCursor(String CursorIdent)  throws PDException
-//{
-//if (CursorIdent.length()<7)
-//    throw new PDException("Cursor no identificado");
-//int NumCur=Integer.parseInt(CursorIdent.substring(6));
-//if (NumCur<0||NumCur>=getOpenCur().size())
-//    throw new PDException("Cursor Inexistente");
-//return(NumCur);
-//}
 //-----------------------------------------------------------------------------------
 /**
-* @return the OpenCur
-*/
-private HashMap getOpenCur()
+ * Creates if needed and returns the collection containing open cursors
+ * @return the collection of open cursors
+ */
+private HashMap<String, Cursor> getOpenCur()
 {
 if (OpenCur==null)
     OpenCur=new HashMap();
 return OpenCur;
 }
 //-----------------------------------------------------------------------------------
-///**
-//* @return the OpenCur
-//*/
-//private Vector getFieldsCur()
-//{
-//if (FieldsCur==null)
-//    FieldsCur=new Vector();
-//return FieldsCur;
-//}
-//-----------------------------------------------------------------------------------
 /**
- *
- * @param rs
- * @param Fields
- * @return
+ * Creates a cursor and stores in the collection
+ * @param rs Object representing a collection of results (JDBC Resulset, Vector,..)
+ * @param Fields Record of attributes returned by the cursor
+ * @return Created Cursor
  */
 protected Cursor StoreCursor(Object rs, Record Fields)
 {
-Cursor Cur=new Cursor();
-Cur.setCursorId(genCursorName());
-Cur.setFieldsCur(Fields);
-Cur.setResultSet(rs);
+Cursor Cur=new Cursor(genCursorName(), Fields, rs);
 getOpenCur().put(Cur.getCursorId(), Cur);
 return(Cur);
 }
 //-----------------------------------------------------------------------------------
 /**
- * 
- * @param CursorIdent
- * @return
- * @throws PDException 
+ * Returns a stored cursor
+ * @param CursorIdent Cursor identifier to be returned
+ * @return the stred cursor or null if don't exist
+ * @throws PDException In any error
  */
 protected Object getCursor(Cursor CursorIdent) throws PDException
 {
@@ -1357,9 +1431,9 @@ return(CursorIdent.getResultSet());
 }
 //-----------------------------------------------------------------------------------
 /**
- *
- * @param CursorIdent
- * @throws PDException
+ * Removes a Cursor from the stored collection
+ * @param CursorIdent Cursor to be removed
+ * @throws PDException In any error
  */
 protected void delCursor(Cursor CursorIdent) throws PDException
 {
@@ -1368,17 +1442,17 @@ if (getOpenCur().containsKey(CursorIdent.getCursorId()))
 }
 //-----------------------------------------------------------------------------------
 /**
- *
- * @param CursorIdent
- * @return
- * @throws PDException
+ * Returns the next record of the cursor
+ * @param CursorIdent Cursor Identifier
+ * @return Next Record or null if there are n more rows
+ * @throws PDException In any error
  */
 abstract public Record NextRec(Cursor CursorIdent)  throws PDException;
 //-----------------------------------------------------------------------------------
 /**
- *
- * @param CursorIdent
- * @throws PDException
+ * Closes the cursor, calling also to {@link #delCursor(prodoc.Cursor) }
+ * @param CursorIdent Cursor Identifier
+ * @throws PDException In any error
  */
 abstract public void CloseCursor(Cursor CursorIdent) throws PDException;
 //-----------------------------------------------------------------------------------
@@ -1412,6 +1486,7 @@ if (PDLog.isDebug())
 //---------------------------------------------------------------------
 /**
  * Protected method to create a Special taskUser
+ * @throws prodoc.PDException
  */
 protected void AssignTaskUser() throws PDException
 {
@@ -1422,7 +1497,7 @@ User.CreateTaskUser();
 }
 //-----------------------------------------------------------------------------------
 /**
- * 
+ * Refresh current all the information of current user
  * @throws PDException
  */
 public void RefreshUser() throws PDException
@@ -1431,6 +1506,7 @@ getUser().LoadAll(getUser().getName());
 }
 //-----------------------------------------------------------------------------------
 /**
+ * Returns, and create if needed, the session user
  * @return the User
  * @throws PDException
 */
@@ -1442,11 +1518,11 @@ return User;
 }
 //-----------------------------------------------------------------------------------
 /**
- *
- * @param tableName 
- * @param TypeDef
- * @param TypeRecs
- * @throws PDException
+ * Loads definition of a document type
+ * @param tableName Name of the document types
+ * @param TypeDef Collection of definitions (hierachy of ancestors)
+ * @param TypeRecs Collection of metadata of each ancestor
+ * @throws PDException In any Error
  */
 protected void LoadDef(String tableName, ArrayList<Record> TypeDef, ArrayList<Record> TypeRecs) throws PDException
 {
@@ -1465,16 +1541,16 @@ if (PDLog.isDebug())
 }
 //-----------------------------------------------------------------------------------
 /**
- *
+ * 
  * @param FileOut
  * @param Obj
  * @throws PDException
  */
-public void Export(PrintWriter FileOut, ObjPD Obj) throws PDException
-{
-FileOut.println(Obj.getTabName());
-Export(FileOut, Obj.getRecord());
-}
+//public void Export(PrintWriter FileOut, ObjPD Obj) throws PDException
+//{
+//FileOut.println(Obj.getTabName());
+//Export(FileOut, Obj.getRecord());
+//}
 //-----------------------------------------------------------------------------------
 /**
  *
@@ -1483,15 +1559,15 @@ Export(FileOut, Obj.getRecord());
  * @param RecList
  * @throws PDException
  */
-public void Export(PrintWriter FileOut, String ObjName, Vector RecList) throws PDException
-{
-for (int i = 0; i < RecList.size(); i++)
-    {
-    FileOut.println(ObjName);
-    Record Rec = (Record)RecList.elementAt(i);
-    Export(FileOut, Rec);
-    }
-}
+//public void Export(PrintWriter FileOut, String ObjName, Vector RecList) throws PDException
+//{
+//for (int i = 0; i < RecList.size(); i++)
+//    {
+//    FileOut.println(ObjName);
+//    Record Rec = (Record)RecList.elementAt(i);
+//    Export(FileOut, Rec);
+//    }
+//}
 //-----------------------------------------------------------------------------------
 /**
  *
@@ -1500,16 +1576,16 @@ for (int i = 0; i < RecList.size(); i++)
  * @param CursorId
  * @throws PDException
  */
-public void Export(PrintWriter FileOut, String ObjName, Cursor CursorId) throws PDException
-{
-Record Rec=this.NextRec(CursorId);
-while (Rec!=null)
-    {
-    FileOut.println(ObjName);
-    Export(FileOut, Rec);
-    Rec=this.NextRec(CursorId);
-    }
-}
+//public void Export(PrintWriter FileOut, String ObjName, Cursor CursorId) throws PDException
+//{
+//Record Rec=this.NextRec(CursorId);
+//while (Rec!=null)
+//    {
+//    FileOut.println(ObjName);
+//    Export(FileOut, Rec);
+//    Rec=this.NextRec(CursorId);
+//    }
+//}
 //-----------------------------------------------------------------------------------
 /**
  *
@@ -1517,17 +1593,17 @@ while (Rec!=null)
  * @param Rec
  * @throws PDException
  */
-public void Export(PrintWriter FileOut, Record Rec) throws PDException
-{
-FileOut.println(Rec.NumAttr());
-Rec.initList();
-for (int i = 0; i < Rec.NumAttr(); i++)
-    {
-    Attribute A=Rec.nextAttr();
-    FileOut.println(A.getName());
-    FileOut.println(A.Export());
-    }
-}
+//public void Export(PrintWriter FileOut, Record Rec) throws PDException
+//{
+//FileOut.println(Rec.NumAttr());
+//Rec.initList();
+//for (int i = 0; i < Rec.NumAttr(); i++)
+//    {
+//    Attribute A=Rec.nextAttr();
+//    FileOut.println(A.getName());
+//    FileOut.println(A.Export());
+//    }
+//}
 //-----------------------------------------------------------------------------------
 /**
  *
@@ -1535,32 +1611,32 @@ for (int i = 0; i < Rec.NumAttr(); i++)
  * @param Rec
  * @throws PDException
  */
-public void Import(BufferedReader FileIn, Record Rec) throws PDException
-{
-try {
-String NumStr = FileIn.readLine();
-int NumAtt = Integer.parseInt(NumStr);
-String NomAtt;
-String ValAtt;
-for (int i = 0; i < NumAtt; i++)
-    {
-    NomAtt=FileIn.readLine();
-    Attribute Att = Rec.getAttr(NomAtt);
-    if (Att==null)
-        PDExceptionFunc.GenPDException("Unknown_attibute",NomAtt);
-    ValAtt=FileIn.readLine();
-    Att.Import(ValAtt);
-    }
-} catch (IOException ex)
-    {
-    PDException.GenPDException(ex.getLocalizedMessage(),null);
-    }
-}
+//public void Import(BufferedReader FileIn, Record Rec) throws PDException
+//{
+//try {
+//String NumStr = FileIn.readLine();
+//int NumAtt = Integer.parseInt(NumStr);
+//String NomAtt;
+//String ValAtt;
+//for (int i = 0; i < NumAtt; i++)
+//    {
+//    NomAtt=FileIn.readLine();
+//    Attribute Att = Rec.getAttr(NomAtt);
+//    if (Att==null)
+//        PDExceptionFunc.GenPDException("Unknown_attibute",NomAtt);
+//    ValAtt=FileIn.readLine();
+//    Att.Import(ValAtt);
+//    }
+//} catch (IOException ex)
+//    {
+//    PDException.GenPDException(ex.getLocalizedMessage(),null);
+//    }
+//}
 //-----------------------------------------------------------------------------------
 /**
- *
- * @param Rep
- * @throws PDException
+ * Creates a repository using the definition received (i.e. a Folder, a table blob, etc)
+ * @param Rep Repository definition
+ * @throws PDException In any error
  */
 public void CreateRep(PDRepository Rep) throws PDException
 {
@@ -1575,9 +1651,9 @@ if (PDLog.isDebug())
 }
 //-----------------------------------------------------------------------------------
 /**
- *
- * @param Rep
- * @throws PDException
+ * DESTROY a repository using the definition received (i.e. a Folder, a table blob, etc)
+ * @param Rep Repository definition
+ * @throws PDException In any error
  */
 public void DestroyRep(PDRepository Rep) throws PDException
 {
@@ -1591,10 +1667,10 @@ if (PDLog.isDebug())
     PDLog.Debug("DriverGeneric.DestroyRep<");}
 //-----------------------------------------------------------------------------------
 /**
- *
- * @param Rep
- * @return
- * @throws PDException
+ * Creates an instance of Store using the received definition
+ * @param Rep Repository definition
+ * @return Created object
+ * @throws PDException In any error
  */
 private StoreGeneric ConstrucStore(PDRepository Rep) throws PDException
 {
@@ -1622,10 +1698,10 @@ return(st);
 }
 //-----------------------------------------------------------------------------------
 /**
- * Search, for a DocType, the define Reposit
- * @param docType
- * @return
- * @throws PDException
+ * Search, for a DocType, the defined Reposit and store it in the cache
+ * @param docType Name of doctype to look for
+ * @return name of Assigned Reposit
+ * @throws PDException In any error
  */
 protected String getAssignedRepos(String docType) throws PDException
 {
@@ -1665,13 +1741,13 @@ protected StoreGeneric getRepository(String RepName) throws PDException
 if (PDLog.isDebug())
     PDLog.Debug("DriverGeneric.getRepository>:"+RepName);
 StoreGeneric Rep=null;
-Rep=(StoreGeneric)getListReposit().get(RepName);
-if (Rep!=null)
-    {
-    if (PDLog.isDebug())
-        PDLog.Debug("DriverGeneric.Rep yet Instanced:"+Rep.getServer());
-    return (Rep);
-    }
+//Rep=(StoreGeneric)getListReposit().get(RepName);
+//if (Rep!=null)
+//    {
+//    if (PDLog.isDebug())
+//        PDLog.Debug("DriverGeneric.Rep yet Instanced:"+Rep.getServer());
+//    return (Rep);
+//    }
 if (PDLog.isDebug())
     PDLog.Debug("DriverGeneric.Rep new Instance:"+RepName);
 PDRepository RepDesc=new PDRepository(this);
@@ -1684,17 +1760,18 @@ return(Rep);
 }
 //-----------------------------------------------------------------------------------
 /**
- *
- * @param ValidatName
- * @return
- * @throws PDException
+ * Creates an instance of authenticator based on name received and 
+ * store it in the authenticators collection
+ * @param ValidatName Name of an authenticator definition
+ * @return Created instance of authenticator
+ * @throws PDException In any Error
  */
 private AuthGeneric getAuthentic(String ValidatName) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("DriverGeneric.getAuthentic>:"+ValidatName);
 AuthGeneric Auth=null;
-Auth=(AuthGeneric)getListAuth().get(ValidatName);
+Auth=getListAuth().get(ValidatName);
 if (Auth!=null)
     {
     if (PDLog.isDebug())
@@ -1713,9 +1790,9 @@ return(Auth);
 }
 //-----------------------------------------------------------------------------------
 /**
- *
- * @param Auth
- * @return
+ * Creates an instance of uthenticator based on definition received
+ * @param Auth Authenticator definition
+ * @return Instance created
  */
 private AuthGeneric ConstructAuthentic(PDAuthenticators Auth) throws PDException
 {
@@ -1739,9 +1816,10 @@ return(st);
 }
 //-----------------------------------------------------------------------------------
 /**
-* @return the ListAuth
-*/
-private HashMap getListAuth()
+ * Returns, and create if needed, the colection of authenticators
+ * @return the ListAuth
+ */
+private HashMap<String, AuthGeneric> getListAuth()
 {
 if (ListAuth==null)
     ListAuth=new HashMap();
@@ -1751,19 +1829,19 @@ return ListAuth;
 /**
  * @return the ListReposit
  */
-private HashMap getListReposit()
-{
-if (ListReposit==null)
-    ListReposit=new HashMap();
-return ListReposit;
-}
+//private HashMap getListReposit()
+//{
+//if (ListReposit==null)
+//    ListReposit=new HashMap();
+//return ListReposit;
+//}
 //-----------------------------------------------------------------------------------
 /**
- * 
- * @param UserName
- * @param OldPassword
- * @param NewPassword
- * @throws PDException
+ * Changes (or transmit the change to server defined in the authenticator) the password
+ * @param UserName     Name of the user changing the password
+ * @param OldPassword  Old password
+ * @param NewPassword  New password
+ * @throws PDException In any error
  */
 public void ChangePassword(String UserName, String OldPassword, String NewPassword) throws PDException
 {
@@ -1783,10 +1861,10 @@ if (PDLog.isDebug())
 }
 //-----------------------------------------------------------------------------------
 /**
- *
- * @param UserName
- * @param NewPassword
- * @throws PDException
+ * Assigns (or transmit the assignation to server defined in the authenticator) the password
+ * @param UserName     Name of the user changing the password
+ * @param NewPassword  New password
+ * @throws PDException In any error
  */
 public void SetPassword(String UserName, String NewPassword) throws PDException
 {
@@ -1805,20 +1883,25 @@ if (PDLog.isDebug())
 }
 //-----------------------------------------------------------------------------------
 /**
- * Returns the conector version
- * @return
+ * Returns the core(nucleo) version
+ * @return the version
  */
 static public String getVersion()
 {
 return("2.2");
 }
+/**
+ * constant used for bin <-> hexadecimal conversión
+ */
 private static final char[] HEX_CHARS = "0123456789abcdef".toCharArray();
-//-----------------------------------------------------------------------------------
+/** 
+ * default constant
+ */
 private static final char[] Key = "Esta es la clave".toCharArray();
 /**
- *
- * @param ToBeEncoded
- * @return
+ * Encoding of Strings
+ * @param ToBeEncoded Text to be encoded
+ * @return ncoded text
  */
 static protected String Encode(String ToBeEncoded)
 {
@@ -1840,9 +1923,9 @@ return new String(chars);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param ToBeDecoded
- * @return
+ * Decoding of strings
+ * @param ToBeDecoded text to be decoded
+ * @return Decoded Text
  */
 static private String Decode(String ToBeDecoded)
 {
@@ -1863,33 +1946,16 @@ for (int i = 0; i < S.length(); i++)
 return(S.toString());
 }
 //-------------------------------------------------------------------------
-private byte[] EncodeBlock(byte[] buff)
-{
-for (int i = 0; i <buff.length; i++)
-    {
-    buff[i]=(byte)(buff[i]^ ServerKey[i%16]);
-    }
-return buff;
-}
-//-------------------------------------------------------------------------
-private byte[] DecodeBlock(byte[] buff)
-{
-for (int i = 0; i <buff.length; i++)
-    {
-    buff[i]=(byte)(buff[i]^ ServerKey[i%16]);
-    }
-return buff;
-}
-//-------------------------------------------------------------------------
 /**
  * Creates a properties file to be used by any client, including to create metadata repository
- * @param FileName 
- * @param UserName 
- * @param ConnectName 
- * @param UrlServer 
- * @param JDBCClass 
- * @param Password 
- * @throws Exception
+ * Review Installation product help for details
+ * @param FileName Name of the properties file to create
+ * @param UserName User name for connecting to the database 
+ * @param ConnectName name of connection (PD usually)
+ * @param UrlServer URL of he database server 
+ * @param JDBCClass JDBC class for connection
+ * @param Password Password (clear)for connecting to the database 
+ * @throws Exception In any error
  */
 static public void generateProps(String FileName, String ConnectName, String UrlServer, String UserName, String Password, String JDBCClass) throws Exception
 {
@@ -1904,7 +1970,7 @@ FProps.println("# PD.DATA_TYPE=Remote");
 FProps.println("# and uncomment and modify");
 FProps.println("# PD.DATA_URL=http://localhost:8080/ProdocWeb2/Oper");
 FProps.println("# where host= IP of OPD server, 8080= the port used and ");
-FProps.println("# _ProdocWeb= url where deployed OPD J2EE application");
+FProps.println("# ProdocWeb2= url where deployed OPD J2EE application");
 FProps.println("#------------------------------------------------------------");
 FProps.println("# URL form conection");
 FProps.println(ConnectName+".DATA_URL="+UrlServer.trim());
@@ -1936,11 +2002,11 @@ FProps.println("#--------------------------------------------------------------"
 FProps.println("# Elements related to Tasks");
 FProps.println("#--------------------------------------------------------------");
 FProps.println("# Category of task to generate and execute in this computer (* = all categories");
-FProps.println("#PD.TaskCategory=*");
+FProps.println("#"+ConnectName+".TaskCategory=*");
 FProps.println("# Pooling frecuency for Generation in miliseconds");
-FProps.println("#PD.TaskSearchFreq=120000");
+FProps.println("#"+ConnectName+".TaskSearchFreq=120000");
 FProps.println("# Pooling frecuency for Execution  in miliseconds");
-FProps.println("#PD.TaskExecFreq=60000");
+FProps.println("#"+ConnectName+".TaskExecFreq=60000");
 FProps.println("#--------------------------------------------------------------");
 FProps.println("#  UserData for just reading OPAC configuration files");
 FProps.println("#--------------------------------------------------------------");
@@ -1951,9 +2017,9 @@ FProps.close();
 }
 //-------------------------------------------------------------------------
 /**
- * 
- * @param Text
- * @return
+ * Translates a text using the session language and the language properties
+ * @param Text Text to translate
+ * @return Translated text or the same test if not found
  */
 public String TT(String Text)
 {
@@ -1986,9 +2052,9 @@ else
 }
 //-------------------------------------------------------------------------
 /**
- * 
- * @param Text
- * @return
+ * Translates a text using the default language and the language properties
+ * @param Text Text to translate
+ * @return Translated text or the same test if not found
  */
 public static String DefTT(String Text)
 {
@@ -2019,10 +2085,10 @@ else
 }
 //-------------------------------------------------------------------------
 /**
- * 
- * @param Lang
- * @param Text
- * @return
+ * Translates a text using the specified language and the language properties
+ * @param Lang language to use
+ * @param Text Text to translate
+ * @return Translated text or the same test if not found
  */
 public static String DefTT(String Lang, String Text)
 {
@@ -2052,10 +2118,16 @@ else
     return(Translation+AddText);
 }
 //----------------------------------------------------------
+/**
+ * Load the file containing the translation for the specifies language and
+ * stores the language properties for the next time
+ * @param Lang Language to load
+ * @return Loaded properties
+ */
 static private Properties getProperties(String Lang)
 {
 Lang=Lang.toUpperCase();
-Properties Trans=(Properties)TransList.get(Lang);
+Properties Trans=TransList.get(Lang);
 if (Trans!=null)
     return(Trans);
 InputStream f=null;
@@ -2083,6 +2155,7 @@ return(Trans);
 }
 //----------------------------------------------------------
 /**
+ * Returns the language to use
  * @return the AppLang
  */
 public String getAppLang()
@@ -2096,6 +2169,7 @@ return AppLang;
 }
 //----------------------------------------------------------
 /**
+ * Sets the language to use
  * @param pAppLang the AppLang to set
  */
 public void setAppLang(String pAppLang)
@@ -2104,6 +2178,7 @@ AppLang = pAppLang.toUpperCase();
 }
 //---------------------------------------------------------------------
 /**
+ * Returns the default language
  * @return the DefAppLang
  */
 public static String getDefAppLang()
@@ -2117,6 +2192,7 @@ return DefAppLang;
 }
 //---------------------------------------------------------------------
 /**
+ * Sets the default language
  * @param aDefAppLang the DefAppLang to set
  */
 public static void setDefAppLang(String aDefAppLang)
@@ -2124,10 +2200,10 @@ public static void setDefAppLang(String aDefAppLang)
 DefAppLang = aDefAppLang.toUpperCase();
 }
 //---------------------------------------------------------------------
-
 /**
- * @return the PDCust
- * @throws PDException  
+ * Returns the customization assigned to session, creating if needed
+ * @return the PDCust the session customization
+ * @throws PDException in any error 
  */
 public PDCustomization getPDCust() throws PDException
 {
@@ -2137,16 +2213,16 @@ return PDCust;
 }
 //---------------------------------------------------------------------
 /**
- * 
- * @param XMLFile
- * @param ParentFolderId
- * @return Num of elements processed
- * @throws PDException
+ * Imports ANY kind of OpenProdoc object(s) (doc, folder, definition, object of any kind,..) in XML format from a file
+ * @param XMLFile local file containing the object
+ * @param ParentFolderId Folder Id for importing folders or docs.
+ * @return Number of objects found and processed in the XML
+ * @throws PDException In any error
  */
 public int ProcessXML(File XMLFile, String ParentFolderId) throws PDException
 {
 if (PDLog.isInfo())
-    PDLog.Debug("DriverGeneric.ProcessXML>:XMLFile="+XMLFile.getAbsolutePath()+" ParentFolderId="+ParentFolderId);        
+    PDLog.Info("DriverGeneric.ProcessXML>:XMLFile="+XMLFile.getAbsolutePath()+" ParentFolderId="+ParentFolderId);        
 try {
 DocumentBuilder DB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 Document XMLObjects = DB.parse(XMLFile);
@@ -2176,8 +2252,8 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
         }
     }
 DB.reset();
-if (PDLog.isDebug())
-    PDLog.Debug("DriverGeneric.ProcessXML<");        
+if (PDLog.isInfo())
+    PDLog.Info("DriverGeneric.ProcessXML<");        
 return(Tot);
 }catch(Exception ex)
     {
@@ -2187,16 +2263,16 @@ return(Tot);
 }
 //---------------------------------------------------------------------
 /**
- * 
- * @param XMLFile
- * @param ParentFolderId
- * @return Num of elements processed
- * @throws PDException
+ * Imports ANY kind of OpenProdoc object(s) (doc, folder, definition, object of any kind,..) in XML format from a InputStream
+ * @param XMLFile InputStream containing the object
+ * @param ParentFolderId Folder Id for importing folders or docs.
+ * @return Number of objects found and processed in the XML
+ * @throws PDException In any error
  */
 public int ProcessXML(InputStream XMLFile, String ParentFolderId) throws PDException
 {
 if (PDLog.isInfo())
-    PDLog.Debug("DriverGeneric.ProcessXML>:InputStream. ParentFolderId="+ParentFolderId);        
+    PDLog.Info("DriverGeneric.ProcessXML>:InputStream. ParentFolderId="+ParentFolderId);        
 try {
 DocumentBuilder DB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 Document XMLObjects = DB.parse(XMLFile);
@@ -2227,8 +2303,8 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
         }
     }
 DB.reset();
-if (PDLog.isDebug())
-    PDLog.Debug("DriverGeneric.ProcessXML<");        
+if (PDLog.isInfo())
+    PDLog.Info("DriverGeneric.ProcessXML<");        
 return(Tot);
 }catch(Exception ex)
     {
@@ -2238,16 +2314,16 @@ return(Tot);
 }
 //---------------------------------------------------------------------
 /**
- * 
- * @param XMLFile
- * @param ParentFolderId
- * @return Num of elements processed
- * @throws PDException
+ * Imports ANY kind of OpenProdoc object(s) (doc, folder, definition, object of any kind,..) in XML format from a InputStream with base64 content
+ * @param XMLFile InputStream containing the object
+ * @param ParentFolderId Folder Id for importing folders or docs.
+ * @return Number of objects found and processed in the XML
+ * @throws PDException In any error
  */
 public int ProcessXMLB64(InputStream XMLFile, String ParentFolderId) throws PDException
 {
 if (PDLog.isInfo())
-    PDLog.Debug("DriverGeneric.ProcessXML>:InputStream. ParentFolderId="+ParentFolderId);        
+    PDLog.Info("DriverGeneric.ProcessXML>:InputStream. ParentFolderId="+ParentFolderId);        
 try {
 DocumentBuilder DB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 Document XMLObjects = DB.parse(XMLFile);
@@ -2278,8 +2354,8 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
         }
     }
 DB.reset();
-if (PDLog.isDebug())
-    PDLog.Debug("DriverGeneric.ProcessXML<");        
+if (PDLog.isInfo())
+    PDLog.Info("DriverGeneric.ProcessXML<");        
 return(Tot);
 }catch(Exception ex)
     {
@@ -2288,6 +2364,12 @@ return(Tot);
     }
 }
 //---------------------------------------------------------------------
+/**
+ * Build an OpenProdoc object from an XML node
+ * @param OPDObject XML node containing an object
+ * @return Created OpenProdoc object
+ * @throws PDException in any error
+ */
 public ObjPD BuildObj(Node OPDObject) throws PDException
 {           
 NamedNodeMap attributes = OPDObject.getAttributes();
@@ -2324,10 +2406,17 @@ if (OPDObjectType.equalsIgnoreCase(PDTasksCron.getTableName()))
 throw new PDException("Inexistent_OPD_object_type");
 }
 //---------------------------------------------------------------------
+/**
+ * Executes a received order from a remote installation
+ * @param Order Order to execute
+ * @param XMLObjects XML containign the parameters for the order
+ * @return XML result containing OK + information of the operation
+ * @throws PDException In any error
+ */
 public String RemoteOrder(String Order, Document XMLObjects) throws PDException
 {
-String Result=null;
-boolean EndsOk=true;
+if (PDLog.isDebug())
+    PDLog.Debug("DriverGeneric.RemoteOrder:"+Order);            
 if (Order.equals(S_SELECT))
     {
     return("<OPD><Result>OK</Result><Data>"+GenVector(XMLObjects)+"</Data></OPD>");
@@ -2410,32 +2499,40 @@ return("<OPD><Result>OK</Result></OPD>");
 }        
 //---------------------------------------------------------------------
 /**
- * Opens a Cursor y generates a "Vector" with all the results
+ * Opens a Cursor using he query included as XML and generates a "Vector" with all the results
  * @param XMLObjects Query as XML
- * @return XML with the <Data> contect
- * @throws PDException 
+ * @return XML with all the records of the query
+ * @throws PDException  In any error
  */
 private String GenVector(Document XMLObjects) throws PDException
 {
 StringBuilder Res=new StringBuilder();
 Query Q=new Query(XMLObjects);    
-Cursor C=OpenCursor(Q);
+Cursor C=null;
+try {
+C=OpenCursor(Q);
 Record R=NextRec(C);
 while (R!=null)
     {
     Res.append(R.toXMLt());
     R=NextRec(C);
     }
-CloseCursor(C);
-delCursor(C);
+} finally
+{
+if (C!=null)
+    {    
+    CloseCursor(C);
+    delCursor(C);
+    }
+}
 return(Res.toString());
 }
 //---------------------------------------------------------------------
 /**
- * 
- * @param XMLObjects
- * @return
- * @throws PDException 
+ * Insert a record using the received XML
+ * @param XMLObjects Data to insert
+ * @return An empty string when ok
+ * @throws PDException In any error
  */
 private String InsertRecord(Document XMLObjects) throws PDException
 {
@@ -2450,11 +2547,11 @@ return("");
 }
 //---------------------------------------------------------------------
 /**
- * 
- * @param XMLObjects
- * @return
- * @throws PDException 
- */
+ * Delete a record using the received XML
+ * @param XMLObjects Data to delete
+ * @return An empty string when ok
+ * @throws PDException In any error
+*/
 private String DeleteRecord(Document XMLObjects) throws PDException
 {
 NodeList OPDObjectList = XMLObjects.getElementsByTagName("Tab");
@@ -2468,10 +2565,10 @@ return("");
 }
 //---------------------------------------------------------------------
 /**
- * 
- * @param XMLObjects
- * @return
- * @throws PDException 
+ * Updates a record using the received XML
+ * @param XMLObjects Data to update
+ * @return An empty string when ok
+ * @throws PDException In any error
  */
 private String UpdateRecord(Document XMLObjects) throws PDException
 {
@@ -2488,7 +2585,12 @@ UpdateRecord(Tab, R, C);
 return("");
 }
 //---------------------------------------------------------------------
-
+/**
+ * Creates a table using the received XML
+ * @param XMLObjects table definition to create
+ * @return An empty string when ok
+ * @throws PDException In any error
+ */
 private String CreateTable(Document XMLObjects) throws PDException
 {
 NodeList OPDObjectList = XMLObjects.getElementsByTagName("Tab");
@@ -2501,7 +2603,12 @@ CreateTable(Tab, R);
 return("");
 }
 //---------------------------------------------------------------------
-
+/**
+ * Drops a table using the received XML
+ * @param XMLObjects table definition to drop
+ * @return An empty string when ok
+ * @throws PDException In any error
+ */
 private String DropTable(Document XMLObjects) throws PDException
 {
 NodeList OPDObjectList = XMLObjects.getElementsByTagName("Tab");
@@ -2511,7 +2618,12 @@ DropTable(Tab);
 return("");
 }
 //---------------------------------------------------------------------
-
+/**
+ * Alter a table adding a column using the received XML
+ * @param XMLObjects table definition to alter
+ * @return An empty string when ok
+ * @throws PDException In any error
+ */
 private String AlterTableAdd(Document XMLObjects) throws PDException
 {
 NodeList OPDObjectList = XMLObjects.getElementsByTagName("Tab");
@@ -2527,6 +2639,12 @@ AlterTableAdd(Tab, A, IsVer.equals("1"));
 return("");
 }
 //---------------------------------------------------------------------
+/**
+ * Alter a table adding a column using the received XML
+ * @param XMLObjects table definition to alter
+ * @return An empty string when ok
+ * @throws PDException In any error
+ */
 private String AlterTableDel(Document XMLObjects) throws PDException
 {
 NodeList OPDObjectList = XMLObjects.getElementsByTagName("Tab");
@@ -2540,10 +2658,10 @@ return("");
 }
 //---------------------------------------------------------------------
 /**
- * 
- * @param XMLObjects
- * @return
- * @throws PDException 
+ * Alter a table adding integrity with one field using the received XML
+ * @param XMLObjects table definition to alter
+ * @return An empty string when ok
+ * @throws PDException In any error
  */
 private String AddIntegrity(Document XMLObjects) throws PDException
 {
@@ -2564,10 +2682,10 @@ return("");
 }
 //---------------------------------------------------------------------
 /**
- * 
- * @param XMLObjects
- * @return
- * @throws PDException 
+ * Alter a table adding integrity with two fields using the received XML
+ * @param XMLObjects table definition to alter
+ * @return An empty string when ok
+ * @throws PDException In any error
  */
 private String AddIntegrity2(Document XMLObjects) throws PDException
 {
@@ -2603,9 +2721,10 @@ return(false);
 }
 //---------------------------------------------------------------------
 /**
- * 
- * @param XMLObjects
- * @return 
+ * Deletes a file from repository the received XML
+ * @param XMLObjects File to delete
+ * @return An empty string when ok
+ * @throws PDException In any error
  */
 private String DeleteFile(Document XMLObjects) throws PDException
 {
@@ -2622,7 +2741,7 @@ String RepName=D.getReposit();
 //OPDObject = OPDObjectList.item(0);
 //String RepName=OPDObject.getTextContent();
 if (PDLog.isDebug())
-    PDLog.Debug("DriverGeneric.DeleteFile:"+Id+"/"+Ver);    
+    PDLog.Debug("DriverGeneric.DeleteFileXML:"+Id+"/"+Ver);    
 StoreGeneric Rep=getRepository(RepName);
 if (!Rep.IsRef())
     {
@@ -2634,9 +2753,10 @@ return("");
 }
 //---------------------------------------------------------------------
 /**
- * 
- * @param XMLObjects
- * @return 
+ * Renames a file from repository the received XML
+ * @param XMLObjects File to rename
+ * @return An empty string when ok
+ * @throws PDException In any error
  */
 private String RenameFile(Document XMLObjects) throws PDException
 {
@@ -2653,7 +2773,7 @@ OPDObjectList = XMLObjects.getElementsByTagName("Ver2");
 OPDObject = OPDObjectList.item(0);
 String Ver2=OPDObject.getTextContent();
 if (PDLog.isDebug())
-    PDLog.Debug("DriverGeneric.RenameFile:"+Id1+"/"+Ver1+"->"+Id2+"/"+Ver2);    
+    PDLog.Debug("DriverGeneric.RenameFileXML:"+Id1+"/"+Ver1+"->"+Id2+"/"+Ver2);    
 PDDocs doc=new PDDocs(this);
 doc.setPDId(Id1);
 doc.LoadVersion(Id1, Ver1);
@@ -2668,25 +2788,37 @@ return("");
 }
 //---------------------------------------------------------------------
 /**
- * 
- * @param Id
- * @param Ver
- * @param FileData
- * @throws PDException 
+ * Creates a File in the repository
+ * @param Id Identification of file
+ * @param Ver Version of file
+ * @param FileData InpusStream cotaining the data
+ * @throws PDException In any error 
  */
 public void InsertFile(String Id, String Ver, InputStream FileData) throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("DriverGeneric.InsertFile: Id="+Id+" Ver="+Ver);            
 PDDocs Doc=new PDDocs(this);
 Doc.Load(Id);
 StoreGeneric St=getRepository(Doc.getReposit());
 St.Insert(Id, Ver, FileData, Doc.getRecSum(), null);
 }
 //-----------------------------------------------------------------   
+/**
+ * Escape of values for avoiding problems with xml/html 
+ * @param Text Text to escape
+ * @return "Escaped" Text
+ */
 static public String Codif(String Text)
 {
 return(Text.replace('<', '^').replace("%", "¡1").replace("&", "¡2"));
 }    
 //-----------------------------------------------------------------   
+/**
+ * UNescape of values for avoiding problems with xml/html 
+ * @param Text Text to UNescape
+ * @return "UNescaped" Text
+ */
 static public String DeCodif(String Text)
 {
 return(Text.replace('^', '<').replace("¡1", "%").replace("¡2","&"));
@@ -2698,7 +2830,7 @@ return(Text.replace('^', '<').replace("¡1", "%").replace("¡2","&"));
  * @param folderType Folder type
  * @param MODE  Kind of operation (INS, DEL, UP)
  * @return a list that can be empty
- * @throws prodoc.PDException in any error
+ * @throws PDException in any error
  */
 protected ArrayList<PDTasksDefEvent> getFoldTransThreads(String folderType, String MODE) throws PDException
 {
@@ -2720,6 +2852,7 @@ return TotalTask;
  * @param folderType Folder type
  * @param MODE  Kind of operation (INS, DEL, UP)
  * @return a list that can be empty
+ * @throws PDException In any error
  */
 protected ArrayList getFoldNoTransThreads(String folderType, String MODE) throws PDException
 {
@@ -2736,9 +2869,11 @@ return TotalTask;
 }
 //---------------------------------------------------------------------
 /**
-* @return the AllTaskTrans
-*/
-private TreeMap getAllTaskTrans() throws PDException
+ * Returns, and creates and loads if needed, the collection of transactional tasks
+ * @return the AllTaskTrans Collection of transactional tasks
+ * @throws PDException In any error
+  */
+private TreeMap<String, PDTasksDefEvent> getAllTaskTrans() throws PDException
 {
 if (AllTaskTrans==null)    
     LoadAllTaks();
@@ -2746,9 +2881,11 @@ return AllTaskTrans;
 }
 //---------------------------------------------------------------------
 /**
-* @return the AllTaskTrans
-*/
-private TreeMap getAllTaskNoTrans() throws PDException
+ * Returns, and creates and loads if needed, the collection of NON transactional tasks
+ * @return the AllTaskNOTrans Collection of transactional tasks
+ * @throws PDException In any error
+  */
+private TreeMap<String, PDTasksDefEvent> getAllTaskNoTrans() throws PDException
 {
 if (AllTaskNoTrans==null)    
     LoadAllTaks();
@@ -2757,9 +2894,12 @@ return AllTaskNoTrans;
 //---------------------------------------------------------------------
 /**
  * Loads AllTaskNoTrans and AllTaskTrans the first time
- */
+ * @throws PDException In any error
+  */
 private void LoadAllTaks() throws PDException
 {
+if (PDLog.isInfo())
+    PDLog.Info("DriverGeneric.LoadAllTaks");                
 AllTaskTrans=new TreeMap();
 AllTaskNoTrans=new TreeMap();
 PDTasksDefEvent TE=new PDTasksDefEvent(this);
@@ -2787,16 +2927,18 @@ CloseCursor(C);
  * @param docType Doc type
  * @param MODE  Kind of operation (INS, DEL, UP)
  * @return a list that can be empty
+ * @throws PDException In any error
  */
-
  protected ArrayList<PDTasksDefEvent> getDocTransThreads(String docType, String MODE)  throws PDException
-{
+{    
+if (PDLog.isDebug())
+    PDLog.Debug("DriverGeneric.getDocTransThreads: DocType="+docType+ " Mode="+MODE);                
 ArrayList TotalTask=new ArrayList();    
 PDDocs D=new PDDocs(this,docType);
-ArrayList TypList=D.getTypeDefs();
+ArrayList<Record> TypList=D.getTypeDefs();
 for (int i = TypList.size()-1; i >=0 ; i--)
     {
-    String TypName=(String)((Record)TypList.get(i)).getAttr(PDObjDefs.fNAME).getValue();
+    String TypName=(String)(TypList.get(i)).getAttr(PDObjDefs.fNAME).getValue();
     for (Iterator it = getAllTaskTrans().subMap(TypName+"/"+MODE, TypName+"/"+MODE+"999999").values().iterator(); it.hasNext();)
         TotalTask.add(it.next());
     }
@@ -2809,21 +2951,29 @@ return TotalTask;
  * @param docType Doc type
  * @param MODE  Kind of operation (INS, DEL, UP)
  * @return a list that can be empty
+ * @throws PDException In any error
  */
  protected ArrayList getDocNoTransThreads(String docType, String MODE) throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("DriverGeneric.getDocNoTransThreads: DocType="+docType+ " Mode="+MODE);                    
 ArrayList TotalTask=new ArrayList();    
 PDDocs D=new PDDocs(this,docType);
-ArrayList TypList=D.getTypeDefs();
+ArrayList<Record> TypList=D.getTypeDefs();
 for (int i = TypList.size()-1; i >=0 ; i--)
     {
-    String TypName=(String)((Record)TypList.get(i)).getAttr(PDObjDefs.fNAME).getValue();
+    String TypName=(String)(TypList.get(i)).getAttr(PDObjDefs.fNAME).getValue();
     for (Iterator it = getAllTaskNoTrans().subMap(TypName+"/"+MODE, TypName+"/"+MODE+"999999").values().iterator(); it.hasNext();)
         TotalTask.add(it.next());
     }
 return TotalTask;
 }
 //---------------------------------------------------------------------
+/**
+ * Returns the language of the help for a session language
+ * @param UserLang Language of current session/user
+ * @return Language of the help (that can be different because there are no help for all languages of interface
+ */
 static public String getHelpLang(String UserLang)
 {
 if (UserLang.equalsIgnoreCase("ES") || UserLang.equalsIgnoreCase("PT") || UserLang.equalsIgnoreCase("CT") )    
@@ -2835,6 +2985,7 @@ else
 /**
  * Returns an object of type Fulltext indexer
  * if the repository is yet constructed, returns the constructed one
+ * @param pDocType Document type (for a future evolutio where different document types use different FT engines
  * @return object of type repository
  * @throws PDException in any error
  */
@@ -2858,7 +3009,12 @@ if (PDLog.isDebug())
 return(FTConn);
 }
 //-----------------------------------------------------------------------------------
-
+/**
+ * Execute a Fulltext search using the xml parameter received
+ * @param XMLObjects FT Searching parameters
+ * @return XML list of Id of documents
+ * @throws PDException In any error
+ */
 private String FTSearch(Document XMLObjects) throws PDException
 {
 NodeList OPDObjectList = XMLObjects.getElementsByTagName("Type");
@@ -2894,7 +3050,12 @@ for (String Id : FTRes)
 return(S.toString());    
 }
 //-----------------------------------------------------------------------------------
-
+/**
+ * Deletes a doc from Fulltext index using the xml parameter received
+ * @param XMLObjects FT deleting parameters
+ * @return empty string when ok
+ * @throws PDException In any error
+ */
 private String FTDel(Document XMLObjects) throws PDException
 {
 NodeList OPDObjectList = XMLObjects.getElementsByTagName("Id");
@@ -2912,7 +3073,12 @@ return("");
 }
     
 //-----------------------------------------------------------------------------------
-
+/**
+ * Inserts a doc in Fulltext index using the xml parameter received
+ * @param XMLObjects FT insert parameters
+ * @return empty string when ok
+ * @throws PDException In any error
+ */
 private String FTIns(Document XMLObjects) throws PDException
 {
 NodeList OPDObjectList = XMLObjects.getElementsByTagName("Type");
@@ -2932,7 +3098,12 @@ D.ExecuteFTAdd();
 return("");    
 }
 //-----------------------------------------------------------------------------------
-
+/**
+ * Updates a doc in Fulltext index using the xml parameter received
+ * @param XMLObjects FT Update parameters
+ * @return empty string when ok
+ * @throws PDException In any error
+ */
 private String FTUpd(Document XMLObjects) throws PDException
 {
 NodeList OPDObjectList = XMLObjects.getElementsByTagName("Type");
@@ -2952,5 +3123,4 @@ D.ExecuteFTUpd();
 return("");    
 }
 //-----------------------------------------------------------------------------------
-
 }

@@ -35,6 +35,8 @@ public class StoreRefURL extends StoreGeneric
  * @param pUser
  * @param pPassword
  * @param pParam
+     * @param pEncrypt
+     * @throws prodoc.PDExceptionFunc
  */
 protected StoreRefURL(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt) throws PDExceptionFunc
 {
@@ -45,6 +47,8 @@ super(pServer, pUser, pPassword, pParam, pEncrypt);
  * @param Id
  * @param Ver
  * @param FileName
+     * @param Rec
+     * @param OPDPath
  * @return
  * @throws PDException
  */
@@ -58,6 +62,8 @@ throw new UnsupportedOperationException("Not supported.");
  * @param Id
  * @param Ver
  * @param Bytes
+     * @param Rec
+     * @param OPDPath
  * @return
  * @throws PDException
  */
@@ -70,6 +76,7 @@ throw new UnsupportedOperationException("Not supported.");
  *
  * @param Id
  * @param Ver
+     * @param Rec
  * @throws PDException
  */
 protected void Delete(String Id, String Ver, Record Rec) throws PDException

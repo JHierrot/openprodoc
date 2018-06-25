@@ -28,29 +28,98 @@ import java.io.File;
 public class PDTasksDefEvent extends PDTasksDef
 {
 
-public static final String fEVENTYPE="EvenType";
-public static final String fEVENORDER="EvenOrder";
+    /**
+     *
+     */
+    public static final String fEVENTYPE="EvenType";
+
+    /**
+     *
+     */
+    public static final String fEVENORDER="EvenOrder";
 
 private String EvenType;
 private int EvenOrder;
 
-public static final String fMODEINS="INS";
-public static final String fMODEUPD="UPD";
-public static final String fMODEDEL="DEL";
+    /**
+     *
+     */
+    public static final String fMODEINS="INS";
 
-public static final int STARTNUM=200;
+    /**
+     *
+     */
+    public static final String fMODEUPD="UPD";
 
+    /**
+     *
+     */
+    public static final String fMODEDEL="DEL";
 
-public static final int fTASKEVENT_UPDATE_DOC =STARTNUM+0;
-public static final int fTASKEVENT_UPDATE_FOLD=STARTNUM+1;
-public static final int fTASKEVENT_COPY_DOC   =STARTNUM+2;
-public static final int fTASKEVENT_COPY_FOLD  =STARTNUM+3;
-public static final int fTASKEVENT_EXPORT_DOC =STARTNUM+4;
-public static final int fTASKEVENT_EXPORT_FOLD=STARTNUM+5;
-public static final int fTASKEVENT_CONVERT_DOC=STARTNUM+6;
-public static final int fTASKEVENT_FTINDEX_DOC=STARTNUM+7;
-public static final int fTASKEVENT_FTUPDA_DOC =STARTNUM+8;
-public static final int fTASKEVENT_FTDEL_DOC  =STARTNUM+9;
+    /**
+     *
+     */
+    public static final int STARTNUM=200;
+
+    /**
+     *
+     */
+    public static final int fTASKEVENT_UPDATE_DOC  =STARTNUM+0;
+
+    /**
+     *
+     */
+    public static final int fTASKEVENT_UPDATE_FOLD =STARTNUM+1;
+
+    /**
+     *
+     */
+    public static final int fTASKEVENT_COPY_DOC    =STARTNUM+2;
+
+    /**
+     *
+     */
+    public static final int fTASKEVENT_COPY_FOLD   =STARTNUM+3;
+
+    /**
+     *
+     */
+    public static final int fTASKEVENT_EXPORT_DOC  =STARTNUM+4;
+
+    /**
+     *
+     */
+    public static final int fTASKEVENT_EXPORT_FOLD =STARTNUM+5;
+
+    /**
+     *
+     */
+    public static final int fTASKEVENT_CONVERT_DOC =STARTNUM+6;
+
+    /**
+     *
+     */
+    public static final int fTASKEVENT_FTINDEX_DOC =STARTNUM+7;
+
+    /**
+     *
+     */
+    public static final int fTASKEVENT_FTUPDA_DOC  =STARTNUM+8;
+
+    /**
+     *
+     */
+    public static final int fTASKEVENT_FTDEL_DOC   =STARTNUM+9;
+
+    /**
+     *
+     */
+    public static final int fTASKEVENT_CUSTOM_DOC  =STARTNUM+10;
+
+    /**
+     *
+     */
+    public static final int fTASKEVENT_CUSTOM_FOLD =STARTNUM+11;
 
 private static final String[] LisTypeEventTask= {"UPDATE_DOC",
                                                  "UPDATE_FOLD",
@@ -61,7 +130,9 @@ private static final String[] LisTypeEventTask= {"UPDATE_DOC",
                                                  "CONVERT_DOC",
                                                  "FTINDEX_DOC",
                                                  "FTUPDA_DOC",
-                                                 "FTDEL_DOC"
+                                                 "FTDEL_DOC",
+                                                 "CUSTOM_DOC",
+                                                 "CUSTOM_FOLD"
                                                  };
 /**
  *
@@ -219,11 +290,22 @@ public void setEvenOrder(int EvenOrder)
 this.EvenOrder = EvenOrder;
 }
 //-------------------------------------------------------------------------
+
+    /**
+     *
+     * @return
+     */
 static public String[] getListTypeEventTask()
 {
 return LisTypeEventTask;    
 }
 //-------------------------------------------------------------------------
+
+    /**
+     *
+     * @param Fold
+     * @throws PDException
+     */
 protected void Execute(PDFolders Fold) throws PDException
 {
 if (PDLog.isDebug())
@@ -246,6 +328,12 @@ if (PDLog.isDebug())
     PDLog.Debug("PDTasksDefEvent.Execute-Fold<");                                
 }
 //-------------------------------------------------------------------------
+
+    /**
+     *
+     * @param Doc
+     * @throws PDException
+     */
 protected void Execute(PDDocs Doc) throws PDException
 {
 if (PDLog.isDebug())
@@ -272,6 +360,9 @@ switch (this.getType())
         break;
      case fTASKEVENT_FTDEL_DOC:
         ExecuteFTDelDoc(Doc);
+        break;
+     case fTASKEVENT_CUSTOM_DOC:
+        ExecuteCustomDoc(Doc);
         break;
      default:
          PDException.GenPDException("Unexpected_Task", "Type"+getType());
@@ -588,6 +679,19 @@ if (PDLog.isDebug())
 Doc.ExecuteFTDel();  
 if (PDLog.isDebug())
     PDLog.Debug("PDTasksDefEvent.ExecuteFTDelDoc<:"+Doc.getPDId());                    
+}
+//-------------------------------------------------------------------------
+private void ExecuteCustomDoc(PDDocs Doc) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDefEvent.ExecuteCustomDoc>:"+Doc.getPDId()); 
+String[] Params = getDescription().split("\\|");
+String PDId=Params[0];
+String ClassName=Params[1];
+CustomTask Cust=new CustomTask(getDrv(), PDId, ClassName);
+Cust.ExecuteEvent(getEvenType(), getParam(), getParam2(), getParam3(), getParam4(), Doc);
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksDefEvent.ExecuteCustomDoc<:"+Doc.getPDId());                    
 }
 //-------------------------------------------------------------------------
 }

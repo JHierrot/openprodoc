@@ -514,6 +514,7 @@ return(R);
 //--------------------------------------------------------------------------
 /**
  * 
+     * @throws PDExceptionFunc
  */
 public void CheckDef() throws PDExceptionFunc
 {
@@ -528,6 +529,10 @@ for (int i = 0; i < NumAttr(); i++)
     }
 }
 //--------------------------------------------------------------------------
+
+    /**
+     *
+     */
 public void DelNull()
 {
 for (int i = VAttr.size()-1; i >=0; i--)

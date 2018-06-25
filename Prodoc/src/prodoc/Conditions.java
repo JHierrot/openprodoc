@@ -16,8 +16,6 @@
  * author: Joaquin Hierro      2011
  * 
  */
-
-
 package prodoc;
 
 import java.util.ArrayList;
@@ -26,17 +24,18 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- *
+ * Manages sets of Conditions and/or Condition {@link prodoc.Condition}. 
+ * The Condition elements are simple expresions, the Conditions are composed expresions.
  * @author jhierrot
  */
 public class Conditions
 {
 /**
- *
+ * When true al the condition(s) in the current object has operator AND between them, otherwise, is OR
  */
 private boolean OperatorAnd=true;
 /**
- *
+ * List of condition(s) included in the currnt condition
  */
 private ArrayList CondList=new ArrayList();
 //-------------------------------------------------------------------------
@@ -49,8 +48,8 @@ super();
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Cond
+ * Adds a condition to the current level/set
+ * @param Cond Condition to add see {@link prodoc.Condition}
  */
 public final void addCondition(Condition Cond)
 {
@@ -58,8 +57,8 @@ CondList.add(Cond);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param ListCond
+ * Adds  Conditions to the current level/set
+ * @param ListCond Conditions to add
  */
 public final void addCondition(Conditions ListCond)
 {
@@ -67,8 +66,8 @@ CondList.add(ListCond);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
+ * Returns the number of condition(s) in the current level/set
+ * @return Number of elements (Condition or Conditions) in teh current level
  */
 public int NumCond()
 {
@@ -76,35 +75,37 @@ return(CondList.size());
 }
 //-------------------------------------------------------------------------
 /**
- * 
- * @param n
- * @return
+ * Return the condition n of the current set
+ * @param n Number of condition to return
+ * @return The Condition or Contidions Object in position n
  */
 public Object Cond(int n)
 {
 return(CondList.get(n));
 }
 //-------------------------------------------------------------------------
-/**
-* @return the OperatorAnd
-*/
+/** 
+ * Returns if all the set of Condition(s) at the current level has operator AND or OR.
+ * @return the OperatorAnd
+ */
 public boolean isOperatorAnd()
 {
 return OperatorAnd;
 }
 //-------------------------------------------------------------------------
-/**
-* @param OperatorAnd the OperatorAnd to set
-*/
+/** 
+ * When true all the set of Condition(s) at the current level has operator AND otherwise they have OR between Conditions
+ * @param OperatorAnd the OperatorAnd to set. 
+ */
 public final void setOperatorAnd(boolean OperatorAnd)
 {
 this.OperatorAnd = OperatorAnd;
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Attrname
- * @return
+ * Check if any Condition or Conditions at ANY level includes the column Attrname as search criteria
+ * @param Attrname name to ccheck
+ * @return true when is used in any expresion.
  */
 public boolean UsedAttr(String Attrname)
 {
@@ -154,7 +155,7 @@ return (XML.toString());
 /**
  * Buils a Conditions object from XML
  * @param XMLConds with XML conditions
- * @throws PDException
+ * @throws PDException in any error
  */
 public Conditions(Node XMLConds) throws PDException
 {

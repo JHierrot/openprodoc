@@ -41,14 +41,41 @@ private String Password=null;
 private String Param=null;
 private String FullText=null;
 private String FileMetadata=null;
-final public static String F_TYPE="type";
-final public static String F_ID="id";
-final public static String F_VER="ver";
-final public static String F_FULLTEXT="fulltext";
-final public static String F_DOCMETADATA="docmetadata";
-final public static String F_PREFIX="F_";
 
-final public static int MAXRESULTS=1000;
+    /**
+     *
+     */
+    final public static String F_TYPE="type";
+
+    /**
+     *
+     */
+    final public static String F_ID="id";
+
+    /**
+     *
+     */
+    final public static String F_VER="ver";
+
+    /**
+     *
+     */
+    final public static String F_FULLTEXT="fulltext";
+
+    /**
+     *
+     */
+    final public static String F_DOCMETADATA="docmetadata";
+
+    /**
+     *
+     */
+    final public static String F_PREFIX="F_";
+
+    /**
+     *
+     */
+    final public static int MAXRESULTS=1000;
 
 /**
  *
@@ -184,6 +211,13 @@ protected void setParam(String Param)
 this.Param = Param;
 }
 //------------------------------------------------------------------------
+
+    /**
+     *
+     * @param Bytes
+     * @return
+     * @throws PDException
+     */
 protected String Convert(InputStream Bytes) throws PDException
 {  
 try {                

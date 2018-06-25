@@ -22,7 +22,6 @@ package prodoc;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -40,11 +39,32 @@ static private HashMap<String, Class> DownloadedClasses=new HashMap();
 static private HashMap<String, Properties> DownloadedProp=new HashMap();
 
 //-----------------------------------------------------------------
+
+    /**
+     *
+     * @param pServer
+     * @param pUser
+     * @param pPassword
+     * @param pParam
+     * @param pEncrypt
+     * @throws PDExceptionFunc
+     */
 public StoreCustom(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt) throws PDExceptionFunc
 {
 super(pServer, pUser, pPassword, pParam, pEncrypt);
 }
 //-----------------------------------------------------------------
+
+    /**
+     *
+     * @param pServer
+     * @param pUser
+     * @param pPassword
+     * @param pParam
+     * @param pEncrypt
+     * @param Drv
+     * @throws PDExceptionFunc
+     */
 public StoreCustom(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt, DriverGeneric Drv) throws PDExceptionFunc
 {
 super(pServer, pUser, pPassword, pParam, pEncrypt);

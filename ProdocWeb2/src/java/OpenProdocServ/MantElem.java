@@ -145,7 +145,14 @@ else
     if( TypeElem.equals(ListElem.MANTTASKEVENT) )
         {
         int Value=(Integer)Rec.getAttr(PDTasksCron.fTYPE).getValue();    
-        if ( Value==200 || Value==202 || Value==204 || Value==206|| Value==207|| Value==208|| Value==209 )
+        if ( Value==PDTasksDefEvent.fTASKEVENT_UPDATE_DOC 
+          || Value==PDTasksDefEvent.fTASKEVENT_COPY_DOC
+          || Value==PDTasksDefEvent.fTASKEVENT_EXPORT_DOC
+          || Value==PDTasksDefEvent.fTASKEVENT_CONVERT_DOC
+          || Value==PDTasksDefEvent.fTASKEVENT_FTINDEX_DOC
+          || Value==PDTasksDefEvent.fTASKEVENT_FTUPDA_DOC
+          || Value==PDTasksDefEvent.fTASKEVENT_FTDEL_DOC
+          || Value==PDTasksDefEvent.fTASKEVENT_CUSTOM_DOC )
             {
             String Val=Req.getParameter(PDTasksCron.fOBJTYPE + "2");
             Rec.getAttr(PDTasksCron.fOBJTYPE).setValue(Val);
@@ -500,6 +507,7 @@ else if (ElemType.equals(ListElem.MANTREPO))
     SB.append("{text:\"" + PDRepository.tFS + "\", value:\"" + PDRepository.tFS + "\"").append((Value!=null&&Value.equalsIgnoreCase(PDRepository.tFS))?", selected:true":"").append("},");
     SB.append("{text:\"" + PDRepository.tFTP + "\", value:\"" + PDRepository.tFTP + "\"").append((Value!=null&&Value.equalsIgnoreCase(PDRepository.tFTP))?", selected:true":"").append("},");
     SB.append("{text:\"" + PDRepository.tREFURL + "\", value:\"" + PDRepository.tREFURL + "\"").append((Value!=null&&Value.equalsIgnoreCase(PDRepository.tREFURL))?", selected: true":"").append("},");
+    SB.append("{text:\"" + PDRepository.tCUSTOM + "\", value:\"" + PDRepository.tCUSTOM + "\"").append((Value!=null&&Value.equalsIgnoreCase(PDRepository.tCUSTOM))?", selected: true":"").append("},");
     SB.append("{text:\"" + PDRepository.tS3 + "\", value:\"" + PDRepository.tS3 + "\"").append((Value!=null&&Value.equalsIgnoreCase(PDRepository.tS3))?", selected:true":"").append("}");
     SB.append("]},");
     Attr=Rec.getAttr(PDRepository.fURL);
@@ -698,7 +706,14 @@ else if (ElemType.equals(ListElem.MANTTASKEVENT))
     SB.append("]},");
     Attr=Rec.getAttr(PDTasksDefEvent.fOBJTYPE);
     boolean ShowFoldComb=true;
-    if (Value!=null && (Value==200 ||Value==202 ||Value==204 ||Value==206||Value==207||Value==208||Value==209))
+    if (Value!=null && ( Value==PDTasksDefEvent.fTASKEVENT_UPDATE_DOC 
+                      || Value==PDTasksDefEvent.fTASKEVENT_COPY_DOC
+                      || Value==PDTasksDefEvent.fTASKEVENT_EXPORT_DOC
+                      || Value==PDTasksDefEvent.fTASKEVENT_CONVERT_DOC
+                      || Value==PDTasksDefEvent.fTASKEVENT_FTINDEX_DOC
+                      || Value==PDTasksDefEvent.fTASKEVENT_FTUPDA_DOC
+                      || Value==PDTasksDefEvent.fTASKEVENT_FTDEL_DOC
+                      || Value==PDTasksDefEvent.fTASKEVENT_CUSTOM_DOC))
        ShowFoldComb=false; 
     SB.append("{type: \"combo\", name: \"" + PDTasksDefEvent.fOBJTYPE + "\", label: \"").append(TT(Req, Attr.getUserName())).append("\", required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", hidden:").append(ShowFoldComb?"false":"true").append(", options:[");
     SB.append(getComboModelFold(PDSession, (String)Attr.getValue()) );

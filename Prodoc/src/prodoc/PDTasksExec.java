@@ -1473,6 +1473,7 @@ return GenAuto;
 
 //-------------------------------------------------------------------------
 /**
+     * @param pGenAuto
 * @param GenAuto the GenAuto to set
 */
 protected void setGenAuto(boolean pGenAuto)

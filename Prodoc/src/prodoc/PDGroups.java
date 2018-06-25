@@ -478,6 +478,7 @@ if (PDLog.isDebug())
 //-------------------------------------------------------------------------
 /**
  *
+     * @throws prodoc.PDException
  */
 @Override
 protected void DeleteMulti() throws PDException
@@ -921,7 +922,11 @@ for (int NumNodes = 0; NumNodes < childNodes.getLength(); NumNodes++)
 }    
 //-------------------------------------------------------------------------
 
-public void DelAllSubGroups() throws PDException
+    /**
+     *
+     * @throws PDException
+     */
+    public void DelAllSubGroups() throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDGroups.DelAllSubGroups>:"+getName());
@@ -947,7 +952,11 @@ if (PDLog.isDebug())
 }
 //-------------------------------------------------------------------------
 
-public void DelAllUsers() throws PDException
+    /**
+     *
+     * @throws PDException
+     */
+    public void DelAllUsers() throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDGroups.DelAllSubGroups>:"+getName());

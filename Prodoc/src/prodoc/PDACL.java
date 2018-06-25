@@ -530,6 +530,7 @@ if (PDLog.isDebug())
 //-------------------------------------------------------------------------
 /**
  *
+     * @throws prodoc.PDException
  */
 protected void DeleteMulti() throws PDException
 {
@@ -825,6 +826,11 @@ if (PDLog.isDebug())
 return(Result);
 }
 //-------------------------------------------------------------------------
+
+    /**
+     *
+     * @throws PDException
+     */
 public void DelAllUsers() throws PDException
 {
 if (PDLog.isDebug())
@@ -850,6 +856,11 @@ if (PDLog.isDebug())
     PDLog.Debug("PDACL.DelAllUsers<:"+getName());
 }
 //-------------------------------------------------------------------------
+
+    /**
+     *
+     * @throws PDException
+     */
 public void DelAllGroups() throws PDException
 {
 if (PDLog.isDebug())

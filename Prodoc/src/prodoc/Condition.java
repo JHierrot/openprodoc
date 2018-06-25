@@ -16,8 +16,6 @@
  * author: Joaquin Hierro      2011
  * 
  */
-
-
 package prodoc;
 
 import java.math.BigDecimal;
@@ -37,90 +35,93 @@ import static prodoc.Attribute.StringListSeparator;
 public class Condition
 {
 /**
- *
+ * Kind of condition
  */
 private int cType=0;
-// a standar comparation with attibute, comparator and value
 /**
- *
+ * a standard comparation with attibute, comparator and value
  */
 static final int ctNORMAL     =1;
 /**
- *
+ * A range condition
  */
 static final int ctBETWEEN    =2;
 /**
- *
+ * Field in a list of values
  */
 static final int ctIN         =3;
 /**
- *
+ * Two fields equal
  */
 static final int cEQUALFIELDS =4;
-
-static final int cATTROPER =5;
 /**
- *
+ * Field to compare
  */
 private String Field=null;
 /**
- *
+ * Kind of comparation
  */
 private int Comparation=cEQUAL;
 /**
- *
+ * Constant Comparation: Equal =
  */
 public static final int cEQUAL   =0;
 /**
- *
+ * Constant Comparation: Greater Than >
  */
 public static final int cGT      =1;
 /**
- *
+ * Constant Comparation: Lest Than <
  */
 public static final int cLT      =2;
 /**
- *
+ * Constant Comparation: Greater or Equal Than >=
  */
 public static final int cGET     =3;
 /**
- *
+ * Constant Comparation: Lest or Equal Than <=
  */
 public static final int cLET     =4;
 /**
- *
+ * Constant Comparation: Distinct <>
  */
 public static final int cNE      =5;
 /**
- *
+ * Constant Comparation: Like/Contains %
  */
 public static final int cLIKE     =8;
 /**
- *
+ * Constant: condition In list of values
  */
 public static final int cINList   =6;
 /**
- * TODO: implement "selec in" in driverJDBC
+ * Constant: condition In list of results of a Query
  */
 public static final int cINQuery =7;
-
 /**
- *
+ * Valur to compare
  */
 private Object Value=null;
 /**
- *
+ * Condition inverted when true (NOT (Condition) )
  */
 private boolean Invert=false;
-
+/**
+ * Formatter for searching (an storing) timestamp
+ */
 final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyyMMddHHmmss");
+/**
+ * Formatter for searching (an storing) Date
+ */
 final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyyMMdd");
-
+/**
+ * Kind of Object value
+ */
 private int TypeVal=-1;
 //-------------------------------------------------------------------------
 /**
  * Constructor that creates a condition where name_of_attribute = "value of attribute"
- * @param Attr Attribute to use for comparation
+ * @param Attr Attribute {@link prodoc.Attribute} to use for comparation
  */
 public Condition(Attribute Attr)
 {
@@ -131,8 +132,8 @@ TypeVal=Attr.getType();
 }
 //-------------------------------------------------------------------------
 /**
- * Constructor that creates a condition where name_of_attribute COMPARATION "value of attribute"
- * @param Attr Attribute to use for comparation
+ * Constructor that creates a condition where name_of_attribute COMPARATION value_of_attribute
+ * @param Attr Attribute {@link prodoc.Attribute} to use for comparation
  * @param pComparation Kind of comparation
  * cEQUAL   =0;
  * cGT      =1;
@@ -152,11 +153,18 @@ TypeVal=Attr.getType();
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param pField
- * @param pComparation
- * @param pValue
- * @throws PDException
+ * Constructor that creates a condition where pFied COMPARATION pValue
+ * @param pField name of field to compare
+ * @param pComparation Kind of comparation
+ * cEQUAL   =0;
+ * cGT      =1;
+ * cLT      =2;
+ * cGET     =3;
+ * cLET     =4;
+ * cNE      =5;
+ * cLIKE    =8;
+ * @param pValue Object to compare
+ * @throws PDException in any error
  */
 public Condition(String pField, int pComparation, Object pValue) throws PDException
 {
@@ -181,10 +189,10 @@ else if (pValue instanceof BigDecimal)
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param pField
- * @param pField2
- * @throws PDException
+ * Compare two columns    ( Attr1=Attr2 )
+ * @param pField name of first column
+ * @param pField2 naame of the second column
+ * @throws PDException in any error
  */
 public Condition(String pField, String pField2) throws PDException
 {
@@ -195,14 +203,14 @@ Value=pField2;
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param pField
- * @param ListVal
- * @throws PDException
+ * Compare the value of a field with a list of values (pFiled in (ListVal) )
+ * @param pField name of field to compare
+ * @param ListVal List of values
+ * @throws PDException in any error
  */
 public Condition(String pField, HashSet ListVal) throws PDException
 {
-if (ListVal==null || ListVal.size()==0)
+if (ListVal==null || ListVal.isEmpty())
     {
     PDExceptionFunc.GenPDException("null_value_of_condition",pField);
     }
@@ -213,10 +221,10 @@ Value=ListVal;
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param pField
- * @param Search
- * @throws PDException
+ * Compare the value of a field with the result of  query (pFiled in (select ) )
+ * @param pField name of field to compare
+ * @param Search Query {@link prodoc.Query}
+ * @throws PDException  in any error
  */
 public Condition(String pField, Query Search) throws PDException
 {
@@ -231,7 +239,7 @@ Value=Search;
 }
 //-------------------------------------------------------------------------
 /**
-* @return the cType
+* @return the cType , the type of condition
 */
 public int getcType()
 {
@@ -263,7 +271,7 @@ return Comparation;
 }
 //-------------------------------------------------------------------------
 /**
-* @return the Invert
+* @return the Invert , that is if wur condition has a "previous" NOT
 */
 public boolean isInvert()
 {
@@ -271,7 +279,7 @@ return Invert;
 }
 //-------------------------------------------------------------------------
 /**
- * @return the TypeVal
+ * @return the TypeVal, the kind of value (String, Date,..)
  */
 public int getTypeVal()
 {
@@ -336,6 +344,7 @@ return (XML.toString());
 /**
  * Buils a Condition object from XML
  * @param XMLConds with condition
+ * @throws prodoc.PDException in any error
  */
 public Condition(Node XMLConds) throws PDException
 {
@@ -453,5 +462,4 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
     }
 }
 //-------------------------------------------------------------------------
-
 }

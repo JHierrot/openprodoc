@@ -1,4 +1,4 @@
-<?xml version="1.1" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.3" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
   <Properties>
@@ -10,6 +10,7 @@
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
   <Events>
     <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowClosing"/>
@@ -120,12 +121,10 @@
           <Connection code="MainWin.getFontDialog()" type="code"/>
         </Property>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="5">
+          <StringArray count="3">
             <StringItem index="0" value="READ"/>
-            <StringItem index="1" value="CATALOG"/>
-            <StringItem index="2" value="VERSION"/>
-            <StringItem index="3" value="UPDATE"/>
-            <StringItem index="4" value="DELETE"/>
+            <StringItem index="1" value="UPDATE"/>
+            <StringItem index="2" value="DELETE"/>
           </StringArray>
         </Property>
       </Properties>

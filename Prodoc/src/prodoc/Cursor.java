@@ -16,79 +16,116 @@
  * author: Joaquin Hierro      2011
  * 
  */
-
 package prodoc;
 
+import java.util.Vector;
+
 /**
- *
+ * Manages the "cursors" generated when searchin in any object through ny kind of driver
  * @author jhierrot
  */
 public class Cursor
 {
 /**
- *
+ * Cursor Identifier
  */
 private String CursorId;
 /**
- *
+ * Records of Fields included in Cursor result
  */
 private Record FieldsCur;
 /**
- *
+ * ResulSet conatinign the results (Vectod, JDBC resulSet,...)
  */
 private Object ResultSet;
+//--------------------------------------------------------------------
 /**
-* @return the CursorId
-*/
-public String getCursorId()
+ * Default constructor
+ * @param pCursorId  Cursor Identifier
+ * @param pFieldsCur Record of Atributes returned by Cursor
+ * @param pResultSet ResultSet Object
+ */
+public Cursor (String pCursorId, Record pFieldsCur, Object pResultSet)
+{
+setCursorId(pCursorId);
+setFieldsCur(pFieldsCur);
+setResultSet(pResultSet);
+}
+//------------------------------------------------------------------
+/** 
+ * Returns the Cusor Identifier
+ * @return the CursorId
+ */
+protected String getCursorId()
 {
 return CursorId;
 }
 //-----------------------------------------------------------
 /**
-* @param pCursorId the CursorId to set
-*/
-public void setCursorId(String pCursorId)
+ * Sets the Cursor Identifier
+ * @param pCursorId the CursorId to set
+ */
+private void setCursorId(String pCursorId)
 {
 CursorId = pCursorId;
 }
 //-----------------------------------------------------------
 /**
-* @return the FieldsCur
-*/
-public Record getFieldsCur()
+ * Returns the fields in teh cursor
+ * @return the Record {@link prodoc.Record} with the fields defined (select *)
+ */
+protected Record getFieldsCur()
 {
 return FieldsCur;
 }
 //-----------------------------------------------------------
 /**
-* @param FieldsCur the FieldsCur to set
-*/
-public void setFieldsCur(Record FieldsCur)
+ * Assign the fields in the cursor
+ * @param FieldsCur the Record {@link prodoc.Record} to set
+ */
+private void setFieldsCur(Record FieldsCur)
 {
 this.FieldsCur = FieldsCur;
 }
 //-----------------------------------------------------------
 /**
-* @return the ResultSet
-*/
-public Object getResultSet()
+ * Returns the object containing the resulset
+ * @return the ResultSet with the list of records obtained
+ */
+protected Object getResultSet()
 {
 return ResultSet;
 }
 //-----------------------------------------------------------
 /**
-* @param ResultSet the ResultSet to set
-*/
-public void setResultSet(Object ResultSet)
+ * Sets the resulset
+ * @param ResultSet the ResultSet to set
+ */
+private void setResultSet(Object ResultSet)
 {
 this.ResultSet = ResultSet;
 }
 //-----------------------------------------------------------
+/**
+ * Traceability method
+ * @return a String representation of Cursor
+ */
 @Override
 public String toString()
 {
 return("CursorId:["+CursorId+"] Fields:["+FieldsCur+"]");
+}
+//-----------------------------------------------------------
+/**
+ * Method that cleans the resultset when it's a Vector in memory
+ */
+protected void CleanResultSet()
+{
+if (getResultSet()!=null&& getResultSet() instanceof Vector)
+    {
+    ((Vector)getResultSet()).clear();
+    ResultSet=null;  //  for helping GC
+    }
 }
 //-----------------------------------------------------------
 }

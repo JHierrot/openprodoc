@@ -61,6 +61,18 @@ DocumentBuilder DB=null;
 final static String NEWLINE="\r\n";
     
 //-------------------------------------------------------------------------
+
+    /**
+     *
+     * @param pServer
+     * @param pUser
+     * @param pPassword
+     * @param pParam
+     * @param pUrlPost
+     * @param phttpclient
+     * @param pcontext
+     * @param pDB
+     */
 public FTRemote(String pServer, String pUser, String pPassword, String pParam, HttpPost pUrlPost, CloseableHttpClient phttpclient, HttpContext pcontext, DocumentBuilder pDB)
 {
 super(pServer, pUser, pPassword, pParam);

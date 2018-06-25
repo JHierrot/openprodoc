@@ -103,10 +103,26 @@ static public final String XML_Attr="Attr";
  */
 static public final String AllowedChars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789";
 // Ctes for evaluating syntax of tasks of updating
+
+    /**
+     *
+     */
 static public final char SYN_SEP='#';
-static public final char SYN_ADD='+';
-static public final char SYN_DEL='+';
-public static final char SYN_PARENT='@';
+
+    /**
+     *
+     */
+    static public final char SYN_ADD='+';
+
+    /**
+     *
+     */
+    static public final char SYN_DEL='+';
+
+    /**
+     *
+     */
+    public static final char SYN_PARENT='@';
 //-------------------------------------------------------------------------
 /**
  *
@@ -336,9 +352,17 @@ Record r=(Record)getObjCache().get(Ident);
 if (r==null)
     {
     Query LoadAct=new Query(getTabName(), getRecordStruct(),getConditions());
-    Cursor Cur=getDrv().OpenCursor(LoadAct);
+    Cursor Cur=null;
+    try {
+    Cur=getDrv().OpenCursor(LoadAct);
     r=getDrv().NextRec(Cur);
     getDrv().CloseCursor(Cur);
+    } catch (Exception Ex)
+        {
+        if (Cur!=null)
+           getDrv().CloseCursor(Cur); 
+        PDException.GenPDException("Error_loading_in_cache", Ex.getLocalizedMessage());
+        }
     getObjCache().put(Ident, r);
     }
 if (r!=null) // can be null the result loaded (and assigned/cleaned to cache
@@ -531,6 +555,13 @@ Query qLike=new Query(getTabName(), getRecordStruct(), getConditionsLike(Name), 
 return(getDrv().OpenCursor(qLike));
 }
 //-------------------------------------------------------------------------
+
+    /**
+     *
+     * @param Name
+     * @return
+     * @throws PDException
+     */
 public Cursor SearchLikeDesc(String Name) throws PDException
 {
 Query qLike=new Query(getTabName(), getRecordStruct(), getConditionsLike(Name), getDescOrder());
@@ -664,7 +695,9 @@ return(Name);
  * Field1=Field1+Field2;
  * @param param Expresión to use
  * @param r Record
+     * @param rParent
  * @return Updates record
+     * @throws prodoc.PDException
  */
 protected Record Update(String param, Record r, Record rParent) throws PDException
 {
@@ -769,6 +802,11 @@ Day1+=Integer.parseInt((NewVal+" ").substring(8,10));
 return(String.format("%04d", Year1)+"-"+String.format("%02d", Month1)+"-"+String.format("%02d", Day1));
 }
 //---------------------------------------------------------------------
+
+    /**
+     *
+     * @return
+     */
 protected String getDescOrder()
 {
 return(PDObjDefs.fDESCRIPTION);

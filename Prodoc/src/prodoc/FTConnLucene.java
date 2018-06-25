@@ -55,6 +55,14 @@ static private SearcherManager SM=null;
 static private String DirPath;
 
 //-------------------------------------------------------------------------
+
+    /**
+     *
+     * @param pServer
+     * @param pUser
+     * @param pPassword
+     * @param pParam
+     */
 public FTConnLucene(String pServer, String pUser, String pPassword, String pParam)
 {
 super(pServer, pUser, pPassword, pParam);
@@ -207,7 +215,6 @@ SM.maybeRefresh();
 /**
  * 
  * @param Type
- * @param Id
  * @param sDocMetadata
  * @param sBody
  * @param sMetadata

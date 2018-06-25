@@ -60,7 +60,8 @@ initComponents();
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         LabelOperation = new javax.swing.JLabel();
         UserNameLabel = new javax.swing.JLabel();
@@ -73,13 +74,15 @@ initComponents();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(MainWin.TT("Permissions_Maintenance"));
         setResizable(false);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
+        addWindowListener(new java.awt.event.WindowAdapter()
+        {
+            public void windowClosing(java.awt.event.WindowEvent evt)
+            {
                 formWindowClosing(evt);
             }
         });
 
-        LabelOperation.setFont(new java.awt.Font("DejaVu Sans", 1, 14));
+        LabelOperation.setFont(new java.awt.Font("DejaVu Sans", 1, 14)); // NOI18N
         LabelOperation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         LabelOperation.setText("jLabel1");
 
@@ -93,20 +96,24 @@ initComponents();
         UserComboBox.setModel(getComboModel());
 
         PermisionComboBox.setFont(MainWin.getFontDialog());
-        PermisionComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "READ", "CATALOG", "VERSION", "UPDATE", "DELETE" }));
+        PermisionComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "READ", "UPDATE", "DELETE" }));
 
         ButtonAcept.setFont(MainWin.getFontDialog());
         ButtonAcept.setText(MainWin.TT("Ok"));
-        ButtonAcept.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ButtonAcept.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ButtonAceptActionPerformed(evt);
             }
         });
 
         ButtonCancel.setFont(MainWin.getFontDialog());
         ButtonCancel.setText(MainWin.TT("Cancel"));
-        ButtonCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ButtonCancel.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ButtonCancelActionPerformed(evt);
             }
         });

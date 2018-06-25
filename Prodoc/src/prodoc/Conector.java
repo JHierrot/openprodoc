@@ -16,16 +16,15 @@
  * author: Joaquin Hierro      2011
  * 
  */
-
 package prodoc;
 
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Properties;
 import java.util.Vector;
-
 /**
- *
+ * Class connector responsible of reading configuration, starting tasks 
+ * and managing sessions to an specific OpenProdoc Repository
  * @author jhierrot
  */
 public class Conector
@@ -35,55 +34,68 @@ public class Conector
  */
 private String ConectorName;
 /**
- *
+ * User of the connection to the Database of the repository
  */
 private String User;
 /**
- *
+ * Password of the connection to the Database of the repository
  */
 private String Password;
 /**
- *
+ * Url of the database of the repository
  */
 private String URL;
 /**
- *
+ * Additional params
  */
 private String PARAM;
 /**
- *
+ * Min size of the database pool
  */
 private int MinPoolSize;
 /**
- *
+ * MAX size of the database pool
  */
 private int MaxPoolSize;
 /**
- *
+ * pool timeout
  */
 private int TimeOutPool;
 /**
- *
+ * Kind of the connector (JDBC or REMOTE currently)
  */
 private String DataAccessType;
 /**
- *
+ * Collection containing the current sessions
  */
-private Vector ListSesion;
+private Vector<DriverGeneric> ListSesion;
 /**
- *
+ * Frecuency of pooling the creation of tasks (in ms)
  */
 private int TaskSearchFreq=0;
-
+/**
+ * Frecuency of pooling the execution of pending tasks (in ms)
+ */
 private int TaskExecFreq=0;
-
-static private Hashtable TaskSearchList=new Hashtable();
-static private Hashtable TaskExecList=new Hashtable();  
+/**
+ * Contains a collection of TaskCreator identified by Connector name
+ */
+private static final Hashtable<String, TaskCreator> TaskSearchList=new Hashtable();
+/**
+ * Contains a collection of TaskRunner identified by Connector name
+ */
+private static final Hashtable<String, TaskRunner> TaskExecList=new Hashtable(); 
+/**
+ * Indicates the category of task to be created/executed in the cuurrent node
+ */
 private String TaskCategory="*";
+/**
+ * Indicates if the tasks for the connector has beeen started
+ */
 private boolean TasksStarted=false;
 //--------------------------------------------------------------------------
 /**
- * reads, interpret and store the requiered elements of the configuration
+ * Reads, interpret and store the requiered elements of the configuration
  * @param ProdocProperties  prpoerties readed from configuration file
  */
 Conector(String pConectorName, Properties ProdocProperties) throws PDException
@@ -122,9 +134,9 @@ for (int i = 0; i < MinPoolSize; i++)
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * Creates a session based on configuration
+ * @return a new session of type JDBC or remote with the parameters specified
+ * @throws PDException in any error
  */
 private DriverGeneric CreateSesion()  throws PDException
 {
@@ -141,7 +153,7 @@ return(NewSesion);
 }
 //--------------------------------------------------------------------------
 /**
- * returns a session from the pool
+ * Returns a session from the pool
  * adding a new session if all the session are Locked
  * @param user        name of the Prodoc to connect
  * @param Password    password to connect
@@ -155,7 +167,7 @@ if(PDLog.isDebug())
 DriverGeneric Session;
 for (int i = 0; i < ListSesion.size(); i++)
     {
-    Session =(DriverGeneric) ListSesion.elementAt(i);
+    Session = ListSesion.elementAt(i);
     if (!Session.isLocked())
        {
        Session.Lock();
@@ -180,20 +192,24 @@ return(null);
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @param Session
- * @throws PDException
+ * Frees a sesion locked previously in {@link #getSession(java.lang.String, java.lang.String) }
+ * @param Session Session to be unlocked
+ * @throws PDException in any error
  */
 public void freeSesion(DriverGeneric Session)  throws PDException
 {
 if(PDLog.isDebug())
     PDLog.Debug("unlocking_session");
+if (Session==null)
+    PDException.GenPDException("Null_session_to_unlock", null);
+if (!Session.isLocked())
+    PDException.GenPDException("Unlocked_session_to_unlock", null);
 Session.UnLock();
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @throws PDException
+ * Stops all the tasks, sessions and framework of OpenProdoc
+ * @throws PDException in any error
  */
 public void Shutdown() throws PDException
 {
@@ -203,7 +219,7 @@ if (PDLog.isDebug())
 DestroyTask();
 for (int i = 0; i < ListSesion.size(); i++)
     {
-     Session = (DriverGeneric) ListSesion.elementAt(i);
+     Session = ListSesion.elementAt(i);
      Session.delete();
     }
 }
@@ -242,11 +258,11 @@ if (PDLog.isDebug())
 }
 //--------------------------------------------------------------------------
 /**
- * 
- * @param TaskSearchFreq
- * @param ConectorName 
+ * Creates and starts a thread for checking schedulled task to be instantiated
+ * @param TaskSearchFreq Pooling frecuency (in ms)
+ * @param TaskCategory Category of Tasks to pool and create
  */
-private void CreateSearchTask(int TaskSearchFreq, String TaskCategory)
+synchronized private void CreateSearchTask(int TaskSearchFreq, String TaskCategory)
 {
 if (TaskSearchList.contains(ConectorName))
     return;
@@ -258,11 +274,11 @@ TaskSearchList.put(ConectorName, TaskCreatorTask);
 }
 //--------------------------------------------------------------------------
 /**
- * 
- * @param TaskExecFreq
- * @param ConectorName 
+ * Creates and starts a thread for executing pending task (schedulled or not trans assitiated to an event)
+ * @param TaskExecFreq Pooling frecuency (in ms)
+ * @param TaskCategory Category of Tasks to exetute
  */
-private void CreateExecTask(int TaskExecFreq, String TaskCategory)
+synchronized private void CreateExecTask(int TaskExecFreq, String TaskCategory)
 {
 if (TaskExecList.contains(ConectorName))
     return;
@@ -274,46 +290,69 @@ TaskExecList.put(ConectorName, TaskRunnerTask);
 }
 //--------------------------------------------------------------------------
 /**
- * 
- * @param ConectorName 
+ * Stops the Search Task
+ * @param ConectorName Name of Connector "Owner" of task
  */
-private static void DestroySearchTask(String ConectorName)
+synchronized private static void DestroySearchTask(String ConectorName)
 {
 if (!TaskSearchList.contains(ConectorName))
     return;
 if (PDLog.isDebug())
     PDLog.Debug("DestroySearchTask: Con="+ConectorName);        
-TaskCreator  TaskCreatorTask=(TaskCreator)TaskSearchList.get(ConectorName); 
+TaskCreator  TaskCreatorTask=TaskSearchList.get(ConectorName); 
 TaskCreatorTask.End();
 TaskSearchList.put(ConectorName, null);
 }
 //--------------------------------------------------------------------------
 /**
- * 
- * @param ConectorName 
+ * Stops the Search Task
+ * @param ConectorName Name of Connector "Owner" of task
  */
-private static void DestroyExecTask(String ConectorName)
+synchronized private static void DestroyExecTask(String ConectorName)
 {
 if (!TaskExecList.contains(ConectorName))
     return;
 if (PDLog.isDebug())
     PDLog.Debug("DestroyExecTask: Con="+ConectorName);        
-TaskRunner  TaskRunnerTask=(TaskRunner)TaskExecList.get(ConectorName); 
+TaskRunner  TaskRunnerTask=TaskExecList.get(ConectorName); 
 TaskRunnerTask.End();
 TaskExecList.put(ConectorName, null);
 }
 //--------------------------------------------------------------------------
 //*******************************************************************
+/**
+ * Thread responsible of the actual pooling in definition and creation of schedulled tasks instances
+ */
 static private class TaskCreator extends Thread  
 {
+/**
+ * Time for pooling the status and shutdown orders
+ */
 static private final long SleepTime=1000; 
+/**
+ * When false the task must stop
+ */
 private boolean Continue=true;
+/**
+ * Frecuency for pooling the time for creating Tasks
+ */
 private int TaskSearchFreq;
+/**
+ * Category of tasks to pool
+ */
 private String TaskCategory;
-//private Conector Con;
+/**
+ * Object for creating the tasks when it is the time for creating them
+ */
 PDTasksCron TaskGen;
 
 //-------------------------------------------------
+/**
+ * Constructor
+ * @param pTaskSearchFreq Frecuency of poolong in ms
+ * @param pTaskCategory Category of tasks to pool
+ * @param pCon Connector Used
+ */
 public TaskCreator(int pTaskSearchFreq, String pTaskCategory, Conector pCon)
 {
 setName("TaskCreator");
@@ -334,12 +373,17 @@ if (PDLog.isDebug())
     PDLog.Debug("TaskCreator.TaskCreator:"+pTaskSearchFreq+"-"+pTaskCategory+"-"+pCon);
 }
 //-------------------------------------------------
+/**
+ * Signal the Thread to end in the next check of status (that is smaller than TaskSearchFreq)
+ */
 public void End()
 {
 Continue=false;    
-//System.out.println("Continue:"+Continue);
 } 
 //-------------------------------------------------
+/**
+ * Runs  the Thread, pooling until the Thread si signed to stop by {@link #End()}
+ */
 @Override 
 public void run() 
 {
@@ -374,16 +418,41 @@ while (Continue)
 } 
 //-------------------------------------------------
 } // **** END of task creator ***************************************
+
 //*******************************************************************
+/**
+ * Thread for executing the instantiated tasks
+ */
 static private class TaskRunner extends Thread  
 {
+    /**
+ * Time for pooling the status and shutdown orders
+ */
 static private long SleepTime=1000; 
+/**
+ * When false the task must stop
+ */
 private boolean Continue=true;
+/**
+ * Frecuency for pooling the time for executing pending Tasks
+ */
 private int TaskExecFreq;
+/**
+ * Category of tasks to pool for executing
+ */
 private String TaskCategory;
+/**
+ * Object for executing the tasks when it is the time for executing them
+ */
 PDTasksExec TaskRun;
 
 //-------------------------------------------------
+/**
+ * Constuctor
+ * @param pTaskExecFreq Pooling frecuency for execution
+ * @param pTaskCategory Category of tasks for pool
+ * @param pCon Connector
+ */
 public TaskRunner(int pTaskExecFreq, String pTaskCategory, Conector pCon)
 {
 setName("TaskRunner");
@@ -403,11 +472,17 @@ if (PDLog.isDebug())
     PDLog.Debug("TaskRunner.TaskRunner:"+pTaskExecFreq+"-"+pTaskCategory+"-"+pCon);
 }
 //-------------------------------------------------
+/**
+ * Signal the Thread to end in the next check of status (that is smaller than TaskExecFreq)
+ */
 public void End()
 {
 Continue=false;    
 } 
 //-------------------------------------------------
+/**
+ * Runs  the Thread, pooling until the Thread si signed to stop by {@link #End()}
+ */
 @Override 
 public void run() 
 {
@@ -443,5 +518,4 @@ while (Continue)
 } 
 //-------------------------------------------------
 } // **** END of Task runner ***************************************
-
 }

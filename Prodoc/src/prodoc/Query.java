@@ -188,6 +188,12 @@ else
 return("<Q><Tab>"+XTabs+"</Tab>"+RetrieveFields.toXMLt()+XWhere+XOrders+"</Q>");
 }
 //-------------------------------------------------------------------------
+
+    /**
+     *
+     * @param XMLObjects
+     * @throws PDException
+     */
 public Query(Document XMLObjects) throws PDException
 {
 NodeList OPDObjectList = XMLObjects.getElementsByTagName("Tab");

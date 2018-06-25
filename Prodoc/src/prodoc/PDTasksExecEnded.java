@@ -27,10 +27,26 @@ import java.util.Date;
  */
 public class PDTasksExecEnded extends PDTasksExec
 {
-public static final String fSTARTDATE="StartDate";
-public static final String fENDDATE="EndDate";
-public static final String fRESULT="Result";
-public static final String fENDSOK="EndsOk";
+
+    /**
+     *
+     */
+    public static final String fSTARTDATE="StartDate";
+
+    /**
+     *
+     */
+    public static final String fENDDATE="EndDate";
+
+    /**
+     *
+     */
+    public static final String fRESULT="Result";
+
+    /**
+     *
+     */
+    public static final String fENDSOK="EndsOk";
 
 /**
  *

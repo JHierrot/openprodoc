@@ -323,6 +323,7 @@ getDrv().DropTable(getTabNameAttrs());
 //-------------------------------------------------------------------------
 /**
  *
+     * @return 
  * @throws PDException
  */
 @Override
@@ -422,6 +423,8 @@ else
 //-------------------------------------------------------------------------
 /**
  *
+     * @return 
+     * @throws prodoc.PDException
  */
 protected Conditions getConditions() throws PDException
 {
@@ -808,6 +811,13 @@ if (PDLog.isDebug())
     PDLog.Debug("PDObjDefs.CreateObjectTables<:"+Name);
 }
 //-------------------------------------------------------------------------
+
+    /**
+     *
+     * @param Name
+     * @param NewAttr
+     * @throws PDException
+     */
 public void AddObjectTables(String Name, Attribute NewAttr)  throws PDException
 {
 if (PDLog.isDebug())
@@ -860,6 +870,13 @@ if (PDLog.isDebug())
     }
 }
 //-------------------------------------------------------------------------
+
+    /**
+     *
+     * @param Name
+     * @param OldAttr
+     * @throws PDException
+     */
 public void DelObjectTables(String Name, Attribute OldAttr)  throws PDException
 {
 if (PDLog.isDebug())

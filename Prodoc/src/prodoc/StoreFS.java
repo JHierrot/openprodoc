@@ -38,6 +38,8 @@ public class StoreFS extends StoreGeneric
  * @param pUser
  * @param pPassword
  * @param pParam
+     * @param pEncrypt
+     * @throws prodoc.PDExceptionFunc
  */
 protected StoreFS(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt) throws PDExceptionFunc
 {
@@ -98,6 +100,8 @@ protected void Disconnect() throws PDException
  * @param Id
  * @param Ver
  * @param Bytes
+     * @param Rec
+     * @param OPDPath
  * @return
  * @throws PDException
  */
@@ -143,6 +147,7 @@ return(Tot);
  *
  * @param Id
  * @param Ver
+     * @param Rec
  * @throws PDException
  */
 @Override
