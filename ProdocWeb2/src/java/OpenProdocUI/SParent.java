@@ -182,7 +182,7 @@ return(false);
 protected void AskLogin(HttpServletRequest Req, PrintWriter out) throws Exception
 {
 HttpSession Sess=Req.getSession();
-out.println(new FLogin(Sess).toHtml());
+out.println(new FLogin(Sess, null).toHtml());
 }
 //-----------------------------------------------------------------------------------------------
 /**

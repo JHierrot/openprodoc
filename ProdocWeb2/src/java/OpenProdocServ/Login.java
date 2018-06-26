@@ -51,7 +51,7 @@ String User=Req.getParameter("User");
 String Password=Req.getParameter("Password");
 if (User==null || User.length()==0 ||Password==null || Password.length()==0)
     {
-    out.println(new FLogin(Sess).toHtml());
+    out.println(new FLogin(Sess, null).toHtml());
     return;
     }
 if (!OPDFWLoaded)
@@ -64,7 +64,7 @@ setSessOPD(Req, D);
 out.println(new FMain(Sess).toHtml());
 } catch (Exception Ex)
     {
-    out.println(new FLogin(Sess).toHtml());
+    out.println(new FLogin(Sess, Ex.getLocalizedMessage()).toHtml());
     }
 out.close();
 }

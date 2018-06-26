@@ -26,6 +26,7 @@ import javax.servlet.http.HttpSession;
  */
 public class FLogin 
 {
+private String Html2=Html;    
 private static final String Html="<!DOCTYPE html>" +
 "<html>\n" +
         "<head>\n" +
@@ -60,20 +61,24 @@ private static final String Html="<!DOCTYPE html>" +
         "  <tr><td></td><td><input  class=\"dhxform_btn_filler\" type=\"submit\" value=\"  Ok  \"></td></tr>" +
         "  </table></fieldset>" +
 "        </td></tr>" +
+         "<tr><td>@Msg@</td></tr>"+  
 "    </table>\n"+        
         "</form>\n" +
 "    </body>\n" +
 "</html>\n";
 
 //-------------------------------------------------------------------
-public FLogin(HttpSession Sess)
+public FLogin(HttpSession Sess, String Msg)
 {
-    
+if (Msg!=null && Msg.length()!=0)   
+    Html2=Html.replace("@Msg@", Msg);
+else
+    Html2=Html.replace("@Msg@", "");
 }
 //-------------------------------------------------------------------
 public String toHtml()
 {
-return(Html);    
+return(Html2);    
 }
 //-------------------------------------------------------------------
     

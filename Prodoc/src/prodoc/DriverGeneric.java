@@ -1470,6 +1470,8 @@ if (!userName.equalsIgnoreCase("Install"))
     {
     if (getUser().Load(userName)==null)
         PDExceptionFunc.GenPDException("User_or_password_incorrect", userName);
+    if (!getUser().isActive())
+        PDExceptionFunc.GenPDException("Inactive_User", userName);
     AuthGeneric Auth=getAuthentic(getUser().getValidation());
     Auth.Authenticate(userName, Password);
     getUser().LoadAll(userName);

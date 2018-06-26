@@ -44,7 +44,7 @@ protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Excep
 {
 setSessOPD(Req, null);    
 HttpSession Sess=Req.getSession();
-out.println(new FLogin(Sess).toHtml());
+out.println(new FLogin(Sess, null).toHtml());
 }
 //-----------------------------------------------------------------------------------------------
 
