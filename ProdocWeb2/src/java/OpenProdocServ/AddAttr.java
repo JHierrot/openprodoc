@@ -75,8 +75,8 @@ else
     }
 String Unique=Req.getParameter("UniKey"); 
 String ModifAllow=Req.getParameter("ModAllow"); 
-String Multival=Req.getParameter("Multi"); 
-Attribute Attr=new Attribute(Name,Username, Descrip, TypeN, Required.equals("1"), null, Integer.parseInt(LongStr), true, Unique.equals("1"),ModifAllow.equals("1"),Multival.equals("1"));
+String Multival=Req.getParameter("Multi");                                                                      // no es error, debe ser primary key si es multival ppara evitar duplicados
+Attribute Attr=new Attribute(Name,Username, Descrip, TypeN, Required.equals("1"), null, Integer.parseInt(LongStr), Multival.equals("1"), Unique.equals("1"),ModifAllow.equals("1"),Multival.equals("1"));
 Def.AddObjectTables(ObjType, Attr);
 out.println("OK");
 } catch (PDException Ex)

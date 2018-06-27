@@ -1005,8 +1005,8 @@ for (String Attr : Attrs)
         LongStr="0";
     String Unique=AttrDef[7];
     String ModifAllow=AttrDef[8];
-    String Multival=AttrDef[9];
-    Attribute At=new Attribute(Name,Username, Descrip, TypeN, Required.equals("1"), null, Integer.parseInt(LongStr), false, Unique.equals("1"),ModifAllow.equals("1"),Multival.equals("1"));
+    String Multival=AttrDef[9];                                                                                      // no es error, debe ser primary key 
+    Attribute At=new Attribute(Name,Username, Descrip, TypeN, Required.equals("1"), null, Integer.parseInt(LongStr), Multival.equals("1"), Unique.equals("1"),ModifAllow.equals("1"),Multival.equals("1"));
     pdObjDefs.addAtribute(At);
     }
 }
