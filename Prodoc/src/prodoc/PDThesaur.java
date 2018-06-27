@@ -1162,8 +1162,8 @@ if (PDLog.isDebug())
 return(ListRT);
 }
 //---------------------------------------------------------------------
-/** Obtain a CURSOR of the <b>Records<b> of narrow terms
- * 
+/** 
+ * Obtain a CURSOR of {@link prodoc.Record} of narrow terms
  * @param TermId
  * @return
  * @throws PDException
@@ -1178,7 +1178,7 @@ if (PDLog.isDebug())
 return(CursorId);
 }
 //---------------------------------------------------------------------
-/** Obtain a CURSOR of the <b>Records<b> of related terms
+/** Obtain a CURSOR of the <b>Records</b> of related terms
  * 
  * @param TermId
  * @return
@@ -1194,7 +1194,7 @@ if (PDLog.isDebug())
 return(CursorId);
 }
 //---------------------------------------------------------------------
-/** Obtain a CURSOR of the <b>Records<b> of related terms
+/** Obtain a CURSOR of the <b>Records</b> of related terms
  * 
  * @param TermId
  * @return
@@ -1437,8 +1437,7 @@ return Lang;
 }
 //---------------------------------------------------------------------
 /**
-     * @param pLang
- * @param Lang the Lang to set
+ * @param pLang the Lang to set
  */
 public void setLang(String pLang)
 {

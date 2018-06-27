@@ -263,8 +263,8 @@ return DBPassword;
 }
 //--------------------------------------------------------------------------
 /**
- * Returs true when tteh session is locked (by a thread/http session)
- * @return
+ * Returns true when the session is locked (by a thread/http session)
+ * @return true when the session is locked (by a thread/http session)
  */
 public boolean isLocked()
 {
@@ -1353,7 +1353,7 @@ return InTransaction;
 //--------------------------------------------------------------------------
 /**
  * Assign the transaction status to a the session
- * @param pInTransaction 
+ * @param pInTransaction boolean value indicating the status
  */
 public void setInTransaction(boolean pInTransaction)
 {
@@ -1500,7 +1500,7 @@ User.CreateTaskUser();
 //-----------------------------------------------------------------------------------
 /**
  * Refresh current all the information of current user
- * @throws PDException
+ * @throws PDException In any error
  */
 public void RefreshUser() throws PDException
 {
@@ -1510,7 +1510,7 @@ getUser().LoadAll(getUser().getName());
 /**
  * Returns, and create if needed, the session user
  * @return the User
- * @throws PDException
+ * @throws PDException In any error
 */
 public PDUser getUser() throws PDException
 {

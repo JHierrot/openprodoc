@@ -16,21 +16,18 @@
  * author: Joaquin Hierro      2011
  * 
  */
-
 package prodoc;
 
 import java.util.HashMap;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
 /**
- *
+ * Class that manages the security of Documents, folders and other object with an ACL (Access Cntrol List) model
  * @author jhierrot
  */
 public class PDACL extends ObjPD
 {
-
 /**
  *
  */
@@ -99,9 +96,11 @@ public static final int pUPDATE  =4;
  *
  */
 public static final int pDELETE  =5;
-
+/**
+ * 
+ * 
+ */
 static private ObjectsCache AclObjectsCache = null;
-
 /**
  *
  * @param Drv

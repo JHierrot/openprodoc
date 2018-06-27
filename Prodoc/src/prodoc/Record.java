@@ -27,33 +27,33 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- *
+ * Class for managing the Records, sets of {@link Attribute} used for storing and saving metadata
  * @author jhierrot
  */
 public class Record
 {
-
 /**
- *
+ * Internal storage of the Atributes of a Record
  */
 private final ArrayList<Attribute> VAttr=new ArrayList();
 /**
- *
+ * Position used for traveling fr the set of Atributes
  */
-private int Pos;
+private int Pos=0;
 //--------------------------------------------------------------------------
 /**
- *
+ * Removes ALL the Attributes of the Record
  */
 public void Clear()
 {
 VAttr.clear();
+Pos=0;
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @param rec
- * @return
+ * Compares a Record with the current record
+ * @param rec Record to compare
+ * @return true when ALL the Attributes (with its types and values are equal
  */
 public boolean equals(Record rec)
 {
@@ -75,10 +75,10 @@ return(true);
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @param rec
- * @return
- * @throws PDException
+ * Assígn the values Attributes of a Record to the existing identical Attributes of current Record
+ * @param rec Record containing values to assign
+ * @return true always
+ * @throws PDException In any error
  */
 public boolean assign(Record rec) throws PDException
 {
@@ -111,10 +111,10 @@ return(true);
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @param rec
- * @return
- * @throws PDException
+ * Assígn the values Attributes of a Record to the existing SIMILAR (equal name) Attributes of current Record
+ * @param rec Record containing values to assign
+ * @return true always
+ * @throws PDException In any error
  */
 protected boolean assignSimil(Record rec) throws PDException
 {
@@ -147,9 +147,9 @@ return(true);
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @param newAttr
- * @throws PDException
+ * Adds an attribute to the current record
+ * @param newAttr Attribute to add
+ * @throws PDException In any Error (or duplicated Atribute name)
  */
 public void addAttr(Attribute newAttr) throws PDException
 {
@@ -159,8 +159,8 @@ VAttr.add(newAttr.Copy());
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @param DelAttr
+ * Removes an Attribute from the current Record
+ * @param DelAttr Attribute to remove
  */
 public void delAttr(Attribute DelAttr)
 {
@@ -168,8 +168,8 @@ delAttr(DelAttr.getName());
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @param NameDelAttr
+ * Removes an Attribute from the current Record
+ * @param NameDelAttr name of the Attribute to remove
  */
 public void delAttr(String NameDelAttr)
 {
@@ -186,9 +186,9 @@ for (int i = 0; i < VAttr.size(); i++)
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @param NameAttr
- * @return
+ * Checks if an Attribute with the specified name exist in the current Record
+ * @param NameAttr name of the Attribute to check
+ * @return true if the Attribute Exist
  */
 public boolean ContainsAttr(String NameAttr)
 {
@@ -203,9 +203,9 @@ return(false);
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @param NameAttr
- * @return
+ * Returns the Attribute of the Record with the specified name
+ * @param NameAttr Name of the Attribute to look for
+ * @return The Atrribute or null if the Record don't contains an Attribute with NameAttr name
  */
 public Attribute getAttr(String NameAttr)
 {
@@ -222,10 +222,10 @@ return(null);
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @param NumAttr
- * @return
- * @throws PDException
+ * Return the Attribute with the position specified in the record
+ * @param NumAttr Number of Attribute
+ * @return The Attribute
+ * @throws PDException If the position specified is less that 0 or bigger than the number of Attributes
  */
 public Attribute getAttr(int NumAttr)  throws PDException
 {
@@ -235,8 +235,8 @@ return((Attribute)VAttr.get(NumAttr));
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @return
+ * Returns the current number of Attributes of the Record
+ * @return the current number of Attributes of the Record
  */
 public int NumAttr()
 {
@@ -244,8 +244,8 @@ return(VAttr.size());
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @return the number of attibutes with value
+ * Returns the number of Attributes with value
+ * @return the number of Attributes with value
  */
 public int NumAttrFilled()
 {
@@ -273,7 +273,7 @@ return(N);
 }
 //--------------------------------------------------------------------------
 /**
- *
+ * Starts the counter so a program can travel by the set of Attributes with {@link #nextAttr()}
  */
 public void initList()
 {
@@ -281,8 +281,8 @@ Pos=0;
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @return
+ * After initialization with {@link #initList()}, allows to travel by the set of Attributes of the Record
+ * @return The next Attribute or null if the End of the list is reached
  */
 public Attribute nextAttr()
 {
@@ -293,9 +293,9 @@ else
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * Creates a identical copy of he record with the same Attributes and values
+ * @return The created copy of the Record 
+ * @throws PDException In any error
  */
 synchronized public Record Copy() throws PDException
 {
@@ -309,7 +309,7 @@ return(Copy);
 }
 //--------------------------------------------------------------------------
 /**
- * Returns a Copy of non Multivalued Attributes
+ * Returns a Copy of NON Multivalued Attributes
  * @return a new Record with non Multivalued Attributes
  * @throws PDException in any error
  */
@@ -327,7 +327,7 @@ return(Copy);
 }
 //--------------------------------------------------------------------------
 /**
- * Returns a Copy of non Multivalued Attributes
+ * Returns a Copy of Multivalued Attributes
  * @return a new Record with non Multivalued Attributes
  * @throws PDException in any error
  */
@@ -345,8 +345,8 @@ return(Copy);
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @return
+ * Returns an String showing all the Attributes of the Record
+ * @return an String showing all the Attributes of the Record
  */
 @Override
 public String toString()
@@ -360,9 +360,9 @@ return(S);
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @param newRec
- * @throws PDException
+ * Add all the Attributes of the parameter that DON'T exist in the current Record
+ * @param newRec Record with the Attributes to add
+ * @throws PDException In any error
  */
 public void addRecord(Record newRec) throws PDException
 {
@@ -376,9 +376,9 @@ for (int i = 0; i < newRec.NumAttr(); i++)
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @param substRec
- * @throws PDException
+ * Removes from the current Record all the (existing) Attributes included in the parameter
+ * @param substRec Record with the Attributs to remove
+ * @throws PDException In any Error
  */
 public void delRecord(Record substRec) throws PDException
 {
@@ -390,8 +390,8 @@ for (int i = 0; i < substRec.NumAttr(); i++)
 }
 //--------------------------------------------------------------------------
 /**
- *
- * @throws PDException
+ * Checks if the Values in the Record follow the restrictions defined for each Attribute (mainly length or required)
+ * @throws PDException If any Attribute don't match the restrictions
  */
 public void Verify() throws PDException
 {
@@ -403,9 +403,9 @@ for (int i = 0; i < NumAttr(); i++)
 }
 //--------------------------------------------------------------------------
 /**
- * Converts all the attributes of the record to XML
+ * Converts all the attributes of the record to XML in a short format
  * @return the XML with the attributes.
- * @throws PDException  
+ * @throws PDException in any error
  */
 public String toXML() throws PDException
 {
@@ -417,9 +417,9 @@ return(S.toString());
 }
 //--------------------------------------------------------------------------
 /**
- * Converts all the attributes of the record to XML
+ * Converts all the attributes of the record to XML with ALL tags and elements
  * @return the XML with the attributes.
- * @throws PDException  
+ * @throws PDException in any error 
  */
 public String toXMLt() throws PDException
 {
@@ -428,15 +428,14 @@ S.append("<Rec>");
 initList();
 for (int i = 0; i < NumAttr(); i++)
     S.append(nextAttr().toXMLt());
-//    S.append(nextAttr().toXMLFull());
 S.append("</Rec>");
 return(S.toString());
 }
 //--------------------------------------------------------------------------
 /**
- * Converts all the attributes of the record to XML
+ * Converts all the NON null attributes of the record to XML with ALL tags and elements
  * @return the XML with the attributes.
- * @throws PDException  
+ * @throws PDException in any error   
  */
 public String toXMLtNotNull() throws PDException
 {
@@ -453,6 +452,13 @@ S.append("</Rec>");
 return(S.toString());
 }
 //--------------------------------------------------------------------------
+/**
+ * Fills the Atributes of an EXISTING Record with the values received in XML
+ * @param AttrsNode XML Node to import
+ * @param R Record to fill
+ * @return the Filled Record
+ * @throws PDException  In any error
+ */
 static Record FillFromXML(Node AttrsNode, Record R) throws PDException
 {
 if (PDLog.isDebug())
@@ -477,6 +483,12 @@ if (PDLog.isDebug())
 return(R);
 }
 //--------------------------------------------------------------------------
+/**
+ * Creates a NEW Record importing a XML node
+ * @param AttrsNode Node to import
+ * @return The created and filled record
+ * @throws PDException In any error
+ */
 static Record CreateFromXML(Node AttrsNode) throws PDException
 {
 Record R=new Record();    
@@ -513,8 +525,9 @@ return(R);
 }
 //--------------------------------------------------------------------------
 /**
- * 
-     * @throws PDExceptionFunc
+ * Checks the set of Attributes of a Record BUT with some exceptions
+ * ssimilar to {@link #Verify()}
+ * @throws PDExceptionFunc In any error
  */
 public void CheckDef() throws PDExceptionFunc
 {
@@ -529,10 +542,9 @@ for (int i = 0; i < NumAttr(); i++)
     }
 }
 //--------------------------------------------------------------------------
-
-    /**
-     *
-     */
+/**
+ * Removes ALL the atrributes without value
+ */
 public void DelNull()
 {
 for (int i = VAttr.size()-1; i >=0; i--)

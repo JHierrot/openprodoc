@@ -137,7 +137,7 @@ if (PDLog.isDebug())
 //--------------------------------------------------------------------------
 /**
  * Disconects freeing all resources
- * @throws PDException
+ * @throws PDException In any error
  */
 public void delete() throws PDException
 {
@@ -318,7 +318,7 @@ if (PDLog.isDebug())
 //-----------------------------------------------------------------------------------
 /**
  * Starts a Transaction
- * @throws PDException 
+ * @throws PDException In any error
  */
 @Override
 public void IniciarTrans() throws PDException
@@ -336,7 +336,7 @@ setInTransaction(true);
 //-----------------------------------------------------------------------------------
 /**
  * Ends a transaction
- * @throws PDException 
+ * @throws PDException In any error
  */
 @Override
 public void CerrarTrans() throws PDException
@@ -354,7 +354,7 @@ setInTransaction(false);
 //-----------------------------------------------------------------------------------
 /**
  * Aborts a Transaction
- * @throws PDException 
+ * @throws PDException In any error
  */
 @Override
 public void AnularTrans() throws PDException
@@ -418,8 +418,8 @@ return(StoreCursor(Res, RF));
 //-----------------------------------------------------------------------------------
 /**
  * Close a Cursor
- * @param CursorIdent
- * @throws PDException 
+ * @param CursorIdent Identifier of the cursor to close
+ * @throws PDException In any error
  */
 @Override
 public void CloseCursor(Cursor CursorIdent) throws PDException
@@ -434,9 +434,9 @@ delCursor(CursorIdent);
 //-----------------------------------------------------------------------------------
 /**
  * Retrieves next record of cursor
- * @param CursorIdent
+ * @param CursorIdent Identifier of the cursor to travel
  * @return OPD next Record
- * @throws PDException 
+ * @throws PDException In any error
  */
 @Override
 public Record NextRec(Cursor CursorIdent) throws PDException

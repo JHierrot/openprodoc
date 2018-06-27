@@ -51,7 +51,7 @@ public static final String fDATEFORMAT="DateFormat";
 public static final String fSTYLE="Style";
 /**
  * Contains the secuence of font's formas used in Swing as groups of tree element without spaces
- * getFontMenu() -> new java.awt.Font("Arial", 0, 12);
+ * getFontMenu() - new java.awt.Font("Arial", 0, 12);
  * getFontTree()
  * getFontList()
  * getFontDialog()

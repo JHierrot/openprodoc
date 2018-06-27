@@ -95,7 +95,7 @@ if (PDLog.isDebug())
 //--------------------------------------------------------------------------
 /**
  * Disconects freeing all resources
- * @throws PDException
+ * @throws PDException In any error
  */
 public void delete() throws PDException
 {
@@ -440,7 +440,7 @@ return stmtSQL.executeQuery(SQL);
 //-----------------------------------------------------------------------------------
 /**
  * Starts a Transaction
- * @throws PDException 
+ * @throws PDException In any error
  */
 public void IniciarTrans() throws PDException
 {
@@ -457,7 +457,7 @@ setInTransaction(true);
 //-----------------------------------------------------------------------------------
 /**
  * Ends a transaction
- * @throws PDException 
+ * @throws PDException In any error
  */
 public void CerrarTrans() throws PDException
 {
@@ -475,7 +475,7 @@ setInTransaction(false);
 //-----------------------------------------------------------------------------------
 /**
  * Aborts a Transaction
- * @throws PDException 
+ * @throws PDException In any error
  */
 public void AnularTrans() throws PDException
 {
@@ -729,8 +729,8 @@ return(StoreCursor(rs, Search.getRetrieveFields()));
 //-----------------------------------------------------------------------------------
 /**
  * Close a Cursor
- * @param CursorIdent
- * @throws PDException 
+ * @param CursorIdent Identifieer of cursor
+ * @throws PDException In any error
  */
 public void CloseCursor(Cursor CursorIdent) throws PDException
 {
@@ -750,9 +750,9 @@ delCursor(CursorIdent);
 //-----------------------------------------------------------------------------------
 /**
  * Retrieves next record of cursor
- * @param CursorIdent
+ * @param CursorIdent Identifier of cursor to travel
  * @return OPD next Record
- * @throws PDException 
+ * @throws PDException In any error
  */
 public Record NextRec(Cursor CursorIdent) throws PDException
 {

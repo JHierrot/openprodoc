@@ -67,23 +67,23 @@ private int Comparation=cEQUAL;
  */
 public static final int cEQUAL   =0;
 /**
- * Constant Comparation: Greater Than >
+ * Constant Comparation: Greater Than 
  */
 public static final int cGT      =1;
 /**
- * Constant Comparation: Lest Than <
+ * Constant Comparation: Lest Than 
  */
 public static final int cLT      =2;
 /**
- * Constant Comparation: Greater or Equal Than >=
+ * Constant Comparation: Greater or Equal Than 
  */
 public static final int cGET     =3;
 /**
- * Constant Comparation: Lest or Equal Than <=
+ * Constant Comparation: Lest or Equal Than 
  */
 public static final int cLET     =4;
 /**
- * Constant Comparation: Distinct <>
+ * Constant Comparation: Distinct 
  */
 public static final int cNE      =5;
 /**
