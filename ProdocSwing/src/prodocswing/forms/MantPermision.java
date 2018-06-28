@@ -180,7 +180,13 @@ if (ModeGrp) {
 }
 Attr.setValue(UserComboBox.getSelectedItem());
 Attr = Perm.getAttr(PDACL.fPERMISION);
-Attr.setValue(PermisionComboBox.getSelectedIndex() + 1);
+//Attr.setValue(PermisionComboBox.getSelectedIndex() + 1);
+if (PermisionComboBox.getSelectedItem().equals("UPDATE"))
+   Attr.setValue(PDACL.pUPDATE);
+else if (PermisionComboBox.getSelectedItem().equals("DELETE"))
+   Attr.setValue(PDACL.pDELETE);
+else
+   Attr.setValue(PDACL.pREAD);
 Cancel = false;
 this.dispose();
 } catch (PDException ex)
