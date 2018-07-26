@@ -633,8 +633,9 @@ if (!getDrv().getUser().getName().equals("Install"))
 //-------------------------------------------------------------------------
 protected void VerifyAllowedDel() throws PDException
 {
-if (!getDrv().getUser().getRol().isAllowMaintainAcl() )
-   PDExceptionFunc.GenPDException("ACL_delete_not_allowed_to_user",getName());
+if (!getDrv().getUser().getName().equals("Install"))
+   if (!getDrv().getUser().getRol().isAllowMaintainAcl() )
+      PDExceptionFunc.GenPDException("ACL_delete_not_allowed_to_user",getName());
 }
 //-------------------------------------------------------------------------
 protected void VerifyAllowedUpd() throws PDException
