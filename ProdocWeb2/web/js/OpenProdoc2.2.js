@@ -3122,6 +3122,7 @@ WinAttr.setText("Attributes");
 FormAttr=WinAttr.attachForm(); 
 FormAttr.loadStruct("FormAttr?Oper="+OperA, function(){
     FormAttr.setFocusOnFirstActive(); 
+    FormAttr.enableLiveValidation(true);
     if (OperA!=EOPERNEW)
         {
         var T=GMetadata.cellById(Id,1).getValue();    
@@ -3135,8 +3136,16 @@ FormAttr.loadStruct("FormAttr?Oper="+OperA, function(){
         FormAttr.setItemValue("ModAllow",GMetadata.cellById(Id,7).getValue());
         FormAttr.setItemValue("Multi",   GMetadata.cellById(Id,8).getValue());
         }
-    if (FormAttr.getItemValue("Type")!=AT_TYPESTRING)
+    if (FormAttr.getItemValue("Type")==AT_TYPESTRING)  
+        {
+        FormAttr.showItem("LongStr");
+        FormAttr.setRequired("LongStr",true);
+        }
+    else
+        {        
         FormAttr.hideItem("LongStr");
+        FormAttr.setRequired("LongStr",false); 
+        }
     if (FormAttr.getItemValue("Type")!=AT_TYPETHES)
         FormAttr.hideItem("ThesSel");
     else
@@ -3148,10 +3157,16 @@ FormAttr.loadStruct("FormAttr?Oper="+OperA, function(){
 FormAttr.attachEvent("onChange", function(name, value, is_checked){
     if (name=="Type")
         {
-        if (value!=AT_TYPESTRING)
-            FormAttr.hideItem("LongStr");
-        else
+        if (value==AT_TYPESTRING)  
+            {
             FormAttr.showItem("LongStr");
+            FormAttr.setRequired("LongStr",true);
+            }
+        else
+            {        
+            FormAttr.hideItem("LongStr");
+            FormAttr.setRequired("LongStr",false);
+            }
         if (value!=AT_TYPETHES)
             FormAttr.hideItem("ThesSel");
         else
@@ -3178,44 +3193,49 @@ FormAttr.attachEvent("onChange", function(name, value, is_checked){
     }); 
 FormAttr.attachEvent("onButtonClick", function (name)
     {
-    if (name==OK)
-        {   
-        if (OperA==EOPERDEL)    
-            GMetadata.deleteRow(Id);
-        else if (OperA==EOPERMOD || OperA==EOPERNEW)
-            {
-            Id=FormAttr.getItemValue("Name");    
-            if (OperA==EOPERNEW)
-                GMetadata.addRow(Id,"");
-            GMetadata.cellById(Id,0).setValue(FormAttr.getItemValue("Name"));
-            GMetadata.cellById(Id,1).setValue(FormAttr.getItemValue("UserName"));
-            GMetadata.cellById(Id,2).setValue(FormAttr.getItemValue("Descrip"));
-            GMetadata.cellById(Id,3).setValue(FormAttr.getItemValue("Type"));
-            GMetadata.cellById(Id,4).setValue(FormAttr.getItemValue("Req"));
-            GMetadata.cellById(Id,5).setValue(FormAttr.getItemValue("LongStr"));
-            GMetadata.cellById(Id,6).setValue(FormAttr.getItemValue("UniKey"));
-            GMetadata.cellById(Id,7).setValue(FormAttr.getItemValue("ModAllow"));
-            GMetadata.cellById(Id,8).setValue(FormAttr.getItemValue("Multi"));  
-            if (FormAttr.getItemValue("Type")=="Thesaur")
-                GMetadata.cellById(Id,5).setValue(FormAttr.getItemValue("ThesSel")); 
+    if (FormAttr.getItemValue("Type")==AT_TYPESTRING && ( isNaN(parseInt(FormAttr.getItemValue("LongStr"))) || parseInt(FormAttr.getItemValue("LongStr"))==0 ) )
+        alert("String Length required");
+    else
+        {
+        if (name==OK)
+            {   
+            if (OperA==EOPERDEL)    
+                GMetadata.deleteRow(Id);
+            else if (OperA==EOPERMOD || OperA==EOPERNEW)
+                {
+                Id=FormAttr.getItemValue("Name");    
+                if (OperA==EOPERNEW)
+                    GMetadata.addRow(Id,"");
+                GMetadata.cellById(Id,0).setValue(FormAttr.getItemValue("Name"));
+                GMetadata.cellById(Id,1).setValue(FormAttr.getItemValue("UserName"));
+                GMetadata.cellById(Id,2).setValue(FormAttr.getItemValue("Descrip"));
+                GMetadata.cellById(Id,3).setValue(FormAttr.getItemValue("Type"));
+                GMetadata.cellById(Id,4).setValue(FormAttr.getItemValue("Req"));
+                GMetadata.cellById(Id,5).setValue(FormAttr.getItemValue("LongStr"));
+                GMetadata.cellById(Id,6).setValue(FormAttr.getItemValue("UniKey"));
+                GMetadata.cellById(Id,7).setValue(FormAttr.getItemValue("ModAllow"));
+                GMetadata.cellById(Id,8).setValue(FormAttr.getItemValue("Multi"));  
+                if (FormAttr.getItemValue("Type")=="Thesaur")
+                    GMetadata.cellById(Id,5).setValue(FormAttr.getItemValue("ThesSel")); 
+                }
+            else if (OperA=="DelAttr" || OperA=="AddAttr" )    
+                {
+                var Type=FormElem.getItemValue("Name");    
+                FormAttr.send(OperA+"?ObjType="+Type, function(loader, response)
+                    { // Asynchronous 
+                    if (response.substring(0,2)==OK)    
+                        {      
+                        FormElem.unload();
+                        WinElem.close();
+                        }
+                    else 
+                        alert(response); 
+                    } );
+                }
             }
-        else if (OperA=="DelAttr" || OperA=="AddAttr" )    
-            {
-            var Type=FormElem.getItemValue("Name");    
-            FormAttr.send(OperA+"?ObjType="+Type, function(loader, response)
-                { // Asynchronous 
-                if (response.substring(0,2)==OK)    
-                    {      
-                    FormElem.unload();
-                    WinElem.close();
-                    }
-                else 
-                    alert(response); 
-                } );
-            }
+        FormAttr.unload();
+        WinAttr.close();  
         }
-    FormAttr.unload();
-    WinAttr.close();   
     });
 }
 //--------------------------------------------------------------

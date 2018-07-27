@@ -62,7 +62,7 @@ SB.append("{text: \"Boolean  \", value: \"Boolean\"},");
 SB.append("{text: \"TimeStamp\", value: \"TimeStamp\"},");
 SB.append("{text: \"Thesaur  \", value: \"Thesaur\"}");
 SB.append("]},");
-SB.append("{type: \"input\", name: \"LongStr\", hidden:true, label: \"").append(TT(Req, "Length")).append("\",").append(ReadOnly?"readonly:1,":"").append("inputWidth: 50, maxLength:32},");
+SB.append("{type: \"input\", name: \"LongStr\", hidden:true, label: \"").append(TT(Req, "Length")).append("\",").append(ReadOnly?"readonly:1,":"").append("inputWidth: 50, maxLength:32,validate:\"ValidInteger\"},");
 PDThesaur Thes=new PDThesaur(getSessOPD(Req));
 HashSet listThes = Thes.getListDirectDescendList(PDThesaur.ROOTTERM);
 SB.append("{type: \"combo\", name:\"ThesSel\", hidden:true, options:[");
