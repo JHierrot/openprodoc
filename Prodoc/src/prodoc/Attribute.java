@@ -450,7 +450,7 @@ public void setLongStr(int pLongStr) throws PDException
 this.LongStr = pLongStr;
 if (Type==tSTRING)
     {
-    if (getLongStr()!=0 && getValue()!=null && ((String)Value).length()>getLongStr())
+    if (getLongStr()==0 || getLongStr()!=0 && getValue()!=null && ((String)Value).length()>getLongStr())
         {
         PDExceptionFunc.GenPDException(Incorrect_attribute_length,getName());
         }

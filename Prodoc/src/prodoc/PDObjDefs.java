@@ -606,9 +606,9 @@ Rec.getAttr(fTYPNAME).setValue(getName());
 Rec.getAttr(fATTRNAME).setValue(Attr.getName());
 Rec.getAttr(fATTRUSERNAME).setValue(Attr.getUserName());
 Rec.getAttr(fATTRDESCRIPTION).setValue(Attr.getDescription());
-Rec.getAttr(fATTRTYPE).setValue(new Integer(Attr.getType()));
+Rec.getAttr(fATTRTYPE).setValue(Attr.getType());
 Rec.getAttr(fATTRREQUIRED).setValue(Attr.isRequired());
-Rec.getAttr(fATTRLONG).setValue(new Integer(Attr.getLongStr()));
+Rec.getAttr(fATTRLONG).setValue(Attr.getLongStr());
 Rec.getAttr(fATTRPRIMKEY).setValue(Attr.isPrimKey());
 Rec.getAttr(fATTRUNIQUE).setValue(Attr.isUnique());
 Rec.getAttr(fATTRMODALLOW).setValue(Attr.isModifAllowed());
@@ -624,14 +624,14 @@ return(Rec);
  */
 public Attribute ConvertRec(Record Rec) throws PDException
 {
-boolean Required=((Boolean)Rec.getAttr(fATTRREQUIRED).getValue()).booleanValue();
-boolean Primkey=((Boolean)Rec.getAttr(fATTRPRIMKEY).getValue()).booleanValue();
-int Type=((Integer)Rec.getAttr(fATTRTYPE).getValue()).intValue();
-int LongStr=((Integer)Rec.getAttr(fATTRLONG).getValue()).intValue();
+boolean Required=((Boolean)Rec.getAttr(fATTRREQUIRED).getValue());
+boolean Primkey=((Boolean)Rec.getAttr(fATTRPRIMKEY).getValue());
+int Type=((Integer)Rec.getAttr(fATTRTYPE).getValue());
+int LongStr=((Integer)Rec.getAttr(fATTRLONG).getValue());
 String UserName=(String)Rec.getAttr(fATTRUSERNAME).getValue();
-boolean Unique=((Boolean)Rec.getAttr(fATTRUNIQUE).getValue()).booleanValue();
-boolean ModifAlllowed=((Boolean)Rec.getAttr(fATTRMODALLOW).getValue()).booleanValue();
-boolean Multivalued=((Boolean)Rec.getAttr(fATTRMULTIVALUED).getValue()).booleanValue();
+boolean Unique=((Boolean)Rec.getAttr(fATTRUNIQUE).getValue());
+boolean ModifAlllowed=((Boolean)Rec.getAttr(fATTRMODALLOW).getValue());
+boolean Multivalued=((Boolean)Rec.getAttr(fATTRMULTIVALUED).getValue());
 Attribute Attr=new Attribute((String)Rec.getAttr(fATTRNAME).getValue(), UserName,
                              (String)Rec.getAttr(fATTRDESCRIPTION).getValue(),
                              Type,
