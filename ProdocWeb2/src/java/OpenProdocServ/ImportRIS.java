@@ -49,7 +49,7 @@ if (CurrFold!=null)
     out.println(
     "[" +
     "{type: \"label\", label: \""+TT(Req, "Import_RIS")+"\"}," +
-    "{type: \"combo\", name: \"RISType\", label: \""+TT(Req,"Document_Type")+"\", options:["+
+    "{type: \"combo\", name: \"RISType\", label: \""+TT(Req,"Document_Type")+"\", readonly:1, options:["+
     getComboModelDocRIS(PDSession, null)+"]},"+
     "{type: \"block\", width: 250, list:[" +
         "{type: \"button\", name: \"OK\", value: \""+TT(Req, "Ok")+"\"}," +

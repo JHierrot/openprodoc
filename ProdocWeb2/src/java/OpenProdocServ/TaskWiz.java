@@ -100,7 +100,7 @@ if (TE.equals(ListElem.MANTTASKCRON))
         SB.append("{type: \"input\", name: \"TaskParam\",  label: \"").append(ParamTexts[0]).append("\"").append(ParamTexts[0].length()==0?",hidden:true":"").append("},");
     if (TT==PDTasksDef.fTASK_IMPORT || TT==PDTasksDef.fTASK_LOCALSYNC)
         {
-        SB.append("{type: \"combo\", name: \"TaskParam2\", label: \"").append(ParamTexts[1]).append("\", options:[");
+        SB.append("{type: \"combo\", name: \"TaskParam2\", label: \"").append(ParamTexts[1]).append("\", readonly:1, options:[");
         SB.append(getComboModelDoc(getSessOPD(Req), null) );
         SB.append("]},");        
         }
@@ -108,7 +108,7 @@ if (TE.equals(ListElem.MANTTASKCRON))
         SB.append("{type: \"input\", name: \"TaskParam2\", label: \"").append(ParamTexts[1]).append("\"").append(ParamTexts[1].length()==0?",hidden:true":"").append("},");
     if (TT==PDTasksDef.fTASK_DOCSREPORT || TT==PDTasksDef.fTASK_FOLDSREPORT)
         {
-        SB.append("{type: \"combo\", name: \"TaskParam3\", label: \"").append(ParamTexts[2]).append("\", options:[");
+        SB.append("{type: \"combo\", name: \"TaskParam3\", label: \"").append(ParamTexts[2]).append("\", readonly:1, options:[");
         SB.append(getComboModel("Groups", getSessOPD(Req), "") );
         SB.append("]},");        
         }

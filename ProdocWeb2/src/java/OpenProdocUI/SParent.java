@@ -1047,7 +1047,7 @@ Form.append("{type: \"label\", label: \"").append(TT(Req, Title)).append("\"},")
 Attr=FR.getAttr(PDFolders.fTITLE);
 Form.append(GenInput(Req, Attr,  ReadOnly, Modif));
 Attr=FR.getAttr(PDFolders.fACL);
-Form.append("{type: \"combo\", name: \"" + PDFolders.fACL + "\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" options:[");
+Form.append("{type: \"combo\", name: \"" + PDFolders.fACL + "\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append("readonly:1,").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" options:[");
 if (Attr.getValue()==null)
     Form.append(getComboModel("ACL",PDSession,DefACL) );
 else
@@ -1090,7 +1090,7 @@ Form.append("{type: \"label\", label: \"").append(TT(Req, Title)).append("\", la
 Attr=FR.getAttr(PDFolders.fTITLE);
 Form.append(GenInput(Req, Attr,  ReadOnly, Modif));
 Attr=FR.getAttr(PDFolders.fACL);
-Form.append("{type: \"combo\", name: \"" + PDDocs.fACL + "\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly&&!AclMode?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" options:[");
+Form.append("{type: \"combo\", name: \"" + PDDocs.fACL + "\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append("readonly:1,").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.Export()+"\","):"").append(" options:[");
 if (Attr.getValue()==null)
     Form.append(getComboModel("ACL",PDSession,DefACL) );
 else
@@ -1312,14 +1312,14 @@ FormField.append("{type: \"newcolumn\", offset:5 },");
 if (Attr.getName().equals(PDFolders.fACL) || Attr.getName().equals(PDDocs.fACL) )
     {
     DriverGeneric PDSession=getSessOPD(Req);   
-    FormField.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", inputWidth: 300, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", options:[");
+    FormField.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", inputWidth: 300, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", readonly:1, options:[");
     FormField.append(getComboModelSearch("ACL",PDSession) );
     FormField.append("]},");    
     }
 else if (Attr.getName().equals(PDDocs.fDOCTYPE))
     {
     DriverGeneric PDSession=getSessOPD(Req);   
-    FormField.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", inputWidth: 200, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", options:[");
+    FormField.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", inputWidth: 200, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", readonly:1, options:[");
     FormField.append(getComboModel("ACL",PDSession,(String)Attr.getValue()) );
     FormField.append("]},");    
     }
@@ -1371,7 +1371,7 @@ return(FormField);
 private StringBuilder GenCompCombo(HttpServletRequest Req, Attribute Attr )
 {
 StringBuilder CompCombo=new StringBuilder(200);
-CompCombo.append("{type: \"combo\", label: \"").append(TT(Req, Attr.getUserName())).append("\", name: \"Comp_").append(Attr.getName()).append("\", inputWidth:\"auto\", options:[");
+CompCombo.append("{type: \"combo\", label: \"").append(TT(Req, Attr.getUserName())).append("\", name: \"Comp_").append(Attr.getName()).append("\", inputWidth:\"auto\", readonly:1, options:[");
 CompCombo.append("{text: \"=\", value: \"EQ\", selected: true},");
 CompCombo.append("{text: \"<>      \", value: \"NE\"}");
 if (! (Attr.getType()==Attribute.tBOOLEAN || Attr.getName().equals(PDFolders.fACL) || Attr.getName().equals(PDDocs.fACL) 

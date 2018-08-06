@@ -52,7 +52,7 @@ StringBuilder Form= new StringBuilder(3000);
 Attribute Attr;
 Form.append("[");
 Attr=TmpFold.getRecord().getAttr(PDFolders.fFOLDTYPE);
-Form.append("{type: \"combo\", name: \"" + PDFolders.fFOLDTYPE + "\", offsetLeft:10, label: \"").append(TT(Req, Attr.getUserName())).append("\", required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", options:[");
+Form.append("{type: \"combo\", name: \"" + PDFolders.fFOLDTYPE + "\", offsetLeft:10, label: \"").append(TT(Req, Attr.getUserName())).append("\", required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", readonly:1, options:[");
 Form.append(getComboModelFold(PDSession, null) );
 Form.append("]} ];");
 out.println(Form.toString());

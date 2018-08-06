@@ -50,7 +50,7 @@ SB.append("[{type: \"label\", label: \"").append(TT(Req, Oper.equalsIgnoreCase("
 SB.append("{type: \"block\", list:[" );
 if (Oper.equalsIgnoreCase("New"))            
     {
-    SB.append("{type: \"combo\", name: \"").append(Type).append("\", label: \"").append(TT(Req, Type)).append("\", options:[");
+    SB.append("{type: \"combo\", name: \"").append(Type).append("\", label: \"").append(TT(Req, Type)).append("\", readonly:1, options:[");
     SB.append(getComboModel(Type,PDSession, null) );
     SB.append("]},");
     }
@@ -59,7 +59,7 @@ else
     SB.append("{type: \"input\", name: \"").append(Type).append("\", readonly: \"true\",value:\"").append(Id).append("\"}, ");
     }
 SB.append("{type: \"newcolumn\", offset:20 },");
-SB.append("{type: \"combo\", label: \"").append(TT(Req, "Permission")).append("\", name: \"Permission\", inputWidth:\"auto\", options:[");
+SB.append("{type: \"combo\", label: \"").append(TT(Req, "Permission")).append("\", name: \"Permission\", readonly:1, inputWidth:\"auto\", options:[");
 SB.append("{text: \"READ\", value: \"1\", selected: true},");
 SB.append("{text: \"UPDATE\", value: \"4\"},");
 SB.append("{text: \"DELETE\", value: \"5\"}");

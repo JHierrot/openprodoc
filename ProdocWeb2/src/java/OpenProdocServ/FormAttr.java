@@ -53,7 +53,7 @@ SB.append("[ {type: \"settings\", position: \"label-left\", offsetLeft:10, label
 SB.append("{type: \"input\", name: \"Name\", label: \"").append(TT(Req, "Name")).append("\",").append(ReadOnly||Oper.equalsIgnoreCase("Modif")?"readonly:1,":"").append(" required: true, inputWidth: 100, maxLength:32},");
 SB.append("{type: \"input\", name: \"UserName\", label: \"").append(TT(Req, "Visible_Name_of_attribute")).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, inputWidth: 100, maxLength:32},");
 SB.append("{type: \"input\", name: \"Descrip\", label: \"").append(TT(Req, "Description")).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, inputWidth: 250, maxLength:32},");
-SB.append("{type: \"combo\", name: \"Type\", label: \"").append(TT(Req, "attribute_type")).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, inputWidth: 200, options:[");
+SB.append("{type: \"combo\", name: \"Type\", label: \"").append(TT(Req, "attribute_type")).append("\",").append("readonly:1,").append(" required: true, inputWidth: 200, options:[");
 SB.append("{text: \"Integer  \", value: \"Integer\"},");
 SB.append("{text: \"Float    \", value: \"Float\"},");
 SB.append("{text: \"String   \", value: \"String\"},");
@@ -65,7 +65,7 @@ SB.append("]},");
 SB.append("{type: \"input\", name: \"LongStr\", hidden:true, label: \"").append(TT(Req, "Length")).append("\",").append(ReadOnly?"readonly:1,":"").append("inputWidth: 50, maxLength:32,validate:\"ValidInteger\"},");
 PDThesaur Thes=new PDThesaur(getSessOPD(Req));
 HashSet listThes = Thes.getListDirectDescendList(PDThesaur.ROOTTERM);
-SB.append("{type: \"combo\", name:\"ThesSel\", hidden:true, options:[");
+SB.append("{type: \"combo\", name:\"ThesSel\", readonly:1, hidden:true, options:[");
 for (Iterator iterator = listThes.iterator(); iterator.hasNext();)
     {
     String Id =(String) iterator.next();

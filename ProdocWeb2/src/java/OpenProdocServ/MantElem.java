@@ -389,7 +389,7 @@ else if (ElemType.equals(ListElem.MANTGROUPS))
     Attr=Rec.getAttr(PDGroups.fDESCRIPTION);
     SB.append(GenInput(Req, Attr, ReadOnly, Modif)); 
     Attr=Rec.getAttr(PDGroups.fACL);
-    SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.ExportXML()+"\","):"").append(" options:[");
+    SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append("readonly:1,").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.ExportXML()+"\","):"").append(" options:[");
     SB.append(getComboModel("ACL",PDSession, (String)Attr.getValue()) );
     SB.append("]},"); 
     SB.append("{type: \"hidden\", name:\"Users\", value: \"").append(GenGUsers(PDSession, Id)).append("\"},");
@@ -404,13 +404,13 @@ else if (ElemType.equals(ListElem.MANTUSERS))
     Attr=Rec.getAttr(PDUser.fEMAIL);
     SB.append(GenInput(Req, Attr, ReadOnly, Modif)); 
     Attr=Rec.getAttr(PDUser.fVALIDATION);
-    SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", options:[");
+    SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append("readonly:1,").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", options:[");
     SB.append(getComboModel("Authenticators",PDSession, (String)Attr.getValue()) );
     SB.append("]},"); 
     Attr=Rec.getAttr(PDUser.fACTIVE);
     SB.append(GenInput(Req, Attr, ReadOnly, Modif)); 
     Attr=Rec.getAttr(PDUser.fROLE);
-    SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", options:[");
+    SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append("readonly:1,").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", options:[");
     SB.append(getComboModel("Roles",PDSession, (String)Attr.getValue()) );
     SB.append("]},"); 
     Attr=Rec.getAttr(PDUser.fPASSWORD).Copy();
@@ -418,7 +418,7 @@ else if (ElemType.equals(ListElem.MANTUSERS))
     Attr.setRequired(false);
     SB.append(GenInput(Req, Attr, ReadOnly, Modif)); 
     Attr=Rec.getAttr(PDUser.fCUSTOM);
-    SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", options:[");
+    SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append("readonly:1,").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", options:[");
     SB.append(getComboModel("Customizers",PDSession,(String)Attr.getValue()) );
     SB.append("]},"); 
     }
@@ -502,7 +502,7 @@ else if (ElemType.equals(ListElem.MANTREPO))
     SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
     Attr=Rec.getAttr(PDRepository.fREPTYPE);
     String Value=(String)Attr.getValue();
-    SB.append("{type: \"combo\", label: \"").append(TT(Req, Attr.getUserName())).append("\", name: \"").append(Attr.getName()).append("\",").append((Oper.equals(OPERMODIF)|| Oper.equals(OPERDELETE))?"disabled:1,":"").append(" inputWidth:\"auto\", options:[");
+    SB.append("{type: \"combo\", label: \"").append(TT(Req, Attr.getUserName())).append("\", name: \"").append(Attr.getName()).append("\",").append((Oper.equals(OPERMODIF)|| Oper.equals(OPERDELETE))?"disabled:1,":"").append(" inputWidth:\"auto\", readonly:1, options:[");
     SB.append("{text:\"" + PDRepository.tBBDD + "\", value:\"" + PDRepository.tBBDD + "\"").append((Value!=null&&Value.equalsIgnoreCase(PDRepository.tBBDD))?", selected:true":"").append("},");
     SB.append("{text:\"" + PDRepository.tFS + "\", value:\"" + PDRepository.tFS + "\"").append((Value!=null&&Value.equalsIgnoreCase(PDRepository.tFS))?", selected:true":"").append("},");
     SB.append("{text:\"" + PDRepository.tFTP + "\", value:\"" + PDRepository.tFTP + "\"").append((Value!=null&&Value.equalsIgnoreCase(PDRepository.tFTP))?", selected:true":"").append("},");
@@ -538,7 +538,7 @@ else if (ElemType.equals(ListElem.MANTOBJ))
     Attr=Rec.getAttr(PDObjDefs.fDESCRIPTION);
     SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
     Attr=Rec.getAttr(PDObjDefs.fACL);
-    SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.ExportXML()+"\","):"").append(" options:[");
+    SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append("readonly:1,").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.ExportXML()+"\","):"").append(" options:[");
     if (ObjId!=null)
         SB.append(getComboModel("ACL",PDSession, Parent.getACL()) );
     else
@@ -548,7 +548,7 @@ else if (ElemType.equals(ListElem.MANTOBJ))
              || ((String)Rec.getAttr(PDObjDefs.fCLASSTYPE).getValue()).equals(PDObjDefs.CT_DOC))
         {
         Attr=Rec.getAttr(PDObjDefs.fREPOSIT);
-        SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.ExportXML()+"\","):"").append(" options:[");
+        SB.append("{type: \"combo\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append("readonly:1,").append(" required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\",").append(Attr.getValue()!=null?("value:\""+Attr.ExportXML()+"\","):"").append(" options:[");
         if (ObjId!=null)
             SB.append(getComboModel("Reposit",PDSession, Parent.getReposit()) );
         else
@@ -594,7 +594,7 @@ else if (ElemType.equals(ListElem.MANTAUTH))
     SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
     Attr=Rec.getAttr(PDAuthenticators.fAUTHTYPE);
     String Value=(String)Attr.getValue();
-    SB.append("{type: \"combo\", label: \"").append(TT(Req, Attr.getUserName())).append("\", name: \"").append(Attr.getName()).append("\",").append((Oper.equals(OPERMODIF)|| Oper.equals(OPERDELETE))?"disabled:1,":"").append(" inputWidth:\"auto\", options:[");
+    SB.append("{type: \"combo\", label: \"").append(TT(Req, Attr.getUserName())).append("\", name: \"").append(Attr.getName()).append("\",").append((Oper.equals(OPERMODIF)|| Oper.equals(OPERDELETE))?"disabled:1,":"").append(" inputWidth:\"auto\", readonly:1, options:[");
     SB.append("{text:\"" + PDAuthenticators.tOPD + "\", value:\"" + PDAuthenticators.tOPD + "\"").append((Value!=null&&Value.equalsIgnoreCase(PDRepository.tBBDD))?", selected:true":"").append("},");
     SB.append("{text:\"" + PDAuthenticators.tLDAP + "\", value:\"" + PDAuthenticators.tLDAP + "\"").append((Value!=null&&Value.equalsIgnoreCase(PDRepository.tFTP))?", selected:true":"").append("},");
     SB.append("{text:\"" + PDAuthenticators.tBBDD + "\", value:\"" + PDAuthenticators.tBBDD + "\"").append((Value!=null&&Value.equalsIgnoreCase(PDRepository.tFS))?", selected:true":"").append("},");
@@ -620,7 +620,7 @@ else if (ElemType.equals(ListElem.MANTCUST))
     SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
     Attr=Rec.getAttr(PDCustomization.fLANGUAGE);
     String Value=(String)Attr.getValue();
-    SB.append("{type: \"combo\", label: \"").append(TT(Req, Attr.getUserName())).append("\", name: \"").append(Attr.getName()).append("\",").append((Oper.equals(OPERDELETE))?"disabled:1,":"").append(" inputWidth:\"auto\", options:[");
+    SB.append("{type: \"combo\", label: \"").append(TT(Req, Attr.getUserName())).append("\", name: \"").append(Attr.getName()).append("\",").append((Oper.equals(OPERDELETE))?"disabled:1,":"").append(" inputWidth:\"auto\", readonly:1, options:[");
     SB.append("{text:\"English\", value:\"EN\"").append((Value!=null&&Value.equalsIgnoreCase("EN"))?", selected:true":"").append("},");
     SB.append("{text:\"Español\", value:\"ES\"").append((Value!=null&&Value.equalsIgnoreCase("ES"))?", selected:true":"").append("},");
     SB.append("{text:\"Português\", value:\"PT\"").append((Value!=null&&Value.equalsIgnoreCase("PT"))?", selected:true":"").append("},");
@@ -649,7 +649,7 @@ else if (ElemType.equals(ListElem.MANTTASKCRON))
     SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
     Attr=Rec.getAttr(PDTasksCron.fTYPE);
     Integer Value=(Integer)Attr.getValue();
-    SB.append("{type: \"combo\", label: \"").append(TT(Req, Attr.getUserName())).append("\", name: \"").append(Attr.getName()).append("\",").append(" inputWidth:\"auto\", options:[");
+    SB.append("{type: \"combo\", label: \"").append(TT(Req, Attr.getUserName())).append("\", name: \"").append(Attr.getName()).append("\",").append(" inputWidth:\"auto\", readonly:1, options:[");
     String[] listTypeTask = PDTasksCron.getListTypeTask();
     for (int i = 0; i < listTypeTask.length; i++)
         SB.append("{text:\"").append(listTypeTask[i]).append("\", value:\"").append(i).append("\"").append((Value!=null&&Value==i)?", selected:true":"").append("},");
@@ -658,10 +658,10 @@ else if (ElemType.equals(ListElem.MANTTASKCRON))
     boolean ShowFoldComb=true;
     if (Value!=null && (Value==1 ||Value==2 ||Value==5 ))
        ShowFoldComb=false; 
-    SB.append("{type: \"combo\", name: \"" + PDTasksCron.fOBJTYPE + "\", label: \"").append(TT(Req, Attr.getUserName())).append("\", required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", hidden:").append(ShowFoldComb?"false":"true").append(", options:[");
+    SB.append("{type: \"combo\", name: \"" + PDTasksCron.fOBJTYPE + "\", label: \"").append(TT(Req, Attr.getUserName())).append("\", required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", hidden:").append(ShowFoldComb?"false":"true").append(", readonly:1, options:[");
     SB.append(getComboModelFold(PDSession, (String)Attr.getValue()) );
     SB.append("]},");
-    SB.append("{type: \"combo\", name: \"" + PDTasksCron.fOBJTYPE + "2\", label: \"").append(TT(Req, Attr.getUserName())).append("\", required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", hidden:").append(ShowFoldComb?"true":"false").append(", options:[");
+    SB.append("{type: \"combo\", name: \"" + PDTasksCron.fOBJTYPE + "2\", label: \"").append(TT(Req, Attr.getUserName())).append("\", required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", hidden:").append(ShowFoldComb?"true":"false").append(", readonly:1, options:[");
     SB.append(getComboModelDoc(PDSession, (String)Attr.getValue()) );
     SB.append("]},");
     Attr=Rec.getAttr(PDTasksCron.fFILTER);
@@ -699,7 +699,7 @@ else if (ElemType.equals(ListElem.MANTTASKEVENT))
     SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
     Attr=Rec.getAttr(PDTasksDefEvent.fTYPE);
     Integer Value=(Integer)Attr.getValue();
-    SB.append("{type: \"combo\", label: \"").append(TT(Req, Attr.getUserName())).append("\", name: \"").append(Attr.getName()).append("\",").append(" inputWidth:\"auto\", options:[");
+    SB.append("{type: \"combo\", label: \"").append(TT(Req, Attr.getUserName())).append("\", name: \"").append(Attr.getName()).append("\",").append(" inputWidth:\"auto\", readonly:1, options:[");
     String[] listTypeTask = PDTasksDefEvent.getListTypeEventTask();
     for (int i = 0; i < listTypeTask.length; i++)
         SB.append("{text:\"").append(listTypeTask[i]).append("\", value:\"").append(200+i).append("\"").append((Value!=null&&Value==i+200)?", selected:true":"").append("},");
@@ -715,10 +715,10 @@ else if (ElemType.equals(ListElem.MANTTASKEVENT))
                       || Value==PDTasksDefEvent.fTASKEVENT_FTDEL_DOC
                       || Value==PDTasksDefEvent.fTASKEVENT_CUSTOM_DOC))
        ShowFoldComb=false; 
-    SB.append("{type: \"combo\", name: \"" + PDTasksDefEvent.fOBJTYPE + "\", label: \"").append(TT(Req, Attr.getUserName())).append("\", required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", hidden:").append(ShowFoldComb?"false":"true").append(", options:[");
+    SB.append("{type: \"combo\", name: \"" + PDTasksDefEvent.fOBJTYPE + "\", label: \"").append(TT(Req, Attr.getUserName())).append("\", required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", hidden:").append(ShowFoldComb?"false":"true").append(", readonly:1, options:[");
     SB.append(getComboModelFold(PDSession, (String)Attr.getValue()) );
     SB.append("]},");
-    SB.append("{type: \"combo\", name: \"" + PDTasksDefEvent.fOBJTYPE + "2\", label: \"").append(TT(Req, Attr.getUserName())).append("\", required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", hidden:").append(ShowFoldComb?"true":"false").append(", options:[");
+    SB.append("{type: \"combo\", name: \"" + PDTasksDefEvent.fOBJTYPE + "2\", label: \"").append(TT(Req, Attr.getUserName())).append("\", required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", hidden:").append(ShowFoldComb?"true":"false").append(", readonly:1, options:[");
     SB.append(getComboModelDoc(PDSession, (String)Attr.getValue()) );
     SB.append("]},");
     Attr=Rec.getAttr(PDTasksDefEvent.fFILTER);
@@ -732,7 +732,7 @@ else if (ElemType.equals(ListElem.MANTTASKEVENT))
     Attr=Rec.getAttr(PDTasksDefEvent.fPARAM4);
     SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
     Attr=Rec.getAttr(PDTasksDefEvent.fEVENTYPE);
-    SB.append("{type: \"combo\", label: \"").append(TT(Req, Attr.getUserName())).append("\", name: \"").append(Attr.getName()).append("\",").append(" inputWidth:\"auto\", options:[");
+    SB.append("{type: \"combo\", label: \"").append(TT(Req, Attr.getUserName())).append("\", name: \"").append(Attr.getName()).append("\",").append(" inputWidth:\"auto\", readonly:1, options:[");
     SB.append("{text:\"INS\", value:\"INS\"").append((Attr.getValue()!=null&&Attr.getValue().equals("INS"))?", selected:true":"").append("},");
     SB.append("{text:\"UPD\", value:\"UPD\"").append((Attr.getValue()!=null&&Attr.getValue().equals("UPD"))?", selected:true":"").append("},");
     SB.append("{text:\"DEL\", value:\"DEL\"").append((Attr.getValue()!=null&&Attr.getValue().equals("DEL"))?", selected:true":"").append("}");
