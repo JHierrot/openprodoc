@@ -513,7 +513,7 @@ else
 protected String toFloat(BigDecimal BD)
 {
 if (BD!=null)    
-    return("'"+Attribute.BD2String(BD)+"'");
+    return("'"+Attribute.BD2StringDDBB(BD)+"'");
 else
     return("''");
 }
@@ -814,7 +814,7 @@ for (int i = 0; i < Fields.NumAttr(); i++)
             String BD=rs.getString(Attr.getName());
             if (BD!=null && BD.length()!=0)
                 { try {
-                Attr.setValue(Attribute.String2BD(BD));
+                Attr.setValue(Attribute.String2BDDDBB(BD));
                 } catch (Exception ex)
                     {Attr.setValue(null);}
                 }

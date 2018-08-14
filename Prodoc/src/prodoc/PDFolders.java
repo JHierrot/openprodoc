@@ -126,6 +126,22 @@ static private ObjectsCache FoldObjectsCache = null;
  * Characters not allowed in Folders name (potential problems when exporting or searching)
  */
 static private final String NotAllowedChars="/\\:*?";
+/**
+ * Constant for trace of operations
+ */
+private static final String fOPERINS="INSERT";
+/**
+ * Constant for trace of operations
+ */
+private static final String fOPERDEL="DELETE";
+/**
+ * Constant for trace of operations
+ */
+private static final String fOPERUPD="UPDATE";
+/**
+ * Constant for trace of operations
+ */
+private static final String fOPERVIE="VIEW";
 
 //-------------------------------------------------------------------------
 /**
@@ -504,10 +520,14 @@ if (!IsRootFolder)
     ActFoldLev();
 ExecuteTransThreads(PDTasksDefEvent.fMODEINS);
 GenerateNoTransThreads(PDTasksDefEvent.fMODEINS);
+if (MustTrace(fOPERINS))
+    Trace(fOPERINS, true);
 getObjCache().put(getKey(), getRecord());
 } catch (Exception Ex)
     {
     getDrv().AnularTrans();
+    if (MustTrace(fOPERINS))
+       Trace(fOPERINS, false);
     PDException.GenPDException("Error_creating_folder",Ex.getLocalizedMessage());
     }
 if (InTransLocal)
@@ -866,10 +886,14 @@ DeleteFoldLevelParents();
 MultiDelete(getPDId());
 DelFoldMetadata();
 GenerateNoTransThreads(PDTasksDefEvent.fMODEDEL);
+if (MustTrace(fOPERDEL))
+    Trace(fOPERDEL, true);
 getObjCache().remove(getKey());
 } catch (PDException Ex)
     {  
     getDrv().AnularTrans();
+    if (MustTrace(fOPERDEL))
+       Trace(fOPERDEL, false);
     PDException.GenPDException("Error_deleting_folder",Ex.getLocalizedMessage());
     }
 if (InTransLocal)
@@ -1024,10 +1048,14 @@ MultiDelete(this.getPDId());
 MultiInsert(R);
 ExecuteTransThreads(PDTasksDefEvent.fMODEUPD);
 GenerateNoTransThreads(PDTasksDefEvent.fMODEUPD);
+if (MustTrace(fOPERUPD))
+    Trace(fOPERUPD, true);
 getObjCache().put(getKey(), getRecord());
 } catch (PDException Ex)
     {
     getDrv().AnularTrans();
+    if (MustTrace(fOPERUPD))
+       Trace(fOPERUPD, false);
     PDException.GenPDException("Error_updating_folder",Ex.getLocalizedMessage());
     }
 if (InTransLocal)
@@ -1199,6 +1227,8 @@ if (getTypeDefs().size()>1)
         assignValues(r);
         }
     }
+if (MustTrace(fOPERVIE))
+    Trace(fOPERVIE, true);
 return(r);
 }
 //-------------------------------------------------------------------------
@@ -1894,4 +1924,41 @@ for (Iterator iterator = listDirectDescendList.iterator(); iterator.hasNext();)
     }
 }
 //-------------------------------------------------------------------------
+/**
+ * Return true if the configuration of the document types includes functional trace
+ * @param Oper Operation to verify the trace requirement
+ * @return true when the operaion must be traced
+ * @throws PDException In any error
+ */
+private boolean MustTrace(String Oper) throws PDException
+{
+PDObjDefs Def=new PDObjDefs(getDrv());
+Def.Load(getFolderType());
+if (Oper.equals(fOPERVIE))
+    return(Def.isTraceView());
+if (Oper.equals(fOPERDEL))
+    return(Def.isTraceDel());
+if (Oper.equals(fOPERINS))
+    return(Def.isTraceAdd());
+if (Oper.equals(fOPERUPD))
+    return(Def.isTraceMod());
+return(false);
+}
+//---------------------------------------------------------------------
+/**
+ * Saves the functional trace for the current document
+ * @param Oper Operation 
+ * @param Allowed boolean indication, true when teh opeeration ws allowed
+ * @throws PDException In any error
+ */
+private void Trace(String Oper, boolean Allowed) throws PDException
+{
+PDTrace tr=new PDTrace(getDrv());
+tr.setObjectType(getFolderType());
+tr.setName(getPDId());
+tr.setOperation(Oper);
+tr.setResult(Allowed);
+tr.insert();
+}
+//---------------------------------------------------------------------
 }

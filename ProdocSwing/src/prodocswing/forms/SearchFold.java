@@ -44,7 +44,6 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import prodoc.Attribute;
-import static prodoc.Attribute.SWINGDECIMALPATTERN;
 import prodoc.Condition;
 import prodoc.Conditions;
 import prodoc.Cursor;
@@ -55,6 +54,7 @@ import prodoc.PDObjDefs;
 import prodoc.PDThesaur;
 import prodoc.Record;
 import prodocswing.ThesField;
+import static prodoc.Attribute.DECIMALPATTERN;
 
 /**
  *

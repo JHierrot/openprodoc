@@ -35,8 +35,8 @@ import java.util.TreeSet;
 import java.util.Vector;
 import javax.swing.*;
 import prodoc.*;
-import static prodoc.Attribute.SWINGDECIMALPATTERN;
 import prodocswing.ThesField;
+import static prodoc.Attribute.DECIMALPATTERN;
 
 /**
  *
@@ -870,7 +870,7 @@ else if (Attr.getType()==Attribute.tINTEGER)
     }
 else if (Attr.getType()==Attribute.tFLOAT)
     {
-    JTF=new JFormattedTextField(new DecimalFormat(SWINGDECIMALPATTERN));
+    JTF=new JFormattedTextField(new DecimalFormat(DECIMALPATTERN));
     if (Attr.getValue()!=null)
         ((JFormattedTextField)JTF).setValue((BigDecimal)Attr.getValue());
     else

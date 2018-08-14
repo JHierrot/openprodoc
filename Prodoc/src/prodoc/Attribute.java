@@ -144,11 +144,12 @@ final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
 /**
  * Formatters for reading, importing, exporting and storing BigDecimal
  */
-static public final String DECIMALPATTERN="_0000000000.00;-#";
+static public final String DDBB_DECIMALPATTERN="_0000000000.00;-#";
 /**
  * Formatters for reading, importing, exporting and storing BigDecimal
  */
-static public final String SWINGDECIMALPATTERN="0000000000.00;-#";
+static public final String DECIMALPATTERN="0000000000.00;-#";
+static public final BigDecimal MINIMUMBD=new BigDecimal("-9999999999.99");
 
 //--------------------------------------------------------------------------
 /**
@@ -994,6 +995,20 @@ return(DF.format(BD));
 }
 //--------------------------------------------------------------------------
 /**
+ * Converts a BigDecimal to a OPD formatted String
+ * @param BD value t be converted
+ * @return formated string
+ */
+public static String BD2StringDDBB(BigDecimal BD)
+{
+DecimalFormat DF=new DecimalFormat(DDBB_DECIMALPATTERN);
+if (BD.signum()!=-1)
+    return(DF.format(BD));
+else
+    return(DF.format(MINIMUMBD.subtract(BD)));
+}
+//--------------------------------------------------------------------------
+/**
  * Evaluates a string in any format with decimals to a DBigDecimal in OPD format
  * @param SBD String to e evaluated
  * @return a new BigDecimal
@@ -1002,6 +1017,21 @@ public static BigDecimal String2BD(String SBD)
 {
 DecimalFormat DF=new DecimalFormat(DECIMALPATTERN);
 return(new BigDecimal(DF.format(new BigDecimal(SBD.replace(',','.').replace("_", ""))).replace(',','.').replace("_", "")));
+}
+//--------------------------------------------------------------------------
+/**
+ * Evaluates a string in any format with decimals to a DBigDecimal in OPD format
+ * @param SBD String to e evaluated
+ * @return a new BigDecimal
+ */
+public static BigDecimal String2BDDDBB(String SBD)
+{
+DecimalFormat DF=new DecimalFormat(DDBB_DECIMALPATTERN);
+BigDecimal BD=new BigDecimal(DF.format(new BigDecimal(SBD.replace(',','.').replace("_", ""))).replace(',','.').replace("_", ""));
+if (BD.signum()==-1)
+   return(MINIMUMBD.subtract(BD));
+else
+    return(BD);
 }
 //--------------------------------------------------------------------------
 }
