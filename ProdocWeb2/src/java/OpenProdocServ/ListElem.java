@@ -135,7 +135,7 @@ String Filter=Req.getParameter("F");
 if (CSV)
     {
     response.setContentType("text/csv; charset=UTF-8");
-    response.setHeader("Content-disposition", "inline; filename=" + ElemType+"_"+Long.toHexString(Double.doubleToLongBits(Math.random()))+".csv");
+    response.setHeader("Content-disposition", "attachment; filename=" + ElemType+"_"+Long.toHexString(Double.doubleToLongBits(Math.random()))+".csv");
     }
 else
     response.setContentType("text/xml;charset=UTF-8");

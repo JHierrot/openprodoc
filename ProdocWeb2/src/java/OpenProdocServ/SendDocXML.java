@@ -103,7 +103,7 @@ if (doc.IsUrl())
         PDMimeType mt=new PDMimeType(getSessOPD(Req));
         mt.Load(doc.getMimeType());
         response.setContentType(mt.getMimeCode());
-        response.setHeader("Content-disposition", "inline; filename=\"" + doc.getName()+"\"");
+        response.setHeader("Content-disposition", "attachment; filename=\"" + doc.getName()+"\"");
         response.setCharacterEncoding("UTF-8"); // just for text family docs
         FileInputStream Is=null;
         byte Buffer[]=new byte[TAMBUFF];
@@ -133,7 +133,7 @@ else
     {
     ServletOutputStream out=response.getOutputStream();
     response.setContentType("application/octet-stream");
-    response.setHeader("Content-disposition", "inline; filename=\"" + doc.getPDId()+".opd\"");
+    response.setHeader("Content-disposition", "attachment; filename=\"" + doc.getPDId()+".opd\"");
     response.setCharacterEncoding("UTF-8"); // just for text family docs
     try {
     out.println("<OPDList>");

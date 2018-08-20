@@ -74,7 +74,7 @@ String FoldId=Req.getParameter("Id");
 Fold.LoadFull(FoldId);
 ServletOutputStream out=response.getOutputStream();
 response.setContentType("application/octet-stream");
-response.setHeader("Content-disposition", "inline; filename=\"" + Fold.getPDId()+".opd\"");
+response.setHeader("Content-disposition", "attachment; filename=\"" + Fold.getPDId()+".opd\"");
 response.setCharacterEncoding("UTF-8"); 
 Cursor listContainedDocs = null;
 try {

@@ -74,7 +74,7 @@ protected void ProcessPage(HttpServletRequest Req, HttpServletResponse response)
 DriverGeneric PDSession = getSessOPD(Req); 
 HttpSession Sess=Req.getSession(true);
 response.setContentType("text/csv; charset=UTF-8");
-response.setHeader("Content-disposition", "inline; filename=ResultFold_"+Long.toHexString(Double.doubleToLongBits(Math.random()))+".csv");
+response.setHeader("Content-disposition", "attachment; filename=ResultFold_"+Long.toHexString(Double.doubleToLongBits(Math.random()))+".csv");
 PrintWriter out = response.getWriter();
 String Type=(String)Sess.getAttribute(SParent.SD_QType);
 String FType=(String)Sess.getAttribute(SParent.SD_FType);
