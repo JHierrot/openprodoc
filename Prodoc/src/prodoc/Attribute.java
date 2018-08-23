@@ -150,7 +150,7 @@ static public final String DDBB_DECIMALPATTERN="_0000000000.00;-#";
  */
 static public final String DECIMALPATTERN="0000000000.00;-#";
 static public final BigDecimal MINIMUMBD=new BigDecimal("-9999999999.99");
-
+static protected final String XML_NULL="[{NULL}]";
 //--------------------------------------------------------------------------
 /**
  * Default constructor of an Attribute for MONO or MULTI valued Attributes
@@ -691,6 +691,8 @@ return(null);
  */
 private Object FormatImportXML(String Val) throws PDException
 {
+if (Val.equalsIgnoreCase(XML_NULL))    
+    return(null);
 if (getType()==Attribute.tSTRING)
     return(Val.replace("&lt;", "<").replace("&gt;", ">" ).replace("&amp;", "&"));
 else 
@@ -835,6 +837,8 @@ S.append(isUnique()?"1":"0");
 S.append("\" ModAllow=\"");
 S.append(isModifAllowed()?"1":"0");
 S.append("\">");
+if (!isMultivalued() && getValue()==null)
+    S.append(XML_NULL);
 S.append(ExportXML());
 S.append("</"+ObjPD.XML_Attr+">\n");
 return(S.toString());

@@ -1220,7 +1220,6 @@ InsertVersion(Id, getDrv().getUser().getName(), TobeUpdated.getRecSum());
 String Vers=TobeUpdated.getVersion();
 setPDId(Id);
 setVersion(Vers);
-//setLockedBy(getDrv().getUser().getName());
 Record Rec=getRecordStruct();
 Attribute Attr=Rec.getAttr(fPDID);
 Attr.setValue(Id);
@@ -1235,6 +1234,13 @@ getDrv().UpdateRecord(getTabName(), Rec, getConditionsVer());
 Record Mult=TobeUpdated.getRecSum().Copy();
 Mult.getAttr(fVERSION).setValue(getDrv().getUser().getName());
 TobeUpdated.MultiInsert(Mult);
+StoreGeneric Rep=getDrv().getRepository(TobeUpdated.getReposit());
+if (!Rep.IsRef())
+    {
+    Rep.Connect();
+    Rep.Copy(Id, Vers, Id, getDrv().getUser().getName()); 
+    Rep.Disconnect();
+    }
 getObjCache().remove(getKey());
 } catch (PDException Ex)
     {

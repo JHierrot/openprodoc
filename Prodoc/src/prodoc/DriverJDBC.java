@@ -327,7 +327,7 @@ boolean Second=false;
 for (int i = 0; i < NumAttr; i++)
     {
     At=NewFields.nextAttr();
-    if ((At.getValue()!=null || (At.getValue()==null && At.getType()==Attribute.tTHES)) && !At.isPrimKey() || (At.getValue()==null && (At.getType()==Attribute.tDATE || At.getType()==Attribute.tTIMESTAMP)))
+    if ((At.getValue()!=null || (At.getValue()==null && At.getType()==Attribute.tTHES)) && !At.isPrimKey() || (At.getValue()==null && (At.getType()==Attribute.tDATE || At.getType()==Attribute.tFLOAT || At.getType()==Attribute.tTIMESTAMP)))
         {
         if (Second)
             SQL+=", ";

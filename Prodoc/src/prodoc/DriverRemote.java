@@ -84,7 +84,7 @@ final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyyMMddHHmmss");
  */
 final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyyMMdd");
 
-DocumentBuilder DB=null;
+// DocumentBuilder DB=null;
 
 /**
 * 
@@ -105,7 +105,7 @@ if (pURL==null || pURL.length()<4)
 httpclient=GetHttpClient();
 UrlPost = new HttpPost(pURL);
 context = new BasicHttpContext();
-DB =  DocumentBuilderFactory.newInstance().newDocumentBuilder();
+// DB =  DocumentBuilderFactory.newInstance().newDocumentBuilder();
 } catch (Exception ex)
     {
     PDException.GenPDException("Error_connecting_trough_URL"+pURL,ex.getLocalizedMessage());
@@ -273,7 +273,7 @@ protected void UpdateRecord(String TableName, Record NewFields, Conditions UpCon
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.UpdateRecord>:"+TableName+"="+NewFields);
 ReadWrite(S_UPDATE, "<OPD><Tab>"+TableName+"</Tab>"+NewFields.toXMLt()+"<UpConds>"+UpConds.toXML()+"</UpConds></OPD>");
-// ReadWrite(S_UPDATE, "<OPD><Tab>"+TableName+"</Tab>"+NewFields.toXMLtNotNull()+"<UpConds>"+UpConds.toXML()+"</UpConds></OPD>");
+//ReadWrite(S_UPDATE, "<OPD><Tab>"+TableName+"</Tab>"+NewFields.toXMLtNotNull()+"<UpConds>"+UpConds.toXML()+"</UpConds></OPD>");
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.UpdateRecord<:"+TableName+"="+NewFields);
 }
@@ -462,6 +462,7 @@ return(Fields.Copy());
 private Node ReadWrite(String pOrder, String pParam) throws PDException
 {
 Node OPDObject=null;
+DocumentBuilder DB=null;
 CloseableHttpResponse response2 = null;
 if (PDLog.isDebug())
     {
@@ -472,6 +473,7 @@ if (PDLog.isDebug())
        PDLog.Debug("Param:"+pParam.substring(0, 18));
     }
 try {
+DB =  DocumentBuilderFactory.newInstance().newDocumentBuilder();
 List <NameValuePair> nvps = new ArrayList <NameValuePair>();
 nvps.add(new BasicNameValuePair(ORDER, pOrder));
 nvps.add(new BasicNameValuePair(PARAM, pParam));
@@ -508,7 +510,8 @@ finally
             PDException.GenPDException(ex.getLocalizedMessage(), "");
             }
     }
-DB.reset();
+if (DB!=null)
+    DB.reset();
 return(OPDObject);
 }
 //-----------------------------------------------------------------   
@@ -533,7 +536,14 @@ if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.getRepository>:"+RepName);
 PDRepository RepDesc=new PDRepository(this);
 RepDesc.Load(RepName);
-StoreGeneric Rep=new StoreRem(RepDesc.getURL(), RepDesc.getUser(), RepDesc.getPassword(), RepDesc.getParam(), RepDesc.isEncrypted(), UrlPost, httpclient, context, DB );
+StoreGeneric Rep=null;
+try {
+DocumentBuilder DB= DocumentBuilderFactory.newInstance().newDocumentBuilder();
+Rep=new StoreRem(RepDesc.getURL(), RepDesc.getUser(), RepDesc.getPassword(), RepDesc.getParam(), RepDesc.isEncrypted(), UrlPost, httpclient, context, DB );
+} catch (Exception Ex)
+    {
+    PDException.GenPDException(Ex.getLocalizedMessage(), "");
+    }
 return(Rep);
 }
 //-----------------------------------------------------------------------------------
@@ -614,7 +624,13 @@ if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.Rep new Instance");
 PDRepository RepDesc=new PDRepository(this);
 RepDesc.Load("PD_FTRep");
+try {
+DocumentBuilder DB= DocumentBuilderFactory.newInstance().newDocumentBuilder();
 FTConn=new FTRemote(RepDesc.getURL(), RepDesc.getUser(), RepDesc.getPassword(), RepDesc.getParam(), UrlPost, httpclient, context, DB );
+} catch (Exception Ex)
+    {
+    PDException.GenPDException(Ex.getLocalizedMessage(), "");
+    }
 if (PDLog.isDebug())
     PDLog.Debug("DriverRemote.getFTRepository<");
 return(FTConn);
