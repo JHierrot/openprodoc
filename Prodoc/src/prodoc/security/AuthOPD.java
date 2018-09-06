@@ -76,9 +76,7 @@ if (!U.getPassword().equals(U2.getPassword()))
 public void UpdatePass(String User, String NewPass) throws PDException
 {
 PDUser U=new PDUser(OPDInstance);
-U.Load(User);
-U.setPassword(NewPass);
-U.update();
+U.UpdatePass(User, NewPass);
 }
 //----------------------------------------------------------------------
 }

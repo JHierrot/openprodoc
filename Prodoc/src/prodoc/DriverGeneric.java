@@ -1854,9 +1854,9 @@ if (U2cp.Load(UserName)==null)
     PDExceptionFunc.GenPDException("User_or_password_incorrect", UserName);
 AuthGeneric Auth=getAuthentic(U2cp.getValidation());
 Auth.Authenticate(UserName, OldPassword);
-if (U2cp.getValidation().equals(PDAuthenticators.tOPD))
-    Auth.UpdatePass(UserName, Encode(NewPassword));
-else
+//if (U2cp.getValidation().equals(PDAuthenticators.tOPD))
+//    Auth.UpdatePass(UserName, Encode(NewPassword));
+//else
     Auth.UpdatePass(UserName, NewPassword);
 if (PDLog.isDebug())
     PDLog.Debug("DriverGeneric.ChangePassword<:"+UserName);

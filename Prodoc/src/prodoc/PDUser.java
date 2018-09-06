@@ -22,7 +22,6 @@ package prodoc;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import static prodoc.PDACL.fGROUPNAME;
 
 /**
  *
@@ -125,7 +124,7 @@ private Iterator iAcl;
 
 static private ObjectsCache UserObjectsCache = null;
 
-
+private boolean ModePass=false;
 //-------------------------------------------------------------------------
 /**
  *
@@ -466,7 +465,7 @@ setName(Ident);
 */
 public HashMap getAclList()
 {
-return AclList;
+return (HashMap)AclList.clone();
 }
 
 /**
@@ -738,7 +737,7 @@ if (!getDrv().getUser().getRol().isAllowMaintainUser() )
 //-------------------------------------------------------------------------
 protected void VerifyAllowedUpd() throws PDException
 {
-if (!getDrv().getUser().getRol().isAllowMaintainUser() && !getDrv().getUser().getName().equalsIgnoreCase(getName()))
+if (! (getDrv().getUser().getRol().isAllowMaintainUser() ||  ModePass && getDrv().getUser().getName().equalsIgnoreCase(getName())  ) ) 
    PDExceptionFunc.GenPDException("User_modification_not_allowed_to_user",getName());
 }
 //-------------------------------------------------------------------------
@@ -830,4 +829,15 @@ protected String getKey()
 return(getName());
 }
 //-------------------------------------------------------------------------
+
+public void UpdatePass(String User, String NewPass) throws PDException
+{
+Load(User);
+setPassword(NewPass);
+ModePass=true;
+update();
+ModePass=false;
+}
+//-------------------------------------------------------------------------
+
 }
