@@ -2048,8 +2048,9 @@ else
 //---------------------------------------------------------------------
 static private Image getIcon()
 {
-ImageIcon Ic=new ImageIcon( );    
-ImageIcon PDIcon=new ImageIcon(Ic.getClass().getResource("/resources/LogoProdoc.jpg"));
+//ImageIcon Ic=new ImageIcon( );    
+//ImageIcon PDIcon=new ImageIcon(Ic.getClass().getResource("/resources/LogoProdoc.jpg"));
+ImageIcon PDIcon=new ImageIcon("/resources/LogoProdoc.jpg");
 return PDIcon.getImage();
 }
 //---------------------------------------------------------------------
