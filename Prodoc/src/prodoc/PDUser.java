@@ -465,7 +465,10 @@ setName(Ident);
 */
 public HashMap getAclList()
 {
-return (HashMap)AclList.clone();
+if (AclList==null)
+    return(null);    
+else
+    return (HashMap)AclList.clone();
 }
 
 /**

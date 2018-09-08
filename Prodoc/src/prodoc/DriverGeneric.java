@@ -19,6 +19,7 @@
 package prodoc;
 
 import java.io.*;
+import java.nio.file.Paths;
 import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -1999,7 +2000,8 @@ FProps.println("# TraceLevel LOGLEVELERROR=0, LOGLEVELINFO=1, LOGLEVELDEBUG=2");
 FProps.println("TRACELEVEL=0");
 FProps.println("# Path to the log4j properties file");
 FProps.println("# Beware that the TRACELEVEL has priority over level defined in the file");
-FProps.println("TRACECONF=log4j.properties");
+// FProps.println("TRACECONF=log4j.properties");
+FProps.println("TRACECONF="+Paths.get(".").toAbsolutePath().normalize().toString().replace("\\", "/")+"/log4j.properties");
 FProps.println("#--------------------------------------------------------------");
 FProps.println("# Elements related to Tasks");
 FProps.println("#--------------------------------------------------------------");

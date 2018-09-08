@@ -482,9 +482,12 @@ public void AnularTrans() throws PDException
 if (PDLog.isDebug())
     PDLog.Debug("DriverJDBC.CancelTrans");
 try {
-con.rollback();
-con.setAutoCommit(true);
-setInTransaction(false);
+if (isInTransaction())    
+    {
+    con.rollback();
+    con.setAutoCommit(true);
+    setInTransaction(false);
+    }
 } catch (SQLException ex)
     {
     PDException.GenPDException("Error_canceling_transaction",ex.getLocalizedMessage());
