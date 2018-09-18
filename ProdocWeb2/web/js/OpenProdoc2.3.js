@@ -102,6 +102,7 @@ var CpFold="";
 var CpParentFold="";
 var CurrTitle="";
 var CurrFoldTitle="";
+var BUTFT="FT";
        
 function doOnLoadLogin() 
 {   
@@ -2493,6 +2494,15 @@ FormElem.attachEvent("onChange", function(name, value, is_checked){
                 }
             }
         }
+    else if (TypeElem==ELEMREPOS)  
+        {
+        if (name=="Name")
+            {if (value=="PD_FTRep")
+                FormElem.showItem(BUTFT);  
+            else
+                FormElem.hideItem(BUTFT);  
+            }
+        }
     }); 
 FormElem.attachEvent("onButtonClick", function (name)
     {if (name==OK)
@@ -2517,8 +2527,43 @@ FormElem.attachEvent("onButtonClick", function (name)
         }
      else if (TypeElem==ELEMTASKCRON || TypeElem==ELEMTASKEVENT )  
         ProcessWizard(FormElem, TypeElem, name);
-     }
-             );    
+     else if (name==BUTFT)
+        {
+        ProcessFT(FormElem);    
+        }
+     });    
+}
+//------------------------------------------------------------
+function ProcessFT(FormRep)
+{
+var Url="RepFT";
+var vals=FormRep.getItemValue("Param").split("|");
+var WinRPFT=myWins.createWindow({
+id:"RPFT",
+left:20,
+top:1,
+width:500,
+height:200,
+center:true,
+modal:true,
+resize:false});  
+WinRPFT.setText("OpenProdoc");
+var FormRPFT=WinRPFT.attachForm();
+FormRPFT.loadStruct(Url+"?F="+CurrFold, function(){
+    FormRPFT.setFocusOnFirstActive();
+    if (vals.length>0)
+       FormRPFT.setItemValue("GlobLang", vals[0]);
+    if (vals.length>1)
+       FormRPFT.setItemValue("SW", vals[1]);
+    }); 
+FormRPFT.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {    
+        FormRep.setItemValue("Param", FormRPFT.getItemValue("GlobLang")+"|"+FormRPFT.getItemValue("SW"));
+        }
+    FormRPFT.unload();
+    WinRPFT.close();
+     });    
 }
 //------------------------------------------------------------
 function ProcessWizard(FormEl, TypeElem, ButtName)
@@ -2727,7 +2772,8 @@ FormElem.attachEvent("onChange", function(name, value, is_checked){
         }
     }); 
 FormElem.attachEvent("onButtonClick", function (name)
-    {if (name==OK || name=="CreateObj" || name=="DeleteObj" )
+    {
+    if (name==OK || name=="CreateObj" || name=="DeleteObj" )
         {    
         FillHideFields(TypeElem);    
         FormElem.send("MantElem?Oper=Modif", function(loader, response)
@@ -2770,8 +2816,11 @@ FormElem.attachEvent("onButtonClick", function (name)
         }
      else if (TypeElem==ELEMTASKCRON || TypeElem==ELEMTASKEVENT )  
         ProcessWizard(FormElem, TypeElem, name);
-     }
-             );       
+     else if (name==BUTFT)
+        {
+        ProcessFT(FormElem);    
+        }
+     });       
 }
 //------------------------------------------------------------
 function ElemDelLogs(TypeElem, formFilter)
@@ -3061,7 +3110,12 @@ if (TypeElem==ELEMMIME)
     WinElem.setDimension(500, 250);
     WinElem.center();
     }
-else if (TypeElem==ELEMREPOS || TypeElem==ELEMAUTH || TypeElem==ELEMCUST || TypeElem==ELEMUSERS )
+else if (TypeElem==ELEMREPOS)
+    {
+    WinElem.setDimension(500, 430);
+    WinElem.center();    
+    }    
+else if ( TypeElem==ELEMAUTH || TypeElem==ELEMCUST || TypeElem==ELEMUSERS )
     {
     WinElem.setDimension(500, 400);
     WinElem.center();

@@ -368,6 +368,10 @@
         <servlet-name>ModACLDoc</servlet-name>
         <servlet-class>OpenProdocServ.ModACLDoc</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RepFT</servlet-name>
+        <servlet-class>OpenProdocServ.RepFT</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SParent</servlet-name>
         <url-pattern>/SParent</url-pattern>
@@ -735,6 +739,10 @@
     <servlet-mapping>
         <servlet-name>ModACLDoc</servlet-name>
         <url-pattern>/ModACLDoc</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RepFT</servlet-name>
+        <url-pattern>/RepFT</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

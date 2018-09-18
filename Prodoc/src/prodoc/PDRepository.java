@@ -77,15 +77,15 @@ public static final String tFTP="FTP";
  */
 public static final String tREFURL="REFURL";
 
-    /**
-     *
-     */
-    public static final String tS3="S3";
+/**
+ *
+ */
+public static final String tS3="S3";
 
-    /**
-     *
-     */
-    public static final String tCUSTOM="CUSTOM";
+/**
+ *
+ */
+public static final String tCUSTOM="CUSTOM";
 /**
  *
  */
@@ -506,6 +506,13 @@ String S=getURL()+DocName;
 return(S);    
 }        
 //-----------------------------------------------------------------
-
+public boolean isFTRep()
+{
+if (getName()!=null &&getName().equalsIgnoreCase("PD_FTRep"))   
+    return(true);
+else
+    return(false);
+}
+//-----------------------------------------------------------------
 }
 

@@ -1891,7 +1891,7 @@ if (PDLog.isDebug())
  */
 static public String getVersion()
 {
-return("2.2");
+return("2.3");
 }
 /**
  * constant used for bin <-> hexadecimal conversión
@@ -3008,6 +3008,13 @@ if (PDLog.isDebug())
 PDRepository RepDesc=new PDRepository(this);
 RepDesc.Load("PD_FTRep");
 FTConn=new FTConnLucene(RepDesc.getURL(), RepDesc.getUser(), RepDesc.getPassword(), RepDesc.getParam());
+if (FTConn.getStopWords()!=null)
+    {
+    PDDocs SW=new PDDocs(this);
+    SW.setPDId(FTConn.getStopWords());
+    String FileSW = SW.getFileOpt(System.getProperty("java.io.tmpdir"), Locked);
+    FTConn.setSWFile(FileSW);
+    }
 if (PDLog.isDebug())
     PDLog.Debug("DriverGeneric.getFTRepository<");
 return(FTConn);

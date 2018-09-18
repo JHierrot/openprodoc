@@ -850,7 +850,6 @@ if (FolderPath.charAt(FolderPath.length()-1)!=File.separatorChar)
     FolderPath+=File.separatorChar+getPDId()+d.getVersion().replace(' ', '_')+d.getName().replace(' ', '_');
 else
     FolderPath+=getPDId()+d.getVersion().replace(' ', '_')+d.getName().replace(' ', '_');
-// StoreGeneric Rep=getDrv().getRepository(d.getReposit());
 PDRepository Rep=new PDRepository(getDrv());
 Rep.Load(d.getReposit());
 if (Rep.IsRef())

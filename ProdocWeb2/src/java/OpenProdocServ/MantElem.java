@@ -51,25 +51,25 @@ import prodoc.Record;
 public class MantElem extends SParent
 {
    
-    /**
-     *
-     */
-    public static final String OPERNEW="New";   
+/**
+ *
+ */
+public static final String OPERNEW="New";   
 
-    /**
-     *
-     */
-    public static final String OPERMODIF="Modif";
+/**
+ *
+ */
+public static final String OPERMODIF="Modif";
 
-    /**
-     *
-     */
-    public static final String OPERDELETE="Delete";
+/**
+ *
+ */
+public static final String OPERDELETE="Delete";
 
-    /**
-     *
-     */
-    public static final String OPERCOPY="Copy";
+/**
+ *
+ */
+public static final String OPERCOPY="Copy";
 
 private static final String List2=ObjPD.fPDAUTOR+"/"+ObjPD.fPDDATE;
 
@@ -496,8 +496,11 @@ else if (ElemType.equals(ListElem.MANTMIME))
     }
 else if (ElemType.equals(ListElem.MANTREPO))
     {
+    boolean IsFT=false;    
     Attr=Rec.getAttr(PDRepository.fNAME);
     SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
+    if (Attr.getValue()!=null && ((String)Attr.getValue()).equals("PD_FTRep"))
+        IsFT=true; 
     Attr=Rec.getAttr(PDRepository.fDESCRIPTION);
     SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
     Attr=Rec.getAttr(PDRepository.fREPTYPE);
@@ -516,6 +519,7 @@ else if (ElemType.equals(ListElem.MANTREPO))
     SB.append(GenInput(Req, Attr,  (Oper.equals(OPERMODIF)|| Oper.equals(OPERDELETE)) , Modif));
     Attr=Rec.getAttr(PDRepository.fPARAM);
     SB.append(GenInput(Req, Attr,  (Oper.equals(OPERMODIF)|| Oper.equals(OPERDELETE)), Modif));
+    SB.append(" {type: \"button\", name: \"FT\", value: \"FT\", width: 20, offsetLeft:160, hidden:").append(!IsFT?"1":"0").append("},");
     Attr=Rec.getAttr(PDRepository.fUSERNAME);
     SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
     Attr=Rec.getAttr(PDRepository.fPASSWORD);

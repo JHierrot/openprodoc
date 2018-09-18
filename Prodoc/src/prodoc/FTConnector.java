@@ -41,41 +41,43 @@ private String Password=null;
 private String Param=null;
 private String FullText=null;
 private String FileMetadata=null;
+private String Lang="*";
+private String StopWords=null;
 
-    /**
-     *
-     */
-    final public static String F_TYPE="type";
+/**
+ *
+ */
+final public static String F_TYPE="type";
 
-    /**
-     *
-     */
-    final public static String F_ID="id";
+/**
+ *
+ */
+final public static String F_ID="id";
 
-    /**
-     *
-     */
-    final public static String F_VER="ver";
+/**
+ *
+ */
+final public static String F_VER="ver";
 
-    /**
-     *
-     */
-    final public static String F_FULLTEXT="fulltext";
+/**
+ *
+ */
+final public static String F_FULLTEXT="fulltext";
 
-    /**
-     *
-     */
-    final public static String F_DOCMETADATA="docmetadata";
+/**
+ *
+ */
+final public static String F_DOCMETADATA="docmetadata";
 
-    /**
-     *
-     */
-    final public static String F_PREFIX="F_";
+/**
+ *
+ */
+final public static String F_PREFIX="F_";
 
-    /**
-     *
-     */
-    final public static int MAXRESULTS=1000;
+/**
+ *
+ */
+final public static int MAXRESULTS=1000;
 
 /**
  *
@@ -89,6 +91,7 @@ Server=pServer;
 User=pUser;
 Password=pPassword;
 Param=pParam;    
+CheckLangSW(Param);
 }
 /**
  *
@@ -254,5 +257,50 @@ public String getFileMetadata()
 return FileMetadata;
 }
 //------------------------------------------------------------------------
-
+/**
+* @return the Lang
+*/
+protected String getLang()
+{
+return Lang;
+}
+//------------------------------------------------------------------------
+/**
+* @param Lang the Lang to set
+*/
+protected void setLang(String pLang)
+{
+if (pLang!=null)
+    Lang = pLang.toUpperCase();
+}
+//------------------------------------------------------------------------
+/**
+* @return the StopWords
+*/
+protected String getStopWords()
+{
+return StopWords;
+}
+//------------------------------------------------------------------------
+/**
+* @param StopWords the StopWords to set
+*/
+protected void setStopWords(String StopWords)
+{
+this.StopWords = StopWords;
+}
+//------------------------------------------------------------------------
+private void CheckLangSW(String Param)
+{
+if (Param==null)    
+    return;
+String[] Par = Param.split("\\|");
+if (Par.length>0 && Par[0].length()!=0)
+    setLang(Par[0]);
+if (Par.length==2 && Par[1].length()!=0 )
+    setStopWords(Par[1]);
+}
+//------------------------------------------------------------------------
+abstract void setSWFile(String FileSW)  throws PDException;
+//------------------------------------------------------------------------    
 }

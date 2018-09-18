@@ -18,12 +18,22 @@
  */
 package prodoc;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.CharArraySet;
+import org.apache.lucene.analysis.ca.CatalanAnalyzer;
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
+import org.apache.lucene.analysis.es.SpanishAnalyzer;
+import org.apache.lucene.analysis.pt.PortugueseAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -48,12 +58,12 @@ public class FTConnLucene extends FTConnector
 {
 static private IndexWriter iwriter;
 static private Directory directory;
-//private IndexSearcher isearcher;
 static private Analyzer analyzer;
 static private IndexWriterConfig iwc;
 static private SearcherManager SM=null;
 static private String DirPath;
-
+static private String GlobLang=null;
+static private CharArraySet SW=null;
 //-------------------------------------------------------------------------
 
     /**
@@ -137,13 +147,10 @@ for (int NumAttr = 0; NumAttr < pMetadata.NumAttr(); NumAttr++)
     Attribute Attr=pMetadata.nextAttr();
     if (Attr.getValue()!=null || Attr.isMultivalued() && !Attr.getValuesList().isEmpty())
         S.append(Attr.getName().toLowerCase()).append("=").append(Attr.Export().toLowerCase()).append("\n");
-//    doc.add(new StringField(Attr.getName().toLowerCase(), Attr.Export().toLowerCase(), Field.Store.NO));    
     }
 if (Bytes!=null)
     {
     Convert(Bytes);
-//    doc.add(new TextField( F_DOCMETADATA, getFileMetadata().toLowerCase(), Field.Store.NO));
-//    doc.add(new TextField( F_FULLTEXT, getFullText(), Field.Store.NO));
     doc.add(new TextField( F_FULLTEXT, S.toString()+getFileMetadata().toLowerCase()+"\n"+getFullText(), Field.Store.NO));
     }
 else
@@ -173,13 +180,10 @@ for (int NumAttr = 0; NumAttr < pMetadata.NumAttr(); NumAttr++)
     Attribute Attr=pMetadata.nextAttr();
     if (Attr.getValue()!=null || Attr.isMultivalued() && !Attr.getValuesList().isEmpty())
         S.append(Attr.getName().toLowerCase()).append("=").append(Attr.Export().toLowerCase()).append("\n");
-//    doc.add(new StringField(Attr.getName().toLowerCase(), Attr.Export().toLowerCase(), Field.Store.NO));    
     }
 if (Bytes!=null)
     {
     Convert(Bytes);
-//    doc.add(new TextField( F_DOCMETADATA, getFileMetadata().toLowerCase(), Field.Store.NO));
-//    doc.add(new TextField( F_FULLTEXT, getFullText(), Field.Store.NO));
     doc.add(new TextField( F_FULLTEXT, S.toString()+getFileMetadata().toLowerCase()+"\n"+getFullText(), Field.Store.NO));
     }
 else
@@ -253,7 +257,69 @@ return(Res);
  */
 static private Analyzer CreateAnalizer()
 {
-return(new StandardAnalyzer());
+if (GlobLang==null)     
+    return(new StandardAnalyzer());
+switch (GlobLang)
+    {
+    case "ES":  if (SW==null)
+                   return(new SpanishAnalyzer());
+                else
+                    return(new SpanishAnalyzer(SW));
+    case "EN":  if (SW==null)
+                   return(new EnglishAnalyzer());
+                else
+                    return(new EnglishAnalyzer(SW));
+    case "PT":  if (SW==null)
+                   return(new PortugueseAnalyzer());
+                else
+                    return(new PortugueseAnalyzer(SW));
+    case "CT":  if (SW==null)
+                   return(new CatalanAnalyzer());
+                else
+                    return(new CatalanAnalyzer(SW));
+    default:    if (SW==null)
+                   return(new StandardAnalyzer());
+                else
+                    return(new StandardAnalyzer(SW));
+    }
 }
 //-------------------------------------------------------------------------
+@Override
+protected void setLang(String pLang)
+{
+if (pLang!=null)    
+    {
+    GlobLang = pLang.toUpperCase();
+    super.setLang(pLang);
+    }
+}
+//-------------------------------------------------------------------------
+@Override
+void setSWFile(String FileSW) throws PDException
+{
+BufferedReader br =null;    
+try {    
+SW= new CharArraySet(100, true);
+br = new BufferedReader(new FileReader(FileSW));
+String strLine;
+while ((strLine = br.readLine()) != null)   
+    {
+    if (!strLine.trim().startsWith("#"))    
+       SW.add(strLine.trim().toLowerCase());
+    }
+} catch (Exception Ex)
+    {
+    SW=null;
+    PDException.GenPDException(Ex.getMessage(), FileSW);
+    }
+finally
+    {
+    if (br!=null)
+        try {
+        br.close();
+        } catch (Exception e)
+        {}
+    }
+}
+//-------------------------------------------------------------------------    
 }

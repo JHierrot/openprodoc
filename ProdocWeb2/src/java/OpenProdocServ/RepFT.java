@@ -17,42 +17,24 @@
  * 
  */
 
-package OpenProdocUI;
+package OpenProdocServ;
 
+import OpenProdocUI.SParent;
+import static OpenProdocUI.SParent.PrepareError;
+import static OpenProdocUI.SParent.TT;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import prodoc.Attribute;
+import prodoc.DriverGeneric;
+import prodoc.PDException;
+import prodoc.PDFolders;
 
 /**
  *
  * @author jhierrot
  */
-public class SThesaurMain extends SParent
+public class RepFT extends SParent
 {
-private static final String Html="<!DOCTYPE html>\n" +
-"<html>\n" +
-"    <head>\n" +
-"        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n" +
-"        <title>OpenProdoc2 Web</title>\n" +
-"        <script src=\"js/OpenProdoc2.3.js\" type=\"text/javascript\"></script>\n" +
-"        <script src=\"js/dhtmlx.js\" type=\"text/javascript\"></script>\n" +
-"        <link rel=\"shortcut icon\" href=\"img/OpenProdoc.ico\" type=\"image/x-icon\">" +       
-"        <link rel=\"STYLESHEET\" type=\"text/css\" href=\"js/dhtmlx.css\">\n" +
-"        <link rel=\"STYLESHEET\" type=\"text/css\" href=\"css/OpenProdoc.css\">\n" +
-"        <style>\n" +
-"        html, body {\n" +
-"                width: 100%;\n" +
-"                height: 100%;\n" +
-"                margin: 0px;\n" +
-"                padding: 0px;\n" +
-"                overflow: hidden;\n" +
-"           }\n" +
-"	</style>\n" +
-"        </head>\n" +
-"    <body onload=\"doOnLoadThes();\" >\n" +
-"    <div id=\"MainBody\"></div>\n" +
-"    </body>\n" +
-"</html>";
 
 //-----------------------------------------------------------------------------------------------
 /**
@@ -63,9 +45,23 @@ private static final String Html="<!DOCTYPE html>\n" +
  */
 @Override
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
-{
-HttpSession Sess=Req.getSession();
-out.println(Html);
+{   
+out.println(
+"[ {type: \"settings\", offsetLeft:10, position: \"label-left\", labelWidth: 140}," +
+"{type: \"label\", label: \""+TT(Req, "Cong.FT")+"\"}," +
+"{type: \"combo\", label: \""+TT(Req, "GlobLang")+"\", name: \"GlobLang\", inputWidth:\"auto\", options:["+
+"{text:\"*\", value:\"*\"},"+
+"{text:\"English\", value:\"EN\"},"+
+"{text:\"Español\", value:\"ES\"},"+
+"{text:\"Português\", value:\"PT\"},"+
+"{text:\"Català\", value:\"CT\"},"+
+"]},"+
+"{type: \"input\", name: \"SW\", label: \""+TT(Req, "StopWords_File")+"\", inputWidth: 120}," +
+"{type: \"block\", width: 250, list:[" +
+    "{type: \"button\", name: \"OK\", value: \""+TT(Req, "Ok")+"\"}," +
+    "{type: \"newcolumn\", offset:20 }," +
+    "{type: \"button\", name: \"CANCEL\", value: \""+TT(Req, "Cancel")+"\"}" +
+"]} ];");
 }
 //-----------------------------------------------------------------------------------------------
 
@@ -76,7 +72,7 @@ out.println(Html);
 @Override
 public String getServletInfo()
 {
-return "SThesaurMain Servlet";
+return "RepFT Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 }
