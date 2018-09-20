@@ -38,6 +38,7 @@ import prodoc.PDDocs;
 import prodoc.PDFolders;
 import prodoc.PDMimeType;
 import prodoc.PDReport;
+import prodoc.Record;
 
 /**
  *
@@ -83,7 +84,7 @@ boolean SubT=(Boolean)Sess.getAttribute(SParent.SD_SubT);
 boolean SubF=(Boolean)Sess.getAttribute(SParent.SD_SubF);
 String actFolderId=(String)Sess.getAttribute(SParent.SD_actFolderId);
 Vector Ord=(Vector)Sess.getAttribute(SParent.SD_Ord);
-Cursor Cur=null;
+Vector<Record> ListRes=null;
 if (Type.equalsIgnoreCase("Fold"))
     {
     PDFolders Fold;
@@ -91,22 +92,23 @@ if (Type.equalsIgnoreCase("Fold"))
         Fold = new PDFolders(PDSession);
     else
         Fold = new PDFolders(PDSession, FType);
-    Cur=Fold.Search(FType, Conds, SubT, SubF, actFolderId, Ord);
+    ListRes=Fold.SearchV(FType, Conds, SubT, SubF, actFolderId, Ord);
     }
 else
     {
-    PDDocs F;
+    PDDocs Doc;
     if (FType==null)
-        F = new PDDocs(PDSession);
+        Doc = new PDDocs(PDSession);
     else
-        F = new PDDocs(PDSession, FType);
+        Doc = new PDDocs(PDSession, FType);
     boolean Vers=(Boolean)Sess.getAttribute(SParent.SD_Vers);
     String FTQuery=(String) Sess.getAttribute(SParent.SD_FTQ);
-    Cur=F.Search(FTQuery, FType, Conds, SubT, SubF, Vers, actFolderId, Ord);
+    ListRes=Doc.SearchV(FTQuery, FType, Conds, SubT, SubF, Vers, actFolderId, Ord);
     }
 PDReport Rep=new PDReport(PDSession);
 Rep.LoadFull(Id);
-ArrayList<String> GeneratedRep= Rep.GenerateRep(getActFolderId(Req), Cur, null, Rep.getDocsPerPage(), Rep.getPagesPerFile(), SParent.getIO_OSFolder());
+ArrayList<String> GeneratedRep= Rep.GenerateRep(getActFolderId(Req), null, ListRes, Rep.getDocsPerPage(), Rep.getPagesPerFile(), SParent.getIO_OSFolder());
+ListRes.clear();
 String File2Send;
 if (GeneratedRep.size()==1)
     {

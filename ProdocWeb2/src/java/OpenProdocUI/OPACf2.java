@@ -28,6 +28,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Vector;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -115,9 +116,18 @@ while (Attr!=null)
     Attr=Rec.nextAttr();
     }
 Cur=TmpFold.Search(CurrType, Cond, ConfOPAC.isInheritance(), true, CurrFoldId, null);
+Vector<Record> ListRes=new Vector();
+Record Res=PDSession.NextRec(Cur);
+while (Res!=null)
+    {
+    ListRes.add(Res);
+    Res=PDSession.NextRec(Cur);
+    }
+PDSession.CloseCursor(Cur);   
+Cur=null;
 PDReport Rep=new PDReport(PDSession);
 Rep.LoadFull(ReportId);
-ArrayList<String> GeneratedRep= Rep.GenerateRep(getActFolderId(Req), Cur, null, 0, 0, SParent.getIO_OSFolder(),ConfOPAC.getMaxResults());
+ArrayList<String> GeneratedRep= Rep.GenerateRep(getActFolderId(Req), null, ListRes, 0, 0, SParent.getIO_OSFolder(),ConfOPAC.getMaxResults());
 String File2Send=GeneratedRep.get(0);
 PDMimeType mt=new PDMimeType(PDSession);
 mt.Load(Rep.getMimeType());

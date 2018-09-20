@@ -2296,6 +2296,43 @@ return(Cur);
  * @return a Cursor with the results of the query to use o send to {@link #NextDoc(prodoc.Cursor)}
  * @throws PDException when occurs any problem
  */
+public Vector<Record> SearchV(String FTQuery, String DocType, Conditions AttrConds, boolean SubTypes, boolean SubFolders, boolean IncludeVers, String IdActFold, Vector Ord) throws PDException
+{
+Vector<Record> ListRes=new Vector();
+Cursor CursorId = null;
+try {
+CursorId = Search(FTQuery, DocType, AttrConds, SubTypes, SubFolders, IncludeVers, IdActFold, Ord);
+Record Res=getDrv().NextRec(CursorId);
+while (Res!=null)
+    {
+    ListRes.add(Res);
+    Res=getDrv().NextRec(CursorId);
+    }
+} catch (Exception Ex)
+    {
+    PDException.GenPDException("Error_searching_Document", Ex.getLocalizedMessage());
+    }
+finally 
+    {
+    if (CursorId!=null)
+        getDrv().CloseCursor(CursorId);    
+    }
+return(ListRes);   
+}
+/**
+ * Search for Documents returning a cursor with the results of Documents with the
+ * indicated values of fields. Only returns the folders allowed for the user, as defined by ACL.
+ * @param FTQuery Fultext search criteria
+ * @param DocType Type of Document to search. Can return Documents of subtypes.
+ * @param AttrConds Conditions over the fields of the Document Type
+ * @param SubTypes if true, returns results of the indicated type AND susbtipes
+ * @param SubFolders if true seach in actual folder AND subfolders, if false, search in ALL the structure
+ * @param IncludeVers if true, includes in the searching ALL versions of documents. Not posible with subtypes
+ * @param IdActFold Folder to start the search. if null, start in the root level
+ * @param Ord Vector of Strings with the ASCENDING order
+ * @return a Cursor with the results of the query to use o send to {@link #NextDoc(prodoc.Cursor)}
+ * @throws PDException when occurs any problem
+ */
 public Cursor Search(String FTQuery, String DocType, Conditions AttrConds, boolean SubTypes, boolean SubFolders, boolean IncludeVers, String IdActFold, Vector Ord) throws PDException
 {
 if (FTQuery==null || FTQuery.length()==0)

@@ -403,7 +403,7 @@ PDTableModel TM = (PDTableModel) getObjectsTable().getModel();
 //List<? extends RowSorter.SortKey> sortKeys = getObjectsTable().getRowSorter().getSortKeys();
 Vector<Record> Res=new Vector(TM.getRowCount());
 for (int NumRow = 0; NumRow < TM.getRowCount(); NumRow++)
-Res.add(TM. getElement(getObjectsTable().convertRowIndexToModel(NumRow)));
+    Res.add(TM. getElement(getObjectsTable().convertRowIndexToModel(NumRow)));
 PDReport Rep=new PDReport(MainWin.getSession());
 Rep.setPDId(SR.getSelectedRep());
 ArrayList<String> GeneratedRep = Rep.GenerateRep(MainWin.getActFolderId(), null, Res, SR.getDocsPerPage(), SR.getPagesPerFile(), MainWin.getIO_OSFolder());

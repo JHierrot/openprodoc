@@ -35,6 +35,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.TreeSet;
+import java.util.Vector;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -1627,10 +1628,11 @@ PDFolders Fold=new PDFolders(Session);
 Conditions Conds=new Conditions();
 Condition Cond=new Condition(PDFolders.fPARENTID, Condition.cEQUAL, getActFolderId());
 Conds.addCondition(Cond);
-Cursor Cur=Fold.Search(PDFolders.getTableName(), Conds,  true, false, null, null);
+// Cursor Cur=Fold.Search(PDFolders.getTableName(), Conds,  true, false, null, null);
+Vector<Record> Res = Fold.SearchV(PDFolders.getTableName(), Conds,  true, false, null, null);
 PDReport Rep=new PDReport(Session);
 Rep.setPDId(SR.getSelectedRep());
-ArrayList<String> GeneratedRep = Rep.GenerateRep(getActFolderId(), Cur, null, SR.getDocsPerPage(), SR.getPagesPerFile(), getIO_OSFolder());
+ArrayList<String> GeneratedRep = Rep.GenerateRep(getActFolderId(), null, Res, SR.getDocsPerPage(), SR.getPagesPerFile(), getIO_OSFolder());
 setCursor(DefCur);
 ListReports LR = new ListReports(this, true);
 LR.setLocationRelativeTo(null);
@@ -1644,7 +1646,8 @@ LR.setVisible(true);
 
     private void ReportsDocActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ReportsDocActionPerformed
     {//GEN-HEADEREND:event_ReportsDocActionPerformed
-try {
+Cursor CursorId =null;
+        try {
 SelectReport SR = new SelectReport(this, true);
 SR.setLocationRelativeTo(null);
 SR.setVisible(true);
@@ -1654,7 +1657,17 @@ setCursor(WaitCur);
 PDDocs Doc=new PDDocs(Session);
 PDReport Rep=new PDReport(Session);
 Rep.setPDId(SR.getSelectedRep());
-ArrayList<String> GeneratedRep = Rep.GenerateRep(getActFolderId(), Doc.getListContainedDocs(getActFolderId()), null, SR.getDocsPerPage(), SR.getPagesPerFile(), getIO_OSFolder());
+Vector<Record> ListRec=new Vector();
+CursorId = Doc.getListContainedDocs(getActFolderId());
+Record Res=Session.NextRec(CursorId);
+while (Res!=null)
+    {
+    ListRec.add(Res);
+    Res=Session.NextRec(CursorId);
+    }
+Session.CloseCursor(CursorId);
+CursorId =null;
+ArrayList<String> GeneratedRep = Rep.GenerateRep(getActFolderId(), null, ListRec, SR.getDocsPerPage(), SR.getPagesPerFile(), getIO_OSFolder());
 setCursor(DefCur);
 ListReports LR = new ListReports(this, true);
 LR.setLocationRelativeTo(null);
@@ -1662,6 +1675,11 @@ LR.setRepList(GeneratedRep);
 LR.setVisible(true);
 } catch (Exception ex)
     {
+    if (CursorId!=null)
+        {try {
+        Session.CloseCursor(CursorId); 
+        } catch (Exception e){}
+        }
     Message(DrvTT(ex.getLocalizedMessage()));
     }
     }//GEN-LAST:event_ReportsDocActionPerformed
@@ -2292,7 +2310,7 @@ return(Tmp);
  */
 static public String getVersion()
 {
-return("2.2");  
+return("2.3");  
 }
 //---------------------------------------------------------------------
 

@@ -1402,6 +1402,42 @@ return(CompPath);
  * @return a Cursor with the results of the query to use o send to NextFold()
  * @throws PDException when occurs any problem
  */
+public Vector<Record> SearchV(String FolderType, Conditions AttrConds, boolean SubTypes, boolean SubFolders, String IdActFold, Vector Ord) throws PDException
+{
+Vector<Record> ListRes=new Vector();
+Cursor CursorId = null;
+try {
+CursorId = Search(FolderType, AttrConds, SubTypes, SubFolders, IdActFold, Ord);
+Record Res=getDrv().NextRec(CursorId);
+while (Res!=null)
+    {
+    ListRes.add(Res);
+    Res=getDrv().NextRec(CursorId);
+    }
+} catch (Exception Ex)
+    {
+    PDException.GenPDException("Error_searching_folder", Ex.getLocalizedMessage());
+    }
+finally 
+    {
+    if (CursorId!=null)
+        getDrv().CloseCursor(CursorId);    
+    }
+return(ListRes);
+}
+//-------------------------------------------------------------------------
+/**
+ * Search for Folders returning a cursor with the results of folders with the
+ * indicated values of fields. Only return the folders alowed for the user, as defined by ACL.
+ * @param FolderType Type of folder to search. Can return folders of subtype.
+ * @param AttrConds Conditions over the fields ofthe FolderType
+ * @param SubTypes if true, returns results of the indicated type AND susbtipes
+ * @param SubFolders if true seach in actual folder AND subfolders, if false, serach in ALL the structure
+ * @param IdActFold Folder to start the search. if null, start in the root level
+ * @param Ord Vector of String with the ascending order
+ * @return a Cursor with the results of the query to use o send to NextFold()
+ * @throws PDException when occurs any problem
+ */
 public Cursor Search(String FolderType, Conditions AttrConds, boolean SubTypes, boolean SubFolders, String IdActFold, Vector Ord) throws PDException
 {
 if (PDLog.isDebug())
@@ -1451,19 +1487,6 @@ if (!FolderType.equalsIgnoreCase(getTableName()))
                     }                    
                 }
             }
-//    for (int i = 0; i < ListTip.size(); i++)
-//        {
-//        Record R= (Record)ListTip.get(i);
-//        Attribute Attr=R.getAttr(PDObjDefs.fNAME);
-//        String Typ =(String) Attr.getValue();
-//        if (!Typ.equalsIgnoreCase(getTableName()))
-//            {
-//            Condition Con=new Condition(getTableName()+"."+fPDID, Typ+"."+fPDID);
-//            CondTyps.addCondition(Con);
-//            }
-//        if (!Typ.equalsIgnoreCase(FolderType))
-//            TypList.add(Typ);
-//        }
     ComposedConds.addCondition(CondTyps);
     }
 if (SubFolders)
@@ -1474,11 +1497,6 @@ if (SubFolders)
         ComposedConds.addCondition(C);
         }
     }
-//else
-//    {
-//    Condition C=new Condition(PDFolders.fPARENTID, Condition.cEQUAL, IdActFold);
-//    ComposedConds.addCondition(C);
-//    }
 Record RecSearch=F.getRecSum().CopyMono();
 if (RecSearch.ContainsAttr(fPDID))
     {

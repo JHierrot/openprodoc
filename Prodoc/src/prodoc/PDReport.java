@@ -56,6 +56,7 @@ private static final String R_UNAME_ATTR="@OPD_UNAME_ATTR";
 private static final String R_VAL_ATTR="@OPD_VAL_ATTR";
 private static final String R_REF_ATTR="@OPD_REF_ATTR";
 private static final String R_RECCOUNT="@OPD_RECCOUNT";
+private static final String R_TOTALREC="@OPD_TOTALREC";
 private static final String R_PAGCOUNT="@OPD_PAGCOUNT";
 private String IdParent=null;
 private Cursor ListDocs=null;
@@ -80,6 +81,7 @@ private boolean ExpandObject=false;
 private boolean DelNull=false;
 private HashSet<String> ListIgnTypes=null; 
 private HashSet<String> ListIgnFields=null; 
+private int TotElems=0;
 
     /**
      *
@@ -122,7 +124,7 @@ return(GenerateRep(pIdParent, pListDocs, pVectRec, pRecsPag, pPagsDoc, OSFolder,
 /**
  * generates a report with the current PDId
  * @param pIdParent Parent of the "cursor". Can be null
- * @param pListDocs Cursor with the list of docs
+ * @param pCurElems Cursor with the list of docs
  * @param pVectRec
  * @param pRecsPag Number oc record by page
  * @param pPagsDoc Number of pages by Archive
@@ -131,12 +133,15 @@ return(GenerateRep(pIdParent, pListDocs, pVectRec, pRecsPag, pPagsDoc, OSFolder,
  * @return path to the generated Report.
  * @throws prodoc.PDException
  */
-public ArrayList<String> GenerateRep(String pIdParent, Cursor pListDocs, Vector pVectRec, int pRecsPag, int pPagsDoc, String OSFolder, int MaxResults) throws PDException
+public ArrayList<String> GenerateRep(String pIdParent, Cursor pCurElems, Vector pVectRec, int pRecsPag, int pPagsDoc, String OSFolder, int MaxResults) throws PDException
 {
-if (pListDocs!=null)    
-    ListDocs=pListDocs;
+if (pCurElems!=null)    
+    ListDocs=pCurElems;
 else if (pVectRec!=null)
+    {
     VectRec=pVectRec;
+    TotElems=VectRec.size();
+    }
 else
     PDException.GenPDException("Cursor_or_Vector_of_Records_needed", null);
 int CountVect=0;
@@ -334,6 +339,8 @@ if (Line.startsWith("@OPD"))
         FRepDoc.print(TotalRecsCount);
     else if (Line.startsWith(R_PAGCOUNT))
         FRepDoc.print(PagesCount);
+    else if (Line.startsWith(R_TOTALREC))
+        FRepDoc.print(TotElems);
     }
 else
     FRepDoc.print(Line);    
