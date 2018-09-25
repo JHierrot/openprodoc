@@ -43,7 +43,24 @@
     <li><b>-</b>Word : The word CAN'T be included in any the documents.</li>
     <li>Word<b>*</b> : The search will return the documents that include the words starting with the root defined.</li>
 </ul>
-    </p>
+<H4> Indexing optimization selecting language and stopwords </H4>
+    <p> In the full-text search, since version 2.3 of OpenProdoc, some improvements have been introduced, such as the possibility of choosing the language or being able to define a dictionary of stopwords, two measures that improve the quality of the searches results as well as performance.</p>
+    <p> Choosing a language activates the <a href="https://en.wikipedia.org/wiki/Stemming" target="_blank">stemming</a> for that language, that is the conversion from the words to their "root" before indexing. In this way, when searching, it is indifferent to enter "Document" or "Documents".
+        Logically the stemming rules are different by language (for example in English the suffix "ing" of the gerunds will be eliminated). Therefore, the appropriate language must be chosen to match the language of documents to be searched.
+        If the documents can be of several languages, it is possible to keep the language unspecified.
+        It is generally not convenient to use a different language than the language of the documents, since the application of rules designed for another language may cause the quality of the results to decrease instead of increasing. </P>
+    <p> Regarding the dictionary of <a href="https://en.wikipedia.org/wiki/Stop_words" target="_blank">stopwords</a>, includes words that are not significant for a search, either because they are "meaningless" particles (articles, prepositions, pronouns ...) or because they will appear in almost all documents (for example the word "ecology" in documentation of an environmental organization) and therefore the Search for those terms will return almost all documents, which does not add any value.
+        The inclusion of words in the dictionary of empty words, on the one hand saves space in the files of search indexes by full text and provides more speed of search and indexing, and on the other hand facilitates the search, since their appearances are ignored and it focuses on the significant terms.
+        For example, you can find documents where "pollutant discharges into the river" appear and "some pollutant has been spilled on the right bank of the river" if they are empty words: "the, in, the, has, the, margin, right ", since the terms associated with the document will be: <i>dumping</i>, <i>contaminant</i>, <i>river</i> (where stemming has also been used to remove plurals).</p>
+    <p> To choose the language or the list of empty words, the following procedure should be followed:</p>
+    <ol>
+        <li> Create a text file (.TXT) where all the empty words to be used are entered, each of them in a line. Lines that start with the # character will be ignored and can be used to include comments and explanations.</Li>
+        <li> The file must be incorporated into OpenProdoc, assigning it any type of document. After the insertion, the unique identifier of the document (PDId) must be saved. It is recommended to insert it in the "System" folder, although it is not essential.</Li>
+        <li> Subsequently, the full text repository (which has the name "PD_FTRep") must be modified in the list of repositories. The system detects that it is a full text repository and presents a "W" button that when pressed shows a form that allows editing the language (between the supporters by OpenProdoc: ES, EN, PT, CT) and enter the Identifier (PDid) of the document with the list of stop words.</li>
+        <li> After saving the modifications, the program will use the new parameters for the following indexing and searching processes. The new configuration may take some time to be used (because the information is cached to increase performance). To force the use of the new configuration, it is best to restart the server.</Li>
+        <li> You can choose not to inform the language (by choosing the value "*") or not to enter a dictionary of empty words (leaving the identifier empty).</li>
+        <li> The document with the stop words can be versioned, like any other OpenProdoc document. The program will use the latest version, although it may take some time to update it (because the information is cached to increase performance). To force the use of the new version, it is best to restart the server.</Li>
+    </ol>
 <hr>
 <a href="HelpIndex.html">Help Index OpenProdoc</a>
     </body>

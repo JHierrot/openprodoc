@@ -69,6 +69,7 @@
 <li><b>@OPD_VAL_ATTR</b>: Valor del atributo. Puede expresarse como @OPD_VAL_ATTR_* o como @OPD_VAL_ATTR_NombreInternoAtributo (Ej. @OPD_VAL_ATTR_TITLE). En el primer caso, podrá utilizarse en un bucle para volcar todos los valores, para cualquier tipo de Documento o carpeta. Puede seguido de <b>“:”</b> y un número entero, que indica la longitud que tendrá el texto. Si el valor es menor, se truncará, en otro caso se completará a espacios. (Ej. @OPD_VAL_ATTR_*:20).</li>
 <li><b>@OPD_REF_ATTR</b>: Valor o referencia del atributo. El comportamiento y sintaxis es igual que en el caso de @OPD_VAL_ATTR, pero si el tipo de variable es tesauro, referencia a un tipo mime o a la carpeta contenedora, en lugar de mostrar el valor de la variable (identificador del término, ej: “12e434_43af43”) mostrará el valor del término referenciado (Ej: “Portugal”).</li>
 <li><b>@OPD_RECCOUNT</b>: Número de registros volcados en el informe hasta el momento.</li>
+<li><b>@OPD_TOTALREC</b>: Número total de registros del informe (0 si el informe fue generado con Cursor en lugar de con Vector).</li>
 <li><b>@OPD_PAGCOUNT</b>: Número de páginas volcadas en el informe hasta el momento.</li>
 </ul>
 </li>
