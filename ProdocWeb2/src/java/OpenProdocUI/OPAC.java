@@ -142,7 +142,7 @@ if (LocalSess==null)
         }
     else if(PDLog.isDebug())
         PDLog.Debug("OPACUser: "+ConfOPAC.getUser());        
-    LocalSess=ProdocFW.getSession("PD", ConfOPAC.getUser(), ConfOPAC.getPass()); // just for translation   
+    LocalSess=ProdocFW.getSession(getConnector(), ConfOPAC.getUser(), ConfOPAC.getPass()); // just for translation   
     setSessOPD(Req, LocalSess);
     }
 if (OPACs.containsKey(IdOPAC))
@@ -319,22 +319,6 @@ CSS.append(OutBytes.toString());
     }
 CSS.append("</style>\n");
 return(CSS.toString());
-}
-//-----------------------------------------------------------------------------------------------
-protected static String getHtml(DriverGeneric sessOPD, String idHtmlOpac)
-{
-StringBuilder Html=new StringBuilder();
-try {
-PDDocs DocCSS=new PDDocs(sessOPD);
-DocCSS.setPDId(idHtmlOpac);
-ByteArrayOutputStream OutBytes = new ByteArrayOutputStream();
-DocCSS.getStream(OutBytes);
-Html.append(OutBytes.toString());
-} catch (Exception Ex)
-    {   
-    Ex.printStackTrace();
-    }
-return(Html.toString());
 }
 //-----------------------------------------------------------------------------------------------
 private static void CleanCache()

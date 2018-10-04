@@ -27,7 +27,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
 import javax.servlet.ServletException;
@@ -131,7 +130,7 @@ setOPACConf(Req, ConfOPAC);
 DriverGeneric LocalSess=getSessOPD(Req);
 if (LocalSess==null)
     {
-    LocalSess=ProdocFW.getSession("PD", ConfOPAC.getUser(), ConfOPAC.getPass()); // just for translation   
+    LocalSess=ProdocFW.getSession(getConnector(), ConfOPAC.getUser(), ConfOPAC.getPass()); // just for translation   
     setSessOPD(Req, LocalSess);
     }
 if (OPACs.containsKey(IdOPAC))
@@ -169,7 +168,7 @@ String Agent=Req.getHeader("User-Agent");
 String DimHtml=ConfOPAC.SolveHtml(Agent);
 if (DimHtml!=null) 
     {
-    HtmlFinal=OPAC.getHtml(LocalSess, DimHtml);
+    HtmlFinal=getHtml(LocalSess, DimHtml);
     }
 else
     HtmlFinal=HtmlBase;

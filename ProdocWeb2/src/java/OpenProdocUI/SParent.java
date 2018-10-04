@@ -35,6 +35,7 @@ import javax.servlet.http.*;
 import prodoc.Attribute;
 import prodoc.Condition;
 import prodoc.Conditions;
+import prodoc.ContribConf;
 import prodoc.Cursor;
 import prodoc.DriverGeneric;
 import prodoc.ExtConf;
@@ -1587,6 +1588,16 @@ protected static ExtConf getOPACConf(HttpServletRequest Req)
 return((ExtConf)Req.getSession().getAttribute("OPAC_CONF")); 
 }
 //-----------------------------------------------------------------------------------------------
+protected static void setContribConf(HttpServletRequest Req, ContribConf ConfOPAC)
+{
+Req.getSession().setAttribute("CONTRIB_CONF", ConfOPAC); 
+}
+//-----------------------------------------------------------------------------------------------
+protected static ContribConf getContribConf(HttpServletRequest Req)
+{
+return((ContribConf)Req.getSession().getAttribute("CONTRIB_CONF")); 
+}
+//-----------------------------------------------------------------------------------------------
 protected static String EscapeHtmlJson(String Text)
 {
 if (Text==null)  
@@ -1621,7 +1632,7 @@ if (ListAttrFold==null)
     }
 return ListAttrFold;
 }
-
+//-----------------------------------------------------------------------------------------------
 /**
  * @return the ListAttrDoc
  */
@@ -1648,5 +1659,36 @@ if (ListAttrDoc==null)
     }
 return ListAttrDoc;
 }
-
+//-----------------------------------------------------------------------------------------------
+protected static String getHtml(DriverGeneric sessOPD, String idHtmlOpac)
+{
+StringBuilder Html=new StringBuilder();
+try {
+PDDocs DocCSS=new PDDocs(sessOPD);
+DocCSS.setPDId(idHtmlOpac);
+ByteArrayOutputStream OutBytes = new ByteArrayOutputStream();
+DocCSS.getStream(OutBytes);
+Html.append(OutBytes.toString());
+} catch (Exception Ex)
+    {   
+    Ex.printStackTrace();
+    }
+return(Html.toString());
+}
+//-----------------------------------------------------------------------------------------------
+static protected String getConnector()
+{
+return("PD");    
+}
+//-----------------------------------------------------------------------------------------------
+protected PDFolders getContribFolder(HttpServletRequest Req)
+{
+return((PDFolders)Req.getSession().getAttribute("CONTRIB_FOLDER")); 
+}
+//-----------------------------------------------------------------------------------------------
+protected void setContribFolder(HttpServletRequest Req, PDFolders F)
+{
+Req.getSession().setAttribute("CONTRIB_FOLDER", F); 
+}
+//-----------------------------------------------------------------------------------------------
 }

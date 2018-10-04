@@ -372,6 +372,14 @@
         <servlet-name>RepFT</servlet-name>
         <servlet-class>OpenProdocServ.RepFT</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ContribLogin</servlet-name>
+        <servlet-class>OpenProdocUI.ContribLogin</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ContribList</servlet-name>
+        <servlet-class>OpenProdocUI.ContribList</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SParent</servlet-name>
         <url-pattern>/SParent</url-pattern>
@@ -743,6 +751,14 @@
     <servlet-mapping>
         <servlet-name>RepFT</servlet-name>
         <url-pattern>/RepFT</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ContribLogin</servlet-name>
+        <url-pattern>/ContribLogin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ContribList</servlet-name>
+        <url-pattern>/ContribList</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
