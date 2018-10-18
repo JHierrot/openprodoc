@@ -19,6 +19,8 @@
 
 package prodoc;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -28,19 +30,11 @@ import java.util.Vector;
  */
 public class ContribConf
 {
-
-    /**
-     * @return the TitleList
-     */
-    public String getTitleList()
-    {
-        return TitleList;
-    }
 private final Vector<String> DocTipesList=new Vector();
 private String BaseFolder=null;
 private boolean OpenContrib=false;
 private String LoginFolderType=null;
-private Vector<String> LoginFields=new Vector();
+private final Vector<String> LoginFields=new Vector();
 private final Vector<String> FieldsToRead=new Vector();
 private String FormContribCSS=null;
 private String FormContribLogo=null;
@@ -60,6 +54,9 @@ private Vector<String> HtmlAgentList=null;
 private int NumHtmlContAdd=0;
 private Vector<String[]> ListAgentAdd=null;
 private Vector<String> HtmlAgentAdd=null;
+private final HashMap<String, HashSet> FieldsByType=new HashMap();
+private static final String FIELDSPREFIX="Fields_";
+private static HashSet<String> GlobalExcluded=null;
 
 //----------------------------------------------------------------------------    
 static void AssignDefConf(Properties ProdocProperties)
@@ -96,6 +93,18 @@ if (ConfDocTipesList!=null && ConfDocTipesList.trim().length()!=0)
     String[] DTL = ConfDocTipesList.trim().split("\\|");
     for (String DTL1 : DTL)
         getDocTipesList().add(DTL1.trim());
+    }
+for (int i = 0; i < getDocTipesList().size(); i++)
+    {
+    String FieldsType = ProdocProperties.getProperty(FIELDSPREFIX+getDocTipesList().elementAt(i));
+    if (FieldsType!=null && FieldsType.trim().length()!=0) 
+        {
+        String[] FTL = FieldsType.trim().split("\\|");
+        HashSet Temp=new HashSet();
+        for (String FTL1 : FTL)  
+            Temp.add(FTL1.trim().toUpperCase());
+        getFieldsByType().put(getDocTipesList().elementAt(i), Temp);
+        }
     }
 String ConfFieldsToInclude=ProdocProperties.getProperty("FieldsToInclude");
 if (ConfFieldsToInclude!=null && ConfFieldsToInclude.trim().length()!=0)
@@ -226,6 +235,14 @@ for (int NHO = 0; NHO < NumHtmlContAdd; NHO++)
 }
 //---------------------------------------------------------------------------- 
 /**
+ * @return the TitleList
+ */
+public String getTitleList()
+{
+return TitleList;
+}
+//---------------------------------------------------------------------------- 
+/**
  *
  * @param Agent
  * @return
@@ -351,13 +368,44 @@ public Vector<String> getLoginFields()
 return LoginFields;
 }
 
+/**
+* @return the DocsReportId
+*/
+public String getDocsReportId()
+{
+return DocsReportId;
+}
+
+/**
+* @return the FieldsByType
+*/
+private HashMap<String, HashSet> getFieldsByType()
+{
+return FieldsByType;
+}
     /**
-     * @return the DocsReportId
-     */
-    public String getDocsReportId()
+ * @return the GlobalExcluded
+ */
+private synchronized static HashSet<String> getGlobalExcluded()
+{
+if (GlobalExcluded==null)    
     {
-        return DocsReportId;
+    GlobalExcluded=new HashSet();
     }
+return GlobalExcluded;
+}
+//-----------------------------------------------------------------------------------------------
+
+public boolean Allowed(String NameDocT, String name)
+{
+HashSet AllowFields = getFieldsByType().get(NameDocT);    
+if (AllowFields!=null && !AllowFields.contains(name.toUpperCase()))
+    return(false);
+if (getGlobalExcluded().contains(name.toUpperCase()))
+    return(false);
+return(true);
+}
+//-----------------------------------------------------------------------------------------------
 }
 
 /***************************

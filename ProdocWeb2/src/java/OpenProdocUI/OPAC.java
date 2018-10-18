@@ -360,7 +360,6 @@ private static StringBuilder CalcOps(StringBuilder Ops, String TermId, DriverGen
 {
 PDThesaur T=new PDThesaur(LocalSess);
 T.Load(TermId);
-
 StringBuilder SLev=new StringBuilder(100);
 for (int i = 0; i < Level-1; i++)
     SLev.append("&nbsp;&nbsp;");

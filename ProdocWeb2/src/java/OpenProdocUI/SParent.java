@@ -1686,7 +1686,7 @@ protected PDFolders getContribFolder(HttpServletRequest Req)
 return((PDFolders)Req.getSession().getAttribute("CONTRIB_FOLDER")); 
 }
 //-----------------------------------------------------------------------------------------------
-protected void setContribFolder(HttpServletRequest Req, PDFolders F)
+static protected void setContribFolder(HttpServletRequest Req, PDFolders F)
 {
 Req.getSession().setAttribute("CONTRIB_FOLDER", F); 
 }

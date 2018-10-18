@@ -25,6 +25,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -32,6 +35,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
+import java.util.stream.Stream;
 
 /**
  * Class for generating "reports"
@@ -784,6 +788,26 @@ public void Install() throws PDException
 {
     
 getDrv().CreateTable(getTabName(), getRecordStruct());
+}
+//-------------------------------------------------------------------------
+public StringBuilder GenerateRepString(String pIdParent, Cursor pListDocs, Vector pVectRec) throws PDException
+{
+StringBuilder SB= new StringBuilder(2000);    
+ArrayList<String> GeneratedRep = GenerateRep(pIdParent, pListDocs, pVectRec, 0, 0, System.getProperty("java.io.tmpdir"), 0);  
+String File2Send=GeneratedRep.get(0);
+try {
+Stream<String> stream = Files.lines( Paths.get(File2Send), StandardCharsets.UTF_8);
+stream.forEach(s -> SB.append(s).append("\n"));
+for (int i = 0; i < GeneratedRep.size(); i++)
+    {
+    File f=new File(GeneratedRep.get(i));
+    f.delete();
+    }
+} catch (Exception Ex)
+    {
+    PDException.GenPDException(Ex.getLocalizedMessage(), File2Send);
+    }
+return (SB);    
 }
 //-------------------------------------------------------------------------
 }

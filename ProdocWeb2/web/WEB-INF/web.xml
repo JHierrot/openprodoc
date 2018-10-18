@@ -380,6 +380,10 @@
         <servlet-name>ContribList</servlet-name>
         <servlet-class>OpenProdocUI.ContribList</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ContribAdd</servlet-name>
+        <servlet-class>OpenProdocUI.ContribAdd</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SParent</servlet-name>
         <url-pattern>/SParent</url-pattern>
@@ -759,6 +763,10 @@
     <servlet-mapping>
         <servlet-name>ContribList</servlet-name>
         <url-pattern>/ContribList</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ContribAdd</servlet-name>
+        <url-pattern>/ContribAdd</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

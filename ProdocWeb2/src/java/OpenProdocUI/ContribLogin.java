@@ -88,6 +88,11 @@ private static final String HtmlBase="<!DOCTYPE html>\n" +
 @Override
 protected void processRequest(HttpServletRequest Req, HttpServletResponse response) throws ServletException, IOException
 {   
+ShowLoginContrib(Req, response);    
+}
+//----------------------------------------------------------------------------
+static void ShowLoginContrib(HttpServletRequest Req, HttpServletResponse response) throws ServletException, IOException
+{   
 response.setContentType("text/html;charset=UTF-8");
 PrintWriter out = response.getWriter(); 
 DriverGeneric LocalSess=null;
@@ -110,6 +115,7 @@ if (ConfContr==null)
     Confs.put(IdContrib, ConfContr);
     }
 setContribConf(Req, ConfContr);
+setContribFolder(Req, null);    
 LocalSess=ProdocFW.getSession(getConnector(), ConfContr.getUser(), ConfContr.getPass());   
 if (ContribLogins.containsKey(IdContrib))
     out.println(ContribLogins.get(IdContrib));   
