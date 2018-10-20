@@ -384,6 +384,14 @@
         <servlet-name>ContribAdd</servlet-name>
         <servlet-class>OpenProdocUI.ContribAdd</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ContribAdd2</servlet-name>
+        <servlet-class>OpenProdocUI.ContribAdd2</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ContribRes</servlet-name>
+        <servlet-class>OpenProdocUI.ContribRes</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SParent</servlet-name>
         <url-pattern>/SParent</url-pattern>
@@ -767,6 +775,14 @@
     <servlet-mapping>
         <servlet-name>ContribAdd</servlet-name>
         <url-pattern>/ContribAdd</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ContribAdd2</servlet-name>
+        <url-pattern>/ContribAdd2</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ContribRes</servlet-name>
+        <url-pattern>/ContribRes</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

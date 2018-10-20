@@ -54,7 +54,11 @@ private Vector<String> HtmlAgentList=null;
 private int NumHtmlContAdd=0;
 private Vector<String[]> ListAgentAdd=null;
 private Vector<String> HtmlAgentAdd=null;
+private int NumHtmlContRes=0;
+private Vector<String[]> ListAgentRes=null;
+private Vector<String> HtmlAgentRes=null;
 private final HashMap<String, HashSet> FieldsByType=new HashMap();
+private HashSet<String> AllowedExt=new HashSet();
 private static final String FIELDSPREFIX="Fields_";
 private static HashSet<String> GlobalExcluded=null;
 
@@ -232,6 +236,33 @@ for (int NHO = 0; NHO < NumHtmlContAdd; NHO++)
     String HAgent=ProdocProperties.getProperty("HtmlAgentAdd"+NHO);
     HtmlAgentAdd.add(HAgent);
     }
+//--------------
+String ConfNumHtmlContRes=ProdocProperties.getProperty("NumHtmlContRes");
+if (ConfNumHtmlContRes!=null && ConfNumHtmlContRes.trim().length()!=0)
+    {
+    NumHtmlContRes=Integer.parseInt(ConfNumHtmlContRes.trim());
+    }    
+ListAgentRes=new Vector(NumHtmlContRes);
+HtmlAgentRes=new Vector(NumHtmlContRes);
+for (int NHO = 0; NHO < NumHtmlContRes; NHO++)
+    {
+    String LAgent=ProdocProperties.getProperty("ListAgentRes"+NHO);
+    if (LAgent!=null && LAgent.trim().length()!=0)
+        {
+        String[] LA = LAgent.trim().toUpperCase().split("\\|");
+        ListAgentRes.add(LA);
+        }    
+    String HAgent=ProdocProperties.getProperty("HtmlAgentRes"+NHO);
+    HtmlAgentRes.add(HAgent);
+    }
+//---------------
+String ConfAllowedExt=ProdocProperties.getProperty("AllowedExt");
+if (ConfLoginFields!=null && ConfLoginFields.trim().length()!=0)
+    {
+    String[] ALLE = ConfAllowedExt.trim().split("\\|");
+    for (String ALLE1 : ALLE) 
+        AllowedExt.add(ALLE1.trim());
+    }
 }
 //---------------------------------------------------------------------------- 
 /**
@@ -247,7 +278,7 @@ return TitleList;
  * @param Agent
  * @return
  */
-public String SolveHtml(String Agent)
+public String SolveHtmlLog(String Agent)
 {
 Agent=Agent.toUpperCase();
 for (int NHO = 0; NHO < NumHtmlContLog; NHO++)
@@ -258,6 +289,69 @@ for (int NHO = 0; NHO < NumHtmlContLog; NHO++)
         String Age = LA[i];
         if (Age.equals("*") || Agent.contains(Age))
            return(HtmlAgentLog.get(NHO)); 
+        }
+    }
+return(null);    
+}
+//---------------------------------------------------------------------------- 
+/**
+ *
+ * @param Agent
+ * @return
+ */
+public String SolveHtmlList(String Agent)
+{
+Agent=Agent.toUpperCase();
+for (int NHO = 0; NHO < NumHtmlContList; NHO++)
+    {
+    String[] LA =ListAgentList.get(NHO);    
+    for (int i = 0; i < LA.length; i++)
+        {
+        String Age = LA[i];
+        if (Age.equals("*") || Agent.contains(Age))
+           return(HtmlAgentList.get(NHO)); 
+        }
+    }
+return(null);    
+}
+//---------------------------------------------------------------------------- 
+/**
+ *
+ * @param Agent
+ * @return
+ */
+public String SolveHtmlAdd(String Agent)
+{
+Agent=Agent.toUpperCase();
+for (int NHO = 0; NHO < NumHtmlContAdd; NHO++)
+    {
+    String[] LA =ListAgentAdd.get(NHO);    
+    for (int i = 0; i < LA.length; i++)
+        {
+        String Age = LA[i];
+        if (Age.equals("*") || Agent.contains(Age))
+           return(HtmlAgentAdd.get(NHO)); 
+        }
+    }
+return(null);    
+}
+//---------------------------------------------------------------------------- 
+/**
+ *
+ * @param Agent
+ * @return
+ */
+public String SolveHtmlRes(String Agent)
+{
+Agent=Agent.toUpperCase();
+for (int NHO = 0; NHO < NumHtmlContRes; NHO++)
+    {
+    String[] LA =ListAgentRes.get(NHO);    
+    for (int i = 0; i < LA.length; i++)
+        {
+        String Age = LA[i];
+        if (Age.equals("*") || Agent.contains(Age))
+           return(HtmlAgentRes.get(NHO)); 
         }
     }
 return(null);    
@@ -336,22 +430,13 @@ return UrlHelp;
 }
 //---------------------------------------------------------
 /**
-* @return the NumHtmlContLog
-*/
-public int getNumHtmlContLog()
-{
-return NumHtmlContLog;
-}
-//---------------------------------------------------------
-
-/**
 * @return the OpenContrib
 */
 public boolean isOpenContrib()
 {
 return OpenContrib;
 }
-
+//---------------------------------------------------------
 /**
 * @return the LoginFolderType
 */
@@ -359,7 +444,7 @@ public String getLoginFolderType()
 {
 return LoginFolderType;
 }
-
+//---------------------------------------------------------
 /**
 * @return the LoginFields
 */
@@ -367,7 +452,7 @@ public Vector<String> getLoginFields()
 {
 return LoginFields;
 }
-
+//---------------------------------------------------------
 /**
 * @return the DocsReportId
 */
@@ -375,7 +460,7 @@ public String getDocsReportId()
 {
 return DocsReportId;
 }
-
+//---------------------------------------------------------
 /**
 * @return the FieldsByType
 */
@@ -383,7 +468,8 @@ private HashMap<String, HashSet> getFieldsByType()
 {
 return FieldsByType;
 }
-    /**
+//---------------------------------------------------------
+/**
  * @return the GlobalExcluded
  */
 private synchronized static HashSet<String> getGlobalExcluded()
@@ -391,11 +477,23 @@ private synchronized static HashSet<String> getGlobalExcluded()
 if (GlobalExcluded==null)    
     {
     GlobalExcluded=new HashSet();
+    GlobalExcluded.add(PDDocs.fACL);
+    GlobalExcluded.add(PDDocs.fDOCTYPE);
+    GlobalExcluded.add(PDDocs.fLOCKEDBY);
+    GlobalExcluded.add(PDDocs.fMIMETYPE);
+    GlobalExcluded.add(PDDocs.fNAME);
+    GlobalExcluded.add(PDDocs.fPARENTID);
+    GlobalExcluded.add(PDDocs.fPDAUTOR);
+    GlobalExcluded.add(PDDocs.fPDDATE);
+    GlobalExcluded.add(PDDocs.fPDID);
+    GlobalExcluded.add(PDDocs.fPURGEDATE);
+    GlobalExcluded.add(PDDocs.fREPOSIT);
+    GlobalExcluded.add(PDDocs.fSTATUS);
+    GlobalExcluded.add(PDDocs.fVERSION);
     }
 return GlobalExcluded;
 }
 //-----------------------------------------------------------------------------------------------
-
 public boolean Allowed(String NameDocT, String name)
 {
 HashSet AllowFields = getFieldsByType().get(NameDocT);    
@@ -406,37 +504,9 @@ if (getGlobalExcluded().contains(name.toUpperCase()))
 return(true);
 }
 //-----------------------------------------------------------------------------------------------
+public boolean IsAllowedExt(String NewExt)
+{
+return (AllowedExt.contains(NewExt));    
 }
-
-/***************************
-
-#########################################################################
-####            OPAC                                                 ####
-#########################################################################
-OpacActive=1
-WebInactive=0
-DocTipesList=Article|ECM_Standards|InternetProfile|MusicRecords|Picture
-FieldsToInclude=Author|Authors|Keywords|Player|Title|Country|CreativeCommons
-## Operators for search. 1 for each field. Default EQ
-## = EQ, <> NE, > GT, >= GE, < LT, <= LE, Contains CT 
-FieldsComp=EQ|EQ|EQ|EQ|CT|EQ|EQ
-// BaseFolder=/Examples - Ejemplos
-BaseFolder=/
-Inheritance=1
-ResultForm=150c9be080c-3fe46f69eb1b2cb7|150c9be8462-3fd76612bb72fece
-MaxResults=0
-FormSearchCSS=15db73b6628-3fee99cd40e27fee
-#FormSearchLogo=SendDoc?Id=15d8a225786-3fe11b750cd2517e
-FormSearchLogo=img/LogoProdoc.jpg
-User=root
-Pass=root
-Title=Punto de Consulta Simplificada
-DTLabel=Seleccionar tipo de documento a buscar
-FTLabel=Introducir algunas palabras de b&uacute;squeda
-FormatLabel=Seleccionar formato de salida de los resultados
-HelpForDocType=Ayuda Tipos Documentales
-HelpForFullText=Ayuda B&uacute;squeda Texto Completo<br>Introduzca cualquier palabra(s) del contenido de documento para recuperar por criterios aproximados. Si se desea que el docuemnto contenga la palabra, debe incluirse un signo +. Si desea buscar literalmente debe incluirse la palabra entre comillas. Para buscar documentos que NO contengan una palabra debe incluirse un signo menos -<br>Puede combinarse con la b&uacute;sqeda por metadatos de los documentos.
-HelpForFormatType=Ayuda Formatos Salida
-UrlHelp=help/EN/HelpIndex.html
-
-*****************************/
+//-----------------------------------------------------------------------------------------------
+}

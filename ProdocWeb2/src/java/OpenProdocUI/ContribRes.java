@@ -20,10 +20,18 @@ package OpenProdocUI;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import prodoc.Attribute;
 import prodoc.ContribConf;
 import prodoc.DriverGeneric;
@@ -37,7 +45,7 @@ import prodoc.Record;
  *
  * @author jhierrot
  */
-public class ContribAdd extends SParent
+public class ContribRes extends SParent
 {
 private static final String HtmlBase="<!DOCTYPE html>\n" +
 "<html>" +
@@ -48,22 +56,10 @@ private static final String HtmlBase="<!DOCTYPE html>\n" +
         "@CSS@"+
     "</head>\n" +
     "<body class=\"CONTRIBBODY\" >\n" +
-       "<form action=\"ContribRes\" method=\"post\" class=\"CONTRIBFORM\" enctype=\"multipart/form-data\">" +
-       "<table align=\"center\"  class=\"CONTRIBTABLE\">\n" +
-        "<tr><td>&nbsp</td></tr>" +
-        "<tr><td>@LOGO@<H3>OpenProdoc</H3></td></tr>" +
-        "<tr><td>"+
-        "<fieldset class=\"CONTRIBFS\"><legend class=\"CONTRIBLEG\">&nbsp;&nbsp;@DOCTITLE@&nbsp;&nbsp;</legend>\n"+
-         "<table>\n" +   
-          "@CONTRIB_DOCFIELDS@"+
-          "<tr><td><div class=\"CONTRIBLABELFILEUP\">Archivo a aportar</div></td><td><input type=\"file\" class=\"CONTRIBFILEUP\" name=\"FileUp\"></td></tr>"+
-          "<tr></tr><tr><td><a class=\"CONTRIBHELP\" href=\"@URLHELP@\" target=\"_blank\">?</a></td><td><a class=\"CONTRIBLISTURL\" href=\"ContribList\" ><-</a><input  class=\"CONTRIBBUT\" type=\"submit\" value=\"  +  \"></td></tr>" +
-          "</table>\n" +
-         "</fieldset>" +
-        "</td></tr>" +
-       "</table>\n"+       
-        "<input type=\"hidden\" name=\"CONTRIB_DT\" value=\"@CONTRIBDTVAL@\">"+
-     "</form>\n" +
+    "<p>Document Upload</p>"+
+    "@RESULT@"+
+    "<a class=\"CONTRIBLISTURL\" href=\"ContribList\" >List</a><br>"+   
+    "<a href=\"javascript: history.go(-1)\">Retry</a>"+
     "</body>" +
 "</html>";
 
@@ -107,14 +103,14 @@ ProdocFW.freeSesion(getConnector(), LocalSess);
 @Override
 public String getServletInfo()
 {
-return "ContribAdd Servlet";
+return "ContribRes Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 static synchronized private String GenHtml(HttpServletRequest Req, DriverGeneric LocalSess, ContribConf ConfContrib, PDFolders FoldUser) throws Exception
 {
 String HtmlFinal;   
 String Agent=Req.getHeader("User-Agent");
-String DimHtml=ConfContrib.SolveHtmlAdd(Agent);
+String DimHtml=ConfContrib.SolveHtmlRes(Agent);
 if (DimHtml!=null) 
     {
     HtmlFinal=getHtml(LocalSess, DimHtml);
@@ -130,43 +126,62 @@ if (ConfContrib.getFormContribCSS()!=null)
     }
 else
     HtmlFinal=HtmlFinal.replace("@CSS@", "");
-if (ConfContrib.getFormContribLogo()!=null) // <img src=\"/SendDoc?Id="+ExtConf.getFormSearchLogo()+"\">"
-    HtmlFinal=HtmlFinal.replace("@LOGO@", "<img src=\""+ConfContrib.getFormContribLogo()+"\">");
-else
-    HtmlFinal=HtmlFinal.replace("@LOGO@", "");
-if (ConfContrib.getUrlHelp()!=null) 
-    HtmlFinal=HtmlFinal.replace("@URLHELP@", ConfContrib.getUrlHelp());
-else
-    HtmlFinal=HtmlFinal.replace("@URLHELP@", "");
-String NameDocT=Req.getParameter("CONTRIB_DT");
-HtmlFinal=HtmlFinal.replace("@CONTRIBDTVAL@", NameDocT); // for actual ADD servlet
-PDObjDefs DocT=new PDObjDefs(LocalSess);
-DocT.Load(NameDocT);
-HtmlFinal=HtmlFinal.replace("@DOCTITLE@", DocT.getDescription());
-PDDocs DocTmp=new PDDocs(LocalSess, NameDocT);
-Record AttrDef = DocTmp.getRecSum();
-StringBuilder Fields=new StringBuilder(3000);
-Attribute Attr;
-AttrDef.initList();
-for (int i = 0; i < AttrDef.NumAttr(); i++)
+if (!ServletFileUpload.isMultipartContent(Req))
     {
-    Attr = AttrDef.nextAttr();   
-    if (!ConfContrib.Allowed(NameDocT, Attr.getName()))
-        continue; 
-    switch (Attr.getType())
-        {
-        case Attribute.tTHES:
-            Fields.append(GenThesVals(Req, LocalSess, Attr));
-            break;
-        case Attribute.tBOOLEAN:
-            Fields.append(GenBoolVals(Req, Attr));
-            break;
-        default:
-            Fields.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"CONTRIBLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td class=\"TD_CONTRIBINP\"><input class=\"CONTRIBINP\" type=\"text\" name=\"").append(Attr.getName()).append("\" value=\"").append(Attr.Export()).append("\"></td></tr>\n");
-            break;
-        }
+    HtmlFinal=HtmlFinal.replace("@RESULT@", "<div class=\"CONTRIBRESKO\">ERROR:NO File<div>");    
+    return(HtmlFinal);
     }
-HtmlFinal=HtmlFinal.replace("@CONTRIB_DOCFIELDS@", Fields);
+String NameDocT=null;
+String FileName=null;
+InputStream FileData=null;
+HashMap <String, String>ListFields=new HashMap();
+DiskFileItemFactory factory = new DiskFileItemFactory();
+factory.setSizeThreshold(1000000);
+ServletFileUpload upload = new ServletFileUpload(factory);
+List items = upload.parseRequest(Req);
+Iterator iter = items.iterator();
+while (iter.hasNext())
+    {
+    FileItem item = (FileItem) iter.next();
+    if (item.isFormField())
+        {
+        if (item.getFieldName().equals("CONTRIB_DT"))    
+            NameDocT=item.getString();
+        else
+            {
+            ListFields.put(item.getFieldName(), item.getString());
+            }
+        }
+    else 
+        {
+        FileName=item.getName();
+        FileData=item.getInputStream();
+        }
+    }   
+if (!ConfContrib.IsAllowedExt(FileName.substring(FileName.lastIndexOf(".")+1)))
+    {
+    HtmlFinal=HtmlFinal.replace("@RESULT@", "<div class=\"CONTRIBRESKO\">ERROR:Not Allowed extension<div>");    
+    return(HtmlFinal);
+    }
+PDDocs DocTmp=new PDDocs(LocalSess, NameDocT);
+DocTmp.setName(FileName);
+DocTmp.setStream(FileData);
+Record AttrDef = DocTmp.getRecSum();
+for (Map.Entry<String, String> entry : ListFields.entrySet())
+    {
+    if (AttrDef.getAttr(entry.getKey())!=null);
+        AttrDef.getAttr(entry.getKey()).Import(entry.getValue());
+    }
+DocTmp.assignValues(AttrDef);
+DocTmp.setParentId(FoldUser.getPDId());
+DocTmp.setACL(FoldUser.getACL());
+try {
+DocTmp.insert();
+HtmlFinal=HtmlFinal.replace("@RESULT@", "<div class=\"CONTRIBRESOK\">OK</div>");
+} catch (Exception Ex)
+    {
+    HtmlFinal=HtmlFinal.replace("@RESULT@", "<div class=\"CONTRIBRESKO\">ERROR:"+Ex.getLocalizedMessage()+"<div>");    
+    }
 return(HtmlFinal);
 }
 //-----------------------------------------------------------------------------------------------

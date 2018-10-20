@@ -1691,4 +1691,41 @@ static protected void setContribFolder(HttpServletRequest Req, PDFolders F)
 Req.getSession().setAttribute("CONTRIB_FOLDER", F); 
 }
 //-----------------------------------------------------------------------------------------------
+protected static StringBuilder GenThesVals(HttpServletRequest Req, DriverGeneric LocalSess, Attribute Attr) throws PDException
+{
+StringBuilder SB=new StringBuilder(2000);
+StringBuilder Ops=new StringBuilder(2000);
+CalcOps(Ops, String.valueOf(Attr.getLongStr()), LocalSess, 0);
+SB.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"CONTRIBLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td class=\"TD_CONTRIBINP\"><select class=\"CONTRIBFORMATTHES\" name=\"").append(Attr.getName()).append("\">").append(Ops).append("</select><span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
+return(SB);
+}
+//-----------------------------------------------------------------------------------------------
+protected static StringBuilder GenBoolVals(HttpServletRequest Req, Attribute Attr)
+{
+StringBuilder SB=new StringBuilder(2000);
+SB.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"CONTRIBLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td class=\"TD_CONTRIBINP\"><select class=\"CONTRIBFORMATTHES\" name=\"").append(Attr.getName()).append("\">").append("<option value=\"\" selected></option><option value=\"1\">true</option></option><option value=\"0\">false</option>").append("</select><span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
+return(SB);
+}
+//-----------------------------------------------------------------------------------------------
+private static StringBuilder CalcOps(StringBuilder Ops, String TermId, DriverGeneric LocalSess, int Level) throws PDException
+{
+PDThesaur T=new PDThesaur(LocalSess);
+T.Load(TermId);
+StringBuilder SLev=new StringBuilder(100);
+for (int i = 0; i < Level-1; i++)
+    SLev.append("&nbsp;&nbsp;");
+SLev.append("└ ");
+//String SLev=ThesTree.substring(0, Level);
+if (Level==0)
+    Ops.append("<option value=\"\" selected> </option>");
+else
+    Ops.append("<option value=\"").append(T.getPDId()).append("\">").append(SLev).append(T.getName()).append("</option>");
+HashSet listDirectDescendList = T.getListDirectDescendList(TermId);
+for (Iterator iterator = listDirectDescendList.iterator(); iterator.hasNext();)
+    {
+    CalcOps(Ops,(String)iterator.next(), LocalSess, Level+1 );    
+    }
+return(Ops);
+}
+//-----------------------------------------------------------------------------------------------
 }

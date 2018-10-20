@@ -153,7 +153,7 @@ static synchronized private String GenHtml(HttpServletRequest Req, DriverGeneric
 {
 String HtmlFinal;   
 String Agent=Req.getHeader("User-Agent");
-String DimHtml=ConfContrib.SolveHtml(Agent);
+String DimHtml=ConfContrib.SolveHtmlList(Agent);
 if (DimHtml!=null) 
     {
     HtmlFinal=getHtml(LocalSess, DimHtml);
