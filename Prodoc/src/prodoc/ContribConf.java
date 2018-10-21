@@ -30,14 +30,7 @@ import java.util.Vector;
  */
 public class ContribConf
 {
-
-    /**
-     * @return the MaxSize
-     */
-    public int getMaxSize()
-    {
-        return MaxSize;
-    }
+private String Id;
 private final Vector<String> DocTipesList=new Vector();
 private String BaseFolder=null;
 private boolean OpenContrib=false;
@@ -51,7 +44,7 @@ private String Pass=null;
 private String Title=null;
 private String DocsReportId=null;
 private String TitleList=null;
-private static final ContribConf DefExtConf=new ContribConf();
+//private static final ContribConf DefExtConf=new ContribConf();
 private String UrlHelp=null;
 private int NumHtmlContLog=0;
 private Vector<String[]> ListAgentLog=null;
@@ -72,33 +65,15 @@ private int MaxSize=30000000;
 private static final String FIELDSPREFIX="Fields_";
 private static HashSet<String> GlobalExcluded=null;
 
-//----------------------------------------------------------------------------    
-static void AssignDefConf(Properties ProdocProperties)
+public ContribConf(String IdContrib)
 {
-DefExtConf.AssignConf(ProdocProperties);
+Id=IdContrib;
 }
 //----------------------------------------------------------------------------    
 /**
-* @return the User
-*/
-public static String getDefUser()
-{
-return DefExtConf.getUser();
-}
-//----------------------------------------------------------------------------    
-/**
-* @return the Pass
-*/
-public static String getDefPass()
-{
-return DefExtConf.getPass();
-}
-//----------------------------------------------------------------------------    
-
-    /**
-     *
-     * @param ContribProperties
-     */
+ *
+ * @param ContribProperties
+ */
 public void AssignConf(Properties ContribProperties)
 {
 String ConfDocTipesList=ContribProperties.getProperty("DocTipesList");
@@ -512,9 +487,9 @@ return GlobalExcluded;
 //-----------------------------------------------------------------------------------------------
 public boolean Allowed(String NameDocT, String name)
 {
-HashSet AllowFields = getFieldsByType().get(NameDocT);    
 if (getGlobalExcluded().contains(name))
     return(false);
+HashSet AllowFields = getFieldsByType().get(NameDocT);    
 if (AllowFields==null)
     return(true);
 if (AllowFields.contains(name))
@@ -527,4 +502,20 @@ public boolean IsAllowedExt(String NewExt)
 return (AllowedExt.contains(NewExt));    
 }
 //-----------------------------------------------------------------------------------------------
+/**
+ * @return the MaxSize
+ */
+public int getMaxSize()
+{
+return MaxSize;
+}
+//-----------------------------------------------------------------------------------------------
+
+    /**
+     * @return the Id
+     */
+    public String getId()
+    {
+        return Id;
+    }
 }

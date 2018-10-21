@@ -63,7 +63,8 @@ private static final String HtmlBase="<!DOCTYPE html>\n" +
         "<fieldset class=\"CONTRIBFS\"><legend class=\"CONTRIBLEG\">&nbsp;&nbsp;@TITLELIST@&nbsp;&nbsp;</legend>\n"+
          "<table>\n" +   
           "@CONTRIBFIELDS@"+
-          "<tr></tr><tr><td><a class=\"CONTRIBHELP\" href=\"@URLHELP@\" target=\"_blank\">?</a></td><td><select class=\"CONTRIBDOCTYPESCOMB\" name=\"CONTRIB_DT\">@CONTRIB_DT@</select><input  class=\"CONTRIBBUT\" type=\"submit\" value=\"  +  \"></td></tr>" +
+          "<tr></tr><tr><td></td><td><select class=\"CONTRIBDOCTYPESCOMB\" name=\"CONTRIB_DT\">@CONTRIB_DT@</select><input  class=\"CONTRIBBUT\" type=\"submit\" value=\"  +  \"></td></tr>" +
+        "<tr><td><a class=\"CONTRIBLOG\" href=\"ContribLogin?Id=@CONTRIBID@\">exit</a></td><td><a class=\"CONTRIBHELP\" href=\"@URLHELP@\" target=\"_blank\">?</a></td></tr>"+
           "</table>\n" +
          "</fieldset>" +
         "</td></tr>" +
@@ -181,6 +182,7 @@ if (ConfContrib.getUrlHelp()!=null)
     HtmlFinal=HtmlFinal.replace("@URLHELP@", ConfContrib.getUrlHelp());
 else
     HtmlFinal=HtmlFinal.replace("@URLHELP@", "");
+HtmlFinal=HtmlFinal.replace("@CONTRIBID@",ConfContrib.getId());
 HtmlFinal=HtmlFinal.replace("@CONTRIB_DT@", CalcListTips(LocalSess, ConfContrib));
 HtmlFinal=HtmlFinal.replace("@DOCSCONT@", genReport(LocalSess, ConfContrib, FoldUser));
 Vector<String> FieldsToShow=ConfContrib.getFieldsToRead();

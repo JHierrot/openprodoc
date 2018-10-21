@@ -110,7 +110,7 @@ if (IsCacheExpired())
 ContribConf ConfContr=Confs.get(IdContrib);
 if (ConfContr==null)
     {
-    ConfContr=new ContribConf();
+    ConfContr=new ContribConf(IdContrib);
     ConfContr.AssignConf(getContribProperties(IdContrib));
     Confs.put(IdContrib, ConfContr);
     }
@@ -254,5 +254,224 @@ ProdocFW.freeSesion("PD", sessOPD);
 return P;
 }
 //-----------------------------------------------------------------------------------------------
-
 }
+
+//#======= Document configuration =============================================
+//# Fields used for "login"/verifiation of identity
+//LoginFields=Correo|Telef
+//# Fields of the Foolder type to ask to be filled
+//FieldsToInclude=Nombre|Apellidos|Correo|Telef|Idioma
+//# Path of folder where folders will be created
+//BaseFolder=/Donaciones
+//# Document types allowed to be uploded
+//DocTipesList=PD_DOCS|Manual|Picture|Grabaciones
+//# Non included doc types show ALL fields
+//#Fields_PD_DOCS=
+//Fields_Manual=Title|DocDate
+//Fields_Picture=Title|Author|Keywords|DocDate
+//#Fields_Grabaciones=
+//#======= Security ==========================================================
+//# Open (1) or closed (0)system. When closed, Folder MUST be created and login information transmited to external user.
+//OpenContrib=1           
+//# Folder type to use
+//LoginFolderType=Donaciones
+//# UserName and Password of the user that will  do the actual insert in openprodoc of Folders and docs. 
+//# It is recmmended to be a user with a limiteed rol (only insert of folders and docs) and permissions only in the Contribution folder
+//User=root
+//Pass=root               
+//# Allowed extensions to upload
+//AllowedExt=doc|docx|xls|xlsx|ppt|pptx|txt|pdf|jpg|jpeg|tiff|tif|png|gif|odt
+//# MaxSize upload (bytes)
+//MaxSize=20000000                         
+//#======= Interface =========================================================
+//# Openprodoc identifier of CSS or http url of CSS
+//ContribCSS=16697ec3694-3fe7288b86493159
+//# url of logo. Can be a "local" url using the format /SendDoc?Id=Identifier of doc
+//ContribLogo=img/LogoProdoc.jpg
+//# Title to be show in login
+//Title=Aportaciones
+//# Title to be show in content of folder
+//TitleList=Archivo personal
+//# Id of Report used for showing docs infolder
+//DocsReportId=16654ff6af1-3f9b78099c0147a0
+//# Url of help
+//UrlHelp=
+//#======= Alternative htmls ==================================================
+//# Alternative htmls depending on agent
+//#---------------------------------------------
+//# Num alternatives for login
+//NumHtmlContLog=0
+//# Agents for login
+//ListAgentLog0=
+//# html for each agent of login
+//HtmlAgentLog0=
+//#---------------------------------------------
+//# Num alternatives for Lista of docs
+//NumHtmlContList=0
+//# Agents for List
+//ListAgentList0=
+//# html for each agent of List
+//HtmlAgentList0=
+//#---------------------------------------------
+//# Num alternatives for adding docs
+//NumHtmlContAdd=0
+//# Agents for adding docs
+//ListAgentAdd0=
+//# html for each agent of adding docs
+//HtmlAgentAdd0=
+//#---------------------------------------------
+//# Num alternatives for Results adding docs
+//NumHtmlContRes=0
+//# Agents for Results adding docs
+//ListAgentRes0=
+//# html for each agent of Results adding docs
+//HtmlAgentRes0=
+//#====================================================
+
+
+///* OpenProdoc CONTRIB default CSS */
+//.CONTRIBBODY
+//{
+//background-color: #DFDFDF;
+//}
+///* Style for whole body */
+//.CONTRIBFORM
+//{  
+//}
+///* Style for table containing fields */
+//.CONTRIBTABLE
+//{
+//}
+///* Style for FieldSet */
+//.CONTRIBFS
+//{
+//}
+///* Style for Legend */
+//.CONTRIBLEG
+//{
+//font-family: Tahoma,Helvetica;
+//font-size: 20px; 
+//font-weight: bold;
+//}
+///* Style for Document Type Combo */
+//.CONTRIBDOCTYPESCOMB
+//{
+//background-color: #A6A6A6;
+//}
+//.CONTRIBDOCTYPESCOMB:hover .tooltiptext 
+//{
+//visibility: visible;
+//}
+//
+///* Style for Fields Label */
+//.CONTRIBLAB
+//{
+//font-family: Tahoma,Helvetica;
+//font-size: 12px; 
+//border-bottom-color: #FFFFFF;
+//}
+///* Style for Fields Label */
+//.CONTRIBLAB_LOGIN
+//{
+//font-family: Tahoma,Helvetica;
+//font-size: 15px; 
+//border-bottom-color: #FFFFFF;
+//}
+//.CONTRIBLABELFILEUP
+//{
+//font-family: Tahoma,Helvetica;
+//font-size: 15px; 
+//border-bottom-color: #FFFFFF;
+//}
+//.CONTRIBRESOK
+//{
+//font-family: Tahoma,Helvetica;
+//font-size: 15px; 
+//border-bottom-color: #FFFFFF;
+//}
+//.CONTRIBRESKO
+//{
+//font-family: Tahoma,Helvetica;
+//font-size: 15px; 
+//border-bottom-color: #FF0000;
+//}
+//
+///* Style for Fields Input */
+//.CONTRIBINP
+//{
+//width: 200px;
+//}
+//.TD_CONTRIBINP:hover .tooltiptext 
+//{
+//    visibility: visible;
+//}
+///* format for thesaurus combos **/
+//.CONTRIBFORMATTHES
+//{
+//font-family: Tahoma,Helvetica;
+//}
+//
+///* Style for Fields Input */
+//.CONTRIBBUT
+//{
+//height: 40px;
+//width: 70px;
+//border-style: outset;
+//border-width: 4px;
+//font-size: 14px; 
+//font-style: italic;
+//font-weight: bold;
+//border-radius: 8px;
+//}
+//.CONTRIBHELP
+//{
+//font-family: Tahoma,Helvetica;
+//font-size: 16px; 
+//font-style: bold;
+//border-style: outset;
+//border-width: 4px;
+//border-radius: 8px;
+//padding: 5px;
+//background-color: #DFDFDF;
+//}
+//.CONTRIBLOG
+//{
+//font-family: Tahoma,Helvetica;
+//font-size: 16px; 
+//font-style: bold;
+//border-style: outset;
+//border-width: 4px;
+//border-radius: 8px;
+//padding: 5px;
+//background-color: #DFDFDF;
+//}
+//.CONTRIBLISTURL
+//{
+//font-family: Tahoma,Helvetica;
+//font-size: 16px; 
+//font-style: bold;
+//border-style: outset;
+//border-width: 4px;
+//border-radius: 8px;
+//padding: 5px;
+//background-color: #DFDFDF;
+//}
+//
+//img
+//{
+//height: 83px;
+//width: 80px;
+//}
+//.tooltiptext 
+//{
+//visibility: hidden;
+//font-family: Tahoma,Helvetica;
+//font-size: 12px; 
+//width: 200px;
+//background-color: grey;
+//color: #fff;
+//padding: 8px;
+//border-radius: 6px;
+//position: absolute;
+//z-index: 1;
+//}
