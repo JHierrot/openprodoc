@@ -138,6 +138,7 @@ HashMap <String, String>ListFields=new HashMap();
 DiskFileItemFactory factory = new DiskFileItemFactory();
 factory.setSizeThreshold(1000000);
 ServletFileUpload upload = new ServletFileUpload(factory);
+upload.setFileSizeMax(ConfContrib.getMaxSize());
 List items = upload.parseRequest(Req);
 Iterator iter = items.iterator();
 while (iter.hasNext())

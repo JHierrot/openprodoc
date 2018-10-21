@@ -392,6 +392,10 @@
         <servlet-name>ContribRes</servlet-name>
         <servlet-class>OpenProdocUI.ContribRes</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SendDocCont</servlet-name>
+        <servlet-class>OpenProdocServ.SendDocCont</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SParent</servlet-name>
         <url-pattern>/SParent</url-pattern>
@@ -783,6 +787,10 @@
     <servlet-mapping>
         <servlet-name>ContribRes</servlet-name>
         <url-pattern>/ContribRes</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SendDocCont</servlet-name>
+        <url-pattern>/SendDocCont</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

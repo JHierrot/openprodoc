@@ -30,6 +30,14 @@ import java.util.Vector;
  */
 public class ContribConf
 {
+
+    /**
+     * @return the MaxSize
+     */
+    public int getMaxSize()
+    {
+        return MaxSize;
+    }
 private final Vector<String> DocTipesList=new Vector();
 private String BaseFolder=null;
 private boolean OpenContrib=false;
@@ -58,7 +66,9 @@ private int NumHtmlContRes=0;
 private Vector<String[]> ListAgentRes=null;
 private Vector<String> HtmlAgentRes=null;
 private final HashMap<String, HashSet> FieldsByType=new HashMap();
-private HashSet<String> AllowedExt=new HashSet();
+private final HashSet<String> AllowedExt=new HashSet();
+private int MaxSize=30000000;
+
 private static final String FIELDSPREFIX="Fields_";
 private static HashSet<String> GlobalExcluded=null;
 
@@ -87,11 +97,11 @@ return DefExtConf.getPass();
 
     /**
      *
-     * @param ProdocProperties
+     * @param ContribProperties
      */
-public void AssignConf(Properties ProdocProperties)
+public void AssignConf(Properties ContribProperties)
 {
-String ConfDocTipesList=ProdocProperties.getProperty("DocTipesList");
+String ConfDocTipesList=ContribProperties.getProperty("DocTipesList");
 if (ConfDocTipesList!=null && ConfDocTipesList.trim().length()!=0)
     {
     String[] DTL = ConfDocTipesList.trim().split("\\|");
@@ -100,7 +110,7 @@ if (ConfDocTipesList!=null && ConfDocTipesList.trim().length()!=0)
     }
 for (int i = 0; i < getDocTipesList().size(); i++)
     {
-    String FieldsType = ProdocProperties.getProperty(FIELDSPREFIX+getDocTipesList().elementAt(i));
+    String FieldsType = ContribProperties.getProperty(FIELDSPREFIX+getDocTipesList().elementAt(i));
     if (FieldsType!=null && FieldsType.trim().length()!=0) 
         {
         String[] FTL = FieldsType.trim().split("\\|");
@@ -110,77 +120,77 @@ for (int i = 0; i < getDocTipesList().size(); i++)
         getFieldsByType().put(getDocTipesList().elementAt(i), Temp);
         }
     }
-String ConfFieldsToInclude=ProdocProperties.getProperty("FieldsToInclude");
+String ConfFieldsToInclude=ContribProperties.getProperty("FieldsToInclude");
 if (ConfFieldsToInclude!=null && ConfFieldsToInclude.trim().length()!=0)
     {
     String[] FTL = ConfFieldsToInclude.trim().split("\\|");
     for (String FTL1 : FTL)  
         getFieldsToRead().add(FTL1.trim());
     }
-String ConfOpenContrib=ProdocProperties.getProperty("OpenContrib");
+String ConfOpenContrib=ContribProperties.getProperty("OpenContrib");
 if (ConfOpenContrib!=null && ConfOpenContrib.trim().equals("1"))
     {
     OpenContrib=true;
     }
-String ConfLoginFolder=ProdocProperties.getProperty("LoginFolderType");
+String ConfLoginFolder=ContribProperties.getProperty("LoginFolderType");
 if (ConfLoginFolder!=null && ConfLoginFolder.trim().length()!=0)
     {
     LoginFolderType=ConfLoginFolder.trim();
     }
-String ConfLoginFields=ProdocProperties.getProperty("LoginFields");
+String ConfLoginFields=ContribProperties.getProperty("LoginFields");
 if (ConfLoginFields!=null && ConfLoginFields.trim().length()!=0)
     {
     String[] FTL = ConfLoginFields.trim().split("\\|");
     for (String FTL1 : FTL) 
         LoginFields.add(FTL1.trim());
     }
-String ConfBaseFolder=ProdocProperties.getProperty("BaseFolder");
+String ConfBaseFolder=ContribProperties.getProperty("BaseFolder");
 if (ConfBaseFolder!=null && ConfBaseFolder.trim().length()!=0)
     {
     BaseFolder=ConfBaseFolder.trim();
     }
-String ConfContribCSS=ProdocProperties.getProperty("ContribCSS");
+String ConfContribCSS=ContribProperties.getProperty("ContribCSS");
 if (ConfContribCSS!=null && ConfContribCSS.trim().length()!=0)
     {
     FormContribCSS=ConfContribCSS.trim();
     }    
-String ConfContribLogo=ProdocProperties.getProperty("ContribLogo");
+String ConfContribLogo=ContribProperties.getProperty("ContribLogo");
 if (ConfContribLogo!=null && ConfContribLogo.trim().length()!=0)
     {
     FormContribLogo=ConfContribLogo.trim();
     }    
-String ConfUser=ProdocProperties.getProperty("User");
+String ConfUser=ContribProperties.getProperty("User");
 if (ConfUser!=null && ConfUser.trim().length()!=0)
     {
     User=ConfUser.trim();
     }    
-String ConfPass=ProdocProperties.getProperty("Pass");
+String ConfPass=ContribProperties.getProperty("Pass");
 if (ConfPass!=null && ConfPass.trim().length()!=0)
     {
     Pass=ConfPass.trim();
     }    
-String ConfTitle=ProdocProperties.getProperty("Title");
+String ConfTitle=ContribProperties.getProperty("Title");
 if (ConfTitle!=null && ConfTitle.trim().length()!=0)
     {
     Title=ConfTitle.trim();
     }    
-String ConfDocsReportId=ProdocProperties.getProperty("DocsReportId");
+String ConfDocsReportId=ContribProperties.getProperty("DocsReportId");
 if (ConfDocsReportId!=null && ConfDocsReportId.trim().length()!=0)
     {
     DocsReportId=ConfDocsReportId.trim();
     }    
-String ConfTitleList=ProdocProperties.getProperty("TitleList");
+String ConfTitleList=ContribProperties.getProperty("TitleList");
 if (ConfTitleList!=null && ConfTitleList.trim().length()!=0)
     {
     TitleList=ConfTitleList.trim();
     }    
-String ConfUrlHelp=ProdocProperties.getProperty("UrlHelp");
+String ConfUrlHelp=ContribProperties.getProperty("UrlHelp");
 if (ConfUrlHelp!=null && ConfUrlHelp.trim().length()!=0)
     {
     UrlHelp=ConfUrlHelp.trim();
     }    
 //--------------
-String ConfNumHtmlContLog=ProdocProperties.getProperty("NumHtmlContLog");
+String ConfNumHtmlContLog=ContribProperties.getProperty("NumHtmlContLog");
 if (ConfNumHtmlContLog!=null && ConfNumHtmlContLog.trim().length()!=0)
     {
     NumHtmlContLog=Integer.parseInt(ConfNumHtmlContLog.trim());
@@ -189,17 +199,17 @@ ListAgentLog=new Vector(NumHtmlContLog);
 HtmlAgentLog=new Vector(NumHtmlContLog);
 for (int NHO = 0; NHO < NumHtmlContLog; NHO++)
     {
-    String LAgent=ProdocProperties.getProperty("ListAgentLog"+NHO);
+    String LAgent=ContribProperties.getProperty("ListAgentLog"+NHO);
     if (LAgent!=null && LAgent.trim().length()!=0)
         {
         String[] LA = LAgent.trim().toUpperCase().split("\\|");
         ListAgentLog.add(LA);
         }    
-    String HAgent=ProdocProperties.getProperty("HtmlAgentLog"+NHO);
+    String HAgent=ContribProperties.getProperty("HtmlAgentLog"+NHO);
     HtmlAgentLog.add(HAgent);
     }
 //--------------
-String ConfNumHtmlContList=ProdocProperties.getProperty("NumHtmlContList");
+String ConfNumHtmlContList=ContribProperties.getProperty("NumHtmlContList");
 if (ConfNumHtmlContList!=null && ConfNumHtmlContList.trim().length()!=0)
     {
     NumHtmlContList=Integer.parseInt(ConfNumHtmlContList.trim());
@@ -208,17 +218,17 @@ ListAgentList=new Vector(NumHtmlContList);
 HtmlAgentList=new Vector(NumHtmlContList);
 for (int NHO = 0; NHO < NumHtmlContList; NHO++)
     {
-    String LAgent=ProdocProperties.getProperty("ListAgentList"+NHO);
+    String LAgent=ContribProperties.getProperty("ListAgentList"+NHO);
     if (LAgent!=null && LAgent.trim().length()!=0)
         {
         String[] LA = LAgent.trim().toUpperCase().split("\\|");
         ListAgentList.add(LA);
         }    
-    String HAgent=ProdocProperties.getProperty("HtmlAgentList"+NHO);
+    String HAgent=ContribProperties.getProperty("HtmlAgentList"+NHO);
     HtmlAgentList.add(HAgent);
     }
 //--------------
-String ConfNumHtmlContAdd=ProdocProperties.getProperty("NumHtmlContAdd");
+String ConfNumHtmlContAdd=ContribProperties.getProperty("NumHtmlContAdd");
 if (ConfNumHtmlContAdd!=null && ConfNumHtmlContAdd.trim().length()!=0)
     {
     NumHtmlContAdd=Integer.parseInt(ConfNumHtmlContAdd.trim());
@@ -227,17 +237,17 @@ ListAgentAdd=new Vector(NumHtmlContAdd);
 HtmlAgentAdd=new Vector(NumHtmlContAdd);
 for (int NHO = 0; NHO < NumHtmlContAdd; NHO++)
     {
-    String LAgent=ProdocProperties.getProperty("ListAgentAdd"+NHO);
+    String LAgent=ContribProperties.getProperty("ListAgentAdd"+NHO);
     if (LAgent!=null && LAgent.trim().length()!=0)
         {
         String[] LA = LAgent.trim().toUpperCase().split("\\|");
         ListAgentAdd.add(LA);
         }    
-    String HAgent=ProdocProperties.getProperty("HtmlAgentAdd"+NHO);
+    String HAgent=ContribProperties.getProperty("HtmlAgentAdd"+NHO);
     HtmlAgentAdd.add(HAgent);
     }
 //--------------
-String ConfNumHtmlContRes=ProdocProperties.getProperty("NumHtmlContRes");
+String ConfNumHtmlContRes=ContribProperties.getProperty("NumHtmlContRes");
 if (ConfNumHtmlContRes!=null && ConfNumHtmlContRes.trim().length()!=0)
     {
     NumHtmlContRes=Integer.parseInt(ConfNumHtmlContRes.trim());
@@ -246,23 +256,29 @@ ListAgentRes=new Vector(NumHtmlContRes);
 HtmlAgentRes=new Vector(NumHtmlContRes);
 for (int NHO = 0; NHO < NumHtmlContRes; NHO++)
     {
-    String LAgent=ProdocProperties.getProperty("ListAgentRes"+NHO);
+    String LAgent=ContribProperties.getProperty("ListAgentRes"+NHO);
     if (LAgent!=null && LAgent.trim().length()!=0)
         {
         String[] LA = LAgent.trim().toUpperCase().split("\\|");
         ListAgentRes.add(LA);
         }    
-    String HAgent=ProdocProperties.getProperty("HtmlAgentRes"+NHO);
+    String HAgent=ContribProperties.getProperty("HtmlAgentRes"+NHO);
     HtmlAgentRes.add(HAgent);
     }
 //---------------
-String ConfAllowedExt=ProdocProperties.getProperty("AllowedExt");
+String ConfAllowedExt=ContribProperties.getProperty("AllowedExt");
 if (ConfLoginFields!=null && ConfLoginFields.trim().length()!=0)
     {
     String[] ALLE = ConfAllowedExt.trim().split("\\|");
     for (String ALLE1 : ALLE) 
         AllowedExt.add(ALLE1.trim());
     }
+String ConfMaxSize=ContribProperties.getProperty("MaxSize");
+if (ConfMaxSize!=null && ConfMaxSize.trim().length()!=0)
+    {
+    MaxSize=Integer.parseInt(ConfMaxSize.trim());
+    }       
+
 }
 //---------------------------------------------------------------------------- 
 /**
@@ -497,11 +513,13 @@ return GlobalExcluded;
 public boolean Allowed(String NameDocT, String name)
 {
 HashSet AllowFields = getFieldsByType().get(NameDocT);    
-if (AllowFields!=null && !AllowFields.contains(name.toUpperCase()))
+if (getGlobalExcluded().contains(name))
     return(false);
-if (getGlobalExcluded().contains(name.toUpperCase()))
-    return(false);
-return(true);
+if (AllowFields==null)
+    return(true);
+if (AllowFields.contains(name))
+    return(true);
+return(false);
 }
 //-----------------------------------------------------------------------------------------------
 public boolean IsAllowedExt(String NewExt)
