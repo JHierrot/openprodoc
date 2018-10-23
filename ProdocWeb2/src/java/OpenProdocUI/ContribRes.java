@@ -51,7 +51,7 @@ private static final String HtmlBase="<!DOCTYPE html>\n" +
 "<html>" +
     "<head>" +
         "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>" +
-        "<title>OpenProdoc2 Web Contrib Add</title>\n" +
+        "<title>OpenProdoc2 Web Contrib Result</title>\n" +
         "<link rel=\"shortcut icon\" href=\"img/OpenProdoc.ico\" type=\"image/x-icon\"/>\n" +       
         "@CSS@"+
     "</head>\n" +

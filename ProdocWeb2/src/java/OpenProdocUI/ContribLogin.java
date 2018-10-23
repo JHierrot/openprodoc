@@ -73,7 +73,8 @@ private static final String HtmlBase="<!DOCTYPE html>\n" +
           "</table>\n" +
          "</fieldset>" +
         "</td></tr>" +
-       "</table>\n"+        
+       "</table>\n"+      
+      "<input type=\"hidden\" name=\"Id\" value=\"@CONTRIB_ID@\">"+  
      "</form>\n" +
     "</body>" +
 "</html>";
@@ -184,7 +185,7 @@ if (ConfContrib.getUrlHelp()!=null)
     HtmlFinal=HtmlFinal.replace("@URLHELP@", ConfContrib.getUrlHelp());
 else
     HtmlFinal=HtmlFinal.replace("@URLHELP@", "");
-
+HtmlFinal=HtmlFinal.replace("@CONTRIB_ID@", ConfContrib.getId());
 Vector<String> FieldsLogin = ConfContrib.getLoginFields();
 Vector<String> FieldsToAsk;
 if (ConfContrib.isOpenContrib())
