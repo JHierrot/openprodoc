@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Módulo de Contribución</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="shortcut icon" href="img/OpenProdoc.ico" type="image/x-icon"/> 
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+<H4>Módulo de Contribución</H4><hr>
+<h5>Introducción</h5>
+<p>El módulo de Contribución de OpenProdoc permite aportar documentación a usuarios no dados de alta de OpenProdoc por medio de pantallas totalmente configurables, de forma similar a módulo de consultas OPAC que permite consultar a usuarios externos.</p>
+<p>Esto puede facilitar a usuarios externos a la entidad, o internos pero no dados de alta y que accederán puntualmente, el poder aportar documentación sin necesidad de formación ni conocimientos de OpenProdoc, 
+y evitando la gestión de usuarios cuando se puede tratar de un gran número de colaboradores muy puntuales, como podría ser colaboradores, socios o clientes de una institución.
+Como en el caso del OPAC, la seguridad es crítica, ya que podría accederse a información confidencial, intentar manipularse documentos o aportar archivos dañinos o demasiado grandes que puedan perjudicar el sistema.
+Para minimizar riesgos, el módulo de contribución cuenta con varias formas de seguridad y control que se detallan posteriormente.</p>
+<p>Con la función "Módulo de Contribución" puede crearse formularios como:</p>
+<p style="text-align:center;"><img alt="Ejemplo Contribución1" src="img/Contrib1.png"/></p>
+<h5>Funcionamiento</h5>
+<p>El funcionamiento del "Módulo de Contribución", que solo requiere parametrización, es el siguiente:</p>
+<ul>
+<li>Debe elegirse o crease una carpeta dentro de OpenProdoc donde se recibirán las aportaciones de documentos y se crea(elige) un tipo de carpeta para agrupar esos documentos en “expedientes” con el sentido que se quiera dar (donante,fuente,fondo,...”, con todos los metadatos que se considere necesario para definir ese “expediente”.</li>
+<li>Dentro del total conjunto de metadatos, podrá elegirse un subconjunto de ellos que el usuario externo podrá ver, e introducir si el sistema se define como “abierto” (véase el apartado de Seguridad y Control más adelante), y varios metadatos que se utilizaran para verificar la identidad del usuario externo si este se conecta más de una vez o si el sistema es “cerrado”.</li>
+<li>Deberá además elegirse los tipos documentales que se admitirán, los metadatos a introducir por cada tipo documental así como los formatos de archivo.</li>
+<li>Cuando un usuario externo se conecta, si el sistema es “abierto” le presentará todos metadatos definidos como “públicos” para el tipo de carpeta en la configuración. El usuario rellenará todos los metadatos obligatorios (entre los que estarán los metadatos de “verificación”) y al aceptar se creará una carpeta “expediente/fondo” (contenida en la carpeta principal de aportaciones), dentro del cual se recogerán todos los documentos que el usuario aporte. Posteriormente, las personas autorizadas dentro de OpenProdoc podrán modificar los metadatos introducidos o modificar metadatos de la carpeta de uso “interno”, por ejemplo notas.</li>
+<li>Una vez se accede a la carpeta personal, se mostrará los documentos introducidos hasta ese momento y podrá elegirse un nuevo tipo documental a añadir. El módulo de contribución presentará un formulario de entrada con los metadatos del tipo documental elegido, así como un control para elegir el documento en sí. Al aceptar, se incorporará el documento dentro de la carpeta, salvo que se incumpla alguna restricción, ya sea por los metadatos (como obligatoriedad, unicidad, etc.) o por el documento en sí (extensión no admitida,..) en cuyo caso se presentará información del error. En otro caso se presentará una pantalla de confirmación y se volverá a presentar el contenido del expediente personal, con la documentación aportada hasta el momento.</li>
+<li>Cuando el usuario desee finalizar la sesión, podrá salir del sistema y volver a la pantalla de entrada.</li>
+<li>Si desea aportar documentos en sesiones sucesivas deberá introducir los metadatos de verificación para que el sistema puede comprobar su identidad y evitar que un usuario pueda ver el contenido de un expediente que no es suyo. Estos metadatos cumplen la función de autenticación de una combinación de nombre de usuario y clave de acceso, de forma que ningún otro usuario externo pueda entrar a la carpeta personal (los usuario internos autorizados por medio de ACL) siempre podrán entrar y realizar las operaciones que el ACL les permita.</li>
+<li>Si un sistema es cerrado, la diferencia es que solo se presentarán los metadatos de verificación y que la carpeta debe estar ya creada. Es decir el personal responsable de OpenProdoc habrá creado las carpetas adecuadas previamente y remitido la información de acceso/verificación a los usuarios que se conectarán.</li>
+<li>El modelo abierto puede ser aplicable a un escenario en que un gran número de usuarios desconocidos aportarán documentación, mientras que el modelo cerrado sería aplicable a un escenario donde una entidad trabaja con un número reducido de colaboradores o entidades externas, con las que quiere compartir información pero sin crearles usuarios internos de la herramienta. Hay que resaltar el término “compartir”, ya que además de aportar, todos los documentos que se depositen en la carpeta expediente serán visibles por el usuario conectado. Es decir la entidad puede depositar documentos que desea que vea ese usuario externo.</li>
+<li>Adicionalmente hay que tener en cuenta que en esa carpeta podrían insertarse documentos con otro ACL, de forma que no puedan ser vistos por el usuario externo pero sí por el personal interno.</li>
+<li>Una vez que las información se ha introducido, un usuario interno con permisos sobre la carpeta podrá revisar la documentación aportada, modificando metadatos si es necesario (para lo que se deberá crear otra versión) o reclasificando los documentos (exportando e importando de nuevo) si la clasificación era errónea. 
+    Adicionalmente, una vez revisada la documentación podría moverse a otra carpeta “pública” desde donde pueda consultarse por medio del OPAC.</li>
+</ul>
+<h5>Parametrización:</h5>
+<p>Pueden crearse tantos ficheros de contribución como se desee. Cada uno representará un “área de contribución” con características e interfaz diferente. Aunque en principio estarán separadas, podría compartirse CSS, usuario interno de acceso e incluso e incluso la carpeta contenedora. 
+    Como en el caso del OPAC, se invocará por medio de una llamada incluyendo como parámetro el identificador del fichero de contribución. Cada fichero contendrá la siguiente información:</p>
+<ul>
+    <li><b>LoginFolderType:</b> Tipo de carpeta que se utilizará para almacenar y contener los documentos aportados por los usuarios externos. Se creará una carpeta de este tipo por cada usuario.
+        Puede contener el número y tipo de metadatos que se considere necesarios, incluyendo metadatos de acceso, información que aporte el usuario externo y metadatos “internos” no visibles por los usuarios externos.  
+        Para evitar duplicidades el tipo podría metadatos con valores únicos. También podría definirse tareas asociadas a eventos para asignar o cambiar valores de metadatos si se deea. Ej. <i>LoginFolderType=Donacion</i></li>
+    <li><b>LoginFields:</b> Esta entrada  contiene los metadatos del tipo de carpeta  que se utilizarán para verificar la identidad del usuario. Si el sistema es cerrado, solo se presentarán esos metadatos y se pedirán siempre. 
+        Si es abierto se presentarán todos los incluidos en  FieldsToInclude y a partir de la primera vez (en que se crea la carpeta) las siguientes veces solo se exigirá estos. El número de metadatos de verificación puede ser variable. 
+        El mínimo es uno, pero puede incluirse dos, tres, etc. según la seguridad y confidencialidad del sistema lo requiera. 
+        Hay que tener en cuenta que estos metadatos, desde el punto de vista  de OpenProdoc son metadatos “normales” y por tanto NO están ENCRIPTADOS, por lo que no es recomendable recoger información confidencial en ellos, pues los usuarios de OpenProdoc con acceso a estas carpetas podrían verlos. Ej:<i>LoginFields= Correo|Telef</i></li>
+    <li><b>FieldsToInclude:</b> Esta entrada contiene todos los metadatos del tipo de carpeta que se permitirá ver (siempre) o editar(si es abierto) al usuario. 
+        Deberá incluirse en la lista los metadatos de login. Podrá definirse metadatos adicionales para uso interno de los usuarios de OpenProdoc (Notas, códigos, fechas, etc). Ej.: <i>FieldsToInclude=Nombre|Apellidos|Correo|Telef|Idioma</i></li>
+    <li><b>DocTipesList:</b> Este parámetro contiene la lista de tipos documentales que el usuario podrá aportar.  Hay que tener en cuenta que solo lomita los tipos de documentos a aportar, pero que en su carpeta personal puede haber documentos de otro tipo (introducidos por ejemplo por un usuario de OpenProdoc, como ayuda o para intercambiar documentación . Ej. <i>DocTipesList=PD_DOCS|Manual|Picture|Grabaciones</i></li>
+    <li><b>Lista de metadatos:</b> Para cada tipo documental incluido en  DocTipesList puede incluirse una entrada con el nombre: Fields_NombreTipo que incluya una lista de los metadatos de ese tipo documental que se solicitarán al usuario. Cualquier metadato no incluido en la lista no se solicitará (aunque podrá presentarse si el Report utilizado para mostrar resultados lo contiene) (Ej. <i>Fields_Picture=Title|Author|Keywords|DocDate ) . Si no se incluye una entrada para alguno de los tipos incluidos en DocTipesList, se presentarán todos los metadatos de ese tipo. De la lista siempre se excluyen los metadatos internos: ACL, Doctype, LockedBy, MimeType, Name, ParentId, PDAuthor, PDDate, PDId, Purgedate, Reposit, Status, Version</i></li>
+    <li><b>OpenContrib:</b> Indica si el Sistema es “abierto”, es decir cualquier persona puede crear carpetas o si es cerrado y por tanto las carpetas ya están creadas y el usuario externo que se conecte debe  conocer TODOS los metadatos de verificación para acceder a la carpeta correspondiente . Ej.:  <i>OpenContrib=1</i></li>
+    <li><b>BaseFolder:</b> Indica la carpeta dentro de la cual se crearán todas las carpetas del tipo  indicado en LoginFolderType. Debe ser una carpeta donde el usuario utilizado para la contribución tenga permisos de escritura y actualización al menos. Ej.: <i>BaseFolder=/Fondos/DonacionesUsuarios</i></li>
+    <li><b>User:</b> OpenProdoc user used internally by OpenProdoc for connecting automatically to OpenProdoc and create the folders and document. It should be a user with as limited permissions in folders (The BaseFolder ionly if possible) and role (only insert of folders and docs)  as possible in order to minimize the security risks. Ej. <i>User=guest1</i></li>
+    <li><b>Pass:</b> Password en “claro” del usuario seleccionado.    Ej.: <i>Pass= PassGuest1</i></li>
+    <li><b>AllowedExt:</b> Lista de extensiones de ficheros que se admitirán. Cualquier otra extensión se rechazará, para evitar la subida de ficheros ejecutables o perjudiciales. Ej.: <i>AllowedExt=:doc|docx|xls|xlsx|ppt|pptx|txt|pdf|jpg|jpeg|tiff|tif|png|gif|odt</i></li>
+    <li><b>MaxSize:</b> Tamaño máximo en bytes de cada archivo subido, para evitar que se llene el sistema de archivos. Ej.: <i>MaxSize=20000000</i></li>
+    <li><b>ContribCSS:</b> Identificador de la hoja de estilo css a utilizar. Puede ser un identificador de un archivo alojado en OpenProdoc o bien una url externa. Ej.: <i>ContribCSS=16697ec3694-3fe7288b86493159</i>  o   <i>ContribCSS=http://www.portalCorporativo.com/css/estándar.css</i></li>
+    <li><b>ContribLogo:</b> Url del logo de las pantallas de contribución. Puede ser una url absoluta o bien una referencia a una imagen albergada en OpenProdoc. Ej.: <i>ContribLogo=http://www.portalCorporativo.com/imgs/Logo.jpeg</i>  o  <i>ContribLogo=SendDoc?Id=43436565-aefe43434</i></li>
+    <li><b>Title:</b> Título  a presentar en la pantalla de aportaciones. Ej.: <i>Title=Entrada Donaciones Documentación</i></li>
+    <li><b>TitleList:</b> Título a presenter sobre la lista de documentos contenidos en la carpeta. Ej.: <i>TitleList=Documentos aportados hasta el momento</i></li>                                                                                                          
+    <li><b>DocsReportId:</b> Identificador del informe (Report) a utilizar para presentar documentos. Deberá ser un informe con un fragmento de página html que pueda “embeberse”. Ej.: <i>DocsReportId=16654ff6af1-3f9b78099c0147a0</i></li>
+    <li><b>UrlHelp:</b> Página de ayuda que explique el proceso de forma general y complete. Ej. : <i>UrlHelp= http://www.portalCorporativo.com/aportaciones/ayuda.html</i></li>
+    <li><b>NumHtmlContLog:</b> Número de páginas html de login alternativas. Para cada uno de los grupos de agentes que se enumeran deberá definirse una identificador de un documento OpenProdoc conteniendo una página html. Deberá crearse tantas parejas ListAgentLog[i], HtmlAgentLog[i] como indique esta entrada, empezando en cero. Ej.: <i>NumHtmlContLog=2</i></li>
+    <li><b>ListAgentLog[i]:</b> Lista de agentes web para los que debe devolverse el html correspondiente de igual “subindice”.  No es necesario incluir el nombre complete del agente, basta un fragmento del mismo, que puede incluir nombre, versión, etc.  Ej.:   <i>ListAgentLog0=Chrome|Firefox</i></li>
+    <li><b>HtmlAgentLog[i]:</b> Identificador del documento OpenProdoc con el html de login que debe devolverse para todos los agentes de igual subíndice. Ej.:  <i>HtmlAgentLog0=57576abf4-6565dde4</i></li>
+    <li><b>NumHtmlContList:</b> Número de páginas html alternativas de presentación del listado de documentos. Para cada uno de los grupos de agentes que se enumeran deberá definirse una identificador de un documento OpenProdoc conteniendo una página html. Deberá crearse tantas parejas ListAgentList [i], HtmlAgentList [i] como indique esta entrada, empezando en cero. Ej.: <i>NumHtmlContList=1</i></li>
+    <li><b>ListAgentList[i]:</b> Lista de agentes web para los que debe devolverse el html correspondiente de igual “subindice”.  No es necesario incluir el nombre complete del agente, basta un fragmento del mismo, que puede incluir nombre, versión, etc.  Ej.:   <i>ListAgentList0=Chrome|Firefox</i></li>
+    <li><b>HtmlAgentList[i]:</b> Identificador del documento OpenProdoc con el html de listado de documento que debe devolverse para todos los agentes de igual subíndice. Ej.:  <i>HtmlAgentList0=574343abf4-86976ddaa3</i></li>
+    <li><b>NumHtmlContAdd:</b> Número de páginas html alternativas de incorporación de documentos. Para cada uno de los grupos de agentes que se enumeran deberá definirse una identificador de un documento OpenProdoc conteniendo una página html. Deberá crearse tantas parejas ListAgentAdd [i], HtmlAgentAdd [i] como indique esta entrada, empezando en cero. Ej.: <i>NumHtmlContAdd=3</i></li>
+    <li><b>ListAgentAdd[i]:</b> Lista de agentes web para los que debe devolverse el html correspondiente de igual “subindice”.  No es necesario incluir el nombre complete del agente, basta un fragmento del mismo, que puede incluir nombre, versión, etc.  Ej.:   <i>ListAgentAdd1=Chrome|Firefox</i></li>
+    <li><b>HtmlAgentAdd[i]:</b> Identificador del documento OpenProdoc con el html de incorporación de documento que debe devolverse para todos los agentes de igual subíndice. Ej.:  <i>HtmlAgentAdd0=123456abf4-4477238dda3</i></li>
+    <li><b>NumHtmlContRes:</b>   <i></i></li>
+    <li><b>ListAgentRes0:</b>    <i></i></li>
+    <li><b>HtmlAgentRes0:</b>    <i></i></li>
+</ul>
+<p>Si el User-Agent del navegador no contiene ninguna de las entradas indicadas, entonces se utilizará las plantillas internas incluidas en OpenProdoc.</p>
+<p>El proceso de parametrizar un punto de consulta consiste en crear un archivo de texto con el contenido citado (puede utilizarse como base el ejemplo incluido y modificarlo), introduciendo los valores adecuados a la instalación de OpenProdoc concreta.</p>
+<p>Previamente debe modificarse el fichero de configuración de OpenProdoc (Prodoc.properties o el nombre utilizado) y añadirse 2 líneas:</p>
+<p>User=<I>Usuario1</i></p>
+<p>Pass=<I>ClaveUsuario1</I></p>
+<p>Donde <I>Usuario1</i> y <I>ClaveUsuario1</I> serán datos de un usuario que tenga acceso a los distintos documentos que configuración (Contrib y Contrib_CS) que se describen a continuación.
+Se recomienda que sea un usuario con un rol (perfil) limitado y con un mínimo de permisos, ya que solo debe poder acceder en modo lectura a los ficheros de configuración de la Contribución.
+<b>Como todo cambio en el fichero de configuración (Prodoc.properties), debe reiniciarse el servidor para que se lea de nuevo.</b></p>
+<p>A continuación debe crearse (o modificarse el ejemplo incluido) el CSS para adaptarlo al estilo de la institución o empresa correspondiente. 
+    Luego deberá añadirse el CSS al repositorio OpenProdoc y anotar el PdId generado. 
+    Ese PdId es el que deberá referenciarse como parámetro <b>ContribCSS:</b> del fichero de configuración del módulo de contribución. 
+    A continuacion se subirá ese fichero de configuración del módulo de contribución.</p>
+<p>Con el Id generado deberá invocarse la url de OpenProdoc (Ej.: <i>http://localhost:8080/ProdocWeb2/ContribLogin?Id=</i> + el identificador del nuevo documento subido, por ejemplo <i>http://localhost:8080/ProdocWeb2/ContribLogin?Id=566b6464a654-9696e68d686</i> ).</p>
+<p>OpenProdoc presentará una página de acuerdo a los parámetros definidos en ese fichero, incluido hoja de estilo, literales, tipos documentales, etc.</p> 
+ <p>Dado que toda la apariencia es parametrizable, incluidas tipologías documentales, metadatos, etc, y que está orientado a usuarios esporádicos, es razonable asumir que sea necesaria una ayuda peronalizada. 
+     Para eso se dispone de un botón que abrirá la página html cuya url se indique en a configuración. Podría ser una página externa o un documento html almacenado en OpenProdoc.</p>
+<p>Hay que resaltar que el fichero de configuración, como cualquier documento de Openprodoc puede ser editado y versionado, utilizándose siempre para componer el punto de consulta la última versión publicada. 
+    No obstante la actualización puede llevar cierto tiempo, ya que para mejorar el rendimiento la configuración no se actualiza inmediatamente.</p>
+<p>Dado que la parametrización se basa en un documento de OpenProdoc y el estilo en otro, es posible tener diversas parametrizaciones simultaneamente, que presenten diferentes conjuntos de documentos, distinto idioma del interfaz, distinto estilo o diferente usuario.
+Suministrando a cada colectivo de usuarios la url adecuada (que solo se diferenciará en el Identificador de documento, puede ofrecerse simultaneamente muchos módulos de contribución distintos con muy poco esfuerzo.</p>
+<p><b>Ejemplo de Archivo de configuración de módulo de contribución:</b></p>
+<em>
+    #======= Document configuration =============================================<br>
+# Fields used for "login"/verifiation of identity<br>
+LoginFields=Correo|Telef<br>
+# Fields of the Foolder type to ask to be filled<br>
+FieldsToInclude=Nombre|Apellidos|Correo|Telef|Idioma<br>
+# Path of folder where folders will be created<br>
+BaseFolder=/Donaciones<br>
+# Document types allowed to be uploded<br>
+DocTipesList=PD_DOCS|Manual|Picture|Grabaciones<br>
+# Non included doc types show ALL fields<br>
+#Fields_PD_DOCS=<br>
+Fields_Manual=Title|DocDate<br>
+Fields_Picture=Title|Author|Keywords|DocDate<br>
+#Fields_Grabaciones=<br>
+#======= Security ==========================================================<br>
+# Open (1) or closed (0)system. When closed, Folder MUST be created and login information transmited to external user.<br>
+OpenContrib=0<br>
+# Folder type to use<br>
+LoginFolderType=Donaciones<br>
+# UserName and Password of the user that will  do the actual insert in openprodoc of Folders and docs.<br> 
+# It is recmmended to be a user with a limiteed rol (only insert of folders and docs) and permissions only in the Contribution folder<br>
+User=guest1<br>
+Pass=passguest1<br>               
+# Allowed extensions to upload<br>
+AllowedExt=doc|docx|xls|xlsx|ppt|pptx|txt|pdf|jpg|jpeg|tiff|tif|png|gif|odt<br>
+# MaxSize upload (bytes)<br>
+MaxSize=20000000<br>                        
+#======= Interface =========================================================<br>
+# Openprodoc identifier of CSS or http url of CSS<br>
+ContribCSS=16697ec3694-3fe7288b86493159<br>
+# url of logo. Can be a "local" url using the format /SendDoc?Id=Identifier of doc<br>
+ContribLogo=img/LogoProdoc.jpg<br>
+# Title to be show in login<br>
+Title=Aportaciones<br>
+# Title to be show in content of folder<br>
+TitleList=Archivo personal<br>
+# Id of Report used for showing docs infolder<br>
+DocsReportId=16654ff6af1-3f9b78099c0147a0<br>
+# Url of help<br>
+UrlHelp=<br>
+#======= Alternative htmls ==================================================<br>
+# Alternative htmls depending on agent<br>
+#---------------------------------------------<br>
+# Num alternatives for login<br>
+NumHtmlContLog=1<br>
+# Agents for login<br>
+ListAgentLog0=Edge|Firefox<br>
+# html for each agent of login<br>
+HtmlAgentLog0=166a24cd914-3fee91e7fa2c96cc<br>
+#---------------------------------------------<br>
+# Num alternatives for Lista of docs<br>
+NumHtmlContList=1<br>
+# Agents for List<br>
+ListAgentList0=Chrome<br>
+# html for each agent of List<br>
+HtmlAgentList0=166a24d2fa1-3fe05747921f306c<br>
+#---------------------------------------------<br>
+# Num alternatives for adding docs<br>
+NumHtmlContAdd=1<br>
+# Agents for adding docs<br>
+ListAgentAdd0=Opera|Chrome<br>
+# html for each agent of adding docs<br>
+HtmlAgentAdd0=166a24d90f9-3fc08534bf7753e0<br>
+#---------------------------------------------<br>
+# Num alternatives for Results adding docs<br>
+NumHtmlContRes=1<br>
+# Agents for Results adding docs<br>
+ListAgentRes0=*<br>
+# html for each agent of Results adding docs<br>
+HtmlAgentRes0=166a24de462-3fc29665f8ea9ffc<br>
+#====================================================<br>
+</em>
+<h5>Automatización</h5> 
+<p>Para facilitar el trabajo de los usuarios internos, es recomendable el definir tareas automáticas que notifiquen los cambios y que normalicen las entradas.</p>
+<p>Por ejemplo, si la carpeta tiene unos metadatos Nombre, apellidos y DNI, puede ser recomendable la creación de una tarea asociada al evento “Inserción” de tipo “modificar metadatos”, que normalice el título de la carpeta con la “fórmula“ Titulo= DNI+”-“+Apellidos+”,”+Nombre (la sintaxis exacta no es esta, pero se utiliza por claridad). De esta forma se asegura que la nomenclatura es homogénea independientemente de quién introduzca los datos.</p>
+<p>También podría crearse una tarea programada que todas las noches envíe un informe a determinado grupo con los datos de todas las carpetas creadas o actualizadas (es decir que tienen nuevos documentos) en el día, de forma que automáticamente se puede saber qué nueva documentación se ha recibido y expedientes hay que revisar sin necesidad de revisarlos uno a uno.</p>
+<p>Este fichero sigue el estándar habitual de los ficheros de propiedades (etiqueta+"="+Valor), admitiendo comentarios (líneas que empiezan con el caracter '#'). El significado de cada etiqueta (que no puede repetirse) es el siguiente:</p>
+<h5>Seguridad y Control:</h5>
+<p>Dado que el acceso externo a un gestor documental por parte de usuarios externos sin autenticar puede implicar riesgos de diverso tipo, se ha introducido diversas medidas para minimizar el riesgo:</p>
+<ul>
+    <li>La definición de un sistema como sistema cerrado permite que solo los usuarios que conozcan información de las carpetas/expedientes pueden entrar en el sistema. Aunque el sistema sea abierto, una vez creado el expediente, solo el usuario conoce los datos de acceso exigidos puede conectarse. A todos los efectos el comportamiento es similar a la creación de usuarios, que deben conocer usuario y password para entrar, exigiéndose en el caso del módulo de contribución, el conocimiento de 2 o más campos del expediente (ej NIF y teléfono, nombre y código de expediente,…).</li>
+<li>El usuario de aplicación de OpenProdoc que se utilice internamente para conectarse desde el módulo de contribución debería ser un usuario con los mínimos permisos. Básicamente tener un rol que solo permita crear documentos (y crear carpetas si el sistema es abierto, en otro caso no es necesario) y que solo tenga acceso a esa carpeta. Eso minimizará el riesgo si de alguna forma un usuario externo lograra acceder con ese usuario interno.</li>
+<li>Para evitar la introducción de archivos dañinos perjudiciales, puede parametrizarse la lista de extensiones permitidas. Si un documento que se intenta subir no tiene alguna de las extensiones incluidas en la lista, se rechazará. Eso evitará que pueda incorporarse programas ejecutables (exe, com, dll, ...) o script (bat, sh, vbs,..) que pueden contener virus o código perjudicial.</li>
+<li>Para evitar el desbordamiento del sistema, puede limitarse el tamaño máximo de cada archivo a subir, de forma que no pueda incorporarse archivos de varios Gigabytes que llenen el sistema de archivos y bloqueen el funcionamiento.</li>
+<li>La posibilidad de crear diversas configuraciones (ficheros de configuración) permite crear áreas separadas donde distintos tipos o grupos de usuarios puedan colaborar. Incluso aunque pudiera obtenerse datos de acceso a un área de contribución, no se dispondría de acceso a otro área.</li>
+</ul>
+<p>Si la documentación que contiene el repositorio incluye documentación confidencial o especialmente delicada, para aumentar la seguridad la recomendación sería disponer de DOS instalaciones, una dedicada únicamente a recoger la documentación desplegada en la DMZ o nube o un área visible desde Internet y otra desplegada en un ámbito interno donde esta resida finalmente. La comunicación entre ambas puede automatizarse por medio de tareas automáticas en el repositorio de entrada que exporten la documentación (nada más introducirse o periódicamente) y otras tareas automáticas que la importen el repositorio destino.</p>
+<hr>
+<a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>
+    </body>
+</html>
