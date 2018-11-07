@@ -2656,6 +2656,8 @@ var Url="RunProcess?T1="+FormEl.getItemValue("TaskParam")
         +"&Item="+FormEl.getItemValue("ObjType")
         +"&Item2="+FormEl.getItemValue("ObjType2")
         +"&NextDate="+Fec1;    
+        +"&Name="+FormEl.getItemValue("Name")
+        +"&Descrip="+FormEl.getItemValue("Description")
 dhtmlx.confirm(LocaleTrans("Do_you_really_want_to_execute_the_task")+"? ("
             +LocaleTrans("Beware_that_several_elements_can_be_altered_or_deleted")+")", function(result)
     {    

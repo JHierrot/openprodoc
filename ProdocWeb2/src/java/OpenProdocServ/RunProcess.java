@@ -64,6 +64,12 @@ String Filter=Req.getParameter("Filter");
 String ItemFold=Req.getParameter("Item");
 String ItemDoc=Req.getParameter("Item2");
 String NextDate=Req.getParameter("NextDate");
+String Name=Req.getParameter("Name");
+if (Name==null)
+    Name="Test";
+String Descrip=Req.getParameter("Descrip");
+if (Descrip==null)
+    Descrip="Test";
 Date NDate=null;
 if (NextDate!=null && NextDate.length()!=0)
     NDate=new Date(Long.parseLong(NextDate));
@@ -81,6 +87,8 @@ else
     {      
     TC.setObjType(ItemDoc);    
     }
+TC.setName(Name);
+TC.setDescription(Descrip);
 TC.setObjFilter(Filter);
 TC.setParam(T1);
 TC.setParam2(T2);
