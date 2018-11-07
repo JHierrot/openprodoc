@@ -926,10 +926,13 @@ Cursor CursorId = Obj.SearchLikeDesc("*");
 Record Res=Session.NextRec(CursorId);
 while (Res!=null)
     {
-    ListVals.append("{text: \"").append(Res.getAttr(PDRoles.fDESCRIPTION).getValue()).append("\", value: \"").append(Res.getAttr(PDRoles.fNAME).getValue()).append("\" "+((Value!=null&&Value.equalsIgnoreCase((String)Res.getAttr(PDRoles.fNAME).getValue()))?", selected: true":"")+"}");
+    boolean FTRepMode=ListName.equals("Reposit") && ((String)Res.getAttr(PDRepository.fNAME).getValue()).equals("PD_FTRep");    
+    if (!FTRepMode)    
+        ListVals.append("{text: \"").append(Res.getAttr(PDRoles.fDESCRIPTION).getValue()).append("\", value: \"").append(Res.getAttr(PDRoles.fNAME).getValue()).append("\" "+((Value!=null&&Value.equalsIgnoreCase((String)Res.getAttr(PDRoles.fNAME).getValue()))?", selected: true":"")+"}");
     Res=Session.NextRec(CursorId);
-    if (Res!=null)
-        ListVals.append(",");
+    if (!FTRepMode)    
+        if (Res!=null)
+            ListVals.append(",");
     }
 Session.CloseCursor(CursorId);
 return(ListVals.toString());

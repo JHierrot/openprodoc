@@ -651,7 +651,8 @@ Record Res=Session.NextRec(CursorId);
 while (Res!=null)
     {
     Attribute Attr=Res.getAttr(PDRoles.fNAME); //it is the same name, but potential problems...
-    VObjects.add(Attr.getValue());
+    if (!(ListName.equals("Reposit") && ((String)Attr.getValue()).equals("PD_FTRep")))   
+        VObjects.add(Attr.getValue());
     Res=Session.NextRec(CursorId);
     }
 Session.CloseCursor(CursorId);
