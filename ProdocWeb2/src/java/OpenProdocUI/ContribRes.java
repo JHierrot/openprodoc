@@ -32,12 +32,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import prodoc.Attribute;
 import prodoc.ContribConf;
 import prodoc.DriverGeneric;
 import prodoc.PDDocs;
 import prodoc.PDFolders;
-import prodoc.PDObjDefs;
 import prodoc.ProdocFW;
 import prodoc.Record;
 
@@ -50,7 +48,7 @@ public class ContribRes extends SParent
 private static final String HtmlBase="<!DOCTYPE html>\n" +
 "<html>" +
     "<head>" +
-        "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>" +
+        "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>" +
         "<title>OpenProdoc2 Web Contrib Result</title>\n" +
         "<link rel=\"shortcut icon\" href=\"img/OpenProdoc.ico\" type=\"image/x-icon\"/>\n" +       
         "@CSS@"+
@@ -147,10 +145,10 @@ while (iter.hasNext())
     if (item.isFormField())
         {
         if (item.getFieldName().equals("CONTRIB_DT"))    
-            NameDocT=item.getString();
+            NameDocT=item.getString("UTF-8");
         else
             {
-            ListFields.put(item.getFieldName(), item.getString());
+            ListFields.put(item.getFieldName(), item.getString("UTF-8"));
             }
         }
     else 

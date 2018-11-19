@@ -42,13 +42,13 @@ public class ContribAdd extends SParent
 private static final String HtmlBase="<!DOCTYPE html>\n" +
 "<html>" +
     "<head>" +
-        "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>" +
+        "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>" +
         "<title>OpenProdoc2 Web Contrib Add</title>\n" +
         "<link rel=\"shortcut icon\" href=\"img/OpenProdoc.ico\" type=\"image/x-icon\"/>\n" +       
         "@CSS@"+
     "</head>\n" +
     "<body class=\"CONTRIBBODY\" >\n" +
-       "<form action=\"ContribRes\" method=\"post\" class=\"CONTRIBFORM\" enctype=\"multipart/form-data\">" +
+       "<form action=\"ContribRes\" method=\"post\" class=\"CONTRIBFORM\" enctype=\"multipart/form-data\"  accept-charset=\"UTF-8\">" +
        "<table align=\"center\"  class=\"CONTRIBTABLE\">\n" +
         "<tr><td>&nbsp</td></tr>" +
         "<tr><td>@LOGO@<H3>OpenProdoc</H3></td></tr>" +
