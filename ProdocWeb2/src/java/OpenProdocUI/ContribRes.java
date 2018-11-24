@@ -57,7 +57,7 @@ private static final String HtmlBase="<!DOCTYPE html>\n" +
     "<p>Document Upload</p>"+
     "@RESULT@"+
     "<a class=\"CONTRIBLISTURL\" href=\"ContribList\" >List</a><br>"+   
-    "<a href=\"javascript: history.go(-1)\">Retry</a>"+
+    "<a class=\"CONTRIBRETRYKO\" href=\"javascript: history.go(-1)\">Retry</a>"+
     "</body>" +
 "</html>";
 
@@ -176,7 +176,8 @@ DocTmp.setParentId(FoldUser.getPDId());
 DocTmp.setACL(FoldUser.getACL());
 try {
 DocTmp.insert();
-HtmlFinal=HtmlFinal.replace("@RESULT@", "<div class=\"CONTRIBRESOK\">OK</div>");
+HtmlFinal=HtmlFinal.replace("@RESULT@", "<div class=\"CONTRIBRESOK\">"+ConfContrib.getOKMsg()+"</div>");
+HtmlFinal=HtmlFinal.replace("CONTRIBRETRYKO", "CONTRIBRETRYOK");
 } catch (Exception Ex)
     {
     HtmlFinal=HtmlFinal.replace("@RESULT@", "<div class=\"CONTRIBRESKO\">ERROR:"+Ex.getLocalizedMessage()+"<div>");    

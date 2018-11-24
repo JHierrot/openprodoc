@@ -46,6 +46,7 @@ private String DocsReportId=null;
 private String TitleList=null;
 //private static final ContribConf DefExtConf=new ContribConf();
 private String UrlHelp=null;
+private String OKMsg="Ok";
 private int NumHtmlContLog=0;
 private Vector<String[]> ListAgentLog=null;
 private Vector<String> HtmlAgentLog=null;
@@ -163,6 +164,12 @@ String ConfUrlHelp=ContribProperties.getProperty("UrlHelp");
 if (ConfUrlHelp!=null && ConfUrlHelp.trim().length()!=0)
     {
     UrlHelp=ConfUrlHelp.trim();
+    }    
+
+String ConfOKMsg=ContribProperties.getProperty("OKMsg");
+if (ConfOKMsg!=null && ConfOKMsg.trim().length()!=0)
+    {
+    OKMsg=ConfOKMsg.trim();
     }    
 //--------------
 String ConfNumHtmlContLog=ContribProperties.getProperty("NumHtmlContLog");
@@ -492,7 +499,7 @@ if (getGlobalExcluded().contains(name))
 HashSet AllowFields = getFieldsByType().get(NameDocT);    
 if (AllowFields==null)
     return(true);
-if (AllowFields.contains(name))
+if (AllowFields.contains(name.toUpperCase()))
     return(true);
 return(false);
 }
@@ -517,5 +524,13 @@ return MaxSize;
     public String getId()
     {
         return Id;
+    }
+
+    /**
+     * @return the OKMsg
+     */
+    public String getOKMsg()
+    {
+        return OKMsg;
     }
 }
