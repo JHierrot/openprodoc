@@ -78,7 +78,7 @@ To minimize risks, the contribution module has several forms of security and con
      <li><b>User:</b> OpenProdoc user used internally to connect and create folders and documents.
          It must be a user with limited permissions on folders (ideally only on <b>BaseFolder</b>) and role (only inserting folders and documents) as much as possible to minimize security risks. Ex <i> User=guest1</i></li>
      <li><b>Pass:</b> Password in "clear" of the selected user. Example: <i> Pass=PassGuest1</i></li>
-    <li><b>AllowedExt: </b> Lista de extensiones de ficheros que se admitirán. Cualquier otra extensión se rechazará, para evitar la subida de ficheros ejecutables o perjudiciales. Ej.: <i>AllowedExt=:doc|docx|xls|xlsx|ppt|pptx|txt|pdf|jpg|jpeg|tiff|tif|png|gif|odt</i></li>
+    <li><b>AllowedExt: </b> List of allowed extensions to upload. Any other extension will be rejected, avoiding the upload of dangerous files. Ex.: <i>AllowedExt=:doc|docx|xls|xlsx|ppt|pptx|txt|pdf|jpg|jpeg|tiff|tif|png|gif|odt</i></li>
     <li><b>MaxSize:</b> Tamaño máximo en bytes de cada archivo subido, para evitar que se llene el sistema de archivos. Ej.: <i>MaxSize=20000000</i></li>
     <li><b>ContribCSS:</b> Identificador de la hoja de estilo css a utilizar. Puede ser un identificador de un archivo alojado en OpenProdoc o bien una url externa. 
         Los estilos predefinidos en la página se detallan en <a href="Contrib_CSS.html">Estilos CSS Contribución</a>. Ej.: <i>ContribCSS=16697ec3694-3fe7288b86493159</i>  o   <i>ContribCSS=http://www.portalCorporativo.com/css/estándar.css</i></li>
