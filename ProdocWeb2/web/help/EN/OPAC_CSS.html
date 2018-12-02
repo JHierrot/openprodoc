@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>CSS Punto de Consulta</title>
+        <title>CSS OPAC</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management"/>
         <meta name="author" content="Joaquin Hierro" />
@@ -9,37 +9,38 @@
         <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
     </head>
     <body>
-<H4>CSS Punto de Consulta</H4><hr>
-<p>Para la personalización del <a href="OPAC.html">Punto de Consulta</a> de OpenProdoc al estilo de la institución que lo esté utilizando pueden utilizarse hojas de estilo que se referenciarán en el archivo de configuración. Una hoja puede ser referenciada por varios ficheros de configuracion de Punto de Consulta.</p>
-<p>Los estilos definidos para en el html del Punto de Consulta son:</p>
+<H4>CSS OPAC</H4><hr>
+<p>For customization of the <a href="OPAC.html">OPAC</a> of OpenProdoc in the style of the institution that is using it, style sheets can be used that will be referenced in the configuration file. 
+    A CSS can be referenced by several files of configuration of OPAC.</p>
+<p>The styles defined for in the html of the Query Point are:</p>
 <ul>
-    <li><b>OPACBODY :</b> Cuerpo de la página.</li>
-    <li><b>OPACFORM :</b> Formulario.</li>
-    <li><b>OPACTABLE :</b> Tabla que embebe los campos del formulario.</li>
-    <li><b>OPACFS :</b> Estilo del conjunto de campos (FieldSet).</li>
-    <li><b>OPACLEG :</b> Leyenda.</li>
-    <li><b>OPACDT :</b> Etiqueta texto del combo de tipos de documento.</li>
-    <li><b>OPACCOMB :</b> Combo tipos de documento.</li>
-    <li><b>TD_OPACCOMB :</b> Estilo de la ayuda emergente del combo tipos de documento.</li>
-    <li><b>OPACFTLAB :</b> Etiqueta búsqueda por texto completo.</li>
-    <li><b>OPACFTINP :</b> Campo búsqueda por texto completo.</li>
-    <li><b>TD_OPACFTINP :</b> Estilo de la ayuda emergente del Campo búsqueda por texto completo.</li>
-    <li><b>OPACFORMATLAB :</b> Etiqueta texto del combo de formatos de salida.</li>
-    <li><b>OPACFORMATCOMB :</b> Combo de formatos de salida.</li>
-    <li><b>TD_PACFORMATCOMB :</b> Estilo de la ayuda emergente del Combo de formatos de salida.</li>
-    <li><b>OPACLAB :</b> Etiquetas de texto de los metadatos.</li>
-    <li><b>OPACINP :</b> Campos de entrada de los metadatos.</li>
-    <li><b>TD_OPACINP :</b> Estilo de la ayuda emergente de los Campos de entrada de los metadatos.</li>
-    <li><b>OPACFORMATTHES :</b> Estilo de los combos de metadatos de tipo tesauro.</li>
-    <li><b>OPACBUT :</b> Botón de búsqueda.</li>
-    <li><b>OPACHELP :</b> "Botón" de ayuda.</li>
+    <li><b>OPACBODY :</b> html body.</li>
+    <li><b>OPACFORM :</b> Form.</li>
+    <li><b>OPACTABLE :</b> Table that containf the fields of the form.</li>
+    <li><b>OPACFS :</b> Style of the FieldSet.</li>
+    <li><b>OPACLEG :</b> Legend.</li>
+    <li><b>OPACDT :</b> Label of the combo of document types.</li>
+    <li><b>OPACCOMB :</b> Combo of document types.</li>
+    <li><b>TD_OPACCOMB :</b> Tooltip help of document types.</li>
+    <li><b>OPACFTLAB :</b> Label of the full text search field.</li>
+    <li><b>OPACFTINP :</b> Full text search field.</li>
+    <li><b>TD_OPACFTINP :</b> Tooltip help of the full text search field.</li>
+    <li><b>OPACFORMATLAB :</b> Label of the ouput reports combo.</li>
+    <li><b>OPACFORMATCOMB :</b> Ouput reports combo.</li>
+    <li><b>TD_PACFORMATCOMB :</b> Tooltip help of the ouput reports combo.</li>
+    <li><b>OPACLAB :</b> Labels of the input fields.</li>
+    <li><b>OPACINP :</b> input fields.</li>
+    <li><b>TD_OPACINP :</b> Tooltip help of the input fields.</li>
+    <li><b>OPACFORMATTHES :</b> Thesaurus input fields.</li>
+    <li><b>OPACBUT :</b> Search button.</li>
+    <li><b>OPACHELP :</b> Help button.</li>
 </ul>
-<p>Por supuesto puede definirse cualquier estilo de los elementos estandar de html (&lt;h3>,&lt;img>, ...) </p>
-<p><b>Ejemplo de Archivo CSS:</b></p>
+<p>Of course you can redefine any style of the standard html elements (&lt;h3>,&lt;img>, ...) </p>
+<p><b>Sample CSS File:</b></p>
 <em>
 #############################################<br>
-####&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-OPAC CSS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;####<br>
+####&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+OPAC CSS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;####<br>
 #############################################<br>
 /* Style for whole body */<br>
 .OPACBODY<br>
@@ -184,6 +185,6 @@ z-index: 1;<br>
 }<br>
 </em>
 <hr>
-<a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>
+<a href="HelpIndex.html">Help Index OpenProdoc</a>
     </body>
 </html>
