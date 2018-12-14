@@ -229,6 +229,8 @@ switch (IdMenu)
         break;
     case "AddDoc": AddDoc(CurrFold);
         break;
+    case "FoldReports": FoldReports(CurrFold);
+        break;
     case "AddExtDoc": AddExtDoc(CurrFold);
         break;
     case "ModExtDoc" : if (CurrDoc!="") 
@@ -270,6 +272,8 @@ switch (IdMenu)
     case "PasteDoc": if (CpDoc!="") 
                         Paste(CpDoc);
         break;
+    case "DocReports": DocReports(CurrFold);
+        break;
     case "PasswordChange": PassChange();
         break;
     case "TrashBin": TrashBin();
@@ -306,7 +310,7 @@ switch (IdMenu)
         break;
     case "ReportingBugs": window.open("https://docs.google.com/spreadsheet/viewform?usp=drive_web&formkey=dEpsRzZzSmlaQVZET0g2NDdsM0ZRaEE6MA#gid=0");
         break;
-    case "Contents": window.open(LocaleTrans("_Help"));
+    case "Contents": window.open("_Help");
         break;
     case "Exit": window.location.assign("Logout");
         layoutThes.unload();
@@ -3613,6 +3617,43 @@ FormModDoc.attachEvent("onButtonClick", function (name)
         WinMD.close();
         }
     });
+}
+//--------------------------------------------------
+function FoldReports(CurrFold)
+{
+WinAF=myWins.createWindow({
+id:"Reports",
+left:20,
+top:1,
+width:500,
+height:160,
+center:true,
+modal:true,
+resize:false});  
+WinAF.setText(LocaleTrans("Reports"));
+var FormReportFold=WinAF.attachForm();
+FormReportFold.loadStruct("Reports", function(){
+    FormReportFold.setFocusOnFirstActive();
+    });
+FormReportFold.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {    
+        window.open("GenReportListFold?Type=Fold&F="+CurrFold+"&IdRep="+FormReportFold.getItemValue("Report"))    
+        FormReportFold.send(Url, function(loader, response)
+                        { // Asynchronous 
+                        if (response.substring(0,2)!=OK)    
+                            alert(response); 
+                        } );
+        }  
+    FormReportFold.unload();
+    WinAF.close();
+    });
+    
+}
+//--------------------------------------------------
+function DocReports(CurrFold)
+{
+    
 }
 //--------------------------------------------------
 

@@ -24,8 +24,6 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Properties;
 import java.util.Vector;
 import javax.servlet.ServletException;
@@ -36,9 +34,7 @@ import prodoc.ContribConf;
 import prodoc.DriverGeneric;
 import prodoc.ExtConf;
 import prodoc.PDDocs;
-import prodoc.PDException;
 import prodoc.PDFolders;
-import prodoc.PDThesaur;
 import prodoc.ProdocFW;
 import prodoc.Record;
 
@@ -57,6 +53,7 @@ private static final String HtmlBase="<!DOCTYPE html>\n" +
     "<head>" +
         "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>" +
         "<title>OpenProdoc2 Web Contrib Login</title>\n" +
+        "<script src=\"js/OPDCombo2.3.js\" type=\"text/javascript\"></script>\n" +
         "<link rel=\"shortcut icon\" href=\"img/OpenProdoc.ico\" type=\"image/x-icon\"/>\n" +       
         "@CSS@"+
     "</head>\n" +

@@ -61,6 +61,7 @@ private static final String HtmlBase="<!DOCTYPE html>\n" +
     "<head>" +
         "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>" +
         "<title>OpenProdoc2 Web OPAC</title>\n" +
+        "<script src=\"js/OPDCombo2.3.js\" type=\"text/javascript\"></script>\n" +
         "<script>\n"+
         "@LISTFIELDS@\n"+
         "function ExecMenu(IdType)\n" +
@@ -352,7 +353,7 @@ private static StringBuilder GenThesVals(HttpServletRequest Req, DriverGeneric L
 StringBuilder SB=new StringBuilder(2000);
 StringBuilder Ops=new StringBuilder(2000);
 CalcOps(Ops, String.valueOf(Attr.getLongStr()), LocalSess, 0);
-SB.append("<tr id=\"").append(DT+"_"+Attr.getName()).append("\"><td><div class=\"OPACLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td class=\"TD_OPACINP\"><select class=\"OPACFORMATTHES\" name=\"").append(DT+"_"+Attr.getName()).append("\">").append(Ops).append("</select><span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
+SB.append("<tr id=\"").append(DT+"_"+Attr.getName()).append("\"><td><div class=\"OPACLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td class=\"TD_OPACINP\"><select class=\"OPACFORMATTHES\" name=\"").append(DT+"_"+Attr.getName()).append("\"  onkeyup=\"Search(event)\" onblur=\"Clean(event)\">").append(Ops).append("</select><span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
 return(SB);
 }
 //-----------------------------------------------------------------------------------------------

@@ -396,6 +396,14 @@
         <servlet-name>SendDocCont</servlet-name>
         <servlet-class>OpenProdocServ.SendDocCont</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Reports</servlet-name>
+        <servlet-class>OpenProdocServ.Reports</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GenReportListFold</servlet-name>
+        <servlet-class>OpenProdocServ.GenReportListFold</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SParent</servlet-name>
         <url-pattern>/SParent</url-pattern>
@@ -791,6 +799,14 @@
     <servlet-mapping>
         <servlet-name>SendDocCont</servlet-name>
         <url-pattern>/SendDocCont</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Reports</servlet-name>
+        <url-pattern>/Reports</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GenReportListFold</servlet-name>
+        <url-pattern>/GenReportListFold</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

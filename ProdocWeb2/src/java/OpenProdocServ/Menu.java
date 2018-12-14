@@ -97,6 +97,8 @@ if (R.isAllowMaintainDoc())
     Men.append("<item id=\"PasteFold\" text=\"").append(TT(Req, "Paste_Fold")).append("\" enabled=\"false\"/>");
     }
 Men.append("<item id=\"file_sep_03\" type=\"separator\"/>");
+Men.append("<item id=\"FoldReports\" text=\"").append(TT(Req, "Reports")).append("\"/>");
+Men.append("<item id=\"file_sep_03b\" type=\"separator\"/>");
 Men.append("<item id=\"Exit\" text=\"").append(TT(Req, "Exit")).append("\" img=\"img/close.gif\" imgdis=\"img/close_dis.gif\"/></item>");
 Men.append("<item id=\"Documentos\" text=\"").append(TT(Req, "Documents")).append("\">");
 if (R.isAllowCreateDoc())
@@ -132,6 +134,8 @@ if (R.isAllowMaintainDoc())
     Men.append("<item id=\"CopyDoc\" text=\"").append(TT(Req, "Copy_Doc")).append("\"/>");
     Men.append("<item id=\"PasteDoc\" text=\"").append(TT(Req, "Paste_Doc")).append("\" enabled=\"false\"/>");
     }
+Men.append("<item id=\"file_sep_09\" type=\"separator\"/>");
+Men.append("<item id=\"DocReports\" text=\"").append(TT(Req, "Reports")).append("\"/>");
 Men.append("</item>");
 Men.append("<item id=\"Other\" text=\"").append(TT(Req, "Other_Tasks")).append("\">");
 if (R.isAllowCreateDoc() && R.isAllowMaintainDoc())

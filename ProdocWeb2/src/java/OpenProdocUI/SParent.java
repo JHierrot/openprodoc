@@ -48,6 +48,7 @@ import prodoc.PDException;
 import prodoc.PDFolders;
 import prodoc.PDGroups;
 import prodoc.PDObjDefs;
+import prodoc.PDReport;
 import prodoc.PDRepository;
 import prodoc.PDRoles;
 import prodoc.PDThesaur;
@@ -928,11 +929,33 @@ while (Res!=null)
     {
     boolean FTRepMode=ListName.equals("Reposit") && ((String)Res.getAttr(PDRepository.fNAME).getValue()).equals("PD_FTRep");    
     if (!FTRepMode)    
-        ListVals.append("{text: \"").append(Res.getAttr(PDRoles.fDESCRIPTION).getValue()).append("\", value: \"").append(Res.getAttr(PDRoles.fNAME).getValue()).append("\" "+((Value!=null&&Value.equalsIgnoreCase((String)Res.getAttr(PDRoles.fNAME).getValue()))?", selected: true":"")+"}");
+        ListVals.append("{text: \"").append(Res.getAttr(PDRoles.fDESCRIPTION).getValue()).append("\", value: \"").append(Res.getAttr(PDRoles.fNAME).getValue()).append("\" ").append((Value!=null&&Value.equalsIgnoreCase((String)Res.getAttr(PDRoles.fNAME).getValue()))?", selected: true":"").append("}");
     Res=Session.NextRec(CursorId);
     if (!FTRepMode)    
         if (Res!=null)
             ListVals.append(",");
+    }
+Session.CloseCursor(CursorId);
+return(ListVals.toString());
+}
+//----------------------------------------------------------------
+/**
+ * 
+ * @param ListName
+ * @return
+ */
+static public String getComboReports(DriverGeneric Session, String SelId) throws PDException
+{
+StringBuilder ListVals=new StringBuilder(5000);
+PDReport Rep=new PDReport(Session);
+Cursor CursorId = Rep.GetListReports();
+Record Res=Session.NextRec(CursorId);
+while (Res!=null)
+    {
+    ListVals.append("{text: \"").append(Res.getAttr(PDReport.fTITLE).getValue()).append("\", value: \"").append(Res.getAttr(PDReport.fPDID).getValue()).append("\" ").append((SelId!=null&&SelId.equalsIgnoreCase((String)Res.getAttr(PDReport.fPDID).getValue()))?", selected: true":"").append("}");
+    Res=Session.NextRec(CursorId);    
+    if (Res!=null)
+        ListVals.append(",");
     }
 Session.CloseCursor(CursorId);
 return(ListVals.toString());
@@ -1699,7 +1722,7 @@ protected static StringBuilder GenThesVals(HttpServletRequest Req, DriverGeneric
 StringBuilder SB=new StringBuilder(2000);
 StringBuilder Ops=new StringBuilder(2000);
 CalcOps(Ops, String.valueOf(Attr.getLongStr()), LocalSess, 0);
-SB.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"CONTRIBLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td class=\"TD_CONTRIBINP\"><select class=\"CONTRIBFORMATTHES\" name=\"").append(Attr.getName()).append("\">").append(Ops).append("</select><span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
+SB.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"CONTRIBLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td class=\"TD_CONTRIBINP\"><select class=\"CONTRIBFORMATTHES\" name=\"").append(Attr.getName()).append("\"  onkeyup=\"Search(event)\" onblur=\"Clean(event)\" >").append(Ops).append("</select><span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
 return(SB);
 }
 //-----------------------------------------------------------------------------------------------
