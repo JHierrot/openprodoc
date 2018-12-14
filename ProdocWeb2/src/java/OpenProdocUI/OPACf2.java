@@ -68,13 +68,14 @@ try {
 /**
  *
  * @param Req
- * @param out
+ * @param response
  * @throws Exception
  */
 protected void ProcessPage(HttpServletRequest Req, HttpServletResponse response) throws Exception
 {   
 DriverGeneric PDSession=getSessOPD(Req);
 PDFolders TmpFold;
+Req.setCharacterEncoding("UTF-8");
 Cursor Cur=null;    
 try {      
 PDFolders F=new PDFolders(PDSession);

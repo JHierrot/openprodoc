@@ -207,7 +207,10 @@ for (int i = 0; i < FieldsToAsk.size(); i++)
             Fields.append(GenBoolVals(Req, Attr));
             break;
         default:
-            Fields.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"").append(FieldsLogin.contains(Attr.getName())?"CONTRIBLAB_LOGIN":"CONTRIBLAB").append("\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td class=\"TD_CONTRIBINP\"><input class=\"CONTRIBINP\" type=\"text\" name=\"").append(Attr.getName()).append("\"><span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
+            if (Attr.getType()==Attribute.tSTRING &&Attr.getLongStr()>256)
+                Fields.append(GenArea(Req, Attr));
+            else    
+                Fields.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"").append(FieldsLogin.contains(Attr.getName())?"CONTRIBLAB_LOGIN":"CONTRIBLAB").append("\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td class=\"TD_CONTRIBINP\"><input class=\"CONTRIBINP\" type=\"text\" name=\"").append(Attr.getName()).append("\"><span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
             break;
         }
     }

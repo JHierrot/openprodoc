@@ -163,8 +163,10 @@ for (int i = 0; i < AttrDef.NumAttr(); i++)
             Fields.append(GenBoolVals(Req, Attr));
             break;
         default:
-//            Fields.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"CONTRIBLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td class=\"TD_CONTRIBINP\"><input class=\"CONTRIBINP\" type=\"text\" name=\"").append(Attr.getName()).append("\" value=\"").append(Attr.Export()).append("\"></td></tr>\n");
-            Fields.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"").append(Attr.isRequired()?"CONTRIBLAB_LOGIN":"CONTRIBLAB").append("\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td class=\"TD_CONTRIBINP\"><input class=\"CONTRIBINP\" type=\"text\" name=\"").append(Attr.getName()).append("\"><span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
+            if (Attr.getType()==Attribute.tSTRING &&Attr.getLongStr()>256)
+                Fields.append(GenArea(Req, Attr));
+            else    
+                Fields.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"").append(Attr.isRequired()?"CONTRIBLAB_LOGIN":"CONTRIBLAB").append("\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td class=\"TD_CONTRIBINP\"><input class=\"CONTRIBINP\" type=\"text\" name=\"").append(Attr.getName()).append("\"><span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
             break;
         }
     }

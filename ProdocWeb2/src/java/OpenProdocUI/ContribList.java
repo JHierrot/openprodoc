@@ -91,6 +91,7 @@ if (!OPDFWLoaded)
     ProdocFW.InitProdoc("PD", getProdocProperRef());
     OPDFWLoaded=true;
     }
+Req.setCharacterEncoding("UTF-8");
 ContribConf ConfContr=getContribConf(Req);
 LocalSess=ProdocFW.getSession(getConnector(), ConfContr.getUser(), ConfContr.getPass()); 
 PDFolders F=getContribFolder(Req);

@@ -1733,6 +1733,13 @@ SB.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"CONTRI
 return(SB);
 }
 //-----------------------------------------------------------------------------------------------
+protected static StringBuilder GenArea(HttpServletRequest Req, Attribute Attr)
+{
+StringBuilder SB=new StringBuilder(2000);
+SB.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"CONTRIBLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td class=\"TD_CONTRIBINP\"><textarea class=\"CONTRIBAREA\" type=\"text\" name=\"").append(Attr.getName()).append("\"></textarea><span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
+return(SB);
+}
+//-----------------------------------------------------------------------------------------------
 private static StringBuilder CalcOps(StringBuilder Ops, String TermId, DriverGeneric LocalSess, int Level) throws PDException
 {
 PDThesaur T=new PDThesaur(LocalSess);

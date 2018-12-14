@@ -74,6 +74,7 @@ protected void processRequest(HttpServletRequest Req, HttpServletResponse respon
 {   
 DriverGeneric LocalSess=null;
 try {
+Req.setCharacterEncoding("UTF-8");
 ContribConf ConfContr=getContribConf(Req);
 LocalSess=ProdocFW.getSession(getConnector(), ConfContr.getUser(), ConfContr.getPass()); 
 PDFolders F=getContribFolder(Req);
