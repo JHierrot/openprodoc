@@ -50,12 +50,15 @@ private String OKMsg="Ok";
 private int NumHtmlContLog=0;
 private Vector<String[]> ListAgentLog=null;
 private Vector<String> HtmlAgentLog=null;
+private Vector<Boolean> is1ColAgentLog=null;
 private int NumHtmlContList=0;
 private Vector<String[]> ListAgentList=null;
 private Vector<String> HtmlAgentList=null;
+private Vector<Boolean> is1ColAgentList=null;
 private int NumHtmlContAdd=0;
 private Vector<String[]> ListAgentAdd=null;
 private Vector<String> HtmlAgentAdd=null;
+private Vector<Boolean> is1ColAgentAdd=null;
 private int NumHtmlContRes=0;
 private Vector<String[]> ListAgentRes=null;
 private Vector<String> HtmlAgentRes=null;
@@ -179,6 +182,7 @@ if (ConfNumHtmlContLog!=null && ConfNumHtmlContLog.trim().length()!=0)
     }    
 ListAgentLog=new Vector(NumHtmlContLog);
 HtmlAgentLog=new Vector(NumHtmlContLog);
+is1ColAgentLog=new Vector(NumHtmlContLog);
 for (int NHO = 0; NHO < NumHtmlContLog; NHO++)
     {
     String LAgent=ContribProperties.getProperty("ListAgentLog"+NHO);
@@ -189,6 +193,8 @@ for (int NHO = 0; NHO < NumHtmlContLog; NHO++)
         }    
     String HAgent=ContribProperties.getProperty("HtmlAgentLog"+NHO);
     HtmlAgentLog.add(HAgent);
+    String NumColAgent=ContribProperties.getProperty("NumColAgentLog"+NHO);
+    is1ColAgentLog.add(NumColAgent!=null&&NumColAgent.equals("1"));
     }
 //--------------
 String ConfNumHtmlContList=ContribProperties.getProperty("NumHtmlContList");
@@ -198,6 +204,7 @@ if (ConfNumHtmlContList!=null && ConfNumHtmlContList.trim().length()!=0)
     }    
 ListAgentList=new Vector(NumHtmlContList);
 HtmlAgentList=new Vector(NumHtmlContList);
+is1ColAgentList=new Vector(NumHtmlContList);
 for (int NHO = 0; NHO < NumHtmlContList; NHO++)
     {
     String LAgent=ContribProperties.getProperty("ListAgentList"+NHO);
@@ -208,6 +215,8 @@ for (int NHO = 0; NHO < NumHtmlContList; NHO++)
         }    
     String HAgent=ContribProperties.getProperty("HtmlAgentList"+NHO);
     HtmlAgentList.add(HAgent);
+    String NumColAgent=ContribProperties.getProperty("NumColAgentList"+NHO);
+    is1ColAgentList.add(NumColAgent!=null&&NumColAgent.equals("1"));
     }
 //--------------
 String ConfNumHtmlContAdd=ContribProperties.getProperty("NumHtmlContAdd");
@@ -217,6 +226,7 @@ if (ConfNumHtmlContAdd!=null && ConfNumHtmlContAdd.trim().length()!=0)
     }    
 ListAgentAdd=new Vector(NumHtmlContAdd);
 HtmlAgentAdd=new Vector(NumHtmlContAdd);
+is1ColAgentAdd=new Vector(NumHtmlContAdd);
 for (int NHO = 0; NHO < NumHtmlContAdd; NHO++)
     {
     String LAgent=ContribProperties.getProperty("ListAgentAdd"+NHO);
@@ -227,6 +237,8 @@ for (int NHO = 0; NHO < NumHtmlContAdd; NHO++)
         }    
     String HAgent=ContribProperties.getProperty("HtmlAgentAdd"+NHO);
     HtmlAgentAdd.add(HAgent);
+    String NumColAgent=ContribProperties.getProperty("NumColAgentAdd"+NHO);
+    is1ColAgentAdd.add(NumColAgent!=null&&NumColAgent.equals("1"));
     }
 //--------------
 String ConfNumHtmlContRes=ContribProperties.getProperty("NumHtmlContRes");
@@ -297,6 +309,27 @@ return(null);
  * @param Agent
  * @return
  */
+public Boolean Is1ColHtmlLog(String Agent)
+{
+Agent=Agent.toUpperCase();
+for (int NHO = 0; NHO < NumHtmlContLog; NHO++)
+    {
+    String[] LA =ListAgentLog.get(NHO);    
+    for (int i = 0; i < LA.length; i++)
+        {
+        String Age = LA[i];
+        if (Age.equals("*") || Agent.contains(Age))
+           return(is1ColAgentLog.get(NHO)); 
+        }
+    }
+return(false);    
+}
+//---------------------------------------------------------------------------- 
+/**
+ *
+ * @param Agent
+ * @return
+ */
 public String SolveHtmlList(String Agent)
 {
 Agent=Agent.toUpperCase();
@@ -318,6 +351,27 @@ return(null);
  * @param Agent
  * @return
  */
+public Boolean Is1ColHtmlList(String Agent)
+{
+Agent=Agent.toUpperCase();
+for (int NHO = 0; NHO < NumHtmlContList; NHO++)
+    {
+    String[] LA =ListAgentList.get(NHO);    
+    for (int i = 0; i < LA.length; i++)
+        {
+        String Age = LA[i];
+        if (Age.equals("*") || Agent.contains(Age))
+           return(is1ColAgentList.get(NHO)); 
+        }
+    }
+return(false);    
+}
+//---------------------------------------------------------------------------- 
+/**
+ *
+ * @param Agent
+ * @return
+ */
 public String SolveHtmlAdd(String Agent)
 {
 Agent=Agent.toUpperCase();
@@ -332,6 +386,27 @@ for (int NHO = 0; NHO < NumHtmlContAdd; NHO++)
         }
     }
 return(null);    
+}
+//---------------------------------------------------------------------------- 
+/**
+ *
+ * @param Agent
+ * @return
+ */
+public Boolean Is1ColHtmlAdd(String Agent)
+{
+Agent=Agent.toUpperCase();
+for (int NHO = 0; NHO < NumHtmlContAdd; NHO++)
+    {
+    String[] LA =ListAgentAdd.get(NHO);    
+    for (int i = 0; i < LA.length; i++)
+        {
+        String Age = LA[i];
+        if (Age.equals("*") || Agent.contains(Age))
+           return(is1ColAgentAdd.get(NHO)); 
+        }
+    }
+return(false);    
 }
 //---------------------------------------------------------------------------- 
 /**

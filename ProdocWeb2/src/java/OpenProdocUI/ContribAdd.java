@@ -116,6 +116,7 @@ static synchronized private String GenHtml(HttpServletRequest Req, DriverGeneric
 String HtmlFinal;   
 String Agent=Req.getHeader("User-Agent");
 String DimHtml=ConfContrib.SolveHtmlAdd(Agent);
+Boolean is1Col=ConfContrib.Is1ColHtmlAdd(Agent);
 if (DimHtml!=null) 
     {
     HtmlFinal=getHtml(LocalSess, DimHtml);
@@ -157,16 +158,16 @@ for (int i = 0; i < AttrDef.NumAttr(); i++)
     switch (Attr.getType())
         {
         case Attribute.tTHES:
-            Fields.append(GenThesVals(Req, LocalSess, Attr));
+            Fields.append(GenThesVals(Req, LocalSess, Attr, is1Col));
             break;
         case Attribute.tBOOLEAN:
-            Fields.append(GenBoolVals(Req, Attr));
+            Fields.append(GenBoolVals(Req, Attr, is1Col));
             break;
         default:
             if (Attr.getType()==Attribute.tSTRING &&Attr.getLongStr()>256)
-                Fields.append(GenArea(Req, Attr));
+                Fields.append(GenArea(Req, Attr, is1Col));
             else    
-                Fields.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"").append(Attr.isRequired()?"CONTRIBLAB_LOGIN":"CONTRIBLAB").append("\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td class=\"TD_CONTRIBINP\"><input class=\"CONTRIBINP\" type=\"text\" name=\"").append(Attr.getName()).append("\"><span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
+                Fields.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"").append(Attr.isRequired()?"CONTRIBLAB_LOGIN":"CONTRIBLAB").append("\" >").append(TT(Req, Attr.getUserName())).append("</div></td>").append(is1Col?"</tr><tr>":"").append("<td class=\"TD_CONTRIBINP\"><input class=\"CONTRIBINP\" type=\"text\" name=\"").append(Attr.getName()).append("\"><span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
             break;
         }
     }

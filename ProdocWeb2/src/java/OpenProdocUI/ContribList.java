@@ -156,6 +156,7 @@ static synchronized private String GenHtml(HttpServletRequest Req, DriverGeneric
 String HtmlFinal;   
 String Agent=Req.getHeader("User-Agent");
 String DimHtml=ConfContrib.SolveHtmlList(Agent);
+Boolean is1Col=ConfContrib.Is1ColHtmlList(Agent);
 if (DimHtml!=null) 
     {
     HtmlFinal=getHtml(LocalSess, DimHtml);
@@ -203,7 +204,7 @@ for (int i = 0; i < FieldsToShow.size(); i++)
             Attr.setValue(PDThes.getName());
             }
         }
-    Fields.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"CONTRIBLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td><td class=\"TD_CONTRIBINP\"><input class=\"CONTRIBINP\" type=\"text\" readonly name=\"").append(Attr.getName()).append("\" value=\"").append(Attr.Export()).append("\"></td></tr>\n");
+    Fields.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"CONTRIBLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td>").append(is1Col?"</tr><tr>":"").append("<td class=\"TD_CONTRIBINP\"><input class=\"CONTRIBINP\" type=\"text\" readonly name=\"").append(Attr.getName()).append("\" value=\"").append(Attr.Export()).append("\"></td></tr>\n");
     }
 HtmlFinal=HtmlFinal.replace("@CONTRIBFIELDS@", Fields);
 return(HtmlFinal);

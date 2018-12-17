@@ -51,6 +51,7 @@ private String UrlHelp=null;
 private int NumHtmlOpac=0;
 private Vector<String[]> ListAgent=null;
 private Vector<String> HtmlAgent=null;
+private Vector<Boolean> OnColAgent=null;
 
 //----------------------------------------------------------------------------    
 static void AssignDefConf(Properties ProdocProperties)
