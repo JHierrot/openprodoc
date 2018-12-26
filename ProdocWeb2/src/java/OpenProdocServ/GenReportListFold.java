@@ -77,10 +77,10 @@ protected void ProcessPage(HttpServletRequest Req, HttpServletResponse response)
 {
 DriverGeneric PDSession = getSessOPD(Req); 
 HttpSession Sess=Req.getSession(true);
-String Type=(String)Sess.getAttribute("Type");
-String CurrFold=(String)Sess.getAttribute("F");
-String IdRep=(String)Sess.getAttribute("IdRep");
-Vector<Record> ListRes=null;
+String Type=Req.getParameter("Type");
+String CurrFold=Req.getParameter("F");
+String IdRep=Req.getParameter("IdRep");
+//Vector<Record> ListRes=null;
 Vector<Record> Res=null;
 ArrayList<String> GeneratedRep=null;
 PDReport Rep=new PDReport(PDSession);
@@ -108,7 +108,8 @@ else
     CursorId =null;
     }
 GeneratedRep = Rep.GenerateRep(CurrFold, null, Res, Rep.getDocsPerPage(), Rep.getPagesPerFile(), getIO_OSFolder());
-ListRes.clear();
+//ListRes.clear();
+Res.clear();
 String File2Send;
 if (GeneratedRep.size()==1)
     {

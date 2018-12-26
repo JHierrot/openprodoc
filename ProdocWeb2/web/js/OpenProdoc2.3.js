@@ -310,7 +310,7 @@ switch (IdMenu)
         break;
     case "ReportingBugs": window.open("https://docs.google.com/spreadsheet/viewform?usp=drive_web&formkey=dEpsRzZzSmlaQVZET0g2NDdsM0ZRaEE6MA#gid=0");
         break;
-    case "Contents": window.open("_Help");
+    case "Contents": window.open(LocaleTrans("_Help")); // actually not translation but select of language
         break;
     case "Exit": window.location.assign("Logout");
         layoutThes.unload();
@@ -3653,7 +3653,33 @@ FormReportFold.attachEvent("onButtonClick", function (name)
 //--------------------------------------------------
 function DocReports(CurrFold)
 {
-    
+WinAF=myWins.createWindow({
+id:"Reports",
+left:20,
+top:1,
+width:500,
+height:160,
+center:true,
+modal:true,
+resize:false});  
+WinAF.setText(LocaleTrans("Reports"));
+var FormReportFold=WinAF.attachForm();
+FormReportFold.loadStruct("Reports", function(){
+    FormReportFold.setFocusOnFirstActive();
+    });
+FormReportFold.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {    
+        window.open("GenReportListFold?Type=Doc&F="+CurrFold+"&IdRep="+FormReportFold.getItemValue("Report"))    
+        FormReportFold.send(Url, function(loader, response)
+                        { // Asynchronous 
+                        if (response.substring(0,2)!=OK)    
+                            alert(response); 
+                        } );
+        }  
+    FormReportFold.unload();
+    WinAF.close();
+    });    
 }
 //--------------------------------------------------
 
