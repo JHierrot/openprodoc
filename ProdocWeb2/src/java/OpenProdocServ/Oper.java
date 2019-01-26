@@ -118,6 +118,11 @@ if (Connected(request) && Order.equals(DriverGeneric.S_RETRIEVEFILE))
     SendFile(request, response);
     return;
     }
+if (Connected(request) || Order.equals(DriverGeneric.S_LOGOUT)) 
+    {
+    ProdocFW.freeSesion("PD", getSessOPD(request));    
+    setSessOPD(request, null);    
+    }
 if (Connected(request) || Order.equals(DriverGeneric.S_LOGIN)) 
     {
     PrintWriter out = response.getWriter();      

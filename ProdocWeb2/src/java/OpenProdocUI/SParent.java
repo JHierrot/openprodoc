@@ -19,13 +19,14 @@
 
 package OpenProdocUI;
 
+import OpenProdocServ.CurrentSession;
 import java.io.*;
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.TreeSet;
@@ -53,6 +54,7 @@ import prodoc.PDRepository;
 import prodoc.PDRoles;
 import prodoc.PDThesaur;
 import prodoc.PDUser;
+import prodoc.ProdocFW;
 import prodoc.Record;
 
 
@@ -100,8 +102,12 @@ public final static String SD_Ord="SD_Ord";
 public final static String SD_Rec="SD_Rec";
 public final static String SD_OperComp="SD_OperComp";
 public final static String SD_FTQ="SD_FTQ";
+public final static String PRODOC_SESS="PRODOC_SESS";
+public final static String PRODOC_SESSID="PRODOC_SESSID";
 
 protected static boolean OPDFWLoaded=false;
+
+static Hashtable<String, CurrentSession> ListOPSess=new Hashtable();
 
 /** Initializes the servlet.
  * @param config 
@@ -602,9 +608,23 @@ return(Cond);
  */
 public static DriverGeneric getSessOPD(HttpServletRequest Req)
 {
-return (DriverGeneric)Req.getSession(true).getAttribute("PRODOC_SESS");
+return (DriverGeneric)Req.getSession(true).getAttribute(PRODOC_SESS);
 }
 //--------------------------------------------------------------
+public static void ClearSessOPD(HttpSession HttpSes)
+{
+try {
+DriverGeneric OPDSess = (DriverGeneric)HttpSes.getAttribute(PRODOC_SESS);
+if (OPDSess!=null)
+    ProdocFW.freeSesion(getConnector(), OPDSess);
+String SesId=(String)HttpSes.getAttribute(PRODOC_SESSID);
+ListOPSess.remove(SesId);
+} catch (Exception Ex) 
+    {Ex.printStackTrace();
+    }
+HttpSes.setAttribute(PRODOC_SESSID, null);
+HttpSes.setAttribute(PRODOC_SESS, null);
+}
 /**
  *
  * @param Req
@@ -612,7 +632,16 @@ return (DriverGeneric)Req.getSession(true).getAttribute("PRODOC_SESS");
  */
 public static void setSessOPD(HttpServletRequest Req, DriverGeneric OPDSess)
 {
-Req.getSession().setAttribute("PRODOC_SESS", OPDSess);
+String UN=""; 
+try {
+UN=OPDSess.getUser().getName();
+} catch (Exception Ex) 
+    {}
+CurrentSession CS=new CurrentSession(UN, new Date(), Req.getRemoteHost());
+String SesId=Long.toHexString(System.currentTimeMillis());
+ListOPSess.put(SesId, CS);
+Req.getSession().setAttribute(PRODOC_SESSID, SesId);
+Req.getSession().setAttribute(PRODOC_SESS, OPDSess);
 }
 //--------------------------------------------------------------
 /**

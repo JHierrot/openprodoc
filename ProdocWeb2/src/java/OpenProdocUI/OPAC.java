@@ -337,7 +337,7 @@ DocCSS.setPDId(IdOPAC);
 ByteArrayOutputStream OutBytes = new ByteArrayOutputStream();
 DocCSS.getStream(OutBytes);
 P.load(new StringReader(OutBytes.toString()));
-ProdocFW.freeSesion("PD", sessOPD);
+ProdocFW.freeSesion(getConnector(), sessOPD);
 return P;
 }
 //-----------------------------------------------------------------------------------------------

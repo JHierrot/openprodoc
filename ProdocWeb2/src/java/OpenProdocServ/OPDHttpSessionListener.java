@@ -13,50 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
- * author: Joaquin Hierro      2016
+ * author: Joaquin Hierro      2019
  * 
  */
-
 package OpenProdocServ;
 
-import OpenProdocUI.FLogin;
 import OpenProdocUI.SParent;
-import java.io.PrintWriter;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import javax.servlet.annotation.WebListener;
+import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSessionListener;
+import prodoc.DriverGeneric;
 import prodoc.ProdocFW;
 
 /**
  *
  * @author jhierrot
  */
-public class Logout extends SParent
+@WebListener
+public class OPDHttpSessionListener implements HttpSessionListener 
 {
-
 //-----------------------------------------------------------------------------------------------
-/**
- *
- * @param Req
- * @param out
- * @throws Exception
- */
 @Override
-protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
+public void sessionCreated(HttpSessionEvent se)
 {
-HttpSession Sess=Req.getSession();
-ClearSessOPD(Sess);
-out.println(new FLogin(Sess, null).toHtml());
 }
 //-----------------------------------------------------------------------------------------------
-
-/** 
- * Returns a short description of the servlet.
- * @return a String containing servlet description
- */
 @Override
-public String getServletInfo()
+public void sessionDestroyed(HttpSessionEvent HttpSesEvent)
 {
-return "Logout Servlet";
+SParent.ClearSessOPD(HttpSesEvent.getSession());
 }
-//-----------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------    
 }

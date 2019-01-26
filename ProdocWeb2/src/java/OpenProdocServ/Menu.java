@@ -177,6 +177,7 @@ Men.append("<item id=\"Help\" text=\"").append(TT(Req, "Help")).append("\">");
 Men.append("<item id=\"Contents\" text=\"").append(TT(Req, "Contents")).append("\" img=\"img/help.gif\"/>");
 Men.append("<item id=\"About\" text=\"").append(TT(Req, "About")).append("\" img=\"img/about.gif\"/>");
 Men.append("<item id=\"ReportingBugs\" text=\"").append(TT(Req, "Reporting_Bugs")).append("\" img=\"img/bug_reporting.gif\"/></item>");
+Men.append("<item id=\"Status\" text=\"Status\"/></item>");
 Men.append("</menu>");
 return(Men.toString());
 } catch (PDException ex)
