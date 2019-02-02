@@ -607,6 +607,10 @@ return(Cond);
  */
 public static DriverGeneric getSessOPD(HttpServletRequest Req)
 {
+try {    
+String SesId=(String)Req.getSession().getAttribute(PRODOC_SESSID);
+getListOPSess().get(SesId).setLastUse(new Date());    
+} catch (Exception Ex){}
 return (DriverGeneric)Req.getSession(true).getAttribute(PRODOC_SESS);
 }
 //--------------------------------------------------------------
@@ -617,13 +621,14 @@ DriverGeneric OPDSess = (DriverGeneric)HttpSes.getAttribute(PRODOC_SESS);
 if (OPDSess!=null)
     ProdocFW.freeSesion(getConnector(), OPDSess);
 String SesId=(String)HttpSes.getAttribute(PRODOC_SESSID);
-            getListOPSess().remove(SesId);
+getListOPSess().remove(SesId);
 } catch (Exception Ex) 
     {Ex.printStackTrace();
     }
 HttpSes.setAttribute(PRODOC_SESSID, null);
 HttpSes.setAttribute(PRODOC_SESS, null);
 }
+//--------------------------------------------------------------
 /**
  *
  * @param Req

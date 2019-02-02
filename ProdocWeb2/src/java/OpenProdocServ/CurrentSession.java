@@ -23,13 +23,15 @@ import java.util.Date;
 
 public class CurrentSession
 {
-private String UserName;  
-private Date LoginTime;
-private String Host;
+private final String UserName;  
+private final Date LoginTime;
+private Date LastUse;
+private final String Host;
 public CurrentSession(String pUserName,Date pLoginTime, String pHost)
 {
 UserName=pUserName;  
 LoginTime=pLoginTime;
+LastUse=pLoginTime;
 Host=pHost; 
 }
 //-----------------------------------------------------------------------------------------------
@@ -57,4 +59,20 @@ public String getHost()
 {
 return Host;
 }
+
+    /**
+     * @return the LastUse
+     */
+    public Date getLastUse()
+    {
+        return LastUse;
+    }
+
+    /**
+     * @param LastUse the LastUse to set
+     */
+    public void setLastUse(Date LastUse)
+    {
+        this.LastUse = LastUse;
+    }
 }

@@ -27,7 +27,6 @@
 package OpenProdocServ;
 
 import OpenProdocUI.SParent;
-import static OpenProdocUI.SParent.ClearSessOPD;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -119,9 +118,9 @@ if (Connected(request) && Order.equals(DriverGeneric.S_RETRIEVEFILE))
     SendFile(request, response);
     return;
     }
-if (Connected(request) || Order.equals(DriverGeneric.S_LOGOUT)) 
+if (!Connected(request) || Order.equals(DriverGeneric.S_LOGOUT)) 
     {
-    ClearSessOPD(request.getSession());
+    SParent.ClearSessOPD(request.getSession());
     }
 if (Connected(request) || Order.equals(DriverGeneric.S_LOGIN)) 
     {
@@ -202,7 +201,7 @@ System.out.println(">> "+this.getServletName()+":"+new Date()+"="+Texto);
  */
 protected boolean Connected(HttpServletRequest Req) throws Exception
 {
-if (getSessOPD(Req)==null)
+if (SParent.getSessOPD(Req)==null)
     return(false);
 else
     return(true);
@@ -235,18 +234,19 @@ if (Order.equals(DriverGeneric.S_LOGIN))
     OPDObject = OPDObjectList.item(0);
     String Pass=OPDObject.getTextContent(); 
     DriverGeneric D=ProdocFW.getSession("PD", User, Pass);
-    Req.getSession().setAttribute("PRODOC_SESS", D);   
+    SParent.setSessOPD(Req, D);
     Answer(Req, out, true, null, null);
     return;    
     }
 else if (Order.equals(DriverGeneric.S_UNLOCK)) 
     {
-    getSessOPD(Req).UnLock();
-    Req.getSession().setAttribute("PRODOC_SESS", null);   
+//    getSessOPD(Req).UnLock();
+//    Req.getSession().setAttribute("PRODOC_SESS", null);   
+    SParent.ClearSessOPD(Req.getSession());
     Answer(Req, out, true, null, null);
     return;    
     }
-DriverGeneric D=getSessOPD(Req);
+DriverGeneric D=SParent.getSessOPD(Req);
 String Results=D.RemoteOrder(Order, XMLObjects);
 Answer(Req, out, Results);
 XMLObjects=null;
@@ -290,25 +290,25 @@ public String getServletInfo()
 return "Servlet for Oper";
 }
 //-----------------------------------------------------------------------------------------------
-/**
- *
- * @param Req
- * @return
- */
-public static DriverGeneric getSessOPD(HttpServletRequest Req)
-{
-return (DriverGeneric)Req.getSession(true).getAttribute("PRODOC_SESS");
-}
+///**
+// *
+// * @param Req
+// * @return
+// */
+//public static DriverGeneric getSessOPD(HttpServletRequest Req)
+//{
+//return (DriverGeneric)Req.getSession(true).getAttribute("PRODOC_SESS");
+//}
 //--------------------------------------------------------------
-/**
- *
- * @param Req
- * @param OPDSess
- */
-public static void setSessOPD(HttpServletRequest Req, DriverGeneric OPDSess)
-{
-Req.getSession().setAttribute("PRODOC_SESS", OPDSess);
-}
+///**
+// *
+// * @param Req
+// * @param OPDSess
+// */
+//public static void setSessOPD(HttpServletRequest Req, DriverGeneric OPDSess)
+//{
+//Req.getSession().setAttribute("PRODOC_SESS", OPDSess);
+//}
 //--------------------------------------------------------------
 /**
  * 
@@ -339,14 +339,14 @@ OPDObjectList = XMLObjects.getElementsByTagName("Ver");
 OPDObject = OPDObjectList.item(0);
 String Ver=OPDObject.getTextContent();
 DB.reset();
-PDDocs doc=new PDDocs(getSessOPD(Req));
+PDDocs doc=new PDDocs(SParent.getSessOPD(Req));
 doc.setPDId(Id);
 if (Ver!=null && Ver.length()!=0)
     doc.LoadVersion(Id, Ver);
 else
     doc.LoadCurrent(Id);
 ServletOutputStream out=response.getOutputStream();
-PDMimeType mt=new PDMimeType(getSessOPD(Req));
+PDMimeType mt=new PDMimeType(SParent.getSessOPD(Req));
 mt.Load(doc.getMimeType());
 response.setContentType(mt.getMimeCode());
 response.setHeader("Content-disposition", "inline; filename=" + doc.getName());
@@ -391,7 +391,7 @@ while (iter.hasNext())
         ItemFile=item;
         }
     }
-DriverGeneric PDSession=getSessOPD(Req);
+DriverGeneric PDSession=SParent.getSessOPD(Req);
 String Id=(String) ListFields.get("Id");
 String Ver=(String) ListFields.get("Ver");
 PDSession.InsertFile(Id, Ver, FileData);

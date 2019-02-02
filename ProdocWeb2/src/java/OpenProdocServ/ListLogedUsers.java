@@ -20,7 +20,6 @@
 package OpenProdocServ;
 
 import OpenProdocUI.SParent;
-import static OpenProdocUI.SParent.TT;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
@@ -28,12 +27,7 @@ import java.util.Iterator;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import prodoc.Attribute;
-import prodoc.Cursor;
 import prodoc.DriverGeneric;
-import prodoc.PDDocs;
-import prodoc.PDException;
-import prodoc.Record;
 
 /**
  *
@@ -41,7 +35,7 @@ import prodoc.Record;
  */
 public class ListLogedUsers extends SParent
 {
-
+static final String FORMATTS="yyyy-MM-dd HH:mm:ss";
 //-----------------------------------------------------------------------------------------------
 /**
  *
@@ -61,7 +55,7 @@ Resp.append("<rows>");
 try {
 Iterator<CurrentSession> ListSess = getListOPSess().values().iterator();
 int i=0;
-SimpleDateFormat formatterTS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+SimpleDateFormat formatterTS = new SimpleDateFormat(FORMATTS);
 while (ListSess.hasNext())
     {
     CurrentSession Sess = ListSess.next();
@@ -69,6 +63,7 @@ while (ListSess.hasNext())
     Resp.append("<cell>").append(Sess.getHost()).append("</cell>");
     Resp.append("<cell>").append(Sess.getUserName()).append("</cell>");
     Resp.append("<cell>").append(formatterTS.format(Sess.getLoginTime())).append("</cell>");
+    Resp.append("<cell>").append(formatterTS.format(Sess.getLastUse())).append("</cell>");
     Resp.append("</row>");
     }
 Resp.append("</rows>");
