@@ -22,8 +22,6 @@ import OpenProdocUI.SParent;
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
-import prodoc.DriverGeneric;
-import prodoc.ProdocFW;
 
 /**
  *

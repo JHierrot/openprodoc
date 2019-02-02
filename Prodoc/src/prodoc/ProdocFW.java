@@ -160,7 +160,7 @@ SearchConector(ConectorName).Shutdown();
 static public DriverGeneric getSession(String ConectorName, String user, String Password) throws PDException
 {
 if(PDLog.isDebug())
-    PDLog.Debug("ProdocFW.getSession: "+ConectorName);
+    PDLog.Debug("ProdocFW.getSession: "+ConectorName+"/"+user);
 return SearchConector(ConectorName).getSession(user, Password);
 }
 //-------------------------------------------------------------------------
@@ -173,7 +173,7 @@ return SearchConector(ConectorName).getSession(user, Password);
 static public void freeSesion(String ConectorName, DriverGeneric Session)  throws PDException
 {
 if(PDLog.isDebug())
-    PDLog.Debug("ProdocFW.freeSesion: "+ConectorName);
+    PDLog.Debug("ProdocFW.freeSesion: "+ConectorName+"/"+Session.getUser().getName());
 SearchConector(ConectorName).freeSesion(Session);
 }
 //-------------------------------------------------------------------------

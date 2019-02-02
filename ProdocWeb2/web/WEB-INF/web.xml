@@ -400,6 +400,14 @@
         <servlet-name>GenReportListFold</servlet-name>
         <servlet-class>OpenProdocServ.GenReportListFold</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Status</servlet-name>
+        <servlet-class>OpenProdocServ.Status</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListLogedUsers</servlet-name>
+        <servlet-class>OpenProdocServ.ListLogedUsers</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SParent</servlet-name>
         <url-pattern>/SParent</url-pattern>
@@ -799,6 +807,14 @@
     <servlet-mapping>
         <servlet-name>GenReportListFold</servlet-name>
         <url-pattern>/GenReportListFold</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Status</servlet-name>
+        <url-pattern>/Status</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListLogedUsers</servlet-name>
+        <url-pattern>/ListLogedUsers</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -82,6 +82,7 @@ private Record Res=null;
 private Attribute Attr=null;
 private boolean FirstLine=false;
 private boolean ExpandObject=false;
+private boolean ExportMulti=true;
 private boolean DelNull=false;
 private HashSet<String> ListIgnTypes=null; 
 private HashSet<String> ListIgnFields=null; 
@@ -271,7 +272,11 @@ while (Line!=null)
     else if (Line.trim().equals(R_LOOPATTR_E))
         AttrLoopEnd=RepLines.size();
     else if (Line.trim().equals(R_LOOPVAL_S))
+        {
         ValLoopStart=RepLines.size();
+        ExportMulti=false;
+        ExpandObject=true;
+        }
     else if (Line.trim().equals(R_LOOPVAL_E))
         ValLoopEnd=RepLines.size();
     else
@@ -388,7 +393,7 @@ else
 if (Attr1==null)
     return("");
 String ResVal;
-if (Attr1.isMultivalued())
+if (Attr1.isMultivalued() && !ExportMulti)
     ResVal=(String)CurVal;
 else    
     ResVal=Attr1.Export();
@@ -504,14 +509,30 @@ else if (Attr1.getType()==Attribute.tTHES)
     {
     if (Attr1.isMultivalued())
         {
-        PDThesaur Thes=new PDThesaur(getDrv());
-        if (CurVal!=null)
+        if (!ExportMulti)  
             {
-            Thes.Load((String)CurVal);
-            ResVal=Thes.getName();
+            PDThesaur Thes=new PDThesaur(getDrv());
+            if (CurVal!=null)
+                {
+                Thes.Load((String)CurVal);
+                ResVal=Thes.getName();
+                }
+            else
+                ResVal="";
             }
         else
-            ResVal="";
+            {
+            ResVal=null;
+            for (Object ThesId : Attr1.getValuesList())
+                {
+                PDThesaur Thes=new PDThesaur(getDrv());
+                Thes.Load((String)ThesId);
+                if (ResVal==null)
+                    ResVal=Thes.getName();
+                else
+                    ResVal+="|"+Thes.getName();
+                }
+            }
         }
     else
         {

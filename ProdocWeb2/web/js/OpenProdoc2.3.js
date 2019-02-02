@@ -322,7 +322,45 @@ switch (IdMenu)
         break;
     case "About": About();    
         break;
+    case "Status": Status();
+        break;
     }
+}
+//----------------------------------
+function  Status()
+{
+var WinST=myWins.createWindow({
+id:"Status",
+left:20,
+top:1,
+width:900,
+height:500,
+center:true,
+modal:true,
+resize:true});   
+WinST.setText("OpenProdoc");
+var SL=WinST.attachLayout('2U');
+//var FormStatus=WinST.attachForm();
+SL.cells("a").setText("Status");
+var FormStatus=SL.cells("a").attachForm();
+SL.cells("b").setText("Sessions");
+SL.cells("b").setWidth(260);
+var STGrid=SL.cells("b").attachGrid();
+STGrid.setHeader("Host,User,TimeLogged");
+STGrid.setInitWidths("60,60,*");
+STGrid.setColAlign("left,left,left");
+STGrid.setColTypes("ro,ro,ro");
+STGrid.setColSorting("str,str,str");
+STGrid.init();
+STGrid.load("ListLogedUsers");
+FormStatus.loadStruct("Status", function(){
+    FormStatus.setItemFocus("OK");
+    });
+FormStatus.attachEvent("onButtonClick", function (name)
+    {
+    FormStatus.unload();
+    WinST.close();
+    });
 }
 //----------------------------------
 function doOnLoadThes() 

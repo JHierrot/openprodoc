@@ -67,7 +67,6 @@ import prodoc.Record;
  */
 public class SParent extends HttpServlet
 {
-
 protected static String ProdocProperRef=null;
 /**
  * 
@@ -107,7 +106,7 @@ public final static String PRODOC_SESSID="PRODOC_SESSID";
 
 protected static boolean OPDFWLoaded=false;
 
-static Hashtable<String, CurrentSession> ListOPSess=new Hashtable();
+private final static Hashtable<String, CurrentSession> ListOPSess=new Hashtable();
 
 /** Initializes the servlet.
  * @param config 
@@ -618,7 +617,7 @@ DriverGeneric OPDSess = (DriverGeneric)HttpSes.getAttribute(PRODOC_SESS);
 if (OPDSess!=null)
     ProdocFW.freeSesion(getConnector(), OPDSess);
 String SesId=(String)HttpSes.getAttribute(PRODOC_SESSID);
-ListOPSess.remove(SesId);
+            getListOPSess().remove(SesId);
 } catch (Exception Ex) 
     {Ex.printStackTrace();
     }
@@ -639,7 +638,7 @@ UN=OPDSess.getUser().getName();
     {}
 CurrentSession CS=new CurrentSession(UN, new Date(), Req.getRemoteHost());
 String SesId=Long.toHexString(System.currentTimeMillis());
-ListOPSess.put(SesId, CS);
+        getListOPSess().put(SesId, CS);
 Req.getSession().setAttribute(PRODOC_SESSID, SesId);
 Req.getSession().setAttribute(PRODOC_SESS, OPDSess);
 }
@@ -1788,6 +1787,14 @@ for (Iterator iterator = listDirectDescendList.iterator(); iterator.hasNext();)
     CalcOps(Ops,(String)iterator.next(), LocalSess, Level+1 );    
     }
 return(Ops);
+}
+//-----------------------------------------------------------------------------------------------
+/**
+ * @return the ListOPSess
+ */
+protected static Hashtable<String, CurrentSession> getListOPSess()
+{
+return ListOPSess;
 }
 //-----------------------------------------------------------------------------------------------
 }

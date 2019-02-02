@@ -27,6 +27,7 @@
 package OpenProdocServ;
 
 import OpenProdocUI.SParent;
+import static OpenProdocUI.SParent.ClearSessOPD;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -120,8 +121,7 @@ if (Connected(request) && Order.equals(DriverGeneric.S_RETRIEVEFILE))
     }
 if (Connected(request) || Order.equals(DriverGeneric.S_LOGOUT)) 
     {
-    ProdocFW.freeSesion("PD", getSessOPD(request));    
-    setSessOPD(request, null);    
+    ClearSessOPD(request.getSession());
     }
 if (Connected(request) || Order.equals(DriverGeneric.S_LOGIN)) 
     {
