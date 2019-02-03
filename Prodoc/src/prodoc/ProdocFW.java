@@ -90,6 +90,7 @@ static public void InitProdoc(String ConectorName, String FileConf) throws PDExc
 if (ConectList.isEmpty())
     {
     InitEngine(ConectorName, FileConf);
+    AddShutdownHook(ConectorName);
     if(PDLog.isDebug() || PDLog.isInfo())
         {
         PDLog.Info("*************************************************************************************");
@@ -175,6 +176,21 @@ static public void freeSesion(String ConectorName, DriverGeneric Session)  throw
 if(PDLog.isDebug())
     PDLog.Debug("ProdocFW.freeSesion: "+ConectorName+"/"+Session.getUser().getName());
 SearchConector(ConectorName).freeSesion(Session);
+}
+//-------------------------------------------------------------------------
+private static void AddShutdownHook(String ConectorName)
+{
+Runtime.getRuntime().addShutdownHook(new Thread("ProdocShutDown") 
+    { 
+    public void run() 
+    { 
+    try {     
+    ShutdownProdoc(ConectorName);
+    } catch (Exception Ex)
+        {Ex.printStackTrace();
+        }  
+    }
+    }); 
 }
 //-------------------------------------------------------------------------
 }

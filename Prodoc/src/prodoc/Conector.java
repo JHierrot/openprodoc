@@ -93,6 +93,7 @@ private String TaskCategory="*";
  * Indicates if the tasks for the connector has beeen started
  */
 private boolean TasksStarted=false;
+private boolean EndShutdown=false;
 //--------------------------------------------------------------------------
 /**
  * Reads, interpret and store the requiered elements of the configuration
@@ -163,7 +164,7 @@ return(NewSesion);
 public synchronized DriverGeneric getSession(String user, String Password) throws PDException
 {
 if(PDLog.isDebug())
-    PDLog.Debug("Obtainning_Sessio");
+    PDLog.Debug("Obtaining_Sessio");
 DriverGeneric Session;
 for (int i = 0; i < ListSesion.size(); i++)
     {
@@ -196,7 +197,7 @@ return(null);
  * @param Session Session to be unlocked
  * @throws PDException in any error
  */
-public void freeSesion(DriverGeneric Session)  throws PDException
+public synchronized void freeSesion(DriverGeneric Session)  throws PDException
 {
 if(PDLog.isDebug())
     PDLog.Debug("unlocking_session");
@@ -205,6 +206,10 @@ if (Session==null)
 if (!Session.isLocked())
     PDException.GenPDException("Unlocked_session_to_unlock", null);
 Session.UnLock();
+if (ListSesion.size()>MinPoolSize)
+    {
+    ListSesion.remove(Session);
+    }
 }
 //--------------------------------------------------------------------------
 /**
@@ -213,6 +218,8 @@ Session.UnLock();
  */
 public void Shutdown() throws PDException
 {
+if (EndShutdown) // to avoid double invocation
+    return;
 DriverGeneric Session;
 if (PDLog.isDebug())
     PDLog.Debug("closing_sessions_of"+":"+this.ConectorName);
@@ -222,6 +229,7 @@ for (int i = 0; i < ListSesion.size(); i++)
      Session = ListSesion.elementAt(i);
      Session.delete();
     }
+EndShutdown=true;
 }
 //--------------------------------------------------------------------------
 /**
@@ -250,9 +258,15 @@ private void DestroyTask()
 if (PDLog.isDebug())
     PDLog.Debug("DestroyTask >");        
 if (TaskSearchFreq!=0)    
+    {
     Conector.DestroySearchTask(ConectorName);
+    TaskSearchFreq=0;
+    }
 if (TaskExecFreq!=0)
-    Conector.DestroyExecTask(ConectorName);   
+    {
+    Conector.DestroyExecTask(ConectorName);  
+    TaskExecFreq=0;
+    }
 if (PDLog.isDebug())
     PDLog.Debug("DestroyTask <");        
 }
