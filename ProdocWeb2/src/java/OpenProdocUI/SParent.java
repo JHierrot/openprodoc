@@ -621,7 +621,8 @@ DriverGeneric OPDSess = (DriverGeneric)HttpSes.getAttribute(PRODOC_SESS);
 if (OPDSess!=null)
     ProdocFW.freeSesion(getConnector(), OPDSess);
 String SesId=(String)HttpSes.getAttribute(PRODOC_SESSID);
-getListOPSess().remove(SesId);
+if (SesId!=null)
+    getListOPSess().remove(SesId);
 } catch (Exception Ex) 
     {Ex.printStackTrace();
     }
