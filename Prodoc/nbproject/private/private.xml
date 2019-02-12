@@ -5,8 +5,11 @@
         <group>
             <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/ProdocFW.java</file>
             <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/DriverGeneric.java</file>
+            <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/PDException.java</file>
             <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/DriverRemote.java</file>
+            <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/DriverJDBC.java</file>
             <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/Conector.java</file>
+            <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/ObjPD.java</file>
             <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/PDReport.java</file>
         </group>
     </open-files>

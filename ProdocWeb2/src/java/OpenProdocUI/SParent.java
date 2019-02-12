@@ -1760,10 +1760,11 @@ SB.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"CONTRI
 return(SB);
 }
 //-----------------------------------------------------------------------------------------------
-protected static StringBuilder GenBoolVals(HttpServletRequest Req, Attribute Attr, Boolean is1Col)
+protected static StringBuilder GenBoolVals(HttpServletRequest Req, Attribute Attr, Boolean is1Col, boolean ReadOnly)
 {
 StringBuilder SB=new StringBuilder(2000);
-SB.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"CONTRIBLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td>").append(is1Col?"</tr><tr>":"").append("<td class=\"TD_CONTRIBINP\"><select class=\"CONTRIBFORMATTHES\" name=\"").append(Attr.getName()).append("\">").append("<option value=\"\" selected></option><option value=\"1\">true</option></option><option value=\"0\">false</option>").append("</select><span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
+//SB.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"CONTRIBLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td>").append(is1Col?"</tr><tr>":"").append("<td class=\"TD_CONTRIBINP\"><select class=\"CONTRIBFORMATTHES\" name=\"").append(Attr.getName()).append("\">").append("<option value=\"\" selected></option><option value=\"1\">true</option></option><option value=\"0\">false</option>").append("</select><span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
+SB.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"CONTRIBLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td>").append(is1Col?"</tr><tr>":"").append("<td class=\"TD_CONTRIBINP\"><input type=\"checkbox\" class=\"CONTRIBCHECKBOX\" name=\"").append(Attr.getName()).append("\"").append(Attr.getValue()!=null&&((boolean)Attr.getValue())?"checked":"").append(ReadOnly?" disabled":"").append(" >").append("<span class=\"tooltiptext\">").append(TT(Req,Attr.getDescription())).append("</span></td></tr>\n");
 return(SB);
 }
 //-----------------------------------------------------------------------------------------------

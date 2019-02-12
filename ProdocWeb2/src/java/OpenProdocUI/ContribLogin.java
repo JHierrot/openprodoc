@@ -205,7 +205,7 @@ for (int i = 0; i < FieldsToAsk.size(); i++)
             Fields.append(GenThesVals(Req, LocalSess, Attr, is1Col));
             break;
         case Attribute.tBOOLEAN:
-            Fields.append(GenBoolVals(Req, Attr, is1Col));
+            Fields.append(GenBoolVals(Req, Attr, is1Col, false));
             break;
         default:
             if (Attr.getType()==Attribute.tSTRING &&Attr.getLongStr()>256)

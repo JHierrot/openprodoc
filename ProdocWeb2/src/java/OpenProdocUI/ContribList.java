@@ -194,17 +194,24 @@ Attribute Attr;
 for (int i = 0; i < FieldsToShow.size(); i++)
     {
     String F = FieldsToShow.elementAt(i);
-    Attr = AttrDef.getAttr(F).Copy();    
-    if (Attr.getType()==Attribute.tTHES)
+    Attr = AttrDef.getAttr(F).Copy();  
+    if (Attr.getType()==Attribute.tBOOLEAN)
         {
-        PDThesaur PDThes=new PDThesaur(LocalSess);
-        if (Attr.getValue()!=null)
-            {
-            PDThes.Load((String)Attr.getValue());
-            Attr.setValue(PDThes.getName());
-            }
+        Fields.append(GenBoolVals(Req, Attr, is1Col, true));
         }
-    Fields.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"CONTRIBLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td>").append(is1Col?"</tr><tr>":"").append("<td class=\"TD_CONTRIBINP\"><input class=\"CONTRIBINP\" type=\"text\" readonly name=\"").append(Attr.getName()).append("\" value=\"").append(Attr.Export()).append("\"></td></tr>\n");
+    else
+        {
+        if (Attr.getType()==Attribute.tTHES)
+            {
+            PDThesaur PDThes=new PDThesaur(LocalSess);
+            if (Attr.getValue()!=null)
+                {
+                PDThes.Load((String)Attr.getValue());
+                Attr.setValue(PDThes.getName());
+                }
+            }
+        Fields.append("<tr id=\"").append(Attr.getName()).append("\"><td><div class=\"CONTRIBLAB\" >").append(TT(Req, Attr.getUserName())).append("</div></td>").append(is1Col?"</tr><tr>":"").append("<td class=\"TD_CONTRIBINP\"><input class=\"CONTRIBINP\" type=\"text\" readonly name=\"").append(Attr.getName()).append("\" value=\"").append(Attr.Export()).append("\"></td></tr>\n");
+        }
     }
 HtmlFinal=HtmlFinal.replace("@CONTRIBFIELDS@", Fields);
 return(HtmlFinal);
