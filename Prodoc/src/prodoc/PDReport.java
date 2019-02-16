@@ -81,7 +81,7 @@ private int FilesCount=0;
 private Record Res=null;
 private Attribute Attr=null;
 private boolean FirstLine=false;
-private boolean ExpandObject=false;
+private boolean ExpandObject=true;
 private boolean ExportMulti=true;
 private boolean DelNull=false;
 private HashSet<String> ListIgnTypes=null; 
@@ -554,7 +554,7 @@ else if (AttrName.equals(PDDocs.fMIMETYPE))
     }
 else
     {
-    if (Attr1.isMultivalued())
+    if (Attr1.isMultivalued() && ValLoopStart!=ValLoopEnd)
         ResVal=(String)CurVal;
     else    
         ResVal=Attr1.Export();
@@ -653,6 +653,14 @@ for (Map.Entry<String, Attribute> entrySet : AttrList.entrySet())
     if (!Attr.isMultivalued())
         {
         CurVal=Attr.getValue();
+        for (int i = AttrLoopStart; i < AttrLoopEnd; i++)
+            {
+            ProcessLine(RepLines.get(i));
+            }
+        }
+    else if (ValLoopStart==ValLoopEnd)
+        {
+        CurVal=Attr.Export();
         for (int i = AttrLoopStart; i < AttrLoopEnd; i++)
             {
             ProcessLine(RepLines.get(i));
