@@ -1475,15 +1475,16 @@ Message(DrvTT("Exported")+" "+ExpFolds+" "+DrvTT("Folders")+" / "+ExpDocs +" "+D
     private void ImportFoldActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ImportFoldActionPerformed
     {//GEN-HEADEREND:event_ImportFoldActionPerformed
 try {
-ExpFolds=0;
-ExpDocs=0;    
 DialogImportFolders ImpFold = new DialogImportFolders(this,true);
 ImpFold.setLocationRelativeTo(null);
 ImpFold.setVisible(true);
 if (ImpFold.isCancel())
     return;
 setCursor(WaitCur);
-Import(FoldAct, getIO_OSFolder(), ImpFold.IsOneLevel(), ImpFold.IncludeMetadata(), ImpFold.IncludeDocs(), ImpFold.FoldType(), ImpFold.DocType(), ImpFold.IsStrict());
+getSession().ImportFolder(FoldAct, getIO_OSFolder(), ImpFold.IsOneLevel(), ImpFold.IncludeMetadata(), ImpFold.IncludeDocs(), ImpFold.FoldType(), ImpFold.DocType(), ImpFold.IsStrict());;
+ExpFolds=getSession().getImpFolds();
+ExpDocs=getSession().getImpDocs();    
+//Import(FoldAct, getIO_OSFolder(), ImpFold.IsOneLevel(), ImpFold.IncludeMetadata(), ImpFold.IncludeDocs(), ImpFold.FoldType(), ImpFold.DocType(), ImpFold.IsStrict());
 TreePath ActualPath = TreeFolder.getSelectionPath();
 DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) ActualPath.getLastPathComponent();
 ExpandFold(TreeFold);
@@ -2365,6 +2366,7 @@ if (!IsOneLevel)
     }    
 }
 //---------------------------------------------------------------------
+/**
 private void Import(PDFolders FoldAct, String OriginPath, boolean IsOneLevel, boolean IncludeMetadata, boolean IncludeDocs, String FoldType, String DocType, boolean Strict) throws PDException
 {
 PDFolders NewFold=new PDFolders(FoldAct.getDrv(), FoldType); 
@@ -2442,13 +2444,14 @@ for (File ListElement : ListOrigin)
             }
         }
     }
-ListOrigin=null; // to help gc and save memory during recursivity
+ListOrigin=null; 
 for (int i = 0; i < DirList.size(); i++)
     {
     File SubDir = (File) DirList.get(i);
     Import(NewFold, SubDir.getAbsolutePath(), IsOneLevel, IncludeMetadata, IncludeDocs, FoldType, DocType, Strict);    
     }
 }
+***/
 //---------------------------------------------------------------------
 
 private void ImportExt(PDFolders FoldAct, String OriginPath, boolean DeleteAfter, String Format, String DefFoldType, String DateFormat, String TimeStampFormat) throws PDException

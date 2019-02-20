@@ -703,7 +703,15 @@ FileImp=new File("ex/PD_REP_EXA_RIS.opd");
 ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
 Trace.add("RIS types created");
 TE.CreateRootThesaur(DefLang);
-//----------------------
+//-----------------------
+Trace.addAll(ImportDefs("ex/Def"));
+Trace.add("Custom Definitions imported");
+//-----------------------
+PDFolders FoldRoot=new PDFolders(this);
+FoldRoot.Load(PDFolders.ROOTFOLDER);
+ImportFolder(FoldRoot, "ex/Obj", false, true, true, PDFolders.getTableName(), PDDocs.getTableName(), false);
+Trace.add("Custom Objects imported: Folders="+getImpFolds()+" Docs="+getImpDocs());
+//-----------------------
 CerrarTrans();
 Trace.add("Installation finished");
 }
@@ -3133,5 +3141,185 @@ D.ExecuteFTUpd();
     }   
 return("");    
 }
+private int ImpFolds;
+private int ImpDocs;
 //-----------------------------------------------------------------------------------
+public void ImportFolder(PDFolders FoldAct, String OriginPath, boolean IsOneLevel, boolean IncludeMetadata, boolean IncludeDocs, String FoldType, String DocType, boolean Strict) throws PDException
+{
+ImpFolds=0;
+ImpDocs=0;
+Import(FoldAct, OriginPath, IsOneLevel, IncludeMetadata, IncludeDocs, FoldType, DocType, Strict);
+}
+//---------------------------------------------------------------------
+private void Import(PDFolders FoldAct, String OriginPath, boolean IsOneLevel, boolean IncludeMetadata, boolean IncludeDocs, String FoldType, String DocType, boolean Strict) throws PDException
+{
+PDFolders NewFold=new PDFolders(FoldAct.getDrv(), FoldType); 
+if (OriginPath.lastIndexOf(File.separatorChar)==OriginPath.length()-1) // ends with separtos
+   OriginPath=OriginPath.substring(0, OriginPath.length()-1);
+boolean FoldExist=false;
+if (!Strict)
+    {
+    String Name=OriginPath.substring(OriginPath.lastIndexOf(File.separatorChar)+1);
+    try {
+    String IdFold=NewFold.GetIdChild(FoldAct.getPDId(), Name);
+    NewFold.Load(IdFold);
+    FoldExist=true;
+    } catch( PDException ex)
+        { // don't exits
+        }
+    }
+if (Strict || (!Strict && !FoldExist))
+    {
+    if (IncludeMetadata)   
+        {
+        try{    
+        NewFold=NewFold.ProcessXML(new File(OriginPath+".opd"), FoldAct.getPDId()); 
+        } catch (PDException ex)
+            {
+            throw new PDException(ex.getLocalizedMessage()+"->"+OriginPath+".opd");    
+            }
+        }   
+    else
+        {
+        String Name=OriginPath.substring(OriginPath.lastIndexOf(File.separatorChar)+1);
+        NewFold.setTitle(Name);
+        NewFold.setParentId(FoldAct.getPDId());   
+        NewFold.insert();
+        }
+    }
+ImpFolds++;
+File ImpFold=new File(OriginPath);
+File []ListOrigin=ImpFold.listFiles();
+ArrayList DirList=new ArrayList(5);
+for (File ListElement : ListOrigin)
+    {
+    if (ListElement.isDirectory())
+        {
+        if (!IsOneLevel)
+            DirList.add(ListElement);
+        continue;
+        }
+    if (IncludeDocs)
+        {
+        if (ListElement.getName().endsWith(".opd"))
+            {
+            if (IncludeMetadata)
+                {
+                try {
+                    ImpDocs+=ProcessXML(ListElement, NewFold.getPDId());
+                } catch (PDException ex)
+                    {
+                    throw new PDException(ex.getLocalizedMessage()+"->"+ListElement.getAbsolutePath());    
+                    }
+                }
+            }
+        else
+            {
+            if (!IncludeMetadata)
+                {
+                PDDocs NewDoc=new PDDocs(FoldAct.getDrv(), DocType);
+                NewDoc.setTitle(ListElement.getName());
+                NewDoc.setFile(ListElement.getAbsolutePath());
+                NewDoc.setDocDate(new Date(ListElement.lastModified()));
+                NewDoc.setParentId(NewFold.getPDId());
+                NewDoc.insert();
+                ImpDocs++;
+                }
+            }
+        }
+    }
+ListOrigin=null; // to help gc and save memory during recursivity
+for (int i = 0; i < DirList.size(); i++)
+    {
+    File SubDir = (File) DirList.get(i);
+    Import(NewFold, SubDir.getAbsolutePath(), IsOneLevel, IncludeMetadata, IncludeDocs, FoldType, DocType, Strict);    
+    }
+}
+//---------------------------------------------------------------------
+/**
+* @return the ImpFolds
+*/
+public int getImpFolds()
+{
+return ImpFolds;
+}
+//---------------------------------------------------------------------
+/**
+* @return the ImpDocs
+*/
+public int getImpDocs()
+{
+return ImpDocs;
+}
+//---------------------------------------------------------------------
+public ArrayList<String> ImportDefs(String FolderPath, boolean CreateTypes) throws PDException
+{
+Date ImportStart=new Date();    
+ArrayList<String> ListImps=new ArrayList();   
+File FDef=new File(FolderPath);
+File[] ListDefs = FDef.listFiles();
+if (ListDefs!=null)
+    {
+    Arrays.sort(ListDefs);
+    for (File ListDef : ListDefs)
+        {
+        try {
+            ProcessXML(ListDef, PDFolders.SYSTEMFOLDER);
+            ListImps.add("Custom imported:" + ListDef);
+        } catch (Exception Ex)
+            {
+            ListImps.add("Error in Custom import:" + ListDef);
+            ListImps.add("Error:"+Ex.getLocalizedMessage());
+            }
+        }
+    if (CreateTypes)
+        {
+        PDObjDefs Defs=new PDObjDefs(this);
+        PDObjDefs DefCurr=new PDObjDefs(this);
+        Cursor listDocs = Defs.getListDocs();
+        Record NextRec = NextRec(listDocs);
+        while (NextRec!=null)
+            {
+            DefCurr.assignValues(NextRec);
+            if (DefCurr.getPDDate().after(ImportStart))
+                DefCurr.CreateObjectTables(DefCurr.getName(), false);
+            NextRec = NextRec(listDocs);
+            }
+        Cursor listFolds = Defs.getListFold();
+        NextRec = NextRec(listFolds);
+        while (NextRec!=null)
+            {
+            DefCurr.assignValues(NextRec);
+            if (DefCurr.getPDDate().after(ImportStart))
+                DefCurr.CreateObjectTables(DefCurr.getName(), false);
+            NextRec = NextRec(listFolds);
+            }
+        }
+    }
+return(ListImps);    
+}
+//---------------------------------------------------------------------
+public ArrayList<String> ImportPack(String FolderPath) throws PDException
+{
+ArrayList<String> ListDef=ImportDefs(FolderPath+"/Def", true);
+PDFolders FoldRoot=new PDFolders(this);
+FoldRoot.Load(PDFolders.ROOTFOLDER);
+
+ImportFolder(FoldRoot, FolderPath+"/Obj", false, true, true, PDFolders.getTableName(), PDDocs.getTableName(), false);  
+return(ListDef);
+}
+//---------------------------------------------------------------------
+//***********************************************************************************
+class FilterOPDFiles implements FileFilter
+{
+@Override
+public boolean accept(File PathName)
+{
+if (PathName.getName().toLowerCase().endsWith(".opd"))   
+    return(true);
+else
+    return(false);    
+}
+}
+//***********************************************************************************
 }
