@@ -39,12 +39,10 @@ public static final String fOBJECTID="ObjectId";
  *
  */
 public static final String fOPERATION="Operation";
-
-    /**
-     *
-     */
-    public static final String fRESULT="Result";
-
+/**
+ *
+ */
+public static final String fRESULT="Result";
 /**
  *
  */

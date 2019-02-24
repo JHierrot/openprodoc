@@ -704,7 +704,10 @@ ProcessXML(FileImp, PDFolders.SYSTEMFOLDER);
 Trace.add("RIS types created");
 TE.CreateRootThesaur(DefLang);
 //-----------------------
-Trace.addAll(ImportDefs("ex/Def"));
+Trace.addAll(ImportThes("ex/Thes"));
+Trace.add("Thesaurus imported");
+//-----------------------
+Trace.addAll(ImportDefs("ex/Def", true));
 Trace.add("Custom Definitions imported");
 //-----------------------
 PDFolders FoldRoot=new PDFolders(this);
@@ -3251,10 +3254,19 @@ public int getImpDocs()
 {
 return ImpDocs;
 }
+public ArrayList<String> ImportThes(String FolderPath) throws PDException
+{
+ArrayList<String> ListImps=new ArrayList();   
+PDThesaur Thes=new PDThesaur(this);
+ListImps.addAll(Thes.ImportPackThes(FolderPath));
+return(ListImps);    
+}
 //---------------------------------------------------------------------
 public ArrayList<String> ImportDefs(String FolderPath, boolean CreateTypes) throws PDException
-{
-Date ImportStart=new Date();    
+{  
+PDObjDefs Defs=new PDObjDefs(this);
+HashSet<String> ListPreviousDefsDocs=Defs.getNamesUncreatedDefs(false);
+HashSet<String> ListPreviousDefsFolds=Defs.getNamesUncreatedDefs(true);
 ArrayList<String> ListImps=new ArrayList();   
 File FDef=new File(FolderPath);
 File[] ListDefs = FDef.listFiles();
@@ -3265,34 +3277,28 @@ if (ListDefs!=null)
         {
         try {
             ProcessXML(ListDef, PDFolders.SYSTEMFOLDER);
-            ListImps.add("Custom imported:" + ListDef);
+            ListImps.add("ObjDef imported:" + ListDef);
         } catch (Exception Ex)
             {
-            ListImps.add("Error in Custom import:" + ListDef);
+            ListImps.add("Error in ObjDef import:" + ListDef);
             ListImps.add("Error:"+Ex.getLocalizedMessage());
             }
         }
     if (CreateTypes)
         {
-        PDObjDefs Defs=new PDObjDefs(this);
-        PDObjDefs DefCurr=new PDObjDefs(this);
-        Cursor listDocs = Defs.getListDocs();
-        Record NextRec = NextRec(listDocs);
-        while (NextRec!=null)
+        TreeSet<String> ListUpdatedDefsDocs=new TreeSet<>(Defs.getNamesUncreatedDefs(false));
+        TreeSet<String> ListUpdatedDefsFolds=new TreeSet<>(Defs.getNamesUncreatedDefs(true));
+        for (Iterator<String> iterator = ListUpdatedDefsDocs.iterator(); iterator.hasNext();)
             {
-            DefCurr.assignValues(NextRec);
-            if (DefCurr.getPDDate().after(ImportStart))
-                DefCurr.CreateObjectTables(DefCurr.getName(), false);
-            NextRec = NextRec(listDocs);
+            String NameDef=iterator.next();    
+            if (!ListPreviousDefsDocs.contains(NameDef))
+                Defs.CreateObjectTables(NameDef, false);        
             }
-        Cursor listFolds = Defs.getListFold();
-        NextRec = NextRec(listFolds);
-        while (NextRec!=null)
+        for (Iterator<String> iterator = ListUpdatedDefsFolds.iterator(); iterator.hasNext();)
             {
-            DefCurr.assignValues(NextRec);
-            if (DefCurr.getPDDate().after(ImportStart))
-                DefCurr.CreateObjectTables(DefCurr.getName(), false);
-            NextRec = NextRec(listFolds);
+            String NameDef=iterator.next();    
+            if (!ListPreviousDefsFolds.contains(NameDef))
+                Defs.CreateObjectTables(NameDef, true);        
             }
         }
     }
@@ -3301,11 +3307,18 @@ return(ListImps);
 //---------------------------------------------------------------------
 public ArrayList<String> ImportPack(String FolderPath) throws PDException
 {
-ArrayList<String> ListDef=ImportDefs(FolderPath+"/Def", true);
+ArrayList<String> ListDef=ImportThes(FolderPath+"/Thes");    
+ListDef.addAll(ImportDefs(FolderPath+"/Def", true));
 PDFolders FoldRoot=new PDFolders(this);
 FoldRoot.Load(PDFolders.ROOTFOLDER);
-
-ImportFolder(FoldRoot, FolderPath+"/Obj", false, true, true, PDFolders.getTableName(), PDDocs.getTableName(), false);  
+File FDef=new File(FolderPath+"/Obj");
+File[] ListFolds = FDef.listFiles();
+for (int i = 0; i < ListFolds.length; i++)
+    {
+    File Fold = ListFolds[i];
+    if (Fold.isDirectory())    
+        ImportFolder(FoldRoot, Fold.getAbsolutePath(), false, true, true, PDFolders.getTableName(), PDDocs.getTableName(), false);  
+    }
 return(ListDef);
 }
 //---------------------------------------------------------------------

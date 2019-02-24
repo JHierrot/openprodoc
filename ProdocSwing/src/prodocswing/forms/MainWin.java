@@ -181,6 +181,7 @@ setTitle(getTitle()+" @"+getSession().getUser().getName()+" ( "+getSession().get
         TaskExecMenuItem = new javax.swing.JMenuItem();
         TaskEndedMenuItem = new javax.swing.JMenuItem();
         TraceMenuItem = new javax.swing.JMenuItem();
+        ImportPackage = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
         contentsMenuItem1 = new javax.swing.JMenuItem();
         aboutMenuItem1 = new javax.swing.JMenuItem();
@@ -788,6 +789,17 @@ setTitle(getTitle()+" @"+getSession().getUser().getName()+" ( "+getSession().get
             }
         });
         AdminMenu.add(TraceMenuItem);
+
+        ImportPackage.setFont(getFontMenu());
+        ImportPackage.setText(TT("Import_Package"));
+        ImportPackage.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                ImportPackageActionPerformed(evt);
+            }
+        });
+        AdminMenu.add(ImportPackage);
 
         menuBar.add(AdminMenu);
 
@@ -1481,7 +1493,7 @@ ImpFold.setVisible(true);
 if (ImpFold.isCancel())
     return;
 setCursor(WaitCur);
-getSession().ImportFolder(FoldAct, getIO_OSFolder(), ImpFold.IsOneLevel(), ImpFold.IncludeMetadata(), ImpFold.IncludeDocs(), ImpFold.FoldType(), ImpFold.DocType(), ImpFold.IsStrict());;
+getSession().ImportFolder(FoldAct, getIO_OSFolder(), ImpFold.IsOneLevel(), ImpFold.IncludeMetadata(), ImpFold.IncludeDocs(), ImpFold.FoldType(), ImpFold.DocType(), ImpFold.IsStrict());
 ExpFolds=getSession().getImpFolds();
 ExpDocs=getSession().getImpDocs();    
 //Import(FoldAct, getIO_OSFolder(), ImpFold.IsOneLevel(), ImpFold.IncludeMetadata(), ImpFold.IncludeDocs(), ImpFold.FoldType(), ImpFold.DocType(), ImpFold.IsStrict());
@@ -1702,6 +1714,31 @@ RefreshDocs();
     }        
     }//GEN-LAST:event_ImportExtRISActionPerformed
 
+    private void ImportPackageActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_ImportPackageActionPerformed
+    {//GEN-HEADEREND:event_ImportPackageActionPerformed
+try {
+DialogImportPackage ImpFold = new DialogImportPackage(this,true);
+ImpFold.setLocationRelativeTo(null);
+ImpFold.setVisible(true);
+if (ImpFold.isCancel())
+    return;
+setCursor(WaitCur);
+getSession().ImportPack(getIO_OSFolder());
+ExpFolds=getSession().getImpFolds();
+ExpDocs=getSession().getImpDocs();    
+TreePath ActualPath = TreeFolder.getSelectionPath();
+DefaultMutableTreeNode TreeFold = (DefaultMutableTreeNode) ActualPath.getLastPathComponent();
+ExpandFold(TreeFold);
+TreeFolder.setSelectionPath(ActualPath);
+setCursor(DefCur);
+Message(DrvTT("Imported")+" "+ExpFolds+" "+DrvTT("Folders")+" / "+ExpDocs +" "+DrvTT("Documents"));
+} catch (Exception ex)
+    {
+    setCursor(DefCur);
+    MainWin.Message(MainWin.DrvTT(ex.getLocalizedMessage()));
+    }
+    }//GEN-LAST:event_ImportPackageActionPerformed
+
 /**
 * @param args the command line arguments
 */
@@ -1750,6 +1787,7 @@ java.awt.EventQueue.invokeLater(new Runnable()
     private javax.swing.JMenuItem ImportExtFold;
     private javax.swing.JMenuItem ImportExtRIS;
     private javax.swing.JMenuItem ImportFold;
+    private javax.swing.JMenuItem ImportPackage;
     private javax.swing.JMenuItem ListVersions;
     private javax.swing.JMenuItem MimeTypeMenuItem;
     private javax.swing.JMenuItem ModDocAdvanced;

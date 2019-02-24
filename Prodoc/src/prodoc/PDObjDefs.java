@@ -1283,11 +1283,11 @@ return(v);
  * @return return a HashSet of all subclases clases
  * @throws PDException in any error
  */
-public HashSet getListSubClases(String ClassName) throws PDException
+public HashSet<String> getListSubClases(String ClassName) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDObjDefs.getListSubClases>:"+ClassName);
-HashSet v=new HashSet();
+HashSet<String> v=new HashSet();
 v.add(ClassName);
 Condition CondType=new Condition(PDObjDefs.fPARENT, Condition.cEQUAL, ClassName);
 Conditions Conds=new Conditions();
@@ -1417,11 +1417,11 @@ public void setCreated(boolean Created)
 this.Created = Created;
 }
 //-------------------------------------------------------------------------
-private HashSet getListSubClasesCreated(String ClassName) throws PDException
+private HashSet<String> getListSubClasesCreated(String ClassName) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDObjDefs.getListSubClases>:"+ClassName);
-HashSet v=new HashSet();
+HashSet<String> v=new HashSet();
 Condition CondType=new Condition(PDObjDefs.fPARENT, Condition.cEQUAL, ClassName);
 Condition CCreated=new Condition(PDObjDefs.fCREATED, Condition.cEQUAL, true);
 Conditions Conds=new Conditions();
@@ -1441,4 +1441,48 @@ if (PDLog.isDebug())
 return(v);
 }
 //-------------------------------------------------------------------------
+public HashSet<String> getNamesDocsDefs() throws PDException
+{
+HashSet<String> ListNameDefs=new HashSet();
+Cursor ListDocsDefs = getListDocs();
+Record NextRec = getDrv().NextRec(ListDocsDefs);
+while (NextRec!=null)
+    {
+    ListNameDefs.add((String)NextRec.getAttr(PDObjDefs.fNAME).getValue());
+    NextRec = getDrv().NextRec(ListDocsDefs);
+    }
+getDrv().CloseCursor(ListDocsDefs);
+return(ListNameDefs);
+}
+//-------------------------------------------------------------------------
+public HashSet<String> getNamesFoldDefs() throws PDException
+{
+HashSet<String> ListNameDefs=new HashSet();
+Cursor ListFoldsDefs = getListFold();
+Record NextRec = getDrv().NextRec(ListFoldsDefs);
+while (NextRec!=null)
+    {
+    ListNameDefs.add((String)NextRec.getAttr(PDObjDefs.fNAME).getValue());
+    NextRec = getDrv().NextRec(ListFoldsDefs);
+    }
+getDrv().CloseCursor(ListFoldsDefs);
+return(ListNameDefs);
+}
+//-------------------------------------------------------------------------
+public HashSet<String> getNamesUncreatedDefs(boolean Folds) throws PDException
+{
+HashSet<String> ListNameDefs=new HashSet();
+Cursor ListUncreatedDefs = SearchLike("");
+Record NextRec = getDrv().NextRec(ListUncreatedDefs);
+while (NextRec!=null)
+    {
+    if (!(boolean)NextRec.getAttr(fCREATED).getValue() && ((String)NextRec.getAttr(fCLASSTYPE).getValue()).equals(Folds?CT_FOLDER:CT_DOC))
+        ListNameDefs.add((String)NextRec.getAttr(PDObjDefs.fNAME).getValue());
+    NextRec = getDrv().NextRec(ListUncreatedDefs);
+    }
+getDrv().CloseCursor(ListUncreatedDefs);
+return(ListNameDefs);
+}
+//-------------------------------------------------------------------------
+
 }

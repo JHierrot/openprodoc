@@ -19,10 +19,15 @@
 
 package prodoc;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
@@ -2421,6 +2426,38 @@ return (NewId);
     static public String getImportReport()
 {
 return(ImportReport);
+}
+//---------------------------------------------------------------------
+ArrayList<String> ImportPackThes(String FolderPath)throws PDException
+{
+ArrayList<String> ListThes=new ArrayList<>();
+File f=new File(FolderPath+"/ListThes.csv");
+if (!f.exists())
+    return(ListThes);
+String Line;
+try (BufferedReader BR=new BufferedReader(new FileReader(f))) 
+{
+while ((Line=BR.readLine())!=null) 
+    {
+    if (Line.startsWith("#"))
+        continue;
+    String[] Params = Line.split(";");
+    PDThesaur ThesImp=new PDThesaur(getDrv());
+    //   Import(String ThesName, String ImpThesId, File XMLFile, String MainLang, String Root, boolean SubThesLang, boolean Transact, boolean RetainCodes) throws PDException
+    try {
+    ThesImp.Import(Params[0].trim(), Params[1].trim(),new File(FolderPath+"/"+Params[0].trim()+".rdf") , Params[2].trim(), Params[3].trim(), false, true, true);
+    } catch (Exception PDException)
+        {
+        ListThes.add("Error importing Thes:"+Params[0]);
+        ListThes.add("Error:"+PDException.getLocalizedMessage());
+        }
+    ListThes.add("Imported Thes:"+Params[0]);
+    }
+}catch (Exception ex)
+    {
+    PDException.GenPDException(ex.getLocalizedMessage(), null);
+    }
+return(ListThes);
 }
 //---------------------------------------------------------------------
 }
