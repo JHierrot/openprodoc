@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>    
+    <head>        
+        <title>OpenProdoc packages</title>        
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">        
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management"/>        
+        <meta name="author" content="Joaquin Hierro" />        
+        <link rel="shortcut icon" href="img/OpenProdoc.ico" type="image/x-icon"/> 
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />    
+    </head>    
+    <body><H4>Paquetes OpenProdoc</H4>
+        <hr>
+        <p>in order to help the deployment in diferent enviroments of "projects" in OpenProdoc, it's possible to define "Packages".</p>
+        <p>It should be understood "Package" as folder containing a set of definitions of document or folder types, Roles, Groups, ACL, Scheduled Tasks, Events Tasks, .. as well as Thesauri and folder trees containing folders and documents, of any of the previously defined types. 
+            The objective of this function is to prepare parameterizations for specific scenarios or uses (teaching centers, professional offices, NGOs, etc.) that can be deployed between environments of the same institution or clients after carrying out a task of document consulting and parameterization of OpenProdoc.</p>
+        <p>Although all operations can be performed separately and manually without using the Package option, the preparation of a package simplifies the work and ensures automation, so that once tested in a testing environment, it can be imported into any destination environment automatically.</p>
+        <p>For this, the following steps must be carried out::</p>
+        <ol>
+            <li>
+                <a href="#1">Create the necessary definitions</a>
+            </li>
+            <li>
+                <a href="#2">Create folders structure and documents</a>
+            </li>
+            <li>
+                <a href="#3">Export definitions</a>
+            </li>
+            <li>
+                <a href="#4">Export folder(s) tree(s)</a>
+            </li>
+            <li>
+                <a href="#5">Prepare the exported items</a>
+            </li>
+            <li>
+                <a href="#6">Import at destination</a>
+            </li>
+            <li>
+                <a href="#7">Import into destination during OpenProdoc installation</a>
+            </li>
+        </ol>
+        <h4 id="1">1 - Create the necessary definitions</h4>
+        <p>The first step will be to create the definitions of document or folder types, profiles, groups, tasks, etc. necessary to be able to work in the type of institution or process in which OpenProdoc will be used. 
+            Any element that can be defined in the OpenProdoc administration options can be included in a package.</p>
+        <p>In addition to the definitions themselves, for the handling of document or folder types it will have been necessary to create thesauri that will be associated with the metadata of the defined types, or sometimes they can simply be defined as help and analysis, as is done in other tools of thesaurus management alone. 
+            These thesauri should be defined and filled with the necessary terms, structure and relationships.</p>
+        <h4 id="2">2 - Create folders structure and documents</h4>
+        <p>Sometimes it will be necessary to create a folder structure (reflecting the administrative structure, geographic, etc.) or it will be necessary to create customized reports, OPAC configutration files or reports files.</p>
+        <p>All those necessary folders and documents should be created and tested in the development installation before creating the package. 
+            These created elements may be based on definitions of types, or reference security elements, previously defined, so before transferring them to the destination environment, these definitions must exist in that environment, so they must be exported and imported previously.</p>
+        <h4 id="3">3 - Export definitions</h4>
+        <p>After creating and testing all definitions, they must be exported one by one. 
+            Since some definitions can depend on others (for example, an ACL can reference Groups, an Object Type can reference another parent type, etc.), it is necessary to indicate an import order, so that when an element is imported, others elements required are imported previously.</p>
+        <p>This order to be applied will be the alphabetical order of the file names. For this you can rename the files; for example, include a numeric prefix before the name of the exported item. So, they can be renamed:</p>
+        <em>01_EmployeesGroup.opd</em>.<br>
+        <em>02_DirectorsGroup.opd</em>.<br>
+        <em>03_ACLPublicDocs.opd</em>.<br>
+        <em>04_ACLPrivateDocs.opd</em>.<br>
+        <em>05_TypeDocReport.opd</em>.<br>
+        <em>06_TypeDocReport2.opd</em>.<br>
+        <em>07_TypeDocStudy.opd</em>.<br>
+        <p>Regarding the Thesauri, all the thesauri used in metadata of the types of objects must be exported, using the SKOS format, as well as any auxiliary thesaurus that is considered useful. When imported, the same root, numeric code, language and name must be used to maintain consistency.</p>
+        <h4 id="4">4 - Export folder(s) tree(s)</h4>
+        <p>The previous functions can be done with any OpenProdoc client (Web or Swing), however the export of folders, by volume and type of content (folder tree containing potentially hundreds of files) must be done with the OpenProdoc Swing client.</p> 
+        <p>All desired folder structures must be exported to reconstruct the configuration at destination. It must be taken into account that the automatic import into destination will be done from the OpenProdoc root folder.</p>
+        <h4 id="5">5 - Prepare the exported items</h4>
+        <p>For the subsequent import, the elements that make up the package should be grouped into three folders with predefined names (including uppercase and lowercase to avoid problems in Linux environments):</p>  
+        <ol>
+            <li><b>Thes</b>: It will contain all the thesauri exported as well as a file with the list of them, with the name <i>ListThes.csv</i>.</li>
+            <li><b>Def</b>: Contain all exported definitions. To ensure that the import is done in the proper order (for example, a document type "father" BEFORE the document subtypes), the import will be done in alphabetical order, as indicated in Export definitions, so if necessary, you must rename the files. The definition name used will be the one described internally in the .opd file, so it can be renamed without affecting the definition.</li>
+            <li><b>Obj</b>: It will contain all folder trees and documents previously exported. These trees will be imported starting from the root folder (on which the user who has to import the package MUST have "WRITE" permissions).</li>
+        </ol>
+        <p>The import will be done in the order indicated in the previous list:</p>
+        <p>First, all the thesauri included in <i>Thes</i> folder will be imported, with the parameters described in the file <i>ListThes.csv</i> (whose format is described later).</p> 
+        <p>Subsequently, all the definitions included in <i>Def</i> folder will be imported in alphabetical order. After import, definitions of document types and folders will create their data structures (tables).</p>  
+        <p>Finally, all folder trees contained in <i>Obj</i> folder will be imported, recreating the structures, with their object types (previously defined in the previous step). If a folder exists before the merge, contents of both folders will be added.</p>
+        <p>The expected format for the <i>ListThes.csv</i> is as follows:</p>
+        <ul>
+            <li>Comment lines, which start with the # character, are ignored.</li>
+            <li>Thesaurus reference lines, with the 4 columns with the meanings.</li>
+        </ul>
+        <p>For example, the file may be:</p>
+        <em>
+            #-------------------------------------------------------------------------------------------------------------------------------------------<br>
+# Lines that start with # are comments and are ignored<br> 
+#-------------------------------------------------------------------------------------------------------------------------------------------<br>
+# Thesaurus name: Name to be assigned to the thesaurus in OpenProdoc and the name of the file (without the rdf extension that must be on disk) to be imported..<br>
+# Thesaurus number: Numeric identifier of the thesaurus. Integers can be used between 1 and 999999.. <br>
+# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It will be used as reference when defining metadata that are validated against the values ​​of that thesaurus. <br>
+# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When importing the thesaurus it must be used the same number used when defining the metadata.<br>
+# Main Language: The chosen language will be used as the default language in the import. <br>
+# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This implies that OpenProdoc will go through the terms tree using this language..<br>
+# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the structure in each language is identical, the chosen language would not affect the export, but if it is different <br>
+# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(eg, the specific terms in one language are different from those of another language) the way to go through the term tree will vary..<br>
+# Text URI: Indicates the text that includes the skos format as a reference for the thesaurus. Eg: for '&lt;skos: ConceptScheme rdf: about  rdf:about="http://skos.um.es/unescothes/CS000">'<br>
+# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;must be entered "http://skos.um.es/unescothes/" in this field..<br>
+# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;That URI will be removed to get the code for each term and analyze the relationships between the terms. The same used when exporting must be used.. <br>
+#-------------------------------------------------------------------------------------------------------------------------------------------<br>
+# ThesName, ImpThesId, MainLang, Root<br>
+Countries;12345;EN;http://opd.es/myroot <br>
+#-------------------------------------------------------------------------------------------------------------------------------------------<br>
+        </em>
+        <p>Although generally a parameterization of OpenProdoc will require all types of elements, it is not necessary that all the elements exist, that is, definitions, thesauri or trees may not be included. 
+            However, the three container folders should always be included, as well as the thesaurus enumeration file, even if empty.</p>
+        <h4 id="6">6 - Import at destination</h4>
+        <p>After copying the folder structures to the destination installation, using the Swing client, the package can also be imported, by means of the menu option "Administration -> Import Package". This option will present a form to choose the folder that contains the three subfolders of the package.</p>
+        <p style="text-align:center;"><img alt="Copia de menu Importación Paquete" src="img/MenuImportPack.png"/></p>
+        <p style="text-align:center;"><img alt="Copia de Selección Importación Paquete" src="img/SelectImportPack.png"/></p>
+        <p style="text-align:center;"><img alt="Copia de Formulario Importación Paquete" src="img/FormImportPack.png"/></p>
+        <h4 id="7">7 - Import into destination during OpenProdoc Installation</h4>
+        <p>If within the subfolder ex of the OpenProdoc installation package the subdirectories that compose a package are copied, the installation of OpenProdoc upon completion of the creation of the base elements will auto-installed the installation of the content package.</p>
+        <hr>
+        <a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>    
+    </body>
+</html>

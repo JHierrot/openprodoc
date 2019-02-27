@@ -3288,17 +3288,15 @@ if (ListDefs!=null)
         {
         TreeSet<String> ListUpdatedDefsDocs=new TreeSet<>(Defs.getNamesUncreatedDefs(false));
         TreeSet<String> ListUpdatedDefsFolds=new TreeSet<>(Defs.getNamesUncreatedDefs(true));
-        for (Iterator<String> iterator = ListUpdatedDefsDocs.iterator(); iterator.hasNext();)
-            {
-            String NameDef=iterator.next();    
+        for (String NameDef : ListUpdatedDefsDocs)
+            {    
             if (!ListPreviousDefsDocs.contains(NameDef))
-                Defs.CreateObjectTables(NameDef, false);        
+                Defs.CreateObjectTables(NameDef, false);
             }
-        for (Iterator<String> iterator = ListUpdatedDefsFolds.iterator(); iterator.hasNext();)
-            {
-            String NameDef=iterator.next();    
+        for (String NameDef : ListUpdatedDefsFolds)
+            {    
             if (!ListPreviousDefsFolds.contains(NameDef))
-                Defs.CreateObjectTables(NameDef, true);        
+                Defs.CreateObjectTables(NameDef, true);
             }
         }
     }
