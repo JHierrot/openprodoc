@@ -2600,7 +2600,12 @@ TaskCronMenuItem.setVisible(R.isAllowCreateTask()  || R.isAllowMaintainTask());
 TaskEvenMenuItem.setVisible(R.isAllowCreateTask()  || R.isAllowMaintainTask());
 TaskExecMenuItem.setVisible(R.isAllowCreateTask()  || R.isAllowMaintainTask());
 TaskEndedMenuItem.setVisible(R.isAllowCreateTask()  || R.isAllowMaintainTask());
-this.TraceMenuItem.setVisible(R.isAllowCreateObject()  || R.isAllowMaintainObject());
+TraceMenuItem.setVisible(R.isAllowCreateObject()  || R.isAllowMaintainObject());
+ImportPackage.setVisible(R.isAllowCreateAcl()&&R.isAllowCreateAuth()&&R.isAllowCreateCustom()
+                        &&R.isAllowCreateGroup()&&R.isAllowCreateMime()&& R.isAllowCreateObject()
+                        && R.isAllowCreateRepos()&& R.isAllowCreateRole()&& R.isAllowCreateUser()
+                        &&R.isAllowCreateTask()&& R.isAllowCreateFolder() &&R.isAllowCreateDoc()
+                        && R.isAllowCreateThesaur());
 AddFold.setVisible(R.isAllowCreateFolder());
 AddFoldAdvanced.setVisible(R.isAllowCreateFolder());
 ImportFold.setVisible(R.isAllowCreateFolder());

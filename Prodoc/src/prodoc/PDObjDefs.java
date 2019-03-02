@@ -426,6 +426,7 @@ else
      * @return 
      * @throws prodoc.PDException
  */
+@Override
 protected Conditions getConditions() throws PDException
 {
 Conditions ListCond=new Conditions();
@@ -433,12 +434,16 @@ ListCond.addCondition(new Condition(fNAME, Condition.cEQUAL, getName()));
 return(ListCond);
 }
 //-------------------------------------------------------------------------
+@Override
 protected Conditions getConditionsLike(String Name) throws PDException
 {
 Conditions ListCond=new Conditions();
 ListCond.addCondition(new Condition(fNAME, Condition.cLIKE, VerifyWildCards(Name)));
-Condition CondAcl=new Condition(PDObjDefs.fACL, new HashSet(getDrv().getUser().getAclList().keySet()));
-ListCond.addCondition(CondAcl);
+if (!getDrv().getUser().getName().equals("Install")) 
+    {
+    Condition CondAcl=new Condition(PDObjDefs.fACL, new HashSet(getDrv().getUser().getAclList().keySet()));
+    ListCond.addCondition(CondAcl);
+    }
 return(ListCond);
 }
 //-------------------------------------------------------------------------

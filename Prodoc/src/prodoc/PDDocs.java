@@ -1237,7 +1237,8 @@ StoreGeneric Rep=getDrv().getRepository(TobeUpdated.getReposit());
 if (!Rep.IsRef())
     {
     Rep.Connect();
-    Rep.Copy(Id, Vers, Id, getDrv().getUser().getName()); 
+    PDFolders F=new PDFolders(getDrv());
+    Rep.Copy(Id, Vers, Id, getDrv().getUser().getName(), Mult, F.getPathId((String)Mult.getAttr(fPARENTID).getValue())); 
     Rep.Disconnect();
     }
 getObjCache().remove(getKey());
@@ -1905,7 +1906,8 @@ if (!Rep.IsRef())
     else
         {
         String OriginalVers=TobeUpdated.getVersion();
-        Rep.Copy(Id, OriginalVers, Id, getDrv().getUser().getName());
+        PDFolders F=new PDFolders(getDrv());
+        Rep.Copy(Id, OriginalVers, Id, getDrv().getUser().getName(), Rec, F.getPathId((String)Rec.getAttr(fPARENTID).getValue()));
         }
     Rep.Disconnect();
     }

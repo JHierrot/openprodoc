@@ -312,7 +312,7 @@ protected int Insert(String Id, String Ver, String FileName, Record Rec, String 
 {
 try {
 if (PDLog.isDebug())
-    PDLog.Debug("StoreGeneric.Insert"+FileName);
+    PDLog.Debug("StoreGeneric.Insert"+FileName+"Id="+Id+" Ver="+Ver+" Rec="+Rec+ "Path="+OPDPath);
 FileInputStream in = new FileInputStream(FileName);
 return(Insert(Id, Ver, in, Rec, OPDPath));
 } catch (FileNotFoundException ex)
@@ -328,13 +328,18 @@ return(Insert(Id, Ver, in, Rec, OPDPath));
  * @param Ver1 Original Version
  * @param Id2  New Identifier
  * @param Ver2  New Version
+ * @param Rec  Record with all the metadata (mainly for custom drivers)
+ * @param OPDPath Path of document in OPD (mainly for custom drivers)
  * @throws PDException
  */
-protected void Copy(String Id1, String Ver1, String Id2, String Ver2) throws PDException
+protected void Copy(String Id1, String Ver1, String Id2, String Ver2, Record Rec, String OPDPath) throws PDException
 {
 try {
-InputStream Bytes=Retrieve(Id1, Ver1, null);
-Insert(Id2, Ver2, Bytes, null, null);
+if (PDLog.isDebug())
+    PDLog.Debug("StoreGeneric.Copy<: Id1="+Id1+" Ver1="+Ver1+" Id2="+Id2+" Ver2="+Ver2+ " Rec="+Rec+ "Path="+OPDPath);    
+Record Rec2=Rec.Copy();
+InputStream Bytes=Retrieve(Id1, Ver1, Rec2);
+Insert(Id2, Ver2, Bytes, Rec2, OPDPath);
 } catch (Exception ex)
     {
     PDException.GenPDException("Error_copying_content", ex.getLocalizedMessage());
@@ -437,6 +442,8 @@ for (int i = 0; i < readed; i++)
  */
 protected int Retrieve(String Id, String Ver, OutputStream fo, Record Rec) throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("StoreGeneric.Retrieve: Id="+Id+" Ver="+Ver+" Rec="+Rec);            
 int Tot=0;
 VerifyId(Id);    
 InputStream in=null;

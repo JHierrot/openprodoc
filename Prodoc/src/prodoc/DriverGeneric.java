@@ -712,7 +712,13 @@ Trace.add("Custom Definitions imported");
 //-----------------------
 PDFolders FoldRoot=new PDFolders(this);
 FoldRoot.Load(PDFolders.ROOTFOLDER);
-ImportFolder(FoldRoot, "ex/Obj", false, true, true, PDFolders.getTableName(), PDDocs.getTableName(), false);
+File FDef=new File("ex/Obj");
+File[] ListDefs = FDef.listFiles();
+if (ListDefs!=null)
+    {
+    for (File ListDef : ListDefs)
+        ImportFolder(FoldRoot, ListDef.getAbsolutePath(), false, true, true, PDFolders.getTableName(), PDDocs.getTableName(), false);
+    }
 Trace.add("Custom Objects imported: Folders="+getImpFolds()+" Docs="+getImpDocs());
 //-----------------------
 CerrarTrans();

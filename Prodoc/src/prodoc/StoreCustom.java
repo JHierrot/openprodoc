@@ -119,6 +119,8 @@ Bin.Disconnect();
 @Override
 protected int Insert(String Id, String Ver, InputStream Bytes, Record Rec, String OPDPath) throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("StoreCustom.Insert: Id="+Id+" Ver="+Ver+" Rec="+Rec+ "Path="+OPDPath);    
 return(Bin.Insert(Id, Ver, Bytes, Rec, OPDPath));
 }
 //-----------------------------------------------------------------
@@ -126,6 +128,8 @@ return(Bin.Insert(Id, Ver, Bytes, Rec, OPDPath));
 @Override
 protected void Delete(String Id, String Ver, Record Rec) throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("StoreCustom.Delete: Id="+Id+" Ver="+Ver+" Rec="+Rec);        
 Bin.Delete(Id, Ver, Rec);
 }
 //-----------------------------------------------------------------
@@ -133,6 +137,8 @@ Bin.Delete(Id, Ver, Rec);
 @Override
 protected InputStream Retrieve(String Id, String Ver, Record Rec) throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("StoreCustom.Retrieve: Id="+Id+" Ver="+Ver+" Rec="+Rec);            
 return(Bin.Retrieve(Id, Ver, Rec));
 }
 //-----------------------------------------------------------------

@@ -1336,11 +1336,14 @@ public String GetIdChild(String ParentId, String FoldName) throws PDException
 {
 Condition CT=new Condition(fTITLE, Condition.cEQUAL, FoldName);
 Condition CP=new Condition(fPARENTID, Condition.cEQUAL, ParentId);
-Condition CondAcl=new Condition(PDFolders.fACL, new HashSet(getDrv().getUser().getAclList().keySet()));
 Conditions Conds=new Conditions();
 Conds.addCondition(CT);
 Conds.addCondition(CP);
-Conds.addCondition(CondAcl);
+if (!getDrv().getUser().getName().equals("Install")) 
+    {
+    Condition CondAcl=new Condition(PDFolders.fACL, new HashSet(getDrv().getUser().getAclList().keySet()));
+    Conds.addCondition(CondAcl);
+    }
 Query LoadAct=new Query(getTabName(), getRecordStructPDFolder(), Conds);
 Cursor Cur=getDrv().OpenCursor(LoadAct);
 Record r=getDrv().NextRec(Cur);
