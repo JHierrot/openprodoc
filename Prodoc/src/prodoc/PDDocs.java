@@ -1291,7 +1291,7 @@ if (!Rep.IsRef())
     {
     Rep.Connect();
     MultiDelete(getPDId(), getDrv().getUser().getName());
-    Rep.Delete(PDId, getDrv().getUser().getName(), getRecSum());
+    Rep.Delete(PDId, getDrv().getUser().getName(), TobeUpdated.getRecSum());
     Rep.Disconnect();
     }
 DeleteVersion(getDocType(), Id, getDrv().getUser().getName());
