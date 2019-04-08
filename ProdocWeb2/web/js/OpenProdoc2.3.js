@@ -1277,7 +1277,6 @@ STToolBar.attachEvent("onClick", function(id)
     ListO.add(new Option(Text, TermId));
     Vals.options.selectedIndex=ListO.length-1;
     WinSelThes.close();
-    WinSelThes.unload();
     });
 }
 //----------------------------------

@@ -46,6 +46,17 @@
       <li>y por supuesto conexión y consulta.
       </li>
     </ul>
+     <p>Las órdenes pueden ser diferentes dependiendo de la base de datos y el interfaz de administración, pero serán similares a las de Oracle:</p>
+    <em>
+        CREATE USER Prodoc IDENTIFIED BY Password;<br>    
+        GRANT CREATE SESION TO Prodoc; o GRANT connect TO Prodoc;<br>
+        GRANT CREATE ANY TABLE,ALTER ANY TABLE, DROP ANY TABLE to Prodoc;<br>
+        GRANT SELECT ANY TABLE, INSERT ANY TABLE, ALTER ANY TABLE, DELETE ANY TABLE TO Prodoc;<br>
+        GRANT CREATE ANY INDEX,ALTER ANY INDEX, DROP ANy INDEX to Prodoc;<br> 
+        GRANT UNLIMITED TABLESPACE TO Prodoc;<br> 
+        ....<br>
+    </em>
+     <p>Las órdenes anteriores son un EJEMPLO sencillo, es conveniente aplicar permisos más restrictivos o roles existentes y limitar a un SCHEMA.</p>
     <h4 id="2">2 - Descompresión OpenProdoc</h4>
     <p>Debe descomprimirse el archivo zip en el lugar del disco deseado, manteniendo la estructura de carpetas interna.
     </p>
@@ -62,11 +73,11 @@
       </li>
       <li><b>Clave usuario BBDD</b>: Clave del usuario de BBDD. (requerido)
       </li>
-      <li><b>Url del servidor de BBDD</b>: Url en formato JDBC del servidor de BBDD (Ej.:<i>"jdbc:mysql://127.0.0.1:3306/Prodoc", "jdbc:derby://localhost:1527/Prodoc", "jdbc:oracle:thin:@127.0.0.1:1521:Prodoc"</i>). (requerido)
+      <li><b>Url del servidor de BBDD</b>: Url en formato JDBC del servidor de BBDD (Ej.:<i>"jdbc:mysql://localhost:3306/Prodoc?serverTimezone=UTC", "jdbc:mysql://127.0.0.1:3306/Prodoc", "jdbc:derby://localhost:1527/Prodoc", "jdbc:oracle:thin:@127.0.0.1:1521:Prodoc"</i>). (requerido)
       </li>
       <li><b>Tipo de conexión</b>: Indicar el tipo de conexión a utilizar. (Actualmente solo soportado JDBC). (requerido)
       </li>
-      <li><b>Clases java a utilizar</b>: Indicar las clases de conexión (JDBC) a utilizar (Ej.:<i>"org.apache.derby.jdbc.ClientDriver", "com.mysql.jdbc.Driver", "com.ibm.db2jcc.DBDriver", "org.postgresql.Driver"</i>). (requerido)
+      <li><b>Clases java a utilizar</b>: Indicar las clases de conexión (JDBC) a utilizar (Ej.:<i>"org.apache.derby.jdbc.ClientDriver", "com.mysql.cj.jdbc.Driver", "com.mysql.jdbc.Driver", "com.ibm.db2jcc.DBDriver", "org.postgresql.Driver"</i>). (requerido)
       </li>
       <li><b>Classpath adicional</b>: Localización de las clases adicionales a las instaladas en la carpeta ".\lib". Debe especificarse el classpath de las clases del driver JDBC.
       </li>
@@ -130,17 +141,22 @@
     </p>
     <p>Es posible realizar este paso sin presentar el interfaz de usuario. Para ello debe invocarse el programa de instalacion pasándole los parametos "NO_UI" y el nombre de un fichero (Ej."Setup.sh NO_UI Setup.properties") con los datos adecuados (los mismos que para el modo interactivo). En el paquete de instalación se suministra un ejemplo que será necesario modificar de acuerdo al entorno de instalación.
     </p>  
+    <p>Es conveniente revisar la configuracion de trazas log4j para ajustarla a las necesidades y carpetas deseadas. Hay que recordar que el nivel de traza está centralizado en el fichero de configuración Prodoc.properties.</p>
     <h4 id="5">5 - Instalación resto de clientes</h4>
     <p>Una vez creada la estructura básica, deberá instalarse los clientes de los usuarios.
     </p>  
     <p>Para los usuarios que utilicen el cliente Swing, basta copiar la carpeta que contiene la primera instalación realizada, ya que incluye las referencias al servidor.
     </p>
-    <p>Si el acceso para otros usuarios es a través del cliente Web, o si hay usuarios que utilizarán conexión cliente pesado servidor Web, deberá instalarse la aplicación J2EE. Para ello, en un servidor J2EE soportado deberá desplegarse el WAR de la aplicación. Debe comprobarse que el tamaño máximo de subida de archivos es mayor que el tamaño del fichero WAR (para Tomcat debe verificarse el fichero tomcat\webapps\manager\WEB-INF\web.xml y comprobar los valores de &LTmultipart-config&GT ). Además, se deberá <b>copiar a la carpeta lib</b> de la aplicación, donde están otros archivos jar como Prodoc.jar, <b>los ficheros del driver JDBC</b> de la BBDD utilizada. A continuación debe configurarse el fichero de configuración <b>Prodoc.properties</b> que utilizará la aplicación J2EE con la herramienta Install o copiando un properties ya creado.
+    <p>Si el acceso para otros usuarios es a través del cliente Web, o si hay usuarios que utilizarán conexión cliente pesado servidor Web, deberá instalarse la aplicación J2EE. 
+        Para ello, en un servidor J2EE soportado deberá desplegarse el WAR de la aplicación. Debe comprobarse que el tamaño máximo de subida de archivos es mayor que el tamaño del fichero WAR (para Tomcat debe verificarse el fichero tomcat\webapps\manager\WEB-INF\web.xml y comprobar los valores de &LTmultipart-config&GT ). 
+        Además, se deberá <b>copiar a la carpeta lib</b> de la aplicación, donde están otros archivos jar como Prodoc.jar, <b>los ficheros del driver JDBC</b> de la BBDD utilizada. 
+        A continuación debe configurarse el fichero de configuración <b>Prodoc.properties</b> que utilizará la aplicación J2EE con la herramienta Install o copiando un properties ya creado.
     </p>
     <p>Por ultimo, debe crearse una variable de sistema de entorno OPDWeb que referencie a la carpeta donde está el archivo <b>OPDWeb.properties</b> (Ej.: OPDWeb=/OpenProdoc/Web/Conf ), modificando la entrada para que referencie la ubicación del fichero <b>Prodoc.properties</b>
     </p>
     <p>Alternativamente, puede hacerse lo siguiente: en el directorio home (ej.: /home/J_Smith) del usuario con que se ejecuta el servidor J2EE debe copiarse el archivo <b>OPDWeb.properties</b>, modificando la entrada para que referencie la ubicación del fichero <b>Prodoc.properties</b>
-    </p>  
+        Debe tenerse en cuenta que cuando el servidor de aplicaciones está instalado como servicio, generalmente NO tiene un usuario ni una carpetas "home".</p>
+    <p>Otra opción es crear una subcarpeta de nombre "conf" contenida en la carpeta en la que se ejecute la aplicación, dentro de la cual puede copiarse el fichero Prodoc.properties.</p>
     <h4 id="6">6 - Tareas tras la instalacion</h4>
     <p>El proceso de instalación NO crea el repositorio de FullText. Si desea usar las funciones de <a href="Fulltext.html">Búsqueda por Texto Libre</a> DEBE crearse el repositorio para FullText en las carpetas o sistema de archivos elegido Y activar (o crear nuevas) tareas de actualización de los índices Fulltext. El programa de instalación crea 3 tareas pero están inicialmente DESACTIVADAS. DESPUÉS de crear el repsitorio pueden activarse o crear otras otras nuevas.
     </p>
