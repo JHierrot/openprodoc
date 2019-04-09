@@ -69,6 +69,7 @@
 <li><b>@OPD_VAL_ATTR</b>: Shows the value of an attribute within the attributes loop. It can be expressed as @OPD_VAL_ATTR_* (for all attributes) or @OPD_VAL_ATTR_NombreInternoAtributo (eg. @OPD_VAL_ATTR_TITLE). It can followed by <b>":"</b> and an integer that indicates the length of the text. If the value is less, it is truncated, otherwise spaces will be added. (Eg. @OPD_VAL_ATTR_*:20).</li>
 <li><b>@OPD_REF_ATTR</b>: Attribute value or reference. The behavior and syntax is the same as in the case of @OPD_VAL_ATTR, but if the variable is thesaurus, reference to a mime type or to the containing folder, rather than showing the value of the variable (element identifier, Eg "12e434_43af43 ") will show the value of the referenced term (eg" Portugal ").</li>
 <li><b>@OPD_RECCOUNT</b>: Number of records written to the report until the current record.</li>
+<li><b>@OPD_TOTALREC</b>: Total number of records of the report (0 if the report was generated with Cursor, not with Vector).</li>
 <li><b>@OPD_PAGCOUNT</b>: Number of pages written to the report until the current record.</li>
 </ul>
 </li>

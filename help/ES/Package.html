@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>    
+    <head>        
+        <title>Paquetes OpenProdoc</title>        
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">        
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management"/>        
+        <meta name="author" content="Joaquin Hierro" />        
+        <link rel="shortcut icon" href="img/OpenProdoc.ico" type="image/x-icon"/> 
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />    
+    </head>    
+    <body><H4>Paquetes OpenProdoc</H4>
+        <hr>
+        <p>Para facilitar la configuración y movimiento entre entornos de "proyectos", en Openprodoc pueden prepararse paquetes de despliegue.</p>
+        <p>Debe entenderse "Proyectos" como un conjunto de definiciones de <a href="MantObjDef.html">tipos documentales o de carpeta</a>, <a href="MantRoles.html">Roles</a>, <a href="MantGroups.html">Grupos</a>, <a href="MantACL.html">ACL</a>, <a href="ListTaskCron.html">Tareas Programadas</a>, <a href="ListTaskEvent.html">Tareas de eventos</a>,.. así como <a href="ThesIndex.html">Tesauros</a> de apoyo 
+            y árboles de carpetas conteniendo carpetas/fondos/expedientes y documentos de cualquiera de los tipos definidos previamente. 
+            El objetivo de esta función es preparar parametrizaciones para escenarios o usos específicos (centros de enseñanza, despachos profesionales, ONG, etc) 
+            y que puedan desplegarse entre entornos de una misma institución o en clientes tras realizar una labor de consultoría documental y parametrización de OpenProdoc.</p>
+        <p>Aunque todas las operaciones pueden realizarse por separado y de forma manual sin usar la opción de Paquete, la preparación de un paquete simplifica el trabajo y asegura la automatización, de forma que una vez probado en un entorno de pruebas, podrá importarse en el entornmo destino de forma automática.</p>
+        <p>Para ello deben realizarse los siguientes pasos:</p>
+        <ol>
+            <li>
+                <a href="#1">Crear las definiciones necesarias</a>
+            </li>
+            <li>
+                <a href="#2">Crear la estructura de carpetas y los documentos</a>
+            </li>
+            <li>
+                <a href="#3">Exportar definiciones</a>
+            </li>
+            <li>
+                <a href="#4">Exportar árbol de carpetas</a>
+            </li>
+            <li>
+                <a href="#5">Agrupar y preparar los elementos exportados</a>
+            </li>
+            <li>
+                <a href="#6">Importar en destino</a>
+            </li>
+            <li>
+                <a href="#7">Importación en destino durante Instalación de OpenProdoc</a>
+            </li>
+        </ol>
+        <h4 id="1">1 - Crear las definiciones necesarias</h4>
+        <p>El primer paso será crear las definiciones de <a href="MantObjDef.html">tipos documentales o de carpeta</a>, perfiles, grupos, tareas, etc. necesarias para poder trabajar en el tipo de institución o proceso en los que se utilizará OpenProdoc.
+        Cualquier elemento que pueda definirse en las opciones de administración de OpenProdoc puede ser susceptible de incluirse en un paquete.</p>
+        <p>Además de las definiciones propiamente, para el manejo de <a href="MantObjDef.html">tipos documentales o de carpeta</a> habrá sido necesario crear tesauros  que se asociarán a los metadatos de los tipos definidos, o en ocasiones simplemente se podran definir como ayuda y análisis, tal como se hace en las herramientas de manejo de tesauros. 
+            Estos tesauros deberán definirse y rellenarse con los términos, estructura y relaciones necesarios.</p>
+        <h4 id="2">2 - Crear la estructura de carpetas y los documentos</h4>
+        <p>En ocasiones será necesario crear una estructura de carpetas (que refleje la estructura administrativa, geográfica, de fondos o series) o será necesario crear informes personalizados, ficheros de conmfiguración de <a href="OPAC.html">Punto de Consulta</a> o de <a href="Reports.html">Informes</a>.</p>
+        <p>Todas esas carpetas y documentos necesarios deberán crearse y probarse en la instalación de desarrollo antes de crear el paquete. 
+            Esos elementos creados podrán estar basados en definiciones de tipos, o referenciar elementos de seguridad, previamente definidos, por lo que antes de trasladarlos al entorno destino, deberán existir esas definiciones en ese entorno, por lo que debe exportarse e importarse previamente.</p>
+        <h4 id="3">3 - Exportar definiciones</h4>
+        <p>Tras crear y probar todas las definiciones deberán exportarse una a una. Dado que unas definiciones pueden depender de otras (por ejemplo un <a href="MantACL.html">ACL</a> puede referenciar <a href="MantGroups.html">Grupos</a>, un <a href="MantObjDef.html">Tipo de Objeto</a> puede referencia otro tipo padre, etc, es necesario indicar un orden de importación, para que cuando se importa un elemento, ya estén importados otros que requiere.</p>
+        <p>Este orden a aplicar será el orden alfabético de los nombres de ficheros. Para ello puede renombrarse los archivo; por ejemplo, incluirse un prefijo numérico delante del nombre del elemento exportado. Así por ejemplo, podrán renombrarse:</p>
+        <em>01_GrupoEmpleados.opd</em>.<br>
+        <em>02_GrupoDirectores.opd</em>.<br>
+        <em>03_ACLDocsPublicos.opd</em>.<br>
+        <em>04_ACLDocsPrivados.opd</em>.<br>
+        <em>05_TipoDocInforme.opd</em>.<br>
+        <em>06_TipoDocInforme2.opd</em>.<br>
+        <em>07_TipoDocMemoria.opd</em>.<br>
+        <p>Respecto a los <a href="ThesIndex.html">Tesauros</a>, deberán exportarse, utilizando formato SKOS, todos los tesauros utilizados en metadtos de los tipos de objetos, así como cualquier tesauro auxiliar que se considere útil). Cuando se importen deberá utilizarse la misma raiz, código numérico, idioma y nombre, para mantener la coherencia.</p>
+        <h4 id="4">4 - Exportar árbol de carpetas</h4>
+        <p>Las funciones anteriores pueden realizarse indistintamente con cualquier cliente (Web o Swing), sin embargo la exportación de carpetas, por volumen y tipo de contenido (árbol de carpetas conteniendo potencialmente cientos de ficheros) debe hacerse con el cliente Swing de OpenProdoc.</p> 
+        <p>Deberá exportarse todas las estructuras de carpetas que se desee para reconstruir la configuración en destino. Debe tenerse en cuenta que la importación automática en destino se realizará desde la carpeta raíz.</p>
+        <h4 id="5">5 - Agrupar y preparar los elementos exportados</h4>
+        <p>Para la posterior importación, los elementos que compondrán el paquete deben agruparse en tres carpetas con los nombres predefinidos (incluidas mayúsculas y minusculas para evitar problemas en entornos Linux):</p>  
+        <ol>
+            <li><b>Thes</b>: Contendrá todos los tesauros exportados así como un fichero con la lista de ellos, y el nombre <i>ListThes.csv</i>.</li>
+            <li><b>Def</b>: Contendrá todas las definiciones exportadas. Para asegurar que la importación se hace en el orden adecuado (por ejemplo un tipo documental "padre" ANTES que los subtipos documentales), la importación se realizará en orden alfabético, tal como se indicaba en <a href="#3">Exportar definiciones</a>, por lo que si es necesario deberá renombrarse los ficheros.El nombre de definición utilizado será el descrito internamente en el fichero .opd, por lo que puede renombrarse sin afectar.</li>
+            <li><b>Obj</b>: Contendrá todos los árboles de carpetas y los documentos exportados anteriormente. Estos árboles se importarán partiendo de la carpeta raíz (sobre la que deberá tener permisos de escritura el usuario que realice la importación del paquete).</li>
+        </ol>
+        <p>La importación se realizará en el orden indicado en la lista anterior:</p>
+        <p>Primero se importarán todos los tesauros incluidos en Thes, con los parámetros descritos en el fichero <i>ListThes.csv</i> (cuyo formato se describe más adelante.</p> 
+        <p>Posteriormente se importarán, por orden alfabético todas las definiciones incluidas en Def. Tras la importación, las definiciones de tipos documentales y de carpetas crearán sus estructuras de datos (tablas).</p>  
+        <p>Finalmente, se importarán todos los árboles de carpetas contenidos en Obj, recreando las estructuras, con sus tipos de objeto (previamente definidos en el paso anterior). Si una carpeta existe antes del aimportación, sus contenidos se sumarán.</p>
+        <p>El formato esperado para el fichero <i>ListThes.csv</i> es el siguiente:</p>
+        <ul>
+            <li>Líneas de comentario, que empiezan por el caracter # y que se ignoran.</li>
+            <li>Líneas de referencia de Tesauros, con la 4 columnas con los significados:</li>
+        </ul>
+        <p>Por ejemplo, el fichero podrá ser:</p>
+        <em>
+            #-------------------------------------------------------------------------------------------------------------------------------------------<br>
+# Las líneas que empiezan con # son comentarios y se ignoran<br> 
+#-------------------------------------------------------------------------------------------------------------------------------------------<br>
+# Nombre de tesauro: Nombre a asignar al tesauro en OpenProdoc y el nombre del archivo (sin la extensión rdf que debe tener en disco) a importar.<br>
+# Número de tesauro: Identificador numérico del tesauro. Puede utilizarse números enteros entre 1 y 999999. <br>
+# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Se utilizará como referencia al definir metadatos que se validen contra los valores de ese tesauro. <br>
+# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Al importar debe utilizarse el mismo usado al definir el metadato<br>
+# Idioma Principal: El idioma elegido se utilizará como idioma por defecto en la importación. <br>
+# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Esto implica que se recorrerá el árbol de términos utilizando este idioma.<br>
+# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Si la estructura en cada idioma es idéntica, no afectaría a la exportación el idioma elegido, pero si es diferente <br>
+# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ej. los términos específicos en un idioma son diferentes a los de otro idioma) la forma de recorrer el árbol de términos variará.<br>
+# Texto URI: Indica el texto que incluye el formato skos como referencia del tesauro. Ej.: para '&lt;skos:ConceptScheme rdf:about="http://skos.um.es/unescothes/CS000">'<br>
+# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;se debe introducir "http://skos.um.es/unescothes/" en este campo.<br>
+# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Esa URI se eliminará para obtener el código de cada término y analizar las relaciones entre los términos. Debe utilizarse el mismo usado al exportar. <br>
+#-------------------------------------------------------------------------------------------------------------------------------------------<br>
+# ThesName, ImpThesId, MainLang, Root<br>
+Countries;12345;EN;http://opd.es/myroot <br>
+#-------------------------------------------------------------------------------------------------------------------------------------------<br>
+        </em>
+        <p>Aunque generalmente una parametrización de OpenProdoc requerirá de todos los tipos de elementos, no es necesario que existan todos los elementos, es decir puede no incluirse definiciones, tesauros o árboles. Sin embargo deben incluirse siempre las tres carpetas contenedooras, así como el fichero de enumeración de tesauros, aunque estñe vacio.</p>
+        <h4 id="6">6 - Importar en destino</h4>
+        <p>Tras copiar la estructuras de carpetas a la instalación destino, utilizando igualmente el cliente Swing podra importarse el paquete, por medio de la opción de menú "Administración -> Importar Paquete".
+        Esta opción presentará un formulario para elegir la carpeta que contiene las tres subcarpetas del paquete.</p>
+        <p style="text-align:center;"><img alt="Copia de menu Importación Paquete" src="img/MenuImportPack.png"/></p>
+        <p style="text-align:center;"><img alt="Copia de Selección Importación Paquete" src="img/SelectImportPack.png"/></p>
+        <p style="text-align:center;"><img alt="Copia de Formulario Importación Paquete" src="img/FormImportPack.png"/></p>
+        <h4 id="7">7 - Importación en destino durante Instalación de OpenProdoc</h4>
+        <p>Si dentro de la subcarpeta <b>ex</b> del paquete de instalación de OpenProdoc se copian los subditrectorios que componen un paquete, la instalación de OpenProdoc al finalizar la creación de los elementos base, realizará autopmáticamente la instalación del paquete contenido.</p>
+        <hr>
+        <a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>    
+    </body>
+</html>

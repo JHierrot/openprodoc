@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Estilos CSS Contribución</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="shortcut icon" href="img/OpenProdoc.ico" type="image/x-icon"/> 
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+<H4>Estilos CSS Contribución</H4><hr>
+<p>Para la personalización del <a href="Contrib.html">Módulo de Contribución</a> de OpenProdoc al estilo de la institución que lo esté utilizando pueden utilizarse hojas de estilo que se referenciarán en el archivo de configuración. 
+    Una hoja puede ser referenciada por varios ficheros de configuracion de Módulo de Contribución.</p>
+<p>Los estilos definidos para el html del Módulo de Contribución son:</p>
+<ul>
+    <li><b>CONTRIBBODY :</b> Cuerpo de las páginas.</li>
+    <li><b>CONTRIBFORM :</b> Formularios de entrada (Login, Lista, Incorporación doc).</li>
+    <li><b>CONTRIBTABLE :</b> Tabla que embebe los campos del formulario.</li>
+    <li><b>CONTRIBFS :</b> Estilo del conjunto de campos (FieldSet).</li>
+    <li><b>CONTRIBLEG :</b> Leyenda.</li>
+    <li><b>CONTRIBDOCTYPESCOMB :</b> Combo tipos de documento.</li>
+    <li><b>CONTRIBDOCTYPESCOMB:hover .tooltiptext :</b> Estilo de la ayuda emergente del combo tipos de documento.</li>
+    <li><b>CONTRIBLAB :</b> Etiquetas de texto de los metadatos.</li>
+    <li><b>CONTRIBLAB_LOGIN :</b> Etiquetas de texto de los metadatos obligatorios/de login.</li>
+    <li><b>CONTRIBLABELFILEUP :</b> Etiqueta de incorporación del documento (control file).</li>
+    <li><b>CONTRIBFILEUP :</b> Campo de incorporación del documento (control file).</li>
+    <li><b>CONTRIBINP :</b> Campos de entrada de los metadatos.</li>
+    <li><b>CONTRIBCHECKBOX :</b> Campos de entrada de metadatos booleanos.</li>   
+    <li><b>TD_CONTRIBINP:hover .tooltiptext :</b> Estilo de la ayuda emergente de los Campos de entrada de los metadatos.</li>
+    <li><b>CONTRIBFORMATTHES :</b> Estilo de los combos de metadatos de tipo tesauro.</li>
+    <li><b>CONTRIBBUT :</b> Botón de operación.</li>
+    <li><b>CONTRIBHELP :</b> "Botón" de ayuda.</li>
+    <li><b>CONTRIBRESOK :</b> Mensaje mostrando el resultado CORRECTO de la insercion del documento.</li>
+    <li><b>CONTRIBRESKO :</b> Mensaje mostrando el resultado INCORRECTO de la insercion del documento.</li>
+    <li><b>CONTRIBLOG :</b> URL de salida de la sesión y acceso a la pantalla de login.</li>
+    <li><b>CONTRIBLISTURL :</b> URL de acceso a la pantallla de listad desde inserción de documentos o resultados.</li>
+    <li><b>CONTRIBRETRYOK :</b> Estilo tras resultado CORRECTO de la insercion del documento. En general debería contener <i>display:none;</i> ya que no es necesario reintentar</li>
+    <li><b>CONTRIBRETRYKO :</b> Estilo del control para reintentar la inserción tras resultado INCORRECTO de la insercion del documento.</li>
+</ul>
+<p>Por supuesto puede definirse cualquier estilo de los elementos estandar de html (&lt;h3>,&lt;img>, ...) </p>
+<p><b>Ejemplo de Archivo CSS:</b></p>
+<em>
+/* OpenProdoc CONTRIB default CSS */<br>
+.CONTRIBBODY<br>
+{<br>
+background-color: #DFDFDF;<br>
+}<br>
+/* Style for whole body */<br>
+.CONTRIBFORM<br>
+{<br>  
+}<br>
+/* Style for table containing fields */<br>
+.CONTRIBTABLE<br>
+{<br>
+}<br>
+/* Style for FieldSet */<br>
+.CONTRIBFS<br>
+{<br>
+}<br>
+/* Style for Legend */<br>
+.CONTRIBLEG<br>
+{<br>
+font-family: Tahoma,Helvetica;<br>
+font-size: 20px;<br> 
+font-weight: bold;<br>
+}<br>
+/* Style for Document Type Combo */<br>
+.CONTRIBDOCTYPESCOMB<br>
+{<br>
+background-color: #A6A6A6;<br>
+}<br>
+.CONTRIBDOCTYPESCOMB:hover .tooltiptext<br> 
+{<br>
+visibility: visible;<br>
+}<br>
+<br>
+/* Style for Fields Label */<br>
+.CONTRIBLAB<br>
+{<br>
+font-family: Tahoma,Helvetica;<br>
+font-size: 12px;<br> 
+border-bottom-color: #FFFFFF;<br>
+}<br>
+/* Style for Fields Label */<br>
+.CONTRIBLAB_LOGIN<br>
+{<br>
+font-family: Tahoma,Helvetica;<br>
+font-size: 15px;<br> 
+border-bottom-color: #FFFFFF;<br>
+}<br>
+.CONTRIBLABELFILEUP<br>
+{<br>
+font-family: Tahoma,Helvetica;<br>
+font-size: 15px;<br> 
+border-bottom-color: #FFFFFF;<br>
+}<br>
+.CONTRIBFILEUP<br>
+{<br>
+font-family: Tahoma,Helvetica;<br>
+font-size: 15px;<br> 
+border-bottom-color: #FFFFFF;<br>
+}<br>
+.CONTRIBRESOK<br>
+{<br>
+font-family: Tahoma,Helvetica;<br>
+font-size: 15px;<br> 
+border-bottom-color: #FFFFFF;<br>
+}<br>
+.CONTRIBRESKO<br>
+{<br>
+font-family: Tahoma,Helvetica;<br>
+font-size: 15px;<br> 
+border-bottom-color: #FF0000;<br>
+}<br>
+<br>
+/* Style for Fields Input */<br>
+.CONTRIBINP<br>
+{<br>
+width: 200px;<br>
+}<br>
+.TD_CONTRIBINP:hover .tooltiptext<br> 
+{<br>
+    visibility: visible;<br>
+}<br>
+/* format for thesaurus combos **/<br>
+.CONTRIBFORMATTHES<br>
+{<br>
+font-family: Tahoma,Helvetica;<br>
+}<br>
+<br>
+/* Style for Fields Input */<br>
+.CONTRIBBUT<br>
+{<br>
+height: 40px;<br>
+width: 70px;<br>
+border-style: outset;<br>
+border-width: 4px;<br>
+font-size: 14px;<br> 
+font-style: italic;<br>
+font-weight: bold;<br>
+border-radius: 8px;<br>
+}<br>
+.CONTRIBHELP<br>
+{<br>
+font-family: Tahoma,Helvetica;<br>
+font-size: 16px;<br> 
+font-style: bold;<br>
+border-style: outset;<br>
+border-width: 4px;<br>
+border-radius: 8px;<br>
+padding: 5px;<br>
+background-color: #DFDFDF;<br>
+}<br>
+.CONTRIBLOG<br>
+{<br>
+font-family: Tahoma,Helvetica;<br>
+font-size: 16px;<br> 
+font-style: bold;<br>
+border-style: outset;<br>
+border-width: 4px;<br>
+border-radius: 8px;<br>
+padding: 5px;<br>
+background-color: #DFDFDF;<br>
+}<br>
+.CONTRIBLISTURL<br>
+{<br>
+font-family: Tahoma,Helvetica;<br>
+font-size: 16px;<br> 
+font-style: bold;<br>
+border-style: outset;<br>
+border-width: 4px;<br>
+border-radius: 8px;<br>
+padding: 5px;<br>
+background-color: #DFDFDF;<br>
+}<br>
+<br>
+img<br>
+{<br>
+height: 83px;<br>
+width: 80px;<br>
+}<br>
+.tooltiptext<br> 
+{<br>
+visibility: hidden;<br>
+font-family: Tahoma,Helvetica;<br>
+font-size: 12px;<br> 
+width: 200px;<br>
+background-color: grey;<br>
+color: #fff;<br>
+padding: 8px;<br>
+border-radius: 6px;<br>
+position: absolute;<br>
+z-index: 1;<br>
+}<br>
+<br>
+</em>
+<hr>
+<a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>
+    </body>
+</html>

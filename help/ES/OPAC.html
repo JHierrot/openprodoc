@@ -17,7 +17,10 @@
     La parametrización se hace por medio de un fichero de propiedades con los elementos que se detallan a continuación. Al final se incluye un ejemplo (las líneas que empiezan por # se toman como comentarios y se ignoran, al igual que las líneas en blanco) :</p>
 <p>Con la función "OPAC" puede crearse formularios como:</p>
 <p style="text-align:center;"><img alt="OPAC Example" src="img/OPAC1.png"/></p>
-<p style="text-align:center;"><img alt="OPAC Example2" src="img/OPACExample.png"/></p>
+<p style="text-align:center;"><img alt="OPAC Example2" src="img/demo-opac.png"/></p>
+<p style="text-align:center;"><img alt="OPAC Example3" src="img/demo-opac-results.png"/></p>
+<p style="text-align:center;"><a href="https://github.com/lucycons3/openprodoc-athena">Diseño Athena creado por Lucycons3 y Nosturi</a></p>
+<p style="text-align:center;"><img alt="OPAC Example4" src="img/OPACExample.png"/></p>
 <p>Este fichero sigue el estandar habitual de los ficheros de propiedades (etiqueta+"="+Valor), admitiendo comentarios (líneas que empiezan con el caracter '#'). El significado de cada etiqueta (que no puede repetirse) es el siguiente:</p>
 <ul>
     <li><b>DocTipesList : </b> Nombres de los Tipos de documentos por lo que podrá buscar un usuario. 
@@ -67,6 +70,17 @@ El formato puede ser html para presentar con un formato más estético, txt o cs
     No obstante la actualización puede llevar cierto tiempo, ya que para mejorar el rendimiento la configuración no se actualiza inmediatamente.</p>
 <p>Dado que la parametrización se basa en un documento de Openprodoc y el estilo en otro, es posible tener diversas parametrizaciones simultaneamente, que presenten diferentes conjunts de documentos, distinto idioma del interfaz, distinto estilo o diferente usuario de consulta.
 Suministrando a cada colectivo de usuarios la url adecuada (que solo se diferenciará en el Identificador de documento, puede ofrecerse simultaneamente muchos puntos de consulta distintos con muy poco esfuerzo.</p>
+<p>Si la plantilla html de OPAC incluida en OpenProdoc se desea modificar más aún de lo que permite los CSS, o adaptar la página a cada navegador, es posible referenciar diferentes plantillas. Para ello debe incluirse unas entradas opcionales en el fichero:</p>
+<ul>
+    <li><b>NumHtmlOpac: </b> Número de HTML alternativos para cubrir necesidades específicas de navegadores concretos o para usar un formato diferente al interno de OpenProdoc. A continuación debe incluirse tantas parejas de parámetros como se indica en <b>NumHtmlOpac</b></li> 
+    <li><b>ListAgent[i]=Texto1|Texto2|...: </b> Debe incluirse tantas entradas como las indicadas en <b>NumHtmlOpac</b> empezando en 0, es decir: ListAgent0, ListAgent1, ListAgent2,.. .
+        Si la descripción "User-Agent" del navegador CONTIENE cualquiera de los textos Texto1, Texto2,.., entonces la plantilla usada será el html almacenado en OpenProdoc como PDID especificado en <b>HtmlAgent</b>. 
+        Si la cadena es *, entonces no se realizará más comprobaciones de navegador y de devolverá el identificador correspondiente.</li>
+    <li><b>HtmlAgent[i]=PDID Documento: </b> Identificador del documento a utilizar como plantilla en caso de que User-Agent contenga alguno de los textos incluidos en el <b>ListAgent</b> correspondiente. 
+        Los números deben empezar en 0, es decir: HtmlAgent0, HtmlAgent1, HtmlAgent2,...</li>
+</ul>
+<p>Si el User-Agent del navegador no contiene ninguna de las entradas indicadas, entonces se utilizará la plantilla interna incluida en OpenProdoc.</p>
+
 <p><b>Ejemplo de Archivo de configuración de punto de consulta:</b></p>
 <em>
 #############################################<br>
@@ -112,6 +126,16 @@ HelpForFullText=Ayuda B&uacute;squeda Texto Completo&lt;br>Introduzca cualquier 
 HelpForFormatType=Ayuda Formatos Salida<br>
 # Url de la página de ayuda<br>
 UrlHelp=help/EN/HelpIndex.html <br>   
+#OPCIONALMENTE, en lugar de usar la plantilla html de OPAC incluida en OpenProdoc puede definirse plantillas adicionales
+#Número de Htmls alternativos<br>
+NumHtmlOpac=2<br>
+#2 entradas para cada número de Htmls, empezando en 0<br>
+#------- 0 --<br>
+ListAgent0=Edge|Explorer<br>
+HtmlAgent0=1632c1c280b-3fa2b6496a3c3250<br>
+#------- 1 --<br>
+ListAgent1=Firefox<br>
+HtmlAgent1=1632c1dd6a2-3fe55f2e09ab3605<br>
 </em>
 <hr>
 <a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>

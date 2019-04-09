@@ -46,6 +46,17 @@
       <li>and of course, connect and search.
       </li>
     </ul>
+    <p>The orders can change depending on database and management interface, but will be more similar to:</p>
+    <em>
+        CREATE USER Prodoc IDENTIFIED BY Password;<br>    
+        GRANT CREATE SESION TO Prodoc; o GRANT connect TO Prodoc;<br>
+        GRANT CREATE ANY TABLE,ALTER ANY TABLE, DROP ANY TABLE to Prodoc;<br>
+        GRANT SELECT ANY TABLE, INSERT ANY TABLE, ALTER ANY TABLE, DELETE ANY TABLE TO Prodoc;<br>
+        GRANT CREATE ANY INDEX,ALTER ANY INDEX, DROP ANy INDEX to Prodoc;<br> 
+        GRANT UNLIMITED TABLESPACE TO Prodoc;<br> 
+        ....<br>
+    </em>
+     <p>The previous orders are a simple EXAMPLE and more restrictive permissions must be granted for a productive system.</p>
     <h4 id="2">2 - Uncompress OpenProdoc files</h4>
     <p>It should be uncompresed the zip files in a the selectd folder of the computer, with the folders structure of the zip file.
     </p>
@@ -62,11 +73,11 @@
       </li>
       <li><b>BBDD user password</b>: Password of the user in the DDBB. (required)
       </li>
-      <li><b>DDBB server url</b>: Url in JDBC format of the database server (IE.:<i>"jdbc:mysql://127.0.0.1:3306/Prodoc", "jdbc:derby://localhost:1527/Prodoc", "jdbc:oracle:thin:@127.0.0.1:1521:Prodoc"</i>). (required)
+      <li><b>DDBB server url</b>: Url in JDBC format of the database server (IE.:<i>"jdbc:mysql://localhost:3306/Prodoc?serverTimezone=UTC", "jdbc:mysql://127.0.0.1:3306/Prodoc", "jdbc:derby://localhost:1527/Prodoc", "jdbc:oracle:thin:@127.0.0.1:1521:Prodoc"</i>). (required)
       </li>
       <li><b>Kind of conection</b>: Kind of connection to use. (In this version only JDBC, in the future, other systems as non SQL DDBB). (required)
       </li>
-      <li><b>Java class to use</b>: Name of the classes used for connection (JDBC) (IE.:<i>"org.apache.derby.jdbc.ClientDriver", "com.mysql.jdbc.Driver", "com.ibm.db2jcc.DBDriver", "org.postgresql.Driver</i>). (required)
+      <li><b>Java class to use</b>: Name of the classes used for connection (JDBC) (IE.:<i>"org.apache.derby.jdbc.ClientDriver", "com.mysql.cj.jdbc.Driver", "com.mysql.jdbc.Driver", "com.ibm.db2jcc.DBDriver", "org.postgresql.Driver"</i>). (required)
       </li>
       <li><b>Aditional Classpath</b>: Classpath where the connection classes and any required library is stored besides the folder ".\lib". The classpath must include the path to the JDBC driver libraries.
       </li>
@@ -128,7 +139,7 @@
     </ul>  
     <p>This proccess will create all the tables structure and elements necessary for OPD. Later, it will be possible to define new document types or folders, creating the required elements.
 <p>It's possible to execute this program without showing user Interface (i.e.: Terminal installation only). You should call the install program with the parameters "NO_UI" and the name of a file (Ej."Setup.sh NO_UI Setup.properties") with the correct parameters (same parameters and options that used in interactive mode). In the installation package is included an example file that should be modify according to the installation environment.</p>
-    <h4 id="5">5 - Installation of other client</h4>
+<p> It is convenient to check the trace configuration file log4j.properties to adjust it to the project needs and to the desired folders. Remember that the trace level is centralized in the Prodoc.properties configuration file.</p>    <h4 id="5">5 - Installation of other client</h4>
     <p>After the creation of the core structure, it's necessary to install OPD clients for the users.
     </p>  
     <p>For users with Swing client, just copy the folder after the first installation. It will contains the references to the server.
@@ -139,7 +150,7 @@
     </p>
     <p>Another way to configure the  J2EE application is: in the home directory of the user (Ie.: /home/J_Smith) with which it's executed the J2EE server, it must be copied the file <b>OPDWeb.properties</b>, editing the line that contains the absolute path to <b>Prodoc.properties</b>
     </p>  
-    <h4 id="6">6 - Post Installation tasks</h4>
+    <p> Another option is to create a subfolder named "conf" contained in the folder in which the application is executed, within which the Prodoc.properties file can be copied.</p>    <h4 id="6">6 - Post Installation tasks</h4>
     <p>The installation process DO NOT create a Full Text repository. If you are interested in using the <a href="Fulltext.html">Full Text Search</a> you MUST create the full text repository in your selected filesystem AND activate (or create new) full text events. The installation program creates 3 task but they are DEACTIVATED. AFTER creating the FT repository you can activate them or create new ones.
     </p>
     <p>The installation process define RIS document types but they are not created. If you want to use <a href="RIS.html">RIS</a>, you should create/activate the defined document types or new ones. Beware with record size and DDBB capacities because the limits are very different and also in some DDBB, using UTF8 can limit the size by two. So adjust the metadata definitions to your needs and environment.
