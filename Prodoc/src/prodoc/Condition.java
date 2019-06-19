@@ -27,6 +27,8 @@ import java.util.StringTokenizer;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import static prodoc.Attribute.StringListSeparator;
+import static prodoc.PDFolders.fGRANTPARENTID;
+import static prodoc.PDFolders.getRecordStructPDFolderLev;
 
 /**
  * Class for managing simple search conditions in OpenProdoc
@@ -118,6 +120,13 @@ final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyyMMdd");
  * Kind of Object value
  */
 private int TypeVal=-1;
+
+public final static String CONTAINS="CONTAINS";
+
+public final static String INTREE="IN_TREE";
+
+public final static String INFOLDER="IN_FOLDER";
+
 //-------------------------------------------------------------------------
 /**
  * Constructor that creates a condition where name_of_attribute = "value of attribute"
@@ -460,6 +469,26 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
             }
         }
     }
+}
+//-------------------------------------------------------------------------
+public static Condition genContainsCond(String Arg)
+{
+throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+}
+//-------------------------------------------------------------------------
+public static Conditions genInTreeCond(String Arg, DriverGeneric Drv) throws PDException
+{
+PDFolders F=new PDFolders(Drv);  
+Conditions Cs=new Conditions();
+Cs.addCondition(new Condition(PDFolders.fPARENTID, F.getQueryListDescendList(Arg)));
+Cs.addCondition(new Condition(PDFolders.fPARENTID, cEQUAL, Arg));
+Cs.setOperatorAnd(false);
+return(Cs);
+}
+//-------------------------------------------------------------------------
+public static Condition genInFolder(String Arg) throws PDException
+{
+return(new Condition(PDFolders.fPARENTID, Condition.cEQUAL, Arg));
 }
 //-------------------------------------------------------------------------
 }

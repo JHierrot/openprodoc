@@ -811,10 +811,11 @@ public HashSet getListDescendList(String PDId) throws PDException
 if (PDLog.isDebug())
     PDLog.Debug("PDFolders.getListDescendList>:"+PDId);
 HashSet Result=new HashSet();
-Condition CondParents=new Condition( fGRANTPARENTID, Condition.cEQUAL, PDId);
-Conditions Conds=new Conditions();
-Conds.addCondition(CondParents);
-Query Q=new Query(getTableNameFoldLev(), getRecordStructPDFolderLev(), Conds);
+//Condition CondParents=new Condition( fGRANTPARENTID, Condition.cEQUAL, PDId);
+//Conditions Conds=new Conditions();
+//Conds.addCondition(CondParents);
+//Query Q=new Query(getTableNameFoldLev(), getRecordStructPDFolderLev(), Conds);
+Query Q=getQueryListDescendList(PDId);
 Cursor CursorId=null;
 try {
 CursorId=getDrv().OpenCursor(Q);
@@ -835,6 +836,16 @@ getDrv().CloseCursor(CursorId);
 if (PDLog.isDebug())
     PDLog.Debug("PDFolders.getListDescendList<:"+PDId);
 return(Result);
+}
+//-------------------------------------------------------------------------
+protected Query getQueryListDescendList(String PDId) throws PDException
+{
+Condition CondParents=new Condition( fGRANTPARENTID, Condition.cEQUAL, PDId);
+Conditions Conds=new Conditions();
+Conds.addCondition(CondParents);
+Record R=getRecordStructPDFolderLev().Copy();
+R.delAttr(fGRANTPARENTID);
+return(new Query(getTableNameFoldLev(), R, Conds));
 }
 //-------------------------------------------------------------------------
 /**
@@ -1496,8 +1507,8 @@ if (SubFolders)
     {
     if (!(IdActFold==null || IdActFold.equalsIgnoreCase(PDFolders.ROOTFOLDER)))
         { // add list to conditions
-        Condition C=new Condition(PDFolders.fPDID, F.getListDescendList(IdActFold));
-        ComposedConds.addCondition(C);
+//        Condition C=new Condition(PDFolders.fPDID, F.getQueryListDescendList(IdActFold));
+        ComposedConds.addCondition(Condition.genInTreeCond(IdActFold, getDrv()));
         }
     }
 Record RecSearch=F.getRecSum().CopyMono();

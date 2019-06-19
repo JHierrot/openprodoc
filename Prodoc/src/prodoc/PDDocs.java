@@ -2466,13 +2466,14 @@ if (SubFolders)
     {
     if (!(IdActFold==null || IdActFold.equalsIgnoreCase(PDFolders.ROOTFOLDER)))
         { // add list to conditions
-        PDFolders Fold=new PDFolders(getDrv());
-        HashSet listDescendList = Fold.getListDescendList(IdActFold);
-        if (listDescendList==null)
-            listDescendList=new HashSet();
-        listDescendList.add(IdActFold);
-        Condition C=new Condition(PDDocs.fPARENTID, listDescendList);
-        ComposedConds.addCondition(C);
+        PDFolders F=new PDFolders(getDrv());
+//        HashSet listDescendList = Fold.getListDescendList(IdActFold);
+//        if (listDescendList==null)
+//            listDescendList=new HashSet();
+//        listDescendList.add(IdActFold);
+//        Condition C=new Condition(PDDocs.fPARENTID, listDescendList);
+//        Condition C=new Condition(PDFolders.fPARENTID, F.getQueryListDescendList(IdActFold));
+        ComposedConds.addCondition(Condition.genInTreeCond(IdActFold, getDrv()));
         }
     }
 Condition CondAcl=new Condition(PDDocs.fACL, new HashSet(getDrv().getUser().getAclList().keySet()));
