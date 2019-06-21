@@ -51,11 +51,8 @@ private Conditions Where=null;
 /**
  *
  */
-private String Order=null;
-/**
- *
- */
-private Vector OrderList=null;
+private Vector<String> OrderList=null;
+private Vector<Boolean> OrderAsc=null;
 //-------------------------------------------------------------------------
 /**
  *
@@ -82,7 +79,10 @@ public Query(String pTable, Record pFields, Conditions pWhere, String pOrder)
 Table=pTable;
 RetrieveFields=pFields;
 Where=pWhere;
-Order=pOrder;
+OrderList=new Vector();
+OrderList.add(pOrder);
+OrderAsc=new Vector();
+OrderAsc.add(true);
 }
 //-------------------------------------------------------------------------
 /**
@@ -92,12 +92,32 @@ Order=pOrder;
  * @param pWhere
  * @param pOrderList
  */
-public Query(Vector pTables, Record pFields, Conditions pWhere, Vector pOrderList)
+public Query(Vector pTables, Record pFields, Conditions pWhere, Vector<String> pOrderList)
 {
 Tables=pTables;
 RetrieveFields=pFields;
 Where=pWhere;
 OrderList=pOrderList;
+OrderAsc=new Vector();
+for (int i = 0; i < pOrderList.size(); i++)
+    OrderAsc.add(true);  
+}
+//-------------------------------------------------------------------------
+/**
+ *
+ * @param pTables
+ * @param pFields
+ * @param pWhere
+ * @param pOrderList
+     * @param pOrderAsc
+ */
+public Query(Vector pTables, Record pFields, Conditions pWhere, Vector<String> pOrderList, Vector<Boolean> pOrderAsc)
+{
+Tables=pTables;
+RetrieveFields=pFields;
+Where=pWhere;
+OrderList=pOrderList;
+OrderAsc=pOrderAsc; 
 }
 //-------------------------------------------------------------------------
 /**
@@ -133,19 +153,19 @@ return Table;
 }
 //-------------------------------------------------------------------------
 /**
-* @return the Order
+* @return the OrderList
 */
-public String getOrder()
+public Vector<String> getOrderList()
 {
-return Order;
+return OrderList;
 }
 //-------------------------------------------------------------------------
 /**
 * @return the OrderList
 */
-public Vector getOrderList()
+public Vector<Boolean> getOrderAscList()
 {
-return OrderList;
+return OrderAsc;
 }
 //-------------------------------------------------------------------------
 /**
@@ -177,23 +197,28 @@ if (OrderList!=null)
     XOrders="<Ord>";
     for (int i = 0; i < OrderList.size(); i++)
         {
-        XOrders+=(String)OrderList.elementAt(i)+StringListSeparator;
+        XOrders+=OrderList.elementAt(i)+StringListSeparator;
         }
     XOrders+="</Ord>";
-    }
-else if (Order!=null)
-    XOrders="<Ord>"+Order+"</Ord>";
-else            
+    if (OrderAsc!=null)
+        {
+        XOrders="<OrdAsc>";
+        for (int i = 0; i < OrderAsc.size(); i++)
+            {
+            XOrders+=OrderAsc.elementAt(i)+StringListSeparator;
+            }
+        XOrders+="</OrdAsc>";
+        }
+    }          
     XOrders="";
 return("<Q><Tab>"+XTabs+"</Tab>"+RetrieveFields.toXMLt()+XWhere+XOrders+"</Q>");
 }
 //-------------------------------------------------------------------------
-
-    /**
-     *
-     * @param XMLObjects
-     * @throws PDException
-     */
+/**
+ *
+ * @param XMLObjects
+ * @throws PDException
+ */
 public Query(Document XMLObjects) throws PDException
 {
 NodeList OPDObjectList = XMLObjects.getElementsByTagName("Tab");
@@ -227,17 +252,26 @@ if (OPDObjectList.getLength()>0)
     OPDObject = OPDObjectList.item(0);
     String Ord=OPDObject.getTextContent();
     OrderList=null;
-    if (Ord.contains(StringListSeparator))
+    StringTokenizer St=new StringTokenizer(Ord, StringListSeparator);
+    OrderList=new Vector();
+    while (St.hasMoreTokens())
+        OrderList.add(St.nextToken());
+    OPDObjectList = XMLObjects.getElementsByTagName("OrdAsc");
+    OrderAsc=new Vector();
+    if (OPDObjectList.getLength()>0)
         {
-        StringTokenizer St=new StringTokenizer(Ord, StringListSeparator);
-        OrderList=new Vector();
-        while (St.hasMoreTokens())
-            {
-            OrderList.add(St.nextToken());
-            }
+        OPDObject = OPDObjectList.item(0);
+        String OrdAsc=OPDObject.getTextContent();
+        OrderAsc=null;
+        StringTokenizer StOA=new StringTokenizer(OrdAsc, StringListSeparator);
+        while (StOA.hasMoreTokens())
+            OrderAsc.add(Boolean.parseBoolean(StOA.nextToken()));
         }
     else
-        Order=Ord;
+        {
+        for (int i = 0; i < OrderList.size(); i++)
+            OrderAsc.add(true);
+        }
     }
 }
 //-------------------------------------------------------------------------

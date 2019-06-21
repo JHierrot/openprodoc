@@ -3134,7 +3134,7 @@ FTConn.Disconnect();
  * @return An arrayList with the Id of the documents
  * @throws PDException In any error
  */
-private ArrayList SearchFT(String pDocType, boolean SubTypes, String FTQuery) throws PDException
+protected ArrayList SearchFT(String pDocType, boolean SubTypes, String FTQuery) throws PDException
 {
 ArrayList FTRes=null;    
 FTConnector FTConn=getDrv().getFTRepository(pDocType);

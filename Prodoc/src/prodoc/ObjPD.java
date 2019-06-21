@@ -19,11 +19,40 @@
 
 package prodoc;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import net.sf.jsqlparser.expression.BinaryExpression;
+import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.expression.ExpressionVisitorAdapter;
+import net.sf.jsqlparser.expression.Function;
+import net.sf.jsqlparser.expression.Parenthesis;
+import net.sf.jsqlparser.expression.StringValue;
+import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
+import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
+import net.sf.jsqlparser.expression.operators.relational.ComparisonOperator;
+import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
+import net.sf.jsqlparser.expression.operators.relational.InExpression;
+import net.sf.jsqlparser.parser.CCJSqlParserUtil;
+import net.sf.jsqlparser.statement.select.AllColumns;
+import net.sf.jsqlparser.statement.select.OrderByElement;
+import net.sf.jsqlparser.statement.select.PlainSelect;
+import net.sf.jsqlparser.statement.select.Select;
+import net.sf.jsqlparser.statement.select.SelectExpressionItem;
+import net.sf.jsqlparser.statement.select.SelectItem;
+import net.sf.jsqlparser.util.TablesNamesFinder;
+import static prodoc.Attribute.DECIMALPATTERN;
+
 
 /**
  *
@@ -802,14 +831,294 @@ Day1+=Integer.parseInt((NewVal+" ").substring(8,10));
 return(String.format("%04d", Year1)+"-"+String.format("%02d", Month1)+"-"+String.format("%02d", Day1));
 }
 //---------------------------------------------------------------------
-
-    /**
-     *
-     * @return
-     */
+/**
+ *
+ * @return
+ */
 protected String getDescOrder()
 {
 return(PDObjDefs.fDESCRIPTION);
 }
 //---------------------------------------------------------------------
+/**
+ * Search in ANY object using SQL Syntax subset, similar to CMIS SQL
+ * @param SQL complete query
+ * @return and opened @Cursor
+ * @throws PDException In any Error
+ */
+public Cursor SearchSelect(String SQL) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("ObjPD.SearchSelect>:"+SQL);
+Query QBE=null;
+try {
+Select ParsedSQL = (Select) CCJSqlParserUtil.parse(SQL);
+//-- Calculate Table Names ------------
+TablesNamesFinder tablesNamesFinder = new TablesNamesFinder();
+Vector <String> Tabs=CalculateTabs(tablesNamesFinder.getTableList(ParsedSQL));
+//-- Calculate Fields -------------
+List<SelectItem> selectItems = ((PlainSelect)ParsedSQL.getSelectBody()).getSelectItems();
+Vector<String> Fields=new Vector();
+if (!( selectItems.get(0) instanceof AllColumns))
+    for (int i = 0; i < selectItems.size(); i++)
+        Fields.add(((SelectExpressionItem)selectItems.get(i)).getExpression().toString());      
+Record Rec=CalculateRec(Fields);
+//-- Calculate Conds in Select ------------
+Expression When = ((PlainSelect)ParsedSQL.getSelectBody()).getWhere();
+Conditions CondSel=EvalExpr(When);
+
+//-- Check Additional-Security Conditions ----
+Conditions FinalConds;
+Conditions AddedConds=NeedeMoreConds();
+if (AddedConds==null)
+    FinalConds=CondSel;
+else
+    {
+    FinalConds=new Conditions();
+    FinalConds.addCondition(AddedConds);
+    FinalConds.addCondition(CondSel);
+    }
+//-- Calculate Order ------------
+Vector <String> Order=new Vector();
+Vector <Boolean> OrderAsc=new Vector();
+List<OrderByElement> orderByElements = ((PlainSelect)ParsedSQL.getSelectBody()).getOrderByElements(); 
+if (orderByElements!=null)
+    for (int i = 0; i < orderByElements.size(); i++)
+        {
+        Order.add(orderByElements.get(i).getExpression().toString());
+        OrderAsc.add(orderByElements.get(i).isAsc());
+        }
+//-- Create Query --------------
+QBE=new Query(Tabs, Rec, FinalConds, Order, OrderAsc);
+if (PDLog.isDebug())
+    PDLog.Debug("ObjPD.SearchSelect <");
+} catch (Exception Ex)
+    {
+    Ex.printStackTrace();
+    PDException.GenPDException("Processing_SQL", Ex.getLocalizedMessage());
+    }
+return(getDrv().OpenCursor(QBE));
+}
+//-------------------------------------------------------------------------
+protected Vector<String> CalculateTabs(List<String> tableList)
+{
+Vector <String> Tabs=new Vector();
+Tabs.add(getTabName());
+return(Tabs);
+}
+//-------------------------------------------------------------------------
+protected Record CalculateRec(Vector<String> Fields) throws PDException
+{
+Record R=getRecordStruct();
+Record R2=new Record();
+R.initList();
+Attribute nextAttr = R.nextAttr();
+while (nextAttr!=null)
+    {
+    if (Fields.contains(nextAttr.getName()))
+        R2.addAttr(nextAttr);
+    nextAttr = R.nextAttr();
+    }
+if (R2.NumAttr()==0)
+    PDException.GenPDException("Empty_or_Erroneus_list_of_Fields", null);
+return(R2);
+}
+//-------------------------------------------------------------------------
+protected Conditions NeedeMoreConds()
+{
+return(null);
+}
+//-------------------------------------------------------------------------
+static private HashMap<String, Integer>CompConv=new HashMap(); 
+
+static private final int EXPR_BASIC=0;
+static private final int EXPR_AND=1;
+static private final int EXPR_OR=2;
+static private final int EXPR_PAR=3;
+static private final int EXPR_FUNCT=4;
+static private final int EXPR_IN=5;
+
+//---------------------------------------------------------------------------
+static private synchronized HashMap<String, Integer>getCompConv()
+{
+if (CompConv.isEmpty())   
+    {
+    CompConv.put("=", Condition.cEQUAL);
+    CompConv.put(">=", Condition.cGET );
+    CompConv.put("<=", Condition.cLET);
+    CompConv.put(">", Condition.cGT);
+    CompConv.put("<", Condition.cLT);
+    CompConv.put("<>", Condition.cNE);
+    }
+return(CompConv);
+}
+//---------------------------------------------------------------------------
+private boolean isField(String Text)
+{
+char c=Text.toLowerCase().charAt(0);
+return(c>='a' && c<='z');
+}
+final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+/**
+ * Default formater, used to store in DDBB, export, etc
+ */
+final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
+
+//---------------------------------------------------------------------------
+private Object CalcVal(String Text)
+{
+System.out.println("CalcVal=("+Text+")");        
+if (Text==null || Text.length()==0)    
+    return(Text);
+if (Text.charAt(0)=='\'')
+    {
+    Text=Text.substring(1, Text.length()-1);    
+    try {
+        return(formatterTS.parse(Text));
+    } catch (ParseException ex)
+        { // No Timestamp
+        }
+    try {
+        return(formatterDate.parse(Text));
+    } catch (ParseException ex)
+        { // No Date
+        }
+    return Text;
+    }
+if (Text.contains(".") || Text.contains("."))
+    return(String2BD(Text));
+else
+    return(Integer.valueOf(Text));  
+}
+//---------------------------------------------------------------------------
+private int CalcTypeVal(String Text)
+{
+System.out.println("CalcTypeVal=("+Text+")");        
+if (Text==null || Text.length()==0)    
+    return(Attribute.tSTRING);
+if (Text.charAt(0)=='\'')
+    {
+    Text=Text.substring(1, Text.length()-1);    
+    try {
+        formatterTS.parse(Text);
+        return(Attribute.tTIMESTAMP);
+    } catch (ParseException ex)
+        { // No Timestamp
+        }
+    try {
+        formatterDate.parse(Text);
+        return(Attribute.tDATE);
+    } catch (ParseException ex)
+        { // No Date
+        }
+    return (Attribute.tSTRING);
+    }
+if (Text.contains(".") || Text.contains("."))
+    return((Attribute.tFLOAT));
+else
+    return((Attribute.tINTEGER));  
+}
+//---------------------------------------------------------------------------
+public BigDecimal String2BD(String SBD)
+{
+DecimalFormat DF=new DecimalFormat(DECIMALPATTERN);
+return(new BigDecimal(DF.format(new BigDecimal(SBD.replace(',','.').replace("_", ""))).replace(',','.').replace("_", "")));
+}
+//---------------------------------------------------------------------------
+private int EvalExprType(Expression where)
+{
+if (where instanceof AndExpression)
+    return (EXPR_AND);
+else if (where instanceof OrExpression)
+    return (EXPR_OR);
+else if (where instanceof BinaryExpression)
+    return(EXPR_BASIC);
+else if (where instanceof Function)
+    return(EXPR_FUNCT);
+else if (where instanceof Parenthesis)
+    return (EXPR_PAR);
+else if (where instanceof InExpression) 
+    return (EXPR_IN);
+return(-1);
+}
+//------------------------------------------------------------------------------
+private Conditions EvalExpr(Expression ParentExpr ) throws PDException 
+{
+Conditions New = new Conditions();    
+int ExprType= EvalExprType(ParentExpr);
+System.out.println("ParentExpr=["+ParentExpr+"]  Type="+ExprType);    
+switch (ExprType)
+    {
+    case EXPR_BASIC:
+        ComparisonOperator CO = (ComparisonOperator) ParentExpr;
+        String Left=CO.getLeftExpression().toString();
+        String Comp=CO.getStringExpression();
+        String Right=CO.getRightExpression().toString();
+        if (isField(Left) && isField(Right))
+            New.addCondition(new Condition(Left,  Right));
+        else  
+            {
+            String FieldName;
+            Object Value;
+            int TypeVal;
+            if (isField(Left))
+                {
+                FieldName=Left;
+                Value=CalcVal(Right);
+                TypeVal=CalcTypeVal(Right);
+                }
+            else
+                {
+                FieldName=Right;
+                Value=CalcVal(Left);
+                TypeVal=CalcTypeVal(Left);
+                }
+            System.out.println("Value="+Value+"  class="+Value.getClass().getName());
+            New.addCondition(new Condition(FieldName,  getCompConv().get(Comp), Value, TypeVal));
+            }
+        break;    
+    case EXPR_AND:
+        New.addCondition(EvalExpr(((AndExpression) ParentExpr).getLeftExpression() ));
+        New.addCondition(EvalExpr(((AndExpression) ParentExpr).getRightExpression() ));
+        break;
+    case EXPR_OR:
+        New.addCondition(EvalExpr(((OrExpression) ParentExpr).getLeftExpression() ));
+        New.addCondition(EvalExpr(((OrExpression) ParentExpr).getRightExpression() ));
+        New.setOperatorAnd(false);
+        break;
+    case EXPR_PAR:
+        New.addCondition(EvalExpr(((Parenthesis) ParentExpr).getExpression() ));
+        break;
+    case EXPR_IN:
+        String FieldNameIn=((InExpression)ParentExpr).getLeftExpression().toString();
+        HashSet<String> ListTerms = new HashSet();
+        List<Expression> LT =((ExpressionList)((InExpression)ParentExpr).getLeftItemsList()).getExpressions();
+        for (Iterator<Expression> iterator = LT.iterator(); iterator.hasNext();)
+            {
+            StringValue NextTerm = (StringValue)iterator.next();
+            ListTerms.add(NextTerm.getValue());
+            }
+        New.addCondition(new Condition(FieldNameIn,ListTerms));
+        break;
+    case EXPR_FUNCT:
+        String Arg=((Function)ParentExpr).getParameters().getExpressions().get(0).toString();
+        switch (((Function)ParentExpr).getName())
+            {
+            case Condition.CONTAINS:
+                New.addCondition(Condition.genContainsCond(PDDocs.getTableName(),Arg, null)); 
+                break;
+            case Condition.INTREE:
+                New.addCondition(Condition.genInTreeCond( Arg, null)); 
+                break;
+            case Condition.INFOLDER:
+                New.addCondition(Condition.genInFolder(Arg));
+                break;
+                
+            }
+        break;    
+        
+    }
+return(New);
+}
+//------------------------------------------------------------------------------
 }

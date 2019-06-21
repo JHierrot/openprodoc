@@ -850,22 +850,6 @@ FieldNames.initList();
 for (int i = 0; i < FieldNames.NumAttr(); i++)
     {
     String FieldName=FieldNames.nextAttr().getName();
-//    if (Search.getTables()!=null && Search.getTables().size()>1 && FieldName.equals(PDFolders.fPDID))
-//        {
-//        Vector v=Search.getTables();
-//        for (int j = 0; j < v.size(); j++)
-//            {
-//            String TabName = (String)v.elementAt(j);
-//            if (TabName.equals(PDFolders.getTableName()) || TabName.equals(PDDocs.getTableName()))
-//                {
-//                SQL+=TabName+"."+FieldName;
-//                if (i!=FieldNames.NumAttr()-1)
-//                   SQL+=",";
-//                break;
-//                }
-//            }
-//        }
-//    else
         {
         SQL+=FieldName;
         if (i!=FieldNames.NumAttr()-1)
@@ -893,19 +877,15 @@ else
     }
 if (Search.getWhere()!=null && Search.getWhere().NumCond()>0)
     SQL+=" where "+EvalConditions(Search.getWhere(), Search.getTables());
-if (Search.getOrder()!=null && Search.getOrder().length()>0)
-    {
-    SQL+=" order by "+Search.getOrder();
-    }
-else if (Search.getOrderList()!=null)
+if (Search.getOrderList()!=null && !Search.getOrderList().isEmpty())
     {
     SQL+=" order by ";
-    Vector v=Search.getOrderList();
-    for (int i = 0; i < v.size(); i++)
+    Vector<String> OrdL=Search.getOrderList();
+    Vector<Boolean> OrdAsc=Search.getOrderAscList();
+    for (int i = 0; i < OrdL.size(); i++)
         {
-        String F = (String)v.elementAt(i);
-        SQL+=F;
-        if (i!=v.size()-1)
+        SQL+=OrdL.elementAt(i)+(OrdAsc.elementAt(i)?" ASC":" DESC");
+        if (i!=OrdL.size()-1)
            SQL+=",";
         }
     }

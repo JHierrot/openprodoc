@@ -21,6 +21,7 @@ package prodoc;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.StringTokenizer;
@@ -195,6 +196,30 @@ else if (pValue instanceof Integer)
     TypeVal=Attribute.tINTEGER;    
 else if (pValue instanceof BigDecimal)
     TypeVal=Attribute.tFLOAT;    
+}
+//-------------------------------------------------------------------------
+/**
+ * Constructor that creates a condition where pFied COMPARATION pValue
+ * @param pField name of field to compare
+ * @param pComparation Kind of comparation
+ * cEQUAL   =0;
+ * cGT      =1;
+ * cLT      =2;
+ * cGET     =3;
+ * cLET     =4;
+ * cNE      =5;
+ * cLIKE    =8;
+ * @param pValue Object to compare
+ * @param pTypeVal Phisical type of value
+ * @throws PDException in any error
+ */
+public Condition(String pField, int pComparation, Object pValue, int pTypeVal) throws PDException
+{
+cType=ctNORMAL;
+Field=pField;
+Comparation=pComparation;
+Value=pValue;
+TypeVal=pTypeVal;    
 }
 //-------------------------------------------------------------------------
 /**
@@ -471,9 +496,12 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
     }
 }
 //-------------------------------------------------------------------------
-public static Condition genContainsCond(String Arg)
+public static Condition genContainsCond(String TabName, String Arg, DriverGeneric Drv) throws PDException
 {
-throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+PDDocs D=new PDDocs(Drv);
+ArrayList SearchFT = D.SearchFT(TabName, true, Arg);
+HashSet<String> L=new HashSet<>(SearchFT);
+return(new Condition(PDDocs.fPDID, L));
 }
 //-------------------------------------------------------------------------
 public static Conditions genInTreeCond(String Arg, DriverGeneric Drv) throws PDException
