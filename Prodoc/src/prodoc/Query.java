@@ -98,9 +98,12 @@ Tables=pTables;
 RetrieveFields=pFields;
 Where=pWhere;
 OrderList=pOrderList;
-OrderAsc=new Vector();
-for (int i = 0; i < pOrderList.size(); i++)
-    OrderAsc.add(true);  
+if (pOrderList!=null)
+    {
+    OrderAsc=new Vector();
+    for (int i = 0; i < pOrderList.size(); i++)
+        OrderAsc.add(true); 
+    }
 }
 //-------------------------------------------------------------------------
 /**

@@ -503,7 +503,7 @@ getDrv().AddIntegrity(getTabName(), fREPOSIT, PDRepository.getTableName(), PDRep
 getDrv().AddIntegrity(getTabName(), fMIMETYPE, PDMimeType.getTableName(),  PDMimeType.fNAME);
 getDrv().AddIntegrity(getTabName(), fPARENTID, PDFolders.getTableName(),   PDFolders.fPDID);
 getDrv().CreateTable(getTabNameVer(), getRecordStructVer());
-//getDrv().AddIntegrity(getTabNameVer(), fPDID,  getTabName(),   fPDID);
+//getDrv().AddIntegrity(getTabNameVer(), fPDID,  getTabName(),   fPDID);+
 getDrv().AddIntegrity(getTabNameVer(), fACL,     PDACL.getTableName(),        PDACL.fNAME);
 getDrv().AddIntegrity(getTabNameVer(), fDOCTYPE, PDObjDefs.getTableName(),    PDObjDefs.fNAME);
 getDrv().AddIntegrity(getTabNameVer(), fREPOSIT, PDRepository.getTableName(), PDRepository.fNAME);
@@ -3294,5 +3294,129 @@ if (PDLog.isDebug())
     }
 return(true);    
 }
+//-------------------------------------------------------------------------
+/**
+ *
+ * @param tableList
+ * @return
+ * @throws prodoc.PDException
+ */
+@Override
+protected Vector<String> CalculateTabs(List<String> tableList) throws PDException
+{
+if (tableList.get(0).equalsIgnoreCase("this"))
+    tableList.set(0, getTabName());
+Vector <String> Tabs=new Vector();
+Tabs.add(tableList.get(0));
+if (!tableList.get(0).equalsIgnoreCase(getTableName())) // Not PDDocs
+    {
+    PDDocs D=new PDDocs(getDrv(),tableList.get(0) );
+    ArrayList ListTip=D.getTypeDefs();
+    ArrayList ListAttr=D.getTypeRecs();
+    for (int NumTabsDef = 0; NumTabsDef < ListTip.size(); NumTabsDef++)
+        {
+        Record R= (Record)ListTip.get(NumTabsDef);
+        Attribute AttrNomTab=R.getAttr(PDObjDefs.fNAME);
+        String Typ =(String) AttrNomTab.getValue();
+        if (!Typ.equalsIgnoreCase(tableList.get(0)))
+            Tabs.add(Typ);
+        Record AttrsTab= ((Record)ListAttr.get(NumTabsDef)).Copy();
+        AttrsTab.initList();
+        Attribute Attr;
+        for (int i = 0; i < AttrsTab.NumAttr(); i++)
+            {
+            Attr=AttrsTab.nextAttr();
+            if (Attr.isMultivalued())
+                {
+                Tabs.add(PDObjDefs.genMultValNam(Typ, Attr.getName()));                            
+                }                    
+            }
+        }
+    }
+return(Tabs);
+}
+//-------------------------------------------------------------------------
+/**
+ *
+ * @param Fields
+ * @param Tabs
+ * @return
+ * @throws PDException
+ */
+@Override
+protected Record CalculateRec(Vector<String> Fields, Vector <String> Tabs) throws PDException
+{
+PDDocs D=new PDDocs(getDrv(), Tabs.get(0));
+Record R2=D.getRecSum().CopyMono();
+if (R2.ContainsAttr(fPDID))
+    {
+    R2.getAttr(fPDID).setName((String)Tabs.get(0)+"."+fPDID);
+    }
+else
+    {
+    Attribute Atr=getRecord().getAttr(fPDID).Copy();
+    Atr.setName((String)Tabs.get(0)+"."+fPDID);
+    R2.addAttr(Atr);
+    }
+return(R2);
+}
+//-------------------------------------------------------------------------
+/**
+ *
+ * @param tableListSQL
+ * @param OPDTabs
+ * @return
+ * @throws prodoc.PDException
+ */
+@Override
+protected Conditions NeededMoreConds(List<String> tableListSQL, Vector <String> OPDTabs) throws PDException
+{
+Conditions Cs=new Conditions(); 
+if (!tableListSQL.contains("SUBTYPES"))
+    {
+    Condition C=new Condition(PDDocs.fDOCTYPE, Condition.cEQUAL, OPDTabs.get(0));
+    Cs.addCondition(C);
+    }
+Condition CondAcl=new Condition(PDDocs.fACL, new HashSet(getDrv().getUser().getAclList().keySet()));
+Cs.addCondition(CondAcl);
+if (OPDTabs.size()!=1)
+    { 
+    PDDocs F=new PDDocs(getDrv(), OPDTabs.get(0));    
+    Conditions CondTyps=new Conditions();
+    ArrayList ListTip=F.getTypeDefs();
+    ArrayList ListAttr=F.getTypeRecs();
+    for (int NumTabsDef = 0; NumTabsDef < ListTip.size(); NumTabsDef++)
+            {
+            Record R= (Record)ListTip.get(NumTabsDef);
+            Attribute AttrNomTab=R.getAttr(PDObjDefs.fNAME);
+            String Typ =(String) AttrNomTab.getValue();
+            if (!Typ.equalsIgnoreCase(getTableName()))
+                {
+                Condition Con=new Condition(getTableName()+"."+fPDID, Typ+"."+fPDID);
+                CondTyps.addCondition(Con);
+                }
+            Record AttrsTab= ((Record)ListAttr.get(NumTabsDef)).Copy();
+            AttrsTab.initList();
+            Attribute Attr;
+            for (int i = 0; i < AttrsTab.NumAttr(); i++)
+                {
+                Attr=AttrsTab.nextAttr();
+                if (Attr.isMultivalued())
+                    {
+                    if (Cs.UsedAttr(Attr.getName()))
+                        {
+                        String MultiName=PDObjDefs.genMultValNam(Typ, Attr.getName());
+                        Condition Con=new Condition(getTableName()+"."+fPDID, MultiName+"."+fPDID);
+                        CondTyps.addCondition(Con);
+                        OPDTabs.add(MultiName);
+                        }                            
+                    }                    
+                }
+            }
+    Cs.addCondition(CondTyps);
+    }
+return(Cs);
+}
+//-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
 }

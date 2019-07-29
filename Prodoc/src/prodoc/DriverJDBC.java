@@ -568,7 +568,7 @@ protected String EvalConditions(Conditions DelCons, Vector TablesNames) throws P
 {
 if (DelCons.NumCond()<1)
     PDException.GenPDException("Empty_conditions",null);
-String SQLWhere="(";
+String SQLWhere=(DelCons.isInvert()?"NOT (":"(");
 for (int i = 0; i < DelCons.NumCond(); i++)
     {
     Object O=DelCons.Cond(i);
@@ -877,17 +877,20 @@ else
     }
 if (Search.getWhere()!=null && Search.getWhere().NumCond()>0)
     SQL+=" where "+EvalConditions(Search.getWhere(), Search.getTables());
-if (Search.getOrderList()!=null && !Search.getOrderList().isEmpty())
+if (Search.getOrderList()!=null && !Search.getOrderList().isEmpty() && Search.getOrderList().elementAt(0)!=null && Search.getOrderAscList().elementAt(0)!=null)
     {
     SQL+=" order by ";
     Vector<String> OrdL=Search.getOrderList();
     Vector<Boolean> OrdAsc=Search.getOrderAscList();
     for (int i = 0; i < OrdL.size(); i++)
         {
-        SQL+=OrdL.elementAt(i)+(OrdAsc.elementAt(i)?" ASC":" DESC");
-        if (i!=OrdL.size()-1)
-           SQL+=",";
-        }
+        if (OrdL.elementAt(i)!=null && OrdAsc.elementAt(i)!=null)   
+            {
+            SQL+=OrdL.elementAt(i)+(OrdAsc.elementAt(i)?" ASC":" DESC");
+            if (i!=OrdL.size()-1)
+               SQL+=",";
+            }
+            }
     }
 return(SQL);
 }

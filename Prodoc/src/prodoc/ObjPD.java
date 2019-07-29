@@ -34,8 +34,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import net.sf.jsqlparser.expression.BinaryExpression;
 import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.ExpressionVisitorAdapter;
 import net.sf.jsqlparser.expression.Function;
+import net.sf.jsqlparser.expression.NotExpression;
 import net.sf.jsqlparser.expression.Parenthesis;
 import net.sf.jsqlparser.expression.StringValue;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
@@ -855,21 +855,22 @@ try {
 Select ParsedSQL = (Select) CCJSqlParserUtil.parse(SQL);
 //-- Calculate Table Names ------------
 TablesNamesFinder tablesNamesFinder = new TablesNamesFinder();
-Vector <String> Tabs=CalculateTabs(tablesNamesFinder.getTableList(ParsedSQL));
+List<String> TableListSQL = tablesNamesFinder.getTableList(ParsedSQL);
+Vector <String> OPDTabs=CalculateTabs(TableListSQL);
 //-- Calculate Fields -------------
 List<SelectItem> selectItems = ((PlainSelect)ParsedSQL.getSelectBody()).getSelectItems();
 Vector<String> Fields=new Vector();
 if (!( selectItems.get(0) instanceof AllColumns))
     for (int i = 0; i < selectItems.size(); i++)
         Fields.add(((SelectExpressionItem)selectItems.get(i)).getExpression().toString());      
-Record Rec=CalculateRec(Fields);
+Record Rec=CalculateRec(Fields, OPDTabs);
 //-- Calculate Conds in Select ------------
 Expression When = ((PlainSelect)ParsedSQL.getSelectBody()).getWhere();
 Conditions CondSel=EvalExpr(When);
 
 //-- Check Additional-Security Conditions ----
 Conditions FinalConds;
-Conditions AddedConds=NeedeMoreConds();
+Conditions AddedConds=NeededMoreConds(TableListSQL, OPDTabs);
 if (AddedConds==null)
     FinalConds=CondSel;
 else
@@ -889,7 +890,7 @@ if (orderByElements!=null)
         OrderAsc.add(orderByElements.get(i).isAsc());
         }
 //-- Create Query --------------
-QBE=new Query(Tabs, Rec, FinalConds, Order, OrderAsc);
+QBE=new Query(OPDTabs, Rec, FinalConds, Order, OrderAsc);
 if (PDLog.isDebug())
     PDLog.Debug("ObjPD.SearchSelect <");
 } catch (Exception Ex)
@@ -900,15 +901,23 @@ if (PDLog.isDebug())
 return(getDrv().OpenCursor(QBE));
 }
 //-------------------------------------------------------------------------
-protected Vector<String> CalculateTabs(List<String> tableList)
+/**
+ *
+ * @param tableList
+ * @return
+ * @throws PDException
+ */
+protected Vector<String> CalculateTabs(List<String> tableList) throws PDException
 {
 Vector <String> Tabs=new Vector();
 Tabs.add(getTabName());
 return(Tabs);
 }
 //-------------------------------------------------------------------------
-protected Record CalculateRec(Vector<String> Fields) throws PDException
+protected Record CalculateRec(Vector<String> Fields, Vector <String> Tabs) throws PDException
 {
+if (Fields.isEmpty())    
+    return getRecordStruct();
 Record R=getRecordStruct();
 Record R2=new Record();
 R.initList();
@@ -924,7 +933,12 @@ if (R2.NumAttr()==0)
 return(R2);
 }
 //-------------------------------------------------------------------------
-protected Conditions NeedeMoreConds()
+/**
+ *
+ * @param tableList
+ * @return
+ */
+protected Conditions NeededMoreConds(List<String> tableListSQL, Vector <String> OPDTabs) throws PDException
 {
 return(null);
 }
@@ -937,6 +951,7 @@ static private final int EXPR_OR=2;
 static private final int EXPR_PAR=3;
 static private final int EXPR_FUNCT=4;
 static private final int EXPR_IN=5;
+static private final int EXPR_NOT=6;
 
 //---------------------------------------------------------------------------
 static private synchronized HashMap<String, Integer>getCompConv()
@@ -1039,6 +1054,8 @@ else if (where instanceof Parenthesis)
     return (EXPR_PAR);
 else if (where instanceof InExpression) 
     return (EXPR_IN);
+else if (where instanceof NotExpression) 
+    return (EXPR_NOT);
 return(-1);
 }
 //------------------------------------------------------------------------------
@@ -1077,6 +1094,11 @@ switch (ExprType)
             New.addCondition(new Condition(FieldName,  getCompConv().get(Comp), Value, TypeVal));
             }
         break;    
+    case EXPR_NOT:
+        Conditions Cs=EvalExpr(((NotExpression) ParentExpr).getExpression());
+        Cs.setInvert(true);
+        New.addCondition(Cs);
+        break;
     case EXPR_AND:
         New.addCondition(EvalExpr(((AndExpression) ParentExpr).getLeftExpression() ));
         New.addCondition(EvalExpr(((AndExpression) ParentExpr).getRightExpression() ));
@@ -1108,10 +1130,10 @@ switch (ExprType)
                 New.addCondition(Condition.genContainsCond(PDDocs.getTableName(),Arg, null)); 
                 break;
             case Condition.INTREE:
-                New.addCondition(Condition.genInTreeCond( Arg, null)); 
+                New.addCondition(Condition.genInTreeCond( Arg, getDrv())); 
                 break;
             case Condition.INFOLDER:
-                New.addCondition(Condition.genInFolder(Arg));
+                New.addCondition(Condition.genInFolder(Arg, getDrv()));
                 break;
                 
             }

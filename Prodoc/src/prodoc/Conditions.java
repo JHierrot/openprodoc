@@ -30,10 +30,12 @@ import org.w3c.dom.NodeList;
  */
 public class Conditions
 {
+
 /**
  * When true al the condition(s) in the current object has operator AND between them, otherwise, is OR
  */
 private boolean OperatorAnd=true;
+private boolean Invert=false;
 /**
  * List of condition(s) included in the currnt condition
  */
@@ -178,4 +180,19 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
     }
 }
 //-------------------------------------------------------------------------
+/**
+ * @return the Invert
+ */
+public boolean isInvert()
+{
+return Invert;
+}
+
+/**
+ * @param Invert the Invert to set
+ */
+public void setInvert(boolean pInvert)
+{
+Invert = pInvert;
+}
 }

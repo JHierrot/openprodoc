@@ -504,19 +504,32 @@ HashSet<String> L=new HashSet<>(SearchFT);
 return(new Condition(PDDocs.fPDID, L));
 }
 //-------------------------------------------------------------------------
-public static Conditions genInTreeCond(String Arg, DriverGeneric Drv) throws PDException
+public static Conditions genInTreeCond(String FoldRef, DriverGeneric Drv) throws PDException
 {
+FoldRef=EvalId(FoldRef, Drv);     
 PDFolders F=new PDFolders(Drv);  
 Conditions Cs=new Conditions();
-Cs.addCondition(new Condition(PDFolders.fPARENTID, F.getQueryListDescendList(Arg)));
-Cs.addCondition(new Condition(PDFolders.fPARENTID, cEQUAL, Arg));
+Cs.addCondition(new Condition(PDFolders.fPARENTID, F.getQueryListDescendList(FoldRef)));
+Cs.addCondition(new Condition(PDFolders.fPARENTID, cEQUAL, FoldRef));
 Cs.setOperatorAnd(false);
 return(Cs);
 }
 //-------------------------------------------------------------------------
-public static Condition genInFolder(String Arg) throws PDException
+public static Condition genInFolder(String FoldRef, DriverGeneric Drv) throws PDException
 {
-return(new Condition(PDFolders.fPARENTID, Condition.cEQUAL, Arg));
+FoldRef=EvalId(FoldRef, Drv);    
+return(new Condition(PDFolders.fPARENTID, Condition.cEQUAL, FoldRef));
+}
+//-------------------------------------------------------------------------
+private static String EvalId(String FoldRef, DriverGeneric Drv) throws PDException
+{
+FoldRef=FoldRef.substring(1, FoldRef.length()-1);
+if (FoldRef.startsWith("/"))
+    {
+    PDFolders F=new PDFolders(Drv);
+    FoldRef=F.getIdPath(FoldRef);
+    }
+return(FoldRef);
 }
 //-------------------------------------------------------------------------
 }
