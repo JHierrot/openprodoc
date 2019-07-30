@@ -801,6 +801,8 @@ if (PDLog.isDebug())
 Condition CondParents=new Condition( fPARENTID, Condition.cEQUAL, PDIdFold);
 Conditions Conds=new Conditions();
 Conds.addCondition(CondParents);
+Condition CondAcl=new Condition(PDDocs.fACL, new HashSet(getDrv().getUser().getAclList().keySet()));
+Conds.addCondition(CondAcl);
 Query Q=new Query(getTableName(), getRecordStruct(), Conds);
 Cursor CursorId=getDrv().OpenCursor(Q);
 if (PDLog.isDebug())
@@ -3417,6 +3419,5 @@ if (OPDTabs.size()!=1)
     }
 return(Cs);
 }
-//-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
 }
