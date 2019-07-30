@@ -1127,7 +1127,7 @@ switch (ExprType)
         switch (((Function)ParentExpr).getName())
             {
             case Condition.CONTAINS:
-                New.addCondition(Condition.genContainsCond(PDDocs.getTableName(),Arg, null)); 
+                New.addCondition(Condition.genContainsCond(PDDocs.getTableName(),Arg, getDrv())); 
                 break;
             case Condition.INTREE:
                 New.addCondition(Condition.genInTreeCond( Arg, getDrv())); 
