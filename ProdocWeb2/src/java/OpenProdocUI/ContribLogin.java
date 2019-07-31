@@ -53,7 +53,7 @@ private static final String HtmlBase="<!DOCTYPE html>\n" +
     "<head>" +
         "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>" +
         "<title>OpenProdoc2 Web Contrib Login</title>\n" +
-        "<script src=\"js/OPDCombo2.3.js\" type=\"text/javascript\"></script>\n" +
+        "<script src=\"js/OPDCombo2.4.js\" type=\"text/javascript\"></script>\n" +
         "<link rel=\"shortcut icon\" href=\"img/OpenProdoc.ico\" type=\"image/x-icon\"/>\n" +       
         "@CSS@"+
     "</head>\n" +

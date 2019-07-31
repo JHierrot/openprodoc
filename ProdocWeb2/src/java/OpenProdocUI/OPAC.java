@@ -61,7 +61,7 @@ private static final String HtmlBase="<!DOCTYPE html>\n" +
     "<head>" +
         "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>" +
         "<title>OpenProdoc2 Web OPAC</title>\n" +
-        "<script src=\"js/OPDCombo2.3.js\" type=\"text/javascript\"></script>\n" +
+        "<script src=\"js/OPDCombo2.4.js\" type=\"text/javascript\"></script>\n" +
         "<script>\n"+
         "@LISTFIELDS@\n"+
         "function ExecMenu(IdType)\n" +
