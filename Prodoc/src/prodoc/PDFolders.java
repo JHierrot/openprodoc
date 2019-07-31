@@ -1240,6 +1240,11 @@ if (getTypeDefs().size()>1)
     }
 if (MustTrace(fOPERVIE))
     Trace(fOPERVIE, true);
+String ActACL=(String)r.getAttr(fACL).getValue();
+if (!getDrv().getUser().getAclList().containsKey(ActACL))
+    {
+    PDExceptionFunc.GenPDException("User_without_permissions_over_folder",Ident);
+    }
 return(r);
 }
 //-------------------------------------------------------------------------

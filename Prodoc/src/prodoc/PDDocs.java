@@ -1700,6 +1700,11 @@ if (getTypeDefs().size()>1) // If size==1, Load is enough
     }
 if (PDLog.isDebug())
    PDLog.Debug("PDDocs.LoadFull<:"+Ident);
+String ActACL=(String)r.getAttr(fACL).getValue();
+if (!getDrv().getUser().getAclList().containsKey(ActACL))
+    {
+    PDExceptionFunc.GenPDException("User_without_permissions_over_document",Ident);
+    }
 return(r);
 }
 //-------------------------------------------------------------------------
@@ -2146,6 +2151,11 @@ if (r!=null)
 getTypeDefs();
 if (PDLog.isDebug())
    PDLog.Debug("PDDocs.LoadDeleted<:"+DocTypename+"/"+Ident);
+String ActACL=(String)r.getAttr(fACL).getValue();
+if (!getDrv().getUser().getAclList().containsKey(ActACL))
+    {
+    PDExceptionFunc.GenPDException("User_without_permissions_over_document",Ident);
+    }
 return(r);
 }
 //-------------------------------------------------------------------------
