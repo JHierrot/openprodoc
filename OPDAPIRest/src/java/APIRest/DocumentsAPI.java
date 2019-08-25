@@ -6,7 +6,6 @@
 package APIRest;
 
 import APIRest.beans.DocB;
-import APIRest.beans.FolderB;
 import APIRest.beans.QueryJSON;
 import APIRest.beans.Rec;
 import com.google.gson.Gson;
@@ -171,25 +170,25 @@ return (returnOK("Updated="+Doc.getPDId()));
 //-------------------------------------------------------------------------
 /**
  * DELETE method for deleting an instance of Folders
- * @param FoldId
+ * @param DocId
  * @param request
  * @return 
  */
 @DELETE
 @Produces(MediaType.APPLICATION_JSON)
-@Path("/ById/{foldId}")
-public Response DeleteById(@PathParam("foldId") String FoldId,@Context HttpServletRequest request)
+@Path("/ById/{DocId}")
+public Response DeleteById(@PathParam("DocId") String DocId,@Context HttpServletRequest request)
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
 try {
 if (isLogDebug())
-    Debug("DeleteById="+FoldId);
+    Debug("DeleteById="+DocId);
 DriverGeneric sessOPD = getSessOPD(request);
-PDFolders Fold=new PDFolders(sessOPD);
-Fold.Load(FoldId);
-Fold.delete();
-return (returnOK("Deleted="+Fold.getPDId()));
+PDDocs Doc=new PDDocs(sessOPD);
+Doc.Load(DocId);
+Doc.delete();
+return (returnOK("Deleted="+Doc.getPDId()));
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
