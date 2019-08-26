@@ -13,7 +13,9 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -67,26 +69,48 @@ if (!Started)
 User U=User.CreateUser(Credentials);
 if (U.getName()==null||U.getName().length()==0 || U.getPassword()==null||U.getPassword().length()==0)
     return(null);
-String Token=U.getName()+"|"+U.getPassword();
 try {
 DriverGeneric D=ProdocFW.getSession("PD", U.getName(), U.getPassword());
 setSessOPD(request, D);
+return(D.AuthGenJWT(U.getName(), U.getPassword()));
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
     return(null);
     }
-return(Token);
 }
 //--------------------------------------------------------------------------
+static final private String TOKPREF="Bearer ";
 protected boolean IsConnected(HttpServletRequest request)
 {
+if (!Started) 
+    StartFramework();    
 DriverGeneric sessOPD = getSessOPD(request);
-return(sessOPD!=null);
+if (sessOPD!=null)
+    return(true);
+Enumeration<String> headers = request.getHeaders("Authorization");
+while (headers.hasMoreElements()) 
+    {
+    String Tok = headers.nextElement();
+    System.out.println("Tok="+Tok);
+    if (Tok.startsWith(TOKPREF))
+        {
+        Tok=Tok.substring(TOKPREF.length());
+        try {
+        DriverGeneric D=ProdocFW.getSession("PD", Tok, Tok);
+        setSessOPD(request, D);
+        return(true);
+        } catch (Exception Ex)
+            {
+            Ex.printStackTrace();
+            }  
+        }
+    }
+return(false);
 }
 //--------------------------------------------------------------------------
 Response CloseSession(HttpServletRequest request)
-{
+{  
 if (IsConnected(request))  
     {
     request.getSession(true).setAttribute(SESSTOK, null);

@@ -9,7 +9,9 @@ import APIRest.beans.DocB;
 import APIRest.beans.QueryJSON;
 import APIRest.beans.Rec;
 import com.google.gson.Gson;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
@@ -21,8 +23,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.StreamingOutput;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
@@ -32,6 +36,7 @@ import prodoc.DriverGeneric;
 import prodoc.PDDocs;
 import prodoc.PDException;
 import prodoc.PDFolders;
+import prodoc.PDMimeType;
 import prodoc.Record;
 
 
@@ -60,7 +65,7 @@ public DocumentsAPI()
 @GET
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/ById/{docId}")
-public Response getDocbyId(@PathParam("docId") String DocId,@Context HttpServletRequest request)
+public Response getDocById(@PathParam("docId") String DocId,@Context HttpServletRequest request)
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
@@ -72,6 +77,48 @@ PDDocs Doc=new PDDocs(sessOPD);
 Doc.LoadFull(DocId);
 DocB f=DocB.CreateDoc(Doc);
 return (Response.ok(f.getJSON()).build());
+} catch (Exception Ex)
+    {
+    Ex.printStackTrace();
+    return(returnERROR(Ex.getLocalizedMessage()));
+    }
+}
+//-------------------------------------------------------------------------
+/**
+ * Retrieves representation of an instance of APIRest.Docs
+ * @param DocId
+ * @param request
+ * @return an instance of java.lang.String
+ */
+@GET
+@Produces(MediaType.APPLICATION_OCTET_STREAM)
+@Path("/ContentById/{docId}")
+public Response getDocContentById(@PathParam("docId") String DocId,@Context HttpServletRequest request)
+{
+if (!IsConnected(request))    
+    return(returnUnathorize());
+if (isLogDebug())
+    Debug("getDocContentById="+DocId);    
+try {
+DriverGeneric sessOPD = getSessOPD(request);
+PDDocs Doc=new PDDocs(sessOPD);
+Doc.Load(DocId);
+PDMimeType M=new PDMimeType(sessOPD);
+String Mime = M.Ext2Mime(Doc.getMimeType());
+StreamingOutput output = new StreamingOutput() 
+    {
+    @Override
+    public void write(OutputStream output) throws IOException, WebApplicationException 
+    {
+    try {                   
+    Doc.getStream(output);
+        } catch (Exception e) 
+            {
+            throw new WebApplicationException(e.getLocalizedMessage());
+            }
+      }
+    };
+return (Response.ok().entity(output).header("Content-Disposition", "attachment; filename=" + Doc.getName()).header("Content-Type", Mime).build());
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
