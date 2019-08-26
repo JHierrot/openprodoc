@@ -274,13 +274,13 @@ protected String getKey()
 return(getName());
 }
 //-------------------------------------------------------------------------
-    /**
-     *
-     * @param Ext
-     * @return
-     * @throws PDException
-     */
-    public PDMimeType SolveExt(String Ext) throws PDException
+/**
+ *
+ * @param Ext
+ * @return
+ * @throws PDException
+ */
+public PDMimeType SolveExt(String Ext) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDMimeType.SolveExt>:"+Ext);
@@ -310,5 +310,24 @@ if (PDLog.isDebug())
 return (getName());
 }
 //-------------------------------------------------------------------------
-
+public String Ext2Mime(String pExt) throws PDException
+{
+PDMimeType M=new PDMimeType(getDrv());
+M.Load(pExt);
+return(M.getMimeCode());
+}
+//-------------------------------------------------------------------------
+public String Mime2Ext(String pMime)  throws PDException
+{
+PDMimeType M=new PDMimeType(getDrv());
+Cursor SearchSelect = M.SearchSelect("select "+fNAME+" from "+getTableName()+"where "+fMIMECODE+"='"+pMime+"'");
+Record NextFold=getDrv().NextRec(SearchSelect);
+if (NextFold!=null)
+    {
+    return((String)NextFold.getAttr(fNAME).getValue());
+    }  
+PDExceptionFunc.GenPDException("Erroneus_MimeType", pMime);
+return(null);
+}
+//-------------------------------------------------------------------------
 }

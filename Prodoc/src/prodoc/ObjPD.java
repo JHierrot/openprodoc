@@ -982,7 +982,7 @@ final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
 //---------------------------------------------------------------------------
 private Object CalcVal(String Text)
 {
-System.out.println("CalcVal=("+Text+")");        
+//System.out.println("CalcVal=("+Text+")");        
 if (Text==null || Text.length()==0)    
     return(Text);
 if (Text.charAt(0)=='\'')
@@ -1008,7 +1008,7 @@ else
 //---------------------------------------------------------------------------
 private int CalcTypeVal(String Text)
 {
-System.out.println("CalcTypeVal=("+Text+")");        
+//System.out.println("CalcTypeVal=("+Text+")");        
 if (Text==null || Text.length()==0)    
     return(Attribute.tSTRING);
 if (Text.charAt(0)=='\'')
@@ -1063,7 +1063,7 @@ private Conditions EvalExpr(Expression ParentExpr ) throws PDException
 {
 Conditions New = new Conditions();    
 int ExprType= EvalExprType(ParentExpr);
-System.out.println("ParentExpr=["+ParentExpr+"]  Type="+ExprType);    
+//System.out.println("ParentExpr=["+ParentExpr+"]  Type="+ExprType);    
 switch (ExprType)
     {
     case EXPR_BASIC:
@@ -1090,7 +1090,7 @@ switch (ExprType)
                 Value=CalcVal(Left);
                 TypeVal=CalcTypeVal(Left);
                 }
-            System.out.println("Value="+Value+"  class="+Value.getClass().getName());
+//            System.out.println("Value="+Value+"  class="+Value.getClass().getName());
             New.addCondition(new Condition(FieldName,  getCompConv().get(Comp), Value, TypeVal));
             }
         break;    

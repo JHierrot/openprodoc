@@ -1238,6 +1238,8 @@ if (getTypeDefs().size()>1)
         assignValues(r);
         }
     }
+if (r==null)
+    PDExceptionFunc.GenPDException("Folder_do_not_exist",Ident);
 if (MustTrace(fOPERVIE))
     Trace(fOPERVIE, true);
 String ActACL=(String)r.getAttr(fACL).getValue();
@@ -2050,7 +2052,20 @@ return(Tabs);
 protected Record CalculateRec(Vector<String> Fields, Vector <String> Tabs) throws PDException
 {
 PDFolders F=new PDFolders(getDrv(), Tabs.get(0));
-Record R2=F.getRecSum().CopyMono();
+Record R=F.getRecSum().CopyMono();   
+if (Fields.isEmpty())    
+    return R;
+Record R2=new Record();
+R.initList();
+Attribute nextAttr = R.nextAttr();
+while (nextAttr!=null)
+    {
+    if (Fields.contains(nextAttr.getName()))
+        R2.addAttr(nextAttr);
+    nextAttr = R.nextAttr();
+    }
+if (R2.NumAttr()==0)
+    PDException.GenPDException("Empty_or_Erroneus_list_of_Fields", null);
 if (R2.ContainsAttr(fPDID))
     {
     R2.getAttr(fPDID).setName(Tabs.get(0)+"."+fPDID);
@@ -2062,6 +2077,20 @@ else
     R2.addAttr(Atr);
     }
 return(R2);
+    
+//PDFolders F=new PDFolders(getDrv(), Tabs.get(0));
+//Record R2=F.getRecSum().CopyMono();
+//if (R2.ContainsAttr(fPDID))
+//    {
+//    R2.getAttr(fPDID).setName(Tabs.get(0)+"."+fPDID);
+//    }
+//else
+//    {
+//    Attribute Atr=getRecord().getAttr(fPDID).Copy();
+//    Atr.setName(Tabs.get(0)+"."+fPDID);
+//    R2.addAttr(Atr);
+//    }
+//return(R2);
 }
 //-------------------------------------------------------------------------
 /**

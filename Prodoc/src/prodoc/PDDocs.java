@@ -3358,19 +3358,45 @@ return(Tabs);
 @Override
 protected Record CalculateRec(Vector<String> Fields, Vector <String> Tabs) throws PDException
 {
-PDDocs D=new PDDocs(getDrv(), Tabs.get(0));
-Record R2=D.getRecSum().CopyMono();
+PDDocs F=new PDDocs(getDrv(), Tabs.get(0));
+Record R=F.getRecSum().CopyMono();   
+if (Fields.isEmpty())    
+    return R;
+Record R2=new Record();
+R.initList();
+Attribute nextAttr = R.nextAttr();
+while (nextAttr!=null)
+    {
+    if (Fields.contains(nextAttr.getName()))
+        R2.addAttr(nextAttr);
+    nextAttr = R.nextAttr();
+    }
+if (R2.NumAttr()==0)
+    PDException.GenPDException("Empty_or_Erroneus_list_of_Fields", null);
 if (R2.ContainsAttr(fPDID))
     {
-    R2.getAttr(fPDID).setName((String)Tabs.get(0)+"."+fPDID);
+    R2.getAttr(fPDID).setName(Tabs.get(0)+"."+fPDID);
     }
 else
     {
     Attribute Atr=getRecord().getAttr(fPDID).Copy();
-    Atr.setName((String)Tabs.get(0)+"."+fPDID);
+    Atr.setName(Tabs.get(0)+"."+fPDID);
     R2.addAttr(Atr);
     }
-return(R2);
+return(R2);    
+//PDDocs D=new PDDocs(getDrv(), Tabs.get(0));
+//Record R2=D.getRecSum().CopyMono();
+//if (R2.ContainsAttr(fPDID))
+//    {
+//    R2.getAttr(fPDID).setName((String)Tabs.get(0)+"."+fPDID);
+//    }
+//else
+//    {
+//    Attribute Atr=getRecord().getAttr(fPDID).Copy();
+//    Atr.setName((String)Tabs.get(0)+"."+fPDID);
+//    R2.addAttr(Atr);
+//    }
+//return(R2);
 }
 //-------------------------------------------------------------------------
 /**

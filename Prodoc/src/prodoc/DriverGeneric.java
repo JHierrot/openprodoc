@@ -31,6 +31,10 @@ import static prodoc.PDFolders.ROOTFOLDER;
 import static prodoc.PDFolders.SYSTEMFOLDER;
 import static prodoc.PDFolders.getTableName;
 import prodoc.security.*;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import java.security.Key;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Abstract class that represent a session that manages  the access to ALL the data and metadata, 
@@ -1486,12 +1490,21 @@ if (PDLog.isDebug())
     PDLog.Debug("DriverGeneric.Assign>:"+userName);
 if (!userName.equalsIgnoreCase("Install"))
     {
-    if (getUser().Load(userName)==null)
-        PDExceptionFunc.GenPDException("User_or_password_incorrect", userName);
-    if (!getUser().isActive())
-        PDExceptionFunc.GenPDException("Inactive_User", userName);
-    AuthGeneric Auth=getAuthentic(getUser().getValidation());
-    Auth.Authenticate(userName, Password);
+    if (userName.equals(Password)&& userName.length()>32)
+        {
+        PDServer S=new PDServer(this);
+        S.Load("Prodoc");
+        userName=CheckUserJWT(S.getKey(), userName);
+        }
+    else
+        {
+        if (getUser().Load(userName)==null)
+            PDExceptionFunc.GenPDException("User_or_password_incorrect", userName);
+        if (!getUser().isActive())
+            PDExceptionFunc.GenPDException("Inactive_User", userName);
+        AuthGeneric Auth=getAuthentic(getUser().getValidation());
+        Auth.Authenticate(userName, Password);
+        }
     getUser().LoadAll(userName);
     getPDCust().Load(getUser().getCustom());
     setAppLang(getPDCust().getLanguage());
@@ -1502,6 +1515,30 @@ else
     }
 if (PDLog.isDebug())
     PDLog.Debug("DriverGeneric.Assign<:"+userName);
+}
+//---------------------------------------------------------------------------
+private static final int ONEDAY=86400000;
+public String AuthGenJWT(String userName, String Password) throws PDException
+{
+AuthGeneric Auth=getAuthentic(getUser().getValidation());
+Auth.Authenticate(userName, Password);
+PDServer S=new PDServer(this);
+S.Load("Prodoc");
+return(genJWT(S.getKey(), userName));    
+}
+//---------------------------------------------------------------------------
+static private String genJWT(String KeyBase, String UserName)
+{
+Key key = new SecretKeySpec(KeyBase.getBytes(),"AES");
+Date Issued=new Date();
+Date Valid=new Date(Issued.getTime()+ONEDAY);
+return(Jwts.builder().setSubject(UserName).setIssuedAt(Issued).setExpiration(Valid).setIssuer("OpenProdoc").signWith(SignatureAlgorithm.HS512, key).compact());
+}
+//---------------------------------------------------------------------------
+static private String CheckUserJWT(String KeyBase, String Token)
+{
+Key key = new SecretKeySpec(KeyBase.getBytes(),"AES");
+return(Jwts.parser().setSigningKey(key).parseClaimsJws(Token).getBody().getSubject());    
 }
 //---------------------------------------------------------------------
 /**
