@@ -7,7 +7,6 @@ package APIRest;
 
 import APIRest.beans.FolderB;
 import APIRest.beans.QueryJSON;
-import APIRest.beans.Rec;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,7 +28,6 @@ import prodoc.Cursor;
 import prodoc.DriverGeneric;
 import prodoc.PDException;
 import prodoc.PDFolders;
-import prodoc.Record;
 
 /**
  * REST Web Service
@@ -55,12 +53,12 @@ public FoldersAPI()
 @GET
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/ById/{foldId}")
-public Response getFoldbyId(@PathParam("foldId") String FoldId,@Context HttpServletRequest request)
+public Response getFoldById(@PathParam("foldId") String FoldId,@Context HttpServletRequest request)
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
 if (isLogDebug())
-    Debug("getFoldbyId="+FoldId);    
+    Debug("getFoldById="+FoldId);    
 try {
 DriverGeneric sessOPD = getSessOPD(request);
 PDFolders Fold=new PDFolders(sessOPD);
@@ -83,12 +81,12 @@ return (Response.ok(f.getJSON()).build());
 @GET
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/ByPath/{path:.*}")
-public Response getFoldbyPath(@PathParam("path") String path, @Context HttpServletRequest request)
+public Response getFoldByPath(@PathParam("path") String path, @Context HttpServletRequest request)
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
 if (isLogDebug())
-    Debug("getFoldbyPath="+path);   
+    Debug("getFoldByPath="+path);   
 try {
 DriverGeneric sessOPD = getSessOPD(request);
 PDFolders Fold=new PDFolders(sessOPD);
@@ -153,7 +151,7 @@ if (!IsConnected(request))
     return(returnUnathorize());
 try {
 if (isLogDebug())
-    Debug("UpdateById="+UpdFold);
+    Debug("Fold UpdateById="+UpdFold);
 FolderB f=FolderB.CreateFolder(UpdFold);
 DriverGeneric sessOPD = getSessOPD(request);
 PDFolders Fold=new PDFolders(sessOPD);
@@ -185,7 +183,7 @@ if (!IsConnected(request))
     return(returnUnathorize());
 try {
 if (isLogDebug())
-    Debug("UpdateByPath="+UpdFold);
+    Debug("Fold UpdateByPath="+UpdFold);
 FolderB f=FolderB.CreateFolder(UpdFold);
 DriverGeneric sessOPD = getSessOPD(request);
 PDFolders Fold=new PDFolders(sessOPD);
@@ -211,16 +209,16 @@ return (returnOK("Updated="+Fold.getPDId()));
 @GET
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/SubFoldersById/{foldId}")
-public Response getSubFoldsbyId(@PathParam("foldId") String FoldId, @DefaultValue("0") @QueryParam("Initial") int Initial,@DefaultValue("100") @QueryParam("Final") int Final, @Context HttpServletRequest request)
+public Response getSubFoldsById(@PathParam("foldId") String FoldId, @DefaultValue("0") @QueryParam("Initial") int Initial,@DefaultValue("100") @QueryParam("Final") int Final, @Context HttpServletRequest request)
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
 if (isLogDebug())
-    Debug("getSubFoldsbyId="+FoldId+ ",Initial="+Initial+ ",Final="+Final);    
+    Debug("getSubFoldsById="+FoldId+ ",Initial="+Initial+ ",Final="+Final);    
 try {
 DriverGeneric sessOPD = getSessOPD(request);
 PDFolders Fold=new PDFolders(sessOPD);
-return (Response.ok(GenSubfoldersList(Fold, FoldId, Initial, Final)).build());
+return (Response.ok(GenSubFoldersList(Fold, FoldId, Initial, Final)).build());
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
@@ -239,16 +237,16 @@ return (Response.ok(GenSubfoldersList(Fold, FoldId, Initial, Final)).build());
 @GET
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/SubFoldersByPath/{path:.*}")
-public Response getSubFoldsbyPath(@PathParam("path") String Path, @DefaultValue("0") @QueryParam("Initial") int Initial,@DefaultValue("100") @QueryParam("Final") int Final, @Context HttpServletRequest request)
+public Response getSubFoldsByPath(@PathParam("path") String Path, @DefaultValue("0") @QueryParam("Initial") int Initial,@DefaultValue("100") @QueryParam("Final") int Final, @Context HttpServletRequest request)
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
 if (isLogDebug())
-    Debug("getSubFoldsbyPath="+Path+ ",Initial="+Initial+ ",Final="+Final);    
+    Debug("getSubFoldsByPath="+Path+ ",Initial="+Initial+ ",Final="+Final);    
 try {
 DriverGeneric sessOPD = getSessOPD(request);
 PDFolders Fold=new PDFolders(sessOPD);
-return (Response.ok(GenSubfoldersList(Fold, Fold.getIdPath("/"+Path), Initial, Final)).build());
+return (Response.ok(GenSubFoldersList(Fold, Fold.getIdPath("/"+Path), Initial, Final)).build());
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
@@ -256,7 +254,7 @@ return (Response.ok(GenSubfoldersList(Fold, Fold.getIdPath("/"+Path), Initial, F
     }
 }
 //-------------------------------------------------------------------------
-private String GenSubfoldersList(PDFolders Fold, String Id, int Initial, int Final) throws PDException
+private String GenSubFoldersList(PDFolders Fold, String Id, int Initial, int Final) throws PDException
 {
 HashSet<String> ChildFolds = Fold.getListDirectDescendList(Id);
 ArrayList<FolderB> L=new ArrayList();
@@ -289,7 +287,7 @@ if (!IsConnected(request))
     return(returnUnathorize());
 try {
 if (isLogDebug())
-    Debug("DeleteById="+FoldId);
+    Debug("Fold DeleteById="+FoldId);
 DriverGeneric sessOPD = getSessOPD(request);
 PDFolders Fold=new PDFolders(sessOPD);
 Fold.Load(FoldId);
@@ -317,7 +315,7 @@ if (!IsConnected(request))
     return(returnUnathorize());
 try {
 if (isLogDebug())
-    Debug("DeleteByPath="+path);
+    Debug("Fold DeleteByPath="+path);
 DriverGeneric sessOPD = getSessOPD(request);
 PDFolders Fold=new PDFolders(sessOPD);
 Fold.Load(Fold.getIdPath("/"+path));
@@ -345,7 +343,7 @@ public Response Search(String QueryParams, @Context HttpServletRequest request)
 if (!IsConnected(request))    
     return(returnUnathorize());
 if (isLogDebug())
-    Debug("Search=["+QueryParams+ "]");  
+    Debug("Fold Search=["+QueryParams+ "]");  
 try { // TODO: Check empty
 QueryJSON RcvQuery = QueryJSON.CreateQuery(QueryParams);   
 DriverGeneric sessOPD = getSessOPD(request);
@@ -356,32 +354,6 @@ return (Response.ok(genCursor(sessOPD, SearchFold, RcvQuery.getInitial(), RcvQue
     {
     Ex.printStackTrace();
     return(returnERROR(Ex.getLocalizedMessage()));
-    }
-}
-//-------------------------------------------------------------------------
-
-private String genCursor(DriverGeneric sessOPD, Cursor SearchFold, int Initial, int Final) throws PDException
-{
-try {
-ArrayList<Rec> L=new ArrayList();
-int N=0;
-Record NextFold=sessOPD.NextRec(SearchFold);
-while (NextFold!=null)
-    {
-    if (N>=Initial) 
-        {
-        Rec r=new Rec(NextFold);
-        L.add(r);
-        }
-    if (++N>=Final)
-        break;
-    NextFold=sessOPD.NextRec(SearchFold);
-    }
-Gson g = new Gson();
-return g.toJson(L);    
-} finally
-    {
-    sessOPD.CloseCursor(SearchFold);    
     }
 }
 //-------------------------------------------------------------------------

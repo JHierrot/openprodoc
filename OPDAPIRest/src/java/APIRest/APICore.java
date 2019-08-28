@@ -6,23 +6,26 @@
 package APIRest;
 
 import APIRest.beans.CurrentSession;
+import APIRest.beans.Rec;
 import APIRest.beans.User;
+import com.google.gson.Gson;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.Response;
+import prodoc.Cursor;
 import prodoc.DriverGeneric;
 import prodoc.PDException;
 import prodoc.ProdocFW;
+import prodoc.Record;
 
 /**
  *
@@ -269,4 +272,31 @@ static public String TS2Str(Date D)
 SimpleDateFormat formatterDate = new SimpleDateFormat(TSFORMAT);
 return(formatterDate.format(D));    
 }
+
+protected String genCursor(DriverGeneric sessOPD, Cursor SearchFold, int Initial, int Final) throws PDException
+{
+try {
+ArrayList<Rec> L=new ArrayList();
+int N=0;
+Record NextFold=sessOPD.NextRec(SearchFold);
+while (NextFold!=null)
+    {
+    if (N>=Initial) 
+        {
+        Rec r=new Rec(NextFold);
+        L.add(r);
+        }
+    if (++N>=Final)
+        break;
+    NextFold=sessOPD.NextRec(SearchFold);
+    }
+Gson g = new Gson();
+return g.toJson(L);    
+} finally
+    {
+    sessOPD.CloseCursor(SearchFold);    
+    }
+}
+//-------------------------------------------------------------------------
+
 }

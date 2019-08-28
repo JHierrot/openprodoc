@@ -7,7 +7,6 @@ package APIRest.beans;
 
 import APIRest.APICore;
 import com.google.gson.Gson;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.TreeSet;

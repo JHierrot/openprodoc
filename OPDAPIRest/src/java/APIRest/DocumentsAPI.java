@@ -7,12 +7,9 @@ package APIRest;
 
 import APIRest.beans.DocB;
 import APIRest.beans.QueryJSON;
-import APIRest.beans.Rec;
-import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.Produces;
@@ -34,10 +31,8 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import prodoc.Cursor;
 import prodoc.DriverGeneric;
 import prodoc.PDDocs;
-import prodoc.PDException;
 import prodoc.PDFolders;
 import prodoc.PDMimeType;
-import prodoc.Record;
 
 
 /**
@@ -70,7 +65,7 @@ public Response getDocById(@PathParam("docId") String DocId,@Context HttpServlet
 if (!IsConnected(request))    
     return(returnUnathorize());
 if (isLogDebug())
-    Debug("getDocbyId="+DocId);    
+    Debug("getDocById="+DocId);    
 try {
 DriverGeneric sessOPD = getSessOPD(request);
 PDDocs Doc=new PDDocs(sessOPD);
@@ -188,7 +183,7 @@ DriverGeneric sessOPD = getSessOPD(request);
 try {
 sessOPD.IniciarTrans();
 if (isLogDebug())
-    Debug("UpdateById="+DocId+"/"+UpdDoc);
+    Debug("Docs UpdateById="+DocId+"/"+UpdDoc);
 DocB D=DocB.CreateDoc(UpdDoc);
 PDDocs Doc=new PDDocs(sessOPD, D.getType());
 Doc.Load(DocId);
@@ -230,7 +225,7 @@ if (!IsConnected(request))
     return(returnUnathorize());
 try {
 if (isLogDebug())
-    Debug("DeleteById="+DocId);
+    Debug("Docs DeleteById="+DocId);
 DriverGeneric sessOPD = getSessOPD(request);
 PDDocs Doc=new PDDocs(sessOPD);
 Doc.Load(DocId);
@@ -258,7 +253,7 @@ public Response Search(String QueryParams, @Context HttpServletRequest request)
 if (!IsConnected(request))    
     return(returnUnathorize());
 if (isLogDebug())
-    Debug("Search=["+QueryParams+ "]");  
+    Debug("Docs Search=["+QueryParams+ "]");  
 try { // TODO: Check empty
 QueryJSON RcvQuery = QueryJSON.CreateQuery(QueryParams);   
 DriverGeneric sessOPD = getSessOPD(request);
@@ -269,32 +264,6 @@ return (Response.ok(genCursor(sessOPD, SearchFold, RcvQuery.getInitial(), RcvQue
     {
     Ex.printStackTrace();
     return(returnERROR(Ex.getLocalizedMessage()));
-    }
-}
-//-------------------------------------------------------------------------
-
-private String genCursor(DriverGeneric sessOPD, Cursor SearchFold, int Initial, int Final) throws PDException
-{
-try {
-ArrayList<Rec> L=new ArrayList();
-int N=0;
-Record NextFold=sessOPD.NextRec(SearchFold);
-while (NextFold!=null)
-    {
-    if (N>=Initial) 
-        {
-        Rec r=new Rec(NextFold);
-        L.add(r);
-        }
-    if (++N>=Final)
-        break;
-    NextFold=sessOPD.NextRec(SearchFold);
-    }
-Gson g = new Gson();
-return g.toJson(L);    
-} finally
-    {
-    sessOPD.CloseCursor(SearchFold);    
     }
 }
 //-------------------------------------------------------------------------
