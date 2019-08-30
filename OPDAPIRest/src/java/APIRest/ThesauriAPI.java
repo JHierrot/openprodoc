@@ -1,7 +1,20 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * OpenProdoc
+ * 
+ * See the help doc files distributed with
+ * this work for additional information regarding copyright ownership.
+ * Joaquin Hierro licenses this file to You under:
+ * 
+ * License GNU Affero GPL v3 http://www.gnu.org/licenses/agpl.html
+ * 
+ * you may not use this file except in compliance with the License.  
+ * Unless agreed to in writing, software is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ * author: Joaquin Hierro      2019
+ * 
  */
 package APIRest;
 
@@ -53,10 +66,12 @@ public ThesauriAPI()
 @GET
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/ById/{ThesId}")
-public Response getThesById(@PathParam("ThesId") String ThesId,@Context HttpServletRequest request)
+public Response getThesById(@PathParam("ThesId") String ThesId, @Context HttpServletRequest request)
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
+if (!Valid(ThesId))
+    return ErrorParam("{ThesId}");
 if (isLogDebug())
     Debug("getThesById="+ThesId);    
 try {
@@ -68,7 +83,7 @@ return (Response.ok(f.getJSON()).build());
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
-    return(returnERROR(Ex.getLocalizedMessage()));
+    return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
 //-------------------------------------------------------------------------
@@ -81,14 +96,22 @@ return (Response.ok(f.getJSON()).build());
 @POST
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public Response Insert(String NewThes,@Context HttpServletRequest request)
+public Response Insert(String NewThes, @Context HttpServletRequest request)
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
-try {
-ThesB TB=ThesB.CreateThes(NewThes);
+if (!Valid(NewThes))
+    return ErrorParam("Body");
 if (isLogDebug())
     Debug("Insert Thes="+NewThes);
+ThesB TB;
+try {
+TB=ThesB.CreateThes(NewThes);
+} catch (Exception Ex)
+    {
+    return(returnErrorInput(Ex.getLocalizedMessage()));
+    }
+try {
 DriverGeneric sessOPD = getSessOPD(request);
 PDThesaur Thes=new PDThesaur(sessOPD);
 TB.Assign(Thes);
@@ -99,7 +122,7 @@ return (returnOK("Creado="+Thes.getPDId()));
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
-    return(returnERROR(Ex.getLocalizedMessage()));
+    return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
 //-------------------------------------------------------------------------
@@ -114,14 +137,22 @@ return (returnOK("Creado="+Thes.getPDId()));
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/ById/{ThesId}")
-public Response UpdateById(@PathParam("ThesId") String ThesId, String UpdThes,@Context HttpServletRequest request)
+public Response UpdateById(@PathParam("ThesId") String ThesId, String UpdThes, @Context HttpServletRequest request)
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
-try {
+if (!Valid(ThesId))
+    return ErrorParam("{ThesId]");
 if (isLogDebug())
     Debug("Thes UpdateById="+UpdThes);
-ThesB TB=ThesB.CreateThes(UpdThes);
+ThesB TB;
+try {
+TB=ThesB.CreateThes(UpdThes);
+} catch (Exception Ex)
+    {
+    return(returnErrorInput(Ex.getLocalizedMessage()));
+    }
+try {
 DriverGeneric sessOPD = getSessOPD(request);
 PDThesaur Thes=new PDThesaur(sessOPD);
 Thes.Load(ThesId);
@@ -131,7 +162,7 @@ return (returnOK("Updated="+Thes.getPDId()));
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
-    return(returnERROR(Ex.getLocalizedMessage()));
+    return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
 //-------------------------------------------------------------------------
@@ -146,10 +177,12 @@ return (returnOK("Updated="+Thes.getPDId()));
 @GET
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/SubThesById/{ThesId}")
-public Response getSubThesById(@PathParam("ThesId") String ThesId, @DefaultValue("0") @QueryParam("Initial") int Initial,@DefaultValue("100") @QueryParam("Final") int Final, @Context HttpServletRequest request)
+public Response getSubThesById(@PathParam("ThesId") String ThesId, @DefaultValue("0") @QueryParam("Initial") int Initial, @DefaultValue("100") @QueryParam("Final") int Final, @Context HttpServletRequest request)
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
+if (!Valid(ThesId))
+    return ErrorParam("{ThesId]");
 if (isLogDebug())
     Debug("getSubFoldsbyId="+ThesId+ ",Initial="+Initial+ ",Final="+Final);    
 try {
@@ -159,7 +192,7 @@ return (Response.ok(GenSubThesList(Fold, ThesId, Initial, Final)).build());
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
-    return(returnERROR(Ex.getLocalizedMessage()));
+    return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
 //-------------------------------------------------------------------------
@@ -194,9 +227,11 @@ public Response DeleteById(@PathParam("ThesId") String ThesId,@Context HttpServl
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
-try {
+if (!Valid(ThesId))
+    return ErrorParam("{ThesId]");
 if (isLogDebug())
     Debug("Thes DeleteById="+ThesId);
+try {
 DriverGeneric sessOPD = getSessOPD(request);
 PDThesaur Thes=new PDThesaur(sessOPD);
 Thes.Load(ThesId);
@@ -205,7 +240,7 @@ return (returnOK("Deleted="+Thes.getPDId()));
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
-    return(returnERROR(Ex.getLocalizedMessage()));
+    return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
 //-------------------------------------------------------------------------
@@ -223,10 +258,18 @@ public Response Search(String QueryParams, @Context HttpServletRequest request)
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
+if (!Valid(QueryParams))
+    return ErrorParam("Body");
 if (isLogDebug())
     Debug("Thes Search=["+QueryParams+ "]");  
-try { // TODO: Check empty
-QueryJSON RcvQuery = QueryJSON.CreateQuery(QueryParams);   
+QueryJSON RcvQuery;
+try {
+RcvQuery = QueryJSON.CreateQuery(QueryParams);   
+} catch (Exception Ex)
+    {
+    return(returnErrorInput(Ex.getLocalizedMessage()));
+    }
+try {
 DriverGeneric sessOPD = getSessOPD(request);
 PDThesaur Fold=new PDThesaur(sessOPD);
 Cursor SearchFold = Fold.SearchSelect(RcvQuery.getQuery());
@@ -234,7 +277,7 @@ return (Response.ok(genCursor(sessOPD, SearchFold, RcvQuery.getInitial(), RcvQue
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
-    return(returnERROR(Ex.getLocalizedMessage()));
+    return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
 //-------------------------------------------------------------------------

@@ -1,7 +1,20 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * OpenProdoc
+ * 
+ * See the help doc files distributed with
+ * this work for additional information regarding copyright ownership.
+ * Joaquin Hierro licenses this file to You under:
+ * 
+ * License GNU Affero GPL v3 http://www.gnu.org/licenses/agpl.html
+ * 
+ * you may not use this file except in compliance with the License.  
+ * Unless agreed to in writing, software is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ * author: Joaquin Hierro      2019
+ * 
  */
 package APIRest;
 
@@ -31,7 +44,6 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import prodoc.Cursor;
 import prodoc.DriverGeneric;
 import prodoc.PDDocs;
-import prodoc.PDFolders;
 import prodoc.PDMimeType;
 
 
@@ -60,10 +72,12 @@ public DocumentsAPI()
 @GET
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/ById/{docId}")
-public Response getDocById(@PathParam("docId") String DocId,@Context HttpServletRequest request)
+public Response getDocById(@PathParam("docId") String DocId, @Context HttpServletRequest request)
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
+if (!Valid(DocId))
+    return ErrorParam("{docId}");
 if (isLogDebug())
     Debug("getDocById="+DocId);    
 try {
@@ -75,7 +89,7 @@ return (Response.ok(f.getJSON()).build());
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
-    return(returnERROR(Ex.getLocalizedMessage()));
+    return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
 //-------------------------------------------------------------------------
@@ -88,10 +102,12 @@ return (Response.ok(f.getJSON()).build());
 @GET
 @Produces(MediaType.APPLICATION_OCTET_STREAM)
 @Path("/ContentById/{docId}")
-public Response getDocContentById(@PathParam("docId") String DocId,@Context HttpServletRequest request)
+public Response getDocContentById(@PathParam("docId") String DocId, @Context HttpServletRequest request)
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
+if (!Valid(DocId))
+    return ErrorParam("{docId}");
 if (isLogDebug())
     Debug("getDocContentById="+DocId);    
 try {
@@ -117,7 +133,7 @@ return (Response.ok().entity(output).header("Content-Disposition", "attachment; 
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
-    return(returnERROR(Ex.getLocalizedMessage()));
+    return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
 //-------------------------------------------------------------------------
@@ -139,10 +155,18 @@ public Response Insert(@FormDataParam("Binary") InputStream uploadedInputStream,
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
-try {
-DocB D=DocB.CreateDoc(NewDoc);
+if (!Valid(NewDoc))
+    return ErrorParam("Body");
 if (isLogDebug())
     Debug("NewDoc="+NewDoc);
+DocB D;
+try {
+D=DocB.CreateDoc(NewDoc);
+} catch (Exception Ex)
+    {
+    return(returnErrorInput(Ex.getLocalizedMessage()));
+    }
+try {
 DriverGeneric sessOPD = getSessOPD(request);
 PDDocs Doc=new PDDocs(sessOPD, D.getType());
 D.Assign(Doc);
@@ -157,14 +181,16 @@ return (returnOK("Creado="+Doc.getPDId()));
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
-    return(returnERROR(Ex.getLocalizedMessage()));
+    return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
 //-------------------------------------------------------------------------
 /**
  * PUT method for updating an instance of Folders
  * @param DocId
- * @param UpdFold representation for the resource
+ * @param uploadedInputStream
+ * @param fileMetaData
+ * @param UpdDoc
  * @param request
  * @return 
  */
@@ -179,12 +205,22 @@ public Response UpdateById(@PathParam("DocId") String DocId,
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
-DriverGeneric sessOPD = getSessOPD(request);
-try {
-sessOPD.IniciarTrans();
+if (!Valid(DocId))
+    return ErrorParam("{DocId}");
+if (!Valid(UpdDoc))
+    return ErrorParam("Metadata");
 if (isLogDebug())
     Debug("Docs UpdateById="+DocId+"/"+UpdDoc);
-DocB D=DocB.CreateDoc(UpdDoc);
+DriverGeneric sessOPD = getSessOPD(request);
+DocB D;
+try {
+D=DocB.CreateDoc(UpdDoc);
+} catch (Exception Ex)
+    {
+    return(returnErrorInput(Ex.getLocalizedMessage()));
+    }
+try {
+sessOPD.IniciarTrans();
 PDDocs Doc=new PDDocs(sessOPD, D.getType());
 Doc.Load(DocId);
 Doc.Checkout();
@@ -206,7 +242,7 @@ return (returnOK("Updated="+Doc.getPDId()));
     try {
     sessOPD.AnularTrans();
     } catch (Exception E){E.printStackTrace();}
-    return(returnERROR(Ex.getLocalizedMessage()));
+    return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
 //-------------------------------------------------------------------------
@@ -223,6 +259,8 @@ public Response DeleteById(@PathParam("DocId") String DocId,@Context HttpServlet
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
+if (!Valid(DocId))
+    return ErrorParam("{DocId}");
 try {
 if (isLogDebug())
     Debug("Docs DeleteById="+DocId);
@@ -234,7 +272,7 @@ return (returnOK("Deleted="+Doc.getPDId()));
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
-    return(returnERROR(Ex.getLocalizedMessage()));
+    return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
 //-------------------------------------------------------------------------
@@ -252,18 +290,26 @@ public Response Search(String QueryParams, @Context HttpServletRequest request)
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
+if (!Valid(QueryParams))
+    return ErrorParam("Body");
 if (isLogDebug())
     Debug("Docs Search=["+QueryParams+ "]");  
-try { // TODO: Check empty
-QueryJSON RcvQuery = QueryJSON.CreateQuery(QueryParams);   
+QueryJSON RcvQuery;
+try {
+RcvQuery = QueryJSON.CreateQuery(QueryParams);   
+} catch (Exception Ex)
+    {
+    return(returnErrorInput(Ex.getLocalizedMessage()));
+    }
+try {
 DriverGeneric sessOPD = getSessOPD(request);
-PDFolders Fold=new PDFolders(sessOPD);
-Cursor SearchFold = Fold.SearchSelect(RcvQuery.getQuery());
-return (Response.ok(genCursor(sessOPD, SearchFold, RcvQuery.getInitial(), RcvQuery.getFinal())).build());
+PDDocs Doc=new PDDocs(sessOPD);
+Cursor SearchDoc = Doc.SearchSelect(RcvQuery.getQuery());
+return (Response.ok(genCursor(sessOPD, SearchDoc, RcvQuery.getInitial(), RcvQuery.getFinal())).build());
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
-    return(returnERROR(Ex.getLocalizedMessage()));
+    return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
 //-------------------------------------------------------------------------

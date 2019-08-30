@@ -1,7 +1,20 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * OpenProdoc
+ * 
+ * See the help doc files distributed with
+ * this work for additional information regarding copyright ownership.
+ * Joaquin Hierro licenses this file to You under:
+ * 
+ * License GNU Affero GPL v3 http://www.gnu.org/licenses/agpl.html
+ * 
+ * you may not use this file except in compliance with the License.  
+ * Unless agreed to in writing, software is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ * author: Joaquin Hierro      2019
+ * 
  */
 package APIRest;
 
@@ -53,10 +66,12 @@ public FoldersAPI()
 @GET
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/ById/{foldId}")
-public Response getFoldById(@PathParam("foldId") String FoldId,@Context HttpServletRequest request)
+public Response getFoldById(@PathParam("foldId") String FoldId, @Context HttpServletRequest request)
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
+if (!Valid(FoldId))
+    return ErrorParam("{foldId}");
 if (isLogDebug())
     Debug("getFoldById="+FoldId);    
 try {
@@ -68,7 +83,7 @@ return (Response.ok(f.getJSON()).build());
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
-    return(returnERROR(Ex.getLocalizedMessage()));
+    return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
 //-------------------------------------------------------------------------
@@ -85,6 +100,8 @@ public Response getFoldByPath(@PathParam("path") String path, @Context HttpServl
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
+if (!Valid(path))
+    return ErrorParam("{path}");
 if (isLogDebug())
     Debug("getFoldByPath="+path);   
 try {
@@ -97,7 +114,7 @@ return (Response.ok(f.getJSON()).build());
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
-    return(returnERROR(Ex.getLocalizedMessage()));
+    return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
 //-------------------------------------------------------------------------
@@ -110,14 +127,22 @@ return (Response.ok(f.getJSON()).build());
 @POST
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public Response Insert(String NewFold,@Context HttpServletRequest request)
+public Response Insert(String NewFold, @Context HttpServletRequest request)
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
+if (!Valid(NewFold))
+    return ErrorParam("Body");
+FolderB f;
 try {
-FolderB f=FolderB.CreateFolder(NewFold);
+f=FolderB.CreateFolder(NewFold);
+} catch (Exception Ex)
+    {
+    return(returnErrorInput(Ex.getLocalizedMessage()));
+    }
 if (isLogDebug())
     Debug("NewFolder="+NewFold);
+try {
 DriverGeneric sessOPD = getSessOPD(request);
 PDFolders Fold=new PDFolders(sessOPD, f.getType());
 f.Assign(Fold);
@@ -126,11 +151,11 @@ if (f.getId()!=null && f.getId().length()!=0)
 if (f.getIdparent()!=null && f.getIdparent().length()!=0)
     Fold.setParentId(f.getIdparent());
 Fold.insert();
-return (returnOK("Creado="+Fold.getPDId()));
+return (returnOK("Created="+Fold.getPDId()));
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
-    return(returnERROR(Ex.getLocalizedMessage()));
+    return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
 //-------------------------------------------------------------------------
@@ -149,10 +174,20 @@ public Response UpdateById(@PathParam("foldId") String FoldId, String UpdFold,@C
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
-try {
+if (!Valid(FoldId))
+    return ErrorParam("{foldId}");
+if (!Valid(UpdFold))
+    return ErrorParam("Body");
 if (isLogDebug())
     Debug("Fold UpdateById="+UpdFold);
-FolderB f=FolderB.CreateFolder(UpdFold);
+FolderB f;
+try {
+f=FolderB.CreateFolder(UpdFold);
+} catch (Exception Ex)
+    {
+    return(returnErrorInput(Ex.getLocalizedMessage()));
+    }
+try {
 DriverGeneric sessOPD = getSessOPD(request);
 PDFolders Fold=new PDFolders(sessOPD);
 Fold.Load(FoldId);
@@ -162,7 +197,7 @@ return (returnOK("Updated="+Fold.getPDId()));
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
-    return(returnERROR(Ex.getLocalizedMessage()));
+    return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
 //-------------------------------------------------------------------------
@@ -177,14 +212,24 @@ return (returnOK("Updated="+Fold.getPDId()));
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/ByPath/{path:.*}")
-public Response UpdateByPath(@PathParam("path") String path, String UpdFold,@Context HttpServletRequest request)
+public Response UpdateByPath(@PathParam("path") String path, String UpdFold, @Context HttpServletRequest request)
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
-try {
+if (!Valid(path))
+    return ErrorParam("{path}");
+if (!Valid(UpdFold))
+    return ErrorParam("Body");
 if (isLogDebug())
     Debug("Fold UpdateByPath="+UpdFold);
-FolderB f=FolderB.CreateFolder(UpdFold);
+FolderB f;
+try {
+f=FolderB.CreateFolder(UpdFold);
+} catch (Exception Ex)
+    {
+    return(returnErrorInput(Ex.getLocalizedMessage()));
+    }
+try {
 DriverGeneric sessOPD = getSessOPD(request);
 PDFolders Fold=new PDFolders(sessOPD);
 Fold.Load(Fold.getIdPath("/"+path));
@@ -194,7 +239,7 @@ return (returnOK("Updated="+Fold.getPDId()));
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
-    return(returnERROR(Ex.getLocalizedMessage()));
+    return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
 //-------------------------------------------------------------------------
@@ -209,10 +254,12 @@ return (returnOK("Updated="+Fold.getPDId()));
 @GET
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/SubFoldersById/{foldId}")
-public Response getSubFoldsById(@PathParam("foldId") String FoldId, @DefaultValue("0") @QueryParam("Initial") int Initial,@DefaultValue("100") @QueryParam("Final") int Final, @Context HttpServletRequest request)
+public Response getSubFoldsById(@PathParam("foldId") String FoldId, @DefaultValue("0") @QueryParam("Initial") int Initial, @DefaultValue("100") @QueryParam("Final") int Final, @Context HttpServletRequest request)
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
+if (!Valid(FoldId))
+    return ErrorParam("{foldId}");
 if (isLogDebug())
     Debug("getSubFoldsById="+FoldId+ ",Initial="+Initial+ ",Final="+Final);    
 try {
@@ -222,7 +269,7 @@ return (Response.ok(GenSubFoldersList(Fold, FoldId, Initial, Final)).build());
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
-    return(returnERROR(Ex.getLocalizedMessage()));
+    return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
 //-------------------------------------------------------------------------
@@ -241,6 +288,8 @@ public Response getSubFoldsByPath(@PathParam("path") String Path, @DefaultValue(
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
+if (!Valid(Path))
+    return ErrorParam("{path}");
 if (isLogDebug())
     Debug("getSubFoldsByPath="+Path+ ",Initial="+Initial+ ",Final="+Final);    
 try {
@@ -250,7 +299,7 @@ return (Response.ok(GenSubFoldersList(Fold, Fold.getIdPath("/"+Path), Initial, F
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
-    return(returnERROR(Ex.getLocalizedMessage()));
+    return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
 //-------------------------------------------------------------------------
@@ -281,10 +330,12 @@ return g.toJson(L);
 @DELETE
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/ById/{foldId}")
-public Response DeleteById(@PathParam("foldId") String FoldId,@Context HttpServletRequest request)
+public Response DeleteById(@PathParam("foldId") String FoldId, @Context HttpServletRequest request)
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
+if (!Valid(FoldId))
+    return ErrorParam("{foldId}");
 try {
 if (isLogDebug())
     Debug("Fold DeleteById="+FoldId);
@@ -296,7 +347,7 @@ return (returnOK("Deleted="+Fold.getPDId()));
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
-    return(returnERROR(Ex.getLocalizedMessage()));
+    return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
 //-------------------------------------------------------------------------
@@ -313,6 +364,8 @@ public Response DeleteByPath(@PathParam("path") String path, @Context HttpServle
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
+if (!Valid(path))
+    return ErrorParam("{path}");
 try {
 if (isLogDebug())
     Debug("Fold DeleteByPath="+path);
@@ -324,7 +377,7 @@ return (returnOK("Deleted="+Fold.getPDId()));
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
-    return(returnERROR(Ex.getLocalizedMessage()));
+    return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
 //-------------------------------------------------------------------------
@@ -342,10 +395,18 @@ public Response Search(String QueryParams, @Context HttpServletRequest request)
 {
 if (!IsConnected(request))    
     return(returnUnathorize());
+if (!Valid(QueryParams))
+    return ErrorParam("Body");
 if (isLogDebug())
-    Debug("Fold Search=["+QueryParams+ "]");  
-try { // TODO: Check empty
-QueryJSON RcvQuery = QueryJSON.CreateQuery(QueryParams);   
+    Debug("Fold Search=["+QueryParams+ "]"); 
+QueryJSON RcvQuery;
+try {
+RcvQuery = QueryJSON.CreateQuery(QueryParams);   
+} catch (Exception Ex)
+    {
+    return(returnErrorInput(Ex.getLocalizedMessage()));
+    }
+try {
 DriverGeneric sessOPD = getSessOPD(request);
 PDFolders Fold=new PDFolders(sessOPD);
 Cursor SearchFold = Fold.SearchSelect(RcvQuery.getQuery());
@@ -353,7 +414,7 @@ return (Response.ok(genCursor(sessOPD, SearchFold, RcvQuery.getInitial(), RcvQue
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
-    return(returnERROR(Ex.getLocalizedMessage()));
+    return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
 //-------------------------------------------------------------------------
