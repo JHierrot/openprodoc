@@ -28,6 +28,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import prodoc.PDLog;
 
 /**
  * REST Web Service
@@ -56,8 +57,8 @@ public Login()
 @Produces(MediaType.APPLICATION_JSON)
 public Response Disconnect(@Context HttpServletRequest request)
 {
-if (isLogDebug())    
-    Debug("Disconnecting=");    
+if (PDLog.isDebug())    
+    PDLog.Debug("Disconnecting=");    
 return(CloseSession(request));
 }
 //-------------------------------------------------------------------------
@@ -73,8 +74,8 @@ return(CloseSession(request));
 @Produces(MediaType.APPLICATION_JSON)
 public Response Connect(String Credentials, @Context HttpServletRequest request)
 {
-if (isLogDebug())    
-    Debug("Login="+Credentials);
+if (PDLog.isDebug())    
+    PDLog.Debug("Login="+Credentials);
 User U=User.CreateUser(Credentials);
 if (U.getName()==null||U.getName().length()==0 || U.getPassword()==null||U.getPassword().length()==0)
     return(ErrorParam("UserName-Password"));

@@ -41,6 +41,7 @@ import prodoc.Cursor;
 import prodoc.DriverGeneric;
 import prodoc.PDException;
 import prodoc.PDFolders;
+import prodoc.PDLog;
 
 /**
  * REST Web Service
@@ -73,8 +74,8 @@ if (sessOPD==null)
     return(returnUnathorize());
 if (!Valid(FoldId))
     return ErrorParam("{foldId}");
-if (isLogDebug())
-    Debug("getFoldById="+FoldId);    
+if (PDLog.isDebug())
+    PDLog.Debug("getFoldById="+FoldId);    
 try {
 PDFolders Fold=new PDFolders(sessOPD);
 Fold.LoadFull(FoldId);
@@ -83,6 +84,7 @@ return (Response.ok(f.getJSON()).build());
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
+    PDLog.Error(Ex.getLocalizedMessage());
     return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
@@ -103,8 +105,8 @@ if (sessOPD==null)
     return(returnUnathorize());
 if (!Valid(path))
     return ErrorParam("{path}");
-if (isLogDebug())
-    Debug("getFoldByPath="+path);   
+if (PDLog.isDebug())
+    PDLog.Debug("getFoldByPath="+path);   
 try {
 PDFolders Fold=new PDFolders(sessOPD);
 String idPath = Fold.getIdPath("/"+path);
@@ -114,6 +116,7 @@ return (Response.ok(f.getJSON()).build());
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
+    PDLog.Error(Ex.getLocalizedMessage());
     return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
@@ -141,8 +144,8 @@ f=FolderB.CreateFolder(NewFold);
     {
     return(returnErrorInput(Ex.getLocalizedMessage()));
     }
-if (isLogDebug())
-    Debug("NewFolder="+NewFold);
+if (PDLog.isDebug())
+    PDLog.Debug("NewFolder="+NewFold);
 try {
 PDFolders Fold=new PDFolders(sessOPD, f.getType());
 f.Assign(Fold);
@@ -155,6 +158,7 @@ return (returnOK("Created="+Fold.getPDId()));
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
+    PDLog.Error(Ex.getLocalizedMessage());
     return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
@@ -179,8 +183,8 @@ if (!Valid(FoldId))
     return ErrorParam("{foldId}");
 if (!Valid(UpdFold))
     return ErrorParam("Body");
-if (isLogDebug())
-    Debug("Fold UpdateById="+UpdFold);
+if (PDLog.isDebug())
+    PDLog.Debug("Fold UpdateById="+UpdFold);
 FolderB f;
 try {
 f=FolderB.CreateFolder(UpdFold);
@@ -197,6 +201,7 @@ return (returnOK("Updated="+Fold.getPDId()));
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
+    PDLog.Error(Ex.getLocalizedMessage());
     return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
@@ -221,8 +226,8 @@ if (!Valid(path))
     return ErrorParam("{path}");
 if (!Valid(UpdFold))
     return ErrorParam("Body");
-if (isLogDebug())
-    Debug("Fold UpdateByPath="+UpdFold);
+if (PDLog.isDebug())
+    PDLog.Debug("Fold UpdateByPath="+UpdFold);
 FolderB f;
 try {
 f=FolderB.CreateFolder(UpdFold);
@@ -239,6 +244,7 @@ return (returnOK("Updated="+Fold.getPDId()));
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
+    PDLog.Error(Ex.getLocalizedMessage());
     return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
@@ -261,14 +267,15 @@ if (sessOPD==null)
     return(returnUnathorize());
 if (!Valid(FoldId))
     return ErrorParam("{foldId}");
-if (isLogDebug())
-    Debug("getSubFoldsById="+FoldId+ ",Initial="+Initial+ ",Final="+Final);    
+if (PDLog.isDebug())
+    PDLog.Debug("getSubFoldsById="+FoldId+ ",Initial="+Initial+ ",Final="+Final);    
 try {
 PDFolders Fold=new PDFolders(sessOPD);
 return (Response.ok(GenSubFoldersList(Fold, FoldId, Initial, Final)).build());
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
+    PDLog.Error(Ex.getLocalizedMessage());
     return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
@@ -291,14 +298,15 @@ if (sessOPD==null)
     return(returnUnathorize());
 if (!Valid(Path))
     return ErrorParam("{path}");
-if (isLogDebug())
-    Debug("getSubFoldsByPath="+Path+ ",Initial="+Initial+ ",Final="+Final);    
+if (PDLog.isDebug())
+    PDLog.Debug("getSubFoldsByPath="+Path+ ",Initial="+Initial+ ",Final="+Final);    
 try {
 PDFolders Fold=new PDFolders(sessOPD);
 return (Response.ok(GenSubFoldersList(Fold, Fold.getIdPath("/"+Path), Initial, Final)).build());
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
+    PDLog.Error(Ex.getLocalizedMessage());
     return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
@@ -338,8 +346,8 @@ if (sessOPD==null)
 if (!Valid(FoldId))
     return ErrorParam("{foldId}");
 try {
-if (isLogDebug())
-    Debug("Fold DeleteById="+FoldId);
+if (PDLog.isDebug())
+    PDLog.Debug("Fold DeleteById="+FoldId);
 PDFolders Fold=new PDFolders(sessOPD);
 Fold.Load(FoldId);
 Fold.delete();
@@ -347,6 +355,7 @@ return (returnOK("Deleted="+Fold.getPDId()));
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
+    PDLog.Error(Ex.getLocalizedMessage());
     return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
@@ -368,8 +377,8 @@ if (sessOPD==null)
 if (!Valid(path))
     return ErrorParam("{path}");
 try {
-if (isLogDebug())
-    Debug("Fold DeleteByPath="+path);
+if (PDLog.isDebug())
+    PDLog.Debug("Fold DeleteByPath="+path);
 PDFolders Fold=new PDFolders(sessOPD);
 Fold.Load(Fold.getIdPath("/"+path));
 Fold.delete();
@@ -377,6 +386,7 @@ return (returnOK("Deleted="+Fold.getPDId()));
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
+    PDLog.Error(Ex.getLocalizedMessage());
     return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
@@ -398,8 +408,8 @@ if (sessOPD==null)
     return(returnUnathorize());
 if (!Valid(QueryParams))
     return ErrorParam("Body");
-if (isLogDebug())
-    Debug("Fold Search=["+QueryParams+ "]"); 
+if (PDLog.isDebug())
+    PDLog.Debug("Fold Search=["+QueryParams+ "]"); 
 QueryJSON RcvQuery;
 try {
 RcvQuery = QueryJSON.CreateQuery(QueryParams);   
@@ -414,6 +424,7 @@ return (Response.ok(genCursor(sessOPD, SearchFold, RcvQuery.getInitial(), RcvQue
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
+    PDLog.Error(Ex.getLocalizedMessage());
     return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }

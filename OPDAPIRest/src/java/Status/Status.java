@@ -39,21 +39,27 @@ try (PrintWriter out = response.getWriter())
 out.println("<!DOCTYPE html>");
 out.println("<html>");
 out.println("<head>");
+out.println("<style>");
+out.println("table { border: 1px solid LightGrey ;  }");
+out.println("th, td { border: 1px solid LightGrey ; padding: 5px; }");
+out.println("</style>");
 out.println("<title>OpenProdoc Servlet Status</title>");            
 out.println("</head>");
 out.println("<body>");
-out.println("<h1>Current Connection</h1>");
+out.println("<h2>OpenProdoc API REST Current Connections</h2>");
+out.println(" <table ><tr><th>Host</th><th>User</th><th>Logged</th><th>Last Use</th></tr>");
 Hashtable<String, CurrentSession> listOPSess = APICore.getListOPSess();
 for (Map.Entry<String, CurrentSession> entry : listOPSess.entrySet())
     {
-//    String key = entry.getKey();
+    out.println("<tr>");      
     CurrentSession CS = entry.getValue();
-    out.println(CS.getHost()+"/");
-    out.println(CS.getUserName()+"/");
-    out.println(CS.getLoginTime()+"/");
-    out.println(CS.getLastUse());
-    out.println("<br>");      
+    out.println("<td>"+CS.getHost()+"</td>");
+    out.println("<td>"+CS.getUserName()+"</td>");
+    out.println("<td>"+CS.getLoginTime()+"</td>");
+    out.println("<td>"+CS.getLastUse()+"</td>");
+    out.println("</tr>");      
     }
+out.println("</table>");      
 out.println("</body>");
 out.println("</html>");
 }

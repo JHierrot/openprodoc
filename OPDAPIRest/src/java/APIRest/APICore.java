@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
@@ -94,6 +95,7 @@ return(AuthGenJWT);
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
+    PDLog.Error(Ex.getLocalizedMessage());
     return(null);
     }
 }
@@ -137,36 +139,6 @@ if (Tok!=null)
 return(returnOK("Closed"));
 }
 //--------------------------------------------------------------------------
-protected boolean isLogDebug()
-{
-return(true);    
-}
-//--------------------------------------------------------------------------
-protected void Debug(String Txt)
-{
-System.out.println("DEBUG:"+Txt);    
-}
-//--------------------------------------------------------------------------
-protected boolean isLogInfo()
-{
-return(true);    
-}
-//--------------------------------------------------------------------------
-protected void Info(String Txt)
-{
-System.out.println("INFO :"+Txt);    
-}
-//--------------------------------------------------------------------------
-protected boolean isLogError()
-{
-return(true);    
-}
-//--------------------------------------------------------------------------
-protected void Error(String Txt)
-{
-System.out.println("ERROR:"+Txt);    
-}
-//--------------------------------------------------------------------------
 static synchronized private void StartFramework()
 {
 if (Started)   
@@ -177,6 +149,8 @@ ProdocFW.InitProdoc("PD", getProdocProperRef());
     {
     Ex.printStackTrace();
     }
+SessCleaner  SC=new SessCleaner(); 
+SC.start();
 Started=true;
 }
 //--------------------------------------------------------------------------
@@ -302,7 +276,6 @@ Enumeration<String> headers = request.getHeaders("Authorization");
 while (headers.hasMoreElements()) 
     {
     String Tok = headers.nextElement();
-    System.out.println("Tok="+Tok);
     if (Tok.startsWith(TOKPREF))
         {
         Tok=Tok.substring(TOKPREF.length());
@@ -312,5 +285,50 @@ while (headers.hasMoreElements())
 return(null);
 }
 //-------------------------------------------------------------------------
+//***********************************************************************
+static private class SessCleaner extends Thread  
+{
+static private final long TIMEOUT=5*60*1000;   
 
+public SessCleaner()
+{
+super();
+setName("SessCleaner");
+}
+/**
+ * 
+ */
+@Override 
+public void run() 
+{
+while (true)
+    {    
+    Hashtable<String, CurrentSession> listOPSess = getListOPSess();
+    for (Map.Entry<String, CurrentSession> entry : listOPSess.entrySet())
+        {
+        CurrentSession CS = entry.getValue();
+        if ((System.currentTimeMillis()-CS.getLastUse().getTime())>TIMEOUT)  
+            {
+            try{
+            ProdocFW.freeSesion("PD", CS.getDrv());
+            } catch (Exception Ex)
+                {
+                PDLog.Error(Ex.getLocalizedMessage());
+                }
+            getListOPSess().remove(entry.getKey());
+            if (PDLog.isDebug())
+                PDLog.Debug("Autodesconnect:"+CS.getHost()+"/"+CS.getUserName());
+            }
+        }
+        try {
+    Thread.sleep(TIMEOUT);
+    } catch (InterruptedException e) 
+        {
+        }
+
+    }
+}
+//-------------------------------------------------------------------------
+}
+//***********************************************************************
 }

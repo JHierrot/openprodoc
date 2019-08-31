@@ -44,6 +44,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import prodoc.Cursor;
 import prodoc.DriverGeneric;
 import prodoc.PDDocs;
+import prodoc.PDLog;
 import prodoc.PDMimeType;
 
 
@@ -79,8 +80,8 @@ if (sessOPD==null)
     return(returnUnathorize());
 if (!Valid(DocId))
     return ErrorParam("{docId}");
-if (isLogDebug())
-    Debug("getDocById="+DocId);    
+if (PDLog.isDebug())
+    PDLog.Debug("getDocById="+DocId);    
 try {
 PDDocs Doc=new PDDocs(sessOPD);
 Doc.LoadFull(DocId);
@@ -109,8 +110,8 @@ if (sessOPD==null)
     return(returnUnathorize());
 if (!Valid(DocId))
     return ErrorParam("{docId}");
-if (isLogDebug())
-    Debug("getDocContentById="+DocId);    
+if (PDLog.isDebug())
+    PDLog.Debug("getDocContentById="+DocId);    
 try {
 PDDocs Doc=new PDDocs(sessOPD);
 Doc.Load(DocId);
@@ -158,8 +159,8 @@ if (sessOPD==null)
     return(returnUnathorize());
 if (!Valid(NewDoc))
     return ErrorParam("Body");
-if (isLogDebug())
-    Debug("NewDoc="+NewDoc);
+if (PDLog.isDebug())
+    PDLog.Debug("NewDoc="+NewDoc);
 DocB D;
 try {
 D=DocB.CreateDoc(NewDoc);
@@ -210,8 +211,8 @@ if (!Valid(DocId))
     return ErrorParam("{DocId}");
 if (!Valid(UpdDoc))
     return ErrorParam("Metadata");
-if (isLogDebug())
-    Debug("Docs UpdateById="+DocId+"/"+UpdDoc);
+if (PDLog.isDebug())
+    PDLog.Debug("Docs UpdateById="+DocId+"/"+UpdDoc);
 DocB D;
 try {
 D=DocB.CreateDoc(UpdDoc);
@@ -263,8 +264,8 @@ if (sessOPD==null)
 if (!Valid(DocId))
     return ErrorParam("{DocId}");
 try {
-if (isLogDebug())
-    Debug("Docs DeleteById="+DocId);
+if (PDLog.isDebug())
+    PDLog.Debug("Docs DeleteById="+DocId);
 PDDocs Doc=new PDDocs(sessOPD);
 Doc.Load(DocId);
 Doc.delete();
@@ -272,6 +273,7 @@ return (returnOK("Deleted="+Doc.getPDId()));
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
+    PDLog.Error(Ex.getLocalizedMessage());
     return(returnErrorInternal(Ex.getLocalizedMessage()));
     }
 }
@@ -293,8 +295,8 @@ if (sessOPD==null)
     return(returnUnathorize());
 if (!Valid(QueryParams))
     return ErrorParam("Body");
-if (isLogDebug())
-    Debug("Docs Search=["+QueryParams+ "]");  
+if (PDLog.isDebug())
+    PDLog.Debug("Docs Search=["+QueryParams+ "]");  
 QueryJSON RcvQuery;
 try {
 RcvQuery = QueryJSON.CreateQuery(QueryParams);   

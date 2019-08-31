@@ -40,6 +40,7 @@ import javax.ws.rs.core.Response;
 import prodoc.Cursor;
 import prodoc.DriverGeneric;
 import prodoc.PDException;
+import prodoc.PDLog;
 import prodoc.PDThesaur;
 
 /**
@@ -73,8 +74,8 @@ if (sessOPD==null)
     return(returnUnathorize());
 if (!Valid(ThesId))
     return ErrorParam("{ThesId}");
-if (isLogDebug())
-    Debug("getThesById="+ThesId);    
+if (PDLog.isDebug())
+    PDLog.Debug("getThesById="+ThesId);    
 try {
 PDThesaur Thes=new PDThesaur(sessOPD);
 Thes.Load(ThesId);
@@ -103,8 +104,8 @@ if (sessOPD==null)
     return(returnUnathorize());
 if (!Valid(NewThes))
     return ErrorParam("Body");
-if (isLogDebug())
-    Debug("Insert Thes="+NewThes);
+if (PDLog.isDebug())
+    PDLog.Debug("Insert Thes="+NewThes);
 ThesB TB;
 try {
 TB=ThesB.CreateThes(NewThes);
@@ -144,8 +145,8 @@ if (sessOPD==null)
     return(returnUnathorize());
 if (!Valid(ThesId))
     return ErrorParam("{ThesId]");
-if (isLogDebug())
-    Debug("Thes UpdateById="+UpdThes);
+if (PDLog.isDebug())
+    PDLog.Debug("Thes UpdateById="+UpdThes);
 ThesB TB;
 try {
 TB=ThesB.CreateThes(UpdThes);
@@ -184,8 +185,8 @@ if (sessOPD==null)
     return(returnUnathorize());
 if (!Valid(ThesId))
     return ErrorParam("{ThesId]");
-if (isLogDebug())
-    Debug("getSubFoldsbyId="+ThesId+ ",Initial="+Initial+ ",Final="+Final);    
+if (PDLog.isDebug())
+    PDLog.Debug("getSubFoldsbyId="+ThesId+ ",Initial="+Initial+ ",Final="+Final);    
 try {
 PDThesaur Fold=new PDThesaur(sessOPD);
 return (Response.ok(GenSubThesList(Fold, ThesId, Initial, Final)).build());
@@ -230,8 +231,8 @@ if (sessOPD==null)
     return(returnUnathorize());
 if (!Valid(ThesId))
     return ErrorParam("{ThesId]");
-if (isLogDebug())
-    Debug("Thes DeleteById="+ThesId);
+if (PDLog.isDebug())
+    PDLog.Debug("Thes DeleteById="+ThesId);
 try {
 PDThesaur Thes=new PDThesaur(sessOPD);
 Thes.Load(ThesId);
@@ -261,8 +262,8 @@ if (sessOPD==null)
     return(returnUnathorize());
 if (!Valid(QueryParams))
     return ErrorParam("Body");
-if (isLogDebug())
-    Debug("Thes Search=["+QueryParams+ "]");  
+if (PDLog.isDebug())
+    PDLog.Debug("Thes Search=["+QueryParams+ "]");  
 QueryJSON RcvQuery;
 try {
 RcvQuery = QueryJSON.CreateQuery(QueryParams);   
