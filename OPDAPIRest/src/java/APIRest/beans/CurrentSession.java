@@ -19,6 +19,7 @@
 package APIRest.beans;
 
 import java.util.Date;
+import prodoc.DriverGeneric;
 
 
 public class CurrentSession
@@ -27,12 +28,14 @@ private final String UserName;
 private final Date LoginTime;
 private Date LastUse;
 private final String Host;
-public CurrentSession(String pUserName,Date pLoginTime, String pHost)
+private final DriverGeneric Drv;
+public CurrentSession(String pUserName,Date pLoginTime, String pHost, DriverGeneric pD)
 {
 UserName=pUserName;  
 LoginTime=pLoginTime;
 LastUse=pLoginTime;
 Host=pHost; 
+Drv=pD;
 }
 //-----------------------------------------------------------------------------------------------
 
@@ -74,5 +77,13 @@ return Host;
     public void setLastUse(Date LastUse)
     {
         this.LastUse = LastUse;
+    }
+
+    /**
+     * @return the Drv
+     */
+    public DriverGeneric getDrv()
+    {
+        return Drv;
     }
 }

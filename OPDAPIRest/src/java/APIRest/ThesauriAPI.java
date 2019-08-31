@@ -68,14 +68,14 @@ public ThesauriAPI()
 @Path("/ById/{ThesId}")
 public Response getThesById(@PathParam("ThesId") String ThesId, @Context HttpServletRequest request)
 {
-if (!IsConnected(request))    
+DriverGeneric sessOPD =IsConnected(request);     
+if (sessOPD==null)    
     return(returnUnathorize());
 if (!Valid(ThesId))
     return ErrorParam("{ThesId}");
 if (isLogDebug())
     Debug("getThesById="+ThesId);    
 try {
-DriverGeneric sessOPD = getSessOPD(request);
 PDThesaur Thes=new PDThesaur(sessOPD);
 Thes.Load(ThesId);
 ThesB f=ThesB.CreateThes(Thes);
@@ -98,7 +98,8 @@ return (Response.ok(f.getJSON()).build());
 @Produces(MediaType.APPLICATION_JSON)
 public Response Insert(String NewThes, @Context HttpServletRequest request)
 {
-if (!IsConnected(request))    
+DriverGeneric sessOPD =IsConnected(request);     
+if (sessOPD==null)    
     return(returnUnathorize());
 if (!Valid(NewThes))
     return ErrorParam("Body");
@@ -112,7 +113,6 @@ TB=ThesB.CreateThes(NewThes);
     return(returnErrorInput(Ex.getLocalizedMessage()));
     }
 try {
-DriverGeneric sessOPD = getSessOPD(request);
 PDThesaur Thes=new PDThesaur(sessOPD);
 TB.Assign(Thes);
 if (TB.getId()!=null && TB.getId().length()!=0)
@@ -139,7 +139,8 @@ return (returnOK("Creado="+Thes.getPDId()));
 @Path("/ById/{ThesId}")
 public Response UpdateById(@PathParam("ThesId") String ThesId, String UpdThes, @Context HttpServletRequest request)
 {
-if (!IsConnected(request))    
+DriverGeneric sessOPD =IsConnected(request);     
+if (sessOPD==null)    
     return(returnUnathorize());
 if (!Valid(ThesId))
     return ErrorParam("{ThesId]");
@@ -153,7 +154,6 @@ TB=ThesB.CreateThes(UpdThes);
     return(returnErrorInput(Ex.getLocalizedMessage()));
     }
 try {
-DriverGeneric sessOPD = getSessOPD(request);
 PDThesaur Thes=new PDThesaur(sessOPD);
 Thes.Load(ThesId);
 TB.Assign(Thes);
@@ -179,14 +179,14 @@ return (returnOK("Updated="+Thes.getPDId()));
 @Path("/SubThesById/{ThesId}")
 public Response getSubThesById(@PathParam("ThesId") String ThesId, @DefaultValue("0") @QueryParam("Initial") int Initial, @DefaultValue("100") @QueryParam("Final") int Final, @Context HttpServletRequest request)
 {
-if (!IsConnected(request))    
+DriverGeneric sessOPD =IsConnected(request);     
+if (sessOPD==null)    
     return(returnUnathorize());
 if (!Valid(ThesId))
     return ErrorParam("{ThesId]");
 if (isLogDebug())
     Debug("getSubFoldsbyId="+ThesId+ ",Initial="+Initial+ ",Final="+Final);    
 try {
-DriverGeneric sessOPD = getSessOPD(request);
 PDThesaur Fold=new PDThesaur(sessOPD);
 return (Response.ok(GenSubThesList(Fold, ThesId, Initial, Final)).build());
 } catch (Exception Ex)
@@ -225,14 +225,14 @@ return g.toJson(L);
 @Path("/ById/{ThesId}")
 public Response DeleteById(@PathParam("ThesId") String ThesId,@Context HttpServletRequest request)
 {
-if (!IsConnected(request))    
+DriverGeneric sessOPD =IsConnected(request);     
+if (sessOPD==null)    
     return(returnUnathorize());
 if (!Valid(ThesId))
     return ErrorParam("{ThesId]");
 if (isLogDebug())
     Debug("Thes DeleteById="+ThesId);
 try {
-DriverGeneric sessOPD = getSessOPD(request);
 PDThesaur Thes=new PDThesaur(sessOPD);
 Thes.Load(ThesId);
 Thes.delete();
@@ -256,7 +256,8 @@ return (returnOK("Deleted="+Thes.getPDId()));
 @Path("/Search")
 public Response Search(String QueryParams, @Context HttpServletRequest request)
 {
-if (!IsConnected(request))    
+DriverGeneric sessOPD =IsConnected(request);     
+if (sessOPD==null)    
     return(returnUnathorize());
 if (!Valid(QueryParams))
     return ErrorParam("Body");
@@ -270,7 +271,6 @@ RcvQuery = QueryJSON.CreateQuery(QueryParams);
     return(returnErrorInput(Ex.getLocalizedMessage()));
     }
 try {
-DriverGeneric sessOPD = getSessOPD(request);
 PDThesaur Fold=new PDThesaur(sessOPD);
 Cursor SearchFold = Fold.SearchSelect(RcvQuery.getQuery());
 return (Response.ok(genCursor(sessOPD, SearchFold, RcvQuery.getInitial(), RcvQuery.getFinal())).build());

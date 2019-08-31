@@ -18,6 +18,7 @@
  */
 package APIRest;
 
+import APIRest.beans.User;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
@@ -74,7 +75,10 @@ public Response Connect(String Credentials, @Context HttpServletRequest request)
 {
 if (isLogDebug())    
     Debug("Login="+Credentials);
-String Token=CanCreateSess(Credentials, request);
+User U=User.CreateUser(Credentials);
+if (U.getName()==null||U.getName().length()==0 || U.getPassword()==null||U.getPassword().length()==0)
+    return(ErrorParam("UserName-Password"));
+String Token=CanCreateSess(U, request);
 if (Token==null)
     return(returnUnathorize());
 return(NewOKSesion(Token));

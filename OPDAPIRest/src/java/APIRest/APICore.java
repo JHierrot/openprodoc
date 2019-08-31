@@ -37,6 +37,7 @@ import javax.ws.rs.core.Response;
 import prodoc.Cursor;
 import prodoc.DriverGeneric;
 import prodoc.PDException;
+import prodoc.PDLog;
 import prodoc.ProdocFW;
 import prodoc.Record;
 
@@ -50,9 +51,6 @@ private static boolean Started=false;
 protected static String ProdocProperRef=null;
 
 private final static Hashtable<String, CurrentSession> ListOPSess=new Hashtable();
-public final static String PRODOC_SESS="PRODOC_SESS";
-public final static String PRODOC_SESSID="PRODOC_SESSID";
-
 
 public static final String OK="OK";  
 public static final String SESSTOK="Token";
@@ -83,17 +81,16 @@ protected Response returnUnathorize()
 return(Response.status(Response.Status.UNAUTHORIZED).entity("{\"Res\":\"KO\",\"Msg\":\"Unauthorized\"}").build());    
 }
 //--------------------------------------------------------------------------
-protected String CanCreateSess(String Credentials, HttpServletRequest request)
+protected String CanCreateSess(User U, HttpServletRequest Req)
 {
 if (!Started) 
     StartFramework();
-User U=User.CreateUser(Credentials);
-if (U.getName()==null||U.getName().length()==0 || U.getPassword()==null||U.getPassword().length()==0)
-    return(null);
 try {
 DriverGeneric D=ProdocFW.getSession("PD", U.getName(), U.getPassword());
-setSessOPD(request, D);
-return(D.AuthGenJWT(U.getName(), U.getPassword()));
+String AuthGenJWT = D.AuthGenJWT(U.getName(), U.getPassword());
+CurrentSession CS=new CurrentSession(D.getUser().getName(), new Date(), Req.getRemoteHost(), D);
+getListOPSess().put(AuthGenJWT, CS);
+return(AuthGenJWT);
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
@@ -102,39 +99,40 @@ return(D.AuthGenJWT(U.getName(), U.getPassword()));
 }
 //--------------------------------------------------------------------------
 static final private String TOKPREF="Bearer ";
-protected boolean IsConnected(HttpServletRequest request)
+protected DriverGeneric IsConnected(HttpServletRequest Req)
 {
 if (!Started) 
     StartFramework();    
-DriverGeneric sessOPD = getSessOPD(request);
-if (sessOPD!=null)
-    return(true);
-Enumeration<String> headers = request.getHeaders("Authorization");
-while (headers.hasMoreElements()) 
+String Tok=ExtractTok(Req);
+if (Tok!=null &&getListOPSess().get(Tok)!=null && getListOPSess().get(Tok).getDrv().IsConnected())
     {
-    String Tok = headers.nextElement();
-    System.out.println("Tok="+Tok);
-    if (Tok.startsWith(TOKPREF))
-        {
-        Tok=Tok.substring(TOKPREF.length());
-        try {
-        DriverGeneric D=ProdocFW.getSession("PD", Tok, Tok);
-        setSessOPD(request, D);
-        return(true);
-        } catch (Exception Ex)
-            {
-            Ex.printStackTrace();
-            }  
-        }
+    getListOPSess().get(Tok).setLastUse(new Date());
+    return(getListOPSess().get(Tok).getDrv());
     }
-return(false);
+try {
+DriverGeneric D=ProdocFW.getSession("PD", Tok, Tok);
+CurrentSession CS=new CurrentSession(D.getUser().getName(), new Date(), Req.getRemoteHost(), D);
+getListOPSess().put(Tok, CS);
+return(D);
+} catch (Exception Ex)
+    {
+    PDLog.Error(Ex.getLocalizedMessage());
+    return(null);
+    }
 }
 //--------------------------------------------------------------------------
 Response CloseSession(HttpServletRequest request)
 {  
-if (IsConnected(request))  
+String Tok=ExtractTok(request);
+if (Tok!=null)    
     {
-    request.getSession(true).setAttribute(SESSTOK, null);
+    try {    
+    ProdocFW.freeSesion("PD", getListOPSess().get(Tok).getDrv());
+    } catch (Exception Ex)
+        {
+        PDLog.Error(Ex.getLocalizedMessage());
+        }
+    getListOPSess().remove(Tok);
     }
 return(returnOK("Closed"));
 }
@@ -230,40 +228,11 @@ return(ProdocProperRef);
 }
 //--------------------------------------------------------------
 /**
- *
- * @param Req
- * @param OPDSess
- */
-public static void setSessOPD(HttpServletRequest Req, DriverGeneric OPDSess) throws PDException
-{
-CurrentSession CS=new CurrentSession(OPDSess.getUser().getName(), new Date(), Req.getRemoteHost());
-String SesId=Long.toHexString(System.currentTimeMillis());
-getListOPSess().put(SesId, CS);
-Req.getSession(true).setAttribute(PRODOC_SESSID, SesId);
-Req.getSession().setAttribute(PRODOC_SESS, OPDSess);
-
-}
-//-----------------------------------------------------------------------------------------------
-/**
  * @return the ListOPSess
  */
-protected static Hashtable<String, CurrentSession> getListOPSess()
+public static Hashtable<String, CurrentSession> getListOPSess()
 {
 return ListOPSess;
-}
-//--------------------------------------------------------------
-/**
- *
- * @param Req
- * @return
- */
-public static DriverGeneric getSessOPD(HttpServletRequest Req)
-{
-try {    
-String SesId=(String)Req.getSession().getAttribute(PRODOC_SESSID);
-getListOPSess().get(SesId).setLastUse(new Date());    
-} catch (Exception Ex){}
-return (DriverGeneric)Req.getSession(true).getAttribute(PRODOC_SESS);
 }
 //--------------------------------------------------------------
 SimpleDateFormat formatterTS = new SimpleDateFormat();
@@ -326,4 +295,22 @@ protected Response ErrorParam(String Param)
 return(returnErrorInput("Empty Param:"+Param));    
 }
 //-------------------------------------------------------------------------
+
+private String ExtractTok(HttpServletRequest request)
+{
+Enumeration<String> headers = request.getHeaders("Authorization");
+while (headers.hasMoreElements()) 
+    {
+    String Tok = headers.nextElement();
+    System.out.println("Tok="+Tok);
+    if (Tok.startsWith(TOKPREF))
+        {
+        Tok=Tok.substring(TOKPREF.length());
+        return(Tok);
+        }
+    }
+return(null);
+}
+//-------------------------------------------------------------------------
+
 }

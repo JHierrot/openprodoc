@@ -74,14 +74,14 @@ public DocumentsAPI()
 @Path("/ById/{docId}")
 public Response getDocById(@PathParam("docId") String DocId, @Context HttpServletRequest request)
 {
-if (!IsConnected(request))    
+DriverGeneric sessOPD =IsConnected(request);     
+if (sessOPD==null)    
     return(returnUnathorize());
 if (!Valid(DocId))
     return ErrorParam("{docId}");
 if (isLogDebug())
     Debug("getDocById="+DocId);    
 try {
-DriverGeneric sessOPD = getSessOPD(request);
 PDDocs Doc=new PDDocs(sessOPD);
 Doc.LoadFull(DocId);
 DocB f=DocB.CreateDoc(Doc);
@@ -104,14 +104,14 @@ return (Response.ok(f.getJSON()).build());
 @Path("/ContentById/{docId}")
 public Response getDocContentById(@PathParam("docId") String DocId, @Context HttpServletRequest request)
 {
-if (!IsConnected(request))    
+DriverGeneric sessOPD =IsConnected(request);     
+if (sessOPD==null)    
     return(returnUnathorize());
 if (!Valid(DocId))
     return ErrorParam("{docId}");
 if (isLogDebug())
     Debug("getDocContentById="+DocId);    
 try {
-DriverGeneric sessOPD = getSessOPD(request);
 PDDocs Doc=new PDDocs(sessOPD);
 Doc.Load(DocId);
 PDMimeType M=new PDMimeType(sessOPD);
@@ -153,7 +153,8 @@ public Response Insert(@FormDataParam("Binary") InputStream uploadedInputStream,
                        @FormDataParam("Metadata") String NewDoc,
                        @Context HttpServletRequest request)
 {
-if (!IsConnected(request))    
+DriverGeneric sessOPD =IsConnected(request);     
+if (sessOPD==null)    
     return(returnUnathorize());
 if (!Valid(NewDoc))
     return ErrorParam("Body");
@@ -167,7 +168,6 @@ D=DocB.CreateDoc(NewDoc);
     return(returnErrorInput(Ex.getLocalizedMessage()));
     }
 try {
-DriverGeneric sessOPD = getSessOPD(request);
 PDDocs Doc=new PDDocs(sessOPD, D.getType());
 D.Assign(Doc);
 if (D.getId()!=null && D.getId().length()!=0)
@@ -203,7 +203,8 @@ public Response UpdateById(@PathParam("DocId") String DocId,
                        @FormDataParam("Binary") FormDataContentDisposition fileMetaData, 
                        @FormDataParam("Metadata") String UpdDoc, @Context HttpServletRequest request)
 {
-if (!IsConnected(request))    
+DriverGeneric sessOPD =IsConnected(request);     
+if (sessOPD==null)    
     return(returnUnathorize());
 if (!Valid(DocId))
     return ErrorParam("{DocId}");
@@ -211,7 +212,6 @@ if (!Valid(UpdDoc))
     return ErrorParam("Metadata");
 if (isLogDebug())
     Debug("Docs UpdateById="+DocId+"/"+UpdDoc);
-DriverGeneric sessOPD = getSessOPD(request);
 DocB D;
 try {
 D=DocB.CreateDoc(UpdDoc);
@@ -257,14 +257,14 @@ return (returnOK("Updated="+Doc.getPDId()));
 @Path("/ById/{DocId}")
 public Response DeleteById(@PathParam("DocId") String DocId,@Context HttpServletRequest request)
 {
-if (!IsConnected(request))    
+DriverGeneric sessOPD =IsConnected(request);     
+if (sessOPD==null)    
     return(returnUnathorize());
 if (!Valid(DocId))
     return ErrorParam("{DocId}");
 try {
 if (isLogDebug())
     Debug("Docs DeleteById="+DocId);
-DriverGeneric sessOPD = getSessOPD(request);
 PDDocs Doc=new PDDocs(sessOPD);
 Doc.Load(DocId);
 Doc.delete();
@@ -288,7 +288,8 @@ return (returnOK("Deleted="+Doc.getPDId()));
 @Path("/Search")
 public Response Search(String QueryParams, @Context HttpServletRequest request)
 {
-if (!IsConnected(request))    
+DriverGeneric sessOPD =IsConnected(request);     
+if (sessOPD==null)    
     return(returnUnathorize());
 if (!Valid(QueryParams))
     return ErrorParam("Body");
@@ -302,7 +303,6 @@ RcvQuery = QueryJSON.CreateQuery(QueryParams);
     return(returnErrorInput(Ex.getLocalizedMessage()));
     }
 try {
-DriverGeneric sessOPD = getSessOPD(request);
 PDDocs Doc=new PDDocs(sessOPD);
 Cursor SearchDoc = Doc.SearchSelect(RcvQuery.getQuery());
 return (Response.ok(genCursor(sessOPD, SearchDoc, RcvQuery.getInitial(), RcvQuery.getFinal())).build());

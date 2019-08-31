@@ -68,14 +68,14 @@ public FoldersAPI()
 @Path("/ById/{foldId}")
 public Response getFoldById(@PathParam("foldId") String FoldId, @Context HttpServletRequest request)
 {
-if (!IsConnected(request))    
+DriverGeneric sessOPD =IsConnected(request);     
+if (sessOPD==null)    
     return(returnUnathorize());
 if (!Valid(FoldId))
     return ErrorParam("{foldId}");
 if (isLogDebug())
     Debug("getFoldById="+FoldId);    
 try {
-DriverGeneric sessOPD = getSessOPD(request);
 PDFolders Fold=new PDFolders(sessOPD);
 Fold.LoadFull(FoldId);
 FolderB f=FolderB.CreateFolder(Fold);
@@ -98,14 +98,14 @@ return (Response.ok(f.getJSON()).build());
 @Path("/ByPath/{path:.*}")
 public Response getFoldByPath(@PathParam("path") String path, @Context HttpServletRequest request)
 {
-if (!IsConnected(request))    
+DriverGeneric sessOPD =IsConnected(request);     
+if (sessOPD==null)    
     return(returnUnathorize());
 if (!Valid(path))
     return ErrorParam("{path}");
 if (isLogDebug())
     Debug("getFoldByPath="+path);   
 try {
-DriverGeneric sessOPD = getSessOPD(request);
 PDFolders Fold=new PDFolders(sessOPD);
 String idPath = Fold.getIdPath("/"+path);
 Fold.LoadFull(idPath);
@@ -129,7 +129,8 @@ return (Response.ok(f.getJSON()).build());
 @Produces(MediaType.APPLICATION_JSON)
 public Response Insert(String NewFold, @Context HttpServletRequest request)
 {
-if (!IsConnected(request))    
+DriverGeneric sessOPD =IsConnected(request);     
+if (sessOPD==null)    
     return(returnUnathorize());
 if (!Valid(NewFold))
     return ErrorParam("Body");
@@ -143,7 +144,6 @@ f=FolderB.CreateFolder(NewFold);
 if (isLogDebug())
     Debug("NewFolder="+NewFold);
 try {
-DriverGeneric sessOPD = getSessOPD(request);
 PDFolders Fold=new PDFolders(sessOPD, f.getType());
 f.Assign(Fold);
 if (f.getId()!=null && f.getId().length()!=0)
@@ -172,7 +172,8 @@ return (returnOK("Created="+Fold.getPDId()));
 @Path("/ById/{foldId}")
 public Response UpdateById(@PathParam("foldId") String FoldId, String UpdFold,@Context HttpServletRequest request)
 {
-if (!IsConnected(request))    
+DriverGeneric sessOPD =IsConnected(request);     
+if (sessOPD==null)    
     return(returnUnathorize());
 if (!Valid(FoldId))
     return ErrorParam("{foldId}");
@@ -188,7 +189,6 @@ f=FolderB.CreateFolder(UpdFold);
     return(returnErrorInput(Ex.getLocalizedMessage()));
     }
 try {
-DriverGeneric sessOPD = getSessOPD(request);
 PDFolders Fold=new PDFolders(sessOPD);
 Fold.Load(FoldId);
 f.Assign(Fold);
@@ -214,7 +214,8 @@ return (returnOK("Updated="+Fold.getPDId()));
 @Path("/ByPath/{path:.*}")
 public Response UpdateByPath(@PathParam("path") String path, String UpdFold, @Context HttpServletRequest request)
 {
-if (!IsConnected(request))    
+DriverGeneric sessOPD =IsConnected(request);     
+if (sessOPD==null)    
     return(returnUnathorize());
 if (!Valid(path))
     return ErrorParam("{path}");
@@ -230,7 +231,6 @@ f=FolderB.CreateFolder(UpdFold);
     return(returnErrorInput(Ex.getLocalizedMessage()));
     }
 try {
-DriverGeneric sessOPD = getSessOPD(request);
 PDFolders Fold=new PDFolders(sessOPD);
 Fold.Load(Fold.getIdPath("/"+path));
 f.Assign(Fold);
@@ -256,14 +256,14 @@ return (returnOK("Updated="+Fold.getPDId()));
 @Path("/SubFoldersById/{foldId}")
 public Response getSubFoldsById(@PathParam("foldId") String FoldId, @DefaultValue("0") @QueryParam("Initial") int Initial, @DefaultValue("100") @QueryParam("Final") int Final, @Context HttpServletRequest request)
 {
-if (!IsConnected(request))    
+DriverGeneric sessOPD =IsConnected(request);     
+if (sessOPD==null)    
     return(returnUnathorize());
 if (!Valid(FoldId))
     return ErrorParam("{foldId}");
 if (isLogDebug())
     Debug("getSubFoldsById="+FoldId+ ",Initial="+Initial+ ",Final="+Final);    
 try {
-DriverGeneric sessOPD = getSessOPD(request);
 PDFolders Fold=new PDFolders(sessOPD);
 return (Response.ok(GenSubFoldersList(Fold, FoldId, Initial, Final)).build());
 } catch (Exception Ex)
@@ -286,14 +286,14 @@ return (Response.ok(GenSubFoldersList(Fold, FoldId, Initial, Final)).build());
 @Path("/SubFoldersByPath/{path:.*}")
 public Response getSubFoldsByPath(@PathParam("path") String Path, @DefaultValue("0") @QueryParam("Initial") int Initial,@DefaultValue("100") @QueryParam("Final") int Final, @Context HttpServletRequest request)
 {
-if (!IsConnected(request))    
+DriverGeneric sessOPD =IsConnected(request);     
+if (sessOPD==null)    
     return(returnUnathorize());
 if (!Valid(Path))
     return ErrorParam("{path}");
 if (isLogDebug())
     Debug("getSubFoldsByPath="+Path+ ",Initial="+Initial+ ",Final="+Final);    
 try {
-DriverGeneric sessOPD = getSessOPD(request);
 PDFolders Fold=new PDFolders(sessOPD);
 return (Response.ok(GenSubFoldersList(Fold, Fold.getIdPath("/"+Path), Initial, Final)).build());
 } catch (Exception Ex)
@@ -332,14 +332,14 @@ return g.toJson(L);
 @Path("/ById/{foldId}")
 public Response DeleteById(@PathParam("foldId") String FoldId, @Context HttpServletRequest request)
 {
-if (!IsConnected(request))    
+DriverGeneric sessOPD =IsConnected(request);     
+if (sessOPD==null)    
     return(returnUnathorize());
 if (!Valid(FoldId))
     return ErrorParam("{foldId}");
 try {
 if (isLogDebug())
     Debug("Fold DeleteById="+FoldId);
-DriverGeneric sessOPD = getSessOPD(request);
 PDFolders Fold=new PDFolders(sessOPD);
 Fold.Load(FoldId);
 Fold.delete();
@@ -362,14 +362,14 @@ return (returnOK("Deleted="+Fold.getPDId()));
 @Path("/ByPath/{path:.*}")
 public Response DeleteByPath(@PathParam("path") String path, @Context HttpServletRequest request)
 {
-if (!IsConnected(request))    
+DriverGeneric sessOPD =IsConnected(request);     
+if (sessOPD==null)    
     return(returnUnathorize());
 if (!Valid(path))
     return ErrorParam("{path}");
 try {
 if (isLogDebug())
     Debug("Fold DeleteByPath="+path);
-DriverGeneric sessOPD = getSessOPD(request);
 PDFolders Fold=new PDFolders(sessOPD);
 Fold.Load(Fold.getIdPath("/"+path));
 Fold.delete();
@@ -393,7 +393,8 @@ return (returnOK("Deleted="+Fold.getPDId()));
 @Path("/Search")
 public Response Search(String QueryParams, @Context HttpServletRequest request)
 {
-if (!IsConnected(request))    
+DriverGeneric sessOPD =IsConnected(request);     
+if (sessOPD==null)    
     return(returnUnathorize());
 if (!Valid(QueryParams))
     return ErrorParam("Body");
@@ -407,7 +408,6 @@ RcvQuery = QueryJSON.CreateQuery(QueryParams);
     return(returnErrorInput(Ex.getLocalizedMessage()));
     }
 try {
-DriverGeneric sessOPD = getSessOPD(request);
 PDFolders Fold=new PDFolders(sessOPD);
 Cursor SearchFold = Fold.SearchSelect(RcvQuery.getQuery());
 return (Response.ok(genCursor(sessOPD, SearchFold, RcvQuery.getInitial(), RcvQuery.getFinal())).build());

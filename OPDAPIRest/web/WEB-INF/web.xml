@@ -42,10 +42,15 @@
  Version 2 license, then the option applies only if the new code is
  made subject to such option by the copyright holder.
 -->
-<web-app xmlns="http://java.sun.com/xml/ns/javaee" version="3.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
-
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+    <servlet>
+        <servlet-name>Status</servlet-name>
+        <servlet-class>Status.Status</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Status</servlet-name>
+        <url-pattern>/Status</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
