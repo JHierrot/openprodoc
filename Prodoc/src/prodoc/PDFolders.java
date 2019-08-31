@@ -26,6 +26,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
 /**
  * Main public class that manages all the operations for Folders in OpenProdoc
  * @author jhierrot
@@ -1191,8 +1192,12 @@ if (r==null)
         }
     getObjCache().put(Ident, r);
     }
-if (r!=null)
-    assignValues(r);
+if (r==null)
+    PDExceptionFunc.GenPDException("Folder_do_not_exist",Ident);
+String ActACL=(String)r.getAttr(fACL).getValue();
+if (!getDrv().getUser().getAclList().containsKey(ActACL))
+    PDExceptionFunc.GenPDException("User_without_permissions_over_folder",Ident);
+assignValues(r);
 return(r);
 }
 //-------------------------------------------------------------------------

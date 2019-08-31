@@ -3363,6 +3363,19 @@ for (int i = 0; i < ListFolds.length; i++)
 return(ListDef);
 }
 //---------------------------------------------------------------------
+public boolean IsConnected()
+{
+try {
+PDServer s=new PDServer(this);
+Cursor all = s.getAll();
+CloseCursor(all);
+return(true);    
+} catch (Exception Ex)
+    {
+    return(false);
+    }
+}
+
 //***********************************************************************************
 class FilterOPDFiles implements FileFilter
 {

@@ -1547,15 +1547,14 @@ if (r==null) // maintained in cache only the "common" values, not the "under edi
         }
     getObjCache().put(Ident, r);
     }
+if (r==null)
+    PDExceptionFunc.GenPDException("Document_do_not_exist",Ident);
 String ActACL=(String)r.getAttr(fACL).getValue();
 if (!getDrv().getUser().getAclList().containsKey(ActACL))
-    {
     PDExceptionFunc.GenPDException("User_without_permissions_over_document",Ident);
-    }
 Attribute UsuBloq=r.getAttr(fLOCKEDBY);
 if (UsuBloq.getValue()!=null && ((String)UsuBloq.getValue()).length()!=0 && ((String)UsuBloq.getValue()).equalsIgnoreCase(getDrv().getUser().getName()))
-    {// locked by actual user, return in-edition metadata
-//    LoadAct=new Query(getTabNameVer(), getRecordStruct(), getConditions(), null);
+    {
     Conditions Cond=getConditions();
     Cond.addCondition(new Condition(fVERSION, Condition.cEQUAL, getDrv().getUser().getName()));
     Attribute Attr=r.getAttr(fDOCTYPE);
@@ -1568,8 +1567,7 @@ if (UsuBloq.getValue()!=null && ((String)UsuBloq.getValue()).length()!=0 && ((St
         getDrv().CloseCursor(Cur);
         }
     }
-if (r!=null)
-    assignValues(r);
+assignValues(r);
 if (PDLog.isDebug())
     PDLog.Debug("PDDocs.Load<");
 return(r);
