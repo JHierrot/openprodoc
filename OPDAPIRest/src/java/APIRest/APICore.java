@@ -126,16 +126,15 @@ return(D);
 Response CloseSession(HttpServletRequest request)
 {  
 String Tok=ExtractTok(request);
-if (Tok!=null)    
+if (Tok==null || !getListOPSess().containsKey(Tok)) 
+    return(returnErrorInput("No Session"));
+try {    
+ProdocFW.freeSesion("PD", getListOPSess().get(Tok).getDrv());
+} catch (Exception Ex)
     {
-    try {    
-    ProdocFW.freeSesion("PD", getListOPSess().get(Tok).getDrv());
-    } catch (Exception Ex)
-        {
-        PDLog.Error(Ex.getLocalizedMessage());
-        }
-    getListOPSess().remove(Tok);
+    PDLog.Error(Ex.getLocalizedMessage());
     }
+getListOPSess().remove(Tok);
 return(returnOK("Closed"));
 }
 //--------------------------------------------------------------------------

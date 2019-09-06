@@ -18,6 +18,7 @@
  */
 package APIRest;
 
+import APIRest.beans.DocB;
 import APIRest.beans.FolderB;
 import APIRest.beans.QueryJSON;
 import com.google.gson.Gson;
@@ -39,9 +40,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import prodoc.Cursor;
 import prodoc.DriverGeneric;
+import prodoc.PDDocs;
 import prodoc.PDException;
 import prodoc.PDFolders;
 import prodoc.PDLog;
+import prodoc.Record;
 
 /**
  * REST Web Service
@@ -311,6 +314,68 @@ return (Response.ok(GenSubFoldersList(Fold, Fold.getIdPath("/"+Path), Initial, F
     }
 }
 //-------------------------------------------------------------------------
+/**
+ * Retrieves representation of an instance of APIRest.FoldersAPI
+ * @param FoldId
+ * @param Initial
+ * @param Final
+ * @param request
+ * @return an instance of java.lang.String
+ */
+@GET
+@Produces(MediaType.APPLICATION_JSON)
+@Path("/ContDocsById/{foldId}")
+public Response getContDocsById(@PathParam("foldId") String FoldId, @DefaultValue("0") @QueryParam("Initial") int Initial, @DefaultValue("100") @QueryParam("Final") int Final, @Context HttpServletRequest request)
+{
+DriverGeneric sessOPD =IsConnected(request);     
+if (sessOPD==null)    
+    return(returnUnathorize());
+if (!Valid(FoldId))
+    return ErrorParam("{foldId}");
+if (PDLog.isDebug())
+    PDLog.Debug("getContDocsById="+FoldId+ ",Initial="+Initial+ ",Final="+Final);    
+try {
+PDFolders Fold=new PDFolders(sessOPD);
+return (Response.ok(GenContDocsList(Fold, FoldId, Initial, Final)).build());
+} catch (Exception Ex)
+    {
+    Ex.printStackTrace();
+    PDLog.Error(Ex.getLocalizedMessage());
+    return(returnErrorInternal(Ex.getLocalizedMessage()));
+    }
+}
+//-------------------------------------------------------------------------
+/**
+ * Retrieves representation of an instance of APIRest.FoldersAPI
+ * @param Path
+ * @param Initial
+ * @param Final
+ * @param request
+ * @return an instance of java.lang.String
+ */
+@GET
+@Produces(MediaType.APPLICATION_JSON)
+@Path("/ContDocsByPath/{path:.*}")
+public Response getContDocsByPath(@PathParam("path") String Path, @DefaultValue("0") @QueryParam("Initial") int Initial,@DefaultValue("100") @QueryParam("Final") int Final, @Context HttpServletRequest request)
+{
+DriverGeneric sessOPD =IsConnected(request);     
+if (sessOPD==null)    
+    return(returnUnathorize());
+if (!Valid(Path))
+    return ErrorParam("{path}");
+if (PDLog.isDebug())
+    PDLog.Debug("getContDocsByPath="+Path+ ",Initial="+Initial+ ",Final="+Final);    
+try {
+PDFolders Fold=new PDFolders(sessOPD);
+return (Response.ok(GenContDocsList(Fold, Fold.getIdPath("/"+Path), Initial, Final)).build());
+} catch (Exception Ex)
+    {
+    Ex.printStackTrace();
+    PDLog.Error(Ex.getLocalizedMessage());
+    return(returnErrorInternal(Ex.getLocalizedMessage()));
+    }
+}
+//-------------------------------------------------------------------------
 private String GenSubFoldersList(PDFolders Fold, String Id, int Initial, int Final) throws PDException
 {
 HashSet<String> ChildFolds = Fold.getListDirectDescendList(Id);
@@ -324,6 +389,28 @@ for (String ChildFold : ChildFolds)
         L.add(f);
     if (count>=Final)
         break;
+    }
+Gson g = new Gson();
+return g.toJson(L);
+}
+//-------------------------------------------------------------------------
+private String GenContDocsList(PDFolders Fold, String Id, int Initial, int Final) throws PDException
+{
+DriverGeneric Drv = Fold.getDrv();
+PDDocs Doc=new PDDocs(Fold.getDrv());
+Cursor ListDocs=Doc.getListContainedDocs(Id); 
+Record NextRec = Drv.NextRec(ListDocs);
+ArrayList<DocB> L=new ArrayList();
+int count=0;
+while (NextRec!=null)
+    {
+    Doc.LoadFull((String)NextRec.getAttr(Doc.fPDID).getValue());
+    DocB f=DocB.CreateDoc(Doc);
+    if (count++>=Initial)
+        L.add(f);
+    if (count>=Final)
+        break;
+    NextRec = Drv.NextRec(ListDocs);
     }
 Gson g = new Gson();
 return g.toJson(L);
