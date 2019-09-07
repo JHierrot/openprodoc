@@ -61,7 +61,6 @@ return "Tree Servlet";
 private String GenTree(HttpServletRequest Req) 
 {
 StringBuilder FolderTree=new StringBuilder(3000);
-//FolderTree.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 DriverGeneric PDSession=getSessOPD(Req);
 String FoldId=Req.getParameter("id");
 try {
@@ -80,7 +79,7 @@ for (Iterator it = Child.iterator(); it.hasNext();)
      if (ChildId.compareTo(PDFolders.ROOTFOLDER)==0)
         continue;
     PDFolders ChildFolder=new PDFolders(PDSession);
-    ChildFolder.Load(ChildId);
+    ChildFolder.LoadRefresh(ChildId);
     FolderTree.append("<item child=\"1\" id=\"").append(ChildFolder.getPDId()).append("\" text=\"").append(EscapeTree(ChildFolder.getTitle())).append("\"></item>");
     }
 } catch(Exception Ex)
