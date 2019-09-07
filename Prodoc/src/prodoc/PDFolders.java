@@ -1202,6 +1202,36 @@ return(r);
 }
 //-------------------------------------------------------------------------
 /**
+ * Loads the standard attributes of folder identified by Ident
+ * @param Ident Identifier of folder to load
+ * @return A record with the loaded values
+ * @throws PDException In any error
+ */
+public Record LoadRefresh(String Ident)  throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDFolders.LoadRefresh:"+Ident);
+AsignKey(Ident);
+Record r;
+Query LoadAct=new Query(getTabName(), getRecordStructPDFolder(),getConditions());
+Cursor Cur=getDrv().OpenCursor(LoadAct);
+try {
+r=getDrv().NextRec(Cur);
+} finally
+    {
+    getDrv().CloseCursor(Cur);
+    }
+getObjCache().put(Ident, r);
+if (r==null)
+    PDExceptionFunc.GenPDException("Folder_do_not_exist",Ident);
+String ActACL=(String)r.getAttr(fACL).getValue();
+if (!getDrv().getUser().getAclList().containsKey(ActACL))
+    PDExceptionFunc.GenPDException("User_without_permissions_over_folder",Ident);
+assignValues(r);
+return(r);
+}
+//-------------------------------------------------------------------------
+/**
  * Load to memory all the elements of a Folder, including all the inherited attributes and multivalued
  * @param Ident Identifier (PDId) of Folder
  * @return a record with ALL the Attributes of the Folder type
