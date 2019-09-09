@@ -2138,14 +2138,15 @@ if (PDLog.isDebug())
     PDLog.Debug("PDDocs.LoadDeleted>:"+DocTypename+"/"+Ident);
 Conditions Cond=new Conditions();
 Cond.addCondition(new Condition(fPDID, Condition.cEQUAL, Ident));
-Cond.addCondition(new Condition(fVERSION, Condition.cEQUAL, fSTATUS_LASTDEL));
+Cond.addCondition(new Condition(fSTATUS, Condition.cEQUAL, fSTATUS_LASTDEL));
 Record r;
 Query LoadAct = new Query(getTabNameVer(DocTypename), getRecordStruct(), Cond, null);
 Cursor Cur = getDrv().OpenCursor(LoadAct);
 r=getDrv().NextRec(Cur);
 getDrv().CloseCursor(Cur);
-if (r!=null)
-    assignValues(r);
+if (r==null)
+    return(r);
+assignValues(r);
 getTypeDefs();
 if (PDLog.isDebug())
    PDLog.Debug("PDDocs.LoadDeleted<:"+DocTypename+"/"+Ident);
