@@ -178,7 +178,7 @@ if (D.getIdparent()!=null && D.getIdparent().length()!=0)
 Doc.setName(fileMetaData.getFileName());
 Doc.setStream(uploadedInputStream);
 Doc.insert();
-return (returnOK("Creado="+Doc.getPDId()));
+return (returnOK("Created="+Doc.getPDId()));
 } catch (Exception Ex)
     {
     Ex.printStackTrace();

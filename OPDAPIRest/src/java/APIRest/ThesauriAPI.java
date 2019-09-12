@@ -119,7 +119,7 @@ TB.Assign(Thes);
 if (TB.getId()!=null && TB.getId().length()!=0)
     Thes.setPDId(TB.getId());
 Thes.insert();
-return (returnOK("Creado="+Thes.getPDId()));
+return (returnOK("Created="+Thes.getPDId()));
 } catch (Exception Ex)
     {
     Ex.printStackTrace();

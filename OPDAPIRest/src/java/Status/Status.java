@@ -6,7 +6,8 @@
 package Status;
 
 import APIRest.APICore;
-import APIRest.beans.CurrentSession;
+import Sessions.CurrentSession;
+import Sessions.PoolSessions;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Hashtable;
@@ -48,16 +49,17 @@ out.println("</head>");
 out.println("<body>");
 out.println("<h2>OpenProdoc API REST Current Connections</h2>");
 out.println(" <table ><tr><th>Host</th><th>User</th><th>Logged</th><th>Last Use</th></tr>");
-Hashtable<String, CurrentSession> listOPSess = APICore.getListOPSess();
-for (Map.Entry<String, CurrentSession> entry : listOPSess.entrySet())
+PoolSessions.InitList();
+CurrentSession CS=null;
+CS=PoolSessions.NextList();
+while (CS!=null)
     {
-    out.println("<tr>");      
-    CurrentSession CS = entry.getValue();
     out.println("<td>"+CS.getHost()+"</td>");
     out.println("<td>"+CS.getUserName()+"</td>");
     out.println("<td>"+CS.getLoginTime()+"</td>");
     out.println("<td>"+CS.getLastUse()+"</td>");
-    out.println("</tr>");      
+    out.println("</tr>");   
+    CS=PoolSessions.NextList();
     }
 out.println("</table>");      
 out.println("</body>");

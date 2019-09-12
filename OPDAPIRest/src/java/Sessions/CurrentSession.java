@@ -16,7 +16,7 @@
  * author: Joaquin Hierro      2019
  * 
  */
-package APIRest.beans;
+package Sessions;
 
 import java.util.Date;
 import prodoc.DriverGeneric;

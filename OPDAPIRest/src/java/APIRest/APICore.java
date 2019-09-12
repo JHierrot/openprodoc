@@ -18,21 +18,17 @@
  */
 package APIRest;
 
-import APIRest.beans.CurrentSession;
+import Sessions.CurrentSession;
 import APIRest.beans.Rec;
 import APIRest.beans.User;
+import Sessions.PoolSessions;
+import static Sessions.PoolSessions.getProdocProperRef;
 import com.google.gson.Gson;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
 import prodoc.Cursor;
@@ -48,11 +44,6 @@ import prodoc.Record;
  */
 public class APICore
 {
-private static boolean Started=false;
-protected static String ProdocProperRef=null;
-
-private final static Hashtable<String, CurrentSession> ListOPSess=new Hashtable();
-
 public static final String OK="OK";  
 public static final String SESSTOK="Token";
 
@@ -84,14 +75,12 @@ return(Response.status(Response.Status.UNAUTHORIZED).entity("{\"Res\":\"KO\",\"M
 //--------------------------------------------------------------------------
 protected String CanCreateSess(User U, HttpServletRequest Req)
 {
-if (!Started) 
-    StartFramework();
 try {
+StartFramework();
 DriverGeneric D=ProdocFW.getSession("PD", U.getName(), U.getPassword());
-String AuthGenJWT = D.AuthGenJWT(U.getName(), U.getPassword());
 CurrentSession CS=new CurrentSession(D.getUser().getName(), new Date(), Req.getRemoteHost(), D);
-getListOPSess().put(AuthGenJWT, CS);
-return(AuthGenJWT);
+PoolSessions.AddSession(D.getToken(), CS);
+return(D.getToken());
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
@@ -99,22 +88,40 @@ return(AuthGenJWT);
     return(null);
     }
 }
+//-------------------------------------------------------------------------
+private static boolean Started=false;
+
+static synchronized private void StartFramework()
+{
+if (Started)   
+    return;
+try {
+ProdocFW.InitProdoc("PD", getProdocProperRef());    
+} catch (Exception Ex)
+    {
+    Ex.printStackTrace();
+    }
+Started=true;
+}
+
 //--------------------------------------------------------------------------
 static final private String TOKPREF="Bearer ";
 protected DriverGeneric IsConnected(HttpServletRequest Req)
-{
-if (!Started) 
-    StartFramework();    
+{    
+StartFramework();
 String Tok=ExtractTok(Req);
-if (Tok!=null &&getListOPSess().get(Tok)!=null && getListOPSess().get(Tok).getDrv().IsConnected())
+if (Tok==null)
+    return(null);
+CurrentSession CS=PoolSessions.GetSession(Tok);
+if (CS!=null)
     {
-    getListOPSess().get(Tok).setLastUse(new Date());
-    return(getListOPSess().get(Tok).getDrv());
+    PoolSessions.GetSession(Tok).setLastUse(new Date());
+    return(PoolSessions.GetSession(Tok).getDrv());
     }
 try {
 DriverGeneric D=ProdocFW.getSession("PD", Tok, Tok);
-CurrentSession CS=new CurrentSession(D.getUser().getName(), new Date(), Req.getRemoteHost(), D);
-getListOPSess().put(Tok, CS);
+CS=new CurrentSession(D.getUser().getName(), new Date(), Req.getRemoteHost(), D);
+PoolSessions.AddSession(Tok, CS);
 return(D);
 } catch (Exception Ex)
     {
@@ -126,86 +133,10 @@ return(D);
 Response CloseSession(HttpServletRequest request)
 {  
 String Tok=ExtractTok(request);
-if (Tok==null || !getListOPSess().containsKey(Tok)) 
+if (Tok==null || PoolSessions.GetSession(Tok)==null) 
     return(returnErrorInput("No Session"));
-try {    
-ProdocFW.freeSesion("PD", getListOPSess().get(Tok).getDrv());
-} catch (Exception Ex)
-    {
-    PDLog.Error(Ex.getLocalizedMessage());
-    }
-getListOPSess().remove(Tok);
+PoolSessions.DelSession(Tok);
 return(returnOK("Closed"));
-}
-//--------------------------------------------------------------------------
-static synchronized private void StartFramework()
-{
-if (Started)   
-    return;
-try {
-ProdocFW.InitProdoc("PD", getProdocProperRef());    
-} catch (Exception Ex)
-    {
-    Ex.printStackTrace();
-    }
-SessCleaner  SC=new SessCleaner(); 
-SC.start();
-Started=true;
-}
-//--------------------------------------------------------------------------
-public static String getProdocProperRef() throws Exception
-{
-if (ProdocProperRef==null)
-    {
-    InputStream Is=null;    
-    File f=new File("../conf/Prodoc.properties");
-    System.out.println("OpenProdoc Properties 1=["+f.getAbsolutePath()+"]");    
-    if (f.exists())
-        {
-        ProdocProperRef=f.getAbsolutePath();    
-        return(ProdocProperRef);
-        }
-    f=new File("conf/Prodoc.properties");
-System.out.println("OpenProdoc Properties 2=["+f.getAbsolutePath()+"]");    
-    if (f.exists())
-        {
-        ProdocProperRef=f.getAbsolutePath();    
-        return(ProdocProperRef);
-        }
-    String Path=System.getProperty("user.home");    
-System.out.println("OpenProdoc Properties 3=["+Path+"]");    
-    try {
-    Is  = new FileInputStream(Path+File.separator+"OPDWeb.properties");        
-    } catch (Exception ex)
-        {
-        Is=null;    
-        }
-    if (Is==null)
-        {
-        Path=System.getenv("OPDWeb");
- System.out.println("OpenProdoc Properties 4=["+Path+"]");    
-       try {
-        Is  = new FileInputStream(Path+File.separator+"OPDWeb.properties");
-        } catch (Exception ex)
-            {
-            Is=null;    
-            }
-        }
-    Properties p= new Properties(); // TODO: CAMBIAR DOC apunta a OPEWEB , no properties y jdbc en path. Interfaz administración tareas ingles y 't''
-    p.load(Is);
-    Is.close();
-    ProdocProperRef=p.getProperty("OPDConfig");
-    }
-System.out.println("ProdocProperRef=["+ProdocProperRef+"]");
-return(ProdocProperRef);
-}
-//--------------------------------------------------------------
-/**
- * @return the ListOPSess
- */
-public static Hashtable<String, CurrentSession> getListOPSess()
-{
-return ListOPSess;
 }
 //--------------------------------------------------------------
 SimpleDateFormat formatterTS = new SimpleDateFormat();
@@ -284,50 +215,4 @@ while (headers.hasMoreElements())
 return(null);
 }
 //-------------------------------------------------------------------------
-//***********************************************************************
-static private class SessCleaner extends Thread  
-{
-static private final long TIMEOUT=5*60*1000;   
-
-public SessCleaner()
-{
-super();
-setName("SessCleaner");
-}
-/**
- * 
- */
-@Override 
-public void run() 
-{
-while (true)
-    {    
-    Hashtable<String, CurrentSession> listOPSess = getListOPSess();
-    for (Map.Entry<String, CurrentSession> entry : listOPSess.entrySet())
-        {
-        CurrentSession CS = entry.getValue();
-        if ((System.currentTimeMillis()-CS.getLastUse().getTime())>TIMEOUT)  
-            {
-            try{
-            ProdocFW.freeSesion("PD", CS.getDrv());
-            } catch (Exception Ex)
-                {
-                PDLog.Error(Ex.getLocalizedMessage());
-                }
-            getListOPSess().remove(entry.getKey());
-            if (PDLog.isDebug())
-                PDLog.Debug("Autodesconnect:"+CS.getHost()+"/"+CS.getUserName());
-            }
-        }
-        try {
-    Thread.sleep(TIMEOUT);
-    } catch (InterruptedException e) 
-        {
-        }
-
-    }
-}
-//-------------------------------------------------------------------------
-}
-//***********************************************************************
 }
