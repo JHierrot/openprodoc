@@ -20,6 +20,8 @@
 package OpenProdocServ;
 
 import OpenProdocUI.SParent;
+import Sessions.CurrentSession;
+import Sessions.PoolSessions;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
@@ -53,18 +55,20 @@ PrintWriter out = response.getWriter();
 StringBuilder Resp=new StringBuilder(3000);
 Resp.append("<rows>");
 try {
-Iterator<CurrentSession> ListSess = getListOPSess().values().iterator();
+PoolSessions.InitList();
 int i=0;
 SimpleDateFormat formatterTS = new SimpleDateFormat(FORMATTS);
-while (ListSess.hasNext())
+CurrentSession CS=null;
+CS=PoolSessions.NextList();
+while (CS!=null)
     {
-    CurrentSession Sess = ListSess.next();
     Resp.append("<row id=\"").append(i++).append("\">");
-    Resp.append("<cell>").append(Sess.getHost()).append("</cell>");
-    Resp.append("<cell>").append(Sess.getUserName()).append("</cell>");
-    Resp.append("<cell>").append(formatterTS.format(Sess.getLoginTime())).append("</cell>");
-    Resp.append("<cell>").append(formatterTS.format(Sess.getLastUse())).append("</cell>");
+    Resp.append("<cell>").append(CS.getHost()).append("</cell>");
+    Resp.append("<cell>").append(CS.getUserName()).append("</cell>");
+    Resp.append("<cell>").append(formatterTS.format(CS.getLoginTime())).append("</cell>");
+    Resp.append("<cell>").append(formatterTS.format(CS.getLastUse())).append("</cell>");
     Resp.append("</row>");
+    CS=PoolSessions.NextList();
     }
 Resp.append("</rows>");
 } catch (Exception ex)

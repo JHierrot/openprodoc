@@ -19,7 +19,8 @@
 
 package OpenProdocUI;
 
-import OpenProdocServ.CurrentSession;
+import Sessions.CurrentSession;
+import Sessions.PoolSessions;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -54,7 +55,6 @@ import prodoc.PDRepository;
 import prodoc.PDRoles;
 import prodoc.PDThesaur;
 import prodoc.PDUser;
-import prodoc.ProdocFW;
 import prodoc.Record;
 
 
@@ -101,12 +101,10 @@ public final static String SD_Ord="SD_Ord";
 public final static String SD_Rec="SD_Rec";
 public final static String SD_OperComp="SD_OperComp";
 public final static String SD_FTQ="SD_FTQ";
-public final static String PRODOC_SESS="PRODOC_SESS";
+//public final static String PRODOC_SESS="PRODOC_SESS";
 public final static String PRODOC_SESSID="PRODOC_SESSID";
 
 protected static boolean OPDFWLoaded=false;
-
-private final static Hashtable<String, CurrentSession> ListOPSess=new Hashtable();
 
 /** Initializes the servlet.
  * @param config 
@@ -607,27 +605,26 @@ return(Cond);
  */
 public static DriverGeneric getSessOPD(HttpServletRequest Req)
 {
-try {    
+
 String SesId=(String)Req.getSession().getAttribute(PRODOC_SESSID);
-getListOPSess().get(SesId).setLastUse(new Date());    
-} catch (Exception Ex){}
-return (DriverGeneric)Req.getSession(true).getAttribute(PRODOC_SESS);
+if (SesId!=null)
+    {
+    PoolSessions.GetSession(SesId).setLastUse(new Date());
+    return(PoolSessions.GetSession(SesId).getDrv());
+    }
+return (null);
 }
 //--------------------------------------------------------------
 public static void ClearSessOPD(HttpSession HttpSes)
 {
 try {
-DriverGeneric OPDSess = (DriverGeneric)HttpSes.getAttribute(PRODOC_SESS);
-if (OPDSess!=null)
-    ProdocFW.freeSesion(getConnector(), OPDSess);
 String SesId=(String)HttpSes.getAttribute(PRODOC_SESSID);
 if (SesId!=null)
-    getListOPSess().remove(SesId);
+    PoolSessions.DelSession(SesId);
 } catch (Exception Ex) 
     {Ex.printStackTrace();
     }
 HttpSes.setAttribute(PRODOC_SESSID, null);
-HttpSes.setAttribute(PRODOC_SESS, null);
 }
 //--------------------------------------------------------------
 /**
@@ -635,18 +632,11 @@ HttpSes.setAttribute(PRODOC_SESS, null);
  * @param Req
  * @param OPDSess
  */
-public static void setSessOPD(HttpServletRequest Req, DriverGeneric OPDSess)
+public static void setSessOPD(HttpServletRequest Req, DriverGeneric OPDSess) throws PDException
 {
-String UN=""; 
-try {
-UN=OPDSess.getUser().getName();
-} catch (Exception Ex) 
-    {}
-CurrentSession CS=new CurrentSession(UN, new Date(), Req.getRemoteHost());
-String SesId=Long.toHexString(System.currentTimeMillis());
-        getListOPSess().put(SesId, CS);
-Req.getSession().setAttribute(PRODOC_SESSID, SesId);
-Req.getSession().setAttribute(PRODOC_SESS, OPDSess);
+CurrentSession CS=new CurrentSession(OPDSess.getUser().getName(), new Date(), Req.getRemoteHost(), OPDSess);
+PoolSessions.AddSession(CS.getDrv().getToken(), CS);
+Req.getSession().setAttribute(PRODOC_SESSID, CS.getDrv().getToken());
 }
 //--------------------------------------------------------------
 /**
@@ -1794,14 +1784,6 @@ for (Iterator iterator = listDirectDescendList.iterator(); iterator.hasNext();)
     CalcOps(Ops,(String)iterator.next(), LocalSess, Level+1 );    
     }
 return(Ops);
-}
-//-----------------------------------------------------------------------------------------------
-/**
- * @return the ListOPSess
- */
-protected static Hashtable<String, CurrentSession> getListOPSess()
-{
-return ListOPSess;
 }
 //-----------------------------------------------------------------------------------------------
 }
