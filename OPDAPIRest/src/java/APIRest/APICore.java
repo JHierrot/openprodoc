@@ -22,13 +22,16 @@ import Sessions.CurrentSession;
 import APIRest.beans.Rec;
 import APIRest.beans.User;
 import Sessions.PoolSessions;
-import static Sessions.PoolSessions.getProdocProperRef;
 import com.google.gson.Gson;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
 import prodoc.Cursor;
@@ -46,6 +49,7 @@ public class APICore
 {
 public static final String OK="OK";  
 public static final String SESSTOK="Token";
+protected static String ProdocProperRef=null;
 
 //--------------------------------------------------------------------------
 protected Response returnOK(String Msg)
@@ -213,6 +217,53 @@ while (headers.hasMoreElements())
         }
     }
 return(null);
+}
+//-------------------------------------------------------------------------
+public static String getProdocProperRef() throws Exception
+{
+if (ProdocProperRef==null)
+    {
+    InputStream Is=null;    
+    File f=new File("../conf/Prodoc.properties");
+    System.out.println("OpenProdoc Properties 1=["+f.getAbsolutePath()+"]");    
+    if (f.exists())
+        {
+        ProdocProperRef=f.getAbsolutePath();    
+        return(ProdocProperRef);
+        }
+    f=new File("conf/Prodoc.properties");
+System.out.println("OpenProdoc Properties 2=["+f.getAbsolutePath()+"]");    
+    if (f.exists())
+        {
+        ProdocProperRef=f.getAbsolutePath();    
+        return(ProdocProperRef);
+        }
+    String Path=System.getProperty("user.home");    
+System.out.println("OpenProdoc Properties 3=["+Path+"]");    
+    try {
+    Is  = new FileInputStream(Path+File.separator+"OPDWeb.properties");        
+    } catch (Exception ex)
+        {
+        Is=null;    
+        }
+    if (Is==null)
+        {
+        Path=System.getenv("OPDWeb");
+ System.out.println("OpenProdoc Properties 4=["+Path+"]");    
+       try {
+        Is  = new FileInputStream(Path+File.separator+"OPDWeb.properties");
+        } catch (Exception ex)
+            {
+            Is=null;    
+            }
+        }
+    Properties p= new Properties(); // TODO: CAMBIAR DOC apunta a OPEWEB , no properties y jdbc en path. Interfaz administración tareas ingles y 't''
+    p.load(Is);
+    Is.close();
+    ProdocProperRef=p.getProperty("OPDConfig");
+    }
+System.out.println("ProdocProperRef=["+ProdocProperRef+"]");
+return(ProdocProperRef);
 }
 //-------------------------------------------------------------------------
 }

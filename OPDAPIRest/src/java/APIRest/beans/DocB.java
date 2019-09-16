@@ -223,13 +223,15 @@ if (getACL()!=null && getACL().length()!=0)
     Doc.setACL(getACL());
 if (getTitle()!=null && getTitle().length()!=0)
     Doc.setTitle(getTitle());
-Doc.setParentId(getIdparent());
+if (getIdparent()!=null && getIdparent().length()!=0)
+    Doc.setParentId(getIdparent());
 if (getMimeType()!=null && getMimeType().length()!=0)
     {
     PDMimeType M=new PDMimeType(Doc.getDrv());
     Doc.setMimeType(M.Mime2Ext(getMimeType()));
     }
-Doc.setDocDate(getDocDate());
+if (getDocDate()!=null)
+    Doc.setDocDate(getDocDate());
 ArrayList<Attr> listAttr = getListAttr();
 Record recSum = Doc.getRecSum();
 for (int i = 0; i < listAttr.size(); i++)

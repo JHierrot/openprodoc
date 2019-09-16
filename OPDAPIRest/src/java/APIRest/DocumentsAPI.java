@@ -232,6 +232,8 @@ if (D.getId()!=null && D.getId().length()!=0)
 if (D.getIdparent()!=null && D.getIdparent().length()!=0)
     Doc.setParentId(D.getIdparent());
 Doc.setName(fileMetaData.getFileName());
+PDMimeType M=new PDMimeType(sessOPD);
+Doc.setMimeType(M.SolveName(fileMetaData.getFileName()));
 Doc.setStream(uploadedInputStream);
 Doc.update();
 Doc.Checkin(D.getVerLabel());

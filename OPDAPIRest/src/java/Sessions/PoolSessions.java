@@ -5,15 +5,9 @@
  */
 package Sessions;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Properties;
-import prodoc.DriverGeneric;
 import prodoc.PDLog;
 import prodoc.ProdocFW;
 
@@ -24,9 +18,8 @@ import prodoc.ProdocFW;
 public class PoolSessions
 {
 private final static Hashtable<String, CurrentSession> ListOPSess=new Hashtable();
-static private long TIMEOUT=5*60*1000;   
+static private long TIMEOUT=10*60*1000;   
 private static boolean Started=false;
-protected static String ProdocProperRef=null;
 private static Enumeration<CurrentSession> ListCS=null;
 
 //-------------------------------------------------------------------------
@@ -80,63 +73,10 @@ if (PDLog.isDebug())
 return(true);
 }
 //--------------------------------------------------------------------------
-public static String getProdocProperRef() throws Exception
-{
-if (ProdocProperRef==null)
-    {
-    InputStream Is=null;    
-    File f=new File("../conf/Prodoc.properties");
-    System.out.println("OpenProdoc Properties 1=["+f.getAbsolutePath()+"]");    
-    if (f.exists())
-        {
-        ProdocProperRef=f.getAbsolutePath();    
-        return(ProdocProperRef);
-        }
-    f=new File("conf/Prodoc.properties");
-System.out.println("OpenProdoc Properties 2=["+f.getAbsolutePath()+"]");    
-    if (f.exists())
-        {
-        ProdocProperRef=f.getAbsolutePath();    
-        return(ProdocProperRef);
-        }
-    String Path=System.getProperty("user.home");    
-System.out.println("OpenProdoc Properties 3=["+Path+"]");    
-    try {
-    Is  = new FileInputStream(Path+File.separator+"OPDWeb.properties");        
-    } catch (Exception ex)
-        {
-        Is=null;    
-        }
-    if (Is==null)
-        {
-        Path=System.getenv("OPDWeb");
- System.out.println("OpenProdoc Properties 4=["+Path+"]");    
-       try {
-        Is  = new FileInputStream(Path+File.separator+"OPDWeb.properties");
-        } catch (Exception ex)
-            {
-            Is=null;    
-            }
-        }
-    Properties p= new Properties(); // TODO: CAMBIAR DOC apunta a OPEWEB , no properties y jdbc en path. Interfaz administración tareas ingles y 't''
-    p.load(Is);
-    Is.close();
-    ProdocProperRef=p.getProperty("OPDConfig");
-    }
-System.out.println("ProdocProperRef=["+ProdocProperRef+"]");
-return(ProdocProperRef);
-}
-//-------------------------------------------------------------------------
 static synchronized private void StartFramework()
 {
 if (Started)   
     return;
-//try {
-//ProdocFW.InitProdoc("PD", getProdocProperRef());    
-//} catch (Exception Ex)
-//    {
-//    Ex.printStackTrace();
-//    }
 SessCleaner  SC=new SessCleaner(); 
 SC.start();
 Started=true;
