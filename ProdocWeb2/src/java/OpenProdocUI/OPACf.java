@@ -19,6 +19,7 @@
 
 package OpenProdocUI;
 
+import Sessions.CurrentSession;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -132,7 +133,7 @@ DriverGeneric LocalSess=getSessOPD(Req);
 if (LocalSess==null)
     {
     LocalSess=ProdocFW.getSession(getConnector(), ConfOPAC.getUser(), ConfOPAC.getPass()); // just for translation   
-    setSessOPD(Req, LocalSess);
+    setSessOPD(Req, LocalSess, CurrentSession.Mode.OPAC);
     }
 if (OPACs.containsKey(IdOPAC))
     out.println(OPACs.get(IdOPAC));   

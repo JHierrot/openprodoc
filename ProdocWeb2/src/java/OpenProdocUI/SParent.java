@@ -632,9 +632,9 @@ HttpSes.setAttribute(PRODOC_SESSID, null);
  * @param Req
  * @param OPDSess
  */
-public static void setSessOPD(HttpServletRequest Req, DriverGeneric OPDSess) throws PDException
+public static void setSessOPD(HttpServletRequest Req, DriverGeneric OPDSess, CurrentSession.Mode M) throws PDException
 {
-CurrentSession CS=new CurrentSession(OPDSess.getUser().getName(), new Date(), Req.getRemoteHost(), OPDSess);
+CurrentSession CS=new CurrentSession(OPDSess.getUser().getName(), new Date(), Req.getRemoteHost(), OPDSess, M);
 PoolSessions.AddSession(CS.getDrv().getToken(), CS);
 Req.getSession().setAttribute(PRODOC_SESSID, CS.getDrv().getToken());
 }

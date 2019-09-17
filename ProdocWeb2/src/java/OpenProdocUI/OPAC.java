@@ -19,8 +19,7 @@
 
 package OpenProdocUI;
 
-import static OpenProdocUI.SParent.getProdocProperRef;
-import static OpenProdocUI.SParent.setSessOPD;
+import Sessions.CurrentSession;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -144,7 +143,7 @@ if (LocalSess==null)
     else if(PDLog.isDebug())
         PDLog.Debug("OPACUser: "+ConfOPAC.getUser());        
     LocalSess=ProdocFW.getSession(getConnector(), ConfOPAC.getUser(), ConfOPAC.getPass()); // just for translation   
-    setSessOPD(Req, LocalSess);
+    setSessOPD(Req, LocalSess, CurrentSession.Mode.OPAC);
     }
 if (OPACs.containsKey(IdOPAC))
     out.println(OPACs.get(IdOPAC));   

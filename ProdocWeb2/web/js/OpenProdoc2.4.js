@@ -333,7 +333,7 @@ var WinST=myWins.createWindow({
 id:"Status",
 left:20,
 top:1,
-width:1000,
+width:1100,
 height:500,
 center:true,
 modal:true,
@@ -344,13 +344,13 @@ var SL=WinST.attachLayout('2U');
 SL.cells("a").setText("Status");
 var FormStatus=SL.cells("a").attachForm();
 SL.cells("b").setText("Sessions");
-SL.cells("b").setWidth(360);
+SL.cells("b").setWidth(400);
 var STGrid=SL.cells("b").attachGrid();
-STGrid.setHeader("Host,User,TimeLogged, LastUse");
-STGrid.setInitWidths("60,60,120,*");
-STGrid.setColAlign("left,left,left,left");
-STGrid.setColTypes("ro,ro,ro,ro");
-STGrid.setColSorting("str,str,str,str");
+STGrid.setHeader("Host,Mode,User,TimeLogged, LastUse");
+STGrid.setInitWidths("80,30,60,120,*");
+STGrid.setColAlign("left,left,left,left,left");
+STGrid.setColTypes("ro,ro,ro,ro,ro");
+STGrid.setColSorting("str,str,str,str,str");
 STGrid.init();
 STGrid.load("ListLogedUsers");
 FormStatus.loadStruct("Status", function(){

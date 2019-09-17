@@ -43,6 +43,14 @@ import javax.crypto.spec.SecretKeySpec;
  */
 abstract public class DriverGeneric
 {
+
+    /**
+     * @return the Token
+     */
+    public String getToken()
+    {
+        return Token;
+    }
 /**
  * Url of the connection
  */
@@ -220,6 +228,8 @@ private TreeMap<String, PDTasksDefEvent> AllTaskNoTrans=null;
  * Connector for FullText indexing
  */
 protected static FTConnector FTConn=null;
+
+private String Token="";
 /**
  * Defualt constructor
  * @param pURL    url of database or OPD server when remote
@@ -1504,6 +1514,7 @@ if (!userName.equalsIgnoreCase("Install"))
             PDExceptionFunc.GenPDException("Inactive_User", userName);
         AuthGeneric Auth=getAuthentic(getUser().getValidation());
         Auth.Authenticate(userName, Password);
+        Token=genJWT(userName);
         }
     getUser().LoadAll(userName);
     getPDCust().Load(getUser().getCustom());
@@ -1518,18 +1529,20 @@ if (PDLog.isDebug())
 }
 //---------------------------------------------------------------------------
 private static final int ONEDAY=86400000;
-public String AuthGenJWT(String userName, String Password) throws PDException
+//public String AuthGenJWT(String userName, String Password) throws PDException
+//{
+////AuthGeneric Auth=getAuthentic(getUser().getValidation());
+////Auth.Authenticate(userName, Password);
+//PDServer S=new PDServer(this);
+//S.Load("Prodoc");
+//return(genJWT(S.getKey(), userName));    
+//}
+//---------------------------------------------------------------------------
+private String genJWT(String UserName) throws PDException
 {
-AuthGeneric Auth=getAuthentic(getUser().getValidation());
-Auth.Authenticate(userName, Password);
 PDServer S=new PDServer(this);
 S.Load("Prodoc");
-return(genJWT(S.getKey(), userName));    
-}
-//---------------------------------------------------------------------------
-static private String genJWT(String KeyBase, String UserName)
-{
-Key key = new SecretKeySpec(KeyBase.getBytes(),"AES");
+Key key = new SecretKeySpec(S.getKey().getBytes(),"AES");
 Date Issued=new Date();
 Date Valid=new Date(Issued.getTime()+ONEDAY);
 return(Jwts.builder().setSubject(UserName).setIssuedAt(Issued).setExpiration(Valid).setIssuer("OpenProdoc").signWith(SignatureAlgorithm.HS512, key).compact());

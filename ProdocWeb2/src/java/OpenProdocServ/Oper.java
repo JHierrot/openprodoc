@@ -27,6 +27,7 @@
 package OpenProdocServ;
 
 import OpenProdocUI.SParent;
+import Sessions.CurrentSession;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -234,7 +235,7 @@ if (Order.equals(DriverGeneric.S_LOGIN))
     OPDObject = OPDObjectList.item(0);
     String Pass=OPDObject.getTextContent(); 
     DriverGeneric D=ProdocFW.getSession("PD", User, Pass);
-    SParent.setSessOPD(Req, D);
+    SParent.setSessOPD(Req, D, CurrentSession.Mode.REM);
     Answer(Req, out, true, null, null);
     return;    
     }
@@ -289,26 +290,6 @@ public String getServletInfo()
 {
 return "Servlet for Oper";
 }
-//-----------------------------------------------------------------------------------------------
-///**
-// *
-// * @param Req
-// * @return
-// */
-//public static DriverGeneric getSessOPD(HttpServletRequest Req)
-//{
-//return (DriverGeneric)Req.getSession(true).getAttribute("PRODOC_SESS");
-//}
-//--------------------------------------------------------------
-///**
-// *
-// * @param Req
-// * @param OPDSess
-// */
-//public static void setSessOPD(HttpServletRequest Req, DriverGeneric OPDSess)
-//{
-//Req.getSession().setAttribute("PRODOC_SESS", OPDSess);
-//}
 //--------------------------------------------------------------
 /**
  * 

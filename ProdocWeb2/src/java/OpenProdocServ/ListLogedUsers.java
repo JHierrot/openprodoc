@@ -64,6 +64,7 @@ while (CS!=null)
     {
     Resp.append("<row id=\"").append(i++).append("\">");
     Resp.append("<cell>").append(CS.getHost()).append("</cell>");
+    Resp.append("<cell>").append(CS.GetMod()).append("</cell>");
     Resp.append("<cell>").append(CS.getUserName()).append("</cell>");
     Resp.append("<cell>").append(formatterTS.format(CS.getLoginTime())).append("</cell>");
     Resp.append("<cell>").append(formatterTS.format(CS.getLastUse())).append("</cell>");

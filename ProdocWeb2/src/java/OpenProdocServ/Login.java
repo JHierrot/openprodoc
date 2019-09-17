@@ -20,6 +20,7 @@
 package OpenProdocServ;
 
 import OpenProdocUI.*;
+import Sessions.CurrentSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
@@ -60,7 +61,7 @@ if (!OPDFWLoaded)
     OPDFWLoaded=true;
     }
 DriverGeneric D=ProdocFW.getSession("PD", User, Password);
-setSessOPD(Req, D);
+setSessOPD(Req, D, CurrentSession.Mode.WEB);
 out.println(new FMain(Sess).toHtml());
 } catch (Exception Ex)
     {
