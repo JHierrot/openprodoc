@@ -74,7 +74,7 @@ CursorId = pCursorId;
  * Returns the fields in teh cursor
  * @return the Record {@link prodoc.Record} with the fields defined (select *)
  */
-protected Record getFieldsCur()
+public Record getFieldsCur()
 {
 return FieldsCur;
 }

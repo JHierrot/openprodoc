@@ -45,7 +45,9 @@ var WinMT;
 var WinRes;
 var FormAddFold; 
 var FormSearchFold; 
+var FormSearchFoldSQL; 
 var FormSearchDoc; 
+var FormSearchDocSQL; 
 var TabBar;
 var GridResults;
 var ToolBar;
@@ -1595,6 +1597,7 @@ var b = LayoutFold.cells('b');
 b.hideHeader();
 TabBar=b.attachTabbar();
 TabBar.addTab("Search", LocaleTrans("Search_Folders"), null, null, true);
+TabBar.addTab("SQL", LocaleTrans("Advanced_Search"));
 TabBar.addTab("Results", LocaleTrans("Search_Results"));
 TabBar.addTab("Reports", LocaleTrans("Reports_Generation"));
 GridReports=TabBar.tabs("Reports").attachGrid();
@@ -1609,6 +1612,8 @@ GridReports.load("RepList?Type=Fold");
 GridReports.init();
 TabBar.tabs("Reports").disable();
 FormSearchFold = TabBar.tabs("Search").attachForm();
+FormSearchFoldSQL = TabBar.tabs("SQL").attachForm();
+FormSearchFoldSQL.load("FormSQL");
 ToolBar = TabBar.tabs("Results").attachToolbar();
 ToolBar.addButton(T_EDIT, 0, LocaleTrans("Edit"), "img/edit.png", "img/edit.png");
 ToolBar.addButton(T_DEL, 1, LocaleTrans("Delete"), "img/del.png", "img/del.png");
@@ -1631,7 +1636,7 @@ SearchFoldMain(Url, "PD_FOLDERS");
 function SearchFoldMain(Url, Type)
 {
 FormSearchFold.loadStruct(Url+"?F="+CurrFold+"&Ty="+Type, function(){
-    FormAddFold.setFocusOnFirstActive();
+    FormSearchFold.setFocusOnFirstActive();
     });    
 FormSearchFold.enableLiveValidation(true);     
 FormSearchFold.attachEvent("onButtonClick", function (name)
@@ -1650,6 +1655,7 @@ FormSearchFold.attachEvent("onButtonClick", function (name)
      else if (name==CANCEL) 
         {   
         FormSearchFold.unload();
+        FormSearchFoldSQL.unload();
         WinAF.close();
         }   
     else if (name.substring(0,2)=="T_") 
@@ -1657,6 +1663,28 @@ FormSearchFold.attachEvent("onButtonClick", function (name)
     else if (name.substring(0,3)=="TD_") 
         DelTerm(FormSearchFold, name.substring(3)); 
     });   
+FormSearchFoldSQL.enableLiveValidation(true);     
+FormSearchFoldSQL.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {   
+        FormSearchFoldSQL.send(Url, function(loader, response)
+                        { // Asynchronous 
+                        if (response.substring(0,2)!=OK)    
+                            alert(response); 
+                        else
+                            {
+                            ShowFoldResults(response.substring(2));  
+                            }
+                        });
+        }
+     else if (name==CANCEL) 
+        {   
+        FormSearchFold.unload();
+        FormSearchFoldSQL.unload();
+        WinAF.close();
+        }   
+    });   
+    
 }
 //------------------------------------------------------------
 function ShowFoldResults(Result)

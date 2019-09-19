@@ -63,48 +63,60 @@ if (CurrFold!=null)
         TmpFold.LoadFull(CurrFold);
         NewType=TmpFold.getFolderType();
         }
-    Record R=TmpFold.getRecSum();
     out.println( GenSearchFoldForm("Search_Folders", Req, PDSession, CurrFold, NewType, TmpFold.getRecSum(), false, false) );    
     }
 else
     {
-    Cursor c=null;    
+    Cursor c=null; 
+    Record Rec;
+    String SQL=Req.getParameter("SQLF"); 
     try {    
-    String CurrentFold=Req.getParameter("CurrFold");   
-    String CurrType=Req.getParameter("OPDNewType"); 
-    String SubTypes=Req.getParameter("Subtypes"); 
-    String SubFolders=Req.getParameter("SubFolders"); 
-    TmpFold=new PDFolders(PDSession, CurrType);
-    Record Rec=TmpFold.getRecSum();
-    Conditions Cond=new Conditions();
-    Rec.initList();
-    Attribute Attr=Rec.nextAttr();
-    while (Attr!=null)
+    if (SQL!=null && SQL.length()!=0)
         {
-        if (Attr.getName().equals(PDFolders.fFOLDTYPE))
-            {
-            Attr=Rec.nextAttr();
-            continue;
-            }
-        String Val=Req.getParameter(Attr.getName());
-        String Comp=Req.getParameter("Comp_"+Attr.getName());
-        if (Attr.getType()==Attribute.tTHES)
-                {
-                Val=Req.getParameter("TH_"+Attr.getName());    
-                if (Val != null && Val.length()!=0)
-                    Cond.addCondition(SParent.FillCond(Req, Attr, Val, Comp));
-                }
-        else if (!(Val == null || Val.length()==0 || Attr.getName().equals(PDFolders.fACL) && Val.equals("null") 
-              || Attr.getType()==Attribute.tBOOLEAN && Val.equals("0") ) )
-            {
-            Cond.addCondition(SParent.FillCond(Req, Attr, Val, Comp));
-            }
-        Attr=Rec.nextAttr();
+        SQL=SQL.replace("&gt;",">").replace("&lt;","<").replace("<b>","").replace("</b>","").replace("<i>","").replace("</i>","").replace("<u>","").replace("</u>","").replace("<div>"," ").replace("</div>"," ").replace("<br>"," ");
+        PDFolders f=new PDFolders(PDSession);
+        c = f.SearchSelect(SQL);
+        Rec=c.getFieldsCur();
         }
+    else
+        {
+        String CurrentFold=Req.getParameter("CurrFold");   
+        String CurrType=Req.getParameter("OPDNewType"); 
+        String SubTypes=Req.getParameter("Subtypes"); 
+        String SubFolders=Req.getParameter("SubFolders"); 
+        TmpFold=new PDFolders(PDSession, CurrType);
+        Rec=TmpFold.getRecSum();
+        Conditions Cond=new Conditions();
+        Rec.initList();
+        Attribute Attr=Rec.nextAttr();
+        while (Attr!=null)
+            {
+            if (Attr.getName().equals(PDFolders.fFOLDTYPE))
+                {
+                Attr=Rec.nextAttr();
+                continue;
+                }
+            String Val=Req.getParameter(Attr.getName());
+            String Comp=Req.getParameter("Comp_"+Attr.getName());
+            if (Attr.getType()==Attribute.tTHES)
+                    {
+                    Val=Req.getParameter("TH_"+Attr.getName());    
+                    if (Val != null && Val.length()!=0)
+                        Cond.addCondition(SParent.FillCond(Req, Attr, Val, Comp));
+                    }
+            else if (!(Val == null || Val.length()==0 || Attr.getName().equals(PDFolders.fACL) && Val.equals("null") 
+                  || Attr.getType()==Attribute.tBOOLEAN && Val.equals("0") ) )
+                {
+                Cond.addCondition(SParent.FillCond(Req, Attr, Val, Comp));
+                }
+            Attr=Rec.nextAttr();
+            }
+        SaveConds(Req, "Fold", CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")), false, CurrentFold, null, Rec, null);
+        c=TmpFold.Search(CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")), CurrentFold, null);
+        }
+    
     out.println("OK"+GenHeader(Req, Rec, false));
     out.print("data={ rows:[");
-    SaveConds(Req, "Fold", CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")), false, CurrentFold, null, Rec, null);
-    c=TmpFold.Search(CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")), CurrentFold, null);
     Record NextFold=PDSession.NextRec(c);
     while (NextFold!=null)
         {
