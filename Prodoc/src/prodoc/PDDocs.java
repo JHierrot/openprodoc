@@ -3362,13 +3362,20 @@ Record R=F.getRecSum().CopyMono();
 if (Fields.isEmpty())    
     return R;
 Record R2=new Record();
-R.initList();
-Attribute nextAttr = R.nextAttr();
-while (nextAttr!=null)
+//R.initList();
+//Attribute nextAttr = R.nextAttr();
+//while (nextAttr!=null)
+//    {
+//    if (Fields.contains(nextAttr.getName()))
+//        R2.addAttr(nextAttr);
+//    nextAttr = R.nextAttr();
+//    }
+Attribute attr;
+for (int i = 0; i < Fields.size(); i++)
     {
-    if (Fields.contains(nextAttr.getName()))
-        R2.addAttr(nextAttr);
-    nextAttr = R.nextAttr();
+    attr = R.getAttr(Fields.elementAt(i));
+    if (attr!=null)
+        R2.addAttr(attr);
     }
 if (R2.NumAttr()==0)
     PDException.GenPDException("Empty_or_Erroneus_list_of_Fields", null);
