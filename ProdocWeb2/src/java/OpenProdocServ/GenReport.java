@@ -77,33 +77,51 @@ protected void ProcessPage(HttpServletRequest Req, HttpServletResponse response)
 DriverGeneric PDSession = getSessOPD(Req); 
 HttpSession Sess=Req.getSession(true);
 String Id=Req.getParameter("Id");
-String Type=(String)Sess.getAttribute(SParent.SD_QType);
-String FType=(String)Sess.getAttribute(SParent.SD_FType);
-Conditions Conds=(Conditions)Sess.getAttribute(SParent.SD_Cond);
-boolean SubT=(Boolean)Sess.getAttribute(SParent.SD_SubT);
-boolean SubF=(Boolean)Sess.getAttribute(SParent.SD_SubF);
-String actFolderId=(String)Sess.getAttribute(SParent.SD_actFolderId);
-Vector Ord=(Vector)Sess.getAttribute(SParent.SD_Ord);
 Vector<Record> ListRes=null;
-if (Type.equalsIgnoreCase("Fold"))
+String SQL=(String)Sess.getAttribute(SParent.SQL);
+if (SQL==null)
     {
-    PDFolders Fold;
-    if (FType==null)
-        Fold = new PDFolders(PDSession);
+    String Type=(String)Sess.getAttribute(SParent.SD_QType);
+    String FType=(String)Sess.getAttribute(SParent.SD_FType);
+    Conditions Conds=(Conditions)Sess.getAttribute(SParent.SD_Cond);
+    boolean SubT=(Boolean)Sess.getAttribute(SParent.SD_SubT);
+    boolean SubF=(Boolean)Sess.getAttribute(SParent.SD_SubF);
+    String actFolderId=(String)Sess.getAttribute(SParent.SD_actFolderId);
+    Vector Ord=(Vector)Sess.getAttribute(SParent.SD_Ord);
+    if (Type.equalsIgnoreCase("Fold"))
+        {
+        PDFolders Fold;
+        if (FType==null)
+            Fold = new PDFolders(PDSession);
+        else
+            Fold = new PDFolders(PDSession, FType);
+        ListRes=Fold.SearchV(FType, Conds, SubT, SubF, actFolderId, Ord);
+        }
     else
-        Fold = new PDFolders(PDSession, FType);
-    ListRes=Fold.SearchV(FType, Conds, SubT, SubF, actFolderId, Ord);
+        {
+        PDDocs Doc;
+        if (FType==null)
+            Doc = new PDDocs(PDSession);
+        else
+            Doc = new PDDocs(PDSession, FType);
+        boolean Vers=(Boolean)Sess.getAttribute(SParent.SD_Vers);
+        String FTQuery=(String) Sess.getAttribute(SParent.SD_FTQ);
+        ListRes=Doc.SearchV(FTQuery, FType, Conds, SubT, SubF, Vers, actFolderId, Ord);
+        }
     }
 else
     {
-    PDDocs Doc;
-    if (FType==null)
-        Doc = new PDDocs(PDSession);
+    String SQLOBJ=(String)Sess.getAttribute(SParent.SQLOBJ);
+    if (SQLOBJ.equals("FOLD"))
+        {
+        PDFolders F=new PDFolders(PDSession);
+        ListRes = F.SearchSelectV(SQL);
+        }
     else
-        Doc = new PDDocs(PDSession, FType);
-    boolean Vers=(Boolean)Sess.getAttribute(SParent.SD_Vers);
-    String FTQuery=(String) Sess.getAttribute(SParent.SD_FTQ);
-    ListRes=Doc.SearchV(FTQuery, FType, Conds, SubT, SubF, Vers, actFolderId, Ord);
+        {
+        PDDocs F=new PDDocs(PDSession);
+        ListRes = F.SearchSelectV(SQL);        
+        }
     }
 PDReport Rep=new PDReport(PDSession);
 Rep.LoadFull(Id);

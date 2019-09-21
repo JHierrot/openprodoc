@@ -33,7 +33,7 @@ import prodoc.PDFolders;
  */
 public class FormSQL extends SParent
 {
-
+final static String ExampleSQL="<b>Select</b> PDId, Title, FolderType, ACL <br> <b>from</b> PD_FOLDERS, SUBTYPES <br> <b>where</b> Title=' ' and PDDate>'2000-01-01 09:10:11' <br> <b>order by</b> PDDate <b>DESC</b>";
 //-----------------------------------------------------------------------------------------------
 /**
  *
@@ -47,7 +47,7 @@ protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Excep
 out.println(
     "[" +
     "{type: \"label\", label: \""+TT(Req, "Advanced_Folder_Search")+"\"}," +
-    "{type:\"editor\", name:\"SQLF\", label:\""+TT(Req, "OPD_SQL_Expresion")+"\", position:'label-top', offsetLeft:20, required:true, inputWidth:600, inputHeight:140}," +
+    "{type:\"editor\", name:\"SQLF\", label:\""+TT(Req, "OPD_SQL_Expresion")+"\", value:\""+ExampleSQL+"\", position:'label-top', offsetLeft:20, required:true, inputWidth:600, inputHeight:140}," +
     "{type:\"block\", width: 250, list:[" +
         "{type: \"button\", name: \"OK\", value: \""+TT(Req, "Ok")+"\"}," +
         "{type: \"newcolumn\", offset:20 }," +

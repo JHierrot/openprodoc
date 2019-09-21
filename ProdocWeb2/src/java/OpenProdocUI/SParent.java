@@ -83,13 +83,13 @@ public final static int SEARCHDOC_FORM =2;
 /**
  * 
  */
-//private static final String ListAttrFold=PDFolders.fACL+"/"+PDFolders.fFOLDTYPE+"/"+PDFolders.fPARENTID+"/"+PDFolders.fPDID+"/"+PDFolders.fTITLE+"/"+PDFolders.fPDAUTOR+"/"+PDFolders.fPDDATE;
-//private static final String ListAttrDoc=PDDocs.fACL+"/"+PDDocs.fDOCTYPE+"/"+PDDocs.fPARENTID+"/"+PDDocs.fPDID+"/"+PDDocs.fTITLE+"/"+"/"+PDDocs.fPDID+"/"+PDDocs.fPDAUTOR+"/"+PDDocs.fPDDATE+"/"+PDDocs.fLOCKEDBY+"/"+PDDocs.fVERSION+"/"+PDDocs.fPURGEDATE+"/"+PDDocs.fREPOSIT+"/"+PDDocs.fSTATUS+"/"+PDDocs.fMIMETYPE+"/"+PDDocs.fNAME;
 private static HashSet ListAttrFold=null;
 private static HashSet ListAttrDoc=null;
         
 public static HashSet ListThes=null;
 
+public final static String SQL="SQL";
+public final static String SQLOBJ="SQLOBJ";
 public final static String SD_QType="SD_QType";
 public final static String SD_FType="SD_FType";
 public final static String SD_Cond="SD_Cond";
@@ -101,7 +101,6 @@ public final static String SD_Ord="SD_Ord";
 public final static String SD_Rec="SD_Rec";
 public final static String SD_OperComp="SD_OperComp";
 public final static String SD_FTQ="SD_FTQ";
-//public final static String PRODOC_SESS="PRODOC_SESS";
 public final static String PRODOC_SESSID="PRODOC_SESSID";
 
 protected static boolean OPDFWLoaded=false;
@@ -1602,6 +1601,14 @@ Sess.setAttribute(SParent.SD_actFolderId, actFolderId);
 Sess.setAttribute(SParent.SD_Ord, Ord);
 Sess.setAttribute(SParent.SD_Rec, Rec);
 Sess.setAttribute(SParent.SD_FTQ, FTQuery);
+SaveSQL(Req, null, null);
+}
+//-----------------------------------------------------------------------------------------------
+public static void SaveSQL(HttpServletRequest Req, String SQLObj, String SQL)
+{
+HttpSession Sess=Req.getSession(true);
+Sess.setAttribute(SParent.SQLOBJ, SQLObj);
+Sess.setAttribute(SParent.SQL, SQL);
 }
 //-----------------------------------------------------------------------------------------------
 public static String GenErrorForm(String localizedMessage)
