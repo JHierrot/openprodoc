@@ -840,6 +840,25 @@ protected String getDescOrder()
 return(PDObjDefs.fDESCRIPTION);
 }
 //---------------------------------------------------------------------
+public Vector<Record> SearchSelectV(String SQL) throws PDException
+{
+Vector<Record> ListRes=new Vector(); 
+Cursor CurSelect = SearchSelect(SQL);
+try {
+Record NextRec=getDrv().NextRec(CurSelect);
+while (NextRec!=null)
+    {
+    ListRes.add(NextRec);
+    NextRec=getDrv().NextRec(CurSelect);
+    }
+} 
+finally 
+    {
+    getDrv().CloseCursor(CurSelect);
+    }
+return(ListRes);
+}
+
 /**
  * Search in ANY object using SQL Syntax subset, similar to CMIS SQL
  * @param SQL complete query
@@ -920,14 +939,6 @@ if (Fields.isEmpty())
     return getRecordStruct();
 Record R=getRecordStruct();
 Record R2=new Record();
-//R.initList();
-//Attribute nextAttr = R.nextAttr();
-//while (nextAttr!=null)
-//    {
-//    if (Fields.contains(nextAttr.getName()))
-//        R2.addAttr(nextAttr);
-//    nextAttr = R.nextAttr();
-//    }
 Attribute attr;
 for (int i = 0; i < Fields.size(); i++)
     {
