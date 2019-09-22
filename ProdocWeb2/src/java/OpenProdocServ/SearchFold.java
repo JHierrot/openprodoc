@@ -115,7 +115,6 @@ else
         SaveConds(Req, "Fold", CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")), false, CurrentFold, null, Rec, null);
         c=TmpFold.Search(CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")), CurrentFold, null);
         }
-    
     out.println("OK"+GenHeader(Req, Rec, false));
     out.print("data={ rows:[");
     Record NextFold=PDSession.NextRec(c);

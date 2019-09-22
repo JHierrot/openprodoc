@@ -68,46 +68,58 @@ if (CurrFold!=null)
     }
 else
     {
-    Cursor c=null;    
+    Cursor c=null; 
+    Record Rec;
+    String SQL=Req.getParameter("SQLF"); 
     try {    
-    String CurrentFold=Req.getParameter("CurrFold");   
-    String CurrType=Req.getParameter("OPDNewType"); 
-    String SubTypes=Req.getParameter("Subtypes"); 
-    String SubFolders=Req.getParameter("SubFolders"); 
-    String IncludeVers=Req.getParameter("IncludeVers"); 
-    String FullTextSearch=Req.getParameter("FullTextSearch"); 
-    TmpDoc=new PDDocs(PDSession, CurrType);
-    Record Rec=TmpDoc.getRecSum();
-    Conditions Cond=new Conditions();
-    Rec.initList();
-    Attribute Attr=Rec.nextAttr();
-    while (Attr!=null)
+    if (SQL!=null && SQL.length()!=0)
         {
-        if (Attr.getName().equals(PDDocs.fDOCTYPE))
+        SQL=SQL.replace("&gt;",">").replace("&lt;","<").replace("<b>","").replace("</b>","").replace("<i>","").replace("</i>","").replace("<u>","").replace("</u>","").replace("<div>"," ").replace("</div>"," ").replace("<br>"," ");
+        PDDocs f=new PDDocs(PDSession);
+        c = f.SearchSelect(SQL);
+        SaveSQL(Req, "DOC", SQL);
+        Rec=c.getFieldsCur();
+        }
+    else
+        {   
+        String CurrentFold=Req.getParameter("CurrFold");   
+        String CurrType=Req.getParameter("OPDNewType"); 
+        String SubTypes=Req.getParameter("Subtypes"); 
+        String SubFolders=Req.getParameter("SubFolders"); 
+        String IncludeVers=Req.getParameter("IncludeVers"); 
+        String FullTextSearch=Req.getParameter("FullTextSearch"); 
+        TmpDoc=new PDDocs(PDSession, CurrType);
+        Rec=TmpDoc.getRecSum();
+        Conditions Cond=new Conditions();
+        Rec.initList();
+        Attribute Attr=Rec.nextAttr();
+        while (Attr!=null)
             {
-            Attr=Rec.nextAttr();
-            continue;
-            }
-        String Val=Req.getParameter(Attr.getName());
-        String Comp=Req.getParameter("Comp_"+Attr.getName());
-        if (Attr.getType()==Attribute.tTHES)
+            if (Attr.getName().equals(PDDocs.fDOCTYPE))
                 {
-                Val=Req.getParameter("TH_"+Attr.getName());   
-                if (Val != null && Val.length()!=0)
-                    Cond.addCondition(SParent.FillCond(Req, Attr, Val, Comp));
+                Attr=Rec.nextAttr();
+                continue;
                 }
-        else if (!(Val == null || Val.length()==0 || Attr.getName().equals(PDDocs.fACL) && Val.equals("null") 
-              || Attr.getType()==Attribute.tBOOLEAN && Val.equals("0") ) )
-            {
-            Cond.addCondition(SParent.FillCond(Req, Attr, Val, Comp));
+            String Val=Req.getParameter(Attr.getName());
+            String Comp=Req.getParameter("Comp_"+Attr.getName());
+            if (Attr.getType()==Attribute.tTHES)
+                    {
+                    Val=Req.getParameter("TH_"+Attr.getName());   
+                    if (Val != null && Val.length()!=0)
+                        Cond.addCondition(SParent.FillCond(Req, Attr, Val, Comp));
+                    }
+            else if (!(Val == null || Val.length()==0 || Attr.getName().equals(PDDocs.fACL) && Val.equals("null") 
+                  || Attr.getType()==Attribute.tBOOLEAN && Val.equals("0") ) )
+                {
+                Cond.addCondition(SParent.FillCond(Req, Attr, Val, Comp));
+                }
+            Attr=Rec.nextAttr();
             }
-        Attr=Rec.nextAttr();
+        SaveConds(Req, "Doc", CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")),(IncludeVers.equals("1")), CurrentFold, null, Rec, FullTextSearch);
+        c=TmpDoc.Search(FullTextSearch, CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")),(IncludeVers.equals("1")), CurrentFold, null);
         }
     out.println("OK"+GenHeader(Req, Rec, true));
-//    out.print("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rows>");
     out.print("<rows>");
-    SaveConds(Req, "Doc", CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")),(IncludeVers.equals("1")), CurrentFold, null, Rec, FullTextSearch);
-    c=TmpDoc.Search(FullTextSearch, CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")),(IncludeVers.equals("1")), CurrentFold, null);
     Record NextDoc=PDSession.NextRec(c);
     while (NextDoc!=null)
         {

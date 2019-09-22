@@ -1613,7 +1613,7 @@ GridReports.init();
 TabBar.tabs("Reports").disable();
 FormSearchFold = TabBar.tabs("Search").attachForm();
 FormSearchFoldSQL = TabBar.tabs("SQL").attachForm();
-FormSearchFoldSQL.load("FormSQL");
+FormSearchFoldSQL.load("FormSQL?Type=FOLD");
 ToolBar = TabBar.tabs("Results").attachToolbar();
 ToolBar.addButton(T_EDIT, 0, LocaleTrans("Edit"), "img/edit.png", "img/edit.png");
 ToolBar.addButton(T_DEL, 1, LocaleTrans("Delete"), "img/del.png", "img/del.png");
@@ -1683,8 +1683,7 @@ FormSearchFoldSQL.attachEvent("onButtonClick", function (name)
         FormSearchFoldSQL.unload();
         WinAF.close();
         }   
-    });   
-    
+    });    
 }
 //------------------------------------------------------------
 function ShowFoldResults(Result)
@@ -2100,6 +2099,7 @@ var b = LayoutFold.cells('b');
 b.hideHeader();
 TabBar=b.attachTabbar();
 TabBar.addTab("Search", LocaleTrans("Search_Documents"), null, null, true);
+TabBar.addTab("SQL", LocaleTrans("Advanced_Search"));
 TabBar.addTab("Results", LocaleTrans("Search_Results"));
 TabBar.addTab("Reports", LocaleTrans("Reports_Generation"));
 GridReports=TabBar.tabs("Reports").attachGrid();
@@ -2127,6 +2127,8 @@ ToolBar.attachEvent("onClick", function(id)
         DocResProc(id, GridResults.getSelectedRowId());    
     });
 FormSearchDoc = TabBar.tabs("Search").attachForm();
+FormSearchDocSQL = TabBar.tabs("SQL").attachForm();
+FormSearchDocSQL.load("FormSQL?Type=DOC");
 formCombo.attachEvent("onChange", function(name, value, is_checked){
     FormSearchDoc.unload();
     FormSearchDoc = TabBar.tabs("Search").attachForm();
@@ -2158,13 +2160,36 @@ FormSearchDoc.attachEvent("onButtonClick", function (name)
      else if (name==CANCEL) 
         {   
         FormSearchDoc.unload();
+        FormSearchDocSQL.unload();
         WinAF.close();
         }    
     else if (name.substring(0,2)=="T_") 
         ShowThes(FormSearchDoc, name.substring(2));  
     else if (name.substring(0,3)=="TD_") 
         DelTerm(FormSearchDoc, name.substring(3)); 
+    }); 
+FormSearchDocSQL.enableLiveValidation(true);     
+FormSearchDocSQL.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {   
+        FormSearchDocSQL.send(Url, function(loader, response)
+                        { // Asynchronous 
+                        if (response.substring(0,2)!=OK)    
+                            alert(response); 
+                        else
+                            {
+                            ShowDocResults(response.substring(2));  
+                            }
+                        });
+        }
+     else if (name==CANCEL) 
+        {   
+        FormSearchDoc.unload();
+        FormSearchDocSQL.unload();
+        WinAF.close();
+        }   
     });   
+    
 }
 //------------------------------------------------------------
 function ShowDocResults(Result)
