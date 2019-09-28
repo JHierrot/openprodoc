@@ -708,8 +708,8 @@ private void LoadDef(String tableName) throws PDException
 if (PDLog.isDebug())
     PDLog.Debug("PDFolders.LoadDef");
 setFolderType(tableName);
-TypeDefs=new ArrayList();
-TypeRecs=new ArrayList();
+TypeDefs=new ArrayList<Record>();
+TypeRecs=new ArrayList<Record>();
 getDrv().LoadDef(tableName, getTypeDefs(), getTypeRecs());
 RecSum=new Record();
 for (int i = 0; i < getTypeRecs().size(); i++)
@@ -1135,7 +1135,7 @@ f3.insert();
  * @return a hashset with all the DirectDescend
  * @throws PDException in any error
  */
-public HashSet getListDirectDescendList(String PDId) throws PDException
+public HashSet<String> getListDirectDescendList(String PDId) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDFolders.getListDirectDescendList>:"+PDId);
@@ -1460,7 +1460,7 @@ return(CompPath);
  */
 public Vector<Record> SearchV(String FolderType, Conditions AttrConds, boolean SubTypes, boolean SubFolders, String IdActFold, Vector Ord) throws PDException
 {
-Vector<Record> ListRes=new Vector();
+Vector<Record> ListRes=new Vector<Record>();
 Cursor CursorId = null;
 try {
 CursorId = Search(FolderType, AttrConds, SubTypes, SubFolders, IdActFold, Ord);
@@ -2046,7 +2046,7 @@ protected Vector<String> CalculateTabs(List<String> tableList) throws PDExceptio
 {
 if (tableList.get(0).equalsIgnoreCase("this"))
     tableList.set(0, getTabName());
-Vector <String> Tabs=new Vector();
+Vector <String> Tabs=new Vector<String>();
 Tabs.add(tableList.get(0));
 if (!tableList.get(0).equalsIgnoreCase(getTableName())) // Not PDFolders
     {

@@ -108,7 +108,6 @@ else
     CursorId =null;
     }
 GeneratedRep = Rep.GenerateRep(CurrFold, null, Res, Rep.getDocsPerPage(), Rep.getPagesPerFile(), getIO_OSFolder());
-//ListRes.clear();
 Res.clear();
 String File2Send;
 if (GeneratedRep.size()==1)

@@ -40,31 +40,30 @@ static private HashMap<String, Properties> DownloadedProp=new HashMap();
 
 //-----------------------------------------------------------------
 
-    /**
-     *
-     * @param pServer
-     * @param pUser
-     * @param pPassword
-     * @param pParam
-     * @param pEncrypt
-     * @throws PDExceptionFunc
-     */
+/**
+ *
+ * @param pServer
+ * @param pUser
+ * @param pPassword
+ * @param pParam
+ * @param pEncrypt
+ * @throws PDExceptionFunc
+ */
 public StoreCustom(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt) throws PDExceptionFunc
 {
 super(pServer, pUser, pPassword, pParam, pEncrypt);
 }
 //-----------------------------------------------------------------
-
-    /**
-     *
-     * @param pServer
-     * @param pUser
-     * @param pPassword
-     * @param pParam
-     * @param pEncrypt
-     * @param Drv
-     * @throws PDExceptionFunc
-     */
+/**
+ *
+ * @param pServer
+ * @param pUser
+ * @param pPassword
+ * @param pParam
+ * @param pEncrypt
+ * @param Drv
+ * @throws PDExceptionFunc
+ */
 public StoreCustom(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt, DriverGeneric Drv) throws PDExceptionFunc
 {
 super(pServer, pUser, pPassword, pParam, pEncrypt);

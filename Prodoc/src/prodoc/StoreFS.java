@@ -31,6 +31,8 @@ import java.io.InputStream;
  */
 public class StoreFS extends StoreGeneric
 {
+static final String SEP="_";
+    
 //-----------------------------------------------------------------
 /**
  *
@@ -95,15 +97,17 @@ protected void Disconnect() throws PDException
 {
 }
 //-----------------------------------------------------------------
-/**
- * 
- * @param Id
- * @param Ver
- * @param Bytes
-     * @param Rec
-     * @param OPDPath
- * @return
- * @throws PDException
+/** 
+ * Do the actual insertion of the document binary. 
+ * Always close the input stream to avoid problems
+ * and degradation.
+ * @param Id OpenProdoc identifier (PDId) of the document to store
+ * @param Ver Versión Label of the Document
+ * @param Bytes Inpuit stream to store
+ * @param Rec   Record with Metadata of the document (not used in Filesystem storage)
+ * @param OPDPath Path in OpenProdoc of the document (not used in Filesystem storage)
+ * @return the size of the file
+ * @throws PDException In any error
  */
 protected int Insert(String Id, String Ver, InputStream Bytes, Record Rec, String OPDPath) throws PDException
 {
@@ -114,7 +118,7 @@ try {
 File Path=new File(getPath()+ GenPath(Id, Ver));
 if (!Path.isDirectory())
     Path.mkdirs();
-fo = new FileOutputStream(getPath()+ GenPath(Id, Ver) +Id+"_"+Ver);
+fo = new FileOutputStream(getPath()+ GenPath(Id, Ver) +Id+SEP+Ver);
 int readed=Bytes.read(Buffer);
 while (readed!=-1)
     {
@@ -144,26 +148,26 @@ return(Tot);
 }
 //-----------------------------------------------------------------
 /**
- *
- * @param Id
- * @param Ver
-     * @param Rec
- * @throws PDException
+ * Deletes the binary
+ * @param Id Identifier of document
+ * @param Ver Identifier of version
+ * @param Rec Record with Metadata of the document (not used in Filesystem storage)
+ * @throws PDException In Any Error
  */
 @Override
 protected void Delete(String Id, String Ver, Record Rec) throws PDException
 {
 VerifyId(Id);
-File f=new File(getPath()+ GenPath(Id, Ver)+Id+"_"+Ver);
+File f=new File(getPath()+ GenPath(Id, Ver)+Id+SEP+Ver);
 f.delete();
 }
 //-----------------------------------------------------------------
 /**
- * 
- * @param Id
- * @param Ver
- * @return
- * @throws PDException
+ * Return the binary as InputStream
+ * @param Id Identifier of document
+ * @param Ver Identifier of version
+ * @return an InputStream with the content
+ * @throws PDException in any error
  */
 @Override
 protected InputStream Retrieve(String Id, String Ver, Record Rec) throws PDException
@@ -171,7 +175,7 @@ protected InputStream Retrieve(String Id, String Ver, Record Rec) throws PDExcep
 VerifyId(Id);    
 FileInputStream in=null;
 try {
-in = new FileInputStream(getPath() + GenPath(Id, Ver) + Id+"_"+Ver);
+in = new FileInputStream(getPath() + GenPath(Id, Ver) + Id+SEP+Ver);
 } catch (FileNotFoundException ex)
     {
     PDException.GenPDException("Error_retrieving_file",Id+"/"+Ver+"="+ex.getLocalizedMessage());
@@ -188,21 +192,20 @@ private String getPath()
 return(getServer());
 }
 //-----------------------------------------------------------------
-
 /**
- *
- * @param Id1
- * @param Ver1
- * @param Id2
- * @param Ver2
+ * Changes the name of e binary. Used for CheckInCheckOut,..
+ * @param Id1 Identifier of original document
+ * @param Ver1 Identifier of original version
+ * @param Id2 Identifier of Target document
+ * @param Ver2 Identifier of Target version
  * @throws PDException
  */
 @Override
 protected void Rename(String Id1, String Ver1, String Id2, String Ver2) throws PDException
 {
 VerifyId(Id1);
-File f=new File(getPath()+ GenPath(Id1, Ver1)+Id1+"_"+Ver1);
-File f2=new File(getPath()+ GenPath(Id2, Ver2)+Id2+"_"+Ver2);
+File f=new File(getPath()+ GenPath(Id1, Ver1)+Id1+SEP+Ver1);
+File f2=new File(getPath()+ GenPath(Id2, Ver2)+Id2+SEP+Ver2);
 f.renameTo(f2);
 }
 //-----------------------------------------------------------------

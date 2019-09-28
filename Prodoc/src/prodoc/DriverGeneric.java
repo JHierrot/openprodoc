@@ -1878,6 +1878,8 @@ else if (AuthType.equals(PDAuthenticators.tLDAP))
     st=new AuthLDAP( Auth.getURL(), Auth.getUser(), Decode(Auth.getPassword()), Auth.getParam());
 else if (AuthType.equals(PDAuthenticators.tSO))
     st=new AuthSO( Auth.getURL(), Auth.getUser(), Decode(Auth.getPassword()), Auth.getParam());
+else if (AuthType.equals(PDAuthenticators.tCUSTOM))
+    st=new AuthCustom(Auth.getURL(), Auth.getUser(), Decode(Auth.getPassword()), Auth.getParam(), this);
 else
     PDException.GenPDException("Authentication_type_unsuported", AuthType);
 if (PDLog.isDebug())

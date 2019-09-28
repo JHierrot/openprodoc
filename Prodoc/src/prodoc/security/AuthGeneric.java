@@ -19,6 +19,7 @@
 
 package prodoc.security;
 
+import java.util.Properties;
 import prodoc.PDException;
 
 /**
@@ -43,6 +44,8 @@ private String Password=null;
  *
  */
 private String Param=null;
+private Properties Prop=null;
+
 
 //----------------------------------------------------------------------
 /**
@@ -61,19 +64,19 @@ Param=pParam;
 }
 //----------------------------------------------------------------------
 /**
- * 
- * @param User
- * @param Pass
- * @throws PDException
+ * Authenticates the user against the server defined and 
+ * thows an exception if the authentication fails.
+ * @param User user to authenticate
+ * @param Pass Password (in clear)of the user 
+ * @throws PDException if the user is nos authenticated
  */
 abstract public void Authenticate(String User, String Pass) throws PDException;
-
 //----------------------------------------------------------------------
 /**
  * Method to change the password when is allowed by the kind and actual authenticator
  * @param User User who will change his password
  * @param NewPass New Password to assign
- * @throws PDException In ani problem
+ * @throws PDException In any problem
  */
 public void UpdatePass(String User, String NewPass) throws PDException
 {
@@ -144,4 +147,20 @@ protected void setParam(String Param)
 this.Param = Param;
 }
 //----------------------------------------------------------------------
+/**
+ * @return the Prop
+ */
+public Properties getProp()
+{
+return Prop;
+}
+//-----------------------------------------------------------------
+/**
+* @param Prop the Prop to set
+*/
+public void setProp(Properties Prop)
+{
+this.Prop = Prop;
+}
+//-----------------------------------------------------------------
 }

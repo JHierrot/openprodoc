@@ -842,7 +842,7 @@ return(PDObjDefs.fDESCRIPTION);
 //---------------------------------------------------------------------
 public Vector<Record> SearchSelectV(String SQL) throws PDException
 {
-Vector<Record> ListRes=new Vector(); 
+Vector<Record> ListRes=new Vector<Record>(); 
 Cursor CurSelect = SearchSelect(SQL);
 try {
 Record NextRec=getDrv().NextRec(CurSelect);
@@ -878,7 +878,7 @@ List<String> TableListSQL = tablesNamesFinder.getTableList(ParsedSQL);
 Vector <String> OPDTabs=CalculateTabs(TableListSQL);
 //-- Calculate Fields -------------
 List<SelectItem> selectItems = ((PlainSelect)ParsedSQL.getSelectBody()).getSelectItems();
-Vector<String> Fields=new Vector();
+Vector<String> Fields=new Vector<String>();
 if (!( selectItems.get(0) instanceof AllColumns))
     for (int i = 0; i < selectItems.size(); i++)
         Fields.add(((SelectExpressionItem)selectItems.get(i)).getExpression().toString());      
@@ -899,8 +899,8 @@ else
     FinalConds.addCondition(CondSel);
     }
 //-- Calculate Order ------------
-Vector <String> Order=new Vector();
-Vector <Boolean> OrderAsc=new Vector();
+Vector <String> Order=new Vector<String>();
+Vector <Boolean> OrderAsc=new Vector<Boolean>();
 List<OrderByElement> orderByElements = ((PlainSelect)ParsedSQL.getSelectBody()).getOrderByElements(); 
 if (orderByElements!=null)
     for (int i = 0; i < orderByElements.size(); i++)
@@ -928,7 +928,7 @@ return(getDrv().OpenCursor(QBE));
  */
 protected Vector<String> CalculateTabs(List<String> tableList) throws PDException
 {
-Vector <String> Tabs=new Vector();
+Vector <String> Tabs=new Vector<String>();
 Tabs.add(getTabName());
 return(Tabs);
 }
@@ -961,7 +961,7 @@ protected Conditions NeededMoreConds(List<String> tableListSQL, Vector <String> 
 return(null);
 }
 //-------------------------------------------------------------------------
-static private HashMap<String, Integer>CompConv=new HashMap(); 
+static private HashMap<String, Integer>CompConv=new HashMap<String, Integer>(); 
 
 static private final int EXPR_BASIC=0;
 static private final int EXPR_AND=1;
@@ -1131,7 +1131,7 @@ switch (ExprType)
         break;
     case EXPR_IN:
         String FieldNameIn=((InExpression)ParentExpr).getLeftExpression().toString();
-        HashSet<String> ListTerms = new HashSet();
+        HashSet<String> ListTerms = new HashSet<String>();
         List<Expression> LT =((ExpressionList)((InExpression)ParentExpr).getLeftItemsList()).getExpressions();
         for (Iterator<Expression> iterator = LT.iterator(); iterator.hasNext();)
             {
