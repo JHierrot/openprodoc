@@ -3,6 +3,7 @@
     <servlet>
         <servlet-name>SParent</servlet-name>
         <servlet-class>OpenProdocUI.SParent</servlet-class>
+        <load-on-startup>0</load-on-startup>
     </servlet>
     <servlet>
         <servlet-name>Login</servlet-name>

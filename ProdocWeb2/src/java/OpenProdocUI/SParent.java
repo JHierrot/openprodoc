@@ -55,6 +55,7 @@ import prodoc.PDRepository;
 import prodoc.PDRoles;
 import prodoc.PDThesaur;
 import prodoc.PDUser;
+import prodoc.ProdocFW;
 import prodoc.Record;
 
 
@@ -112,6 +113,12 @@ protected static boolean OPDFWLoaded=false;
 public void init(ServletConfig config) throws ServletException
 {
 super.init(config);
+try {
+ProdocFW.InitProdoc("PD", getProdocProperRef());    
+} catch (Exception Ex)
+    {
+    Ex.printStackTrace();
+    }
 }
 //-----------------------------------------------------------------------------------------------
 

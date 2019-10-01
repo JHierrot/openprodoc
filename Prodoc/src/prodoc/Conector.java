@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Properties;
 import java.util.Vector;
+import prodoc.security.AuthGeneric;
 /**
  * Class connector responsible of reading configuration, starting tasks 
  * and managing sessions to an specific OpenProdoc Repository
@@ -131,7 +132,25 @@ for (int i = 0; i < MinPoolSize; i++)
     {
     ListSesion.add(CreateSesion());
     }
-//CreateTask();
+if (!TasksStarted)
+    {    
+    CreateTask();
+    LoadAuth();
+    }
+}
+//--------------------------------------------------------------------------
+private void LoadAuth() throws PDException
+{
+DriverGeneric Session=CreateSesion();
+Session.Lock();
+Session.AssignTaskUser();   
+PDAuthenticators Auth=new PDAuthenticators(Session);
+Vector<Record> ListCustAuth = Auth.SearchSelectV("select * from this where AUTHTYPE='CUSTOM'");
+for (int i = 0; i < ListCustAuth.size(); i++)
+    {
+    Auth.assignValues(ListCustAuth.elementAt(i));
+    Session.ConstructAuthentic(Auth); // just in order to download binaries
+    }
 }
 //--------------------------------------------------------------------------
 /**
@@ -173,10 +192,6 @@ for (int i = 0; i < ListSesion.size(); i++)
        {
        Session.Lock();
        Session.Assign(user, Password);
-       if (!TasksStarted)
-           {
-           CreateTask();
-           }
        return(Session);
        }
     }

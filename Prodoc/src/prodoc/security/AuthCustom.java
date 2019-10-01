@@ -30,6 +30,7 @@ import prodoc.DriverGeneric;
 import prodoc.PDDocs;
 import prodoc.PDException;
 import prodoc.PDExceptionFunc;
+import prodoc.PDLog;
 
 /**
  *
@@ -68,13 +69,14 @@ if (!DownloadedClasses.containsKey(ClassName))
 if (PDIdProps!=null && !DownloadedProp.containsKey(PDIdProps))
     DownloadProp(Drv, PDIdProps);
 Class CustomAuth=DownloadedClasses.get(ClassName);
-Constructor DefCons=CustomAuth.getDeclaredConstructor(String.class, String.class, String.class, String.class, boolean.class);
+Constructor DefCons=CustomAuth.getDeclaredConstructor(String.class, String.class, String.class, String.class);
 Bin=(AuthGeneric)DefCons.newInstance(pServer, pUser, pPassword, pParam);
 if (PDIdProps!=null)
     Bin.setProp(DownloadedProp.get(PDIdProps));
 } catch (Exception Ex)
     {
-    PDExceptionFunc.GenPDException("Unable_Instantiate_Custom_Repository"+":"+ClassName, Ex.getLocalizedMessage());
+    Ex.printStackTrace();
+    PDExceptionFunc.GenPDException("Unable_Instantiate_Custom_Authenticator"+":"+ClassName, Ex.getLocalizedMessage());
     }
 }
 //----------------------------------------------------------------------
@@ -100,6 +102,8 @@ String DownFile = D.getFile(System.getProperty("java.io.tmpdir"));
 URLClassLoader CL=new URLClassLoader(new URL[]{new URL("file:"+DownFile)}, getClass().getClassLoader());
 Class AuthCustom=Class.forName(ClassName, true, CL);
 DownloadedClasses.put(ClassName, AuthCustom);
+if (PDLog.isDebug())
+    PDLog.Debug("AuthCustom.DownloadBin:"+PdId+"/"+ClassName);
 }
 //-----------------------------------------------------------------
 private synchronized void DownloadProp(DriverGeneric Drv, String PDIdProps) throws Exception
@@ -113,6 +117,8 @@ D.getStream(OutBytes);
 Properties Proper=new Properties();
 Proper.load(new ByteArrayInputStream(OutBytes.toByteArray()) );
 DownloadedProp.put(PDIdProps, Proper);
+if (PDLog.isDebug())
+    PDLog.Debug("AuthCustom.DownloadProp:"+PDIdProps);
 }
 //-----------------------------------------------------------------
 }

@@ -1864,7 +1864,7 @@ return(Auth);
  * @param Auth Authenticator definition
  * @return Instance created
  */
-private AuthGeneric ConstructAuthentic(PDAuthenticators Auth) throws PDException
+protected AuthGeneric ConstructAuthentic(PDAuthenticators Auth) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("DriverGeneric.ConstructAuthentic>:"+Auth.getName());
