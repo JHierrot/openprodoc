@@ -3378,16 +3378,29 @@ for (int i = 0; i < ListFolds.length; i++)
 return(ListDef);
 }
 //---------------------------------------------------------------------
+long Last=0;
 public boolean IsConnected()
 {
+if (Last!=0 && (System.currentTimeMillis()-Last)<60000 ) 
+    return(true);
+Cursor all = null;    
 try {
 PDServer s=new PDServer(this);
-Cursor all = s.getAll();
-CloseCursor(all);
+all = s.getAll();
+Last=System.currentTimeMillis();
 return(true);    
 } catch (Exception Ex)
     {
     return(false);
+    }
+finally
+    {
+    if (all!=null) 
+        {
+        try{    
+        CloseCursor(all);  
+        } catch (Exception e){}
+        }
     }
 }
 
