@@ -3336,25 +3336,25 @@ if (ListDefs!=null)
         try {
             ProcessXML(ListDef, PDFolders.SYSTEMFOLDER);
             ListImps.add("ObjDef imported:" + ListDef);
+            if (CreateTypes) // run after each XML to force same CREATION order
+                {
+                TreeSet<String> ListUpdatedDefsDocs=new TreeSet<>(Defs.getNamesUncreatedDefs(false));
+                TreeSet<String> ListUpdatedDefsFolds=new TreeSet<>(Defs.getNamesUncreatedDefs(true));
+                for (String NameDef : ListUpdatedDefsDocs)
+                    {    
+                    if (!ListPreviousDefsDocs.contains(NameDef))
+                        Defs.CreateObjectTables(NameDef, false);
+                    }
+                for (String NameDef : ListUpdatedDefsFolds)
+                    {    
+                    if (!ListPreviousDefsFolds.contains(NameDef))
+                        Defs.CreateObjectTables(NameDef, true);
+                    }
+                }
         } catch (Exception Ex)
             {
             ListImps.add("Error in ObjDef import:" + ListDef);
             ListImps.add("Error:"+Ex.getLocalizedMessage());
-            }
-        }
-    if (CreateTypes)
-        {
-        TreeSet<String> ListUpdatedDefsDocs=new TreeSet<>(Defs.getNamesUncreatedDefs(false));
-        TreeSet<String> ListUpdatedDefsFolds=new TreeSet<>(Defs.getNamesUncreatedDefs(true));
-        for (String NameDef : ListUpdatedDefsDocs)
-            {    
-            if (!ListPreviousDefsDocs.contains(NameDef))
-                Defs.CreateObjectTables(NameDef, false);
-            }
-        for (String NameDef : ListUpdatedDefsFolds)
-            {    
-            if (!ListPreviousDefsFolds.contains(NameDef))
-                Defs.CreateObjectTables(NameDef, true);
             }
         }
     }

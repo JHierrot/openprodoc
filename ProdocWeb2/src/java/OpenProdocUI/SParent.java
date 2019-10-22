@@ -106,20 +106,21 @@ public final static String PRODOC_SESSID="PRODOC_SESSID";
 
 protected static boolean OPDFWLoaded=false;
 
-/** Initializes the servlet.
- * @param config 
- * @throws ServletException 
- */
-public void init(ServletConfig config) throws ServletException
-{
-super.init(config);
-try {
-ProdocFW.InitProdoc("PD", getProdocProperRef());    
-} catch (Exception Ex)
-    {
-    Ex.printStackTrace();
-    }
-}
+///** Initializes the servlet.
+// * @param config 
+// * @throws ServletException 
+// */
+//public void init(ServletConfig config) throws ServletException
+//{
+//super.init(config);
+//try {
+//Thread.sleep(90000);    
+//ProdocFW.InitProdoc("PD", getProdocProperRef());    
+//} catch (Exception Ex)
+//    {
+//    Ex.printStackTrace();
+//    }
+//}
 //-----------------------------------------------------------------------------------------------
 
 /** Destroys the servlet.

@@ -324,13 +324,13 @@ TaskExecList.put(ConectorName, TaskRunnerTask);
  */
 synchronized private static void DestroySearchTask(String ConectorName)
 {
-if (!TaskSearchList.contains(ConectorName))
+if (!TaskSearchList.containsKey(ConectorName))
     return;
 if (PDLog.isDebug())
     PDLog.Debug("DestroySearchTask: Con="+ConectorName);        
 TaskCreator  TaskCreatorTask=TaskSearchList.get(ConectorName); 
 TaskCreatorTask.End();
-TaskSearchList.put(ConectorName, null);
+TaskSearchList.remove(ConectorName);
 }
 //--------------------------------------------------------------------------
 /**
@@ -339,13 +339,13 @@ TaskSearchList.put(ConectorName, null);
  */
 synchronized private static void DestroyExecTask(String ConectorName)
 {
-if (!TaskExecList.contains(ConectorName))
+if (!TaskExecList.containsKey(ConectorName))
     return;
 if (PDLog.isDebug())
     PDLog.Debug("DestroyExecTask: Con="+ConectorName);        
 TaskRunner  TaskRunnerTask=TaskExecList.get(ConectorName); 
 TaskRunnerTask.End();
-TaskExecList.put(ConectorName, null);
+TaskExecList.remove(ConectorName);
 }
 //--------------------------------------------------------------------------
 //*******************************************************************
@@ -357,7 +357,7 @@ static private class TaskCreator extends Thread
 /**
  * Time for pooling the status and shutdown orders
  */
-static private final long SleepTime=1000; 
+static private final long SleepTime=5000; 
 /**
  * When false the task must stop
  */
@@ -384,7 +384,7 @@ PDTasksCron TaskGen;
  */
 public TaskCreator(int pTaskSearchFreq, String pTaskCategory, Conector pCon)
 {
-setName("TaskCreator");
+setName("TaskCreator"+System.currentTimeMillis());
 TaskSearchFreq=pTaskSearchFreq;   
 TaskCategory=pTaskCategory;
 //Con=pCon;
@@ -416,12 +416,17 @@ Continue=false;
 @Override 
 public void run() 
 {
-if (PDLog.isDebug())
-    PDLog.Debug("TaskCreator starts");    
+if (PDLog.isInfo())
+    PDLog.Info("TaskCreator starts");    
 Date d1=new Date(0);   
 Date d2;   
 while (Continue) 
     {
+    try {
+    Thread.sleep(SleepTime);
+    } catch (InterruptedException e) 
+        {
+        }
     try {  
     d2=new Date();
     if (d2.getTime()-d1.getTime()>TaskSearchFreq)
@@ -438,12 +443,9 @@ while (Continue)
         e.printStackTrace();    
         PDLog.Error("TaskCreator run error:"+e.getLocalizedMessage());
         }
-    try {
-    Thread.sleep(SleepTime);
-    } catch (InterruptedException e) 
-        {
-        }
     }
+if (PDLog.isInfo())
+    PDLog.Info("TaskCreator destroy");    
 } 
 //-------------------------------------------------
 } // **** END of task creator ***************************************
@@ -457,7 +459,7 @@ static private class TaskRunner extends Thread
     /**
  * Time for pooling the status and shutdown orders
  */
-static private long SleepTime=1000; 
+static private long SleepTime=5000; 
 /**
  * When false the task must stop
  */
@@ -484,7 +486,7 @@ PDTasksExec TaskRun;
  */
 public TaskRunner(int pTaskExecFreq, String pTaskCategory, Conector pCon)
 {
-setName("TaskRunner");
+setName("TaskRunner"+System.currentTimeMillis());
 TaskExecFreq=pTaskExecFreq;   
 TaskCategory=pTaskCategory;
 try {
@@ -495,7 +497,7 @@ TaskRun=new PDTasksExec(Session);
 } catch (Exception ex)
     {
     ex.printStackTrace();    
-    PDLog.Error("TaskCreator error:"+ex.getLocalizedMessage());
+    PDLog.Error("TaskRunner error:"+ex.getLocalizedMessage());
     }
 if (PDLog.isDebug())
     PDLog.Debug("TaskRunner.TaskRunner:"+pTaskExecFreq+"-"+pTaskCategory+"-"+pCon);
@@ -515,12 +517,17 @@ Continue=false;
 @Override 
 public void run() 
 {
-if (PDLog.isDebug())
-    PDLog.Debug("TaskCreator starts");    
+if (PDLog.isInfo())
+    PDLog.Info("TaskRunner starts");    
 Date d1=new Date(0);   
 Date d2;   
 while (Continue) 
     {
+    try {
+    Thread.sleep(SleepTime);
+    } catch (InterruptedException e) 
+        {
+        }
     try {  
     d2=new Date();
     if (d2.getTime()-d1.getTime()>TaskExecFreq)
@@ -538,12 +545,9 @@ while (Continue)
         e.printStackTrace();    
         PDLog.Error("TaskRunner run error:"+e.getLocalizedMessage());
         }
-    try {
-    Thread.sleep(SleepTime);
-    } catch (InterruptedException e) 
-        {
-        }
     }
+if (PDLog.isInfo())
+    PDLog.Info("TaskRunner Destroy");    
 } 
 //-------------------------------------------------
 } // **** END of Task runner ***************************************

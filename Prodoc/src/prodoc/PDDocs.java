@@ -2922,8 +2922,15 @@ private void ExecuteTransThreads(String MODE) throws PDException
 ArrayList<PDTasksDefEvent> L =getDrv().getDocTransThreads(this.getDocType(), MODE); 
 if (!L.isEmpty())
     LoadFull(getPDId());
+PDTasksExec TE;
 for (PDTasksDefEvent L1 : L)
+    {
+    TE=new PDTasksExec(getDrv());
+    TE.GenFromDef(L1, this);
+    if (!TE.MeetsReq(this)) // under folder or future checks
+        continue;    
     L1.Execute(this);
+    }
 }
 //---------------------------------------------------------------------
 /** Generates, for the current document, all the NO transactional defined threads

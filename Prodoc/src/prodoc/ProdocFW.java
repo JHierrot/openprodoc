@@ -95,6 +95,7 @@ if (ConectList.isEmpty())
         {
         PDLog.Info("*************************************************************************************");
         PDLog.Info("ProdocFW.InitProdoc:"+ConectorName+"="+FileConf);
+        PDLog.Info("OpenProdoc.Version:"+DriverGeneric.getVersion()); 
         PDLog.Info("os.arch="+System.getProperty("os.arch"));
         PDLog.Info("os.name="+System.getProperty("os.name"));
         PDLog.Info("user.home="+System.getProperty("user.home"));

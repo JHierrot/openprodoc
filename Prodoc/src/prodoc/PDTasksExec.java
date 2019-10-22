@@ -312,6 +312,8 @@ switch (getType())
         break;
     case PDTasksDefEvent.fTASKEVENT_EXPORT_FOLD: ExecuteExportFold();
         break;
+    case PDTasksDefEvent.fTASKEVENT_CUSTOM_FOLD: ExecuteCustomFold();
+        break;
     case PDTasksDefEvent.fTASKEVENT_UPDATE_DOC: ExecuteUpdDoc();
         break;
     case PDTasksDefEvent.fTASKEVENT_COPY_DOC: ExecuteCopyDoc();
@@ -326,6 +328,8 @@ switch (getType())
         break;
     case PDTasksDefEvent.fTASKEVENT_FTDEL_DOC: ExecuteFTDelDoc();
         break;
+    case PDTasksDefEvent.fTASKEVENT_CUSTOM_DOC: ExecuteCustomDoc();
+        break;    
     default: PDExceptionFunc.GenPDException("Unexpected_Task", ""+getType());
         break;
     }
@@ -1375,6 +1379,8 @@ switch (getType())
     case PDTasksDefEvent.fTASKEVENT_FTUPDA_DOC:
         IdUnder=Fold.getIdPath(getParam());
         break;
+    case PDTasksDefEvent.fTASKEVENT_CUSTOM_DOC:
+        return(CustomMeetsReq(Doc.getRecSum().Copy()));
     }
 Fold.setPDId(Doc.getParentId());
 if (!Fold.IsUnder(IdUnder))    
@@ -1489,4 +1495,46 @@ if (isGenAuto())
 super.VerifyAllowedIns();
 }
 //-------------------------------------------------------------------------
+private boolean CustomMeetsReq(Record Rec) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksExec.CustomMeetsReq>:"+Rec); 
+String[] Params = getDescription().split("\\|");
+String PDIdT=Params[0];
+String ClassName=Params[1];
+CustomTask Cust=new CustomTask(getDrv(), PDIdT, ClassName);
+return(Cust.CustomMeetsReq(getParam(), getParam2(), getParam3(), getParam4(), Rec));            
+}
+//-------------------------------------------------------------------------
+private void ExecuteCustomDoc() throws PDException
+{
+PDDocs Doc=new PDDocs(this.getDrv(), getObjType());
+Doc.LoadFull(getObjFilter());      
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksExec.ExecuteCustomDoc>:"+Doc.getPDId()); 
+String[] Params = getDescription().split("\\|");
+String PDId=Params[0];
+String ClassName=Params[1];
+CustomTask Cust=new CustomTask(getDrv(), PDId, ClassName);
+Cust.ExecuteEvent(getParam(), getParam2(), getParam3(), getParam4(), Doc);
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksExec.ExecuteCustomDoc<:"+Doc.getPDId());                    
+}
+//-------------------------------------------------------------------------
+private void ExecuteCustomFold() throws PDException
+{
+PDFolders Fold=new PDFolders(this.getDrv(), getObjType());
+Fold.LoadFull(getObjFilter());
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksExec.ExecuteCustomFold>:"+Fold.getPDId()); 
+String[] Params = getDescription().split("\\|");
+String PDId=Params[0];
+String ClassName=Params[1];
+CustomTask Cust=new CustomTask(getDrv(), PDId, ClassName);
+Cust.ExecuteEvent(getParam(), getParam2(), getParam3(), getParam4(), Fold);
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksExec.ExecuteCustomFold<:"+Fold.getPDId());                    
+}
+//-------------------------------------------------------------------------
+    
 }

@@ -361,9 +361,6 @@ switch (this.getType())
      case fTASKEVENT_FTDEL_DOC:
         ExecuteFTDelDoc(Doc);
         break;
-     case fTASKEVENT_CUSTOM_DOC:
-        ExecuteCustomDoc(Doc);
-        break;
      default:
          PDException.GenPDException("Unexpected_Task", "Type"+getType());
          break;
@@ -679,19 +676,6 @@ if (PDLog.isDebug())
 Doc.ExecuteFTDel();  
 if (PDLog.isDebug())
     PDLog.Debug("PDTasksDefEvent.ExecuteFTDelDoc<:"+Doc.getPDId());                    
-}
-//-------------------------------------------------------------------------
-private void ExecuteCustomDoc(PDDocs Doc) throws PDException
-{
-if (PDLog.isDebug())
-    PDLog.Debug("PDTasksDefEvent.ExecuteCustomDoc>:"+Doc.getPDId()); 
-String[] Params = getDescription().split("\\|");
-String PDId=Params[0];
-String ClassName=Params[1];
-CustomTask Cust=new CustomTask(getDrv(), PDId, ClassName);
-Cust.ExecuteEvent(getEvenType(), getParam(), getParam2(), getParam3(), getParam4(), Doc);
-if (PDLog.isDebug())
-    PDLog.Debug("PDTasksDefEvent.ExecuteCustomDoc<:"+Doc.getPDId());                    
 }
 //-------------------------------------------------------------------------
 }
