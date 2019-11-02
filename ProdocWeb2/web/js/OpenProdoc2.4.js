@@ -19,6 +19,8 @@
 
 var layout;
 var menu;
+var Ribbon=null;
+var RibEve;
 var DocsTree;
 var DocsGrid;
 var layoutThes;
@@ -152,7 +154,8 @@ Init();
 layout = new dhtmlXLayoutObject(document.body,"3L");         
 layout.cells("a").setText(LocaleTrans("Folders_Tree")); 
 layout.cells("a").setWidth(300);
-layout.cells("b").setText(LocaleTrans("Current_Folder"));   
+layout.cells("b").setText(LocaleTrans("Current_Folder"));  
+layout.cells("b").setHeight(250);  
 layout.cells("c").setText(LocaleTrans("Folder_Documents"));   
 menu = layout.attachMenu();
 menu.loadStruct("Menu", function(){});
@@ -160,6 +163,7 @@ menu.attachEvent("onClick", function(id, zoneId, cas)
     {
     ExecMenu(id);    
     });
+RibbonEnable();
 DocsGrid = layout.cells("c").attachGrid();
 DocsGrid.setHeader(LocaleTrans("Document_Type")+","+LocaleTrans("Document_Title")+","+LocaleTrans("Document_Date")+","+LocaleTrans("Lock_user")+","+LocaleTrans("Date"));   //sets the headers of columns
 DocsGrid.setColumnIds("Type,Title,Date,Lock,RepDate");         
@@ -281,6 +285,8 @@ switch (IdMenu)
     case "TrashBin": TrashBin();
         break;
     case "Thesaurus": OpenThes();
+        break;
+    case "RibbonEnable": RibbonEnable();
         break;
     case "ACL": Admin(ELEMACL);
         break;
@@ -3770,6 +3776,26 @@ FormReportFold.attachEvent("onButtonClick", function (name)
     FormReportFold.unload();
     WinAF.close();
     });    
+}
+//--------------------------------------------------
+function RibbonEnable()
+{
+if (Ribbon!=null)    
+    {
+    Ribbon.detachEvent(RibEve);    
+    layout.detachRibbon();   
+//    Ribbon.unload();
+    Ribbon=null;
+    }
+else
+    {
+    Ribbon = layout.attachRibbon();
+    Ribbon.loadStruct("Ribbon");
+    RibEve=Ribbon.attachEvent("onClick", function(id)
+        {
+        ExecMenu(id);    
+        });
+    }    
 }
 //--------------------------------------------------
 

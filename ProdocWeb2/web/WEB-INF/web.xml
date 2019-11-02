@@ -413,6 +413,10 @@
         <servlet-name>FormSQL</servlet-name>
         <servlet-class>OpenProdocServ.FormSQL</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Ribbon</servlet-name>
+        <servlet-class>OpenProdocServ.Ribbon</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SParent</servlet-name>
         <url-pattern>/SParent</url-pattern>
@@ -824,6 +828,10 @@
     <servlet-mapping>
         <servlet-name>FormSQL</servlet-name>
         <url-pattern>/FormSQL</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Ribbon</servlet-name>
+        <url-pattern>/Ribbon</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

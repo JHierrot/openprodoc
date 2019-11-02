@@ -82,6 +82,16 @@ final protected boolean CustomMeetsReq(String param, String param2, String param
 {
 return(Bin.CustomMeetsReqRec(param, param2, param3, param4, Rec));
 }
+//-----------------------------------------------------------------    
+final protected Cursor CurCustom(DriverGeneric Drv, String ObjectType, String Filter, String param, String param2, String param3, String param4)
+{
+return(Bin.CursorCustom( Drv, ObjectType, Filter, param, param2, param3, param4));
+}
+
+final protected void ExecuteCustomCron(DriverGeneric drv, String objType, String objFilter, String param, String param2, String param3, String param4)
+{
+Bin.CustomCronTask(drv, objType, objFilter, param, param2, param3, param4);
+}
        
 //-----------------------------------------------------------------
 /**
@@ -150,6 +160,37 @@ protected void ExecuteEventDoc(String Param1, String Param2, String Param3, Stri
 protected boolean CustomMeetsReqRec(String param, String param2, String param3, String param4, Record Rec)
 {
 return(true);
+}
+//-----------------------------------------------------------------    
+/**
+ * Method to be overloaded by Cron-Schedulled developed Task
+ * @param Drv
+ * @param ObjectType
+ * @param Filter
+ * @param param
+ * @param param2
+ * @param param3
+ * @param param4
+ * @return 
+ */
+protected Cursor CursorCustom(DriverGeneric Drv, String ObjectType, String Filter, String param, String param2, String param3, String param4)
+{
+throw new UnsupportedOperationException("Not supported yet."); 
+}
+//-----------------------------------------------------------------    
+/**
+ * Method to be overloaded by Cron-Schedulled developed Task
+ * @param drv
+ * @param objType
+ * @param objFilter
+ * @param param
+ * @param param2
+ * @param param3
+ * @param param4 
+ */
+protected void CustomCronTask(DriverGeneric drv, String objType, String objFilter, String param, String param2, String param3, String param4)
+{
+throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 }
 //-----------------------------------------------------------------    
 }

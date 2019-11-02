@@ -26,6 +26,7 @@ import java.util.TreeSet;
 import prodoc.Attribute;
 import prodoc.PDException;
 import prodoc.PDFolders;
+import prodoc.PDLog;
 import prodoc.Record;
 
 
@@ -203,6 +204,8 @@ return(f);
 //--------------------------------------------------------------------------    
 public void Assign(PDFolders Fold) throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("FolderB.Assign:"+getListAttr());     
 if (getACL()!=null && getACL().length()!=0)
     Fold.setACL(getACL());
 if (getName()!=null && getName().length()!=0)
@@ -212,7 +215,16 @@ Record recSum = Fold.getRecSum();
 for (int i = 0; i < listAttr.size(); i++)
     {
     Attr At = listAttr.get(i);
-    recSum.getAttr(At.getName()).Import(At.getValues().get(0));
+    if (!recSum.ContainsAttr(At.getName()))
+        PDException.GenPDException("Incorrect_Attribute:", At.getName());
+    if (recSum.getAttr(At.getName()).isMultivalued())
+        {
+        ArrayList<String> values = At.getValues();
+        for (int j = 0; j < values.size(); j++)
+            recSum.getAttr(At.getName()).AddValue(values.get(j));
+        }
+    else
+        recSum.getAttr(At.getName()).Import(At.getValues().get(0));
     }
 }
 //--------------------------------------------------------------------------    

@@ -306,6 +306,8 @@ switch (getType())
         String IdFold=F.getIdPath(getParam3());
         LocalSync(getParam2(), IdFold, getParam4(), getParam()!=null && getParam().equals("1"));
         break;
+    case fTASK_CUSTOM: ExecuteCustomCron();
+        break;
     case PDTasksDefEvent.fTASKEVENT_UPDATE_FOLD: ExecuteUpdFold();
         break;
     case PDTasksDefEvent.fTASKEVENT_COPY_FOLD: ExecuteCopyFold();
@@ -350,6 +352,7 @@ switch (getType())
     case fTASK_EXPORT: return CurExport();
     case fTASK_DOCSREPORT: return CurDocsReport();
     case fTASK_FOLDSREPORT: return CurFoldsReport();
+    case fTASK_CUSTOM: return CurCustom();
     }
 PDExceptionFunc.GenPDException("Undefined_task", ""+getType());
 return (null);
@@ -880,6 +883,17 @@ Conds.addCondition(c2);
 PDFolders F=new PDFolders(getDrv());
 String IdAct=F.getIdPath(getParam4());
 return(Doc.Search(DocType, Conds, SubTypes, true, false, IdAct, null))  ;
+}
+//-------------------------------------------------------------------------
+private Cursor CurCustom() throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksExec.CurCustom>:"); 
+String[] Params = getDescription().split("\\|");
+String PDIdT=Params[0];
+String ClassName=Params[1];
+CustomTask Cust=new CustomTask(getDrv(), PDIdT, ClassName);
+return(Cust.CurCustom(getDrv(), getObjType(), getObjFilter(), getParam(), getParam2(), getParam3(), getParam4()));            
 }
 //-------------------------------------------------------------------------
 /**
@@ -1536,5 +1550,17 @@ if (PDLog.isDebug())
     PDLog.Debug("PDTasksExec.ExecuteCustomFold<:"+Fold.getPDId());                    
 }
 //-------------------------------------------------------------------------
-    
+private void ExecuteCustomCron() throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksExec.ExecuteCustomCron>"); 
+String[] Params = getDescription().split("\\|");
+String PDId=Params[0];
+String ClassName=Params[1];
+CustomTask Cust=new CustomTask(getDrv(), PDId, ClassName);
+Cust.ExecuteCustomCron(getDrv(), getObjType(), getObjFilter(), getParam(), getParam2(), getParam3(), getParam4());
+if (PDLog.isDebug())
+    PDLog.Debug("PDTasksExec.ExecuteCustomCron<");                    
+}
+//-------------------------------------------------------------------------    
 }

@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.TreeSet;
@@ -55,7 +54,6 @@ import prodoc.PDRepository;
 import prodoc.PDRoles;
 import prodoc.PDThesaur;
 import prodoc.PDUser;
-import prodoc.ProdocFW;
 import prodoc.Record;
 
 
@@ -106,21 +104,6 @@ public final static String PRODOC_SESSID="PRODOC_SESSID";
 
 protected static boolean OPDFWLoaded=false;
 
-///** Initializes the servlet.
-// * @param config 
-// * @throws ServletException 
-// */
-//public void init(ServletConfig config) throws ServletException
-//{
-//super.init(config);
-//try {
-//Thread.sleep(90000);    
-//ProdocFW.InitProdoc("PD", getProdocProperRef());    
-//} catch (Exception Ex)
-//    {
-//    Ex.printStackTrace();
-//    }
-//}
 //-----------------------------------------------------------------------------------------------
 
 /** Destroys the servlet.
@@ -836,7 +819,7 @@ while (Attr!=null)
  */
 static public String getVersion()
 {
-return("2.4");
+return("3.0");
 }
 //-----------------------------------------------------------------------------------------------
 /**

@@ -1960,7 +1960,7 @@ if (PDLog.isDebug())
  */
 static public String getVersion()
 {
-return("2.4");
+return("3.0");
 }
 /**
  * constant used for bin <-> hexadecimal conversión

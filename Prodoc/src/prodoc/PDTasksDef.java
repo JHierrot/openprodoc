@@ -113,45 +113,47 @@ private String Description;
 
 public static final int fTASK_DELETE_OLD_FOLD=0;
 
-    /**
-     *
-     */
-    public static final int fTASK_DELETE_OLD_DOC=1;
+/**
+ *
+ */
+public static final int fTASK_DELETE_OLD_DOC=1;
 
-    /**
-     *
-     */
-    public static final int fTASK_PURGEDOC=2;
+/**
+ *
+ */
+public static final int fTASK_PURGEDOC=2;
 
-    /**
-     *
-     */
-    public static final int fTASK_IMPORT=3;
+/**
+ *
+ */
+public static final int fTASK_IMPORT=3;
 
-    /**
-     *
-     */
-    public static final int fTASK_EXPORT=4;
+/**
+ *
+ */
+public static final int fTASK_EXPORT=4;
 
-    /**
-     *
-     */
-    public static final int fTASK_DOCSREPORT=5;
+/**
+ *
+ */
+public static final int fTASK_DOCSREPORT=5;
 
-    /**
-     *
-     */
-    public static final int fTASK_FOLDSREPORT=6;
+/**
+ *
+ */
+public static final int fTASK_FOLDSREPORT=6;
 
-    /**
-     *
-     */
-    public static final int fTASK_LOCALSYNC=7;
+/**
+ *
+ */
+public static final int fTASK_LOCALSYNC=7;
 
-    /**
-     *
-     */
-    public static final int fTASK_MAXCRON=7;
+public static final int fTASK_CUSTOM=8;
+
+/**
+ *
+ */
+public static final int fTASK_MAXCRON=8;
 
 private static final String[] LisTypeTask= {"DELETE_OLD_FOLD",
                                             "DELETE_OLD_DOC",
@@ -160,7 +162,8 @@ private static final String[] LisTypeTask= {"DELETE_OLD_FOLD",
                                             "EXPORT",
                                             "DOCSREPORT",
                                             "FOLDSREPORT",
-                                            "LOCALSYNC"
+                                            "LOCALSYNC",
+                                            "CUSTOM"
                                             };
 
 private static String[] AllLisTypeTask=null;

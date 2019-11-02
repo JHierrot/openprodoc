@@ -73,20 +73,20 @@ StringBuilder Men=new StringBuilder(2000);
 PDRoles R=getSessOPD(Req).getUser().getRol();
 Men.append("<?xml version=\"1.0\"?><menu><item id=\"Folders\" text=\"").append(TT(Req, "Folders")).append("\">");
 if (R.isAllowCreateFolder())
-   Men.append("<item id=\"AddFold\" text=\"").append(TT(Req, "Add")).append("\" img=\"img/add.png\" imgdis=\"img/add.png\" />");
+   Men.append("<item id=\"AddFold\" text=\"").append(TT(Req, "Add")).append("\" img=\"img/Fold.png\" imgdis=\"Fold.png\" />");
 if (R.isAllowMaintainFolder())
     {
-    Men.append("<item id=\"DelFold\" text=\"").append(TT(Req, "Delete")).append("\" img=\"img/del.png\" imgdis=\"img/del.png\" />");
-    Men.append("<item id=\"UpdFold\" text=\"").append(TT(Req, "Update")).append("\" img=\"img/edit.png\" imgdis=\"img/edit.png\" />");    
+    Men.append("<item id=\"DelFold\" text=\"").append(TT(Req, "Delete")).append("\" img=\"img/FoldDel.png\" imgdis=\"img/FoldDel.png\" />");
+    Men.append("<item id=\"UpdFold\" text=\"").append(TT(Req, "Update")).append("\"  />");    
     }
 Men.append("<item id=\"file_sep_01\" type=\"separator\"/>");
 if (R.isAllowCreateFolder())
-    Men.append("<item id=\"AddExtF\" text=\"").append(TT(Req, "Extended_Add")).append("\"/>");
+    Men.append("<item id=\"AddExtF\" text=\"").append(TT(Req, "Extended_Add")).append("\" img='img/FoldAdd.png' />");
 if (R.isAllowMaintainFolder())
-    Men.append("<item id=\"ModExtF\" text=\"").append(TT(Req, "Update_Extended")).append("\"/>");
+    Men.append("<item id=\"ModExtF\" text=\"").append(TT(Req, "Update_Extended")).append("\" img=\"img/FoldEdit.png\" imgdis=\"img/FoldEdit.png\" />");
 Men.append("<item id=\"RefreshFold\" text=\"").append(TT(Req, "Refresh")).append("\"  img=\"img/refresh.png\" imgdis=\"img/refresh.png\" />");
 Men.append("<item id=\"file_sep_02\" type=\"separator\"/>");
-Men.append("<item id=\"SearchFold\" text=\"").append(TT(Req, "Search_Folders")).append("\" img=\"img/search.png\" imgdis=\"img/search.png\" />");
+Men.append("<item id=\"SearchFold\" text=\"").append(TT(Req, "Search_Folders")).append("\" img=\"img/FoldSearch.png\" imgdis=\"img/FoldSearch.png\" />");
 if (R.isAllowMaintainDoc())
     {
     Men.append("<item id=\"file_sep_02a\" type=\"separator\"/>");
@@ -97,21 +97,21 @@ if (R.isAllowMaintainDoc())
     Men.append("<item id=\"PasteFold\" text=\"").append(TT(Req, "Paste_Fold")).append("\" enabled=\"false\"/>");
     }
 Men.append("<item id=\"file_sep_03\" type=\"separator\"/>");
-Men.append("<item id=\"FoldReports\" text=\"").append(TT(Req, "Reports")).append("\"/>");
+Men.append("<item id=\"FoldReports\" text=\"").append(TT(Req, "Reports")).append("\" img='img/Reports.png' imgdis='img/Reports.png' />");
 Men.append("<item id=\"file_sep_03b\" type=\"separator\"/>");
 Men.append("<item id=\"Exit\" text=\"").append(TT(Req, "Exit")).append("\" img=\"img/close.gif\" imgdis=\"img/close_dis.gif\"/></item>");
 Men.append("<item id=\"Documentos\" text=\"").append(TT(Req, "Documents")).append("\">");
 if (R.isAllowCreateDoc())
-    Men.append("<item id=\"AddDoc\" text=\"").append(TT(Req, "Add")).append("\"  img=\"img/add.png\" imgdis=\"img/add.png\" />");
+    Men.append("<item id=\"AddDoc\" text=\"").append(TT(Req, "Add")).append("\"  img=\"img/Doc.png\" imgdis=\"img/Doc.png\" />");
 if (R.isAllowMaintainDoc())    
-    Men.append("<item id=\"DelDoc\" text=\"").append(TT(Req, "Delete")).append("\" img=\"img/del.png\" imgdis=\"img/del.png\" />");  
+    Men.append("<item id=\"DelDoc\" text=\"").append(TT(Req, "Delete")).append("\" img=\"img/DocDel.png\" imgdis=\"img/DocDel.png\" />");  
 Men.append("<item id=\"file_sep_04\" type=\"separator\"/>");
 if (R.isAllowCreateDoc())
-    Men.append("<item id=\"AddExtDoc\" text=\"").append(TT(Req, "Extended_Add")).append("\"/>");    
+    Men.append("<item id=\"AddExtDoc\" text=\"").append(TT(Req, "Extended_Add")).append("\" img='img/DocAdd.png' />");    
 if (R.isAllowMaintainDoc())    
     {
-    Men.append("<item id=\"ModExtDoc\" text=\"").append(TT(Req, "Update_Extended")).append("\" img=\"img/edit.png\" imgdis=\"img/edit.png\" />");
-    Men.append("<item id=\"ChangeACL\" text=\"").append(TT(Req, "Change_ACL")).append("\"/>");
+    Men.append("<item id=\"ModExtDoc\" text=\"").append(TT(Req, "Update_Extended")).append("\" img=\"img/DocEdit.png\" imgdis=\"img/DocEdit.png\" />");
+    Men.append("<item id=\"ChangeACL\" text=\"").append(TT(Req, "Change_ACL")).append("\" img='img/DocACL.png' />");
     }
 Men.append("<item id=\"DocMetadata\" text=\"").append(TT(Req, "Document_Attributes")).append("\" img=\"img/data.png\" imgdis=\"img/data.png\" />");
 Men.append("<item id=\"file_sep_05\" type=\"separator\"/>");
@@ -121,9 +121,9 @@ if (R.isAllowMaintainDoc())
     Men.append("<item id=\"CheckIn\" text=\"").append(TT(Req, "CheckIn")).append("\" img=\"img/checkin.png\" imgdis=\"img/checkin.png\" />");
     Men.append("<item id=\"CancelCheckOut\" text=\"").append(TT(Req, "Cancel_CheckOut")).append("\" img=\"img/cancelcheckout.png\" imgdis=\"img/cancelcheckout.png\" />");    
     }
-Men.append("<item id=\"ListVer\" text=\"").append(TT(Req, "List_of_Versions")).append("\"/>");
+Men.append("<item id=\"ListVer\" text=\"").append(TT(Req, "List_of_Versions")).append("\" img='img/ListVers.png' imgdis='img/ListVers.png' />");
 Men.append("<item id=\"file_sep_06\" type=\"separator\"/>");
-Men.append("<item id=\"SearchDoc\" text=\"").append(TT(Req, "Search_Documents")).append("\" img=\"img/search.png\" imgdis=\"img/search.png\" />");
+Men.append("<item id=\"SearchDoc\" text=\"").append(TT(Req, "Search_Documents")).append("\" img=\"img/DocSearch.png\" imgdis=\"img/DocSearch.png\" />");
 if (R.isAllowMaintainDoc())
     {
     Men.append("<item id=\"file_sep_07\" type=\"separator\"/>");
@@ -135,14 +135,15 @@ if (R.isAllowMaintainDoc())
     Men.append("<item id=\"PasteDoc\" text=\"").append(TT(Req, "Paste_Doc")).append("\" enabled=\"false\"/>");
     }
 Men.append("<item id=\"file_sep_09\" type=\"separator\"/>");
-Men.append("<item id=\"DocReports\" text=\"").append(TT(Req, "Reports")).append("\"/>");
+Men.append("<item id=\"DocReports\" text=\"").append(TT(Req, "Reports")).append("\" img='img/Reports.png' imgdis='img/Reports.png' />");
 Men.append("</item>");
 Men.append("<item id=\"Other\" text=\"").append(TT(Req, "Other_Tasks")).append("\">");
 if (R.isAllowCreateDoc() && R.isAllowMaintainDoc())
     Men.append("<item id=\"TrashBin\" text=\"").append(TT(Req, "Trash_bin")).append("\" />");
 Men.append("<item id=\"PasswordChange\" text=\"").append(TT(Req, "Password_change")).append("\"/>");
 if (R.isAllowCreateThesaur() || R.isAllowMaintainThesaur())
-    Men.append("<item id=\"Thesaurus\" text=\"").append(TT(Req, "Thesaurus")).append("\"/>");
+    Men.append("<item id=\"Thesaurus\" text=\"").append(TT(Req, "Thesaurus")).append("\" img='img/Thesaurus.png' />");
+Men.append("<item id=\"RibbonEnable\" text=\"").append(TT(Req, "Toolbar_0/1")).append("\"/>");
 Men.append("</item>");
 Men.append("<item id=\"Administration\" text=\"").append(TT(Req, "Administration")).append("\">");
 if (R.isAllowCreateAcl() || R.isAllowMaintainAcl())
