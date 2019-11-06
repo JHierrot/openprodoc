@@ -72,7 +72,7 @@ try {
 StringBuilder Men=new StringBuilder(3000);
 PDRoles R=getSessOPD(Req).getUser().getRol();
 Men.append("<?xml version='1.0' encoding='UTF-8'?><ribbon>");
-Men.append("<item id='Folders' type='block' mode='cols' text='").append(TT(Req, "Folders_Mant")).append("'>");
+Men.append("<item id='Folders' type='block' mode='cols' text='").append(TT(Req, "Maintenance_Folders")).append("'>");
     if (R.isAllowCreateFolder())
         Men.append("<item id='AddExtF' type='button' isbig='true' text='").append(TT(Req, "Extended_Add")).append("' img='img/FoldAdd.png' />");
     if (R.isAllowCreateFolder())
@@ -83,12 +83,12 @@ Men.append("<item id='Folders' type='block' mode='cols' text='").append(TT(Req, 
         Men.append("<item id='DelFold' type='button' text='").append(TT(Req, "Delete")).append("' img='img/FoldDel.png' imgdis='img/FoldDel.png' />");
         }
 Men.append("</item>");
-Men.append("<item id='Folders2' type='block' mode='cols' text='").append(TT(Req, "Folders_Info")).append("'>");
+Men.append("<item id='Folders2' type='block' mode='cols' text='").append(TT(Req, "Folders")).append(" "+TT(Req, "Info")).append("'>");
     Men.append("<item id='RefreshFold' type='button' text='").append(TT(Req, "Refresh")).append("'  img='img/refresh.png' imgdis='img/refresh.png' />");
     Men.append("<item id='SearchFold' type='button' text='").append(TT(Req, "Search")).append("' img='img/FoldSearch.png' imgdis='img/FoldSearch.png' />");
     Men.append("<item id='FoldReports' type='button' text='").append(TT(Req, "Reports")).append("' img='img/Reports.png' imgdis='img/Reports.png' />");
 Men.append("</item>");
-Men.append("<item id='Documentos'  type='block' mode='cols' text='").append(TT(Req, "Documents_Mant")).append("'>");
+Men.append("<item id='Documentos'  type='block' mode='cols' text='").append(TT(Req, "Maintenance_Documents")).append("'>");
     if (R.isAllowCreateDoc())
         {
         Men.append("<item id='AddExtDoc' type='button' text='").append(TT(Req, "Extended_Add")).append("' isbig='true' img='img/DocAdd.png' />");    
@@ -100,7 +100,7 @@ Men.append("<item id='Documentos'  type='block' mode='cols' text='").append(TT(R
         Men.append("<item id='DelDoc' type='button' text='").append(TT(Req, "Delete")).append("' img='img/DocDel.png' imgdis='img/DocDel.png' />");  
         }
 Men.append("</item>");
-Men.append("<item id='Documentos2'  type='block' mode='cols' text='").append(TT(Req, "Documents_Versions")).append(" '>");
+Men.append("<item id='Documentos2'  type='block' mode='cols' text='").append(TT(Req, "Documents")).append(" "+TT(Req, "Versions")).append(" '>");
     if (R.isAllowMaintainDoc())
         {
         Men.append("<item id='CheckOut' type='button' text='").append(TT(Req, "CheckOut")).append("' img='img/checkout.png' imgdis='img/checkout.png' />");

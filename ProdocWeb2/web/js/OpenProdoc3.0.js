@@ -1621,8 +1621,8 @@ FormSearchFold = TabBar.tabs("Search").attachForm();
 FormSearchFoldSQL = TabBar.tabs("SQL").attachForm();
 FormSearchFoldSQL.load("FormSQL?Type=FOLD");
 ToolBar = TabBar.tabs("Results").attachToolbar();
-ToolBar.addButton(T_EDIT, 0, LocaleTrans("Edit"), "img/edit.png", "img/edit.png");
-ToolBar.addButton(T_DEL, 1, LocaleTrans("Delete"), "img/del.png", "img/del.png");
+ToolBar.addButton(T_EDIT, 0, LocaleTrans("Edit"), "img/FoldEdit.png", "img/FoldEdit.png");
+ToolBar.addButton(T_DEL, 1, LocaleTrans("Delete"), "img/FoldDel.png", "img/FoldDel.png");
 ToolBar.addButton(CSVFORMAT, 2, "CSV", "img/expCSV.png", "img/expCSV.png");
 ToolBar.attachEvent("onClick", function(id)
     {
@@ -2119,8 +2119,8 @@ GridReports.load("RepList?Type=Fold");
 GridReports.init();
 TabBar.tabs("Reports").disable();
 ToolBar = TabBar.tabs("Results").attachToolbar();
-ToolBar.addButton(T_EDIT, 0, LocaleTrans("Edit"), "img/edit.png", "img/edit.png");
-ToolBar.addButton(T_DEL, 1, LocaleTrans("Delete"), "img/del.png", "img/del.png");
+ToolBar.addButton(T_EDIT, 0, LocaleTrans("Edit"), "img/DocEdit.png", "img/DocEdit.png");
+ToolBar.addButton(T_DEL, 1, LocaleTrans("Delete"), "img/DocDel.png", "img/DocDel.png");
 ToolBar.addButton("CheckOut", 2, "CheckOut", "img/checkout.png", "img/checkout.png");
 ToolBar.addButton("CheckIn", 3, "CheckIn", "img/checkin.png", "img/checkin.png");
 ToolBar.addButton("CancelCheckOut", 4, "CancelCheckOut", "img/cancelcheckout.png", "img/cancelcheckout.png");
