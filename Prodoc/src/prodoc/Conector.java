@@ -132,7 +132,7 @@ for (int i = 0; i < MinPoolSize; i++)
     {
     ListSesion.add(CreateSesion());
     }
-if (!TasksStarted)
+if (!TasksStarted && !IsInstallMode())
     {    
     CreateTask();
     LoadAuth();
@@ -346,6 +346,16 @@ if (PDLog.isDebug())
 TaskRunner  TaskRunnerTask=TaskExecList.get(ConectorName); 
 TaskRunnerTask.End();
 TaskExecList.remove(ConectorName);
+}
+
+private boolean IsInstallMode() throws PDException
+{
+DriverGeneric Session=CreateSesion();
+Session.Lock();
+boolean IsInstallMode=!Session.IsConnected();
+Session.UnLock();
+Session.delete();
+return(IsInstallMode);
 }
 //--------------------------------------------------------------------------
 //*******************************************************************

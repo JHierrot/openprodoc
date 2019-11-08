@@ -1195,7 +1195,7 @@ if (r==null)
 if (r==null)
     PDExceptionFunc.GenPDException("Folder_do_not_exist",Ident);
 String ActACL=(String)r.getAttr(fACL).getValue();
-if (!getDrv().getUser().getAclList().containsKey(ActACL))
+if (!getDrv().getUser().getName().equals("Install") && !getDrv().getUser().getAclList().containsKey(ActACL))
     PDExceptionFunc.GenPDException("User_without_permissions_over_folder",Ident);
 assignValues(r);
 return(r);
