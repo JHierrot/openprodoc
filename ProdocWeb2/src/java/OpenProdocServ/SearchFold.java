@@ -73,7 +73,7 @@ else
     try {    
     if (SQL!=null && SQL.length()!=0)
         {
-        SQL=SQL.replace("&gt;",">").replace("&lt;","<").replace("<b>","").replace("</b>","").replace("<i>","").replace("</i>","").replace("<u>","").replace("</u>","").replace("<div>"," ").replace("</div>"," ").replace("<br>"," ");
+        SQL=SQL.replace("&gt;",">").replace("&lt;","<").replace("<b>","").replace("</b>","").replace("<i>","").replace("</i>","").replace("<u>","").replace("</u>","").replace("<div>"," ").replace("</div>"," ").replace("<br>"," ").replace("&nbsp;", " ");
         PDFolders f=new PDFolders(PDSession);
         c = f.SearchSelect(SQL);
         SaveSQL(Req, "FOLD", SQL);

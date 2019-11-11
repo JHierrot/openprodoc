@@ -30,39 +30,55 @@ import javax.servlet.http.HttpServletRequest;
 public class FormSQL extends SParent
 {
 final static String ExampleFoldSQL="<b>Select</b> PDId, Title, FolderType, ACL <br> <b>from</b> PD_FOLDERS, SUBTYPES <br> <b>where</b> Title=' ' and PDDate>'2000-01-01 09:10:11' <br> <b>order by</b> PDDate <b>DESC</b>";
-final static String HelpFoldSQL="&lt;Select_Expression&gt; ::= SELECT &lt;Columns_List&gt; " +
-" FROM &lt;Object_Name&gt; " +
-" [ WHERE &lt;Search_Condition&gt; ] " +
-" [ ORDER BY &lt;Sort_Description&gt; ]<br>" +
-"&lt;Columns_List&gt; ::= * | &lt;ColumnName&gt; [ { , &lt;ColumnName&gt; } ]<br>" +
-"&lt;Object_Name&gt; ::= this | &lt;FolderTypeName&gt; [,SUBTYPES]<br>" +
-"&lt;Search_Condition&gt; ::= [ NOT ] [ ( ]&lt;Bool_Term&gt; | &lt;Search_Condition&gt; OR &lt;Bool_Term&gt; [ ) ]<br>" +
-"&lt;Bool_Term&gt; ::= &lt;Bool_Factor&gt; | &lt;Bool_Term&gt; AND &lt;Bool_Factor&gt;<br>" +
-"&lt;Bool_Factor&gt; ::= &lt;Exp_Comp&gt; | &lt;Exp_In&gt; | &lt;Exp_Func&gt;<br>" +
-"&lt;Exp_Comp&gt; ::= &lt;FieldName&gt; &lt;Comparator&gt; [ &lt;FieldName&gt; | &lt;Value&gt; ]<br>" +
-"&lt;Comparator&gt; ::=  = | &lt;&gt; | &gt;= | &lt;= | &gt; | &lt;<br>" +
-"&lt;Value&gt; ::= &lt;String&gt; | &lt;Date&gt; | &lt;Integer&gt; | &lt;TimeStamp&gt; | &lt;Boolean&gt; | &lt;Decimal&gt;<br>" +
-"&lt;Exp_In&gt; ::= &lt;FieldName&gt; IN &lt;In_List&gt;<br>" +
-"&lt;In_List&gt; ::= (&lt;Value&gt; [ { , &lt;Value&gt; } ]) | &lt;Select_Expression&gt;<br>" +
-"&lt;Exp_Func&gt; ::= IN_TREE( &lt;FolderId&gt; ) | IN_FOLDER( &lt;FolderId&gt; )<br>" +
-"&lt;Sort_Description&gt; ::= &lt;FieldName&gt; ASC | DESC";
+final static String HelpFoldSQL="<i>Select_Expression</i> ::= <b>SELECT</b> <i>Columns_List</i>" +
+" <b>FROM</b> <i>Object_Name</i>" +
+" [ <b>WHERE</b> <i>Search_Condition</i> ]" +
+" [ <b>ORDER BY</b> <i>Sort_Description</i> ]<br>" +
+"<i>Columns_List</i> ::= * | <i>ColumnName</i> [ , <i>ColumnName</i> ]<br>" +
+"<i>Object_Name</i> ::= this | <i>FolderTypeName</i> [,SUBTYPES]<br>" +
+"<i>Search_Condition</i> ::= [ <b>NOT</b> ] [ ( ]<i>Bool_Term</i> | <i>Search_Condition</i> <b>OR</b> <i>Bool_Term</i> [ ) ]<br>" +
+"<i>Bool_Term</i> ::= <i>Bool_Factor</i> | <i>Bool_Term</i> <b>AND</b> <i>Bool_Factor</i><br>" +
+"<i>Bool_Factor</i> ::= <i>Exp_Comp</i> | <i>Exp_In</i> | <i>Exp_Func</i><br>" +
+"<i>Exp_Comp</i> ::= <i>FieldName</i> <i>Comparator</i> [ <i>FieldName</i> | <i>Value</i> ]<br>" +
+"<i>Comparator</i> ::=    <b>= | <> | <= | >= | > | <   </b> <br>" +
+"<i>Value</i> ::= <i>String</i> | <i>Date</i> | <i>Integer</i> | <i>TimeStamp</i> | <i>Boolean</i> | <i>Decimal</i><br>" +
+"<i>Exp_In</i> ::= <i>FieldName</i> <b>IN</b> <i>In_List</i><br>" +
+"<i>In_List</i> ::= (<i>Value</i> [ , <i>Value</i> ]) | <i>Select_Expression</i><br>" +
+"<i>Exp_Func</i> ::= <b>IN_TREE</b>( <i>FolderId</i> ) | <b>IN_FOLDER</b>( <i>FolderId</i> )<br>" +
+"<i>Sort_Description</i> ::= <i>FieldName</i> <b>ASC</b> | <b>DESC</b>";
+//final static String HelpFoldSQL="&lt;Select_Expression&gt; ::= SELECT &lt;Columns_List&gt; " +
+//" FROM &lt;Object_Name&gt; " +
+//" [ WHERE &lt;Search_Condition&gt; ] " +
+//" [ ORDER BY &lt;Sort_Description&gt; ]<br>" +
+//"&lt;Columns_List&gt; ::= * | &lt;ColumnName&gt; [ { , &lt;ColumnName&gt; } ]<br>" +
+//"&lt;Object_Name&gt; ::= this | &lt;FolderTypeName&gt; [,SUBTYPES]<br>" +
+//"&lt;Search_Condition&gt; ::= [ NOT ] [ ( ]&lt;Bool_Term&gt; | &lt;Search_Condition&gt; OR &lt;Bool_Term&gt; [ ) ]<br>" +
+//"&lt;Bool_Term&gt; ::= &lt;Bool_Factor&gt; | &lt;Bool_Term&gt; AND &lt;Bool_Factor&gt;<br>" +
+//"&lt;Bool_Factor&gt; ::= &lt;Exp_Comp&gt; | &lt;Exp_In&gt; | &lt;Exp_Func&gt;<br>" +
+//"&lt;Exp_Comp&gt; ::= &lt;FieldName&gt; &lt;Comparator&gt; [ &lt;FieldName&gt; | &lt;Value&gt; ]<br>" +
+//"&lt;Comparator&gt; ::=  = | &lt;&gt; | &gt;= | &lt;= | &gt; | &lt;<br>" +
+//"&lt;Value&gt; ::= &lt;String&gt; | &lt;Date&gt; | &lt;Integer&gt; | &lt;TimeStamp&gt; | &lt;Boolean&gt; | &lt;Decimal&gt;<br>" +
+//"&lt;Exp_In&gt; ::= &lt;FieldName&gt; IN &lt;In_List&gt;<br>" +
+//"&lt;In_List&gt; ::= (&lt;Value&gt; [ { , &lt;Value&gt; } ]) | &lt;Select_Expression&gt;<br>" +
+//"&lt;Exp_Func&gt; ::= IN_TREE( &lt;FolderId&gt; ) | IN_FOLDER( &lt;FolderId&gt; )<br>" +
+//"&lt;Sort_Description&gt; ::= &lt;FieldName&gt; ASC | DESC";
 final static String ExampleDocSQL="<b>Select</b> PDId, Title, DocType, ACL <br> <b>from</b> PD_DOCS, SUBTYPES <br> <b>where</b> Title=' ' and PDDate>'2000-01-01 09:10:11' <br> <b>order by</b> PDDate <b>DESC</b>";
-final static String HelpDocSQL="&lt;Select_Expression&gt; ::= SELECT &lt;Columns_List&gt; " +
-" FROM &lt;Object_Name&gt; " +
-" [ WHERE &lt;Search_Condition&gt; ] " +
-" [ ORDER BY &lt;Sort_Description&gt; ] <br>" +
-"&lt;Columns_List&gt; ::= * | &lt;ColumnName&gt; [ { , &lt;ColumnName&gt; } ]<br>" +
-"&lt;Object_Name&gt; ::= this | &lt;DocumentTypeName&gt; [,SUBTYPES]<br>" +
-"&lt;Search_Condition&gt; ::= [ NOT ] [ ( ]&lt;Bool_Term&gt; | &lt;Search_Condition&gt; OR &lt;Bool_Term&gt; [ ) ]<br>" +
-"&lt;Bool_Term&gt; ::= &lt;Bool_Factor&gt; | &lt;Bool_Term&gt; AND &lt;Bool_Factor&gt;<br>" +
-"&lt;Bool_Factor&gt; ::= &lt;Exp_Comp&gt; | &lt;Exp_In&gt; | &lt;Exp_Func&gt;<br>" +
-"&lt;Exp_Comp&gt; ::= &lt;FieldName&gt; &lt;Comparator&gt; [ &lt;FieldName&gt; | &lt;Value&gt; ]<br>" +
-"&lt;Comparator&gt; ::=  = | &lt;&gt; | &gt;= | &lt;= | &gt; | &lt;<br>" +
-"&lt;Value&gt; ::= &lt;String&gt; | &lt;Date&gt; | &lt;Integer&gt; | &lt;TimeStamp&gt; | &lt;Boolean&gt; | &lt;Decimal&gt;<br>" +
-"&lt;Exp_In&gt; ::= &lt;FieldName&gt; IN &lt;In_List&gt;<br>" +
-"&lt;In_List&gt; ::= (&lt;Value&gt; [ { , &lt;Value&gt; } ]) | &lt;Select_Expression&gt;<br>" +
-"&lt;Exp_Func&gt; ::= CONTAINS(‘&lt;FullText_Search&gt;‘) | IN_TREE( &lt;FolderId&gt; ) | IN_FOLDER( &lt;FolderId&gt; )<br>" +
-"&lt;Sort_Description&gt; ::= &lt;FieldName&gt; ASC | DESC";
+final static String HelpDocSQL="<i>Select_Expression</i> ::= <b>SELECT</b> <i>Columns_List</i>" +
+" <b>FROM</b> <i>Object_Name</i>" +
+" [ <b>WHERE</b> <i>Search_Condition</i> ]" +
+" [ <b>ORDER BY</b> <i>Sort_Description</i> ]<br>" +
+"<i>Columns_List</i> ::= * | <i>ColumnName</i> [ , <i>ColumnName</i> ]<br>" +
+"<i>Object_Name</i> ::= this | <i>FolderTypeName</i> [,SUBTYPES]<br>" +
+"<i>Search_Condition</i> ::= [ <b>NOT</b> ] [ ( ]<i>Bool_Term</i> | <i>Search_Condition</i> <b>OR</b> <i>Bool_Term</i> [ ) ]<br>" +
+"<i>Bool_Term</i> ::= <i>Bool_Factor</i> | <i>Bool_Term</i> <b>AND</b> <i>Bool_Factor</i><br>" +
+"<i>Bool_Factor</i> ::= <i>Exp_Comp</i> | <i>Exp_In</i> | <i>Exp_Func</i><br>" +
+"<i>Exp_Comp</i> ::= <i>FieldName</i> <i>Comparator</i> [ <i>FieldName</i> | <i>Value</i> ]<br>" +
+"<i>Comparator</i> ::=    <b>= | <> | <= | >= | > | <   </b> <br>" +
+"<i>Value</i> ::= <i>String</i> | <i>Date</i> | <i>Integer</i> | <i>TimeStamp</i> | <i>Boolean</i> | <i>Decimal</i><br>" +
+"<i>Exp_In</i> ::= <i>FieldName</i> <b>IN</b> <i>In_List</i><br> " +
+"<i>In_List</i> ::= (<i>Value</i> [ , <i>Value</i> ]) | <i>Select_Expression</i><br>" +
+"<i>Exp_Func</i> ::= <b>CONTAINS</b>(‘<i>FullText_Search</i>‘) | <b>IN_TREE</b>( <i>FolderId</i> ) | <b>IN_FOLDER</b>( <i>FolderId</i> )<br>" +
+"<i>Sort_Description</i> ::= <i>FieldName</i> <b>ASC</b> | <b>DESC</b>";
 //-----------------------------------------------------------------------------------------------
 /**
  *
