@@ -523,7 +523,9 @@ return(new Condition(PDFolders.fPARENTID, Condition.cEQUAL, FoldRef));
 //-------------------------------------------------------------------------
 private static String EvalId(String FoldRef, DriverGeneric Drv) throws PDException
 {
-FoldRef=FoldRef.substring(1, FoldRef.length()-1);
+char C1 = FoldRef.charAt(0);
+char C2 = FoldRef.charAt(FoldRef.length()-1);
+FoldRef=FoldRef.substring((C1=='\'' || C1=='\"')?1:0, FoldRef.length()-((C2=='\'' || C2=='\"')?1:0));
 if (FoldRef.startsWith("/"))
     {
     PDFolders F=new PDFolders(Drv);
