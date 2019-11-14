@@ -28,6 +28,8 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import prodoc.Conector;
+import prodoc.PDException;
 import prodoc.PDLog;
 
 /**
@@ -74,6 +76,8 @@ return(CloseSession(request));
 @Produces(MediaType.APPLICATION_JSON)
 public Response Connect(String Credentials, @Context HttpServletRequest request)
 {
+if (!Conector.isAPIREST())
+   return(returnErrorInternal("API REST Disabled in Config"));
 if (PDLog.isDebug())    
     PDLog.Debug("Login="+Credentials);
 User U=User.CreateUser(Credentials);

@@ -34,6 +34,7 @@ import java.util.Enumeration;
 import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
+import prodoc.Conector;
 import prodoc.Cursor;
 import prodoc.DriverGeneric;
 import prodoc.PDException;
@@ -113,6 +114,8 @@ static final private String TOKPREF="Bearer ";
 protected DriverGeneric IsConnected(HttpServletRequest Req)
 {    
 StartFramework();
+if (!Conector.isAPIREST())
+    return(null);    
 String Tok=ExtractTok(Req);
 if (Tok==null)
     return(null);

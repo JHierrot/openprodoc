@@ -50,6 +50,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import prodoc.Conector;
 import prodoc.DriverGeneric;
 import prodoc.DriverRemote;
 import prodoc.PDDocs;
@@ -98,6 +99,13 @@ if (!FWStartted)
     {
     StartFW();
     FWStartted=true;
+    }
+if (!Conector.isAPIRem())
+    {
+    PrintWriter out = response.getWriter();      
+    Answer(request, out, "<OPD><Result>KO</Result><Msg>API Remote Disabled in Config</Msg></OPD>");
+    out.close();
+    return;
     }
 if (PDLog.isDebug())
    PDLog.Debug("##########################################################################");  

@@ -1960,7 +1960,7 @@ if (PDLog.isDebug())
  */
 static public String getVersion()
 {
-return("3.0");
+return("3.0.1");
 }
 /**
  * constant used for bin <-> hexadecimal conversión
@@ -2085,6 +2085,14 @@ FProps.println("#  UserData for just reading OPAC configuration files");
 FProps.println("#--------------------------------------------------------------");
 FProps.println("#User=guest");
 FProps.println("#Pass=passguest");
+FProps.println("#--------------------------------------------------------------");
+FProps.println("#  Enable (1) o disable (0) REST API. Default Enabled ");
+FProps.println("#--------------------------------------------------------------");
+FProps.println("#APIREST=0");
+FProps.println("#--------------------------------------------------------------");
+FProps.println("#  Enable (1) o disable (0) Remote API. Default Enabled ");
+FProps.println("#--------------------------------------------------------------");
+FProps.println("#APIRem=0");
 FProps.flush();
 FProps.close();
 }

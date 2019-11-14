@@ -95,6 +95,9 @@ private String TaskCategory="*";
  */
 private boolean TasksStarted=false;
 private boolean EndShutdown=false;
+
+static private boolean APIREST=true;
+static private boolean APIRem=true;
 //--------------------------------------------------------------------------
 /**
  * Reads, interpret and store the requiered elements of the configuration
@@ -118,6 +121,12 @@ if (LogProp==null || LogProp.length()==0)
     PDLog.setPropFile("log4j.properties");
 else
     PDLog.setPropFile(LogProp);
+String pAPIREST=ProdocProperties.getProperty("APIREST");
+if (pAPIREST!=null && pAPIREST.trim().equalsIgnoreCase("0"))
+    APIREST=false;
+String pAPIRem=ProdocProperties.getProperty("APIRem");
+if (pAPIRem!=null && pAPIRem.trim().equalsIgnoreCase("0"))
+    APIRem=false;
 TaskCategory=ProdocProperties.getProperty(ConectorName+".TaskCategory");
 if (TaskCategory!=null)
     TaskCategory=TaskCategory.trim();
@@ -358,6 +367,24 @@ Session.delete();
 return(IsInstallMode);
 }
 //--------------------------------------------------------------------------
+/**
+ * @return the APIREST
+ */
+public static boolean isAPIREST()
+{
+return APIREST;
+}
+//--------------------------------------------------------------------------
+/**
+ * @return the APIRem
+ */
+public static boolean isAPIRem()
+{
+return APIRem;
+}
+//--------------------------------------------------------------------------
+
+
 //*******************************************************************
 /**
  * Thread responsible of the actual pooling in definition and creation of schedulled tasks instances
