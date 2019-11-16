@@ -78,7 +78,7 @@ Cursor ListVer = TmpDoc.ListVersions(TmpDoc.getDocType(), TmpDoc.getPDId());
 Record NextVer=PDSession.NextRec(ListVer);
 while (NextVer!=null)
     {
-    String Id=(String)NextVer.getAttr(PDDocs.fPDID).getValue()+"|";
+    String Id=(String)NextVer.getAttr(PDDocs.fPDID).getValue()+"%7C"; // "|" removed by problems with Tomcat
     Id+=(String)NextVer.getAttr(PDDocs.fVERSION).getValue();   
     Rec.assign(NextVer);
     Resp.append(SParent.GenRowGrid(Req, Id, Rec, true));       

@@ -275,12 +275,6 @@ return (""+File.separatorChar);
  */
 protected String GenPath(String Id, String Ver)
 {
-/**
-Fecha:Tue Mar 09 10:11:12 CET 2010 /  12742312f80-3fc5b4a2322bd9d8
-Fecha:Wed Mar 10 10:11:12 CET 2010 /  12747578b80-3fe9d0a875193663
-Fecha:Mon Mar 15 10:11:12 CET 2010 /  12761175780-3fe79dd735b89da3
-Fecha:Sat Apr 10 10:11:12 CET 2010 /  127e6c5c100-3fda6052f513c84e
- */
 return(Id.substring(0, 5)+getSeparator());
 }
 //-------------------------------------------------------------------------
@@ -594,6 +588,8 @@ return(Tot);
  */
 protected int RetrieveB64(String Id, String Ver, OutputStream fo, Record Rec) throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("StoreGeneric.RetrieveB64: Id="+Id+" Ver="+Ver+" Rec="+Rec);                
 int Tot=0;
 VerifyId(Id);    
 InputStream in=null;

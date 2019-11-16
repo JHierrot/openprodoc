@@ -34,6 +34,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import prodoc.Attribute;
 import prodoc.PDDocs;
+import prodoc.PDLog;
 import prodoc.PDMimeType;
 import prodoc.Record;
 
@@ -114,6 +115,18 @@ else
             }
         Attr=Rec.nextAttr();
         }
+    if (FileName.contains("\\"))
+        {
+        int Pos=FileName.lastIndexOf("\\");
+        FileName=FileName.substring(Pos+1);
+        }
+    else if (FileName.contains("/"))
+        {
+        int Pos=FileName.lastIndexOf("/");
+        FileName=FileName.substring(Pos+1);
+        }
+    if (PDLog.isDebug())
+        PDLog.Debug("ImportDocF="+FileName+" Rec:"+Rec);
     Doc.assignValues(Rec);
     Doc.setParentId(ListFields.get("CurrFold"));
     Doc.setName(FileName);

@@ -172,9 +172,13 @@ f.delete();
 @Override
 protected InputStream Retrieve(String Id, String Ver, Record Rec) throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("StoreFS.Retrieve: Id="+Id+" Ver="+Ver+" Rec="+Rec);                    
 VerifyId(Id);    
 FileInputStream in=null;
 try {
+if (PDLog.isDebug())
+    PDLog.Debug("StoreFS.InputStream="+getPath() + GenPath(Id, Ver) + Id+SEP+Ver);                        
 in = new FileInputStream(getPath() + GenPath(Id, Ver) + Id+SEP+Ver);
 } catch (FileNotFoundException ex)
     {

@@ -840,6 +840,8 @@ return(getFileOpt(FolderPath, true));
  */
 public String getFileOpt(String FolderPath, boolean Overwrite) throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("PDDocs.getFileOpt>:"+getPDId()+" Path="+FolderPath);                        
 PDDocs d=new PDDocs(getDrv());
 d.LoadCurrent(getPDId());
 if (d.getName()==null || d.getName().length()==0)
@@ -849,9 +851,9 @@ if (d.getName()==null || d.getName().length()==0)
     d.setName(getPDId()+"."+MT.getMimeCode());    
     }
 if (FolderPath.charAt(FolderPath.length()-1)!=File.separatorChar)
-    FolderPath+=File.separatorChar+getPDId()+d.getVersion().replace(' ', '_')+d.getName().replace(' ', '_');
+    FolderPath+=File.separatorChar+getPDId()+d.getVersion().replace(' ', '_')+CheckCharsName(d.getName()).replace(' ', '_');
 else
-    FolderPath+=getPDId()+d.getVersion().replace(' ', '_')+d.getName().replace(' ', '_');
+    FolderPath+=getPDId()+d.getVersion().replace(' ', '_')+CheckCharsName(d.getName()).replace(' ', '_');
 PDRepository Rep=new PDRepository(getDrv());
 Rep.Load(d.getReposit());
 if (Rep.IsRef())
@@ -885,6 +887,26 @@ OutCont.close();
     }
 return(FolderPath);
 }
+private String CheckCharsName(String Name)
+{
+String FileName=Name;
+if (FileName.contains("\\"))
+    {
+    int Pos=FileName.lastIndexOf("\\");
+    FileName=FileName.substring(Pos+1);
+    }
+if (FileName.contains("/"))
+    {
+    int Pos=FileName.lastIndexOf("/");
+    FileName=FileName.substring(Pos+1);
+    }
+if (FileName.contains(":"))
+    {
+    int Pos=FileName.lastIndexOf(":");
+    FileName=FileName.substring(Pos+1);
+    }
+return(FileName);
+}
 //-------------------------------------------------------------------------
 /**
  * "Download" a file referenced by the PDID-
@@ -909,12 +931,16 @@ return(getFileVerOpt(FolderPath, Ver, true));
  */
 public String getFileVerOpt(String FolderPath, String Ver, boolean Overwrite) throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("PDDocs.getFileVerOpt>:"+getPDId()+"/"+Ver+" Path="+FolderPath);                    
 PDDocs d=new PDDocs(getDrv());
 d.LoadVersion(getPDId(), Ver);
 if (FolderPath.charAt(FolderPath.length()-1)!=File.separatorChar)
-    FolderPath+=File.separatorChar+getPDId()+d.getVersion().replace(' ', '_')+d.getName().replace(' ', '_');
+    FolderPath+=File.separatorChar+getPDId()+d.getVersion().replace(' ', '_')+CheckCharsName(d.getName()).replace(' ', '_');
 else
-    FolderPath+=getPDId()+d.getVersion().replace(' ', '_')+d.getName().replace(' ', '_');
+    FolderPath+=getPDId()+d.getVersion().replace(' ', '_')+CheckCharsName(d.getName()).replace(' ', '_');
+if (PDLog.isDebug())
+    PDLog.Debug("PDDocs.getFileVerOpt: FolderPath="+FolderPath);                    
 //StoreGeneric Rep=getDrv().getRepository(d.getReposit());
 PDRepository Rep=new PDRepository(getDrv());
 Rep.Load(d.getReposit());
@@ -940,12 +966,14 @@ d.getStreamVer(OutCont);
         }
     if (MustTrace(fOPERVIE))
        Trace(fOPERVIE, false);
+    PDLog.Error("PDDocs.getFileVerOpt:"+ex.getLocalizedMessage());     
     throw new PDException(ex.getLocalizedMessage());
     }
 try {
 OutCont.close();
 } catch (IOException ex)
     {
+    PDLog.Error("PDDocs.getFileVerOpt:"+ex.getLocalizedMessage());     
     throw new PDException(ex.getLocalizedMessage());
     }
 //Rep.Disconnect();
@@ -1024,6 +1052,8 @@ FileStream=new Base64InputStream(B64InputStream,false);
  */
 public void getStream(OutputStream OutBytes) throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("PDDocs.getStream>:"+getPDId());                
 LoadCurrent(getPDId());
 StoreGeneric Rep=getDrv().getRepository(getReposit());
 PDRepository Rep1=new PDRepository(getDrv());
@@ -1054,6 +1084,8 @@ if (MustTrace(fOPERVIE))
  */
 public void getStreamB64(OutputStream OutBytes) throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("PDDocs.getStreamB64>:"+getPDId());            
 LoadCurrent(getPDId());
 StoreGeneric Rep=getDrv().getRepository(getReposit());
 PDRepository Rep1=new PDRepository(getDrv());
@@ -1084,6 +1116,8 @@ if (MustTrace(fOPERVIE))
  */
 public void getStreamVer(OutputStream OutBytes) throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("PDDocs.getStreamVer>:"+getPDId()+"/"+getVersion());    
 LoadVersion(getPDId(), getVersion());
 StoreGeneric Rep=getDrv().getRepository(getReposit());
 PDRepository Rep1=new PDRepository(getDrv());
@@ -1113,6 +1147,8 @@ if (MustTrace(fOPERVIE))
  */
 public void getStreamVerB64(OutputStream OutBytes) throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("PDDocs.getStreamVerB64>:"+getPDId()+"/"+getVersion());        
 LoadVersion(getPDId(), getVersion());
 StoreGeneric Rep=getDrv().getRepository(getReposit());
 PDRepository Rep1=new PDRepository(getDrv());

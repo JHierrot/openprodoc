@@ -5,10 +5,14 @@
         <group>
             <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/ProdocFW.java</file>
             <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/Condition.java</file>
+            <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/StoreFS.java</file>
             <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/DriverGeneric.java</file>
+            <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/PDDocs.java</file>
             <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/PDFolders.java</file>
             <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/Conector.java</file>
             <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/ObjPD.java</file>
+            <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/ExtConf.java</file>
+            <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/StoreGeneric.java</file>
         </group>
     </open-files>
 </project-private>
