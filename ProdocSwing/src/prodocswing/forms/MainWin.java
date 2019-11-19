@@ -1412,6 +1412,7 @@ if (DocsTable.getSelectedRow()==-1)
 try {
 PDDocs Doc = new PDDocs(getSession());
 Doc.assignValues(DocsContained.getElement(DocsTable.convertRowIndexToModel(DocsTable.getSelectedRow())));
+Doc.LoadCurrent(Doc.getPDId());
 String FileName;
 if (Doc.IsUrl())
     FileName=Doc.getUrl();
