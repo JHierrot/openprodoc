@@ -56,7 +56,7 @@ if (CurrDoc!=null)
     out.println(
     "[" +
     "{type: \"label\", label: \""+TT(Req, "Checkin_Selected_Document")+"\"}," +
-    "{type: \"label\", label: \""+TmpDoc.getTitle()+" ( "+TmpDoc.getVersion()+" ) "+"\"}," +
+    "{type: \"label\", label: \""+EscapeHtmlJson(TmpDoc.getTitle())+" ( "+TmpDoc.getVersion()+" ) "+"\"}," +
     "{type: \"input\", name: \""+PDDocs.fVERSION+"\", label: \""+TT(Req, Attr.getUserName())
                    +"\", required: true, tooltip:\""+TT(Req, Attr.getDescription())+"\", inputWidth: 150, maxLength:"+Attr.getLongStr()+"}," +
     "{type: \"block\", width: 250, list:[" +

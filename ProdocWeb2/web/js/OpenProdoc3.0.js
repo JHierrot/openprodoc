@@ -143,7 +143,7 @@ if (window.dhx.isIE)
     {
     alert("Unsupported browser / navegador no soportado");
     }    
-document.title="OpenProdoc2 "+LocaleTrans("_User");
+document.title="OpenProdoc "+LocaleTrans("_User");
 T_EDIT=LocaleTrans("Update");
 T_DEL=LocaleTrans("Delete");
 }

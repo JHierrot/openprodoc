@@ -1619,18 +1619,40 @@ public Record LoadCurrent(String Ident)  throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDDocs.LoadCurrent>:"+Ident);
-AsignKey(Ident);
-Query LoadAct=new Query(getTabName(), getRecordStruct(),getConditions());
-Cursor Cur=getDrv().OpenCursor(LoadAct);
-Record r=getDrv().NextRec(Cur);
-getDrv().CloseCursor(Cur);
-String ActACL=(String)r.getAttr(fACL).getValue();
-if (!getDrv().getUser().getAclList().containsKey(ActACL))
-    {
-    PDExceptionFunc.GenPDException("User_without_permissions_over_document",Ident);
+Record r=Load(Ident);
+getTypeDefs();
+Attribute UsuBloq=r.getAttr(fLOCKEDBY);
+if (UsuBloq.getValue()!=null &&  ((String)UsuBloq.getValue()).equalsIgnoreCase(getDrv().getUser().getName()))
+    {// locked by actual user, return in-edition metadata
+    Conditions Cond=getConditions();
+    Cond.addCondition(new Condition(fVERSION, Condition.cEQUAL, getDrv().getUser().getName()));
+     Attribute Attr=r.getAttr(fDOCTYPE);
+    Query LoadAct=new Query(getTabNameVer((String)Attr.getValue()), getRecordStruct(), Cond, null);
+    Cursor Cur=getDrv().OpenCursor(LoadAct);
+    try {
+    r=getDrv().NextRec(Cur);
+    } finally 
+        {
+        getDrv().CloseCursor(Cur);
+        }
+    if (r!=null)
+        assignValues(r);
+    if (PDLog.isDebug())
+       PDLog.Debug("PDDocs.LoadCurrent<: PWC"+Ident);
+    return(r);
     }
-if (r!=null)
-    assignValues(r);
+//AsignKey(Ident);
+//Query LoadAct=new Query(getTabName(), getRecordStruct(),getConditions());
+//Cursor Cur=getDrv().OpenCursor(LoadAct);
+//Record r=getDrv().NextRec(Cur);
+//getDrv().CloseCursor(Cur);
+//String ActACL=(String)r.getAttr(fACL).getValue();
+//if (!getDrv().getUser().getAclList().containsKey(ActACL))
+//    {
+//    PDExceptionFunc.GenPDException("User_without_permissions_over_document",Ident);
+//    }
+//if (r!=null)
+//    assignValues(r);
 if (PDLog.isDebug())
     PDLog.Debug("PDDocs.LoadCurrent<:"+Ident);
 return(r);
@@ -1705,6 +1727,8 @@ if (UsuBloq.getValue()!=null &&  ((String)UsuBloq.getValue()).equalsIgnoreCase(g
        PDLog.Debug("PDDocs.LoadFull<:"+Ident);
     return(r);
     }
+getObjCache().remove(Ident); // just in case the same server is used
+r=Load(Ident);
 if (getTypeDefs().size()>1) // If size==1, Load is enough
     {
     Conditions Conds=getConditions();
@@ -2279,6 +2303,11 @@ if (PDLog.isDebug())
 Conditions Cond= new Conditions();
 Cond.addCondition(new Condition(fPDID, Condition.cEQUAL, Id));
 Cond.addCondition(new Condition(fACL, new HashSet(getDrv().getUser().getAclList().keySet())));
+PDDocs DocCheck=new PDDocs(getDrv());
+DocCheck.Load(Id);
+String LockBy = DocCheck.getLockedBy();
+if (LockBy!=null &&LockBy.length()!=0 && !LockBy.equalsIgnoreCase(getDrv().getUser().getName()))
+   Cond.addCondition(new Condition(fVERSION, Condition.cNE, LockBy)); 
 PDDocs Doc=new PDDocs(getDrv(), DocTypename);
 Query LoadAct=new Query(getTabNameVer(DocTypename), Doc.getRecSum().CopyMono(), Cond, PDDocs.fPDDATE);
 Cursor Cur=getDrv().OpenCursor(LoadAct);
