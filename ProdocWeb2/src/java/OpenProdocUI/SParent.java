@@ -522,6 +522,10 @@ else if (Attr.getType()==Attribute.tTIMESTAMP)
     Attr.setValue(getFormatterTS(Req).parse(Val));
     Cond=new Condition(Attr, Oper);
     }
+else if (Attr.getType()==Attribute.tINTEGER)
+    {
+    Cond=new Condition(Attr.getName(), Oper, Integer.parseInt(Val));
+    }
 else if (Attr.getType()==Attribute.tFLOAT)
     {
     Attr.setValue(Attribute.String2BD(Val));   
