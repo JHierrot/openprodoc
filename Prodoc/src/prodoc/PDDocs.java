@@ -2303,11 +2303,15 @@ if (PDLog.isDebug())
 Conditions Cond= new Conditions();
 Cond.addCondition(new Condition(fPDID, Condition.cEQUAL, Id));
 Cond.addCondition(new Condition(fACL, new HashSet(getDrv().getUser().getAclList().keySet())));
+try {
 PDDocs DocCheck=new PDDocs(getDrv());
 DocCheck.Load(Id);
 String LockBy = DocCheck.getLockedBy();
 if (LockBy!=null &&LockBy.length()!=0 && !LockBy.equalsIgnoreCase(getDrv().getUser().getName()))
    Cond.addCondition(new Condition(fVERSION, Condition.cNE, LockBy)); 
+} catch (Exception e)
+    {    // just in case there is a Purge scenario
+    }
 PDDocs Doc=new PDDocs(getDrv(), DocTypename);
 Query LoadAct=new Query(getTabNameVer(DocTypename), Doc.getRecSum().CopyMono(), Cond, PDDocs.fPDDATE);
 Cursor Cur=getDrv().OpenCursor(LoadAct);
