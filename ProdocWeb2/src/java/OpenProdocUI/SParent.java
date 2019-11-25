@@ -1468,7 +1468,7 @@ Head.append(Type);
 return(Head.toString());
 }
 //----------------------------------------------------------------
-public static String GenRowGrid(HttpServletRequest Req, String Id, Record NextRec, boolean IsXML)
+public static String GenRowGrid(HttpServletRequest Req, String Id, Record NextRec, boolean IsXML,boolean IsDel)
 {
 boolean IsDoc;
 if (NextRec.ContainsAttr(PDDocs.fDOCTYPE) || Id.contains("%7C"))
@@ -1517,7 +1517,7 @@ while (Attr!=null)
             }
         }
     else if (IsXML && IsDoc && Attr.getName().equals(PDDocs.fTITLE))
-        Row.append("<cell>").append(EscapeTree(Attr.ExportXML())).append("^SendDoc?Id=").append(Id).append("^_blank</cell>");
+        Row.append("<cell>").append(EscapeTree(Attr.ExportXML())).append(IsDel?"^SendDocDel?Id=":"^SendDoc?Id=").append(Id).append("^_blank</cell>");
     else    
         {
         if (IsXML)

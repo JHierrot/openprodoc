@@ -117,7 +117,16 @@ if (R.isAllowCreateThesaur() || R.isAllowMaintainThesaur())
     Men.append("<item id='Thesaurus' type='button' text='").append(TT(Req, "Thesaurus")).append("' isbig='true' img='img/Thesaurus.png' />");
 Men.append("</item>");
 
-Men.append("<item id='Administration'  type='block' mode='cols' text='").append(TT(Req, "Administration")).append("'>");
+Men.append("<item id='AdminDoc'  type='block' mode='cols' text='").append(TT(Req, "Adm.Doc")).append("'>");
+if (R.isAllowCreateObject()|| R.isAllowMaintainObject() )
+   Men.append("<item id='ObjDef' type='button' text=\"").append(TT(Req, "Object_definitions")).append("\"/>");
+if (R.isAllowCreateMime()|| R.isAllowMaintainMime())
+   Men.append("<item id='MimeTypes' type='button' text='").append(TT(Req, "Mime_Types")).append("'/>");
+if (R.isAllowCreateRepos() || R.isAllowMaintainRepos())
+   Men.append("<item id='Repositories' type='button' text='").append(TT(Req, "Repositories")).append("'/>");
+Men.append("</item>");
+
+Men.append("<item id='AdminSec'  type='block' mode='cols' text='").append(TT(Req, "Adm.Sec")).append("'>");
 if (R.isAllowCreateAcl() || R.isAllowMaintainAcl())
    Men.append("<item id='ACL' type='button' text='").append(TT(Req, "ACL")).append("'/>");
 if (R.isAllowCreateGroup() || R.isAllowMaintainGroup())
@@ -126,30 +135,29 @@ if (R.isAllowCreateUser() || R.isAllowMaintainUser())
    Men.append("<item id='Users' type='button' text='").append(TT(Req, "Users")).append("'/>");
 if (R.isAllowCreateRole()|| R.isAllowMaintainRole())
    Men.append("<item id='Roles' type='button' text='").append(TT(Req, "Roles")).append("'/>");
-if (R.isAllowCreateMime()|| R.isAllowMaintainMime())
-   Men.append("<item id='MimeTypes' type='button' text='").append(TT(Req, "Mime_Types")).append("'/>");
-if (R.isAllowCreateRepos() || R.isAllowMaintainRepos())
-   Men.append("<item id='Repositories' type='button' text='").append(TT(Req, "Repositories")).append("'/>");
-if (R.isAllowCreateObject()|| R.isAllowMaintainObject() )
-   Men.append("<item id='ObjDef' type='button' text=\"").append(TT(Req, "Object_definitions")).append("\"/>");
 if (R.isAllowCreateAuth()|| R.isAllowMaintainAuth() )
    Men.append("<item id='Authenticators' type='button' text=\"").append(TT(Req, "Authenticators")).append("\"/>");
 if (R.isAllowCreateCustom()|| R.isAllowMaintainCustom() )
    Men.append("<item id='Customizations' type='button' text='").append(TT(Req, "Customizations")).append("'/>");
+Men.append("</item>");
+
 if (R.isAllowCreateTask()|| R.isAllowMaintainTask() )
     {
+    Men.append("<item id='AdminTasks'  type='block' mode='cols' text='").append(TT(Req, "Adm.Tasks")).append("'>");
     Men.append("<item id='TaskCron' type='button' text='").append(TT(Req, "Task_Cron")).append("'/>");
     Men.append("<item id='TaskEvents' type='button' text='").append(TT(Req, "Task_Events")).append("'/>");
     Men.append("<item id='PendTasklog' type='button' text='").append(TT(Req, "Pending_Task_log")).append("'/>"); 
     Men.append("<item id='EndTasksLogs' type='button' text='").append(TT(Req, "Ended_Tasks_Logs")).append("'/>");
+    if (R.isAllowCreateObject()|| R.isAllowMaintainObject() )
+        Men.append("<item id='TraceLogs' type='button' text='").append(TT(Req, "Trace_Logs")).append("'/>");
+    Men.append("</item>");
     }
-if (R.isAllowCreateObject()|| R.isAllowMaintainObject() )
-    Men.append("<item id='TraceLogs' type='button' text='").append(TT(Req, "Trace_Logs")).append("'/>");
-Men.append("</item></ribbon>");
+
+Men.append("</ribbon>");
 return(Men.toString());
 } catch (PDException ex)
     {
-    return ("<?xml version='1.0'?><menu></menu>item id='Error' text='"+ex.getLocalizedMessage()+"'></menu>");
+    return ("<?xml version='1.0'?><ribbon><item id='Error' type='block' text='"+ex.getLocalizedMessage()+"'/></ribbon>");
     }
 }
 //-----------------------------------------------------------------------------------------------

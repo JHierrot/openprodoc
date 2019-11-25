@@ -34,6 +34,10 @@
         <servlet-class>OpenProdocServ.SendDoc</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>SendDocDel</servlet-name>
+        <servlet-class>OpenProdocServ.SendDocDel</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>About</servlet-name>
         <servlet-class>OpenProdocServ.About</servlet-class>
     </servlet>
@@ -448,6 +452,10 @@
     <servlet-mapping>
         <servlet-name>SendDoc</servlet-name>
         <url-pattern>/SendDoc</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SendDocDel</servlet-name>
+        <url-pattern>/SendDocDel</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>About</servlet-name>

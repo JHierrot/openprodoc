@@ -111,7 +111,7 @@ if (Own==null || !Oper.equals("New"))
         {
         String Id=(String)NextObj.getAttr(PDObjDefs.fNAME).getValue();
         NextObj.getAttr(PDObjDefs.fATTRTYPE).setValue(LTyp[(Integer)NextObj.getAttr(PDObjDefs.fATTRTYPE).getValue()]);
-        Resp.append(SParent.GenRowGrid(Req, Id, NextObj, true));    
+        Resp.append(SParent.GenRowGrid(Req, Id, NextObj, true, false));    
         NextObj=PDSession.NextRec(listParentAttr);
         if (NextObj!=null)
             {

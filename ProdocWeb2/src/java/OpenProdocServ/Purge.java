@@ -51,14 +51,13 @@ response.setContentType("text/xml;charset=UTF-8");
 response.setStatus(HttpServletResponse.SC_OK);
 PrintWriter out = response.getWriter();  
 StringBuilder Resp=new StringBuilder(100);
-//Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 String DocId=Req.getParameter("Id");  
 try {
 String[] Ids = DocId.split("\\|");
 DriverGeneric PDSession=SParent.getSessOPD(Req);
 PDDocs TmpDoc=new PDDocs(PDSession);
 TmpDoc.Purge(Ids[1], Ids[0]);
-Resp.append("<status>OK").append(DocId).append("</status>");
+Resp.append("<status>OK").append(DocId.replace("|", "%7C")).append("</status>");
 } catch (PDException ex)
     {
     Resp.append("<status>").append(DocId).append(TT(Req,ex.getLocalizedMessage())).append("</status>");

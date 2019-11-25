@@ -54,7 +54,6 @@ response.setContentType("text/xml;charset=UTF-8");
 response.setStatus(HttpServletResponse.SC_OK);
 PrintWriter out = response.getWriter();  
 StringBuilder Resp=new StringBuilder(3000);
-// Resp.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rows><head>");
 Resp.append("<rows><head>");
 try {
 String DocType=Req.getParameter("DT");
@@ -72,19 +71,14 @@ while (Attr!=null)
     Attr=Rec.nextAttr();
     }
 Resp.append("</head>");
-//Head.deleteCharAt(Head.length()-1);
-//Edit.deleteCharAt(Edit.length()-1);
-//Type.deleteCharAt(Type.length()-1);
-//StringBuilder VersionsData=new StringBuilder(1000);
-//VersionsData.append("data={ rows:[");
 Cursor ListDel=TmpDoc.ListDeleted(DocType);
 Record NextDel=PDSession.NextRec(ListDel);
 while (NextDel!=null)
     {
-    String Id=(String)NextDel.getAttr(PDDocs.fPDID).getValue()+"|";
+    String Id=(String)NextDel.getAttr(PDDocs.fPDID).getValue()+"%7C";
     Id+=(String)NextDel.getAttr(PDDocs.fDOCTYPE).getValue();
     Rec.assign(NextDel);
-    Resp.append(SParent.GenRowGrid(Req, Id, Rec, true));    
+    Resp.append(SParent.GenRowGrid(Req, Id, Rec, true, true));    
     NextDel=PDSession.NextRec(ListDel);
     }
 Resp.append("</rows>");

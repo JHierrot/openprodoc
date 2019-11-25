@@ -123,7 +123,7 @@ else
     Record NextDoc=PDSession.NextRec(c);
     while (NextDoc!=null)
         {
-        out.print(SParent.GenRowGrid(Req, (String)NextDoc.getAttr(PDDocs.fPDID).getValue(), NextDoc, true));    
+        out.print(SParent.GenRowGrid(Req, (String)NextDoc.getAttr(PDDocs.fPDID).getValue(), NextDoc, true, false));    
         NextDoc=PDSession.NextRec(c);
         }
     out.println("</rows>");

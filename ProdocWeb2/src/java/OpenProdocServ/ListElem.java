@@ -273,7 +273,7 @@ while (NextObj!=null)
     if (CSV)
         Resp.append(SParent.GenRowCSV(Req, Rec)).append("\n");    
     else
-        Resp.append(SParent.GenRowGrid(Req, Id, Rec, true));    
+        Resp.append(SParent.GenRowGrid(Req, Id, Rec, true, false));    
     NextObj=PDSession.NextRec(ListObj);
     }   
 if (!CSV)

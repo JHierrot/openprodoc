@@ -81,7 +81,7 @@ while (NextVer!=null)
     String Id=(String)NextVer.getAttr(PDDocs.fPDID).getValue()+"%7C"; // "|" removed by problems with Tomcat
     Id+=(String)NextVer.getAttr(PDDocs.fVERSION).getValue();   
     Rec.assign(NextVer);
-    Resp.append(SParent.GenRowGrid(Req, Id, Rec, true));       
+    Resp.append(SParent.GenRowGrid(Req, Id, Rec, true, false));       
     NextVer=PDSession.NextRec(ListVer);
     }
 Resp.append("</rows>");

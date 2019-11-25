@@ -125,7 +125,7 @@ while (NextObj!=null)
     {
     String Id=(String)NextObj.getAttr(PDDocs.fPDID).getValue();
     Rec.assign(NextObj);
-    Resp.append(SParent.GenRowGrid(Req, Id, Rec, true));    
+    Resp.append(SParent.GenRowGrid(Req, Id, Rec, true, false));    
     NextObj=PDSession.NextRec(CursorId);
     }
 } catch (Exception Ex)

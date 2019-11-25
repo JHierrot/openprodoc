@@ -1020,7 +1020,6 @@ PDDocs d=new PDDocs(getDrv());
 d.LoadVersion(getPDId(), Ver);
 PDRepository Rep=new PDRepository(getDrv());
 Rep.Load(d.getReposit());
-//StoreGeneric Rep=getDrv().getRepository(d.getReposit());
 return(Rep.GetUrl(d.getName()));
 }
 //-------------------------------------------------------------------------
@@ -2192,7 +2191,7 @@ if (PDLog.isDebug())
  * @return ALL the attributes of the deleted document
  * @throws PDException In any error
  */
-private Record LoadDeleted(String DocTypename, String Ident) throws PDException
+public Record LoadDeleted(String DocTypename, String Ident) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDDocs.LoadDeleted>:"+DocTypename+"/"+Ident);
@@ -3538,4 +3537,36 @@ if (OPDTabs.size()!=1)
 return(Cs);
 }
 //-------------------------------------------------------------------------
+/**
+ * "Download" a file referenced by the PDID and the current assigned version
+ * the OutputStream will be closed at the end
+ * @param OutBytes OutputStream where OpenProdoc will write the binary content
+ * @throws PDException  In any error
+ */
+public void getStreamDel(OutputStream OutBytes) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDDocs.getStreamDel>:"+getPDId()+"/"+getVersion());    
+LoadDeleted(getDocType(), getPDId());
+StoreGeneric Rep=getDrv().getRepository(getReposit());
+PDRepository Rep1=new PDRepository(getDrv());
+Rep1.Load(getReposit());
+if (Rep1.IsRef())
+    throw new UnsupportedOperationException("Not supported.");   
+try {    
+Rep.Connect();
+Rep.Retrieve(getPDId(), getVersion(), OutBytes, getRecSum());
+Rep.Disconnect();
+if (MustTrace(fOPERVIE))
+    Trace(fOPERVIE, true);
+} catch(Exception ex)
+    {
+    Rep.Disconnect();
+    if (MustTrace(fOPERVIE))
+       Trace(fOPERVIE, false);
+    throw new PDException(ex.getLocalizedMessage());
+    }
+}
+//--------------------------------------------------------------------------
+
 }
