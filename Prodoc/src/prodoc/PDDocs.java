@@ -1618,11 +1618,16 @@ public Record LoadCurrent(String Ident)  throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDDocs.LoadCurrent>:"+Ident);
+getObjCache().put(Ident, null); // Fresh value to avoid colisions in cache
 Record r=Load(Ident);
 getTypeDefs();
+if (PDLog.isDebug())
+    PDLog.Debug("PDDocs.LoadCurrent:User["+getDrv().getUser().getName()+"] Rec="+r);
 Attribute UsuBloq=r.getAttr(fLOCKEDBY);
 if (UsuBloq.getValue()!=null &&  ((String)UsuBloq.getValue()).equalsIgnoreCase(getDrv().getUser().getName()))
     {// locked by actual user, return in-edition metadata
+    if (PDLog.isDebug())
+        PDLog.Debug("PDDocs.LoadCurrent:PWC");       
     Conditions Cond=getConditions();
     Cond.addCondition(new Condition(fVERSION, Condition.cEQUAL, getDrv().getUser().getName()));
      Attribute Attr=r.getAttr(fDOCTYPE);
@@ -3406,17 +3411,17 @@ if (!tableList.get(0).equalsIgnoreCase(getTableName())) // Not PDDocs
         String Typ =(String) AttrNomTab.getValue();
         if (!Typ.equalsIgnoreCase(tableList.get(0)))
             Tabs.add(Typ);
-        Record AttrsTab= ((Record)ListAttr.get(NumTabsDef)).Copy();
-        AttrsTab.initList();
-        Attribute Attr;
-        for (int i = 0; i < AttrsTab.NumAttr(); i++)
-            {
-            Attr=AttrsTab.nextAttr();
-            if (Attr.isMultivalued())
-                {
-                Tabs.add(PDObjDefs.genMultValNam(Typ, Attr.getName()));                            
-                }                    
-            }
+//        Record AttrsTab= ((Record)ListAttr.get(NumTabsDef)).Copy();
+//        AttrsTab.initList();
+//        Attribute Attr;
+//        for (int i = 0; i < AttrsTab.NumAttr(); i++)
+//            {
+//            Attr=AttrsTab.nextAttr();
+//            if (Attr.isMultivalued())
+//                {
+//                Tabs.add(PDObjDefs.genMultValNam(Typ, Attr.getName()));                            
+//                }                    
+//            }
         }
     }
 return(Tabs);

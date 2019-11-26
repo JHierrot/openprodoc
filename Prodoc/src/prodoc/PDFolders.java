@@ -2060,17 +2060,17 @@ if (!tableList.get(0).equalsIgnoreCase(getTableName())) // Not PDFolders
         String Typ =(String) AttrNomTab.getValue();
         if (!Typ.equalsIgnoreCase(tableList.get(0)))
             Tabs.add(Typ);
-        Record AttrsTab= ((Record)ListAttr.get(NumTabsDef)).Copy();
-        AttrsTab.initList();
-        Attribute Attr;
-        for (int i = 0; i < AttrsTab.NumAttr(); i++)
-            {
-            Attr=AttrsTab.nextAttr();
-            if (Attr.isMultivalued())
-                {
-                Tabs.add(PDObjDefs.genMultValNam(Typ, Attr.getName()));                            
-                }                    
-            }
+//        Record AttrsTab= ((Record)ListAttr.get(NumTabsDef)).Copy();
+//        AttrsTab.initList();
+//        Attribute Attr;
+//        for (int i = 0; i < AttrsTab.NumAttr(); i++)
+//            {
+//            Attr=AttrsTab.nextAttr();
+//            if (Attr.isMultivalued())
+//                {
+//                Tabs.add(PDObjDefs.genMultValNam(Typ, Attr.getName()));                            
+//                }                    
+//            }
         }
     }
 return(Tabs);
