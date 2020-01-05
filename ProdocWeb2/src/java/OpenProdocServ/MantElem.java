@@ -136,7 +136,7 @@ else
     if( TypeElem.equals(ListElem.MANTTASKCRON) )
         {
         int Type=(Integer)Rec.getAttr(PDTasksCron.fTYPE).getValue();    
-        if ( Type==1 ||Type==2 ||Type==5 )
+        if ( Type==1 ||Type==2 ||Type==5 ||Type==8)
             {
             String Val=Req.getParameter(PDTasksCron.fOBJTYPE + "2");
             Rec.getAttr(PDTasksCron.fOBJTYPE).setValue(Val);
@@ -660,7 +660,7 @@ else if (ElemType.equals(ListElem.MANTTASKCRON))
     SB.append("]},");
     Attr=Rec.getAttr(PDTasksCron.fOBJTYPE);
     boolean ShowFoldComb=true;
-    if (Value!=null && (Value==1 ||Value==2 ||Value==5 ))
+    if (Value!=null && (Value==1 ||Value==2 ||Value==5||Value==8 ))
        ShowFoldComb=false; 
     SB.append("{type: \"combo\", name: \"" + PDTasksCron.fOBJTYPE + "\", label: \"").append(TT(Req, Attr.getUserName())).append("\", required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", hidden:").append(ShowFoldComb?"false":"true").append(", readonly:1, options:[");
     SB.append(getComboModelFold(PDSession, (String)Attr.getValue()) );

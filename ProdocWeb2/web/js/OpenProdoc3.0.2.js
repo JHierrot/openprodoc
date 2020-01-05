@@ -2566,7 +2566,7 @@ FormElem.attachEvent("onChange", function(name, value, is_checked){
                 FormElem.disableItem("TTEST");
             else    
                 FormElem.enableItem("TTEST");
-            if (value==1 ||value==2 ||value==5 )
+            if (value==1 ||value==2 ||value==5||value==8 )
                 {
                 FormElem.hideItem(COMBOFOLDER);
                 FormElem.showItem(COMBODOCS);
@@ -2582,7 +2582,7 @@ FormElem.attachEvent("onChange", function(name, value, is_checked){
         {
         if (name=="TaskType") 
             {
-            if (value==200 || value==202 || value==204 || value==206|| value==207|| value==208|| value==209 )
+            if (value==200 || value==202 || value==204 || value==206|| value==207|| value==208|| value==209|| value==210 )
                 {
                 FormElem.hideItem(COMBOFOLDER);
                 FormElem.showItem(COMBODOCS);
@@ -2728,10 +2728,16 @@ if (Fec1!=null && Fec1!="")
     Fec1=Fec1.getTime();
 else
     Fec1="";
+var TObj=FormEl.getItemValue("ObjType");
+var TypTask=FormEl.getItemValue("TaskType");
+if (TypTask==1 ||TypTask==2 ||TypTask==5||TypTask==8 )
+    TObj=FormEl.getItemValue("ObjType2");
 GridWiz.load("TestProcess?T1="+FormEl.getItemValue("TaskParam")
         +"&T2="+FormEl.getItemValue("TaskParam2")
         +"&T3="+FormEl.getItemValue("TaskParam3")
         +"&T4="+FormEl.getItemValue("TaskParam4")
+        +"&TObj="+TObj
+        +"&TDesc="+FormEl.getItemValue("Description")
         +"&Task="+FormEl.getItemValue("TaskType")
         +"&Filter="+FormEl.getItemValue("ObjFilter")
         +"&Item="+FormEl.getItemValue("ObjType")
@@ -2747,10 +2753,16 @@ if (Fec1!=null && Fec1!="")
     Fec1=Fec1.getTime();
 else
     Fec1="";    
+var TObj=FormEl.getItemValue("ObjType");
+var TypTask=FormEl.getItemValue("TaskType");
+if (TypTask==1 ||TypTask==2 ||TypTask==5||TypTask==8 )
+    TObj=FormEl.getItemValue("ObjType2");
 var Url="RunProcess?T1="+FormEl.getItemValue("TaskParam")
         +"&T2="+FormEl.getItemValue("TaskParam2")
         +"&T3="+FormEl.getItemValue("TaskParam3")
         +"&T4="+FormEl.getItemValue("TaskParam4")
+        +"&TObj="+TObj
+        +"&TDesc="+FormEl.getItemValue("Description")
         +"&Task="+FormEl.getItemValue("TaskType")
         +"&Filter="+FormEl.getItemValue("ObjFilter")
         +"&Item="+FormEl.getItemValue("ObjType")
@@ -2844,7 +2856,7 @@ FormElem.attachEvent("onChange", function(name, value, is_checked){
                 FormElem.disableItem("TTEST");
             else    
                 FormElem.enableItem("TTEST");
-            if (value==1 ||value==2 ||value==5 )
+            if (value==1 ||value==2 ||value==5||value==8 )
                 {
                 FormElem.hideItem(COMBOFOLDER);
                 FormElem.showItem(COMBODOCS);
@@ -2860,7 +2872,7 @@ FormElem.attachEvent("onChange", function(name, value, is_checked){
         {
         if (name=="TaskType") 
             {
-            if (value==200 || value==202 || value==204 || value==206|| value==207|| value==208|| value==209 )
+            if (value==200 || value==202 || value==204 || value==206|| value==207|| value==208|| value==209|| value==210 )
                 {
                 FormElem.hideItem(COMBOFOLDER);
                 FormElem.showItem(COMBODOCS);

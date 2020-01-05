@@ -850,10 +850,13 @@ if (d.getName()==null || d.getName().length()==0)
     MT.Load(d.getMimeType());
     d.setName(getPDId()+"."+MT.getMimeCode());    
     }
-if (FolderPath.charAt(FolderPath.length()-1)!=File.separatorChar)
-    FolderPath+=File.separatorChar+getPDId()+d.getVersion().replace(' ', '_')+CheckCharsName(d.getName()).replace(' ', '_');
-else
-    FolderPath+=getPDId()+d.getVersion().replace(' ', '_')+CheckCharsName(d.getName()).replace(' ', '_');
+//if (FolderPath.charAt(FolderPath.length()-1)!=File.separatorChar)
+//    FolderPath+=File.separatorChar+getPDId()+d.getVersion().replace(' ', '_')+CheckCharsName(d.getName()).replace(' ', '_');
+//else
+//    FolderPath+=getPDId()+d.getVersion().replace(' ', '_')+CheckCharsName(d.getName()).replace(' ', '_');
+FolderPath=DriverGeneric.FixPath(FolderPath, true)+getPDId()+d.getVersion().replace(' ', '_')+CheckCharsName(d.getName()).replace(' ', '_');
+if (PDLog.isDebug())
+    PDLog.Debug("PDDocs.getFileOpt> NewPath=["+FolderPath+"]");                        
 PDRepository Rep=new PDRepository(getDrv());
 Rep.Load(d.getReposit());
 if (Rep.IsRef())
@@ -861,6 +864,8 @@ if (Rep.IsRef())
 File NewF=new File(FolderPath);
 if (!Overwrite && NewF.exists())
     return(FolderPath);
+if (PDLog.isDebug())
+   PDLog.Debug("PDDocs.getFileOpt> New");  
 FileOutputStream OutCont=null;
 try {
 NewF.createNewFile();
@@ -868,6 +873,7 @@ OutCont=new FileOutputStream(NewF);
 d.getStream(OutCont);
 } catch (IOException ex)
     {
+    PDLog.Error("Creating=["+FolderPath+"] Error="+ex.getLocalizedMessage());
      if (OutCont != null)
         {
         try {
@@ -935,10 +941,11 @@ if (PDLog.isDebug())
     PDLog.Debug("PDDocs.getFileVerOpt>:"+getPDId()+"/"+Ver+" Path="+FolderPath);                    
 PDDocs d=new PDDocs(getDrv());
 d.LoadVersion(getPDId(), Ver);
-if (FolderPath.charAt(FolderPath.length()-1)!=File.separatorChar)
-    FolderPath+=File.separatorChar+getPDId()+d.getVersion().replace(' ', '_')+CheckCharsName(d.getName()).replace(' ', '_');
-else
-    FolderPath+=getPDId()+d.getVersion().replace(' ', '_')+CheckCharsName(d.getName()).replace(' ', '_');
+//if (FolderPath.charAt(FolderPath.length()-1)!=File.separatorChar)
+//    FolderPath+=File.separatorChar+getPDId()+d.getVersion().replace(' ', '_')+CheckCharsName(d.getName()).replace(' ', '_');
+//else
+//    FolderPath+=getPDId()+d.getVersion().replace(' ', '_')+CheckCharsName(d.getName()).replace(' ', '_');
+FolderPath=DriverGeneric.FixPath(FolderPath, true)+getPDId()+d.getVersion().replace(' ', '_')+CheckCharsName(d.getName()).replace(' ', '_');
 if (PDLog.isDebug())
     PDLog.Debug("PDDocs.getFileVerOpt: FolderPath="+FolderPath);                    
 //StoreGeneric Rep=getDrv().getRepository(d.getReposit());
@@ -2657,8 +2664,9 @@ throw new UnsupportedOperationException("Not Supported. Use ImportXMLNode");
 public void ExportXML(String FolderPath, boolean AbsPath) throws PDException
 {
 PrintWriter FMetadataXML = null;
-if (FolderPath.charAt(FolderPath.length()-1)!=File.separatorChar)
-    FolderPath+=File.separatorChar;
+//if (FolderPath.charAt(FolderPath.length()-1)!='\\')
+//    FolderPath+=File.separatorChar;
+FolderPath=DriverGeneric.FixPath(FolderPath, true);
 LoadFull(getPDId());
 try {
 String PathContent="";
@@ -2672,7 +2680,8 @@ if (!IsUrl())
         setName(PathContent);
     else
         {
-        int StartName=PathContent.lastIndexOf(File.separatorChar);
+//        int StartName=PathContent.lastIndexOf(DriverGeneric.LINSEPFile.separatorChar);
+        int StartName=PathContent.lastIndexOf(DriverGeneric.LINSEP);
         if (StartName==-1)
             setName(PathContent);
         else
@@ -2733,8 +2742,9 @@ public void ImportXMLNode(Node OPDObject, String FolderPath, String DestFold, bo
 {
 if (PDLog.isInfo())
     PDLog.Debug("PDDocs.ImportXMLNode>:FolderPath="+FolderPath+" DestFold="+DestFold+" MaintainId="+MaintainId+" OPDObject="+OPDObject);    
-if (FolderPath.charAt(FolderPath.length()-1)!=File.separatorChar)
-    FolderPath+=File.separatorChar; 
+//if (FolderPath.charAt(FolderPath.length()-1)!=File.separatorChar)
+//    FolderPath+=File.separatorChar; 
+FolderPath=DriverGeneric.FixPath(FolderPath, true);
 NodeList childNodes = OPDObject.getChildNodes();
 PDDocs NewDoc=null;
 PDObjDefs DefDoc=new PDObjDefs(getDrv());
@@ -3012,6 +3022,8 @@ for (PDTasksDefEvent L1 : L)
  */
 private void GenerateNoTransThreads(String MODE) throws PDException
 {
+if (PDLog.isDebug())
+    PDLog.Debug("PDDocs.GenerateNoTransThreads>: MODE="+MODE);                        
 ArrayList<PDTasksDefEvent> L =getDrv().getDocNoTransThreads(this.getDocType(), MODE); 
 PDTasksDefEvent T;
 PDTasksExec TE;
@@ -3024,7 +3036,11 @@ for (PDTasksDefEvent L1 : L)
     TE.setNextDate(new Date());
     TE.setGenAuto(true);
     TE.insert();
+    if (PDLog.isDebug())
+        PDLog.Debug("Generated:"+TE.getName());                            
     }
+if (PDLog.isDebug())
+    PDLog.Debug("PDDocs.GenerateNoTransThreads<");                        
 }
 //---------------------------------------------------------------------
 /**

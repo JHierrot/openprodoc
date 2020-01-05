@@ -78,9 +78,9 @@ if (PDLog.isInfo())
 Bin.ExecuteEventDoc(Param1, Param2, Param3, Param4, Doc);
 }
 //-----------------------------------------------------------------
-final protected boolean CustomMeetsReq(String param, String param2, String param3, String param4, Record Rec)
+final protected boolean CustomMeetsReq(String param, String param2, String param3, String param4, Record Rec, DriverGeneric Drv)  throws PDException
 {
-return(Bin.CustomMeetsReqRec(param, param2, param3, param4, Rec));
+return(Bin.CustomMeetsReqRec(param, param2, param3, param4, Rec, Drv));
 }
 //-----------------------------------------------------------------    
 final protected Cursor CurCustom(DriverGeneric Drv, String ObjectType, String Filter, String param, String param2, String param3, String param4)   throws PDException
@@ -157,7 +157,7 @@ protected void ExecuteEventDoc(String Param1, String Param2, String Param3, Stri
  * @param Rec
  * @return
  */
-protected boolean CustomMeetsReqRec(String param, String param2, String param3, String param4, Record Rec)
+protected boolean CustomMeetsReqRec(String param, String param2, String param3, String param4, Record Rec, DriverGeneric Drv)  throws PDException
 {
 return(true);
 }

@@ -1699,18 +1699,21 @@ void ExportPath(String IdTopLevel, String Path) throws Exception
 ArrayList Family=OrderedGrandParents(getPDId());
 PDFolders Fold=new PDFolders(getDrv());
 File SOFolder;
+Path=DriverGeneric.FixPath(Path, true);
 for (int i = Family.size()-1; i >=0; i--)
     {
     String Id = (String)Family.get(i);
     if (Id.equals(IdTopLevel) || Id.equals(ROOTFOLDER))
             continue;
     Fold.Load(Id);
-    Path+=File.separatorChar+Fold.getTitle();
+//    Path+=File.separatorChar+Fold.getTitle();
+    Path+=Fold.getTitle();
     SOFolder=new File(Path);
     if (!SOFolder.exists())
         SOFolder.mkdir();
     }
-String Destpath=Path+File.separatorChar+getTitle();    
+//String Destpath=Path+File.separatorChar+getTitle();    
+String Destpath=Path+getTitle();    
 SOFolder=new File(Destpath);    
 if (!SOFolder.exists())
     SOFolder.mkdir();

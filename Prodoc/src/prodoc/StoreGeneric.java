@@ -262,10 +262,10 @@ protected void Decode()
  *
  * @return
  */
-protected String getSeparator()
-{
-return (""+File.separatorChar);
-}
+//protected String getSeparator()
+//{
+//return (""+File.separatorChar);
+//}
 //-------------------------------------------------------------------------
 /**
  * generates Path
@@ -275,7 +275,8 @@ return (""+File.separatorChar);
  */
 protected String GenPath(String Id, String Ver)
 {
-return(Id.substring(0, 5)+getSeparator());
+//return(Id.substring(0, 5)+getSeparator());
+return(Id.substring(0, 5)+DriverGeneric.LINSEP);
 }
 //-------------------------------------------------------------------------
 /**

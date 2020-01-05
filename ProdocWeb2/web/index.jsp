@@ -9,8 +9,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>OpenProdoc2 Web 3.0</title>
-<script src="js/OpenProdoc3.0.js" type="text/javascript"></script>
+<title>OpenProdoc 3.0.2</title>
+<script src="js/OpenProdoc3.0.2.js" type="text/javascript"></script>
 <script src="js/dhtmlx.js" type="text/javascript"/></script>
 <link rel="shortcut icon" href="img/OpenProdoc.ico" type="image/x-icon">      
 <link rel="STYLESHEET" type="text/css" href="js/dhtmlx.css">

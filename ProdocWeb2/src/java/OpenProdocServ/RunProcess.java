@@ -60,6 +60,8 @@ String T1=Req.getParameter("T1");
 String T2=Req.getParameter("T2");
 String T3=Req.getParameter("T3");
 String T4=Req.getParameter("T4");
+String TDesc=Req.getParameter("TDesc");
+String TObj=Req.getParameter("TObj");
 String Filter=Req.getParameter("Filter");
 String ItemFold=Req.getParameter("Item");
 String ItemDoc=Req.getParameter("Item2");
@@ -90,6 +92,8 @@ else
 TC.setName(Name);
 TC.setDescription(Descrip);
 TC.setObjFilter(Filter);
+TC.setDescription(TDesc);
+TC.setObjType(TObj);
 TC.setParam(T1);
 TC.setParam2(T2);
 TC.setParam3(T3);

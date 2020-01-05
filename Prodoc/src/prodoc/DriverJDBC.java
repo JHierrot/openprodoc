@@ -58,6 +58,8 @@ final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyyMMddHHmmss");
 //static final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
 final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyyMMdd");
 
+static final String COM="'";
+static final String ESCCOM="·";
 /**
  * Constructor
  * @param pURL Url to DDBB Server
@@ -541,7 +543,7 @@ else
  */
 static protected String toString(String Val)
 {
-return("'"+Val.replace("'", "·")+"'");
+return("'"+Val.replace(COM, ESCCOM)+"'");
 }
 //-----------------------------------------------------------------------------------
 /**
@@ -783,7 +785,12 @@ for (int i = 0; i < Fields.NumAttr(); i++)
         Attr.setName(PDDocs.fPDID);
     try {
     if (Attr.getType()==Attribute.tSTRING)
-        Attr.setValue(rs.getString(Attr.getName()));
+        {
+        String V=rs.getString(Attr.getName());
+        if (V!=null && V.length()!=0)
+            V=V.replace(ESCCOM, COM);
+        Attr.setValue(V);
+        }
     else if (Attr.getType()==Attribute.tTHES)
         Attr.setValue(rs.getString(Attr.getName()));
     else if (Attr.getType()==Attribute.tDATE)

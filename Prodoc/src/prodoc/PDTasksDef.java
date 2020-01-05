@@ -148,12 +148,13 @@ public static final int fTASK_FOLDSREPORT=6;
  */
 public static final int fTASK_LOCALSYNC=7;
 
-public static final int fTASK_CUSTOM=8;
+public static final int fTASK_CUSTOMDOC=8;
+public static final int fTASK_CUSTOMFOLD=9;
 
 /**
  *
  */
-public static final int fTASK_MAXCRON=8;
+public static final int fTASK_MAXCRON=9;
 
 private static final String[] LisTypeTask= {"DELETE_OLD_FOLD",
                                             "DELETE_OLD_DOC",
@@ -163,7 +164,8 @@ private static final String[] LisTypeTask= {"DELETE_OLD_FOLD",
                                             "DOCSREPORT",
                                             "FOLDSREPORT",
                                             "LOCALSYNC",
-                                            "CUSTOM"
+                                            "CUSTOMDOC",
+                                            "CUSTOMFOLD"
                                             };
 
 private static String[] AllLisTypeTask=null;

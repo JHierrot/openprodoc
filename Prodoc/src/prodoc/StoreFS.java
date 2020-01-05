@@ -46,8 +46,8 @@ static final String SEP="_";
 protected StoreFS(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt) throws PDExceptionFunc
 {
 super(pServer, pUser, pPassword, pParam, pEncrypt);
-if (!getServer().substring(getServer().length()-2).equals(getSeparator()) )
-    setServer(getServer()+getSeparator());
+//if (!getServer().substring(getServer().length()-2).equals(getSeparator()) )
+//    setServer(getServer()+getSeparator());
 if (isEncript())
     setEncriptPass(pParam);
 }

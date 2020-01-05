@@ -249,6 +249,8 @@ for (int i = 0; i < LT.size(); i++)
     TaskEnd.assignValues(R);
     TaskEnd.setStartDate(new Date());
     try {
+    if (PDLog.isDebug())
+        PDLog.Debug("PDTasksExec.Executing:" + Task.getName());        
     Task.Execute();
     TaskEnd.setEndsOk(true);
     TaskEnd.setResult("");
@@ -306,7 +308,8 @@ switch (getType())
         String IdFold=F.getIdPath(getParam3());
         LocalSync(getParam2(), IdFold, getParam4(), getParam()!=null && getParam().equals("1"));
         break;
-    case fTASK_CUSTOM: ExecuteCustomCron();
+    case fTASK_CUSTOMDOC: 
+    case fTASK_CUSTOMFOLD: ExecuteCustomCron();
         break;
     case PDTasksDefEvent.fTASKEVENT_UPDATE_FOLD: ExecuteUpdFold();
         break;
@@ -352,7 +355,8 @@ switch (getType())
     case fTASK_EXPORT: return CurExport();
     case fTASK_DOCSREPORT: return CurDocsReport();
     case fTASK_FOLDSREPORT: return CurFoldsReport();
-    case fTASK_CUSTOM: return CurCustom();
+    case fTASK_CUSTOMDOC: 
+    case fTASK_CUSTOMFOLD: return CurCustom();
     }
 PDExceptionFunc.GenPDException("Undefined_task", ""+getType());
 return (null);
@@ -1394,7 +1398,7 @@ switch (getType())
         IdUnder=Fold.getIdPath(getParam());
         break;
     case PDTasksDefEvent.fTASKEVENT_CUSTOM_DOC:
-        return(CustomMeetsReq(Doc.getRecSum().Copy()));
+        return(CustomMeetsReq(Doc.getRecSum().Copy(), getDrv()));
     }
 Fold.setPDId(Doc.getParentId());
 if (!Fold.IsUnder(IdUnder))    
@@ -1422,6 +1426,8 @@ switch (getType())
     case PDTasksDefEvent.fTASKEVENT_EXPORT_FOLD:
         IdUnder=Fold.getIdPath(getParam());
         break;
+    case PDTasksDefEvent.fTASKEVENT_CUSTOM_FOLD:
+        return(CustomMeetsReq(FoldE.getRecSum().Copy(), getDrv()));
     }
 if (!FoldE.IsUnder(IdUnder))    
    return(false); 
@@ -1509,7 +1515,7 @@ if (isGenAuto())
 super.VerifyAllowedIns();
 }
 //-------------------------------------------------------------------------
-private boolean CustomMeetsReq(Record Rec) throws PDException
+private boolean CustomMeetsReq(Record Rec, DriverGeneric Drv) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDTasksExec.CustomMeetsReq>:"+Rec); 
@@ -1517,7 +1523,7 @@ String[] Params = getDescription().split("\\|");
 String PDIdT=Params[0];
 String ClassName=Params[1];
 CustomTask Cust=new CustomTask(getDrv(), PDIdT, ClassName);
-return(Cust.CustomMeetsReq(getParam(), getParam2(), getParam3(), getParam4(), Rec));            
+return(Cust.CustomMeetsReq(getParam(), getParam2(), getParam3(), getParam4(), Rec, Drv));            
 }
 //-------------------------------------------------------------------------
 private void ExecuteCustomDoc() throws PDException

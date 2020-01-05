@@ -1960,7 +1960,7 @@ if (PDLog.isDebug())
  */
 static public String getVersion()
 {
-return("3.0.1");
+return("3.0.2");
 }
 /**
  * constant used for bin <-> hexadecimal conversión
@@ -3235,6 +3235,7 @@ if (!Strict)
     FoldExist=true;
     } catch( PDException ex)
         { // don't exits
+        ex.printStackTrace();
         }
     }
 if (Strict || (!Strict && !FoldExist))
@@ -3411,7 +3412,16 @@ finally
         }
     }
 }
-
+//---------------------------------------------------------------------
+static public final char LINSEP='/';
+static public final char WINSEP='\\';
+static public String FixPath(String Path, boolean isFolder)
+{
+String NewPath=Path.replace(WINSEP, LINSEP);
+if (isFolder && NewPath.charAt(NewPath.length()-1)!=LINSEP)
+    NewPath+=LINSEP;
+return(NewPath);
+}
 //***********************************************************************************
 class FilterOPDFiles implements FileFilter
 {
