@@ -854,9 +854,10 @@ if (NewAttr.isMultivalued())
 else
     {
     getDrv().AlterTableAdd(Name, NewAttr, false);
+    getDrv().AlterTableAdd(GenVerTabName(Name), NewAttr, false);
     if (Def.getClassType().equalsIgnoreCase(PDObjDefs.CT_DOC))
         {
-        HashSet SubTypes=Def.getListSubClases(Name);
+        HashSet SubTypes=Def.getListSubClasesCreated(Name);
         for (Iterator it = SubTypes.iterator(); it.hasNext();)
             {
             String SubName =(String)it.next();
@@ -897,9 +898,10 @@ if (OldAttr.isMultivalued())
 else
     {
     getDrv().AlterTableDel(Name, OldAttr.getName());
+    getDrv().AlterTableDel(GenVerTabName(Name), OldAttr.getName());
     if (Def.getClassType().equalsIgnoreCase(PDObjDefs.CT_DOC))
         {
-        HashSet SubTypes=Def.getListSubClases(Name);
+        HashSet SubTypes=Def.getListSubClasesCreated(Name);
         for (Iterator it = SubTypes.iterator(); it.hasNext();)
             {
             String SubName =(String)it.next();
@@ -1437,7 +1439,7 @@ Cursor Cur=getDrv().OpenCursor(ListAttr);
 Record r=getDrv().NextRec(Cur);
 while (r!=null)
     {
-    v.addAll(getListSubClases((String)r.getAttr(fNAME).getValue()));
+    v.addAll(getListSubClasesCreated((String)r.getAttr(fNAME).getValue()));
     r=getDrv().NextRec(Cur);
     }
 getDrv().CloseCursor(Cur);
