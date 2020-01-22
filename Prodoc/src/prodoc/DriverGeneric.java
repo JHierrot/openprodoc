@@ -2321,7 +2321,7 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
         {
         ((PDDocs)Obj2Build).ImportXMLNode(OPDObject, XMLFile.getAbsolutePath().substring(0, 
                                            XMLFile.getAbsolutePath().lastIndexOf(File.separatorChar)),
-                                           ParentFolderId, false);
+                                           ParentFolderId, true);
         Tot++;
         }
     else if (Obj2Build instanceof PDFolders)
@@ -3235,7 +3235,6 @@ if (!Strict)
     FoldExist=true;
     } catch( PDException ex)
         { // don't exits
-        ex.printStackTrace();
         }
     }
 if (Strict || (!Strict && !FoldExist))
@@ -3421,6 +3420,14 @@ String NewPath=Path.replace(WINSEP, LINSEP);
 if (isFolder && NewPath.charAt(NewPath.length()-1)!=LINSEP)
     NewPath+=LINSEP;
 return(NewPath);
+}
+//---------------------------------------------------------------------
+public void ConvertJavaDocImport(PDFolders FoldAct, String ImpPath, String FoldType, String DocType, boolean Strict) throws PDException
+{
+PDDocs d=new PDDocs(this);
+File f=new File(ImpPath);
+d.ConvertJavaDoc(f, DocType, FoldType);
+Import(FoldAct, f.getPath(), false, true, true, FoldType, DocType, Strict);
 }
 //***********************************************************************************
 class FilterOPDFiles implements FileFilter

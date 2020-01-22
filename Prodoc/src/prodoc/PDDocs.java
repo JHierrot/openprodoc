@@ -19,6 +19,10 @@
 package prodoc;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
@@ -363,7 +367,7 @@ return(DocsStruct.Copy());
 /**
  * Return a Copy of structure of standard version table
  * @return a Copy of structure of standard version table
- * @throws PDException
+ * @throws PDException in any error
  */
 public Record getRecordStructVer() throws PDException
 {
@@ -663,7 +667,7 @@ setDocType(pDocType);
 /**
  * Assign the name of the type used. Deletes the information about attributes structure, repository,etc.
  * @param pDocType The name of the document type defined in the database.
- * @throws PDException  
+ * @throws PDException in any error 
 */
 public final void setDocType(String pDocType) throws PDException
 {
@@ -1914,7 +1918,7 @@ return(ListCond);
 //-------------------------------------------------------------------------
 /**
  * update a locked document, including metadata and the path o stream asigned previously
- * @throws PDException
+ * @throws PDException in any error
  */
 @Override
 public void update() throws PDException
@@ -2764,7 +2768,7 @@ for (int i = 0; i < childNodes.getLength(); i++)
             NewDoc.setPDId(null);
         NewDoc.setParentId(DestFold);
         PDRepository Rep=new PDRepository(getDrv());
-        Rep.Load(NewDoc.getReposit());
+        Rep.Load(DefDoc.getReposit()); // definiton of type NOT XML imported
         if (!Rep.IsRef())
             {
             Attribute DocName=r.getAttr(fNAME);
@@ -3589,5 +3593,188 @@ if (MustTrace(fOPERVIE))
     }
 }
 //--------------------------------------------------------------------------
+static final String OPDXmlFold="<OPDList>\n" +
+"<OPDObject type=\"PD_FOLDERS\">\n" +
+"<ListAttr>\n" +
+"<Attr Name=\"PDId\">@ID@</Attr>\n" +
+"<Attr Name=\"DocType\">@TYPE@</Attr>\n" +
+"<Attr Name=\"DocDate\">@DOCDATE@</Attr>\n" +
+"<Attr Name=\"Title\">@TITLE@</Attr>\n" +
+"</ListAttr>\n" +
+"</OPDObject>\n" +
+"</OPDList>";
+static final String OPDXmlDoc="<OPDList>\n" +
+"<OPDObject type=\"PD_DOCS\">\n" +
+"<ListAttr>\n" +
+"<Attr Name=\"PDId\">@ID@</Attr>\n" +
+"<Attr Name=\"DocType\">@TYPE@</Attr>\n" +
+"<Attr Name=\"DocDate\">@DOCDATE@</Attr>\n" +
+"<Attr Name=\"Title\">@TITLE@</Attr>\n" +
+"<Attr Name=\"MimeType\">@MIME@</Attr>\n" +
+"<Attr Name=\"Name\">@TITLE@</Attr>\n"+
+"</ListAttr>\n" +
+"</OPDObject>\n" +
+"</OPDList>";
+HashMap<String, String> PathId=new HashMap();
+final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
+static final String REF="href=\"";
+static final String REF2="src=\"";
+static final String REFEND="\"";
+static final String REFINTER="#";
+static final String REFPARAM="?";
 
+//--------------------------------------------------------------------------    
+public void ConvertJavaDoc(File f, String DocType, String FoldType) throws PDException
+{
+try {    
+String Id=genId(f.getCanonicalPath());
+PathId.put(f.getCanonicalPath(), Id);
+GenerateOPDFold(f, Id, FoldType);
+for (File SubElem : f.listFiles())
+    {
+    if (SubElem.isDirectory())
+        ConvertJavaDoc(SubElem, DocType, FoldType);
+    else if (!SubElem.getName().endsWith(".opd"))
+        {
+        GenerateOPDDoc(SubElem, DocType); 
+        Modify4OPD(SubElem);
+        }
+    }
+} catch (Exception Ex)
+    {
+    PDException.GenPDException("Converting Javadoc:", Ex.getLocalizedMessage());
+    }
+}
+//--------------------------------------------------------------------------    
+
+private String genId(String Path)
+{
+StringBuilder genId = new StringBuilder();
+genId.append(Long.toHexString(System.currentTimeMillis()));
+genId.append("-");
+genId.append(Long.toHexString(Double.doubleToLongBits(Math.random())));
+if (Path.endsWith("html"))
+   return (genId.toString().substring(0, 27)+".html"); 
+else if (Path.endsWith("css"))
+   return (genId.toString().substring(0, 27)+".css"); 
+else if (Path.endsWith("woff"))
+   return (genId.toString().substring(0, 27)+".woff"); 
+else if (Path.endsWith("ttf"))
+   return (genId.toString().substring(0, 27)+".ttf"); 
+else if (Path.endsWith("eot"))
+   return (genId.toString().substring(0, 27)+".eot"); 
+else if (Path.endsWith("otf"))
+   return (genId.toString().substring(0, 27)+".otf"); 
+else if (Path.endsWith("svg"))
+   return (genId.toString().substring(0, 27)+".svg"); 
+return genId.toString();
+}
+//--------------------------------------------------------------------------    
+private void GenerateOPDFold(File f, String Id, String FoldType) throws Exception
+{
+Path P = Paths.get(f.getCanonicalPath()+".opd");
+Files.write(P, OPDXmlFold.replace("@ID@", Id).replace("@TYPE@", FoldType).replace("@TITLE@", f.getName()).replace("@DOCDATE@", formatterDate.format( f.lastModified())).getBytes(), StandardOpenOption.CREATE,StandardOpenOption.TRUNCATE_EXISTING );
+}
+//--------------------------------------------------------------------------    
+private void GenerateOPDDoc(File f, String DocType)  throws Exception
+{
+String CanonPath = f.getCanonicalPath();    
+if (PDLog.isDebug())
+    PDLog.Debug("GenerateOPDDoc = "+CanonPath);
+String Id=PathId.get(CanonPath);
+if (Id==null)
+    {
+    Id=genId(CanonPath);
+    PathId.put(CanonPath, Id);
+    }
+String Mime;
+int Ext=f.getName().lastIndexOf(".");
+if (Ext==-1)
+    Mime="*";
+else    
+    Mime=f.getName().substring(f.getName().lastIndexOf(".")+1);
+Path P;
+if (Ext==-1)
+    P= Paths.get(f.getCanonicalPath()+".opd");
+else
+    P= Paths.get(f.getCanonicalPath().substring(0, f.getCanonicalPath().length()-Mime.length())+"opd");
+if (Mime.equalsIgnoreCase("mf"))
+    Mime="txt";
+Files.write(P, OPDXmlDoc.replace("@ID@", Id).replace("@TYPE@", DocType).replace("@TITLE@", f.getName()).replace("@MIME@", Mime).replace("@DOCDATE@", formatterDate.format( f.lastModified())).getBytes(), StandardOpenOption.CREATE,StandardOpenOption.TRUNCATE_EXISTING  );
+}
+//--------------------------------------------------------------------------  
+private String ReplaceAllRef(String CurrentFile, String Text) throws Exception
+{
+StringBuilder SB=new StringBuilder(Text);
+int Pos=0;
+while ((Pos=SB.indexOf(REF, Pos))!=-1)
+    {
+    Pos=ReplaceRef(CurrentFile, SB, Pos+REF.length());
+    }
+Pos=0;
+while ((Pos=SB.indexOf(REF2, Pos))!=-1)
+    {
+    Pos=ReplaceRef(CurrentFile, SB, Pos+REF2.length());
+    }
+return(SB.toString());
+}
+//-----------------------------------------------------------------
+private int ReplaceRef(String CurrentFile, StringBuilder SB, int Pos)throws Exception
+{
+int PosEnd=SB.indexOf(REFEND, Pos);
+int PosURL=PosEnd;
+if (PosEnd!=-1)
+    {
+    int PosEnd2=SB.indexOf(REFINTER, Pos);
+    boolean UrlParam=false;
+    if (PosEnd2!=-1 && PosEnd2<PosEnd)
+        PosURL=PosEnd2;
+    PosEnd2=SB.indexOf(REFPARAM, Pos);
+    if (PosEnd2!=-1 && PosEnd2<PosEnd)
+        {
+        PosURL=PosEnd2;
+        UrlParam=true;
+        }
+    String OldRef=SB.substring(Pos, PosURL);
+    String NewRef=CalculateNewRef( CurrentFile,OldRef);
+    if (UrlParam)
+        SB.replace(Pos, PosEnd, NewRef);
+    else
+        SB.replace(Pos, PosURL, NewRef);
+    return(PosEnd);
+    }
+else
+    return(Pos);
+}
+//-----------------------------------------------------------------
+private String CalculateNewRef(String CurrentFile, String OldRef) throws Exception
+{
+if (OldRef.startsWith("http") || OldRef.startsWith("javascript")|| OldRef.startsWith("mailto:") || OldRef.length()==0)   
+    return(OldRef);
+if (PDLog.isDebug())
+    PDLog.Debug("CurrentFile="+CurrentFile+ "  OldRef="+OldRef);
+File f=new File(CurrentFile+File.separator+OldRef);
+String canonPath = f.getCanonicalPath();
+if (PDLog.isDebug())
+    PDLog.Debug("CalculateNewRef="+canonPath);
+String Id=PathId.get(canonPath);
+if (Id==null)
+    {
+    Id=genId(canonPath);
+    PathId.put(f.getCanonicalPath(), Id);
+    }
+return("SendDoc?Id="+Id);    
+}
+//-----------------------------------------------------------------
+private void Modify4OPD(File f)  throws Exception
+{
+String CanonPath = f.getCanonicalPath(); 
+if (!(CanonPath.endsWith(".html")||CanonPath.endsWith(".css")))
+    return;
+Path P = Paths.get(CanonPath);
+String SHtml=new String(Files.readAllBytes(P));
+SHtml=ReplaceAllRef(f.getParent(), SHtml);
+Files.write(P, SHtml.getBytes(), StandardOpenOption.TRUNCATE_EXISTING );
+}
+//-----------------------------------------------------------------
 }
