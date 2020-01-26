@@ -65,14 +65,13 @@ static private String DirPath;
 static private String GlobLang=null;
 static private CharArraySet SW=null;
 //-------------------------------------------------------------------------
-
-    /**
-     *
-     * @param pServer
-     * @param pUser
-     * @param pPassword
-     * @param pParam
-     */
+/**
+ * Constructor
+ * @param pServer path to Lucene indexes
+ * @param pUser currently not used for this connection
+ * @param pPassword currently not used for this connection
+ * @param pParam currently not used for this connection
+ */
 public FTConnLucene(String pServer, String pUser, String pPassword, String pParam)
 {
 super(pServer, pUser, pPassword, pParam);

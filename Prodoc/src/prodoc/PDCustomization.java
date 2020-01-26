@@ -96,9 +96,9 @@ static private ObjectsCache CustomObjectsCache = null;
 
 //-------------------------------------------------------------------------
 /**
- * 
- * @param Drv
- * @throws PDException
+ * Default constructor
+ * @param Drv Openprodoc Session driver
+ * @throws PDException in any error
  */
 public PDCustomization(DriverGeneric Drv)  throws PDException
 {
@@ -106,9 +106,9 @@ super(Drv);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Rec
- * @throws PDException
+ * Assign new values to the Customization object
+ * @param Rec Record of Customization type with new values
+ * @throws PDException in any error
  */
 @Override
 public void assignValues(Record Rec) throws PDException
@@ -124,9 +124,9 @@ assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * Returns a record with the current values
+ * @return a record with the current values
+ * @throws PDException in any error
  */
 @Override
 synchronized public Record getRecord() throws PDException
@@ -163,9 +163,9 @@ return(ListCond);
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Returns the name of Customization table in DDBB
+ * @return the name of Customization table in DDBB
+ */
 @Override
 public String getTabName()
 {
@@ -173,9 +173,9 @@ return (getTableName());
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * static method that returns the name of Customization table in DDBB
+ * @return the name of Customization table in DDBB
+ */
 static public String getTableName()
 {
 return ("PD_CUSTOMIZE");
@@ -236,8 +236,8 @@ return Name;
 //-------------------------------------------------------------------------
 /**
  * @param Name the Name to set
- * @throws PDExceptionFunc  
-*/
+ * @throws PDExceptionFunc in any error 
+ */
 public void setName(String Name) throws PDExceptionFunc
 {
 this.Name = CheckName(Name);

@@ -27,8 +27,8 @@ public class PDExceptionFunc extends PDException
 {
 
 /**
- *
- * @param TextExcep 
+ * Constructor
+ * @param TextExcep text of the exception
  */
 public PDExceptionFunc(String TextExcep)
 {
@@ -36,10 +36,10 @@ super(TextExcep);
 }
 //----------------------------------------------------------------
 /**
- * 
- * @param TextExcep
- * @param OptParam
- * @throws PDExceptionFunc
+ * creates and thows a new functional PDExceptionFunc with the information provided
+ * @param TextExcep Text of the exception
+ * @param OptParam Optional parameter to be added to the text of exception
+ * @throws PDExceptionFunc the created PDException
  */
 public static void GenPDException(String TextExcep, String OptParam) throws PDExceptionFunc
 {

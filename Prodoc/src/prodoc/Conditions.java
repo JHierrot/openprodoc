@@ -187,12 +187,13 @@ public boolean isInvert()
 {
 return Invert;
 }
-
+//-------------------------------------------------------------------------
 /**
- * @param Invert the Invert to set
+ * @param pInvert when true, the next conditions are inverted: NOT (cond)
  */
 public void setInvert(boolean pInvert)
 {
 Invert = pInvert;
 }
+//-------------------------------------------------------------------------
 }

@@ -87,13 +87,13 @@ final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyyMMdd");
 // DocumentBuilder DB=null;
 
 /**
-* 
-* @param pURL
-* @param pPARAM
-* @param pUser
-* @param pPassword
-* @throws prodoc.PDException
-*/
+ * Constructor
+ * @param pURL Url of OpenProdoc Server
+ * @param pPARAM currently not used for this connection
+ * @param pUser currently not used for this connection
+ * @param pPassword currently not used for this connection
+ * @throws prodoc.PDException in any error
+ */
 public DriverRemote(String pURL, String pPARAM, String pUser, String pPassword) throws PDException
 {
 super(pURL, pPARAM, pUser, pPassword);

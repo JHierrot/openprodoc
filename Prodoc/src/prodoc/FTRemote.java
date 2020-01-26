@@ -55,18 +55,17 @@ DocumentBuilder DB=null;
 final static String NEWLINE="\r\n";
     
 //-------------------------------------------------------------------------
-
-    /**
-     *
-     * @param pServer
-     * @param pUser
-     * @param pPassword
-     * @param pParam
-     * @param pUrlPost
-     * @param phttpclient
-     * @param pcontext
-     * @param pDB
-     */
+/**
+ * Constructor
+ * @param pServer Url of remote Openprodoc Server
+ * @param pUser Currently not used
+ * @param pPassword Currently not used
+ * @param pParam Currently not used
+ * @param pUrlPost Url of remote Openprodoc Server
+ * @param phttpclient Connection to OpenProdoc Server
+ * @param pcontext Http context
+ * @param pDB Document Builder
+ */
 public FTRemote(String pServer, String pUser, String pPassword, String pParam, HttpPost pUrlPost, CloseableHttpClient phttpclient, HttpContext pcontext, DocumentBuilder pDB)
 {
 super(pServer, pUser, pPassword, pParam);

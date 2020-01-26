@@ -134,9 +134,9 @@ private String Password;
 static private ObjectsCache AuthObjectsCache = null;
 
 /**
- *
- * @param Drv
- * @throws PDException
+ * default constructor
+ * @param Drv OpenProdoc session/driver for accesing to DDBB
+ * @throws PDException in any error
  */
 public PDAuthenticators(DriverGeneric Drv) throws PDException
 {
@@ -144,9 +144,9 @@ super(Drv);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Rec
- * @throws PDException
+ * Assign new values to the PDAuthenticator object
+ * @param Rec Record of PDAuthenticator type with new values
+ * @throws PDException in any error
  */
 @Override
 public void assignValues(Record Rec) throws PDException
@@ -169,9 +169,9 @@ if (PDLog.isDebug())
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * Returns a record with the current values
+ * @return a record with the current values
+ * @throws PDException in any error
  */
 @Override
 synchronized public Record getRecord() throws PDException
@@ -208,18 +208,18 @@ return(ListCond);
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Returns the name of Authenticators table in DDBB
+ * @return the name of Authenticators table in DDBB
+ */
 public String getTabName()
 {
 return (getTableName());
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Static method that returns the name of Authenticators table in DDBB
+ * @return the name of Authenticators table in DDBB
+ */
 static public String getTableName()
 {
 return ("PD_AUTHENTICATOR");
@@ -269,7 +269,7 @@ return Name;
 //-------------------------------------------------------------------------
 /**
  * @param Name the Name to set
- * @throws PDExceptionFunc  
+ * @throws PDExceptionFunc in any error 
 */
 public void setName(String Name) throws PDExceptionFunc
 {
@@ -317,7 +317,7 @@ return Param;
 }
 //-------------------------------------------------------------------------
 /**
- * @param PARAM
+ * @param PARAM param to set
 */
 public void setParam(String PARAM)
 {
@@ -372,7 +372,7 @@ return AuthType;
 //-------------------------------------------------------------------------
 /**
  * @param pAuthType the AuthType to set
- * @throws PDException 
+ * @throws PDException in any error
 */
 public void setAuthType(String pAuthType)  throws PDException
 {
@@ -390,7 +390,7 @@ return UserName;
 }
 //-------------------------------------------------------------------------
 /**
- * @param User
+ * @param User User to set
 */
 public void setUser(String User)
 {
@@ -406,7 +406,7 @@ return Password;
 }
 //-------------------------------------------------------------------------
 /**
- * @param pPassword
+ * @param pPassword password to set
 */
 public void setPassword(String pPassword)
 {

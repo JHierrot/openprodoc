@@ -161,8 +161,8 @@ public ObjPD()
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param pDrv
+ * Default constructor of an OpenProdoc object, assigning driver for database access
+ * @param pDrv OpenProdoc Driver/session to assign
  */
 public ObjPD(DriverGeneric pDrv)
 {
@@ -170,8 +170,8 @@ setDrv(pDrv);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @throws PDException
+ * Generic method for inserting an element
+ * @throws PDException in any error
  */
 public void insert() throws PDException
 {
@@ -200,8 +200,8 @@ if (PDLog.isDebug())
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @throws PDException
+ * Generic method for deleting an element
+ * @throws PDException in any error
  */
 public void delete()  throws PDException
 {
@@ -226,9 +226,10 @@ if (InTransLocal)
 if (PDLog.isDebug())
     PDLog.Debug("ObjPD.delete <");
 }
+//------------------------------------------------------------------------
 /**
- *
- * @throws PDException
+ * Generic method for updating an element
+ * @throws PDException in any error
  */
 public void update()  throws PDException
 {
@@ -256,8 +257,8 @@ if (PDLog.isDebug())
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
+ * Generic "abstract" method for obtaining the name of the table
+ * @return the name of the DDB table that stores the current OPD object
  */
 public String getTabName()
 {
@@ -265,9 +266,9 @@ return(null);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * Generic "abstract" method for returning a Record of loaded OPD Object
+ * @return a record with attributes of the loaded OPD object
+ * @throws PDException in any error
  */
 public Record getRecord() throws PDException
 {
@@ -275,8 +276,9 @@ return(null);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
+ * Returns the Structure/definition of current OPD Class (PDUsers, PDGroups, PDAcl,..) as a record 
+ * @return a Record containing the definition/structure of current OPD class
+ * @throws PDException in any error
  */
 Record getRecordStruct() throws PDException
 {
@@ -298,9 +300,9 @@ abstract protected Conditions getConditions() throws PDException;
  */
 abstract protected Conditions getConditionsLike(String Name) throws PDException;
 /**
- *
- * @param Rec
- * @throws PDException
+ * Generic "abstract" method for assigning a Record Values to an OPD Object
+ * @param Rec Record to be assigned
+ * @throws PDException in any error
  */
 public void assignValues(Record Rec) throws PDException
 {
@@ -308,8 +310,8 @@ public void assignValues(Record Rec) throws PDException
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @throws PDException
+ * Creates the Database structure of OpenProdoc
+ * @throws PDException in any error
  */
 public void Install() throws PDException
 {
@@ -325,8 +327,8 @@ protected void InstallMulti()  throws PDException
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @throws PDException
+ * Drops DDBB tables of current class
+ * @throws PDException in any error
  */
 public void unInstall() throws PDException
 {
@@ -370,7 +372,7 @@ protected void DeleteMulti() throws PDException
  * Load the object of the actual type based on the Iden
  * @param Ident Identifier of the objetct to be loaded
  * @return A record with the attributes of the object
- * @throws PDException
+ * @throws PDException In any error
  */
 public Record Load(String Ident)  throws PDException
 {
@@ -414,10 +416,9 @@ abstract protected void AsignKey(String Ident) throws PDException;
      */
     abstract protected String getKey();
 //-------------------------------------------------------------------------
-
 /**
- * @return the getDrv()
- * @throws PDException
+ * @return the OPD "Driver" Session of the current object
+ * @throws PDException In any error
 */
 public DriverGeneric getDrv()  throws PDException
 {
@@ -426,7 +427,6 @@ if (Drv==null)
 return Drv;
 }
 //-------------------------------------------------------------------------
-
 /**
 * @param Drv the Drv to set
 */
@@ -436,8 +436,8 @@ this.Drv = Drv;
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @throws PDException
+ * Deletes the values assigned to the current object
+ * @throws PDException in any error
  */
 public void Clear() throws PDException
 {
@@ -557,9 +557,9 @@ Rec.getAttr(fPDAUTOR).setValue(getPDAutor());
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * Do a Query By Example (bases in values assigned to Atributes) anc returns a Cursor
+ * @return a created Cursor
+ * @throws PDException in any error
  */
 public Cursor SearchQBE() throws PDException
 {
@@ -573,10 +573,10 @@ return(getDrv().OpenCursor(QBE));
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Name
- * @return
- * @throws PDException
+ * Search object of the current OPD classby its main identifier (Name, Code,..) using Like DDBB expression
+ * @param Name Name to Search for
+ * @return a created cursor
+ * @throws PDException In any error
  */
 public Cursor SearchLike(String Name) throws PDException
 {
@@ -584,13 +584,12 @@ Query qLike=new Query(getTabName(), getRecordStruct(), getConditionsLike(Name), 
 return(getDrv().OpenCursor(qLike));
 }
 //-------------------------------------------------------------------------
-
-    /**
-     *
-     * @param Name
-     * @return
-     * @throws PDException
-     */
+/**
+ * Search object of the current OPD classby its descriptionusing Like DDBB expression
+ * @param Name Description of the Object
+ * @return a created cursor
+ * @throws PDException In any error
+ */
 public Cursor SearchLikeDesc(String Name) throws PDException
 {
 Query qLike=new Query(getTabName(), getRecordStruct(), getConditionsLike(Name), getDescOrder());
@@ -615,9 +614,9 @@ return(Name.replace('*','%')); // OJO: Revisar para Driver NO BBDD
 abstract protected String getDefaultOrder();
 //-------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * Returns ALL the elements of the current OPD Class
+ * @return A created Cursor
+ * @throws PDException In any error
  */
 public Cursor getAll() throws PDException
 {
@@ -633,8 +632,8 @@ abstract protected ObjectsCache getObjCache();
 //-------------------------------------------------------------------------
 /**
  * Builds an XML of the object to be printed or exported
- * @return the XML
- * @throws PDException  
+ * @return the XML created
+ * @throws PDException In any error 
  */
 public String toXML() throws PDException
 {
@@ -647,19 +646,19 @@ return XML.toString();
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
+ * Returns the Start String of OpenProdoc XML export format
+ * @return The Start String  of OpenProdoc XML export format
  */
 public String StartXML()
 {
 return("<"+XML_OPDList+">\n");    
 }
 //-------------------------------------------------------------------------
-    /**
-     *
-     * @return
-     */
-    public String EndXML()
+/**
+ * Returns the END String  of OpenProdoc XML export format
+ * @return The END String  of OpenProdoc XML export format
+ */
+public String EndXML()
 {
 return("</"+XML_OPDList+">\n");    
 }
@@ -695,10 +694,10 @@ insert();
 }    
 //-------------------------------------------------------------------------
 /**
- *
- * @param Name
- * @return
- * @throws PDExceptionFunc
+ * Verifis if the name is correct to be used as object or attribute name
+ * @param Name name to be verified
+ * @return the received name
+ * @throws PDExceptionFunc in the name is not correct
  */
 public static String CheckName(String Name) throws PDExceptionFunc
 {

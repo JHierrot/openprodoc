@@ -85,8 +85,8 @@ static private ObjectsCache EventObjectsCache = null;
 
 //-------------------------------------------------------------------------
 /**
- *
- * @param Drv
+ * defacult constructor
+ * @param Drv OpenProdoc session driver
  */
 public PDEvent(DriverGeneric Drv)
 {
@@ -94,10 +94,11 @@ super(Drv);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Rec
- * @throws PDException
+ * Assign new values to the Event object
+ * @param Rec Record of Event type with new values
+ * @throws PDException in any error
  */
+@Override
 public void assignValues(Record Rec) throws PDException
 {
 setMsgId((String) Rec.getAttr(fMSGID).getValue());
@@ -110,9 +111,9 @@ assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * Returns a record with the current values
+ * @return a record with the current values
+ * @throws PDException in any error
  */
 @Override
 synchronized public Record getRecord() throws PDException
@@ -148,18 +149,18 @@ return(ListCond);
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Returns the name of Event table in DDBB
+ * @return the name of Event table in DDBB
+ */
 public String getTabName()
 {
 return (getTableName());
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Static method that returns the name of Event table in DDBB
+ * @return the name of Event table in DDBB
+ */
 static public String getTableName()
 {
 return ("PD_EVENTS");
@@ -216,7 +217,7 @@ return Destination;
 }
 //-------------------------------------------------------------------------
 /**
- * @param pDestination
+ * @param pDestination new destination
  */
 public void setDestination(String pDestination)
 {
@@ -232,7 +233,7 @@ return Description;
 }
 //-------------------------------------------------------------------------
 /**
- * @param pDescription
+ * @param pDescription new description
 */
 public void setDescription(String pDescription)
 {

@@ -27,20 +27,19 @@ public class PDException extends Exception
 {
 
 /**
- *
- * @param TextExcep 
+ * constructor of the exception
+ * @param TextExcep text of the exception
  */
 public PDException(String TextExcep)
 {
 super(TextExcep);
-//        throw new UnsupportedOperationException("Not yet implemented");
 }
 //----------------------------------------------------------------
 /**
- * 
- * @param TextExcep
- * @param OptParam
- * @throws PDException
+ * creates and thows a new PDException with the information provided
+ * @param TextExcep Text of the exception
+ * @param OptParam Optional parameter to be added to the text of exception
+ * @throws PDException the created PDException
  */
 public static void GenPDException(String TextExcep, String OptParam) throws PDException
 {

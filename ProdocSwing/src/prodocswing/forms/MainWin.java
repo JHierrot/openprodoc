@@ -1494,7 +1494,10 @@ ImpFold.setVisible(true);
 if (ImpFold.isCancel())
     return;
 setCursor(WaitCur);
-getSession().ImportFolder(FoldAct, getIO_OSFolder(), ImpFold.IsOneLevel(), ImpFold.IncludeMetadata(), ImpFold.IncludeDocs(), ImpFold.FoldType(), ImpFold.DocType(), ImpFold.IsStrict());
+if (ImpFold.IsJavaDoc())
+    getSession().ConvertJavaDocImport(FoldAct, getIO_OSFolder(), ImpFold.FoldType(), ImpFold.DocType(), ImpFold.IsStrict());
+else    
+    getSession().ImportFolder(FoldAct, getIO_OSFolder(), ImpFold.IsOneLevel(), ImpFold.IncludeMetadata(), ImpFold.IncludeDocs(), ImpFold.FoldType(), ImpFold.DocType(), ImpFold.IsStrict());
 ExpFolds=getSession().getImpFolds();
 ExpDocs=getSession().getImpDocs();    
 //Import(FoldAct, getIO_OSFolder(), ImpFold.IsOneLevel(), ImpFold.IncludeMetadata(), ImpFold.IncludeDocs(), ImpFold.FoldType(), ImpFold.DocType(), ImpFold.IsStrict());

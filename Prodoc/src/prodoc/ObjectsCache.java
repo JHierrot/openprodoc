@@ -77,7 +77,7 @@ return(CO.getContent());
 //----------------------------------------------------------------------------
 /**
  * remove the object from the cache
- * @param Key
+ * @param Key Identifier of object to be removed
  */
 public void remove(Object Key)
 {
@@ -104,11 +104,11 @@ if (CleanerThread==null)
 CleanerThread.End();
 }
 //---------------------------------------------------------------------------
-    /**
-     *
-     * @return
-     */
-    public Iterator getIter()
+/**
+ * Creates an Iterator of the collection of objects
+ * @return a nez iterator
+ */
+public Iterator getIter()
 {
 return(CacheValues.keySet().iterator());    
 }

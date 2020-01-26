@@ -102,9 +102,9 @@ public static final int pDELETE  =5;
  */
 static private ObjectsCache AclObjectsCache = null;
 /**
- *
- * @param Drv
- * @throws PDException
+ * default constructor
+ * @param Drv OpenProdoc driver-session for access to DDBB
+ * @throws PDException In any error
  */
 public PDACL(DriverGeneric Drv) throws PDException
 {
@@ -112,9 +112,9 @@ super(Drv);
 }
 //-------------------------------------------------------------------------
 /**
- * 
- * @return
- * @throws PDException
+ * Returns a record with the current values
+ * @return a record with the current values
+ * @throws PDException in any error
  */
 @Override
 synchronized public Record getRecord() throws PDException
@@ -146,9 +146,9 @@ return(ListCond);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Rec
- * @throws PDException
+ * Assign new values to the ACL object
+ * @param Rec Record of ACL type with new values
+ * @throws PDException in any error
  */
 public void assignValues(Record Rec) throws PDException
 {
@@ -158,36 +158,36 @@ assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Returns the name of ACL table in DDBB
+ * @return the name of ACL table in DDBB
+ */
 public String getTabName()
 {
 return (getTableName());
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Static method that returns the name of ACL table in DDBB
+ * @return the name of ACL table in DDBB
+ */
 static public String getTableName()
 {
 return ("PD_ACL");
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Returns the name of ACL-Users table in DDBB
+ * @return the name of ACL-USers table in DDBB
+ */
 public String getTabNameAclUsers()
 {
 return ("PD_ACL_USERS");
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Returns the name of ACL-Groups table in DDBB
+ * @return the name of ACL-Groups in DDBB
+ */
 public String getTabNameAclGroups()
 {
 return ("PD_ACL_GROUPS");
@@ -247,10 +247,10 @@ else
 }
 //-------------------------------------------------------------------------
 /**
-*
- * @return
- * @throws PDException
-*/
+ * Returns the structure of the Acl-Users Record
+ * @return the structure of the Acl-Users Record
+ * @throws PDException in any error
+ */
 public Record getRecordAclUsersStruct() throws PDException
 {
 if (AclUsersStruct == null)
@@ -277,10 +277,10 @@ else
 }
 //-------------------------------------------------------------------------
 /**
-*
- * @return
- * @throws PDException
-*/
+ * Returns the structure of the Acl-Groups Record
+ * @return the structure of the Acl-Groups Record
+ * @throws PDException in any error
+ */
 public Record getRecordAclGroupsStruct() throws PDException
 {
 if (AclGroupsStruct == null)
@@ -316,7 +316,7 @@ return Name;
 //-------------------------------------------------------------------------
 /**
  * @param Name the Name to set
- * @throws PDExceptionFunc  
+ * @throws PDExceptionFunc in any error 
 */
 public void setName(String Name) throws PDExceptionFunc
 {
@@ -568,9 +568,9 @@ setName(Ident);
 //-------------------------------------------------------------------------
 /**
  * Init retrieving of what groups the UserName is member
- * @param User
- * @return
- * @throws PDException
+ * @param User user to search for
+ * @return a Hashmap with names of the groups-acl the User is member
+ * @throws PDException in any error
  */
 public HashMap FullUserMemberShip(PDUser User) throws PDException
 {
@@ -645,10 +645,10 @@ if (!getDrv().getUser().getRol().isAllowMaintainAcl())
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param ACLName
- * @return
- * @throws PDException
+ * Returns a List of Groups related to an ACL
+ * @param ACLName name of ACL to search for
+ * @return a created Cursor
+ * @throws PDException in any error
  */
 public Cursor ListGroups(String ACLName) throws PDException
 {
@@ -661,10 +661,10 @@ return(getDrv().OpenCursor(Groups));
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param ACLName
- * @return
- * @throws PDException
+ * Returns a List of Users related to an ACL
+ * @param ACLName name of ACL to search for
+ * @return a created Cursor
+ * @throws PDException in any error
  */
 public Cursor ListUsers(String ACLName) throws PDException
 {
@@ -826,11 +826,10 @@ if (PDLog.isDebug())
 return(Result);
 }
 //-------------------------------------------------------------------------
-
-    /**
-     *
-     * @throws PDException
-     */
+/**
+ * deletes-desassigns all users of the current ACL
+ * @throws PDException in any error
+ */
 public void DelAllUsers() throws PDException
 {
 if (PDLog.isDebug())
@@ -856,11 +855,10 @@ if (PDLog.isDebug())
     PDLog.Debug("PDACL.DelAllUsers<:"+getName());
 }
 //-------------------------------------------------------------------------
-
-    /**
-     *
-     * @throws PDException
-     */
+/**
+ * deletes-desassigns all Groups of the current ACL
+ * @throws PDException in any error
+ */
 public void DelAllGroups() throws PDException
 {
 if (PDLog.isDebug())

@@ -44,26 +44,24 @@ final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy/MM/dd");
 
 private HashMap<String, String> ListEquiv=null; 
 //-------------------------------------------------------------------------    
-
-    /**
-     *
-     * @param Drv
-     * @param pDocType
-     * @throws PDException
-     */
+/**
+ * Default constructor
+ * @param Drv Openprodoc session-driver
+ * @param pDocType Document Type
+ * @throws PDException In any error
+ */
 public PDDocsRIS(DriverGeneric Drv, String pDocType) throws PDException
 {
 super(Drv, pDocType);
 }
 //------------------------------------------------------------------------
-
-    /**
-     *
-     * @param ActFolderId
-     * @param RISFilepath
-     * @return
-     * @throws PDException
-     */
+/**
+ * Import a Document(s) from a file RIS definition
+ * @param ActFolderId Id of OpenProdoc Folder where store
+ * @param RISFilepath Path to RIS Metadata file
+ * @return The number of imported Documents
+ * @throws PDException in any error
+ */
 public int ImportFileRIS(String ActFolderId, String RISFilepath) throws PDException
 {
 int NumDocs=0;
@@ -135,14 +133,13 @@ Metadata.close();
 return(NumDocs);
 }
 //-------------------------------------------------------------------------    
-
-    /**
-     *
-     * @param ActFolderId
-     * @param RISFile
-     * @return
-     * @throws PDException
-     */
+/**
+ * Import a Document(s) from an InputStream file RIS definition
+ * @param ActFolderId Id of OpenProdoc Folder where store
+ * @param RISFile InputStream with RIS Metadata file
+ * @return The number of imported Documents
+ * @throws PDException in any error
+ */
 public int ImportFileRIS(String ActFolderId, InputStream RISFile) throws PDException
 {
 int NumDocs=0;

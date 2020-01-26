@@ -151,7 +151,7 @@ FilePathTextField.setText(MainWin.getIO_OSFolder());
         CBStrict.setSelected(true);
 
         JavaDocLabel.setFont(MainWin.getFontDialog());
-        JavaDocLabel.setText(MainWin.TT("Strict"));
+        JavaDocLabel.setText(MainWin.TT("JavaDoc"));
 
         CBJavaDoc.setText("ATENTION: Javadoc folder will be modified");
         CBJavaDoc.addActionListener(new java.awt.event.ActionListener()

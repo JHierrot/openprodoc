@@ -75,8 +75,8 @@ Id=IdContrib;
 }
 //----------------------------------------------------------------------------    
 /**
- *
- * @param ContribProperties
+ * Assign configuration of contribution from a properties
+ * @param ContribProperties Properties of the contribution forms
  */
 public void AssignConf(Properties ContribProperties)
 {
@@ -284,9 +284,9 @@ return TitleList;
 }
 //---------------------------------------------------------------------------- 
 /**
- *
- * @param Agent
- * @return
+ * Calculates a html page for log of documents depending on the browser
+ * @param Agent Browser type
+ * @return id of Html page to return
  */
 public String SolveHtmlLog(String Agent)
 {
@@ -305,9 +305,9 @@ return(null);
 }
 //---------------------------------------------------------------------------- 
 /**
- *
- * @param Agent
- * @return
+ * Calculates if must be 1 column for log of documents depending on the browser
+ * @param Agent Browser type
+ * @return id of Html page to return
  */
 public Boolean Is1ColHtmlLog(String Agent)
 {
@@ -326,9 +326,9 @@ return(false);
 }
 //---------------------------------------------------------------------------- 
 /**
- *
- * @param Agent
- * @return
+ * Calculates a html page for list of documents depending on the browser
+ * @param Agent Browser type
+ * @return id of Html page to return
  */
 public String SolveHtmlList(String Agent)
 {
@@ -347,9 +347,9 @@ return(null);
 }
 //---------------------------------------------------------------------------- 
 /**
- *
- * @param Agent
- * @return
+ * Calculates if use 1 column for list of documents depending on the browser
+ * @param Agent Browser type
+ * @return id of Html page to return
  */
 public Boolean Is1ColHtmlList(String Agent)
 {
@@ -368,9 +368,9 @@ return(false);
 }
 //---------------------------------------------------------------------------- 
 /**
- *
- * @param Agent
- * @return
+ * Calculates a html page for adding documents depending on the browser
+ * @param Agent Browser type
+ * @return id of Html page to return
  */
 public String SolveHtmlAdd(String Agent)
 {
@@ -389,9 +389,9 @@ return(null);
 }
 //---------------------------------------------------------------------------- 
 /**
- *
- * @param Agent
- * @return
+ * Calculates if use 1 column for adding documents depending on the browser
+ * @param Agent Browser type
+ * @return id of Html page to return
  */
 public Boolean Is1ColHtmlAdd(String Agent)
 {
@@ -410,9 +410,9 @@ return(false);
 }
 //---------------------------------------------------------------------------- 
 /**
- *
- * @param Agent
- * @return
+ * Calculates a html page for result of adding documents depending on the browser
+ * @param Agent Browser type
+ * @return id of Html page to return
  */
 public String SolveHtmlRes(String Agent)
 {

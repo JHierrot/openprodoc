@@ -63,9 +63,9 @@ static final String ESCCOM="·";
 /**
  * Constructor
  * @param pURL Url to DDBB Server
- * @param pPARAM 
- * @param pUser     DDBB User
- * @param pPassword   DDBB Password
+ * @param pPARAM JDBC Class to use
+ * @param pUser DDBB User
+ * @param pPassword DDBB Password
  * @throws PDException on error
  */
 public DriverJDBC(String pURL, String pPARAM, String pUser, String pPassword) throws PDException

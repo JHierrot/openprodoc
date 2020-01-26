@@ -3619,7 +3619,9 @@ HashMap<String, String> PathId=new HashMap();
 final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
 static final String REF="href=\"";
 static final String REF2="src=\"";
+static final String REF3="url('";
 static final String REFEND="\"";
+static final String REFEND3="'";
 static final String REFINTER="#";
 static final String REFPARAM="?";
 
@@ -3747,9 +3749,37 @@ else
     return(Pos);
 }
 //-----------------------------------------------------------------
+private int ReplaceRefcss(String CurrentFile, StringBuilder SB, int Pos)throws Exception
+{
+int PosEnd=SB.indexOf(REFEND3, Pos);
+int PosURL=PosEnd;
+if (PosEnd!=-1)
+    {
+    int PosEnd2=SB.indexOf(REFINTER, Pos);
+    boolean UrlParam=false;
+    if (PosEnd2!=-1 && PosEnd2<PosEnd)
+        PosURL=PosEnd2;
+    PosEnd2=SB.indexOf(REFPARAM, Pos);
+    if (PosEnd2!=-1 && PosEnd2<PosEnd)
+        {
+        PosURL=PosEnd2;
+        UrlParam=true;
+        }
+    String OldRef=SB.substring(Pos, PosURL);
+    String NewRef=CalculateNewRef( CurrentFile,OldRef);
+   if (UrlParam)
+        SB.replace(Pos, PosEnd2+1, NewRef);
+    else
+        SB.replace(Pos, PosURL, NewRef);
+    return(PosEnd);
+    }
+else
+    return(Pos);
+}
+//-----------------------------------------------------------------
 private String CalculateNewRef(String CurrentFile, String OldRef) throws Exception
 {
-if (OldRef.startsWith("http") || OldRef.startsWith("javascript")|| OldRef.startsWith("mailto:") || OldRef.length()==0)   
+if (OldRef.startsWith("http") || OldRef.startsWith("ftp:")|| OldRef.startsWith("javascript")|| OldRef.startsWith("mailto:") || OldRef.length()==0)   
     return(OldRef);
 if (PDLog.isDebug())
     PDLog.Debug("CurrentFile="+CurrentFile+ "  OldRef="+OldRef);
@@ -3773,8 +3803,22 @@ if (!(CanonPath.endsWith(".html")||CanonPath.endsWith(".css")))
     return;
 Path P = Paths.get(CanonPath);
 String SHtml=new String(Files.readAllBytes(P));
-SHtml=ReplaceAllRef(f.getParent(), SHtml);
+if (f.getName().endsWith(".css"))
+    SHtml=ReplaceAllRefcss(f.getParent(), SHtml);
+else
+    SHtml=ReplaceAllRef(f.getParent(), SHtml);
 Files.write(P, SHtml.getBytes(), StandardOpenOption.TRUNCATE_EXISTING );
+}
+//-----------------------------------------------------------------
+private String ReplaceAllRefcss(String CurrentFile, String Text) throws Exception
+{
+StringBuilder SB=new StringBuilder(Text);
+int Pos=0;
+while ((Pos=SB.indexOf(REF3, Pos))!=-1)
+    {
+    Pos=ReplaceRefcss(CurrentFile, SB, Pos+REF3.length());
+    }
+return(SB.toString());
 }
 //-----------------------------------------------------------------
 }

@@ -75,11 +75,10 @@ public static String getDefPass()
 return DefExtConf.getPass();
 }
 //----------------------------------------------------------------------------    
-
-    /**
-     *
-     * @param ProdocProperties
-     */
+/**
+ * Assign a properties for configuration of OPAC
+ * @param ProdocProperties properties loaded
+ */
 public void AssignConf(Properties ProdocProperties)
 {
 String ConfDocTipesList=ProdocProperties.getProperty("DocTipesList");
@@ -205,12 +204,11 @@ for (int NHO = 0; NHO < NumHtmlOpac; NHO++)
     }
 }
 //---------------------------------------------------------------------------- 
-
-    /**
-     *
-     * @param Agent
-     * @return
-     */
+/**
+ * Calculates a html page for searching documents depending on the browser
+ * @param Agent Browser type
+ * @return id of Html page to return
+ */
 public String SolveHtml(String Agent)
 {
 Agent=Agent.toUpperCase();
