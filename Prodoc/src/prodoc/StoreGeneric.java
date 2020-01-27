@@ -20,7 +20,6 @@
 package prodoc;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -56,6 +55,7 @@ private String Param=null;
  *
  */
 private boolean Encrypt=false;
+private boolean CopyMode=false;
 private String EncriptPass=null;
 /**
  *
@@ -233,7 +233,7 @@ this.Param = Param;
 */
 protected boolean isEncript()
 {
-return Encrypt;
+return (Encrypt && !CopyMode);
 }
 //-------------------------------------------------------------------------
 /**
@@ -331,12 +331,17 @@ protected void Copy(String Id1, String Ver1, String Id2, String Ver2, Record Rec
 {
 try {
 if (PDLog.isDebug())
-    PDLog.Debug("StoreGeneric.Copy<: Id1="+Id1+" Ver1="+Ver1+" Id2="+Id2+" Ver2="+Ver2+ " Rec="+Rec+ "Path="+OPDPath);    
+    PDLog.Debug("StoreGeneric.Copy<: Id1="+Id1+" Ver1="+Ver1+" Id2="+Id2+" Ver2="+Ver2+ " Rec="+Rec+ "Path="+OPDPath); 
+if (Id1.equals(Id2) & Ver1.equalsIgnoreCase(Ver2))
+    return;
+CopyMode=true;
 Record Rec2=Rec.Copy();
 InputStream Bytes=Retrieve(Id1, Ver1, Rec2);
 Insert(Id2, Ver2, Bytes, Rec2, OPDPath);
+CopyMode=false;
 } catch (Exception ex)
     {
+    CopyMode=false;
     PDException.GenPDException("Error_copying_content", ex.getLocalizedMessage());
     }
 }
