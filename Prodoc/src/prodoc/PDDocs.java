@@ -496,7 +496,7 @@ return DocType;
 /**
 * This method creates all the aditional elements in the database to store the default
 * information for the documents and al the integrity elements.
-* @throws PDException
+* @throws PDException  in any error
 */
 @Override
 protected void InstallMulti() throws PDException
@@ -517,7 +517,7 @@ getDrv().AddIntegrity(getTabNameVer(), fMIMETYPE, PDMimeType.getTableName(),  PD
 //-------------------------------------------------------------------------
 /**
 * This method destroy all the aditional elements to store metadata
-* @throws PDException
+* @throws PDException  in any error
 */
 @Override
 protected void unInstallMulti() throws PDException
@@ -3626,6 +3626,13 @@ static final String REFINTER="#";
 static final String REFPARAM="?";
 
 //--------------------------------------------------------------------------    
+/**
+ * Converts a all Javadoc documents in a Filesystem in OpenProdoc documents with .opd metadata
+ * @param f Filesystem to convert
+ * @param DocType Document type to assign
+ * @param FoldType Folder type to assign
+ * @throws PDException in any error
+ */
 public void ConvertJavaDoc(File f, String DocType, String FoldType) throws PDException
 {
 try {    

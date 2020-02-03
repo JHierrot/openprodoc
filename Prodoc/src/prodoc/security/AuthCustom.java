@@ -54,6 +54,16 @@ public AuthCustom(String pServer, String pUser, String pPassword, String pParam)
 super(pServer, pUser, pPassword, pParam);
 }
 //----------------------------------------------------------------------
+
+    /**
+     *
+     * @param pServer
+     * @param pUser
+     * @param pPassword
+     * @param pParam
+     * @param Drv
+     * @throws PDExceptionFunc
+     */
 public AuthCustom(String pServer, String pUser, String pPassword, String pParam, DriverGeneric Drv) throws PDExceptionFunc
 {
 super(pServer, pUser, pPassword, pParam);

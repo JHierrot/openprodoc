@@ -85,8 +85,8 @@ static private ObjectsCache MesgObjectsCache = null;
 
 //-------------------------------------------------------------------------
 /**
- *
- * @param Drv
+ * Default constructor
+ * @param Drv OPD Session
  */
 public PDMessage(DriverGeneric Drv)
 {
@@ -94,9 +94,9 @@ super(Drv);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Rec
- * @throws PDException
+ * Assign new values to the Message object
+ * @param Rec Record of Message type with new values
+ * @throws PDException in any error
  */
 public void assignValues(Record Rec) throws PDException
 {
@@ -110,9 +110,9 @@ assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * Returns a record with the current values
+ * @return a record with the current values
+ * @throws PDException  in any error
  */
 @Override
 synchronized public Record getRecord() throws PDException
@@ -131,7 +131,7 @@ return(Rec);
 /**
  *
  * @return
- * @throws PDException
+ * @throws PDException in any error
  */
 protected Conditions getConditions() throws PDException
 {
@@ -148,8 +148,8 @@ return(ListCond);
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
+ * Returns the name of Message table in DDBB
+ * @return the name of Message table in DDBB
 */
 public String getTabName()
 {
@@ -157,18 +157,18 @@ return (getTableNameIn());
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Returns the name of Message Out table in DDBB
+ * @return the name of Message Out table in DDBB
+ */
 static public String getTableNameOut()
 {
 return ("PD_MSG_OUT");
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Returns the name of Message In table in DDBB
+ * @return the name of Message In table in DDBB
+ */
 static public String getTableNameIn()
 {
 return ("PD_MSG_IN");
@@ -225,7 +225,7 @@ return Destination;
 }
 //-------------------------------------------------------------------------
 /**
- * @param pDestination
+ * @param pDestination new destination
 */
 public void setDestination(String pDestination)
 {
@@ -241,7 +241,7 @@ return Description;
 }
 //-------------------------------------------------------------------------
 /**
- * @param pDescription
+ * @param pDescription new Subject
  */
 public void setDescription(String pDescription)
 {
@@ -328,7 +328,7 @@ Title = pTitle;
 //-------------------------------------------------------------------------
 /**
  *
- * @throws PDException
+ * @throws PDException in any error
  */
 @Override
 protected  void InstallMulti()  throws PDException

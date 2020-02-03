@@ -839,6 +839,12 @@ protected String getDescOrder()
 return(PDObjDefs.fDESCRIPTION);
 }
 //---------------------------------------------------------------------
+/**
+ * Run a query and return the result as aVector or records
+ * @param SQL Query to run
+ * @return Vector of results as Records
+ * @throws PDException in any error
+ */
 public Vector<Record> SearchSelectV(String SQL) throws PDException
 {
 Vector<Record> ListRes=new Vector<Record>(); 
@@ -923,7 +929,7 @@ return(getDrv().OpenCursor(QBE));
  *
  * @param tableList
  * @return
- * @throws PDException
+ * @throws PDException in any error
  */
 protected Vector<String> CalculateTabs(List<String> tableList) throws PDException
 {
@@ -932,6 +938,14 @@ Tabs.add(getTabName());
 return(Tabs);
 }
 //-------------------------------------------------------------------------
+
+    /**
+     *
+     * @param Fields
+     * @param Tabs
+     * @return
+     * @throws PDException in any error
+     */
 protected Record CalculateRec(Vector<String> Fields, Vector <String> Tabs) throws PDException
 {
 if (Fields.isEmpty())    
@@ -952,8 +966,10 @@ return(R2);
 //-------------------------------------------------------------------------
 /**
  *
- * @param tableList
+     * @param tableListSQL
+     * @param OPDTabs
  * @return
+     * @throws prodoc.PDException
  */
 protected Conditions NeededMoreConds(List<String> tableListSQL, Vector <String> OPDTabs) throws PDException
 {
@@ -1051,6 +1067,11 @@ else
     return((Attribute.tINTEGER));  
 }
 //---------------------------------------------------------------------------
+/**
+ * Evaluates a String stored in Database in OPD format and returns the BigDecimal that represents
+ * @param SBD Sttring representing a BigDecimal
+ * @return BigDecimal
+ */
 public BigDecimal String2BD(String SBD)
 {
 DecimalFormat DF=new DecimalFormat(DECIMALPATTERN);

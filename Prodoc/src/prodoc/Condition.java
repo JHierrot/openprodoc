@@ -122,11 +122,20 @@ final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyyMMdd");
  */
 private int TypeVal=-1;
 
-public final static String CONTAINS="CONTAINS";
+    /**
+     *
+     */
+    public final static String CONTAINS="CONTAINS";
 
-public final static String INTREE="IN_TREE";
+    /**
+     *
+     */
+    public final static String INTREE="IN_TREE";
 
-public final static String INFOLDER="IN_FOLDER";
+    /**
+     *
+     */
+    public final static String INFOLDER="IN_FOLDER";
 
 //-------------------------------------------------------------------------
 /**
@@ -496,6 +505,14 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
     }
 }
 //-------------------------------------------------------------------------
+/**
+ * Search in the Fulltext repository and generates a condition with the list of document that meet the FT criteria
+ * @param TabName Document Type
+ * @param Arg FT criteria
+ * @param Drv OPD Driver
+ * @return a new created Condition
+ * @throws PDException in any error
+ */
 public static Condition genContainsCond(String TabName, String Arg, DriverGeneric Drv) throws PDException
 {
 PDDocs D=new PDDocs(Drv);
@@ -504,6 +521,13 @@ HashSet<String> L=new HashSet<>(SearchFT);
 return(new Condition(PDDocs.fPDID, L));
 }
 //-------------------------------------------------------------------------
+/**
+ * Create conditions for searching all the elements UNDER a specific folder at any level
+ * @param FoldRef Id of Folder under search for
+ * @param Drv OPD Session
+ * @return the created conditions
+ * @throws PDException in any error
+ */
 public static Conditions genInTreeCond(String FoldRef, DriverGeneric Drv) throws PDException
 {
 FoldRef=EvalId(FoldRef, Drv);     
@@ -515,6 +539,13 @@ Cs.setOperatorAnd(false);
 return(Cs);
 }
 //-------------------------------------------------------------------------
+/**
+ * Create conditions for searching the elements contained in a specific folder
+ * @param FoldRef Id of Folder under search for
+ * @param Drv OPD Session
+ * @return the created conditions
+ * @throws PDException in any error
+ */
 public static Condition genInFolder(String FoldRef, DriverGeneric Drv) throws PDException
 {
 FoldRef=EvalId(FoldRef, Drv);    

@@ -148,8 +148,15 @@ public static final int fTASK_FOLDSREPORT=6;
  */
 public static final int fTASK_LOCALSYNC=7;
 
-public static final int fTASK_CUSTOMDOC=8;
-public static final int fTASK_CUSTOMFOLD=9;
+    /**
+     *
+     */
+    public static final int fTASK_CUSTOMDOC=8;
+
+    /**
+     *
+     */
+    public static final int fTASK_CUSTOMFOLD=9;
 
 /**
  *

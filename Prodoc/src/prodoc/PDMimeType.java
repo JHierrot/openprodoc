@@ -61,9 +61,9 @@ static private ObjectsCache MTypeObjectsCache = null;
 
 //-------------------------------------------------------------------------
 /**
- * 
- * @param Drv
- * @throws PDException
+ * Default constructor
+ * @param Drv Openprodoc Session
+ * @throws PDException in any error
  */
 public PDMimeType(DriverGeneric Drv)  throws PDException
 {
@@ -71,9 +71,9 @@ super(Drv);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Rec
- * @throws PDException
+ * Assign new values to the MimeType object
+ * @param Rec Record of MimeType type with new values
+* @throws PDException in any error
  */
 public void assignValues(Record Rec) throws PDException
 {
@@ -84,9 +84,9 @@ assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * Returns a record with the current values
+ * @return a record with the current values
+ * @throws PDException in any error
  */
 @Override
 synchronized public Record getRecord() throws PDException
@@ -102,7 +102,7 @@ return(Rec);
 /**
  *
  * @return
- * @throws PDException
+ * @throws PDException in any error
  */
 protected Conditions getConditions() throws PDException
 {
@@ -119,18 +119,18 @@ return(ListCond);
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Returns the name of MimeType table in DDBB
+ * @return the name of MimeType table in DDBB
+ */
 public String getTabName()
 {
 return (getTableName());
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Static method that returns the name of MimeType table in DDBB
+ * @return the name of MimeType table in DDBB
+ */
 static public String getTableName()
 {
 return ("PD_MIMETYPES");
@@ -275,10 +275,10 @@ return(getName());
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Ext
- * @return
- * @throws PDException
+ * Search for the Mimetype corresponding to an extension
+ * @param Ext File Extension to check
+ * @return a MimeType Object for the extension
+ * @throws PDException in any error or if the extension didn't exist
  */
 public PDMimeType SolveExt(String Ext) throws PDException
 {
@@ -292,10 +292,10 @@ return(this);
 }
 //-------------------------------------------------------------------------
 /**
- * Obtains te jind of mimetype indcated by Name/extension
- * @param FileName
+ * Obtains the kind of mimetype indicated by Name/extension
+ * @param FileName name of the file to check
  * @return String indicating the Name/extension corresponding to file
- * @throws PDException
+ * @throws PDException in any error
  */
 public String SolveName(String FileName) throws PDException
 {
@@ -310,6 +310,12 @@ if (PDLog.isDebug())
 return (getName());
 }
 //-------------------------------------------------------------------------
+/**
+ * Converts an extension in mimetype
+ * @param pExt file extension to check
+ * @return mimetype aasigneto to the extension
+ * @throws PDException in any error
+ */
 public String Ext2Mime(String pExt) throws PDException
 {
 PDMimeType M=new PDMimeType(getDrv());
@@ -317,6 +323,12 @@ M.Load(pExt);
 return(M.getMimeCode());
 }
 //-------------------------------------------------------------------------
+/**
+ * Converts a mimetype in an extension
+ * @param pMime mimetype to check
+ * @return extension assignet to the mimetype
+ * @throws PDException in any error
+ */
 public String Mime2Ext(String pMime)  throws PDException
 {
 PDMimeType M=new PDMimeType(getDrv());

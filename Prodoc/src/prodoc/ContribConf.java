@@ -69,6 +69,10 @@ private int MaxSize=30000000;
 private static final String FIELDSPREFIX="Fields_";
 private static HashSet<String> GlobalExcluded=null;
 
+/**
+ * Default constructor
+ * @param IdContrib Identifier of the OPD document containing the Contrib definition
+ */
 public ContribConf(String IdContrib)
 {
 Id=IdContrib;
@@ -567,6 +571,12 @@ if (GlobalExcluded==null)
 return GlobalExcluded;
 }
 //-----------------------------------------------------------------------------------------------
+/**
+ * Verifies if the field is allowed to be uploaded/filled in the contribution form
+ * @param NameDocT Documetn Type
+ * @param name Name of Attribute
+ * @return true if the Attribute is allowed to be uploaded/filled in the contribution form
+ */
 public boolean Allowed(String NameDocT, String name)
 {
 if (getGlobalExcluded().contains(name))
@@ -579,6 +589,11 @@ if (AllowFields.contains(name.toUpperCase()))
 return(false);
 }
 //-----------------------------------------------------------------------------------------------
+/**
+ * Verifies if the file extension is allowed to upload
+ * @param NewExt Extension to check
+ * @return true if the file extension is allowed to upload
+ */
 public boolean IsAllowedExt(String NewExt)
 {
 return (AllowedExt.contains(NewExt));    

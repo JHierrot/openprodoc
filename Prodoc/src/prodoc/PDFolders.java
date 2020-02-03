@@ -444,6 +444,7 @@ return FolderType;
 /**
  * Assigns the Folder Type, forcing to reload the definition of type and metadata
  * @param pFolderType Type to assign
+ * @throws PDException in any error
  */
 public void setFolderType(String pFolderType) throws PDException
 {
@@ -839,6 +840,13 @@ if (PDLog.isDebug())
 return(Result);
 }
 //-------------------------------------------------------------------------
+
+    /**
+     *
+     * @param PDId
+     * @return
+     * @throws PDException
+     */
 protected Query getQueryListDescendList(String PDId) throws PDException
 {
 Condition CondParents=new Condition( fGRANTPARENTID, Condition.cEQUAL, PDId);

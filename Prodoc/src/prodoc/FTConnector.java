@@ -266,7 +266,7 @@ return Lang;
 }
 //------------------------------------------------------------------------
 /**
-* @param Lang the Lang to set
+     * @param pLang
 */
 protected void setLang(String pLang)
 {

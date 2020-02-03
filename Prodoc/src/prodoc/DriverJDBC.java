@@ -511,7 +511,6 @@ else
 /**
  * Formats date for storage
      * @param BD
- * @param Fec
  * @return
  */
 //----------------------------------------------

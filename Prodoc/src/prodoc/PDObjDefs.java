@@ -199,8 +199,8 @@ static private ObjectsCache ObjDefsObjectsCache = null;
 static private ObjectsCache ObjDefsObjectsCacheAtr = null;
 
 /**
- *
- * @param Drv
+ * Default constructor
+ * @param Drv OPD Session
  */
 public PDObjDefs(DriverGeneric Drv)
 {
@@ -244,7 +244,7 @@ return Name;
 //-------------------------------------------------------------------------
 /**
  * @param Name the Name to set
- * @throws PDExceptionFunc  
+ * @throws PDExceptionFunc in any error 
 */
 public void setName(String Name) throws PDExceptionFunc
 {
@@ -283,9 +283,9 @@ public void setActive(boolean Active)
 this.Active = Active;
 }
 //-------------------------------------------------------------------------
-    /**
- * object "method" needed because static overloading doesn't work in java
- * @return
+/**
+ * Returns the name of Object Definitions table in DDBB
+ * @return the name of Object Definitions table in DDBB
  */
 @Override
 public String getTabName()
@@ -294,8 +294,8 @@ return(getTableName());
 }
 //-------------------------------------------------------------------------
 /**
- * static equivalent method
- * @return
+ * Static method that returns the name of Object Definitions table in DDBB
+ * @return the name of Object Definitions table in DDBB
  */
 static public String getTableName()
 {
@@ -303,18 +303,18 @@ return("PD_DOCDEFS");
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Returns the name of Object Attribute Definitions table in DDBB
+ * @return the name of Object AttributeDefinitions table in DDBB
+ */
 public String getTabNameAttrs()
 {
 return ("PD_DOCDEFS_ATTR");
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @throws PDException
-*/
+ * Deletes the table of Object Attributes definition
+ * @throws PDException in any error 
+ */
 @Override
 protected void unInstallMulti() throws PDException
 {
@@ -322,9 +322,9 @@ getDrv().DropTable(getTabNameAttrs());
 }
 //-------------------------------------------------------------------------
 /**
- *
-     * @return 
- * @throws PDException
+ * Returns a record with the current values
+ * @return a record with the current values
+ * @throws PDException in any error 
  */
 @Override
 public synchronized Record getRecord() throws PDException
@@ -383,9 +383,9 @@ else
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * returns the record containing the definition of structure for Object Attribute definition
+ * @return the record containing the definition of structure for Object Attribute definition
+ * @throws PDException in any error 
  */
 static public Record getRecordAttrsStruct()  throws PDException
 {
@@ -397,7 +397,7 @@ return(DocsDefAttrsStruct.Copy());
 /**
  *
  * @return
- * @throws PDException
+ * @throws PDException in any error 
  */
 static private synchronized Record CreateRecordAttrsStruct()  throws PDException
 {
@@ -450,7 +450,7 @@ return(ListCond);
 /**
  *
  * @param Ident
- * @throws PDExceptionFunc  
+ * @throws PDExceptionFunc  in any error  
  */
 protected void AsignKey(String Ident) throws PDExceptionFunc
 {
@@ -475,7 +475,7 @@ this.ACL = ACL;
 //-------------------------------------------------------------------------
 /**
 *
-* @throws PDException
+* @throws PDException in any error 
 */
 @Override
 protected void InstallMulti() throws PDException
@@ -523,9 +523,9 @@ else
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Attr
- * @throws PDException
+ * Add (and saves) a new attribute to the current object definition
+ * @param Attr new attribute to ad to definition
+ * @throws PDException in any error 
  */
 public void addAtribute(Attribute Attr) throws PDException
 {
@@ -554,9 +554,9 @@ if (PDLog.isDebug())
 
 //-------------------------------------------------------------------------
 /**
- *
- * @param AttrName
- * @throws PDException
+ * Deletes (also in DDBB) an Attribute from object definition
+ * @param AttrName Name of Attribute to delete
+ * @throws PDException in any error 
  */
 public void delAtribute(String AttrName) throws PDException
 {
@@ -587,7 +587,7 @@ if (PDLog.isDebug())
 //-------------------------------------------------------------------------
 /**
  *
- * @throws PDException
+ * @throws PDException in any error 
  */
 public void DelAtributes() throws PDException
 {
@@ -602,7 +602,7 @@ getObjCacheAtr().put(getName(), null);
  *
  * @param Attr
  * @return
- * @throws PDException
+ * @throws PDException in any error 
  */
 protected Record ConvertRec(Attribute Attr) throws PDException
 {
@@ -622,10 +622,10 @@ return(Rec);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Rec
- * @return
- * @throws PDException
+ * Generates an Attribute from a Record containing definition (Ex.loaded from DDBB)
+ * @param Rec Record contaning definition
+ * @return the created attribute
+ * @throws PDException in any error 
  */
 public Attribute ConvertRec(Record Rec) throws PDException
 {
@@ -659,9 +659,9 @@ return ClassType;
 }
 //-------------------------------------------------------------------------
 /**
- * The class can be only DOCUMENT o FOLDER
- * @param pClassType
- * @throws PDException
+ * The family of class (can be only DOCUMENT o FOLDER)
+ * @param pClassType The classtype to Assign
+ * @throws PDException in any error 
 */
 public void setClassType(String pClassType) throws PDException
 {
@@ -712,9 +712,9 @@ if (!getDrv().getUser().getName().equals("Install"))
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * Returns the Record containg the definition of attributes of current object type (loading if needed)
+ * @return The record with the definition of attributes
+ * @throws PDException in any error 
  */
 public Record GetAttrDef() throws PDException
 {
@@ -751,7 +751,7 @@ return(AttrsDef);
  * Creates the Objects table with the definition
  * @param Name Name of the Object definition
  * @param isFolder true when the definition if of a folder
- * @throws PDException
+ * @throws PDException in any error 
  */
 public void CreateObjectTables(String Name, boolean isFolder)  throws PDException
 {
@@ -816,13 +816,13 @@ if (PDLog.isDebug())
     PDLog.Debug("PDObjDefs.CreateObjectTables<:"+Name);
 }
 //-------------------------------------------------------------------------
-
-    /**
-     *
-     * @param Name
-     * @param NewAttr
-     * @throws PDException
-     */
+/**
+ * Update the definition of a created object type, adding an additional attribute 
+ *    and updating the created tables
+ * @param Name Class Name
+ * @param NewAttr Attribute to Add
+ * @throws PDException in any error 
+ */
 public void AddObjectTables(String Name, Attribute NewAttr)  throws PDException
 {
 if (PDLog.isDebug())
@@ -876,13 +876,12 @@ if (PDLog.isDebug())
     }
 }
 //-------------------------------------------------------------------------
-
-    /**
-     *
-     * @param Name
-     * @param OldAttr
-     * @throws PDException
-     */
+/**
+ * Removes an attribute from a created object type, updating definition and tables created
+ * @param Name Class definition to update
+ * @param OldAttr Attribute to remove
+ * @throws PDException in any error 
+ */
 public void DelObjectTables(String Name, Attribute OldAttr)  throws PDException
 {
 if (PDLog.isDebug())
@@ -934,9 +933,9 @@ return(NewName.substring(0,Long>32?32:Long));
 }
 //-------------------------------------------------------------------------
 /**
- * 
- * @param Name
- * @throws PDException
+ * Destroys all the tables created for storing objects of a type
+ * @param Name object definition
+ * @throws PDException in any error 
  */
 public void DeleteObjectTables(String Name)  throws PDException
 {
@@ -1013,7 +1012,7 @@ if (PDLog.isDebug())
 //-------------------------------------------------------------------------
 /**
  *
- * @throws PDException
+ * @throws PDException in any error 
  */
 @Override
 protected void DeleteMulti() throws PDException
@@ -1177,7 +1176,7 @@ return(Cur);
 //-------------------------------------------------------------------------
 /**
  * Return a Cursor with the list of the attibutes of ClassName
- * @param ClassName
+ * @param ClassName Name of class
  * @return Cursor with list of attributes definition
  * @throws PDException in any error
  */
@@ -1449,6 +1448,12 @@ if (PDLog.isDebug())
 return(v);
 }
 //-------------------------------------------------------------------------
+/**
+ * Creates a HashSet with all the names of Documents definitions yet CREATED and
+ *   allowed to the user (by ACL)
+ * @return a HashSet with the names of Documents definitions
+ * @throws PDException in any error
+ */
 public HashSet<String> getNamesDocsDefs() throws PDException
 {
 HashSet<String> ListNameDefs=new HashSet();
@@ -1463,6 +1468,12 @@ getDrv().CloseCursor(ListDocsDefs);
 return(ListNameDefs);
 }
 //-------------------------------------------------------------------------
+/**
+ * Creates a HashSet with all the names of FOLDER definitions yet CREATED and
+ *   allowed to the user (by ACL)
+ * @return a HashSet with the names of FOLDER definitions
+ * @throws PDException in any error
+ */
 public HashSet<String> getNamesFoldDefs() throws PDException
 {
 HashSet<String> ListNameDefs=new HashSet();
@@ -1477,6 +1488,12 @@ getDrv().CloseCursor(ListFoldsDefs);
 return(ListNameDefs);
 }
 //-------------------------------------------------------------------------
+/**
+ * Creates a Hashset with folder or document definitions NOT CREATD yet
+ * @param Folds when true, return Folder definition, when false returns Document definitions
+ * @return Hashset with names of uncreated objects
+ * @throws PDException in any error
+ */
 public HashSet<String> getNamesUncreatedDefs(boolean Folds) throws PDException
 {
 HashSet<String> ListNameDefs=new HashSet();

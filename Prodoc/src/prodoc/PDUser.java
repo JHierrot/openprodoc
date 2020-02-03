@@ -694,7 +694,6 @@ return Rol1;
 //-------------------------------------------------------------------------
 /**
  * Creates special user for task
- * @return Creates PDUser
      * @throws prodoc.PDException
  */
 protected void CreateTaskUser() throws PDException
@@ -833,7 +832,13 @@ return(getName());
 }
 //-------------------------------------------------------------------------
 
-public void UpdatePass(String User, String NewPass) throws PDException
+    /**
+     *
+     * @param User
+     * @param NewPass
+     * @throws PDException
+     */
+    public void UpdatePass(String User, String NewPass) throws PDException
 {
 Load(User);
 setPassword(NewPass);

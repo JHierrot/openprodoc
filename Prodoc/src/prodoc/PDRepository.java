@@ -151,7 +151,7 @@ static private ObjectsCache RepObjectsCache = null;
 /**
  *
  * @param Drv
- * @throws PDException
+ * @throws PDException in any error
  */
 public PDRepository(DriverGeneric Drv) throws PDException
 {
@@ -161,7 +161,7 @@ super(Drv);
 /**
  *
  * @param Rec
- * @throws PDException
+ * @throws PDException in any error
  */
 public void assignValues(Record Rec) throws PDException
 {
@@ -185,7 +185,7 @@ assignCommonValues(Rec);
 /**
  *
  * @return
- * @throws PDException
+ * @throws PDException in any error
  */
 @Override
 synchronized public Record getRecord() throws PDException
@@ -206,7 +206,7 @@ return(Rec);
 /**
  *
  * @return
- * @throws PDException
+ * @throws PDException in any error
  */
 protected Conditions getConditions() throws PDException
 {
@@ -285,7 +285,7 @@ return Name;
 //-------------------------------------------------------------------------
 /**
  * @param Name the Name to set
- * @throws PDExceptionFunc  
+ * @throws PDExceptionFunc  in any error 
 */
 public void setName(String Name) throws PDExceptionFunc
 {
@@ -375,7 +375,7 @@ Password = (pPassword);
 /**
  *
  * @param Ident
- * @throws PDExceptionFunc  
+ * @throws PDExceptionFunc  in any error 
  */
 protected void AsignKey(String Ident) throws PDExceptionFunc
 {
@@ -420,7 +420,7 @@ return RepType;
 //-------------------------------------------------------------------------
 /**
  * @param pRepType the RepType to set
- * @throws PDException 
+ * @throws PDException  in any error
 */
 public void setRepType(String pRepType)  throws PDException
 {
@@ -506,6 +506,11 @@ String S=getURL()+DocName;
 return(S);    
 }        
 //-----------------------------------------------------------------
+
+    /**
+     *
+     * @return
+     */
 public boolean isFTRep()
 {
 if (getName()!=null &&getName().equalsIgnoreCase("PD_FTRep"))   

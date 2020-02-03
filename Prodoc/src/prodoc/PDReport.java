@@ -114,13 +114,13 @@ super(pDrv,getTableName());
 /**
  * generates a report with the current PDId
  * @param pIdParent Parent of the "cursor". Can be null
- * @param pListDocs Cursor with the list of docs
- * @param pVectRec
+ * @param pListDocs Cursor with the list of docs (Alternative to  pVectRec)
+ * @param pVectRec Vectos of Record with list of documents (Alternative to  pListDocs)
  * @param pRecsPag Number oc record by page
  * @param pPagsDoc Number of pages by Archive
  * @param OSFolder Folder for saving reports
  * @return path to the generated Report.
- * @throws prodoc.PDException
+ * @throws PDException in any error
  */
 public ArrayList<String> GenerateRep(String pIdParent, Cursor pListDocs, Vector pVectRec, int pRecsPag, int pPagsDoc, String OSFolder) throws PDException
 {
@@ -129,14 +129,14 @@ return(GenerateRep(pIdParent, pListDocs, pVectRec, pRecsPag, pPagsDoc, OSFolder,
 /**
  * generates a report with the current PDId
  * @param pIdParent Parent of the "cursor". Can be null
- * @param pCurElems Cursor with the list of docs
- * @param pVectRec
+ * @param pCurElems Cursor with the list of docs (Alternative to  pVectRec)
+ * @param pVectRec Vectos of Record with list of documents (Alternative to  pCurElems)
  * @param pRecsPag Number oc record by page
  * @param pPagsDoc Number of pages by Archive
  * @param OSFolder Folder for saving reports
- * @param MaxResults
+ * @param MaxResults Más number of results to obtain
  * @return path to the generated Report.
- * @throws prodoc.PDException
+ * @throws PDException in any error
  */
 public ArrayList<String> GenerateRep(String pIdParent, Cursor pCurElems, Vector pVectRec, int pRecsPag, int pPagsDoc, String OSFolder, int MaxResults) throws PDException
 {
@@ -230,7 +230,7 @@ return(ListFiles);
 /**
  * Downloads and load to memory the template
  * @param OrigRep Name to be usrd for download
- * @throws PDException 
+ * @throws PDException in any error 
  */
 private void ReadTemplate(String OrigRep)  throws PDException
 {
@@ -786,39 +786,44 @@ if (Attr!=null)
 return(true);
 }    
 //-------------------------------------------------------------------------
-
-    /**
-     *
-     * @return
-     * @throws PDException
-     */
+/**
+ * Returns number of docs per page
+ * @return number of docs per page
+ * @throws PDException in any error
+ */
 public int getDocsPerPage() throws PDException
 {
 return(Integer)getRecSum().getAttr(PDReport.fDOCSPAGE).getValue();    
 }
 //-------------------------------------------------------------------------
-
-    /**
-     *
-     * @return
-     * @throws PDException
-     */
+/**
+ * Returns the number of pages per files
+ * @return the number of pages per files
+ * @throws PDException in any error
+ */
 public int getPagesPerFile() throws PDException
 {
 return(Integer)getRecSum().getAttr(PDReport.fPAGESDOC).getValue();   
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @throws PDException
+ * Creates the table needed for the class
+ * @throws PDException in any error
  */
 @Override
 public void Install() throws PDException
 {
-    
 getDrv().CreateTable(getTabName(), getRecordStruct());
 }
 //-------------------------------------------------------------------------
+/**
+ * Generates a list of report generated
+ * @param pIdParent Id of Folder
+ * @param pListDocs Cursor with docs (alternative)
+ * @param pVectRec  Vector with record of docs (alternative)
+ * @return a list of reports (one in each line)
+ * @throws PDException in any error
+ */
 public StringBuilder GenerateRepString(String pIdParent, Cursor pListDocs, Vector pVectRec) throws PDException
 {
 StringBuilder SB= new StringBuilder(2000);    

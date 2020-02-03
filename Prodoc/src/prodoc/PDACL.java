@@ -218,9 +218,9 @@ getDrv().AddIntegrity(getTabNameAclGroups(), fACLNAME, getTabName(), fNAME);
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * returns the record containing the definition of structure for ACL
+ * @return the record containing the definition of structure for ACL
+ */
 Record getRecordStruct() throws PDException
 {
 if (AclStruct == null)

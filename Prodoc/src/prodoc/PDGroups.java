@@ -99,9 +99,9 @@ private Cursor CurUserMemberShip=null;
 static private ObjectsCache GroupsObjectsCache = null;
 
 /**
- *
- * @param Drv
- * @throws PDException
+ * default Constructor
+ * @param Drv OPD Session
+ * @throws PDException in any error
  */
 public PDGroups(DriverGeneric Drv)  throws PDException
 {
@@ -109,9 +109,9 @@ super(Drv);
 }
 //-------------------------------------------------------------------------
 /**
- * 
- * @return
- * @throws PDException
+ * Returns a record with the current values
+ * @return a record with the current values
+ * @throws PDException in any error
  */
 @Override
 synchronized public Record getRecord() throws PDException
@@ -127,7 +127,7 @@ return(Rec);
 /**
  *
  * @return
- * @throws PDException
+ * @throws PDException in any error
  */
 protected Conditions getConditions() throws PDException
 {
@@ -146,9 +146,9 @@ return(ListCond);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Rec
- * @throws PDException
+ * Assign new values to the Group object
+ * @param Rec Record of Group type with new values
+ * @throws PDException in any error
  */
 public void assignValues(Record Rec) throws PDException
 {
@@ -159,8 +159,8 @@ assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
+ * Returns the name of Groups table in DDBB
+ * @return the name of Groups table in DDBB
  */
 public String getTabName()
 {
@@ -168,8 +168,8 @@ return(getTableName());
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
+ * Returns the name of Groups table in DDBB
+ * @return the name of Groups table in DDBB
  */
 static public String getTableName()
 {
@@ -196,7 +196,7 @@ return("PD_GROUPGROUP");
 //-------------------------------------------------------------------------
 /**
  *
- * @throws PDException
+ * @throws PDException in any error
  */
 protected  void InstallMulti()  throws PDException
 {
@@ -238,9 +238,9 @@ else
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return 
- * @throws PDException
+ * returns the structure of relation GroupsUsers
+ * @return a record with the structure of relation GroupsUsers
+ * @throws PDException in any error
  */
 public Record getRecordGroupUsersStruct() throws PDException
 {
@@ -266,9 +266,9 @@ else
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * Returns the name of GroupsGroups relation table in DDBB
+ * @return the name of GroupsGroups relation table in DDBB
+ * @throws PDException in any error
  */
 public Record getRecordGroupGroupsStruct() throws PDException
 {
@@ -295,7 +295,7 @@ else
 //-------------------------------------------------------------------------
 /**
  *
- * @throws PDException
+ * @throws PDException in any error
  */
 protected void unInstallMulti() throws PDException
 {
@@ -313,8 +313,9 @@ return Name;
 }
 //-------------------------------------------------------------------------
 /**
- * @param Name
- * @throws PDExceptionFunc  
+ * sets the name of the Group
+ * @param Name new name of Group
+ * @throws PDExceptionFunc  in any error
 */
 public void setName(String Name) throws PDExceptionFunc
 {
@@ -354,9 +355,9 @@ this.Acl = Acl;
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param UserName
- * @throws PDException
+ * Add (and saves) a new user to the Group
+ * @param UserName Name of User to be added
+ * @throws PDException in any error
  */
 public void addUser( String UserName)  throws PDException
 {
@@ -386,8 +387,8 @@ if (PDLog.isDebug())
 //-------------------------------------------------------------------------
 /**
  * Delete a User from his parent Group
- * @param UserName
- * @throws PDException
+ * @param UserName Name of User to be deleted
+ * @throws PDException in any error
  */
 public void delUser(String UserName)  throws PDException
 {
@@ -415,9 +416,9 @@ if (PDLog.isDebug())
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param GroupName
- * @throws PDException
+ * Add (and Saves)N a Group as member of another Group
+ * @param GroupName name of Group to be added
+ * @throws PDException in any error
  */
 public void addGroup(String GroupName)  throws PDException
 {
@@ -448,8 +449,8 @@ if (PDLog.isDebug())
 //-------------------------------------------------------------------------
 /**
  * Delete a Group from his parent Group
- * @param GroupName
- * @throws PDException
+ * @param GroupName name of Group to be deleted
+ * @throws PDException in any error
  */
 public void delGroup(String GroupName)  throws PDException
 {
@@ -552,7 +553,7 @@ if (PDLog.isDebug())
 /**
  *
  * @param Ident
- * @throws PDExceptionFunc  
+ * @throws PDExceptionFunc  in any error 
  */
 protected void AsignKey(String Ident) throws PDExceptionFunc
 {
@@ -561,9 +562,9 @@ setName(Ident);
 //-------------------------------------------------------------------------
 /**
  * Init retrieving of users members of a group
- * @param GrpName 
- * @return
- * @throws PDException
+ * @param GrpName name of Group containing the Users
+ * @return a New Cursor
+ * @throws PDException in any error
  */
 public Cursor ListUsers(String GrpName) throws PDException
 {
@@ -575,7 +576,7 @@ return(getDrv().OpenCursor(q));
 //-------------------------------------------------------------------------
 /**
  * Init retrieving of users members of a group
- * @throws PDException
+ * @throws PDException in any error
  */
 public void InitListUsers() throws PDException
 {
@@ -586,9 +587,9 @@ CurUsers=getDrv().OpenCursor(q);
 }
 //-------------------------------------------------------------------------
 /**
- * 
- * @return
- * @throws PDException
+ * Used for obtaining the list of user of a Group
+ * @return the name of the next user of the cursor
+ * @throws PDException in any error
  */
 public String NextUsers() throws PDException
 {
@@ -604,9 +605,9 @@ return((String)Attr.getValue());
 //-------------------------------------------------------------------------
 /**
  * Init retrieving of users members of a group
- * @param GrpName
- * @return 
- * @throws PDException
+ * @param GrpName Name of Group copnmtaining the Groups
+ * @return a created cursor
+ * @throws PDException in any error
  */
 public Cursor ListGroups(String GrpName) throws PDException
 {
@@ -618,7 +619,7 @@ return(getDrv().OpenCursor(q));
 //-------------------------------------------------------------------------
 /**
  * Init retrieving of users members of a group
- * @throws PDException
+ * @throws PDException in any error
  */
 public void InitListMembers() throws PDException
 {
@@ -629,9 +630,9 @@ CurMembers=getDrv().OpenCursor(q);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * Used for traveling by the members of a Group
+ * @return the name of the next member of a Group
+ * @throws PDException in any error
  */
 public String NextMember() throws PDException
 {
@@ -647,7 +648,7 @@ return((String)Attr.getValue());
 //-------------------------------------------------------------------------
 /**
  * Init retrieving of what groups the actual group is member
- * @throws PDException
+ * @throws PDException in any error
  */
 public void InitGroupMemberShip() throws PDException
 {
@@ -658,9 +659,9 @@ CurGroupMemberShip=getDrv().OpenCursor(q);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * Used for traveling by the list of memberships
+ * @return the name of the next group "container"
+ * @throws PDException in any error
  */
 public String NextGroupMemberShip() throws PDException
 {
@@ -675,9 +676,9 @@ return((String)Attr.getValue());
 }
 //-------------------------------------------------------------------------
 /**
- * Init retrieving of what groups the actual group is member
- * @param UserName
- * @throws PDException
+ * Init retrieving of what groups the User is member
+ * @param UserName Name of User to check membership
+ * @throws PDException in any error
  */
 public void InitUserMemberShip(String UserName) throws PDException
 {
@@ -688,9 +689,9 @@ CurUserMemberShip=getDrv().OpenCursor(q);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * Used for traveling by the memberships of a User
+ * @return the name of the next group the user is member
+ * @throws PDException in any error
  */
 public String NextUserMemberShip() throws PDException
 {
@@ -706,9 +707,9 @@ return((String)Attr.getValue());
 //-------------------------------------------------------------------------
 /**
  * Init retrieving of what groups the UserName is member
- * @param UserName
- * @return
- * @throws PDException
+ * @param UserName Name of user to check
+ * @return a HashSet of names of Groups the user is member
+ * @throws PDException in any error
  */
 public HashSet FullUserMemberShip(String UserName) throws PDException
 {
@@ -725,10 +726,10 @@ return(Result);
 }
 //-------------------------------------------------------------------------
 /**
- * Init retrieving of what groups the actual group is member
- * @param UserName
- * @return 
- * @throws PDException
+ * Init retrieving of what groups the user is member
+ * @param UserName Name of User to check
+ * @return a HashSet of names of Groups the user is DIRECT Member
+ * @throws PDException in any error
  */
 public HashSet DirectUserMemberShip(String UserName) throws PDException
 {
@@ -745,10 +746,10 @@ return(Partial);
 }
 //-------------------------------------------------------------------------
 /**
- * Init retrieving of what groups the actual group is member
- * @param GroupName
- * @return
- * @throws PDException
+ * Init retrieving of what groups the  group is member
+ * @param GroupName name of the Group to check
+ * @return A HashSet of ALL the Groups the Group is Member
+ * @throws PDException in any error
  */
 public HashSet FullGroupMemberShip(String GroupName) throws PDException
 {
@@ -843,7 +844,7 @@ return(getName());
 /**
  * Add aditional information, oriented a "extended" object with childrn nodes
  * @return The aditional XML
- * @throws PDException
+ * @throws PDException in any error
  */
 @Override
 protected String toXML2() throws PDException
@@ -922,11 +923,11 @@ for (int NumNodes = 0; NumNodes < childNodes.getLength(); NumNodes++)
 }    
 //-------------------------------------------------------------------------
 
-    /**
-     *
-     * @throws PDException
-     */
-    public void DelAllSubGroups() throws PDException
+/**
+ *
+ * @throws PDException in any error
+ */
+public void DelAllSubGroups() throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDGroups.DelAllSubGroups>:"+getName());
@@ -952,11 +953,11 @@ if (PDLog.isDebug())
 }
 //-------------------------------------------------------------------------
 
-    /**
-     *
-     * @throws PDException
-     */
-    public void DelAllUsers() throws PDException
+/**
+ *
+ * @throws PDException in any error
+ */
+public void DelAllUsers() throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDGroups.DelAllSubGroups>:"+getName());

@@ -1863,6 +1863,7 @@ return(Auth);
  * Creates an instance of uthenticator based on definition received
  * @param Auth Authenticator definition
  * @return Instance created
+     * @throws prodoc.PDException
  */
 protected AuthGeneric ConstructAuthentic(PDAuthenticators Auth) throws PDException
 {
@@ -3213,6 +3214,18 @@ return("");
 private int ImpFolds;
 private int ImpDocs;
 //-----------------------------------------------------------------------------------
+/**
+ *
+ * @param FoldAct Id of OpenProdoc folder where the filesystem foplders will be imported
+ * @param OriginPath Filesystem path
+ * @param IsOneLevel when true, only first level will be imported, otherwise ALL the folders and documents
+ * @param IncludeMetadata when true, OPD will try to obtain metadata from OPD files
+ * @param IncludeDocs when true, the documents will be imported, otherwise, only folders
+ * @param FoldType Folder type to be assigned when no metadata if imported
+ * @param DocType Document type to be assigned when no metadata if imported
+ * @param Strict when trueexisting folders with the same name will throw an error otherwise, the folders will be accepted/mixed.
+ * @throws PDException in any error
+ */
 public void ImportFolder(PDFolders FoldAct, String OriginPath, boolean IsOneLevel, boolean IncludeMetadata, boolean IncludeDocs, String FoldType, String DocType, boolean Strict) throws PDException
 {
 ImpFolds=0;
@@ -3320,6 +3333,13 @@ public int getImpDocs()
 {
 return ImpDocs;
 }
+//---------------------------------------------------------------------
+/**
+ * Imports a group of thesauri from a folder
+ * @param FolderPath Filesystem path conmtaning the thesauri
+ * @return a list of Thesauri Identifiers
+ * @throws PDException in any error
+ */
 public ArrayList<String> ImportThes(String FolderPath) throws PDException
 {
 ArrayList<String> ListImps=new ArrayList();   
@@ -3328,6 +3348,13 @@ ListImps.addAll(Thes.ImportPackThes(FolderPath));
 return(ListImps);    
 }
 //---------------------------------------------------------------------
+/**
+ * Import a set of definitions
+ * @param FolderPath Filesystem path where definitions are stored
+ * @param CreateTypes when true, after importing the definitions the document types will be created
+ * @return a list of imported definitions
+ * @throws PDException in any error
+ */
 public ArrayList<String> ImportDefs(String FolderPath, boolean CreateTypes) throws PDException
 {  
 PDObjDefs Defs=new PDObjDefs(this);
@@ -3369,6 +3396,12 @@ if (ListDefs!=null)
 return(ListImps);    
 }
 //---------------------------------------------------------------------
+/**
+ * Imports a complete OPD package, with definitions, thesauri and folders/documents
+ * @param FolderPath Filesystem folder where the package uis stored
+ * @return a list of imported definitions
+ * @throws PDException in any error
+ */
 public ArrayList<String> ImportPack(String FolderPath) throws PDException
 {
 ArrayList<String> ListDef=ImportThes(FolderPath+"/Thes");    
@@ -3387,6 +3420,11 @@ return(ListDef);
 }
 //---------------------------------------------------------------------
 long Last=0;
+
+/**
+ * Checks if OpenProdoc is connected to the server (Database or renmote)
+ * @return true if server is connected
+ */
 public boolean IsConnected()
 {
 if (Last!=0 && (System.currentTimeMillis()-Last)<60000 ) 
@@ -3412,8 +3450,22 @@ finally
     }
 }
 //---------------------------------------------------------------------
+/** 
+ * Linux path separatos
+ */
 static public final char LINSEP='/';
+
+/**
+ * Windows path separator
+ */
 static public final char WINSEP='\\';
+
+/**
+ * Converts any path to a "Linux" format managed by Java
+ * @param Path path to convert
+ * @param isFolder when true, the path is from a folder
+ * @return the normalized path
+ */
 static public String FixPath(String Path, boolean isFolder)
 {
 String NewPath=Path.replace(WINSEP, LINSEP);
@@ -3422,6 +3474,15 @@ if (isFolder && NewPath.charAt(NewPath.length()-1)!=LINSEP)
 return(NewPath);
 }
 //---------------------------------------------------------------------
+/**
+ * Imports a folder structure of Javadoc files, MODIFYING them for use in OpenProdoc
+ * @param FoldAct Id of OPD Folder where Javadoc will be imported
+ * @param ImpPath Filesystem path
+ * @param FoldType Folder type to apply
+ * @param DocType Document type to apply
+ * @param Strict when true, if a folder exists with the same name, the import will be rejected
+ * @throws PDException in any error
+ */
 public void ConvertJavaDocImport(PDFolders FoldAct, String ImpPath, String FoldType, String DocType, boolean Strict) throws PDException
 {
 PDDocs d=new PDDocs(this);

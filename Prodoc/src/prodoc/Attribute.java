@@ -149,8 +149,16 @@ static public final String DDBB_DECIMALPATTERN="_0000000000.00;-#";
  * Formatters for reading, importing, exporting and storing BigDecimal
  */
 static public final String DECIMALPATTERN="0000000000.00;-#";
-static public final BigDecimal MINIMUMBD=new BigDecimal("-9999999999.99");
-static protected final String XML_NULL="[{NULL}]";
+
+    /**
+     *
+     */
+    static public final BigDecimal MINIMUMBD=new BigDecimal("-9999999999.99");
+
+    /**
+     *
+     */
+    static protected final String XML_NULL="[{NULL}]";
 //--------------------------------------------------------------------------
 /**
  * Default constructor of an Attribute for MONO or MULTI valued Attributes

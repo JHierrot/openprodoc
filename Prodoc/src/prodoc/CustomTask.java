@@ -78,17 +78,53 @@ if (PDLog.isInfo())
 Bin.ExecuteEventDoc(Param1, Param2, Param3, Param4, Doc);
 }
 //-----------------------------------------------------------------
+
+    /**
+     *
+     * @param param
+     * @param param2
+     * @param param3
+     * @param param4
+     * @param Rec
+     * @param Drv
+     * @return
+     * @throws PDException
+     */
 final protected boolean CustomMeetsReq(String param, String param2, String param3, String param4, Record Rec, DriverGeneric Drv)  throws PDException
 {
 return(Bin.CustomMeetsReqRec(param, param2, param3, param4, Rec, Drv));
 }
 //-----------------------------------------------------------------    
+
+    /**
+     *
+     * @param Drv
+     * @param ObjectType
+     * @param Filter
+     * @param param
+     * @param param2
+     * @param param3
+     * @param param4
+     * @return
+     * @throws PDException
+     */
 final protected Cursor CurCustom(DriverGeneric Drv, String ObjectType, String Filter, String param, String param2, String param3, String param4)   throws PDException
 {
 return(Bin.CursorCustom( Drv, ObjectType, Filter, param, param2, param3, param4));
 }
 
-final protected void ExecuteCustomCron(DriverGeneric drv, String objType, String objFilter, String param, String param2, String param3, String param4) throws PDException
+    /**
+     *
+     * @param drv
+     * @param objType
+     * @param objFilter
+     * @param param
+     * @param param2
+     * @param param3
+     * @param param4
+     * @throws PDException
+     */
+    final protected void ExecuteCustomCron(DriverGeneric drv, String objType, String objFilter, String param, String param2, String param3, String param4) throws PDException
 {
 Bin.CustomCronTask(drv, objType, objFilter, param, param2, param3, param4);
 }
@@ -131,6 +167,7 @@ DownloadedClasses.put(ClassName, CustomTask);
  * @param Param3
  * @param Param4
  * @param Fold
+     * @throws prodoc.PDException
  */
 protected void ExecuteEventFold(String Param1, String Param2, String Param3, String Param4, PDFolders Fold) throws PDException
 {
@@ -143,6 +180,7 @@ protected void ExecuteEventFold(String Param1, String Param2, String Param3, Str
  * @param Param3
  * @param Param4
  * @param Doc
+     * @throws prodoc.PDException
  */
 protected void ExecuteEventDoc(String Param1, String Param2, String Param3, String Param4, PDDocs Doc) throws PDException
 {
@@ -155,7 +193,9 @@ protected void ExecuteEventDoc(String Param1, String Param2, String Param3, Stri
  * @param param3
  * @param param4
  * @param Rec
+     * @param Drv
  * @return
+     * @throws prodoc.PDException
  */
 protected boolean CustomMeetsReqRec(String param, String param2, String param3, String param4, Record Rec, DriverGeneric Drv)  throws PDException
 {
@@ -172,6 +212,7 @@ return(true);
  * @param param3
  * @param param4
  * @return 
+     * @throws prodoc.PDException 
  */
 protected Cursor CursorCustom(DriverGeneric Drv, String ObjectType, String Filter, String param, String param2, String param3, String param4)  throws PDException
 {
@@ -187,6 +228,7 @@ throw new UnsupportedOperationException("Not supported yet.");
  * @param param2
  * @param param3
  * @param param4 
+     * @throws prodoc.PDException 
  */
 protected void CustomCronTask(DriverGeneric drv, String objType, String objFilter, String param, String param2, String param3, String param4)  throws PDException
 {

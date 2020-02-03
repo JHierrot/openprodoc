@@ -95,32 +95,29 @@ Info = aInfo;
 }
 //----------------------------------------------------------------
 /**
- *
- * @param s
+ * Logs at DEBUG Level
+ * @param s Text to log
  */
 public static void Debug(String s)
 {
-// System.out.println(new Date()+" DEBUG ==>"+s);
 getLogger().debug(s);
 }
 //----------------------------------------------------------------
 /**
- *
- * @param s
+ * Logs at INFO Level
+ * @param s Text to log
  */
 public static void Info(String s)
 {
-// System.out.println(new Date()+" INFO ==>"+s);
 getLogger().info(s);
 }
 //----------------------------------------------------------------
 /**
- *
- * @param s
+ * Logs at ERROR Level
+ * @param s Text to log
  */
 public static void Error(String s)
 {
-// System.out.println(new Date()+" ERROR ==>"+s);
 getLogger().error(s);
 }
 //----------------------------------------------------------------
