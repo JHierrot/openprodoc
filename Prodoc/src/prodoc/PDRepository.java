@@ -149,8 +149,8 @@ private boolean Encrypted=false;
 static private ObjectsCache RepObjectsCache = null;
 
 /**
- *
- * @param Drv
+ * default constructor
+ * @param Drv Openprodoc session
  * @throws PDException in any error
  */
 public PDRepository(DriverGeneric Drv) throws PDException
@@ -159,8 +159,8 @@ super(Drv);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Rec
+ * Assign new values to the Repository object
+ * @param Rec Record of Repository type with new values
  * @throws PDException in any error
  */
 public void assignValues(Record Rec) throws PDException
@@ -183,8 +183,8 @@ assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
+ * Returns a record with the current values
+ * @return a record with the current values
  * @throws PDException in any error
  */
 @Override
@@ -223,18 +223,18 @@ return(ListCond);
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Returns the name of Repository table in DDBB
+ * @return the name of Repository table in DDBB
+ */
 public String getTabName()
 {
 return (getTableName());
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Static method that returns the name of Repositories table in DDBB
+ * @return the name of Repositories table in DDBB
+ */
 static public String getTableName()
 {
 return ("PD_REPOSITORIES");
@@ -333,8 +333,8 @@ return Param;
 }
 //-------------------------------------------------------------------------
 /**
- * @param PARAM
-*/
+ * @param PARAM Addition al parameter that depends on repository kind
+ */
 public void setParam(String PARAM)
 {
 this.Param = PARAM;
@@ -349,7 +349,7 @@ return UserName;
 }
 //-------------------------------------------------------------------------
 /**
- * @param User
+ * @param User User to conect to repository (if needed)
 */
 public void setUser(String User)
 {
@@ -365,7 +365,7 @@ return Password;
 }
 //-------------------------------------------------------------------------
 /**
- * @param pPassword
+ * @param pPassword password to use for connecting to the repository (if needed)
 */
 public void setPassword(String pPassword)
 {
@@ -483,11 +483,10 @@ if (IsRef())
 throw new UnsupportedOperationException("Unsupported");
 }
 //-----------------------------------------------------------------
-
-    /**
-     *
-     * @return
-     */
+/**
+ * Indicates if the repository stores documents or just references
+ * @return true if Repository is of type reference
+ */
 public boolean IsRef()
 {
 return(getRepType().equals(tREFURL));    
@@ -506,11 +505,10 @@ String S=getURL()+DocName;
 return(S);    
 }        
 //-----------------------------------------------------------------
-
-    /**
-     *
-     * @return
-     */
+/**
+ * Indicates if the repository is a special one that stores FukllText Index
+ * @return true if the repository is THE Fulltext Repository
+ */
 public boolean isFTRep()
 {
 if (getName()!=null &&getName().equalsIgnoreCase("PD_FTRep"))   

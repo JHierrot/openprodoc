@@ -258,9 +258,9 @@ private boolean AllowMaintainTask=false;
 static private ObjectsCache RolesObjectsCache = null;
 
 /**
- *
- * @param Drv
- * @throws PDException
+ * Default constructor
+ * @param Drv OpenProdoc session
+ * @throws PDException in any error
  */
 public PDRoles(DriverGeneric Drv) throws PDException
 {
@@ -268,9 +268,9 @@ super(Drv);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Rec
- * @throws PDException
+ * Assign new values to the Roles object
+ * @param Rec Record of Roles type with new values
+ * @throws PDException in any error
  */
     @Override
 public void assignValues(Record Rec) throws PDException
@@ -333,9 +333,9 @@ assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * Returns a record with the current values
+ * @return a record with the current values
+ * @throws PDException in any error
  */
 @Override
 synchronized public Record getRecord() throws PDException
@@ -376,7 +376,7 @@ return(Rec);
 /**
  *
  * @return
- * @throws PDException
+ * @throws PDException in any error
  */
 protected Conditions getConditions() throws PDException
 {
@@ -393,18 +393,18 @@ return(ListCond);
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Returns the name of Roles table in DDBB
+ * @return the name of Roles table in DDBB
+ */
 public String getTabName()
 {
 return (getTableName());
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Static method that returns the name of Roles table in DDBB
+ * @return the name of Roles table in DDBB
+ */
 static public String getTableName()
 {
 return ("PD_ROLES");
@@ -468,7 +468,7 @@ else
 /**
  *
  * @param Ident
- * @throws PDExceptionFunc  
+ * @throws PDExceptionFunc  in any error
  */
 protected void AsignKey(String Ident) throws PDExceptionFunc
 {
@@ -486,7 +486,7 @@ return Name;
 //-------------------------------------------------------------------------
 /**
  * @param Name the Name to set
- * @throws PDExceptionFunc  
+ * @throws PDExceptionFunc in any error  
 */
 public void setName(String Name) throws PDExceptionFunc
 {

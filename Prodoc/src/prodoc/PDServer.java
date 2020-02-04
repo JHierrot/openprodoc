@@ -59,9 +59,9 @@ static private ObjectsCache ServerObjectsCache = null;
 
 //-------------------------------------------------------------------------
 /**
- * 
- * @param Drv
- * @throws PDException
+ * Default Constructor 
+ * @param Drv OpenProdoc session
+ * @throws PDException in any error
  */
 public PDServer(DriverGeneric Drv)  throws PDException
 {
@@ -69,9 +69,9 @@ super(Drv);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Rec
- * @throws PDException
+ * Assign new values to the Server object
+ * @param Rec Record of Server type with new values
+ * @throws PDException in any error
  */
 public void assignValues(Record Rec) throws PDException
 {
@@ -82,9 +82,9 @@ assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * Returns a record with the current values
+ * @return a record with the current values
+ * @throws PDException in any error
  */
 @Override
 synchronized public Record getRecord() throws PDException
@@ -100,7 +100,7 @@ return(Rec);
 /**
  *
  * @return
- * @throws PDException
+ * @throws PDException in any error
  */
 protected Conditions getConditions() throws PDException
 {
@@ -117,18 +117,18 @@ return(ListCond);
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Returns the name of Server table in DDBB
+ * @return the name of Server table in DDBB
+ */
 public String getTabName()
 {
 return (getTableName());
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Static method that returns the name of Server table in DDBB
+ * @return the name of Server table in DDBB
+ */
 static public String getTableName()
 {
 return ("PD_SERVER");

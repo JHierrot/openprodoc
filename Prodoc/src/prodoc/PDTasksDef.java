@@ -196,9 +196,9 @@ static private ObjectsCache TaksDefObjectsCache = null;
 
 //-------------------------------------------------------------------------
 /**
- * 
- * @param Drv
- * @throws PDException
+ * Default Constructor
+ * @param Drv openprodoc Session
+ * @throws PDException in any error
  */
 public PDTasksDef(DriverGeneric Drv)  throws PDException
 {
@@ -206,9 +206,9 @@ super(Drv);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Rec
- * @throws PDException
+ * Assign new values to the TaskDef object
+ * @param Rec Record of TaskDef type with new values
+ * @throws PDException in any error
  */
 @Override
 public void assignValues(Record Rec) throws PDException
@@ -238,9 +238,9 @@ assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * Returns a record with the current values
+ * @return a record with the current values
+ * @throws PDException in any error
  */
 @Override
 synchronized public Record getRecord() throws PDException
@@ -265,7 +265,7 @@ return(Rec);
 /**
  *
  * @return
- * @throws PDException
+ * @throws PDException in any error
  */
 protected Conditions getConditions() throws PDException
 {
@@ -317,7 +317,7 @@ R.addRecord(getRecordStructCommon());
 /**
  *
  * @param Ident
- * @throws PDExceptionFunc  
+ * @throws PDExceptionFunc in any error
  */
 protected void AsignKey(String Ident) throws PDExceptionFunc
 {
@@ -334,7 +334,7 @@ return Name;
 //-----------------------------------------------------------------------
 /**
  * @param Name the Name to set
- * @throws PDExceptionFunc  
+ * @throws PDExceptionFunc in any error  
 */
 public void setName(String Name) throws PDExceptionFunc
 {
@@ -456,7 +456,7 @@ this.TaskUser = TaskUser;
 //-------------------------------------------------------------------------
 /**
  * Start the main tasks that supervises and starts all the others.
- * @param Drv
+ * @param Drv OpenProdoc Session
  */
 public static void StartTaskGenerator(DriverGeneric Drv)
 {
@@ -475,7 +475,7 @@ public static void StopTaskGenerator()
 * The install method is generic because for instantiate a object, the class
 * need to access to the tables for definition
  * @param Drv
- * @throws PDException
+ * @throws PDException in any error
 */
 static protected void InstallMulti(DriverGeneric Drv) throws PDException
 {
@@ -621,8 +621,8 @@ return LisTypeTask;
 }
 //-------------------------------------------------------------------------
 /**
- * Returns an array with Text for all the Types of Tasks (CRON + EVENT
- * @return 
+ * Returns an array with Text for all the Types of Tasks (CRON + EVENT)
+ * @return an Array of Names
  */
 public static String[] getListAllTypeTask()
 {
@@ -684,10 +684,10 @@ this.Param4 = Param4;
 }
 //-------------------------------------------------------------------------
 /**
- * 
- * @param Conds
- * @return 
-     * @throws prodoc.PDException 
+ * Creates a cursor from a set of conditions
+ * @param Conds OPD Conditions
+ * @return Created Cursor
+ * @throws PDException in any error
  */    
 public Cursor Search(Conditions Conds) throws PDException
 {

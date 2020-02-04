@@ -102,7 +102,7 @@ public static final int pDELETE  =5;
  */
 static private ObjectsCache AclObjectsCache = null;
 /**
- * default constructor
+ * Default constructor
  * @param Drv OpenProdoc driver-session for access to DDBB
  * @throws PDException In any error
  */

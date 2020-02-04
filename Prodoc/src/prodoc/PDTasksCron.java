@@ -76,9 +76,9 @@ static private ObjectsCache TaksDefObjectsCache = null;
 
 //-------------------------------------------------------------------------
 /**
- * 
- * @param Drv
- * @throws PDException
+ * Default Constructor
+ * @param Drv openprodoc Session
+ * @throws PDException in any error
  */
 public PDTasksCron(DriverGeneric Drv)  throws PDException
 {
@@ -86,9 +86,9 @@ super(Drv);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Rec
- * @throws PDException
+ * Assign new values to the TaskCron object
+ * @param Rec Record of TaskCron type with new values
+ * @throws PDException in any error
  */
 @Override
 public void assignValues(Record Rec) throws PDException
@@ -116,9 +116,9 @@ assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * Returns a record with the current values
+ * @return a record with the current values
+ * @throws PDException in any error
  */
 @Override
 synchronized public Record getRecord() throws PDException
@@ -136,9 +136,9 @@ return(Rec);
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Returns the name of TaskCron table in DDBB
+ * @return the name of TaskCron table in DDBB
+ */
 @Override
 public String getTabName()
 {
@@ -147,9 +147,9 @@ return (getTableName());
 //-------------------------------------------------------------------------
 
 /**
-*
-* @return
-*/
+ * Static method that returns the name of TaskCron table in DDBB
+ * @return the name of TaskCron table in DDBB
+ */
 static public String getTableName()
 {
 return ("PD_TASKSDEFCRON");
@@ -197,7 +197,7 @@ return NextDate;
 }
 //-----------------------------------------------------------------------
 /**
- * @param NextDate 
+ * @param NextDate TimeStamp of next run
  */
 public void setNextDate(Date NextDate)
 {
@@ -272,7 +272,7 @@ this.AddMins = AddMins;
 * The install method is generic because for instantiate a object, the class
 * need to access to the tables for definition
  * @param Drv
- * @throws PDException
+ * @throws PDException in any error
 */
 static protected void InstallMulti(DriverGeneric Drv) throws PDException
 {

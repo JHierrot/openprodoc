@@ -61,9 +61,9 @@ static private ObjectsCache TaksDefObjectsCache = null;
 
 //-------------------------------------------------------------------------
 /**
- * 
- * @param Drv
- * @throws PDException
+ * Default constructor
+ * @param Drv OpenProdoc driver-session for access to DDBB
+ * @throws PDException in any error
  */
 public PDTasksExec(DriverGeneric Drv)  throws PDException
 {
@@ -71,9 +71,9 @@ super(Drv);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Rec
- * @throws PDException
+ * Assign new values to the TaskExec object
+ * @param Rec Record of TaskExec type with new values
+ * @throws PDException in any error
  */
 @Override
 public void assignValues(Record Rec) throws PDException
@@ -85,9 +85,9 @@ assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * Returns a record with the current values
+ * @return a record with the current values
+ * @throws PDException in any error
  */
 @Override
 synchronized public Record getRecord() throws PDException
@@ -101,9 +101,9 @@ return(Rec);
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Returns the name of TaskExec table in DDBB
+ * @return the name of TaskExec table in DDBB
+ */
 @Override
 public String getTabName()
 {
@@ -111,9 +111,9 @@ return (getTableName());
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Static method that returns the name of TaskExec table in DDBB
+ * @return the name of TaskExec table in DDBB
+ */
 static public String getTableName()
 {
 return ("PD_TASKSEXECPEND");
@@ -153,7 +153,7 @@ else
 * The install method is generic because for instantiate a object, the class
 * need to access to the tables for definition
  * @param Drv
- * @throws PDException
+ * @throws PDException in any error
 */
 static protected void InstallMulti(DriverGeneric Drv) throws PDException
 {
@@ -283,7 +283,7 @@ if (PDLog.isDebug())
 /**
  * Executes the task defined in current object
  * Beware that can be VERY DANGEROUS and DELETE THOUsands OF oBJECTS
- * @throws PDException 
+ * @throws PDException in any error 
  */
 public void Execute()  throws PDException
 {
@@ -341,8 +341,8 @@ switch (getType())
 }
 //-------------------------------------------------------------------------
 /**
- * Executes the task defined in current object
- * @return
+ * Generates a Cursor with the set of elements defined in configuration
+ * @return Cretaed Cursor
  * @throws PDException In any error 
  */
 public Cursor GenCur()  throws PDException
@@ -405,7 +405,7 @@ if (PDLog.isDebug())
 //-------------------------------------------------------------------------
 /**
  * Imports O.S. folders into OpenProdoc repository
- * @throws PDException 
+ * @throws PDException in any error 
  */
 private void Import(String DefDocType, String ParentId, String Path, boolean Recursive) throws PDException
 {
@@ -468,7 +468,7 @@ if (PDLog.isDebug())
 //-------------------------------------------------------------------------
 /**
  * Imports O.S. folders into OpenProdoc repository
- * @throws PDException 
+ * @throws PDException in any error 
  */
 private void LocalSync(String DefDocType, String ParentId, String Path, boolean Recursive) throws PDException
 {
@@ -607,7 +607,7 @@ if (PDLog.isDebug())
 //-------------------------------------------------------------------------
 /**
  * 
- * @throws PDException 
+ * @throws PDException in any error 
  */
 private void Export() throws PDException
 {
@@ -655,7 +655,7 @@ if (PDLog.isDebug())
  * Param -> boolean 0/1 indcate Subtypes.
  * Param2 -> Integer indicates number of days
  * Param3 -> PDID Folder
- * @throws PDException 
+ * @throws PDException in any error 
  */
 private void DeleteOldFold() throws PDException
 {
@@ -740,7 +740,7 @@ return(F.Search(FoldType,  Conds, SubTypes, true, IdAct, null))  ;
  * Param -> boolean 0/1 indcate Subtypes.
  * Param2 -> Integer indicates number of days
  * Param3 -> PDID Folder
- * @throws PDException 
+ * @throws PDException  in any error
  */
 private void DeleteOldDoc() throws PDException
 {
@@ -966,7 +966,7 @@ this.NextDate = NextDate;
 /**
  * Generates the default conditions that is PDID=current PDID
  * @return Conditions containing 1 condition
- * @throws PDException
+ * @throws PDException in any error
  */
 protected Conditions getConditions() throws PDException
 {
@@ -1003,7 +1003,7 @@ this.setObjType(pDoc.getDocType());
 //-------------------------------------------------------------------------
 /**
  * 
- * @throws PDException 
+ * @throws PDException in any error
  */
 private void ExecuteUpdFold() throws PDException
 {
@@ -1031,7 +1031,7 @@ Fold.MonoUpdate();
 //-------------------------------------------------------------------------
 /**
  * 
- * @throws PDException 
+ * @throws PDException in any error 
  */
 private void ExecuteCopyFold() throws PDException
 {
@@ -1051,7 +1051,7 @@ f.insert();
 //-------------------------------------------------------------------------
 /**
  * 
- * @throws PDException 
+ * @throws PDException in any error 
  */
 private void ExecuteExportFold() throws PDException
 {
@@ -1481,7 +1481,7 @@ if (PDLog.isDebug())
 /**
  *
  * @param Ident
- * @throws PDExceptionFunc  
+ * @throws PDExceptionFunc in any error  
  */
 @Override
 protected void AsignKey(String Ident) throws PDExceptionFunc

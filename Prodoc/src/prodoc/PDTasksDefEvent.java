@@ -143,9 +143,9 @@ static private ObjectsCache TaksDefObjectsCache = null;
 
 //-------------------------------------------------------------------------
 /**
- * 
- * @param Drv
- * @throws PDException
+ * Default constructor
+ * @param Drv OpenProdoc driver-session for access to DDBB
+ * @throws PDException in any error
  */
 public PDTasksDefEvent(DriverGeneric Drv)  throws PDException
 {
@@ -153,9 +153,9 @@ super(Drv);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Rec
- * @throws PDException
+ * Assign new values to the TaskDefEvent object
+ * @param Rec Record of TaskDefEvent type with new values
+ * @throws PDException in any error
  */
 @Override
 public void assignValues(Record Rec) throws PDException
@@ -170,9 +170,9 @@ assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * Returns a record with the current values
+ * @return a record with the current values
+ * @throws PDException in any error
  */
 @Override
 synchronized public Record getRecord() throws PDException
@@ -186,20 +186,19 @@ return(Rec);
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Returns the name of TaskDefEvent table in DDBB
+ * @return the name of TaskDefEvent table in DDBB
+ */
 @Override
 public String getTabName()
 {
 return (getTableName());
 }
 //-------------------------------------------------------------------------
-
 /**
-*
-* @return
-*/
+ * Static method that returns the name of TaskDefEvent table in DDBB
+ * @return the name of TaskDefEvent table in DDBB
+ */
 static public String getTableName()
 {
 return ("PD_TASKSDEFEVEN");
@@ -252,7 +251,7 @@ return(TaksDefObjectsCache);
 * The install method is generic because for instantiate a object, the class
 * need to access to the tables for definition
  * @param Drv
- * @throws PDException
+ * @throws PDException in any error
 */
 static protected void InstallMulti(DriverGeneric Drv) throws PDException
 {
@@ -290,22 +289,20 @@ public void setEvenOrder(int EvenOrder)
 this.EvenOrder = EvenOrder;
 }
 //-------------------------------------------------------------------------
-
-    /**
-     *
-     * @return
-     */
+/**
+ * Returns a list of tasks of type event
+ * @return an Arry with the names
+ */
 static public String[] getListTypeEventTask()
 {
 return LisTypeEventTask;    
 }
 //-------------------------------------------------------------------------
-
-    /**
-     *
-     * @param Fold
-     * @throws PDException
-     */
+/**
+ *
+ * @param Fold
+ * @throws PDException in any error
+ */
 protected void Execute(PDFolders Fold) throws PDException
 {
 if (PDLog.isDebug())
@@ -332,7 +329,7 @@ if (PDLog.isDebug())
     /**
      *
      * @param Doc
-     * @throws PDException
+     * @throws PDException in any error
      */
 protected void Execute(PDDocs Doc) throws PDException
 {
