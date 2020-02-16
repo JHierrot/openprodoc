@@ -55,10 +55,10 @@ private Vector<String> OrderList=null;
 private Vector<Boolean> OrderAsc=null;
 //-------------------------------------------------------------------------
 /**
- *
- * @param pTable
- * @param pFields
- * @param pWhere
+ * Constructs a Query 
+ * @param pTable Table to search for
+ * @param pFields Fileds to include in the result Cursor
+ * @param pWhere Conditions of the query
  */
 public Query(String pTable, Record pFields, Conditions pWhere)
 {
@@ -68,11 +68,11 @@ Where=pWhere;
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param pTable
- * @param pFields
- * @param pOrder
- * @param pWhere
+ * Constructs a Query 
+ * @param pTable Table to search for
+ * @param pFields Fileds to include in the result Cursor
+ * @param pWhere Conditions of the query
+ * @param pOrder Order in which return the results
  */
 public Query(String pTable, Record pFields, Conditions pWhere, String pOrder)
 {
@@ -86,11 +86,11 @@ OrderAsc.add(true);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param pTables
- * @param pFields
- * @param pWhere
- * @param pOrderList
+ * Constructs a Query 
+ * @param pTables Tables to search for
+ * @param pFields Fileds to include in the result Cursor
+ * @param pWhere Conditions of the query
+ * @param pOrderList Order in which return the results
  */
 public Query(Vector pTables, Record pFields, Conditions pWhere, Vector<String> pOrderList)
 {
@@ -107,12 +107,12 @@ if (pOrderList!=null)
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param pTables
- * @param pFields
- * @param pWhere
- * @param pOrderList
-     * @param pOrderAsc
+ * Constructs a Query 
+ * @param pTables Tables to search for
+ * @param pFields Fileds to include in the result Cursor
+ * @param pWhere Conditions of the query
+ * @param pOrderList Order in which return the results
+ * @param pOrderAsc indicates if the order is Ascending (true) or descending (false)
  */
 public Query(Vector pTables, Record pFields, Conditions pWhere, Vector<String> pOrderList, Vector<Boolean> pOrderAsc)
 {
@@ -218,9 +218,9 @@ return("<Q><Tab>"+XTabs+"</Tab>"+RetrieveFields.toXMLt()+XWhere+XOrders+"</Q>");
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param XMLObjects
- * @throws PDException
+ * Constructs a Query from an XML document
+ * @param XMLObjects XML Document with the query
+ * @throws PDException in any error
  */
 public Query(Document XMLObjects) throws PDException
 {

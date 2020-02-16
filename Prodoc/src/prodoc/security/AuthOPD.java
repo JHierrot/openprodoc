@@ -25,7 +25,7 @@ import prodoc.PDExceptionFunc;
 import prodoc.PDUser;
 
 /**
- *
+ * Ayuthenticator that authenticates using User and password stored in OPD database 
  * @author jhierrot
  */
 public class AuthOPD extends AuthGeneric
@@ -36,12 +36,12 @@ public class AuthOPD extends AuthGeneric
 DriverGeneric OPDInstance;
 
 /**
- *
- * @param pServer
- * @param pUser
- * @param pPassword
- * @param pParam
- * @param pOPDInstance
+ * Constructor of OPD Authentication
+ * @param pServer not used for this authenticator
+ * @param pUser not used for this authenticator
+ * @param pPassword not used for this authenticator
+ * @param pParam not used for this authenticator
+ * @param pOPDInstance OpenProdoc session for loading the user information
  */
 public AuthOPD(String pServer, String pUser, String pPassword, String pParam, DriverGeneric pOPDInstance)
 {
@@ -50,10 +50,10 @@ OPDInstance=pOPDInstance;
 }
 //----------------------------------------------------------------------
 /**
- *
- * @param User
- * @param Pass
- * @throws PDException
+ * Authenticates the user against the internal database of OpenProdoc
+ * @param User User to authenticate
+ * @param Pass Pawwsord
+ * @throws PDException if fails the authentication or in any technical error
  */
 @Override
 public void Authenticate(String User, String Pass) throws PDException

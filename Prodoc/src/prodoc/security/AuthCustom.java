@@ -33,7 +33,7 @@ import prodoc.PDExceptionFunc;
 import prodoc.PDLog;
 
 /**
- *
+ * Class for downloading and managing authentication through custom defined jar authenticators
  * @author jhierrot
  */
 public class AuthCustom extends AuthGeneric
@@ -43,27 +43,26 @@ static private HashMap<String, Class> DownloadedClasses=new HashMap<String, Clas
 static private HashMap<String, Properties> DownloadedProp=new HashMap<String, Properties>();
 
 /**
- *
- * @param pServer
- * @param pUser
- * @param pPassword
- * @param pParam
+ * Constructor of Authenticator controller
+ * @param pServer URL/UNC reference to the systemt of authentication (LDAP, Database, program)
+ * @param pUser    User needed for accesing to the system (not the OPD user to authenticate) (optional)
+ * @param pPassword Password need for accesing to the system (optional)
+ * @param pParam Additional params (optional)
  */
 public AuthCustom(String pServer, String pUser, String pPassword, String pParam)
 {
 super(pServer, pUser, pPassword, pParam);
 }
 //----------------------------------------------------------------------
-
-    /**
-     *
-     * @param pServer
-     * @param pUser
-     * @param pPassword
-     * @param pParam
-     * @param Drv
-     * @throws PDExceptionFunc
-     */
+/**
+ * Constructor of Authenticator controller
+ * @param pServer URL/UNC reference to the systemt of authentication (LDAP, Database, program)
+ * @param pUser    User needed for accesing to the system (not the OPD user to authenticate) (optional)
+ * @param pPassword Password need for accesing to the system (optional)
+ * @param pParam Additional params that include PDId of authenticator and class
+ * @param Drv OpenProdoc session for downloading the custom authenticator jar
+ * @throws PDExceptionFunc in any error
+ */
 public AuthCustom(String pServer, String pUser, String pPassword, String pParam, DriverGeneric Drv) throws PDExceptionFunc
 {
 super(pServer, pUser, pPassword, pParam);
@@ -91,10 +90,10 @@ if (PDIdProps!=null)
 }
 //----------------------------------------------------------------------
 /**
- *
- * @param User
- * @param Pass
- * @throws PDException
+ * Authenticates calling to a custom authenticator
+ * @param User user to authenticate
+ * @param Pass password of user to authenticate
+ * @throws PDException if the user/password is wrong or in any technical error (as no network, etc)
  */
 @Override
 public void Authenticate(String User, String Pass) throws PDException

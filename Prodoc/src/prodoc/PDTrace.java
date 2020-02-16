@@ -65,8 +65,8 @@ static private ObjectsCache TraceObjectsCache = null;
 
 //-------------------------------------------------------------------------
 /**
- *
- * @param Drv
+ * Default constructor
+ * @param Drv OpenProdoc session
  */
 public PDTrace(DriverGeneric Drv)
 {
@@ -74,9 +74,9 @@ super(Drv);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Rec
- * @throws PDException
+ * Assign new values to the PDTrace object
+ * @param Rec Record of PDTrace type with new values
+ * @throws PDException in any error
  */
 public void assignValues(Record Rec) throws PDException
 {
@@ -88,9 +88,9 @@ assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * Returns a record with the current values
+ * @return a record with the current values
+ * @throws PDException in any error
  */
 @Override
 synchronized public Record getRecord() throws PDException
@@ -107,7 +107,7 @@ return(Rec);
 /**
  *
  * @return
- * @throws PDException
+ * @throws PDException in any error
  */
 protected Conditions getConditions() throws PDException
 {
@@ -124,18 +124,18 @@ return(ListCond);
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Returns the name of PDTrace table in DDBB
+ * @return the name of PDTrace table in DDBB
+ */
 public String getTabName()
 {
 return (getTableName());
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Static method that returns the name of PDTrace table in DDBB
+ * @return the name of PDTrace table in DDBB
+ */
 static public String getTableName()
 {
 return ("PD_TRACE");
@@ -206,7 +206,7 @@ return Operation;
 }
 //-------------------------------------------------------------------------
 /**
- * @param pOperation
+ * @param pOperation Operation (Insert, Update, delete, View) to trace
 */
 public void setOperation(String pOperation)
 {
@@ -236,7 +236,7 @@ return ObjectType;
 }
 //-------------------------------------------------------------------------
 /**
- * @param pObjectType
+ * @param pObjectType Object Class to trace
 */
 public void setObjectType(String pObjectType)
 {
@@ -291,10 +291,10 @@ Result = pResult;
 }
 //-------------------------------------------------------------------------
 /**
- * 
- * @param Conds
- * @return 
-     * @throws prodoc.PDException 
+ * Search PDTrace objects with conditions creating a Cursor
+ * @param Conds Conditions to gfilter
+ * @return a created cursor
+ * @throws PDException in any error
  */    
 public Cursor Search(Conditions Conds) throws PDException
 {
@@ -306,14 +306,13 @@ if (PDLog.isDebug())
 return(getDrv().OpenCursor(QBE));
 }
 //-------------------------------------------------------------------------
-
-    /**
-     *
-     * @param ObjType
-     * @param D1
-     * @param D2
-     * @throws PDException
-     */
+/**
+ * Deletes a range of traces
+ * @param ObjType Class of Object
+ * @param D1 Mimimum date
+ * @param D2 Máximum date
+ * @throws PDException in any error
+ */
 public void DeleteRange(String ObjType, Date D1, Date D2) throws PDException
 {
 boolean InTransLocal;

@@ -23,7 +23,7 @@ import java.util.Properties;
 import prodoc.PDException;
 
 /**
- *
+ * Parent class of all authenticators
  * @author jhierrot
  */
 public abstract class AuthGeneric
@@ -49,11 +49,11 @@ private Properties Prop=null;
 
 //----------------------------------------------------------------------
 /**
- *
- * @param pServer
- * @param pUser
- * @param pPassword
- * @param pParam
+ * Constructor of the parent class of all authenticators
+ * @param pServer url/UNC reference to server
+ * @param pUser    User for connection to system (optional, depends on authenticator)
+ * @param pPassword Password for connection to system (optional, depends on authenticator)
+ * @param pParam additional param, depends on authenticator
  */
 public AuthGeneric(String pServer, String pUser, String pPassword, String pParam)
 {
@@ -148,6 +148,7 @@ this.Param = Param;
 }
 //----------------------------------------------------------------------
 /**
+ * Returns the properties used for custom authenticators
  * @return the Prop
  */
 public Properties getProp()
@@ -156,8 +157,9 @@ return Prop;
 }
 //-----------------------------------------------------------------
 /**
-* @param Prop the Prop to set
-*/
+ * Assign the properties used for custom authenticators
+ * @param Prop the Prop to set
+ */
 public void setProp(Properties Prop)
 {
 this.Prop = Prop;

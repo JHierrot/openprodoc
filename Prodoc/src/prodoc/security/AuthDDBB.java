@@ -25,17 +25,17 @@ import prodoc.PDException;
 import prodoc.PDExceptionFunc;
 
 /**
- *
+ * Authenticator that authenticates connecting to a database with the user to authenticate 
  * @author jhierrot
  */
 public class AuthDDBB extends AuthGeneric
 {
 /**
- *
- * @param pServer
- * @param pUser
- * @param pPassword
- * @param pParam
+ * Constructor for database Authenticator
+ * @param pServer URL of Database
+ * @param pUser  Not needed for this authenticator
+ * @param pPassword Not needed for this authenticator
+ * @param pParam class name of the JDBC driver
  */
 public AuthDDBB(String pServer, String pUser, String pPassword, String pParam)
 {
@@ -44,10 +44,10 @@ super(pServer, pUser, pPassword, pParam);
 
 //----------------------------------------------------------------------
 /**
- *
- * @param User
- * @param Pass
- * @throws PDException
+ * Authenticates calling to a database
+ * @param User user to authenticate
+ * @param Pass password of user to authenticate
+ * @throws PDException if the user/password is wrong or in any technical error (as no network, etc)
  */
 @Override
 public void Authenticate(String User, String Pass) throws PDException

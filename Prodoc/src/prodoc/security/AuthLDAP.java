@@ -25,29 +25,29 @@ import java.util.Hashtable;
 import prodoc.PDException;
 import prodoc.PDExceptionFunc;
 /**
- *
+ * Authenticator that authenticates a user against an LDAP system
  * @author jhierrot
  */
 public class AuthLDAP extends AuthGeneric
 {
-    /**
-     *
-     * @param pServer
-     * @param pUser
-     * @param pPassword
-     * @param pParam
-     */
-    public AuthLDAP(String pServer, String pUser, String pPassword, String pParam)
+/**
+ * Constructor of the Ldap authenticator
+ * @param pServer utl of LDAP server
+ * @param pUser Not used in this authenticator
+ * @param pPassword Not used in this authenticator
+ * @param pParam "path/structure" of user
+ */
+public AuthLDAP(String pServer, String pUser, String pPassword, String pParam)
 {
 super(pServer, pUser, pPassword, pParam);
 }
 
 //----------------------------------------------------------------------
 /**
- *
- * @param User
- * @param Pass
- * @throws PDException
+ * Authenticates the user against ldap 
+ * @param User User to authenticate
+ * @param Pass Password of user
+ * @throws PDException if fails the authentication or in any technical error
  */
 @Override
 public void Authenticate(String User, String Pass) throws PDException
@@ -68,5 +68,4 @@ ctx.close();
     }
 }
 //----------------------------------------------------------------------
-
 }

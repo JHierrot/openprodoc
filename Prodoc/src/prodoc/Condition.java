@@ -28,8 +28,6 @@ import java.util.StringTokenizer;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import static prodoc.Attribute.StringListSeparator;
-import static prodoc.PDFolders.fGRANTPARENTID;
-import static prodoc.PDFolders.getRecordStructPDFolderLev;
 
 /**
  * Class for managing simple search conditions in OpenProdoc
@@ -122,20 +120,18 @@ final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyyMMdd");
  */
 private int TypeVal=-1;
 
-    /**
-     *
-     */
-    public final static String CONTAINS="CONTAINS";
-
-    /**
-     *
-     */
-    public final static String INTREE="IN_TREE";
-
-    /**
-     *
-     */
-    public final static String INFOLDER="IN_FOLDER";
+/**
+ * Constant operator: Condition for Documents containing a text expresion
+ */
+public final static String CONTAINS="CONTAINS";
+/**
+ * Constant operator: Condition for Documents or folders stored under a folder at any level
+ */
+public final static String INTREE="IN_TREE";
+/**
+ * Constant operator: Condition for Documents or folders stored DIRECTLY in a folder
+ */
+public final static String INFOLDER="IN_FOLDER";
 
 //-------------------------------------------------------------------------
 /**
@@ -172,7 +168,7 @@ TypeVal=Attr.getType();
 }
 //-------------------------------------------------------------------------
 /**
- * Constructor that creates a condition where pFied COMPARATION pValue
+ * Constructor that creates a condition where pField COMPARATION pValue
  * @param pField name of field to compare
  * @param pComparation Kind of comparation
  * cEQUAL   =0;
@@ -208,7 +204,7 @@ else if (pValue instanceof BigDecimal)
 }
 //-------------------------------------------------------------------------
 /**
- * Constructor that creates a condition where pFied COMPARATION pValue
+ * Constructor that creates a condition where pField COMPARATION pValue
  * @param pField name of field to compare
  * @param pComparation Kind of comparation
  * cEQUAL   =0;
@@ -246,7 +242,7 @@ Value=pField2;
 }
 //-------------------------------------------------------------------------
 /**
- * Compare the value of a field with a list of values (pFiled in (ListVal) )
+ * Compare the value of a field with a list of values (pField in (ListVal) )
  * @param pField name of field to compare
  * @param ListVal List of values
  * @throws PDException in any error
@@ -264,7 +260,7 @@ Value=ListVal;
 }
 //-------------------------------------------------------------------------
 /**
- * Compare the value of a field with the result of  query (pFiled in (select ) )
+ * Compare the value of a field with the result of  query (pField in (select ) )
  * @param pField name of field to compare
  * @param Search Query {@link prodoc.Query}
  * @throws PDException  in any error
@@ -282,46 +278,52 @@ Value=Search;
 }
 //-------------------------------------------------------------------------
 /**
-* @return the cType , the type of condition
-*/
+ * Returns the cType , the type of condition
+ * @return the cType , the type of condition
+ */
 public int getcType()
 {
 return cType;
 }
 //-------------------------------------------------------------------------
 /**
-* @return the Field
-*/
+ * Returns the Field
+ * @return the Field
+ */
 public String getField()
 {
 return Field;
 }
 //-------------------------------------------------------------------------
 /**
-* @return the Value
-*/
+ * Returns the Value or second operator
+ * @return the Value
+ */
 public Object getValue()
 {
 return Value;
 }
 //-------------------------------------------------------------------------
 /**
-* @return the Comparation
-*/
+ * Returns the Comparation/operator
+ * @return the Comparation
+ */
 public int getComparation()
 {
 return Comparation;
 }
 //-------------------------------------------------------------------------
 /**
-* @return the Invert , that is if wur condition has a "previous" NOT
-*/
+ * Returns the bvalue of inversion of condition, that is if condition has a "previous" NOT
+ * @return true when condition is "inverted", that is NOT (condition)
+ */
 public boolean isInvert()
 {
 return Invert;
 }
 //-------------------------------------------------------------------------
 /**
+ * Returns the TypeVal, the kind of value (String, Date,..)
  * @return the TypeVal, the kind of value (String, Date,..)
  */
 public int getTypeVal()
@@ -552,6 +554,13 @@ FoldRef=EvalId(FoldRef, Drv);
 return(new Condition(PDFolders.fPARENTID, Condition.cEQUAL, FoldRef));
 }
 //-------------------------------------------------------------------------
+/**
+ * Evaluates if the received value is a Foldrr ID or a folder path, returning always an ID
+ * @param FoldRef Folder referencie (Id or Path) to convert
+ * @param Drv OpenProdoc Session used when it's needed to cover frompath to Id
+ * @return Id of the Folder received
+ * @throws PDException in any error
+ */
 private static String EvalId(String FoldRef, DriverGeneric Drv) throws PDException
 {
 char C1 = FoldRef.charAt(0);

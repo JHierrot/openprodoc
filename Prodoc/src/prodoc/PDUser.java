@@ -127,9 +127,9 @@ static private ObjectsCache UserObjectsCache = null;
 private boolean ModePass=false;
 //-------------------------------------------------------------------------
 /**
- *
- * @param Drv 
- * @throws PDException
+ * Default constructor
+ * @param Drv  OopenProdoc Session
+ * @throws PDException in any error 
  */
 public PDUser(DriverGeneric Drv) throws PDException
 {
@@ -137,9 +137,9 @@ super(Drv);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Rec
- * @throws PDException
+ * Constructs a new object with the values of the record
+ * @param Rec Record with PDUser estructure
+ * @throws PDException in any error 
  */
 public PDUser(Record Rec) throws PDException
 {
@@ -172,7 +172,7 @@ return Name;
 
 /**
  * @param Name the Name to set
- * @throws PDExceptionFunc  
+ * @throws PDExceptionFunc in any error  
 */
 public void setName(String Name) throws PDExceptionFunc
 {
@@ -270,12 +270,12 @@ return AclList.size();
 //}
 ////-------------------------------------------------------------------------
 /**
- *
- * @return
+ * Return a list of ACL in which the current user is included 
+ * @return comma separated list 
  */
 public String ACLList()
 {
-StringBuffer ACLList=new StringBuffer();
+StringBuilder ACLList=new StringBuilder();
 String List[]=(String [])AclList.keySet().toArray();
 int Tot=AclList.size();
 for (int i = 0; i < Tot; i++)
@@ -305,8 +305,8 @@ return ACLList.toString();
 //}
 //-------------------------------------------------------------------------
 /**
- * object "method" needed because static overloading doesn't work in java
- * @return
+ * Returns the name of Users table in DDBB
+ * @return the name of Users table in DDBB
  */
 public String getTabName()
 {
@@ -314,8 +314,8 @@ return(getTableName());
 }
 //-------------------------------------------------------------------------
 /**
- * static equivalent method
- * @return
+ * Static method that returns the name of Users table in DDBB
+ * @return the name of Users table in DDBB
  */
 static public String getTableName()
 {
@@ -323,9 +323,9 @@ return("PD_USERS");
 }
 //-------------------------------------------------------------------------
 /**
- *
-     * @return 
- * @throws PDException 
+ * Returns a record with the current values
+ * @return a record with the current values
+ * @throws PDException in any error  
  */
 @Override
 synchronized public Record getRecord() throws PDException
@@ -440,7 +440,7 @@ return Validation;
 /**
  * Method for validation of the user (password, ldap, etc)
  * @param pValidation the Validation to set
- * @throws PDException 
+ * @throws PDException in any error  
 */
 public void setValidation(String pValidation) throws PDException
 {
@@ -453,7 +453,7 @@ public void setValidation(String pValidation) throws PDException
 /**
  *
  * @param Ident
- * @throws PDExceptionFunc  
+ * @throws PDExceptionFunc in any error   
  */
 protected void AsignKey(String Ident) throws PDExceptionFunc
 {
@@ -497,7 +497,7 @@ this.GroupList = GroupList;
 //-------------------------------------------------------------------------
 /**
  *
- * @throws PDException
+ * @throws PDException in any error 
  */
 protected void InsertMulti() throws PDException
 {
@@ -525,7 +525,7 @@ if (!getDrv().getUser().getName().equals("Install"))
 //-------------------------------------------------------------------------
 /**
  *
- * @throws PDException
+ * @throws PDException in any error 
  */
 protected  void InstallMulti()  throws PDException
 {
@@ -551,9 +551,9 @@ this.Role = Role;
 }
 //-------------------------------------------------------------------------
 /**
- * 
- * @param UserName
- * @throws PDException 
+ * Load complete information of the user
+ * @param UserName Name of User to load
+ * @throws PDException in any error  
  */
 public void LoadAll(String UserName) throws PDException
 {
@@ -625,7 +625,7 @@ if (PDLog.isDebug())
     /**
      *
      * @return
-     * @throws PDException
+     * @throws PDException in any error 
      */
 protected int RefreshAuth() throws PDException
 {
@@ -712,9 +712,9 @@ if (PDLog.isDebug())
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Acl
- * @return
+ * Verifies the permission the current user has for objects with an ACL
+ * @param Acl ACL to check
+ * @return permissions that the uses has
  */
 public int PermisionForAcl(String Acl)
 {
@@ -746,7 +746,7 @@ if (! (getDrv().getUser().getRol().isAllowMaintainUser() ||  ModePass && getDrv(
 /**
  * @return the a COPY of the Rol (for security reasons to avoid manipulation
  *         the rol is loaded by PDUser)
- * @throws PDException
+ * @throws PDException in any error 
 */
 public PDRoles getRol() throws PDException
 {
@@ -778,7 +778,7 @@ return(fNAME);
 //-------------------------------------------------------------------------
 /**
  *
- * @return
+ * @return the folder assigned to the user
  */
 public String getUserFolder()
 {
@@ -832,13 +832,13 @@ return(getName());
 }
 //-------------------------------------------------------------------------
 
-    /**
-     *
-     * @param User
-     * @param NewPass
-     * @throws PDException
-     */
-    public void UpdatePass(String User, String NewPass) throws PDException
+/**
+ * Updates the pàssword of an user
+ * @param User Name of user to update
+ * @param NewPass New password
+ * @throws PDException in any error 
+ */
+public void UpdatePass(String User, String NewPass) throws PDException
 {
 Load(User);
 setPassword(NewPass);

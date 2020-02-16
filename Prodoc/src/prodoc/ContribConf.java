@@ -25,8 +25,8 @@ import java.util.Properties;
 import java.util.Vector;
 
 /**
- *
- * @author Joaquin
+ * Class for managin the configuration of Contribution functionality
+ * @author jhierrot
  */
 public class ContribConf
 {
@@ -280,6 +280,7 @@ if (ConfMaxSize!=null && ConfMaxSize.trim().length()!=0)
 }
 //---------------------------------------------------------------------------- 
 /**
+ * Returns the string used as Title of List of documents
  * @return the TitleList
  */
 public String getTitleList()
@@ -435,112 +436,126 @@ return(null);
 }
 //---------------------------------------------------------------------------- 
 /**
-* @return the DocTipesList
-*/
+ * Return the list of Document types allowed to upload
+ * @return the DocTipesList
+ */
 public Vector<String> getDocTipesList()
 {
 return DocTipesList;
 }
 //----------------------------------------------------------------------------    
 /**
-* @return the FieldsToRead
-*/
+ * Return the Fields allowed to fill when creating Folders
+ * @return the FieldsToRead
+ */
 public Vector<String> getFieldsToRead()
 {
 return FieldsToRead;
 }
 //----------------------------------------------------------------------------    
 /**
-* @return the BaseFolder
-*/
+ * Returns the Base folder where all the subfolder will be created
+ * @return the basefolder
+ */
 public String getBaseFolder()
 {
 return BaseFolder;
 }
 //----------------------------------------------------------------------------    
 /**
-* @return the FormContribCSS
-*/
+ * Returns the CSS used in the contribution form
+ * @return the FormContribCSS
+ */
 public String getFormContribCSS()
 {
 return FormContribCSS;
 }
 //----------------------------------------------------------------------------    
 /**
-* @return the User
-*/
+ * Returns the User used internally for the contribution
+ * @return the User
+ */
 public String getUser()
 {
 return User;
 }
 //----------------------------------------------------------------------------    
 /**
-* @return the Pass
-*/
+ * Returns the Password of the User used internally for the contribution
+ * @return the Pass
+ */
 public String getPass()
 {
 return Pass;
 }
 //----------------------------------------------------------------------------    
 /**
-* @return the FormContribLogo
-*/
+ * Returns the logo used in the Contribution Form
+ * @return the FormContribLogo
+ */
 public String getFormContribLogo()
 {
 return FormContribLogo;
 }
 //----------------------------------------------------------------------------    
 /**
-* @return the Title
-*/
+ * Returns the Title of the Contriobution form
+ * @return the Title
+ */
 public String getTitle()
 {
 return Title;
 }
 //----------------------------------------------------------------------------    
 /**
-* @return the UrlHelp
-*/
+ * Returns the Url of the Help page
+ * @return the UrlHelp
+ */
 public String getUrlHelp()
 {
 return UrlHelp;
 }
 //---------------------------------------------------------
 /**
-* @return the OpenContrib
-*/
+ * When true, the contribution system is "open"
+ * @return the OpenContrib
+ */
 public boolean isOpenContrib()
 {
 return OpenContrib;
 }
 //---------------------------------------------------------
 /**
-* @return the LoginFolderType
-*/
+ * Returns the type of Folder used for Login and for creating the users folders
+ * @return the LoginFolderType
+ */
 public String getLoginFolderType()
 {
 return LoginFolderType;
 }
 //---------------------------------------------------------
 /**
-* @return the LoginFields
-*/
+ * Returns the list of Fields for verification of login
+ * @return the LoginFields
+ */
 public Vector<String> getLoginFields()
 {
 return LoginFields;
 }
 //---------------------------------------------------------
 /**
-* @return the DocsReportId
-*/
+ * Return the Id of Document of kind Report used for list the documents
+ * @return the DocsReportId
+ */
 public String getDocsReportId()
 {
 return DocsReportId;
 }
 //---------------------------------------------------------
 /**
-* @return the FieldsByType
-*/
+ * Return the list of fields of documents allowed to fill by document type
+ * @return the FieldsByType
+ */
 private HashMap<String, HashSet> getFieldsByType()
 {
 return FieldsByType;
@@ -600,6 +615,7 @@ return (AllowedExt.contains(NewExt));
 }
 //-----------------------------------------------------------------------------------------------
 /**
+ * Returns the Maximum Size of a file to be upload (always limited also by configuration of J2EE server)
  * @return the MaxSize
  */
 public int getMaxSize()
@@ -607,20 +623,21 @@ public int getMaxSize()
 return MaxSize;
 }
 //-----------------------------------------------------------------------------------------------
-
-    /**
-     * @return the Id
-     */
-    public String getId()
-    {
-        return Id;
-    }
-
-    /**
-     * @return the OKMsg
-     */
-    public String getOKMsg()
-    {
-        return OKMsg;
-    }
+/**
+ * @return the Id
+ */
+public String getId()
+{
+return Id;
+}
+//-----------------------------------------------------------------------------------------------
+/**
+ * Returns the Msg to show when the upload is ok
+ * @return the OKMsg
+ */
+public String getOKMsg()
+{
+return OKMsg;
+}
+//-----------------------------------------------------------------------------------------------
 }

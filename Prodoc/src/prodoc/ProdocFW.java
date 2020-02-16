@@ -41,7 +41,7 @@ static private Properties ProdocProperties = new Properties();
  *
  * @param ConectorName
  * @param FileConf
- * @throws PDException
+ * @throws PDException in any exception
  */
 static private synchronized void InitEngine(String ConectorName, String FileConf) throws PDException
 {
@@ -66,7 +66,7 @@ SearchConector(ConectorName);
 /**
  *
  * @param FileConf
- * @throws PDException
+ * @throws PDException in any exception
  */
 static private void ReadConfiguration(String FileConf) throws PDException
 {
@@ -80,10 +80,10 @@ ExtConf.AssignDefConf(ProdocProperties);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param ConectorName
- * @param FileConf
- * @throws PDException
+ * Init all the OpenProdoc framework
+ * @param ConectorName Name of connector 
+ * @param FileConf Path to the Prodoc.properties file
+ * @throws PDException in any exception
  */
 static public void InitProdoc(String ConectorName, String FileConf) throws PDException
 {
@@ -140,9 +140,9 @@ else
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param ConectorName
- * @throws PDException
+ * Stops OpenProdoc releasing any resource
+ * @param ConectorName name of the conector to releas
+ * @throws PDException in any exception
  */
 static public void ShutdownProdoc(String ConectorName) throws PDException
 {
@@ -152,12 +152,12 @@ SearchConector(ConectorName).Shutdown();
 }
 //---------------------------------------------------------------------
 /**
- *
- * @param ConectorName
- * @param user
- * @param Password
- * @return
- * @throws PDException
+ * Returns an OpenProdoc Session, creating one when needed
+ * @param ConectorName Name of the connector
+ * @param user OpenProdoc User Name
+ * @param Password User password
+ * @return Created session
+ * @throws PDException in any exception
  */
 static public DriverGeneric getSession(String ConectorName, String user, String Password) throws PDException
 {
@@ -167,10 +167,10 @@ return SearchConector(ConectorName).getSession(user, Password);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param ConectorName 
- * @param Session
- * @throws PDException
+ * releases a reserved session
+ * @param ConectorName Connector name
+ * @param Session Session previpusly reserved
+ * @throws PDException in any exception
  */
 static public void freeSesion(String ConectorName, DriverGeneric Session)  throws PDException
 {

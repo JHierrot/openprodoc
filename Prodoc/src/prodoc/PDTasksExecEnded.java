@@ -62,9 +62,9 @@ private String Result;
 private boolean EndsOk;
 
 /**
- * 
- * @param Drv
- * @throws PDException
+ * Dafult constructor
+ * @param Drv Openprodoc Session
+ * @throws PDException in any error
  */
 public PDTasksExecEnded(DriverGeneric Drv)  throws PDException
 {
@@ -72,9 +72,9 @@ super(Drv);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Rec
- * @throws PDException
+ * Assign new values to the TasksExecEnded object
+ * @param Rec Record of TasksExecEnded type with new values
+ * @throws PDException in any error
  */
 @Override
 public void assignValues(Record Rec) throws PDException
@@ -92,9 +92,9 @@ assignCommonValues(Rec);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
- * @throws PDException
+ * Returns a record with the current values
+ * @return a record with the current values
+ * @throws PDException in any error
  */
 @Override
 synchronized public Record getRecord() throws PDException
@@ -112,9 +112,9 @@ return(Rec);
 
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Returns the name of TasksExecEnded table in DDBB
+ * @return the name of TasksExecEnded table in DDBB
+ */
 @Override
 public String getTabName()
 {
@@ -122,9 +122,9 @@ return (getTableName());
 }
 //-------------------------------------------------------------------------
 /**
-*
-* @return
-*/
+ * Static method that returns the name of TasksExecEnded table in DDBB
+ * @return the name of TasksExecEnded table in DDBB
+ */
 static public String getTableName()
 {
 return ("PD_TASKS_ENDED");
@@ -189,7 +189,7 @@ return EndDate;
 }
 //-----------------------------------------------------------------------
 /**
- * @param NextDate 
+ * @param NextDate the nextdate
  */
 public void setEndDate(Date NextDate)
 {
@@ -231,7 +231,7 @@ this.EndsOk = EndsOk;
 /**
  *
  * @return
- * @throws PDException
+ * @throws PDException in any error
  */
 protected Conditions getConditions() throws PDException
 {
@@ -243,7 +243,7 @@ return(ListCond);
 /**
  *
  * @param Ident
- * @throws PDExceptionFunc  
+ * @throws PDExceptionFunc  in any error 
  */
 @Override
 protected void AsignKey(String Ident) throws PDExceptionFunc

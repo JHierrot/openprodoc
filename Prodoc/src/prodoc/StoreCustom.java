@@ -39,15 +39,14 @@ static private HashMap<String, Class> DownloadedClasses=new HashMap();
 static private HashMap<String, Properties> DownloadedProp=new HashMap();
 
 //-----------------------------------------------------------------
-
 /**
- *
- * @param pServer
- * @param pUser
- * @param pPassword
- * @param pParam
- * @param pEncrypt
- * @throws PDExceptionFunc
+ * Constructor of a Custom Storage controles
+ * @param pServer Url or reference to the server
+ * @param pUser  User name/reference (Optional)
+ * @param pPassword Password (Optional)
+ * @param pParam additional params (Optional)
+ * @param pEncrypt when true the repository will be encripted
+ * @throws PDExceptionFunc in any error
  */
 public StoreCustom(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt) throws PDExceptionFunc
 {
@@ -55,14 +54,14 @@ super(pServer, pUser, pPassword, pParam, pEncrypt);
 }
 //-----------------------------------------------------------------
 /**
- *
- * @param pServer
- * @param pUser
- * @param pPassword
- * @param pParam
- * @param pEncrypt
- * @param Drv
- * @throws PDExceptionFunc
+ * Constructor of a Custom Storage controles
+ * @param pServer Url or reference to the server
+ * @param pUser  User name/reference (Optional)
+ * @param pPassword Password (Optional)
+ * @param pParam additional params (Optional)
+ * @param pEncrypt when true the repository will be encripted
+ * @param Drv OpenProdoc driver for downloading the custom development
+ * @throws PDExceptionFunc in any error
  */
 public StoreCustom(String pServer, String pUser, String pPassword, String pParam, boolean pEncrypt, DriverGeneric Drv) throws PDExceptionFunc
 {

@@ -143,9 +143,9 @@ static private String ImportReport;
 
 //-------------------------------------------------------------------------
 /**
- *
- * @param Drv
- * @throws PDException
+ * Deafult costructor
+ * @param Drv OpenProdoc Session
+ * @throws PDException in any error 
  */
 public PDThesaur(DriverGeneric Drv) throws PDException
 {
@@ -174,8 +174,8 @@ return PDId;
 }
 //-------------------------------------------------------------------------
 /**
- * @param pPDId
- * @throws PDExceptionFunc  
+ * @param pPDId the id of Thesaur or term
+ * @throws PDExceptionFunc in any error  
  */
 public void setPDId(String pPDId) throws PDExceptionFunc
 {
@@ -191,8 +191,8 @@ return Name;
 }
 //-------------------------------------------------------------------------
 /**
- * @param pName
- * @throws PDExceptionFunc  
+ * @param pName Name of thesaur or term
+ * @throws PDExceptionFunc  in any error  
 */
 public void setName(String pName) throws PDExceptionFunc
 {
@@ -209,7 +209,8 @@ Name = pName;
 //-------------------------------------------------------------------------
 /**
  * object "method" needed because static overloading doesn't work in java
- * @return
+ * Returns the name of Thesaur table in DDBB
+ * @return the name of Thesaur table in DDBB
  */
 @Override
 public String getTabName()
@@ -218,8 +219,8 @@ return(getTableName());
 }
 //-------------------------------------------------------------------------
 /**
- * static equivalent method
- * @return
+ * Static method that returns the name of Thesaur table in DDBB
+ * @return the name of Thesaur table in DDBB
  */
 static public String getTableName()
 {
@@ -228,7 +229,7 @@ return("PD_THESAUR");
 //-------------------------------------------------------------------------
 /**
  * static method
- * @return
+ * @return the name of hierarchical strucuture of thesaur
  */
 static public String getTableNameThesLev()
 {
@@ -237,7 +238,7 @@ return("PD_THES_LEV");
 //-------------------------------------------------------------------------
 /**
  * static method
- * @return
+ * @return the name of related terms
  */
 static public String getTableNameThesRT()
 {
@@ -246,7 +247,7 @@ return("PD_THES_RT");
 //-------------------------------------------------------------------------
 /**
  * static method
- * @return
+ * @return the name of the table of translate-equivalent terms
  */
 static public String getTableNameThesLang()
 {
@@ -254,9 +255,9 @@ return("PD_THES_LANG");
 }
 //-------------------------------------------------------------------------
 /**
- *
-     * @return 
- * @throws PDException
+ * Returns a record with the current values
+ * @return a record with the current values
+ * @throws PDException in any error 
  */
 @Override
 synchronized public Record getRecord() throws PDException
@@ -284,9 +285,9 @@ return( ThesaurStruct.Copy());
 }
 //-------------------------------------------------------------------------
 /**
- * Returns the fixed structure
- * @return
- * @throws PDException
+ * Returns the fixed structure of thesaur
+ * @return the fixed structure of thesaur
+ * @throws PDException in any error 
  */
 static public Record getRecordStructPDThesaur() throws PDException
 {
@@ -298,7 +299,7 @@ return(ThesaurStruct.Copy());
 /**
  * Returns the fixed structure
  * @return
- * @throws PDException
+ * @throws PDException in any error 
  */
 static private synchronized Record CreateRecordStructPDThesaur() throws PDException
 {
@@ -322,7 +323,7 @@ else
 /**
  * Returns the fixed structure for levels of Thesaurs
  * @return
- * @throws PDException
+ * @throws PDException in any error 
  */
 static protected Record getRecordStructPDThesaurLev() throws PDException
 {
@@ -334,7 +335,7 @@ return(ThesaurLevStruct.Copy());
 /**
  * Returns the fixed structure for levels of Thesaurs
  * @return
- * @throws PDException
+ * @throws PDException in any error 
  */
 static private synchronized Record CreateRecordStructPDThesaurLev() throws PDException
 {
@@ -352,7 +353,7 @@ else
 /**
  * Returns the fixed structure for levels of Thesaurs
  * @return
- * @throws PDException
+ * @throws PDException in any error 
  */
 static protected Record getRecordStructPDThesaurRT() throws PDException
 {
@@ -364,7 +365,7 @@ return(ThesaurRTStruct.Copy());
 /**
  * Returns the fixed structure for levels of Thesaurs
  * @return
- * @throws PDException
+ * @throws PDException in any error 
  */
 static private synchronized Record CreateRecordStructPDThesaurRT() throws PDException
 {
@@ -382,7 +383,7 @@ else
 /**
  * Returns the fixed structure for levels of Thesaurs
  * @return
- * @throws PDException
+ * @throws PDException in any error 
  */
 static protected Record getRecordStructPDThesaurLang() throws PDException
 {
@@ -394,7 +395,7 @@ return(ThesaurLangStruct.Copy());
 /**
  * Returns the fixed structure for levels of Thesaurs
  * @return
- * @throws PDException
+ * @throws PDException in any error 
  */
 static private synchronized Record CreateRecordStructPDThesaurLang() throws PDException
 {
@@ -412,7 +413,7 @@ else
 /**
  *
      * @return 
- * @throws PDException
+ * @throws PDException in any error 
  */
 protected Conditions getConditions() throws PDException
 {
@@ -424,7 +425,7 @@ return(ListCond);
 /**
  * Builds the default conditions identifying the Thesaur: Id="id"
  * @return List of conditions
- * @throws PDException
+ * @throws PDException in any error 
  */
 protected Conditions getConditionsMaint() throws PDException
 {
@@ -443,7 +444,7 @@ return(ListCond);
 /**
  *
  * @param Ident
- * @throws PDExceptionFunc  
+ * @throws PDExceptionFunc  in any error  
  */
 protected void AsignKey(String Ident) throws PDExceptionFunc
 {
@@ -454,7 +455,7 @@ setPDId(Ident);
 * The install method is generic because for instantiate a object, the class
 * need to access to the tables for definition
  * @param Drv
- * @throws PDException
+ * @throws PDException in any error 
 */
 static protected void InstallMulti(DriverGeneric Drv) throws PDException
 {
@@ -472,7 +473,7 @@ Drv.AddIntegrity(getTableNameThesLang(), fPDID2, getTableName(), fPDID);
 //-------------------------------------------------------------------------
 /**
  * creates a new term of the Thesaurus
- * @throws PDException
+ * @throws PDException in any error 
  */
 @Override
 public void insert() throws PDException
@@ -534,7 +535,7 @@ return ParentId;
 }
 //-------------------------------------------------------------------------
 /**
- * @param pParentId
+ * @param pParentId id of thesaur or broad term
  */
 public void setParentId(String pParentId)
 {
@@ -544,7 +545,7 @@ this.ParentId = pParentId;
 /**
  *
      * @param DefLang
- * @throws PDException
+ * @throws PDException in any error 
  */
 protected void CreateRootThesaur(String DefLang) throws PDException
 {
@@ -559,8 +560,8 @@ IsRootThesaur=false;
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @return
+ * Generates a new Id using the Openprodoc algorithm used for docs or folders
+ * @return the new generated Id
  */
 public String GenerateId()
 {
@@ -573,7 +574,7 @@ return genId.toString().substring(0,25); // less chars - more levels for languag
 //-------------------------------------------------------------------------
 /**
  *
- * @throws PDException
+ * @throws PDException in any error 
  */
 private void ActFoldLev() throws PDException
 {
@@ -592,10 +593,10 @@ for (Iterator it = GrandParentList.iterator(); it.hasNext();)
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Parent
- * @return a Set containing the parents of Parent
- * @throws PDException
+ * Search and return all de hierachy of parent terms, including the therausus
+ * @param Parent id of parent for looking for
+ * @return a Set containing the parents of Id received
+ * @throws PDException in any error 
  */
 public HashSet getListGrandParentList(String Parent) throws PDException
 {
@@ -621,10 +622,10 @@ return(Result);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param PDId
- * @return a Set containing the parents of Parent
- * @throws PDException
+ * Search and returns a Set containing the list of all narrow terms of a term
+ * @param PDId Id of therm
+ * @return a Set containing the list of all narrow terms
+ * @throws PDException in any error 
  */
 public HashSet getListDescendList(String PDId) throws PDException
 {
@@ -688,11 +689,11 @@ if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.delete<:"+getPDId());
 }
 //-------------------------------------------------------------------------
-    /**
-     *
-     * @throws PDException
-     */
-    public void DeleteTermRT() throws PDException
+/**
+ * Deletes all the relationship/related terms current id
+ * @throws PDException in any error 
+ */
+public void DeleteTermRT() throws PDException
 {   
 if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.DeleteTermRT:"+getPDId());     
@@ -703,11 +704,11 @@ Conds.setOperatorAnd(false);
 getDrv().DeleteRecord(getTableNameThesRT(), Conds);
 }
 //-------------------------------------------------------------------------
-    /**
-     *
-     * @throws PDException
-     */
-    public void DeleteTermLang() throws PDException
+/**
+ * Deletes all the relationship/translations terms current id
+ * @throws PDException in any error 
+ */
+public void DeleteTermLang() throws PDException
 {   
 if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.DeleteTermLang:"+getPDId());     
@@ -744,7 +745,7 @@ getDrv().CloseCursor(ListThesaursContained);
 //-------------------------------------------------------------------------
 /**
  * Deletes all the references in upper levels to this Thesaur
- * @throws PDException
+ * @throws PDException in any error 
  */
 private void DeleteFoldLevelParents()  throws PDException
 {
@@ -758,7 +759,7 @@ getDrv().DeleteRecord(getTableNameThesLev(), Conds);
 //-------------------------------------------------------------------------
 /**
  * Updates the metadata of the Thesaur
- * @throws PDException
+ * @throws PDException in any error 
  */
 @Override
 public void update()  throws PDException
@@ -813,11 +814,12 @@ return(Result);
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param Ident
- * @return
- * @throws PDException
+ * Loads a Term/Thesaurus
+ * @param Ident Id of element to load
+ * @return a Record containing the loaded term
+ * @throws PDException in any error 
  */
+@Override
 public Record Load(String Ident)  throws PDException
 {
 if (PDLog.isDebug())
@@ -881,7 +883,7 @@ return((String)A.getValue());
  * @param AttrConds Conditions over the fields ofthe ThesaurType
  * @param SubThesaurs if true seach in actual Thesaur AND subThesaurs, if false, serach in ALL the structure
  * @param IdActFold Thesaur to start the search. if null, start in the root level
- * @param Ord
+ * @param Ord Vector with the names of attributes for Order of results
  * @return a Cursor with the results of the query to use o send to NextTerm()
  * @throws PDException when occurs any problem
  */
@@ -960,7 +962,7 @@ return(getPDId());
 /**
  * Add aditional information, oriented a "extended" object with childrn nodes
  * @return The aditional XML
- * @throws PDException
+ * @throws PDException in any error 
  */
 @Override
 protected String toXML2() throws PDException
@@ -971,12 +973,12 @@ return(RFull.toXML()+"</ListAttr>");
 }
 //-------------------------------------------------------------------------
 /**
- *
- * @param OPDObject
- * @param ParentThesaurId
- * @param MaintainId
- * @return
- * @throws PDException
+ * Evaluates a XML Node and generates a Term
+ * @param OPDObject XML Node
+ * @param ParentThesaurId OpenProdoc Id of Parent Element
+ * @param MaintainId when true, the Id of Term will be maintained, otherwise, a new Id will be generated
+ * @return a new created term
+ * @throws PDException in any error 
  */
 public PDThesaur ImportXMLNode(Node OPDObject, String ParentThesaurId, boolean MaintainId) throws PDException
 {
@@ -1000,11 +1002,11 @@ return NewFold;
 }
 //---------------------------------------------------------------------
 /**
- * 
- * @param XMLFile
- * @param ParentThesaurId
- * @return 
- * @throws PDException
+ * Process a File containing a set of terms
+ * @param XMLFile File to import
+ * @param ParentThesaurId Id of thesaur where import
+ * @return the LAST term imported 
+ * @throws PDException in any error 
  */
 public PDThesaur ProcessXML(File XMLFile, String ParentThesaurId) throws PDException
 {
@@ -1036,8 +1038,8 @@ return Description;
 }
 //---------------------------------------------------------------------
 /**
- * @param pDescription
- * @throws PDExceptionFunc  
+ * @param pDescription Description to set
+ * @throws PDExceptionFunc in any error   
  */
 public void setDescription(String pDescription) throws PDExceptionFunc
 {
@@ -1065,7 +1067,7 @@ this.Use = Use;
 /**
  * List all the Thesaurs
  * @return hashset containing all the thesaurs Id
- * @throws PDException 
+ * @throws PDException in any error  
  */
 public HashSet ListThes() throws PDException
 {
@@ -1091,10 +1093,9 @@ return(Result);
 }
 //---------------------------------------------------------------------
 /** Obtain a list of the Codes of related terms
- * 
- * @param TermId
- * @return
- * @throws PDException
+ * @param TermId Id of term to look for relations
+ * @return a HashSet with the Ids of Terms
+ * @throws PDException in any error 
  */
 public HashSet getListRT(String TermId) throws PDException
 {
@@ -1127,11 +1128,10 @@ if (PDLog.isDebug())
 return(ListRT);
 }
 //---------------------------------------------------------------------
-/** Obtain a list of the Codes of related terms
- * 
- * @param TermId
- * @return
- * @throws PDException
+/** Obtain a list of the Codes of translation terms
+ * @param TermId Id of term to look for translations
+ * @return a HashSet with the ids of Terms
+ * @throws PDException in any error 
  */
 public HashSet getListLang(String TermId) throws PDException
 {
@@ -1166,9 +1166,9 @@ return(ListRT);
 //---------------------------------------------------------------------
 /** 
  * Obtain a CURSOR of {@link prodoc.Record} of narrow terms
- * @param TermId
- * @return
- * @throws PDException
+ * @param TermId If of Term to look for narrow terms
+ * @return a created cursor
+ * @throws PDException in any error 
  */
 public Cursor ListNT(String TermId) throws PDException
 {
@@ -1181,10 +1181,9 @@ return(CursorId);
 }
 //---------------------------------------------------------------------
 /** Obtain a CURSOR of the <b>Records</b> of related terms
- * 
- * @param TermId
- * @return
- * @throws PDException
+ * @param TermId Id of term to llok for relations
+ * @return Created Cursor
+ * @throws PDException in any error 
  */
 public Cursor ListRT(String TermId) throws PDException
 {
@@ -1196,11 +1195,10 @@ if (PDLog.isDebug())
 return(CursorId);
 }
 //---------------------------------------------------------------------
-/** Obtain a CURSOR of the <b>Records</b> of related terms
- * 
- * @param TermId
- * @return
- * @throws PDException
+/** Obtain a CURSOR of the <b>Records</b> of translation terms
+ * @param TermId Id of Term to look for translations
+ * @return the created cursor
+ * @throws PDException in any error 
  */
 public Cursor ListLang(String TermId) throws PDException
 {
@@ -1213,10 +1211,9 @@ return(CursorId);
 }
 //---------------------------------------------------------------------
 /** Obtain a list of the Codes of Used For terms
- * 
- * @param TermId
- * @return
- * @throws PDException
+ * @param TermId If of term to look for UF
+ * @return HashSet with lift if Ids
+ * @throws PDException in any error 
  */
 public HashSet getListUF(String TermId) throws PDException
 {
@@ -1248,10 +1245,10 @@ return(ListUF);
 }
 //---------------------------------------------------------------------
 /**
- *
- * @param TermId
- * @return
- * @throws PDException
+ * Creates a Cursor with the terms UF
+ * @param TermId Id of Term to look for UF
+ * @return the created cursor
+ * @throws PDException in any error 
  */
 public Cursor ListUF(String TermId) throws PDException
 {
@@ -1312,15 +1309,8 @@ return(ListAtr);
  * 
  *
  * @return
- * @throws PDException
+ * @throws PDException in any error 
  */
-
-    /**
-     *
-     * @return
-     * @throws PDException
-     */
-
 public String getIDThesaur() throws PDException
 {
 if (getParentId().equals(PDThesaur.ROOTTERM))
@@ -1330,12 +1320,12 @@ Term.Load(getParentId());
 return(Term.getIDThesaur());
 }
 //---------------------------------------------------------------------
-    /**
-     *
-     * @param memRT
-     * @throws PDException
-     */
-    public void AddRT(HashSet memRT) throws PDException
+/**
+ * Adds a list of Id of Terms as Relations to the current Term
+ * @param memRT HasSet of Id of Terms
+ * @throws PDException in any error 
+ */
+public void AddRT(HashSet memRT) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.AddRT:"+getPDId()+">"+memRT);
@@ -1372,12 +1362,12 @@ if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.AddRT:"+getPDId()+"<");
 }
 //---------------------------------------------------------------------
-    /**
-     *
-     * @param memLang
-     * @throws PDException
-     */
-    public void AddLang(HashSet memLang) throws PDException
+/**
+ * Adds a list of Id of Terms as translations Relations to the current Term
+ * @param memLang HasSet of Id of Terms
+ * @throws PDException in any error 
+ */
+public void AddLang(HashSet memLang) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDThesaurs.AddLang:"+getPDId()+">"+memLang);
@@ -1455,7 +1445,7 @@ else
  * @param Path Complete name of file to export
  * @param Root Root to be included in the RDF (i.e. :http://metadataregistry.org/uri/FTWG/ )
  * @param MainLang Language that defines the ID of terms and "walking" of thesaur
- * @throws PDException  
+ * @throws PDException   in any error 
  */
 public void Export(String ExpThesId, String Path, String Root, String MainLang) throws PDException
 {
@@ -1488,7 +1478,7 @@ if (PDLog.isDebug())
  * @param PW PrintWriter for printint Thesaur. MUST be closed by calling appication
  * @param Root Root to be included in the RDF (i.e. :http://metadataregistry.org/uri/FTWG/ )
  * @param MainLang Language that defines the ID of terms and "walking" of thesaur
- * @throws PDException  
+ * @throws PDException   in any error 
  */
 public void Export(String ExpThesId, PrintWriter PW, String Root, String MainLang) throws PDException
 {
@@ -1674,16 +1664,16 @@ if (PDLog.isDebug())
 //---------------------------------------------------------------------
 /**
  * Import a thesaurus in RDF-XML format
- * @param ThesName 
+ * @param ThesName Name of Thesaurus to import
  * @param ImpThesId thesaurus Id
- * @param XMLFile 
+ * @param XMLFile File to import
  * @param Root Root to be included in the RDF (i.e. :http://metadataregistry.org/uri/FTWG/ )
  * @param MainLang Language that defines the ID of terms and "walking" of thesaur
-     * @param SubThesLang
-     * @param Transact
-     * @param RetainCodes
- * @return 
- * @throws PDException  
+ * @param SubThesLang when true, a subthesaurus by language will be created
+ * @param Transact when true, the import will be transactional (roolback in any error)
+ * @param RetainCodes when true, the original codes of terms will be used
+ * @return number of terms imported
+ * @throws PDException in any error   
  */
 synchronized public int Import(String ThesName, String ImpThesId, InputStream XMLFile, String MainLang, String Root, boolean SubThesLang, boolean Transact, boolean RetainCodes) throws PDException
 {
@@ -1703,6 +1693,20 @@ return(ImportThes(ThesName, ImpThesId, DB, XMLObjects, MainLang, Root, SubThesLa
     }
 
 }
+//---------------------------------------------------------------------
+/**
+ * Import a thesaurus in RDF-XML format
+ * @param ThesName Name of Thesaurus to import
+ * @param ImpThesId thesaurus Id
+ * @param XMLFile File to import
+ * @param Root Root to be included in the RDF (i.e. :http://metadataregistry.org/uri/FTWG/ )
+ * @param MainLang Language that defines the ID of terms and "walking" of thesaur
+ * @param SubThesLang when true, a subthesaurus by language will be created
+ * @param Transact when true, the import will be transactional (roolback in any error)
+ * @param RetainCodes when true, the original codes of terms will be used
+ * @return number of terms imported
+ * @throws PDException in any error   
+ */
 synchronized private int ImportThes(String ThesName, String ImpThesId, DocumentBuilder DB, Document XMLObjects, String MainLang, String Root, boolean SubThesLang, boolean Transact, boolean RetainCodes) throws PDException
 {
 try {
@@ -1819,16 +1823,16 @@ return(Tot);
 //---------------------------------------------------------------------
 /**
  * Import a thesaurus in RDF-XML format
- * @param ThesName 
+ * @param ThesName Name of Thesaurus to import
  * @param ImpThesId thesaurus Id
- * @param XMLFile 
+ * @param XMLFile File to import
  * @param Root Root to be included in the RDF (i.e. :http://metadataregistry.org/uri/FTWG/ )
  * @param MainLang Language that defines the ID of terms and "walking" of thesaur
-     * @param SubThesLang
-     * @param Transact
-     * @param RetainCodes
- * @return 
- * @throws PDException  
+ * @param SubThesLang when true, a subthesaurus by language will be created
+ * @param Transact when true, the import will be transactional (roolback in any error)
+ * @param RetainCodes when true, the original codes of terms will be used
+ * @return number of terms imported
+ * @throws PDException in any error   
  */
 synchronized public int Import(String ThesName, String ImpThesId, File XMLFile, String MainLang, String Root, boolean SubThesLang, boolean Transact, boolean RetainCodes) throws PDException
 {
@@ -1856,9 +1860,8 @@ return(ImportThes(ThesName, ImpThesId, DB, XMLObjects, MainLang, Root, SubThesLa
  * @param Root Root to be included in the RDF (i.e. :http://metadataregistry.org/uri/FTWG/ )
  * @param MainLang Language that defines the ID of terms and "walking" of thesaur
  * @return 
- * @throws PDException  
- */
-/**
+ * @throws PDException  in any error  
+
 synchronized public int Import2(String ThesName, String ImpThesId, File XMLFile, String MainLang, String Root, boolean SubThesLang, boolean Transact) throws PDException
 {
 if (PDLog.isDebug())
@@ -2415,12 +2418,11 @@ if (NewId==null)
 return (NewId);
 }
 //---------------------------------------------------------------------
-
-    /**
-     *
-     * @return
-     */
-    static public String getImportReport()
+/**
+ * returns the Report created after importing a SKOS file
+ * @return the Report created
+ */
+static public String getImportReport()
 {
 return(ImportReport);
 }

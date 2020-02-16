@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Properties;
 import java.util.Vector;
-import prodoc.security.AuthGeneric;
 /**
  * Class connector responsible of reading configuration, starting tasks 
  * and managing sessions to an specific OpenProdoc Repository
@@ -368,6 +367,7 @@ return(IsInstallMode);
 }
 //--------------------------------------------------------------------------
 /**
+ * returns true when the API REST mode is enabled in configuration
  * @return the APIREST
  */
 public static boolean isAPIREST()
@@ -376,7 +376,8 @@ return APIREST;
 }
 //--------------------------------------------------------------------------
 /**
- * @return the APIRem
+ * returns true when the remote mode is enabled in configuration
+ * @return the APIRem value
  */
 public static boolean isAPIRem()
 {
