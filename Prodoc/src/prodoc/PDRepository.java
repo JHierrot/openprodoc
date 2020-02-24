@@ -22,7 +22,7 @@ package prodoc;
 import java.util.HashSet;
 
 /**
- *
+ * Manages the definitions of different repositories for storing the documents.
  * @author jhierrot
  */
 public class PDRepository extends ObjPD

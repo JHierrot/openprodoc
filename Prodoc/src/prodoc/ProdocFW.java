@@ -24,7 +24,7 @@ import java.util.Hashtable;
 import java.util.Properties;
 
 /**
- *
+ * Framework that works as Foundation of OpenProdoc
  * @author jhierrot
  */
 public class ProdocFW

@@ -24,7 +24,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 /**
- *
+ * Manages the users stored
  * @author jhierrot
  */
 public class PDUser extends ObjPD

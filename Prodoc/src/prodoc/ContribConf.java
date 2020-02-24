@@ -624,6 +624,7 @@ return MaxSize;
 }
 //-----------------------------------------------------------------------------------------------
 /**
+ * Identifier of Contribution file/configuration
  * @return the Id
  */
 public String getId()

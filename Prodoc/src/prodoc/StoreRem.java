@@ -42,7 +42,7 @@ import static prodoc.DriverRemote.ORDER;
 import static prodoc.DriverRemote.PARAM;
 
 /**
- *
+ * Manages the documents when OpenProdoc is working in a REMOTE mode an the storage is managed remotely
  * @author jhierrot
  */
 public class StoreRem extends StoreGeneric

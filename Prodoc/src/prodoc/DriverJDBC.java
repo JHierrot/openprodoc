@@ -34,7 +34,7 @@ import java.util.Vector;
 
 
 /**
- *
+ * Subclass of DriverGeneric that manages the storage of metadata in a Database 
  * @author jhierrot
  */
 public class DriverJDBC extends DriverGeneric

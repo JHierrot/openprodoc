@@ -23,7 +23,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- *
+ * Manages the documents REFERENCED in an URL/web
  * @author jhierrot
  */
 public class StoreRefURL extends StoreGeneric

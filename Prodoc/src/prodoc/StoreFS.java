@@ -26,7 +26,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 /**
- *
+ * Manages the storage of documents in a filesystem
  * @author jhierrot
  */
 public class StoreFS extends StoreGeneric

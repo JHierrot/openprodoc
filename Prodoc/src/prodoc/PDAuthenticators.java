@@ -81,8 +81,9 @@ public static final String tCUSTOM="CUSTOM";
  */
 private static HashSet tList=null;
 /**
-* @return the tList
-*/
+ * Returns a list to type of Authenticators supported by OpenProdoc
+ * @return the tList
+ */
 public static HashSet gettList()
 {
 if (tList==null)

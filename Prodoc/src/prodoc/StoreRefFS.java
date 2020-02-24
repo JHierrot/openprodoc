@@ -23,7 +23,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- *
+ * Manages the documents REFERENCED in a Filesystem
  * @author jhierrot
  */
 public class StoreRefFS extends StoreGeneric

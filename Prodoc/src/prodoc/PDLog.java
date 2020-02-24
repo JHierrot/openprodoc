@@ -26,7 +26,7 @@ import org.apache.log4j.PropertyConfigurator;
 
 
 /**
- *
+ * Encapsulates the logger (currently using log4j)
  * @author jhierrot
  */
 public class PDLog

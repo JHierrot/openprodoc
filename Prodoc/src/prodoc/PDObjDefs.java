@@ -26,7 +26,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- *
+ * Manages the definitions of Documents and Folder Types, including 
+ * the creation and maintenance of tables for storaging the metadata of each type
  * @author jhierrot
  */
 public class PDObjDefs extends ObjPD
@@ -207,6 +208,11 @@ public PDObjDefs(DriverGeneric Drv)
 super(Drv);
 }
 //-------------------------------------------------------------------------
+/**
+ * Assign new values to the ObjDef object
+ * @param Rec Record of ObjDef type with new values
+ * @throws PDException in any error
+ */
 @Override
 public void assignValues(Record Rec) throws PDException
 {
@@ -214,9 +220,9 @@ setName((String) Rec.getAttr(fNAME).getValue());
 setClassType((String) Rec.getAttr(fCLASSTYPE).getValue());
 setDescription((String) Rec.getAttr(fDESCRIPTION).getValue());
 if (Rec.getAttr(fACTIVE).getValue()!=null)
-    setActive(((Boolean)Rec.getAttr(fACTIVE).getValue()).booleanValue());
+    setActive((Boolean)Rec.getAttr(fACTIVE).getValue());
 if (Rec.getAttr(fCREATED).getValue()!=null)
-    setCreated(((Boolean)Rec.getAttr(fCREATED).getValue()).booleanValue());
+    setCreated((Boolean)Rec.getAttr(fCREATED).getValue());
 setACL((String)  Rec.getAttr(fACL).getValue());
 setParent((String)  Rec.getAttr(fPARENT).getValue());
 if (getClassType()!=null && getClassType().equalsIgnoreCase(CT_DOC))
@@ -268,16 +274,20 @@ this.Description = Description;
 }
 //-------------------------------------------------------------------------
 /**
-* @return the Active
-*/
+ * When true, the definition is active and can be used, otherwise is "deprecated"
+ * and elements of the type can NOT be inserted
+ * @return the Active
+ */
 public boolean isActive()
 {
 return Active;
 }
 //-------------------------------------------------------------------------
 /**
-* @param Active the Active to set
-*/
+ * When true, the definition is active and can be used, otherwise is "deprecated"
+ * and elements of the type can NOT be inserted
+ * @param Active the Active to set
+ */
 public void setActive(boolean Active)
 {
 this.Active = Active;
@@ -423,8 +433,8 @@ else
 //-------------------------------------------------------------------------
 /**
  *
-     * @return 
-     * @throws prodoc.PDException
+ * @return 
+ * @throws prodoc.PDException
  */
 @Override
 protected Conditions getConditions() throws PDException
@@ -488,32 +498,36 @@ getDrv().AddIntegrity(getTabName(),      fREPOSIT, PDRepository.getTableName(), 
 }
 //-------------------------------------------------------------------------
 /**
-* @return the Parent
-*/
+ * Returns the Parent Class
+ * @return the Parent
+ */
 public String getParent()
 {
 return Parent;
 }
 //-------------------------------------------------------------------------
 /**
-* @param Parent the Parent to set
-*/
+ * Set the parent class
+ * @param Parent the Parent to set
+ */
 public void setParent(String Parent)
 {
 this.Parent = Parent;
 }
 //-------------------------------------------------------------------------
 /**
-* @return the Reposit
-*/
+ * Returns the Reposit where the documents binaries wil be stored 
+ * @return the Reposit
+ */
 public String getReposit()
 {
 return Reposit;
 }
 //-------------------------------------------------------------------------
 /**
-* @param Reposit the Reposit to set
-*/
+ * Sets the Reposit where the documents binaries wil be stored 
+ * @param Reposit the Reposit to set
+ */
 public void setReposit(String Reposit)
 {
 if (getClassType()!=null && !getClassType().equals(CT_FOLDER))    
@@ -586,7 +600,7 @@ if (PDLog.isDebug())
 }
 //-------------------------------------------------------------------------
 /**
- *
+ * Deletes ALL the Attributes of the current definition
  * @throws PDException in any error 
  */
 public void DelAtributes() throws PDException
@@ -651,8 +665,9 @@ return(Attr);
 }
 //-------------------------------------------------------------------------
 /**
-* @return the ClassType
-*/
+ * Returns the ClassType (DOCUMENT or FOLDER)
+ * @return the ClassType
+ */
 public String getClassType()
 {
 return ClassType;
@@ -1408,16 +1423,18 @@ for (int NumNodes = 0; NumNodes < childNodes.getLength(); NumNodes++)
 }    
 //-------------------------------------------------------------------------
 /**
-* @return the Created
-*/
+ * When true, the definition is created and elements of the type can be inserted
+ * @return the Created
+ */
 public boolean isCreated()
 {
 return Created;
 }
 //-------------------------------------------------------------------------
 /**
-* @param Created the Created to set
-*/
+ * When true, the definition is created and elements of the type can be inserted
+ * @param Created the Created to set
+ */
 public void setCreated(boolean Created)
 {
 this.Created = Created;

@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.TreeSet;
 
 /**
- *
+ * Manages the importa and export of subtype of documents RIS
  * @author Joaquin
  */
 public class PDDocsRIS extends PDDocs

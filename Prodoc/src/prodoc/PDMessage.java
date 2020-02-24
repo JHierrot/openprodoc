@@ -22,7 +22,7 @@ package prodoc;
 import java.util.Date;
 
 /**
- *
+ * Prepared for a FUTURE storage of Message between Users
  * @author jhierrot
  */
 public class PDMessage extends ObjPD

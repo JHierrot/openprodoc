@@ -20,7 +20,7 @@
 package prodoc;
 
 /**
- *
+ * Class that manages the configuration of OpenProdoc in database using just one record.
  * @author jhierrot
  */
 public class PDServer extends ObjPD

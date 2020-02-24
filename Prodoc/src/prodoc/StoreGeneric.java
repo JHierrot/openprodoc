@@ -30,7 +30,7 @@ import org.apache.commons.codec.binary.Base64InputStream;
 import org.apache.commons.io.IOUtils;
 
 /**
- *
+ * Abstract class parent of all the storage classes
  * @author jhierrot
  */
 public abstract class StoreGeneric

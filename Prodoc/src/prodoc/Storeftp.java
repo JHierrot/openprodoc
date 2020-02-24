@@ -25,7 +25,7 @@ import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 
 /**
- *
+ * manages the storage in a FTP server
  * @author jhierrot
  */
 public class Storeftp extends StoreGeneric

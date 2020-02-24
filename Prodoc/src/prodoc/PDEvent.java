@@ -22,7 +22,7 @@ package prodoc;
 import java.util.Date;
 
 /**
- *
+ * Manages the storage of Events definitions
  * @author jhierrot
  */
 public class PDEvent extends ObjPD

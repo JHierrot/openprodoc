@@ -29,7 +29,7 @@ import org.apache.tika.sax.BodyContentHandler;
 import org.xml.sax.ContentHandler;
 
 /**
- *
+ * Abstract parent class of all the Full Text implementations
  * @author Joaquín Hierro
  */
 public abstract class FTConnector
@@ -80,12 +80,13 @@ final public static String F_PREFIX="F_";
 final public static int MAXRESULTS=1000;
 
 /**
- *
- * @param pUrl
- * @param User
- * @param password
+ * Default constructor
+ * @param pServer URL/reference of Ft server
+ * @param pUser  User for accessing to the FT functions
+ * @param pPassword Password for accessing to the FT functions
+ * @param pParam Additional params for the FT functions
  */
-FTConnector(String pServer, String pUser, String pPassword, String pParam)
+public FTConnector(String pServer, String pUser, String pPassword, String pParam)
 {
 Server=pServer;
 User=pUser;
@@ -242,16 +243,18 @@ return(FullText);
 }
 //------------------------------------------------------------------------
 /**
-* @return the Fulltext
-*/
+ * Returns the Fulltext of the Document under indexing
+ * @return the Fulltext
+ */
 public String getFullText()
 {
 return FullText;
 }
 //------------------------------------------------------------------------
 /**
-* @return the Metadata
-*/
+ * Returns the Metadata of the Document under indexing
+ * @return the Metadata
+ */
 public String getFileMetadata()
 {
 return FileMetadata;
@@ -266,8 +269,8 @@ return Lang;
 }
 //------------------------------------------------------------------------
 /**
-     * @param pLang
-*/
+ * @param pLang
+ */
 protected void setLang(String pLang)
 {
 if (pLang!=null)
@@ -275,16 +278,16 @@ if (pLang!=null)
 }
 //------------------------------------------------------------------------
 /**
-* @return the StopWords
-*/
+ * @return the StopWords
+ */
 protected String getStopWords()
 {
 return StopWords;
 }
 //------------------------------------------------------------------------
 /**
-* @param StopWords the StopWords to set
-*/
+ * @param StopWords the StopWords to set
+ */
 protected void setStopWords(String StopWords)
 {
 this.StopWords = StopWords;

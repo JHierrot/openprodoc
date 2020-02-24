@@ -25,7 +25,7 @@ import java.net.URLClassLoader;
 import java.util.HashMap;
 
 /**
- *
+ * Manages the download an execution of a custom task
  * @author jhierrot
  */
 public class CustomTask
@@ -33,14 +33,13 @@ public class CustomTask
 private CustomTask Bin=null;    
 private static final HashMap<String, Class> DownloadedClasses=new HashMap();
 //-----------------------------------------------------------------
-
-    /**
-     *
-     * @param Drv
-     * @param PDId
-     * @param ClassName
-     * @throws PDExceptionFunc
-     */
+/**
+ *
+ * @param Drv
+ * @param PDId
+ * @param ClassName
+ * @throws PDExceptionFunc
+ */
 protected CustomTask(DriverGeneric Drv, String PDId, String ClassName) throws PDExceptionFunc
 {
 try {
@@ -78,57 +77,54 @@ if (PDLog.isInfo())
 Bin.ExecuteEventDoc(Param1, Param2, Param3, Param4, Doc);
 }
 //-----------------------------------------------------------------
-
-    /**
-     *
-     * @param param
-     * @param param2
-     * @param param3
-     * @param param4
-     * @param Rec
-     * @param Drv
-     * @return
-     * @throws PDException
-     */
-final protected boolean CustomMeetsReq(String param, String param2, String param3, String param4, Record Rec, DriverGeneric Drv)  throws PDException
+/**
+ * Checks if the attributes of the object match the requirements of the task
+ * @param Param1 Parameter 1 of the configured Event
+ * @param Param2 Parameter 2 of the configured Event
+ * @param Param3 Parameter 3 of the configured Event
+ * @param Param4 Parameter 4 of the configured Event
+ * @param Rec Record to check the values of Attributes of event
+ * @param Drv OpenProdoc Session for checking any information
+ * @return true if the recoed Meets the requirements
+ * @throws PDException in any error
+ */
+final protected boolean CustomMeetsReq(String Param1, String Param2, String Param3, String Param4, Record Rec, DriverGeneric Drv)  throws PDException
 {
-return(Bin.CustomMeetsReqRec(param, param2, param3, param4, Rec, Drv));
+return(Bin.CustomMeetsReqRec(Param1, Param2, Param3, Param4, Rec, Drv));
 }
 //-----------------------------------------------------------------    
-
-    /**
-     *
-     * @param Drv
-     * @param ObjectType
-     * @param Filter
-     * @param param
-     * @param param2
-     * @param param3
-     * @param param4
-     * @return
-     * @throws PDException
-     */
-final protected Cursor CurCustom(DriverGeneric Drv, String ObjectType, String Filter, String param, String param2, String param3, String param4)   throws PDException
+/**
+ * Creates a Cursor with all the objects that match the parameters (Objecttype, filter, params,,....)
+ * @param Drv OpenProdoc Session for checking any information
+ * @param ObjectType kind of Object
+ * @param Filter Filter
+ * @param Param1 Parameter 1 of the configured Event
+ * @param Param2 Parameter 2 of the configured Event
+ * @param Param3 Parameter 3 of the configured Event
+ * @param Param4 Parameter 4 of the configured Event
+ * @return The created cursor
+ * @throws PDException in any error
+ */
+final protected Cursor CurCustom(DriverGeneric Drv, String ObjectType, String Filter, String Param1, String Param2, String Param3, String Param4 )  throws PDException
 {
-return(Bin.CursorCustom( Drv, ObjectType, Filter, param, param2, param3, param4));
+return(Bin.CursorCustom( Drv, ObjectType, Filter, Param1, Param2, Param3, Param4));
 }
-
-    /**
-     *
-     * @param drv
-     * @param objType
-     * @param objFilter
-     * @param param
-     * @param param2
-     * @param param3
-     * @param param4
-     * @throws PDException
-     */
-    final protected void ExecuteCustomCron(DriverGeneric drv, String objType, String objFilter, String param, String param2, String param3, String param4) throws PDException
+//-----------------------------------------------------------------
+/**
+ * Executes the task over all the objects that match the parameters (Objecttype, filter, params,,....)
+ * @param Drv OpenProdoc Session for checking any information
+ * @param objType kind of Object
+ * @param objFilter Filter
+ * @param Param1 Parameter 1 of the configured Event
+ * @param Param2 Parameter 2 of the configured Event
+ * @param Param3 Parameter 3 of the configured Event
+ * @param Param4 Parameter 4 of the configured Event
+ * @throws PDException in any error
+ */
+final protected void ExecuteCustomCron(DriverGeneric Drv, String objType, String objFilter, String Param1, String Param2, String Param3, String Param4) throws PDException
 {
-Bin.CustomCronTask(drv, objType, objFilter, param, param2, param3, param4);
-}
-       
+Bin.CustomCronTask(Drv, objType, objFilter, Param1, Param2, Param3, Param4);
+}    
 //-----------------------------------------------------------------
 /**
  * Calls the custom class for the developed Method 
@@ -161,78 +157,78 @@ DownloadedClasses.put(ClassName, CustomTask);
 }
 //-----------------------------------------------------------------    
 /**
- *
- * @param Param1
- * @param Param2
- * @param Param3
- * @param Param4
- * @param Fold
-     * @throws prodoc.PDException
+ * Method to be overloaded by Event developed Task
+ * @param Param1 Parameter 1 of the configured Event
+ * @param Param2 Parameter 2 of the configured Event
+ * @param Param3 Parameter 3 of the configured Event
+ * @param Param4 Parameter 4 of the configured Event
+ * @param Fold Fold that throws the event 
+ * @throws PDException in any error
  */
 protected void ExecuteEventFold(String Param1, String Param2, String Param3, String Param4, PDFolders Fold) throws PDException
 {
 }
 //-----------------------------------------------------------------    
 /**
- *
- * @param Param1
- * @param Param2
- * @param Param3
- * @param Param4
- * @param Doc
-     * @throws prodoc.PDException
+ * Method to be overloaded by Event developed Task
+ * @param Param1 Parameter 1 of the configured Event
+ * @param Param2 Parameter 2 of the configured Event
+ * @param Param3 Parameter 3 of the configured Event
+ * @param Param4 Parameter 4 of the configured Event
+ * @param Doc Document that throws the event
+ * @throws PDException in any error
  */
 protected void ExecuteEventDoc(String Param1, String Param2, String Param3, String Param4, PDDocs Doc) throws PDException
 {
 }
 //-----------------------------------------------------------------    
 /**
- *
- * @param param
- * @param param2
- * @param param3
- * @param param4
- * @param Rec
-     * @param Drv
- * @return
-     * @throws prodoc.PDException
+ * Method to be overloaded (if needed) by Event developed Task
+ * Checks if the attributes of the object match the requirements of the task
+ * @param Param1 Parameter 1 of the configured Event
+ * @param Param2 Parameter 2 of the configured Event
+ * @param Param3 Parameter 3 of the configured Event
+ * @param Param4 Parameter 4 of the configured Event
+ * @param Rec Record to check the values of Attributes of event
+ * @param Drv OpenProdoc Session for checking any information
+ * @return true if the recoed Meets the requirements
+ * @throws PDException in any error
  */
-protected boolean CustomMeetsReqRec(String param, String param2, String param3, String param4, Record Rec, DriverGeneric Drv)  throws PDException
+protected boolean CustomMeetsReqRec(String Param1, String Param2, String Param3, String Param4, Record Rec, DriverGeneric Drv)  throws PDException
 {
 return(true);
 }
 //-----------------------------------------------------------------    
 /**
  * Method to be overloaded by Cron-Schedulled developed Task
- * @param Drv
- * @param ObjectType
- * @param Filter
- * @param param
- * @param param2
- * @param param3
- * @param param4
- * @return 
-     * @throws prodoc.PDException 
+ * @param Drv OpenProdoc Session for checking any information
+ * @param ObjectType kind of Object
+ * @param Filter Filter
+ * @param Param1 Parameter 1 of the configured Event
+ * @param Param2 Parameter 2 of the configured Event
+ * @param Param3 Parameter 3 of the configured Event
+ * @param Param4 Parameter 4 of the configured Event
+ * @throws PDException in any error
  */
-protected Cursor CursorCustom(DriverGeneric Drv, String ObjectType, String Filter, String param, String param2, String param3, String param4)  throws PDException
+protected Cursor CursorCustom(DriverGeneric Drv, String ObjectType, String Filter, String Param1, String Param2, String Param3, String Param4)  throws PDException
 {
 throw new UnsupportedOperationException("Not supported yet."); 
 }
 //-----------------------------------------------------------------    
 /**
  * Method to be overloaded by Cron-Schedulled developed Task
- * @param drv
- * @param objType
- * @param objFilter
- * @param param
- * @param param2
- * @param param3
- * @param param4 
-     * @throws prodoc.PDException 
+ * @param Drv OpenProdoc Session for checking any information
+ * @param ObjectType kind of Object
+ * @param objFilter Filter
+ * @param Param1 Parameter 1 of the configured Event
+ * @param Param2 Parameter 2 of the configured Event
+ * @param Param3 Parameter 3 of the configured Event
+ * @param Param4 Parameter 4 of the configured Event
+ * @throws PDException in any error
  */
-protected void CustomCronTask(DriverGeneric drv, String objType, String objFilter, String param, String param2, String param3, String param4)  throws PDException
+protected void CustomCronTask(DriverGeneric Drv, String ObjectType, String objFilter, String Param1, String Param2, String Param3, String Param4)  throws PDException
 {
-throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+throw new UnsupportedOperationException("Not supported yet.");
 }
 //-----------------------------------------------------------------    
 }

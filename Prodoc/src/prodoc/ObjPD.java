@@ -55,7 +55,7 @@ import static prodoc.Attribute.DECIMALPATTERN;
 
 
 /**
- *
+ * Manages the STORAGE of definition of authenticators, not the authentication function
  * @author jhierrot
  */
 public abstract class ObjPD

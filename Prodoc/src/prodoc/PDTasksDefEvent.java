@@ -22,7 +22,7 @@ package prodoc;
 import java.io.File;
 
 /**
- * 
+ * Class fopr managing the Tasks thrown by and event (Insert, Update or delete) of a Document or folder
  * @author jhierrot
  */
 public class PDTasksDefEvent extends PDTasksDef

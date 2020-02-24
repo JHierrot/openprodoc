@@ -19,10 +19,8 @@
 
 package prodoc;
 
-import java.util.Iterator;
-
 /**
- *
+ * Manages the Mimetypes and conversion from/to file extensions
  * @author jhierrot
  */
 public class PDMimeType extends ObjPD
@@ -175,24 +173,25 @@ protected void AsignKey(String Ident)
 setName(Ident);
 }
 //-------------------------------------------------------------------------
-
 /**
-* @return the Name
-*/
+ * Returns the Name (File extension) of the type
+ * @return the Name
+ */
 public String getName()
 {
 return Name;
 }
-
+//-------------------------------------------------------------------------
 /**
-* @param Name the Name to set
-*/
+ * Sets the Name (File extension) of the type
+ * @param Name the Name to set
+ */
 public void setName(String Name)
 {
 if (Name!=null)    
     this.Name = Name.toLowerCase();
 }
-
+//-------------------------------------------------------------------------
 /**
 * @return the Description
 */
@@ -200,7 +199,7 @@ public String getDescription()
 {
 return Description;
 }
-
+//-------------------------------------------------------------------------
 /**
 * @param Description the Description to set
 */
@@ -208,7 +207,7 @@ public void setDescription(String Description)
 {
 this.Description = Description;
 }
-
+//-------------------------------------------------------------------------
 /**
 * @return the MimeCode
 */
@@ -216,7 +215,7 @@ public String getMimeCode()
 {
 return Extension;
 }
-
+//-------------------------------------------------------------------------
 /**
 * @param Extension the Extension to set
 */

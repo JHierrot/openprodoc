@@ -30,7 +30,7 @@ import java.util.StringTokenizer;
 import javax.sql.rowset.serial.SerialBlob;
 
 /**
- *
+ * Manages the storage of documents in Database blobs
  * @author jhierrot
  */
 public class StoreDDBB extends StoreGeneric

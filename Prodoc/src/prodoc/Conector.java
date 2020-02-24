@@ -290,6 +290,7 @@ if (TaskExecFreq!=0)
     Conector.DestroyExecTask(ConectorName);  
     TaskExecFreq=0;
     }
+ObjectsCache.EndCleaner();
 if (PDLog.isDebug())
     PDLog.Debug("DestroyTask <");        
 }

@@ -41,7 +41,7 @@ import static prodoc.DriverRemote.PARAM;
 
 
 /**
- *
+ * Implementation of FT functions in remote mode
  * @author Joaquín Hierro
  */
 public class FTRemote extends FTConnector

@@ -23,7 +23,7 @@ import java.util.Properties;
 import prodoc.PDException;
 
 /**
- * Parent class of all authenticators
+ * Abstract Parent class of all authenticators
  * @author jhierrot
  */
 public abstract class AuthGeneric

@@ -20,14 +20,11 @@ package prodoc;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.InputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.stream.Stream;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.CharArraySet;
 import org.apache.lucene.analysis.ca.CatalanAnalyzer;
@@ -51,7 +48,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
 /**
- *
+ * Implementation of Full Text indexing and search using Lucene
  * @author Joaquín Hierro
  */
 public class FTConnLucene extends FTConnector

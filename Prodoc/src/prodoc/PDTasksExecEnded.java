@@ -22,7 +22,7 @@ package prodoc;
 import java.util.Date;
 
 /**
- *
+ * Class for managing (relaunch, delete,..) the task ended
  * @author jhierrot
  */
 public class PDTasksExecEnded extends PDTasksExec

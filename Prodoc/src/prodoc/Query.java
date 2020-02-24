@@ -27,7 +27,7 @@ import org.w3c.dom.NodeList;
 import static prodoc.Attribute.StringListSeparator;
 
 /**
- *
+ * Class for managing the Queries against OpenProdoc Datamodel
  * @author jhierrot
  */
 public class Query

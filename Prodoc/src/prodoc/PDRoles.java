@@ -20,7 +20,7 @@
 package prodoc;
 
 /**
- *
+ * Manages the definition of Roles and Permissions of the users
  * @author jhierrot
  */
 public class PDRoles extends ObjPD

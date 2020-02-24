@@ -20,7 +20,7 @@
 package prodoc;
 
 /**
- *
+ * OpenProdoc Functional exceptions
  * @author jhierrot
  */
 public class PDExceptionFunc extends PDException

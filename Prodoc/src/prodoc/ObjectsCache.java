@@ -94,10 +94,10 @@ CleanerThread=new CacheCleaner();
 CleanerThread.start();
 }
 //----------------------------------------------------------------------------
-    /**
-     *
-     */
-    static public void EndCleaner()
+/**
+ * Stops the Thread that cleans the caches
+ */
+static public void EndCleaner()
 {
 if (CleanerThread==null)
     return;

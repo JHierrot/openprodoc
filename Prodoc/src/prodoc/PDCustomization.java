@@ -20,7 +20,8 @@
 package prodoc;
 
 /**
- *
+ * Manages the storage of Customizations, personalization of the language 
+ * and other elements ofthe user interface, specially for the Swing version
  * @author jhierrot
  */
 public class PDCustomization extends ObjPD

@@ -22,7 +22,7 @@ package prodoc;
 import java.util.Date;
 
 /**
- *
+ * Class for managing the functional trace of operation over documents
  * @author jhierrot
  */
 public class PDTrace extends ObjPD

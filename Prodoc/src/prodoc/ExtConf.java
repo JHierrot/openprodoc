@@ -23,7 +23,7 @@ import java.util.Properties;
 import java.util.Vector;
 
 /**
- *
+ * Manages the configuration for the OPAC functions
  * @author Joaquin
  */
 public class ExtConf

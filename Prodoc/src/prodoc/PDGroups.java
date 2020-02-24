@@ -25,7 +25,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- *
+ * Manages the storage of Groups
  * @author jhierrot
  */
 public class PDGroups  extends ObjPD

@@ -29,7 +29,8 @@ import java.io.InputStream;
 
 
 /**
- *
+ * manages the storage of documents in S3 compatible systems. 
+ * Requires to add to classpath the Amazon S3 jar libraries
  * @author jhierrot
  */
 public class StoreAmazonS3 extends StoreGeneric

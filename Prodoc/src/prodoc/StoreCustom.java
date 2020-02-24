@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.Properties;
 
 /**
- *
+ * Class for managing developed drivers for storage of documents
  * @author Joaquin
  */
 public class StoreCustom extends StoreGeneric

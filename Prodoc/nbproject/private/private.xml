@@ -3,11 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/PDDocs.java</file>
-            <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/PDFolders.java</file>
-            <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/PDACL.java</file>
-            <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/Query.java</file>
-            <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/ObjPD.java</file>
+            <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/PDServer.java</file>
+            <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/PDRepository.java</file>
+            <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/PDRoles.java</file>
+            <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/PDObjDefs.java</file>
         </group>
     </open-files>
 </project-private>
