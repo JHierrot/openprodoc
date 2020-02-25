@@ -35,7 +35,6 @@ import prodoc.PDFolders;
 public class formCombo extends SParent
 {
     
-static private int NUMATTREXC=7;
 //-----------------------------------------------------------------------------------------------
 /**
  *
@@ -47,13 +46,14 @@ static private int NUMATTREXC=7;
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {   
 DriverGeneric PDSession=getSessOPD(Req);
+String Active=Req.getParameter("A");
 PDFolders TmpFold=new PDFolders(PDSession);
 StringBuilder Form= new StringBuilder(3000);
 Attribute Attr;
 Form.append("[");
 Attr=TmpFold.getRecord().getAttr(PDFolders.fFOLDTYPE);
 Form.append("{type: \"combo\", name: \"" + PDFolders.fFOLDTYPE + "\", offsetLeft:10, label: \"").append(TT(Req, Attr.getUserName())).append("\", required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", readonly:1, options:[");
-Form.append(getComboModelFold(PDSession, null) );
+Form.append(getComboModelFold(PDSession, null, Active!=null) );
 Form.append("]} ];");
 out.println(Form.toString());
 }

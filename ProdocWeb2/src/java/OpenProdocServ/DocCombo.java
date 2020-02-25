@@ -29,13 +29,12 @@ import prodoc.DriverGeneric;
 import prodoc.PDDocs;
 
 /**
- *
+ * Generates a combo with the list of Document Types (Active or all)
  * @author jhierrot
  */
 public class DocCombo extends SParent
 {
     
-private static final int NUMATTREXC=7;
 //-----------------------------------------------------------------------------------------------
 /**
  *
@@ -47,13 +46,14 @@ private static final int NUMATTREXC=7;
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {   
 DriverGeneric PDSession=getSessOPD(Req);
+String Active=Req.getParameter("A");
 PDDocs TmpFold=new PDDocs(PDSession);
 StringBuilder Form= new StringBuilder(3000);
 Attribute Attr;
 Form.append("[");
 Attr=TmpFold.getRecord().getAttr(PDDocs.fDOCTYPE);
 Form.append("{type: \"combo\", name: \"" + PDDocs.fDOCTYPE + "\",offsetLeft:10,label: \"").append(TT(Req, Attr.getUserName())).append("\", required: true, readonly:1, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", options:[");
-Form.append(getComboModelDoc(PDSession, null));
+Form.append(getComboModelDoc(PDSession, null, Active!=null));
 Form.append("]} ];");
 out.println(Form.toString());
 }

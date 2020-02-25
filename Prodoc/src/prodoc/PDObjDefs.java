@@ -1142,7 +1142,32 @@ return(Cur);
 }
 //-------------------------------------------------------------------------
 /**
- * Search for accesible definitions of clases from family CT_DOC
+ * Search for accesible definitions of clases from family CT_FOLDER
+ * @return an Opened cursor with Clases of family CT_FOLDER
+ * @throws PDException on any error
+ */
+public Cursor getListFoldActive() throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDObjDefs.getListFold>");
+Condition CondType=new Condition(fCLASSTYPE, Condition.cEQUAL, CT_FOLDER);
+Condition CondCreated=new Condition(fCREATED, Condition.cEQUAL, true);
+Condition CondActive=new Condition(fACTIVE, Condition.cEQUAL, true);
+Condition CondAcl=new Condition(PDObjDefs.fACL, new HashSet(getDrv().getUser().getAclList().keySet()));
+Conditions Conds=new Conditions();
+Conds.addCondition(CondType);
+Conds.addCondition(CondAcl);
+Conds.addCondition(CondCreated);
+Conds.addCondition(CondActive);
+Query ListFold=new Query(getTabName(), getRecordStruct(), Conds, PDObjDefs.fNAME);
+Cursor Cur=getDrv().OpenCursor(ListFold);
+if (PDLog.isDebug())
+    PDLog.Debug("PDObjDefs.getListFold<:"+Cur);
+return(Cur);
+}
+//-------------------------------------------------------------------------
+/**
+ * Search for accesible definitions of CREATED clases from family CT_DOC
  * @return an Opened cursor with Clases of family CT_DOC
  * @throws PDException on any error
  */
@@ -1157,6 +1182,31 @@ Conditions Conds=new Conditions();
 Conds.addCondition(CondType);
 Conds.addCondition(CondAcl);
 Conds.addCondition(CondCreated);
+Query ListFold=new Query(getTabName(), getRecordStruct(), Conds, PDObjDefs.fNAME);
+Cursor Cur=getDrv().OpenCursor(ListFold);
+if (PDLog.isDebug())
+    PDLog.Debug("PDObjDefs.getListDocs<:"+Cur);
+return(Cur);
+}
+//-------------------------------------------------------------------------
+/**
+ * Search for accesible definitions of CREATED clases from family CT_DOC
+ * @return an Opened cursor with Clases of family CT_DOC
+ * @throws PDException on any error
+ */
+public Cursor getListDocsActive() throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDObjDefs.getListDocs>");
+Condition CondType=new Condition(fCLASSTYPE, Condition.cEQUAL, CT_DOC);
+Condition CondCreated=new Condition(fCREATED, Condition.cEQUAL, true);
+Condition CondActive=new Condition(fACTIVE, Condition.cEQUAL, true);
+Condition CondAcl=new Condition(PDObjDefs.fACL, new HashSet(getDrv().getUser().getAclList().keySet()));
+Conditions Conds=new Conditions();
+Conds.addCondition(CondType);
+Conds.addCondition(CondAcl);
+Conds.addCondition(CondCreated);
+Conds.addCondition(CondActive);
 Query ListFold=new Query(getTabName(), getRecordStruct(), Conds, PDObjDefs.fNAME);
 Cursor Cur=getDrv().OpenCursor(ListFold);
 if (PDLog.isDebug())

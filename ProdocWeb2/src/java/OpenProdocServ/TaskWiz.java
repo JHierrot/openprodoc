@@ -101,7 +101,7 @@ if (TE.equals(ListElem.MANTTASKCRON))
     if (TT==PDTasksDef.fTASK_IMPORT || TT==PDTasksDef.fTASK_LOCALSYNC)
         {
         SB.append("{type: \"combo\", name: \"TaskParam2\", label: \"").append(ParamTexts[1]).append("\", readonly:1, options:[");
-        SB.append(getComboModelDoc(getSessOPD(Req), null) );
+        SB.append(getComboModelDoc(getSessOPD(Req), null, false) );
         SB.append("]},");        
         }
     else  

@@ -1018,13 +1018,17 @@ return(ListVals.toString());
  * Obtains a list of clases of type folder allowed to the user
  * @return a DefaultComboModel with names of classes of folder
  */
-static protected String getComboModelFold(DriverGeneric Session, String Value) throws PDException
+static protected String getComboModelFold(DriverGeneric Session, String Value, boolean Active) throws PDException
 {
 if (Value==null || Value.length()==0)   
     Value=PDFolders.getTableName();
 StringBuilder ListVals=new StringBuilder(5000);
 PDObjDefs Obj = new PDObjDefs(Session);
-Cursor CursorId = Obj.getListFold();
+Cursor CursorId = null;
+if (Active)
+    CursorId = Obj.getListFoldActive();
+else
+    CursorId = Obj.getListFold();
 Record Res=Session.NextRec(CursorId);
 while (Res!=null)
     {
@@ -1041,13 +1045,17 @@ return(ListVals.toString());
  * Obtains a list of clases of type folder allowed to the user
  * @return a DefaultComboModel with names of classes of folder
  */
-static protected String getComboModelDoc(DriverGeneric Session, String Value) throws PDException
+static protected String getComboModelDoc(DriverGeneric Session, String Value,boolean Active) throws PDException
 {
 if (Value==null || Value.length()==0)   
     Value=PDDocs.getTableName();
 StringBuilder ListVals=new StringBuilder(5000);
 PDObjDefs Obj = new PDObjDefs(Session);
-Cursor CursorId = Obj.getListDocs();
+Cursor CursorId = null;
+if (Active)
+    CursorId = Obj.getListDocsActive();
+else
+    CursorId = Obj.getListDocs();
 Record Res=Session.NextRec(CursorId);
 while (Res!=null)
     {

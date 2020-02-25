@@ -663,10 +663,10 @@ else if (ElemType.equals(ListElem.MANTTASKCRON))
     if (Value!=null && (Value==1 ||Value==2 ||Value==5||Value==8 ))
        ShowFoldComb=false; 
     SB.append("{type: \"combo\", name: \"" + PDTasksCron.fOBJTYPE + "\", label: \"").append(TT(Req, Attr.getUserName())).append("\", required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", hidden:").append(ShowFoldComb?"false":"true").append(", readonly:1, options:[");
-    SB.append(getComboModelFold(PDSession, (String)Attr.getValue()) );
+    SB.append(getComboModelFold(PDSession, (String)Attr.getValue(), false) );
     SB.append("]},");
     SB.append("{type: \"combo\", name: \"" + PDTasksCron.fOBJTYPE + "2\", label: \"").append(TT(Req, Attr.getUserName())).append("\", required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", hidden:").append(ShowFoldComb?"true":"false").append(", readonly:1, options:[");
-    SB.append(getComboModelDoc(PDSession, (String)Attr.getValue()) );
+    SB.append(getComboModelDoc(PDSession, (String)Attr.getValue(), false) );
     SB.append("]},");
     Attr=Rec.getAttr(PDTasksCron.fFILTER);
     SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
@@ -720,10 +720,10 @@ else if (ElemType.equals(ListElem.MANTTASKEVENT))
                       || Value==PDTasksDefEvent.fTASKEVENT_CUSTOM_DOC))
        ShowFoldComb=false; 
     SB.append("{type: \"combo\", name: \"" + PDTasksDefEvent.fOBJTYPE + "\", label: \"").append(TT(Req, Attr.getUserName())).append("\", required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", hidden:").append(ShowFoldComb?"false":"true").append(", readonly:1, options:[");
-    SB.append(getComboModelFold(PDSession, (String)Attr.getValue()) );
+    SB.append(getComboModelFold(PDSession, (String)Attr.getValue(), false) );
     SB.append("]},");
     SB.append("{type: \"combo\", name: \"" + PDTasksDefEvent.fOBJTYPE + "2\", label: \"").append(TT(Req, Attr.getUserName())).append("\", required: true, tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", hidden:").append(ShowFoldComb?"true":"false").append(", readonly:1, options:[");
-    SB.append(getComboModelDoc(PDSession, (String)Attr.getValue()) );
+    SB.append(getComboModelDoc(PDSession, (String)Attr.getValue(), false) );
     SB.append("]},");
     Attr=Rec.getAttr(PDTasksDefEvent.fFILTER);
     SB.append(GenInput(Req, Attr,  ReadOnly, Modif));
