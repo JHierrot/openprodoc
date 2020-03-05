@@ -133,25 +133,26 @@ static public final String XML_Attr="Attr";
 static public final String AllowedChars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789";
 // Ctes for evaluating syntax of tasks of updating
 
-    /**
-     *
-     */
+/**
+ * SYMBOL for delimiting constants
+ */
 static public final char SYN_SEP='#';
-
-    /**
-     *
-     */
-    static public final char SYN_ADD='+';
-
-    /**
-     *
-     */
-    static public final char SYN_DEL='+';
-
-    /**
-     *
-     */
-    public static final char SYN_PARENT='@';
+/**
+ * SYMBOL for adding values
+ */
+static public final char SYN_ADD='+';
+/**
+ * SYMBOL for substract values
+ */
+static public final char SYN_DEL='-';
+/**
+ * SYMBOL for Reference to Parent metadata
+ */
+public static final char SYN_PARENT='@';
+/**
+ * SYMBOL for Reference to Thesaur Term Name
+ */
+public static final char SYN_THES='{';
 //-------------------------------------------------------------------------
 /**
  *
@@ -722,12 +723,13 @@ return(Name);
  * Field1=Field2;
  * Field1=Field1+Field2;
  * @param param Expresión to use
- * @param r Record
-     * @param rParent
- * @return Updates record
-     * @throws prodoc.PDException
+ * @param r Record of the document or folder to update
+ * @param rParent Record of the Parent Folder
+ * @param ListThes List of names/values of the Thesaur elements
+ * @return Updated record
+ * @throws PDException in any error
  */
-protected Record Update(String param, Record r, Record rParent) throws PDException
+protected Record Update(String param, Record r, Record rParent, HashMap<String, String> ListThes) throws PDException
 {
 if (param==null || param.length()==0)    
     return(r);
@@ -786,6 +788,10 @@ for (int i = 0; i < ListElem.size(); i++)
             {
             Attr1=rParent.getAttr(Elem.substring(1));
             NewVal=Attr1.Export();
+            }       
+         else if (Elem.charAt(0)==SYN_THES)
+            {
+            NewVal=ListThes.get(Elem.substring(1));
             }       
         else 
             {

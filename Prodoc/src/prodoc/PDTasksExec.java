@@ -1014,17 +1014,33 @@ if (!Fold.IsUnder(IdUnder))
    return; 
 Record r=Fold.getRecSum();
 Record rParent=null;
-if (getParam().indexOf(ObjPD.SYN_PARENT)!=0 || getParam2().indexOf(ObjPD.SYN_PARENT)!=0 || getParam3().indexOf(ObjPD.SYN_PARENT)!=0)
+HashMap<String, String> ListThes=null;
+if (getParam().indexOf(ObjPD.SYN_PARENT)!=-1 || getParam2().indexOf(ObjPD.SYN_PARENT)!=-1 || getParam3().indexOf(ObjPD.SYN_PARENT)!=-1)
     {
     PDFolders FoldP=new PDFolders(getDrv());
     FoldP.LoadFull(Fold.getParentId());
     rParent=FoldP.getRecSum();
     }
-r=Update(getParam(), r, rParent);
+if (getParam().indexOf(ObjPD.SYN_THES)!=-1 || getParam2().indexOf(ObjPD.SYN_THES)!=-1 || getParam3().indexOf(ObjPD.SYN_THES)!=-1)
+    {
+    ListThes=new HashMap();
+    PDThesaur T=new PDThesaur(getDrv());
+    r.initList();
+    for (int i = 0; i < r.NumAttr(); i++)
+        {
+        Attribute Attr = r.nextAttr();
+        if (Attr.getType()==Attribute.tTHES && Attr.getValue()!=null && ((String)Attr.getValue()).length()!=0)
+            {
+            T.Load((String)Attr.getValue());
+            ListThes.put(Attr.getName(), T.getName());
+            }
+        }
+    }
+r=Update(getParam(), r, rParent, ListThes);
 if (getParam2()!=null && getParam2().length()!=0)
-    r=Update(getParam2(), r, rParent);
+    r=Update(getParam2(), r, rParent, ListThes);
 if (getParam3()!=null && getParam2().length()!=0)
-    r=Update(getParam3(), r, rParent);
+    r=Update(getParam3(), r, rParent, ListThes);
 Fold.assignValues(r);
 Fold.MonoUpdate();
 }
@@ -1230,16 +1246,32 @@ if (!Fold.IsUnder(IdUnder))
    return; 
 Record r=Doc.getRecSum();
 Record rParent=null;
-if (getParam().indexOf(ObjPD.SYN_PARENT)!=0 || getParam2().indexOf(ObjPD.SYN_PARENT)!=0 || getParam3().indexOf(ObjPD.SYN_PARENT)!=0)
+HashMap<String, String> ListThes=null;
+if (getParam().indexOf(ObjPD.SYN_PARENT)!=-1 || getParam2().indexOf(ObjPD.SYN_PARENT)!=-1 || getParam3().indexOf(ObjPD.SYN_PARENT)!=-1)
     {
     Fold.LoadFull(Doc.getParentId());
     rParent=Fold.getRecSum();
     }
-r=Update(getParam(), r, rParent);
+if (getParam().indexOf(ObjPD.SYN_THES)!=-1 || getParam2().indexOf(ObjPD.SYN_THES)!=-1 || getParam3().indexOf(ObjPD.SYN_THES)!=-1)
+    {
+    ListThes=new HashMap();
+    PDThesaur T=new PDThesaur(getDrv());
+    r.initList();
+    for (int i = 0; i < r.NumAttr(); i++)
+        {
+        Attribute Attr = r.nextAttr();
+        if (Attr.getType()==Attribute.tTHES && Attr.getValue()!=null && ((String)Attr.getValue()).length()!=0)
+            {
+            T.Load((String)Attr.getValue());
+            ListThes.put(Attr.getName(), T.getName());
+            }
+        }
+    }
+r=Update(getParam(), r, rParent, ListThes);
 if (getParam2()!=null && getParam2().length()!=0)
-    r=Update(getParam2(), r, rParent);
+    r=Update(getParam2(), r, rParent, ListThes);
 if (getParam3()!=null && getParam2().length()!=0)
-    r=Update(getParam3(), r, rParent);
+    r=Update(getParam3(), r, rParent, ListThes);
 Doc.assignValues(r);
 Doc.updateFragments(r, Doc.getPDId());
 Doc.UpdateVersion(Doc.getPDId(), Doc.getVersion(), r);
