@@ -20,10 +20,12 @@
 package OpenProdocServ;
 
 import OpenProdocUI.SParent;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import prodoc.PDDocs;
 import prodoc.PDException;
 import prodoc.PDRoles;
 
@@ -51,7 +53,16 @@ protected void processRequest(HttpServletRequest Req, HttpServletResponse respon
 {
 response.setContentType("text/xml;charset=UTF-8");
 PrintWriter out = response.getWriter();
-out.println(genMenu(Req));
+try {
+PDDocs D=new PDDocs(getSessOPD(Req));
+D.Load(D.GetIdChild("Users/"+getSessOPD(Req).getUser().getName(), "Ribbon"));
+ByteArrayOutputStream stream = new ByteArrayOutputStream();
+D.getStream(stream);
+out.println(new String(stream.toByteArray()));
+} catch (PDException ex)
+    {
+    out.println(genMenu(Req));
+    }
 out.close();
 }
 //-----------------------------------------------------------------------------------------------
@@ -68,7 +79,7 @@ return "Ribbon Servlet";
 //-----------------------------------------------------------------------------------------------
 private String genMenu(HttpServletRequest Req)
 {
-try {    
+try {        
 StringBuilder Men=new StringBuilder(3000);
 PDRoles R=getSessOPD(Req).getUser().getRol();
 Men.append("<?xml version='1.0' encoding='UTF-8'?><ribbon>");

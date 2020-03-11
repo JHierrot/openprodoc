@@ -3827,5 +3827,34 @@ while ((Pos=SB.indexOf(REF3, Pos))!=-1)
     }
 return(SB.toString());
 }
+//-------------------------------------------------------------------------
+/**
+ * Returns the Id of a document with title DocTitle child of folder ParentId
+ * @param ParentId id of parent folder
+ * @param DocTitle Title of conatined doc
+ * @return Id of the found Doc
+ * @throws PDException if the folder dosen't exist or the user it'snt allowed
+ */
+public String GetIdChild(String ParentId, String DocTitle) throws PDException
+{
+Condition CT=new Condition(fTITLE, Condition.cEQUAL, DocTitle);
+Condition CP=new Condition(fPARENTID, Condition.cEQUAL, ParentId);
+Conditions Conds=new Conditions();
+Conds.addCondition(CT);
+Conds.addCondition(CP);
+if (!getDrv().getUser().getName().equals("Install")) 
+    {
+    Condition CondAcl=new Condition(PDFolders.fACL, new HashSet(getDrv().getUser().getAclList().keySet()));
+    Conds.addCondition(CondAcl);
+    }
+Query LoadAct=new Query(getTabName(), getRecordStruct(), Conds);
+Cursor Cur=getDrv().OpenCursor(LoadAct);
+Record r=getDrv().NextRec(Cur);
+getDrv().CloseCursor(Cur);
+if (r==null)
+    PDExceptionFunc.GenPDException("Do_not_exist_document_under_folder", ParentId+"/"+DocTitle);
+Attribute A=r.getAttr(fPDID);
+return((String)A.getValue());
+}
 //-----------------------------------------------------------------
 }
