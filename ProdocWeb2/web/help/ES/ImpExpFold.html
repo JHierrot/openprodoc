@@ -11,7 +11,7 @@
     <body>
 <H4>Exportar e Importar Carpetas</H4>
 <hr>
-<p>Cuando se desee importar o exportar una estructura completa de carpetas, debe utilizarse las opciones Carpetas->Importar o Carpetas->Exportar <b>(solo en versión Swing)</b></p>
+<p>Cuando se desee importar o exportar una estructura completa de carpetas, debe utilizarse las opciones Carpetas->Importar o Carpetas->Exportar .</p>
 <p>En <b>versión Swing</b>, la opción <b>Exportar</b> exporta la carpeta OPD <b>actual</b> y crea en el sistema de archivos una estructura de carpetas equivalente a la existente en OPD. Antes de iniciar la exportación, OPD presentará una pantalla donde definir distintas características de la exportación. Las opciones posibles y sus efectos son:</p>
 <ul>
     <li><b>Un nivel</b>: Si se selecciona esta opción, solo se exportará la carpeta elegida, en otro caso, se continuará recursivamente hasta recorrer todo la estructura por debajo de la carpeta actual.</li>
@@ -22,19 +22,21 @@
 <p style="text-align:center;"><img alt="Screenshot Export" src="img/Export.jpg"/></p>
 <p>La Exportación solamente incluirá los documentos sobre los que el usuario tenga permisos de acceso, por tanto no debe asumirse que se ha exportado el árbol completo salvo que el usuario tenga permisos de acceso a todas las ramas y documentos</p>
 <p>Al finalizar la exportación, OPD presentará un resumen conteniendo el número de carpetas exportadas y el número de documentos. Si se produce un error se presentará un mensaje con el motivo del error.</p>
-<p>En <b>versión web</b>, los metadatos de la carpeta y de todos los documentos del primer nivel con sus metadatos incluidos se exportan en formato opd (un archivo de texto XML con codificación utf-8) y cada documento EMBEBIDO en el XML en formato base64.
+<p>En <b>versión web</b>, los metadatos de la carpeta y de todos los documentos del <b>primer nivel</b> con sus metadatos incluidos se exportan en formato opd (un archivo de texto XML con codificación utf-8) y cada documento EMBEBIDO en el XML en formato base64.
 El archivo OPD conteniendo todo (Metadatos capeta + metadatos documentos+documentos) se descargará al navegador y podrá guardarse para su importación posterior en el mismo sistema u otro diferente.</p>
 <p>Debe tenerse en cuenta que, para evitar efectos indeseados al importar, no se arrastra definiciones al exportar. Por tanto, las definiciones de elementos como el tipo documental (con los metadatos correspondentes), ACL, Tipo Mime, etc. deberán existir en el momento de importar (en el sistema actual u en otro diferente). Para exportar explicitamente las definiciones debe utilizarse las funciones de mantenimiento de las pantallas de administración.</p>
 <p>En <b>versión Swing</b>, la opción <b>Importar</b> importa una estructura del sistema de archivos EN la carpeta OPD <b>actual</b> y crea en OPD una estructura de carpetas equivalente a la existente en el sistema de archivos. Antes de iniciar la imortación, OPD presentará una pantalla donde definir distintas características de la Importación. Las opciones posibles y sus efectos son:</p>
 <ul>
-    <li><b>Un nivel</b>: Si se selecciona esta opción, solo se importará la carpeta elegida, en otro caso, se continuará recursivamente hasta recorrer todo la estructura por debajo de la carpeta actual.</li>
-    <li><b>Incluir documentos</b>: Si se selecciona esta opción, la importación incluirá los documentos contenidos de cada una de las carpetas. En otro caso, solo importará las carpetas.</li>
-    <li><b>Incluir Metadatos</b>: Si se selecciona esta opción, la importación utilizará, al mismo nivel y con el mismo nombre que el elemento, un archivo ".opd" con los metadatos del objeto (carpeta o documento). En otro caso, se utilizará el nombre del archivo como título, y la fecha del archivo como fecha del documento.</li>
+    <li><b>Un nivel:</b> Si se selecciona esta opción, solo se importará la carpeta elegida, en otro caso, se continuará recursivamente hasta recorrer todo la estructura por debajo de la carpeta actual.</li>
+    <li><b>Incluir documentos:</b> Si se selecciona esta opción, la importación incluirá los documentos contenidos de cada una de las carpetas. En otro caso, solo importará las carpetas.</li>
+    <li><b>Incluir Metadatos:</b> Si se selecciona esta opción, la importación utilizará, al mismo nivel y con el mismo nombre que el elemento, un archivo ".opd" con los metadatos del objeto (carpeta o documento). En otro caso, se utilizará el nombre del archivo como título, y la fecha del archivo como fecha del documento.</li>
     <li><b>Tipo Carpeta:</b> Si no se importan metadatos (por elección o porque es un sistema de archivos que no los contiene), este parámetro indica el tipo de carpeta que se asignará a las carpetas importadas. El tipo asignado no puede tener metadatos obligatorios, pues en otro caso fallará la importación.</li>
     <li><b>Tipo Documental:</b> Si no se importan metadatos (por elección o porque es un sistema de archivos que no los contiene), este parámetro indica el tipo documental que se asignará a los documentos importados. El tipo asignado no puede tener metadatos obligatorios, pues en otro caso fallará la importación.</li>
-    <li><b>La carpeta Origen</b> indica la carpeta del sistema de archivos a partir de la cual se recorrerá la estructura de carpetas y documentos.</li>
+    <li><b>La carpeta Origen:</b> Indica la carpeta del sistema de archivos a partir de la cual se recorrerá la estructura de carpetas y documentos.</li>
+    <li><b>Strict:</b> Cuando este indicador se activa, Openprodoc intentará realizar toda la importación de forma transaccional. Si algo falla, se cancelará la operación completa. No es conveniente activarlo cuando la estructura de carpetas y documentos es muy grande (decenas de miles).</li>
+    <li><b>Javadoc:</b> Cuando este indicador se activa, Openprodoc tratará de importar la estructura de carpetas como Javadoc ( o como un conjunto de páginas html interrelacionadas). <b>Las páginas en disco se modificarán antes de ser importadas</b> para que las referencias/url de todas las páginas o imágenes no sean estáticas sino que referencien los documentos dentro del propio servidor Openprodoc.</li>
 </ul>
-<p style="text-align:center;"><img alt="Screenshot Import" src="img/Import.jpg"/></p>
+<p style="text-align:center;"><img alt="Screenshot Import" src="img/ImportFold.png"/></p>
 <p>En <b>versión Web</b>, OPD presenta un cuadro de diálogo para elegir (o arrastrar) el archivo de tipo ".opd" donde se almacenan los metadatos de la carpeta y los documentos.</p>
 <p>Al finalizar la Importación, OPD presentará un resumen conteniendo el número de carpetas importadas y el número de documentos. Si se produce un error se presentará un mensaje con el motivo del error.</p>
 <p>En el momento de importar deben existir las definiciones de:</p>

@@ -13,8 +13,9 @@
 <p>When selected in the form <a href="ListTaskEvent.html">Events Tasks List</a> one of the options to add, delete, modify or copy the task, will appear this form with different fields on or off.</p>
 <p>This form contains the information:</p>
 <ul>
-    <li><b>Task Name</b>: Task system identifier whose value can not be repeated or changed once assigned. Itcan have a maximum length of 32 characters. (I.e. "StudentCaesCopy")</li>
-    <li><b>Task Description</b>: Description for understanding the task. It can have a maximum length of 128 characters. (Eg "Copy the complete case of the student")</li>
+    <li><b>Task Name</b>: Task system identifier whose value can not be repeated or changed once assigned. Itcan have a maximum length of 32 characters. (I.e. "StudentCaseCopy")</li>
+    <li><b>Task Description</b>: Description for understanding the task. It can have a maximum length of 128 characters. (Eg "Copy the complete case of the student").
+    For custom developed tasks (CUSTOM) it must contain the PDId identifier of the jar file that contains the development, separated by the character '|' and followed by the name of the class to invoke. Ex: "16f5bdc421e-3fc5fc1b23af2f54|eventexample.EventFoldExample"</li>
     <li><b>Task Category</b>: Text for grouping and clasifying tasks. It can have a maximum length of 32 characters.</li>
     <li><b>Kind of Task</b>: Kind of Task. It can be:
         <ul>
