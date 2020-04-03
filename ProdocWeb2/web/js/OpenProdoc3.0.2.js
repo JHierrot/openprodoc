@@ -2250,7 +2250,7 @@ TB.attachEvent("onClick", function(Order)
     {
     if (GR.getSelectedRowId()!=null)    
         {
-        var PartsId = GR.getSelectedRowId().split('|');     
+        var PartsId = GR.getSelectedRowId().split('%7C');     
         if (Order=="Data")  
             ModDoc(PartsId[0], true, PartsId[1]);
         }
