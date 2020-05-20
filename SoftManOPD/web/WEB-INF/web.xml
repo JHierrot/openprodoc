@@ -148,6 +148,22 @@
         <servlet-name>FilterForm</servlet-name>
         <servlet-class>SoftManagOPDServ.FilterForm</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>About</servlet-name>
+        <servlet-class>SoftManagOPDServ.About</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RepList</servlet-name>
+        <servlet-class>SoftManagOPDServ.RepList</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FormSQL</servlet-name>
+        <servlet-class>SoftManagOPDServ.FormSQL</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SearchDoc</servlet-name>
+        <servlet-class>SoftManagOPDServ.SearchDoc</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/Login</url-pattern>
@@ -295,6 +311,22 @@
     <servlet-mapping>
         <servlet-name>FilterForm</servlet-name>
         <url-pattern>/FilterForm</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>About</servlet-name>
+        <url-pattern>/About</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RepList</servlet-name>
+        <url-pattern>/RepList</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FormSQL</servlet-name>
+        <url-pattern>/FormSQL</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchDoc</servlet-name>
+        <url-pattern>/SearchDoc</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

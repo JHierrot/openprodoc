@@ -88,6 +88,8 @@ private static HashSet ListAttrDoc=null;
         
 public static HashSet ListThes=null;
 
+public final static String SQL="SQL";
+public final static String SQLOBJ="SQLOBJ";
 public final static String SD_QType="SD_QType";
 public final static String SD_FType="SD_FType";
 public final static String SD_Cond="SD_Cond";
@@ -852,12 +854,12 @@ while (Attr!=null)
 
 //-----------------------------------------------------------------------------------------------
 /**
- * 
+ * Returns Version of Soft. Management OpenProdoc
  * @return
  */
 static public String getVersion()
 {
-return("2.3");
+return("1.0");
 }
 //-----------------------------------------------------------------------------------------------
 /**
@@ -1660,6 +1662,13 @@ Sess.setAttribute(SParent.SD_actFolderId, actFolderId);
 Sess.setAttribute(SParent.SD_Ord, Ord);
 Sess.setAttribute(SParent.SD_Rec, Rec);
 Sess.setAttribute(SParent.SD_FTQ, FTQuery);
+}
+//-----------------------------------------------------------------------------------------------
+public static void SaveSQL(HttpServletRequest Req, String SQLObj, String SQL)
+{
+HttpSession Sess=Req.getSession(true);
+Sess.setAttribute(SParent.SQLOBJ, SQLObj);
+Sess.setAttribute(SParent.SQL, SQL);
 }
 //-----------------------------------------------------------------------------------------------
 public static String GenErrorForm(String localizedMessage)

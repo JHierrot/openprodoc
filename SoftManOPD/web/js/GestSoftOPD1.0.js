@@ -26,7 +26,7 @@ var CurrDepartment;
 var CurrSoftCompany;
 var CurrIssue;
 var myWins;
-var mySidebar;
+var SoftManOPDSidebar;
 var Toolbar;
 var WinMant;
 var ADD="Add";
@@ -68,6 +68,11 @@ var CurrFold;
 var WinMantDoc;
 var FoldsTree;
 var DocsGrid;
+var T_EDIT="Update";
+var T_DEL="Delete";
+var CSVFORMAT="CSV";
+var GridResults;
+
 
 var FiltFieldsProd=null;
 var FiltFieldsIssue=null;
@@ -81,7 +86,7 @@ if (window.dhx.isIE)
     {
     alert("Unsupported browser / navegador no soportado");
     }    
-document.title="Software Managent OpenProdoc "+LocaleTrans("_User");
+document.title="Software Management OpenProdoc 1.0 ("+LocaleTrans("_User")+")";
 }
 //-----------------------------------------------------------------------
 function doOnLoadMain() 
@@ -90,12 +95,12 @@ Init();
 layout = new dhtmlXLayoutObject(document.body,"3L");         
 layout.cells("a").setText(LocaleTrans("Menu")); 
 layout.cells("a").setWidth(120);
-mySidebar = layout.cells("a").attachSidebar({
+SoftManOPDSidebar = layout.cells("a").attachSidebar({
     template: "icons_text",
     width: 120
 });
-mySidebar.loadStruct("Menu");
-mySidebar.attachEvent("onSelect", function(id, lastId){
+SoftManOPDSidebar.loadStruct("Menu");
+SoftManOPDSidebar.attachEvent("onSelect", function(id, lastId){
     ExecMenu(id);
 });
 ListGrid = layout.cells("c").attachGrid();
@@ -118,6 +123,9 @@ switch (IdMenu)
         break;
     case "Issues": ShowListIssues();
         break;
+    case "Search": CurrFold="RootFolder";
+        SearchDoc();
+        break;
     case "Help": window.open(LocaleTrans("_Help")); // actually not translation but select of language
         // TODO: Help  
         break;
@@ -131,9 +139,161 @@ switch (IdMenu)
         break;
     }
 }
+//-----------------------------------------------------------------------
+function SearchDoc()
+{
+var Url="SearchDoc";
+WinAF=myWins.createWindow({
+id:"SearchDoc",
+left:100,
+top:1,
+width:800,
+height:680,
+center:false,
+modal:true,
+resize:true}); 
+WinAF.setText("OpenProdoc");
+var LayoutFold=WinAF.attachLayout('2E');
+var a = LayoutFold.cells('a');
+a.hideHeader();
+a.setHeight(50);
+var formCombo = a.attachForm();
+formCombo.loadStruct('DocCombo');
+var b = LayoutFold.cells('b');
+b.hideHeader();
+TabBar=b.attachTabbar();
+TabBar.addTab("Search", LocaleTrans("Search_Documents"), null, null, true);
+TabBar.addTab("SQL", LocaleTrans("Advanced_Search"));
+TabBar.addTab("Results", LocaleTrans("Search_Results"));
+TabBar.addTab("Reports", LocaleTrans("Reports_Generation"));
+GridReports=TabBar.tabs("Reports").attachGrid();
+GridReports.setHeader(LocaleTrans("Report_Title")+","+LocaleTrans("MimeType")+","+LocaleTrans("Docs_per_Page")+","+LocaleTrans("Pages_per_File"));   //sets the headers of columns
+GridReports.setColumnIds("Title,Mime,DocsPage,PagesArch");   
+GridReports.setInitWidths("300,100,100,*"); 
+GridReports.setColAlign("left,left,left,left");   
+GridReports.setColTypes("link,ro,ro,ro");  
+GridReports.setColSorting("str,str,int,int"); 
+GridReports.load("RepList");
+GridReports.init();
+TabBar.tabs("Reports").disable();
+ToolBar = TabBar.tabs("Results").attachToolbar();
+ToolBar.addButton(T_EDIT, 0, LocaleTrans("Edit"), "img/DocEdit.png", "img/DocEdit.png");
+ToolBar.addButton(T_DEL, 1, LocaleTrans("Delete"), "img/DocDel.png", "img/DocDel.png");
+ToolBar.addButton("CheckOut", 2, "CheckOut", "img/checkout.png", "img/checkout.png");
+ToolBar.addButton("CheckIn", 3, "CheckIn", "img/checkin.png", "img/checkin.png");
+ToolBar.addButton("CancelCheckOut", 4, "CancelCheckOut", "img/cancelcheckout.png", "img/cancelcheckout.png");
+ToolBar.addButton(CSVFORMAT, 5, "CSV", "img/expCSV.png", "img/expCSV.png");
+ToolBar.attachEvent("onClick", function(id)
+    {
+    if (id==CSVFORMAT && GridResults.getRowsNum()>0)  
+        ExporGenCSV();
+    else if (GridResults.getSelectedRowId()!=null)    
+        DocResProc(id, GridResults.getSelectedRowId());    
+    });
+FormSearchDoc = TabBar.tabs("Search").attachForm();
+FormSQLSearchDoc = TabBar.tabs("SQL").attachForm();
+FormSQLSearchDoc.load("FormSQL?Type=DOC");
+formCombo.attachEvent("onChange", function(name, value, is_checked){
+    FormSearchDoc.unload();
+    FormSearchDoc = TabBar.tabs("Search").attachForm();
+    SearchDocMain(Url, value);
+    });
+SearchDocMain(Url, "PD_DOCS");       
+}
+//----------------------------------
+function SearchDocMain(Url, Type)
+{
+FormSearchDoc.loadStruct(Url+"?F="+CurrFold+"&Ty="+Type, function(){
+    FormSearchDoc.setFocusOnFirstActive();
+    });       
+FormSearchDoc.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {   
+        TabBar.tabs("Results").disable();  
+        TabBar.tabs("Reports").disable();  
+        FormSearchDoc.send(Url, function(loader, response)
+                        { // Asynchronous 
+                        if (response.substring(0,2)!=OK)    
+                            alert(response); 
+                        else
+                            {
+                            ShowDocResults(response.substring(2));  
+                            }
+                        });
+        }
+     else if (name==CANCEL) 
+        {   
+        FormSearchDoc.unload();
+        FormSQLSearchDoc.unload();
+        WinAF.close();
+        }    
+    else if (name.substring(0,2)=="T_") 
+        ShowThes(FormSearchDoc, name.substring(2));  
+    else if (name.substring(0,3)=="TD_") 
+        DelTerm(FormSearchDoc, name.substring(3)); 
+    }); 
+//FormSQLSearchDoc.enableLiveValidation(true);     
+FormSQLSearchDoc.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {   
+        FormSQLSearchDoc.send(Url, function(loader, response)
+                        { // Asynchronous 
+                        if (response.substring(0,2)!=OK)    
+                            alert(response); 
+                        else
+                            {
+                            ShowDocResults(response.substring(2));  
+                            }
+                        });
+        }
+     else if (name==CANCEL) 
+        {   
+        FormSearchDoc.unload();
+        FormSQLSearchDoc.unload();
+        WinAF.close();
+        }   
+    });   
+    
+}
+//------------------------------------------------------------
+function ShowDocResults(Result)
+{
+TabBar.tabs("Results").enable();  
+TabBar.tabs("Reports").enable();
+GridResults=TabBar.tabs("Results").attachGrid();
+var ListPar=Result.split("\n");
+GridResults.setHeader(ListPar[0]);
+GridResults.setColTypes(ListPar[1]);   
+GridResults.setColSorting(ListPar[2]);
+GridResults.init();
+GridResults.parse(ListPar[3],"xml");
+TabBar.tabs("Results").show(true);
+TabBar.tabs("Results").setActive();
+}
+//------------------------------------------------------------
 function About()
 {
-// TODO: Form About     
+var WinA=myWins.createWindow({
+    id:"About",
+    left:20,
+    top:1,
+    width:540,
+    height:420,
+    center:true,
+    modal:true,
+    resize:false
+});  
+WinA.setText("About Soft. Management OpenProdoc");
+var FormAbout=WinA.attachForm();
+FormAbout.loadStruct("About");   
+if (CurrentGrid=="ListProducts")
+    SoftManOPDSidebar.items("Products").setActive();
+else if (CurrentGrid=="ListDepartments")
+    SoftManOPDSidebar.items("Departments").setActive();
+else if (CurrentGrid=="ListSoftCompanies")
+    SoftManOPDSidebar.items("SoftCompanies").setActive();
+else if (CurrentGrid=="ListIssues")
+    SoftManOPDSidebar.items("Issues").setActive();
 }
 //-----------------------------------------------------------------------
 function ShowListProducts()
@@ -144,7 +304,6 @@ layout.cells("b").setHeight(240);
 LoadFilterForm("FilterForm?Filt=Products");
 layout.cells("c").setText(LocaleTrans("Products-Projects")); 
 Toolbar.clearAll();
-//Toolbar.addButton(ADD, 0, LocaleTrans("Add"), "img/add.png", "img/add.png");
 Toolbar.addButton(UPD, 0, LocaleTrans("Update"), "img/icons8-edit-property-144.png", "img/icons8-edit-property-144.png");
 Toolbar.addButton(VER, 1, LocaleTrans("Versions"), "img/icons8-versions-48.png", "img/icons8-versions-48.png");
 Toolbar.addButton(DEL, 2, LocaleTrans("Delete"), "img/icons8-delete-document-144.png", "img/icons8-delete-document-144.png");
@@ -726,9 +885,9 @@ modal:true,
 resize:true});  
 WinVers.setText("Issues Maintenance: "+VersGrid.cellById(VersGrid.getSelectedRowId(), 0).getValue());
 var VersTB=WinVers.attachToolbar();
-VersTB.addButton(ADD, 0, LocaleTrans("Add"), "img/add.png", "img/add.png");
-VersTB.addButton(UPD, 1, LocaleTrans("Update"), "img/upd.png", "img/upd.png");
-VersTB.addButton(DEL, 2, LocaleTrans("Delete"), "img/del.png", "img/del.png");
+VersTB.addButton(ADD, 0, LocaleTrans("Add"), "img/icons8-insert-clip-40.png", "img/icons8-insert-clip-40.png");
+VersTB.addButton(UPD, 1, LocaleTrans("Update"), "img/icons8-edit-property-144.png", "img/icons8-edit-property-144.png");
+VersTB.addButton(DEL, 2, LocaleTrans("Delete"), "img/icons8-delete-document-144.png", "img/icons8-delete-document-144.png");
 VersTB.attachEvent("onClick", function(id)
     {         
     MantIssue(id, IdVers);
@@ -795,9 +954,9 @@ modal:true,
 resize:true});  
 WinDep.setText("Versions Maintenance: "+VersGrid.cellById(IdVers, 0).getValue());
 var DepTB=WinDep.attachToolbar();
-DepTB.addButton(ADD, 0, LocaleTrans("Add"), "img/add.png", "img/add.png");
-DepTB.addButton(UPD, 1, LocaleTrans("Update"), "img/upd.png", "img/upd.png");
-DepTB.addButton(DEL, 2, LocaleTrans("Delete"), "img/del.png", "img/del.png");
+DepTB.addButton(ADD, 0, LocaleTrans("Add"), "img/icons8-insert-clip-40.png", "img/icons8-insert-clip-40.png");
+DepTB.addButton(UPD, 1, LocaleTrans("Update"), "img/icons8-edit-property-144.png", "img/icons8-edit-property-144.png");
+DepTB.addButton(DEL, 2, LocaleTrans("Delete"), "img/icons8-delete-document-144.png", "img/icons8-delete-document-144.png");
 DepTB.attachEvent("onClick", function(id)
     {         
     MantDep(id, IdVers, DepGrid.getSelectedRowId());

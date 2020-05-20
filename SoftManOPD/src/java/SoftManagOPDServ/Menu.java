@@ -24,8 +24,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import prodoc.PDException;
-import prodoc.PDRoles;
 
 /**
  *
@@ -75,6 +73,7 @@ Men.append("<item id=\"Products\" text=\"Products\" icon=\"img/icons8-software-i
 Men.append("<item id=\"Departments\" text=\"Departments\" icon=\"img/icons8-genealogy-80.png\"/>");
 Men.append("<item id=\"Issues\" text=\"Issues\" icon=\"img/icons8-high-importance-80.png\"/>");
 Men.append("<item id=\"SoftCompanies\" text=\"Soft Companies\" icon=\"img/icons8-company-240.png\"/>");
+Men.append("<item id=\"Search\" text=\"Search\" icon=\"img/icons8-search-80.png\"/>");
 Men.append("<item id=\"Help\" text=\"Help\" icon=\"img/icons8-help-80.png\"/>");
 Men.append("<item id=\"About\" text=\"About\" icon=\"img/icons8-about-80.png\"/>");
 Men.append("<item id=\"Exit\" text=\"Exit\" icon=\"img/icons8-exit-80.png\"/>");

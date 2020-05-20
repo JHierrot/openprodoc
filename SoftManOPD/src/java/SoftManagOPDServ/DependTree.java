@@ -20,6 +20,8 @@ package SoftManagOPDServ;
 
 import SoftManagOPDUI.SParent;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +36,7 @@ import prodoc.PDThesaur;
  */
 public class DependTree extends SParent
 {
-
+final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
 //-----------------------------------------------------------------------------------------------
 /**
  *
@@ -104,7 +106,14 @@ LicType=TLic.getName();
     {
     LicType="";
     }
-DepTree.append("<item id=\"").append(IdRel).append("\" text=\"").append(TDep.getName()).append(" --> ").append(F.getTitle()).append("   [ ").append(LicType).append(" ]").append("\" open=\"1\">");
+String EOS;
+try {
+EOS=formatterDate.format((Date)F.getRecSum().getAttr("DateSup").getValue());
+} catch (Exception e)
+    {
+    EOS="";
+    }
+DepTree.append("<item id=\"").append(IdRel).append("\" text=\"").append(TDep.getName()).append(" --> ").append(F.getTitle()).append("   [ EOS:").append(EOS).append(" / Lic: ").append(LicType).append(" ]").append("\" open=\"1\">");
 TreeSet<String> ListDep = F.getRecSum().getAttr(DEPENDENCIES).getValuesList();
 for (Iterator<String> iterator = ListDep.iterator(); iterator.hasNext();)
     {

@@ -1,0 +1,199 @@
+/*
+ * OpenProdoc
+ * 
+ * See the help doc files distributed with
+ * this work for additional information regarding copyright ownership.
+ * Joaquin Hierro licenses this file to You under:
+ * 
+ * License GNU Affero GPL v3 http://www.gnu.org/licenses/agpl.html
+ * 
+ * you may not use this file except in compliance with the License.  
+ * Unless agreed to in writing, software is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ * author: Joaquin Hierro      2016
+ * 
+ */
+
+package SoftManagOPDServ;
+
+import SoftManagOPDUI.SParent;
+import java.io.PrintWriter;
+import javax.servlet.http.HttpServletRequest;
+import prodoc.Attribute;
+import prodoc.Conditions;
+import prodoc.Cursor;
+import prodoc.DriverGeneric;
+import prodoc.PDException;
+import prodoc.PDDocs;
+import prodoc.Record;
+
+/**
+ *
+ * @author jhierrot
+ */
+public class SearchDoc extends SParent
+{
+
+//-----------------------------------------------------------------------------------------------
+/**
+ *
+ * @param Req
+ * @param out
+ * @throws Exception
+ */
+@Override
+protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
+{   
+DriverGeneric PDSession=getSessOPD(Req);
+PDDocs TmpDoc;
+String CurrFold=Req.getParameter("F");
+if (CurrFold!=null)
+    {
+    String NewType=Req.getParameter("Ty");
+    if (NewType!=null && NewType.length()!=0)
+        TmpDoc=new PDDocs(PDSession, NewType);
+    else
+        {
+        TmpDoc=new PDDocs(PDSession);
+        TmpDoc.LoadFull(CurrFold);
+        NewType=TmpDoc.getDocType();
+        }
+    Record R=TmpDoc.getRecSum();
+    out.println( GenSearchDocForm("Search_Documents", Req, PDSession, CurrFold, NewType, TmpDoc.getRecSum(), false, false) );    
+    }
+else
+    {
+    Cursor c=null; 
+    Record Rec;
+    String SQL=Req.getParameter("SQLF"); 
+    try {    
+    if (SQL!=null && SQL.length()!=0)
+        {
+        SQL=SQL.replace("&gt;",">").replace("&lt;","<").replace("<b>","").replace("</b>","").replace("<i>","").replace("</i>","").replace("<u>","").replace("</u>","").replace("<div>"," ").replace("</div>"," ").replace("<br>"," ").replace("&nbsp;", " ");
+        PDDocs f=new PDDocs(PDSession);
+        c = f.SearchSelect(SQL);
+        SaveSQL(Req, "DOC", SQL);
+        Rec=c.getFieldsCur();
+        }
+    else
+        {   
+        String CurrentFold=Req.getParameter("CurrFold");   
+        String CurrType=Req.getParameter("OPDNewType"); 
+        String SubTypes=Req.getParameter("Subtypes"); 
+        String SubFolders=Req.getParameter("SubFolders"); 
+        String IncludeVers=Req.getParameter("IncludeVers"); 
+        String FullTextSearch=Req.getParameter("FullTextSearch"); 
+        TmpDoc=new PDDocs(PDSession, CurrType);
+        Rec=TmpDoc.getRecSum();
+        Conditions Cond=new Conditions();
+        Rec.initList();
+        Attribute Attr=Rec.nextAttr();
+        while (Attr!=null)
+            {
+            if (Attr.getName().equals(PDDocs.fDOCTYPE))
+                {
+                Attr=Rec.nextAttr();
+                continue;
+                }
+            String Val=Req.getParameter(Attr.getName());
+            String Comp=Req.getParameter("Comp_"+Attr.getName());
+            if (Attr.getType()==Attribute.tTHES)
+                    {
+                    Val=Req.getParameter("TH_"+Attr.getName());   
+                    if (Val != null && Val.length()!=0)
+                        Cond.addCondition(SParent.FillCond(Req, Attr, Val, Comp));
+                    }
+            else if (!(Val == null || Val.length()==0 || Attr.getName().equals(PDDocs.fACL) && Val.equals("null") 
+                  || Attr.getType()==Attribute.tBOOLEAN && Val.equals("0") ) )
+                {
+                Cond.addCondition(SParent.FillCond(Req, Attr, Val, Comp));
+                }
+            Attr=Rec.nextAttr();
+            }
+        SaveConds(Req, "Doc", CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")),(IncludeVers.equals("1")), CurrentFold, null, Rec, FullTextSearch);
+        c=TmpDoc.Search(FullTextSearch, CurrType, Cond, (SubTypes.equals("1")), (SubFolders.equals("1")),(IncludeVers.equals("1")), CurrentFold, null);
+        }
+    out.println("OK"+GenHeader(Req, Rec, true));
+    out.print("<rows>");
+    Record NextDoc=PDSession.NextRec(c);
+    while (NextDoc!=null)
+        {
+        out.print(SParent.GenRowGrid(Req, (String)NextDoc.getAttr(PDDocs.fPDID).getValue(), NextDoc, true, false));    
+        NextDoc=PDSession.NextRec(c);
+        }
+    out.println("</rows>");
+    } catch (PDException Ex)
+        {
+        PrepareError(Req, Ex.getLocalizedMessage(), out);
+        }
+    finally 
+        {
+        if (c!=null)
+           PDSession.CloseCursor(c);
+        }
+    }
+}
+//-----------------------------------------------------------------------------------------------
+
+/** 
+ * Returns a short description of the servlet.
+ * @return a String containing servlet description
+ */
+@Override
+public String getServletInfo()
+{
+return "SearchDoc Servlet";
+}
+//-----------------------------------------------------------------------------------------------
+
+    /**
+     *
+     * @param Title
+     * @param Req
+     * @param PDSession
+     * @param CurrFold
+     * @param NewType
+     * @param FR
+     * @param ReadOnly
+     * @param Modif
+     * @return
+     * @throws PDException
+     */
+protected String GenSearchDocForm(String Title, HttpServletRequest Req, DriverGeneric PDSession, String CurrFold, String NewType, Record FR, boolean ReadOnly, boolean Modif) throws PDException
+{
+StringBuilder Form= new StringBuilder(3000);
+Attribute Attr;
+Form.append("[ {type: \"settings\", position: \"label-left\", labelWidth: 150, inputWidth: 200},");
+Form.append("{type: \"label\", label: \"").append(TT(Req, Title)).append("\", labelWidth:200},");
+Form.append("{type: \"block\", width: 600, list:[");
+Form.append("{type: \"checkbox\", name: \"Subtypes\", label:\"").append(TT(Req, "Subtypes")).append("\", tooltip:\"").append(TT(Req,"When_checked_includes_subtypes_of_folders_in_results")).append("\"},");
+Form.append("{type: \"newcolumn\", offset:20 },");
+Form.append("{type: \"checkbox\", name: \"SubFolders\", label:\"").append(TT(Req, "SubFolders")).append("\", tooltip:\"").append(TT(Req,"When_checked_limits_the_search_to_actual_folder_and_subfolders")).append("\"},");
+Form.append("{type: \"newcolumn\", offset:20 },");
+Form.append("{type: \"checkbox\", name: \"IncludeVers\", label:\"").append(TT(Req, "Versions")).append("\", tooltip:\"").append(TT(Req,"When_checked_includes_all_versions_of_document_in_results")).append("\"}");
+Form.append("]},{type: \"input\", name: \"FullTextSearch\", label: \"").append(TT(Req, "Full_Text_Search")).append("\", inputWidth: 300, labelWidth:200},");
+
+FR.initList();
+Attr=FR.nextAttr();
+while (Attr!=null)
+    {
+    if (! (Attr.getName().equals(PDDocs.fDOCTYPE) || (Attr.getName().equals(PDDocs.fSTATUS)) ) )    
+        Form.append(GenSearchInput(Req, Attr));
+    Attr=FR.nextAttr();
+    }
+Form.append("{type: \"block\", width: 250, list:[");
+Form.append("{type: \"button\", name: \"OK\", value: \"").append(TT(Req, "Ok")).append("\"},");
+Form.append("{type: \"newcolumn\", offset:20 },");
+Form.append("{type: \"button\", name: \"CANCEL\", value: \"").append(TT(Req, "Cancel")).append("\"},");
+Form.append("{type: \"hidden\", name:\"OPDNewType\", value: \"").append(NewType).append("\"},");
+Form.append("{type: \"hidden\", name:\"CurrFold\", value: \"").append(CurrFold).append("\"}");
+Form.append("]}");
+Form.append("];");
+return(Form.toString());
+}
+//----------------------------------------------------------------------------
+
+}
