@@ -300,7 +300,7 @@ function ShowListProducts()
 {
 // TODO: Form Filter Products    
 layout.cells("b").setText(LocaleTrans("Products Filter"));   
-layout.cells("b").setHeight(240);
+layout.cells("b").setHeight(280);
 LoadFilterForm("FilterForm?Filt=Products");
 layout.cells("c").setText(LocaleTrans("Products-Projects")); 
 Toolbar.clearAll();
@@ -785,7 +785,7 @@ WinMant=myWins.createWindow({
 id:"MantProducts",
 left:20,
 top:1,
-width:600,
+width:640,
 height:600,
 center:true,
 modal:true,
@@ -1310,7 +1310,7 @@ function ShowListIssues()
 {
 // TODO: Form Filter Products    
 layout.cells("b").setText(LocaleTrans("Issues Filter"));   
-layout.cells("b").setHeight(300);
+layout.cells("b").setHeight(350);
 LoadFilterForm("FilterForm?Filt=Issues");
 layout.cells("c").setText(LocaleTrans("Issues")); 
 Toolbar.clearAll();
@@ -1345,8 +1345,8 @@ WinMant=myWins.createWindow({
 id:"MantIssue",
 left:20,
 top:1,
-width:600,
-height:((IdVers!=null&&Oper!=DEL)?650:700),
+width:640,
+height:((IdVers!=null&&Oper!=DEL)?750:800),
 center:true,
 modal:true,
 resize:false});  
@@ -1512,13 +1512,13 @@ function getFiltFields(Grid2Upd)
 if (Grid2Upd=="ListProducts")
     {
     if (FiltFieldsProd==null)
-        FiltFieldsProd=["TH_Family","TH_License","TH_Technology"];
+        FiltFieldsProd=["TH_Family","TH_License","TH_Technology","Internal"];
     return(FiltFieldsProd)    
     }
 if (Grid2Upd=="ListIssues")
     {
     if (FiltFieldsIssue==null)
-        FiltFieldsIssue=["Code","TH_Env","TH_IssueCrit","TH_IssueStatus","TH_IssueSolver"];
+        FiltFieldsIssue=["Code","TH_Env","TH_IssueCrit","TH_IssueStatus","TH_IssueSolver","Internal"];
     return(FiltFieldsIssue)    
     }
 if (Grid2Upd=="ListDepartments")  

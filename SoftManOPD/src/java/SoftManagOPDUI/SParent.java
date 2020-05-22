@@ -887,34 +887,34 @@ public static String getProdocProperRef() throws Exception
 if (ProdocProperRef==null)
     {
     InputStream Is=null;    
-    File f=new File("../conf/Prodoc.properties");
-System.out.println("OpenProdoc Properties 1=["+f.getAbsolutePath()+"]");    
+    File f=new File("../conf/SoftManProdoc.properties");
+    System.out.println("OpenProdoc Properties 1=["+f.getAbsolutePath()+"]");    
     if (f.exists())
         {
         ProdocProperRef=f.getAbsolutePath();    
         return(ProdocProperRef);
         }
-    f=new File("conf/Prodoc.properties");
-System.out.println("OpenProdoc Properties 2=["+f.getAbsolutePath()+"]");    
+    f=new File("conf/SoftManProdoc.properties");
+    System.out.println("OpenProdoc Properties 2=["+f.getAbsolutePath()+"]");    
     if (f.exists())
         {
         ProdocProperRef=f.getAbsolutePath();    
         return(ProdocProperRef);
         }
     String Path=System.getProperty("user.home");    
-System.out.println("OpenProdoc Properties 3=["+Path+"]");    
+    System.out.println("OpenProdoc Properties 3=["+Path+"]");    
     try {
-    Is  = new FileInputStream(Path+File.separator+"OPDWeb.properties");        
+    Is  = new FileInputStream(Path+File.separator+"SoftManOPDWeb.properties");        
     } catch (Exception ex)
         {
         Is=null;    
         }
     if (Is==null)
         {
-        Path=System.getenv("OPDWeb");
- System.out.println("OpenProdoc Properties 4=["+Path+"]");    
-       try {
-        Is  = new FileInputStream(Path+File.separator+"OPDWeb.properties");
+        Path=System.getenv("SoftManOPDWeb");
+        System.out.println("OpenProdoc Properties 4=["+Path+"]");    
+        try {
+        Is  = new FileInputStream(Path+File.separator+"SoftManOPDWeb.properties");
         } catch (Exception ex)
             {
             Is=null;    
@@ -1358,7 +1358,7 @@ switch (Attr.getType())
             FormField.append("{type: \"button\",").append(ReadOnly?"disabled:1,":"").append(" name:  \"M_").append(Attr.getName()).append("\", value: \"*\", width: 20}]},");
         }
         else if (Attr.getLongStr()>1000)
-            FormField.append("{type: \"editor\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"disabled:1,":"").append(" required: ").append(Attr.isRequired()?"true":"false").append(",").append(Attr.getValue()!=null?("value:\""+EscapeHtmlJson(Attr.Export())+"\","):"").append(" tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", position:'label-left', inputWidth:360, inputHeight:160, maxLength:").append(Attr.getLongStr()).append("},");
+            FormField.append("{type: \"editor\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"disabled:1,":"").append(" required: ").append(Attr.isRequired()?"true":"false").append(",").append(Attr.getValue()!=null?("value:\""+EscapeHtmlJson(Attr.Export())+"\","):"").append(" tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", position:'label-left', inputWidth:400, inputHeight:140, maxLength:").append(Attr.getLongStr()).append("},");
         else
             FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: ").append(Attr.isRequired()?"true":"false").append(",").append(Attr.getValue()!=null?("value:\""+EscapeHtmlJson(Attr.Export())+"\","):"").append(" tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", inputWidth: 300, maxLength:").append(Attr.getLongStr()).append("},");
         break;
@@ -1385,7 +1385,8 @@ switch (Attr.getType())
                         }
                     }
                 }
-            FormField.append("{type: \"block\", width: 550, offsetLeft:1, list:[");
+//            FormField.append("{type: \"block\", width: 550, offsetLeft:1, list:[");
+            FormField.append("{type: \"block\", width: 550, list:[");
             FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\", readonly: \"true\",value:\"").append(EscapeHtmlJson(SBNames.toString())).append("\", tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", labelWidth: 180, inputWidth: 250, userdata: {ThesId:").append(Attr.getLongStr()).append("}},");
             FormField.append("{type: \"newcolumn\", offset:2 },");
             FormField.append("{type: \"hidden\", name:\"TH_").append(Attr.getName()).append("\", value: \"").append(SBId).append("\"},");
@@ -1719,7 +1720,7 @@ protected static String EscapeHtmlJson(String Text)
 {
 if (Text==null)  
     return(Text);
-return(Text.replace("\"", "\\\"")); 
+return(Text.replace("\"", "\\\"").replace("\n", "<br>")); 
 //return(Text.replace("\"", "&quot;")); 
 }
 //-----------------------------------------------------------------------------------------------
@@ -1883,6 +1884,7 @@ if (IssueFields==null)
     IssueFields.add("IssueSolver");
     IssueFields.add("DateOpen");
     IssueFields.add("DateClosed");
+    IssueFields.add("Solution");
     }
 return(IssueFields);    
    

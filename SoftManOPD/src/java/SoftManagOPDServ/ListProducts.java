@@ -90,6 +90,12 @@ for (int i = 0; i < FiltProdFields.size(); i++)
         Cond.addCondition(C);
         }
     }
+String Internal = Req.getParameter("Internal");
+if (Internal!=null && Internal.length()!=0 && !Internal.equalsIgnoreCase("0"))
+    {
+    Condition C=new Condition("Internal", Condition.cEQUAL, Internal.equalsIgnoreCase("1"));
+    Cond.addCondition(C);
+    }    
 if (Cond.NumCond()==0)
     {
     Condition C=new Condition(PDFolders.fPDID , Condition.cNE, "z");

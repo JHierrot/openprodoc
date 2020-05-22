@@ -50,11 +50,13 @@ Form.append("{type: \"label\", label: \"").append(TT(Req, "Filter_"+Filt)).appen
 Vector<String> FiltProdFields = null;
 if (Filt.equalsIgnoreCase("Products"))
     {
+    Form.append(GenInternalFilter());
     FiltProdFields=getProductFieldsFilter();
     TmpFold=new PDFolders(SParent.getSessOPD(Req), getProductType());
     }
 else if (Filt.equalsIgnoreCase("Issues"))
     {
+    Form.append(GenInternalFilter());
     FiltProdFields=getIssuesFieldsFilter();
     TmpFold=new PDFolders(SParent.getSessOPD(Req), getIssuesType());
     }
@@ -93,6 +95,18 @@ out.println(Form);
 public String getServletInfo()
 {
 return "ProductsFilt Servlet";
+}
+//-----------------------------------------------------------------------------------------------
+
+private StringBuilder GenInternalFilter()
+{
+StringBuilder CompCombo=new StringBuilder(200);
+CompCombo.append("{type: \"combo\", label: \"Internal\", name: \"Internal\", inputWidth:\"auto\", options:[");
+CompCombo.append("{text: \"\", value: \"0\", selected: true},");
+CompCombo.append("{text: \"Internal\", value: \"1\"},");
+CompCombo.append("{text: \"External\", value: \"2\"}");
+CompCombo.append("]},");
+return(CompCombo);
 }
 //-----------------------------------------------------------------------------------------------
 }
