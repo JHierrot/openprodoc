@@ -20,3 +20,21 @@ border-bottom-color: #FFFFFF;
 background-color: #D3E7FF;
 }
 
+.icon_fileAlert {
+    background-image: url(folderAlert.png);
+}
+.icon_openedAlert {
+    background-image: url(folderAlertOpen.gif);
+}
+.icon_closedAlert {
+    background-image: url(folderAlert.png);
+}
+.icon_fileCritic {
+    background-image: url(folderCritic.png);
+}
+.icon_openedCritic {
+    background-image: url(folderCriticOpen.png);
+}
+.icon_closedCritic {
+    background-image: url(folderCritic.png);
+}

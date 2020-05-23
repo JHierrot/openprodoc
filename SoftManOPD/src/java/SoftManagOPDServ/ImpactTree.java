@@ -96,7 +96,6 @@ Vector<Record> ListImpProdVers = F.SearchV(getProductsVersType(), Cond, true, fa
 for (int i = 0; i < ListImpProdVers.size(); i++)
     {
     Record R = ListImpProdVers.elementAt(i);
-//    F.LoadFull((String)ListImpProdVers.elementAt(i).getAttr(PDFolders.fPDID).getValue());
     DepTree.append("<item id=\"").append(Math.random()).append("\" text=\"").append((String)R.getAttr(PDFolders.fTITLE).getValue()).append("\" open=\"1\">");
     DepTree.append(SubImpactTree(PDSession, (String)R.getAttr(PDFolders.fPDID).getValue()));
     DepTree.append("</item>");    

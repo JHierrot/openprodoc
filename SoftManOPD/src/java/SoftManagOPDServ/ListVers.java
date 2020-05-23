@@ -76,15 +76,15 @@ PDThesaur TmpTerm=new PDThesaur(PDSession);
 String LicTemp;
 String IdProd=Req.getParameter("IdProd");
 HashSet<String> ListVers = Fold.getListDirectDescendList(IdProd);
+Calendar NextMonth = Calendar.getInstance(); 
+NextMonth.add(Calendar.MONTH, 1);
+Date Now=new Date();
 for (Iterator<String> iterator = ListVers.iterator(); iterator.hasNext();)
     { // Title,DateInit,DateSup,DateSupExt,Notes
     FoldTemp.LoadFull(iterator.next());
     if (FoldTemp.getFolderType().equals(getProductsVersType()))
         {
         String Icon="";
-        Date Now=new Date();
-        Calendar NextMonth = Calendar.getInstance(); 
-        NextMonth.add(Calendar.MONTH, 3);
         Record Rec=FoldTemp.getRecSum();
         ListProducts.append("<row id=\"").append(FoldTemp.getPDId()).append("\">");       
         AttrD=Rec.getAttr(PDFolders.fTITLE);
@@ -92,14 +92,14 @@ for (Iterator<String> iterator = ListVers.iterator(); iterator.hasNext();)
         AttrD=Rec.getAttr("DateInit");
         ListProducts.append("<cell>").append(AttrD.Export()).append("</cell>");       
         AttrD=Rec.getAttr("DateSup");
-        if (AttrD.getValue()!=null && Now.after((Date)AttrD.getValue()))
-           Icon="img/02_Alert.gif";
-        else if (AttrD.getValue()!=null && NextMonth.getTime().after((Date)AttrD.getValue()))
-           Icon="img/01_Prec.gif";
+//        if (AttrD.getValue()!=null && Now.after((Date)AttrD.getValue()))
+//           Icon="img/02_Alert.gif";
+        if (AttrD.getValue()!=null && NextMonth.getTime().after((Date)AttrD.getValue()))
+           Icon="img/Alert.png";
         ListProducts.append("<cell>").append(AttrD.Export()).append("</cell>");
         AttrD=Rec.getAttr("DateSupExt");
         if (AttrD.getValue()!=null && Now.after((Date)AttrD.getValue()))
-           Icon="img/03_Critic.gif";
+           Icon="img/Critic.png";
         ListProducts.append("<cell>").append(AttrD.Export()).append("</cell>");
         ListProducts.append("<cell>").append(Icon).append("</cell>");        
         if ((String)Rec.getAttr("License").getValue()!=null)

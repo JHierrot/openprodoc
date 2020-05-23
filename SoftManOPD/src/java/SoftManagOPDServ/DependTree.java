@@ -21,10 +21,12 @@ package SoftManagOPDServ;
 import SoftManagOPDUI.SParent;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
+import prodoc.Attribute;
 import prodoc.DriverGeneric;
 import prodoc.PDException;
 import prodoc.PDFolders;
@@ -107,13 +109,33 @@ LicType=TLic.getName();
     LicType="";
     }
 String EOS;
+Attribute AttrD=F.getRecSum().getAttr("DateSup");
+Attribute AttrDES=F.getRecSum().getAttr("DateSupExt");
 try {
-EOS=formatterDate.format((Date)F.getRecSum().getAttr("DateSup").getValue());
+EOS=formatterDate.format((Date)AttrD.getValue());
 } catch (Exception e)
     {
     EOS="";
     }
-DepTree.append("<item id=\"").append(IdRel).append("\" text=\"").append(TDep.getName()).append(" --> ").append(F.getTitle()).append("   [ EOS:").append(EOS).append(" / Lic: ").append(LicType).append(" ]").append("\" open=\"1\">");
+//String IconsAlert="<icons file=\"icon_fileAlert\" folder_opened=\"icon_openedAlert\" folder_closed=\"icon_closedAlert\"/>";
+//String IconsCritic="<icons file=\"icon_fileCritic\" folder_opened=\"icon_openedCritic\" folder_closed=\"icon_closedCritic\"/>";
+//String Icons="";
+String ColorStart="";
+String ColorEnd="";
+Calendar NextMonth = Calendar.getInstance(); 
+NextMonth.add(Calendar.MONTH, 1);
+Date Now=new Date();
+if (AttrD.getValue()!=null && NextMonth.getTime().after((Date)AttrD.getValue()))
+    {
+    ColorStart="&lt;span style='color: #ff9900'&gt;";
+    ColorEnd="&lt;/span&gt;";
+    }
+if (AttrDES.getValue()!=null && Now.after((Date)AttrDES.getValue()))
+    {
+    ColorStart="&lt;span style='color: #ff0000'&gt;";
+    ColorEnd="&lt;/span&gt;";
+    }
+DepTree.append("<item id=\"").append(IdRel).append("\" text=\"").append(ColorStart).append(TDep.getName()).append(ColorEnd).append(" --> ").append(F.getTitle()).append("   [ EOS:").append(EOS).append(" / Lic: ").append(LicType).append(" ]").append("\" open=\"1\">");
 TreeSet<String> ListDep = F.getRecSum().getAttr(DEPENDENCIES).getValuesList();
 for (Iterator<String> iterator = ListDep.iterator(); iterator.hasNext();)
     {

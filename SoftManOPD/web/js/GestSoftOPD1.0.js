@@ -916,6 +916,7 @@ var DepTree=L.cells("a").attachTree();
 L.cells("a").setText("Dependencies");
 DepTree.setImagePath("js/imgs/dhxtree_skyblue/");
 DepTree.load("DependTree?IdVers="+IdVers);
+DepTree.setItemIcons("17198a58c6c-3fe8d124fb678675", {folder_opened: "icon_openedAlert"});
 }
 //-----------------------------------------------------------------------
 function ImpactTree(IdVers)
@@ -1345,8 +1346,8 @@ WinMant=myWins.createWindow({
 id:"MantIssue",
 left:20,
 top:1,
-width:640,
-height:((IdVers!=null&&Oper!=DEL)?750:800),
+width:650,
+height:((IdVers!=null&&Oper!=DEL)?780:830),
 center:true,
 modal:true,
 resize:false});  

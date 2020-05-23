@@ -140,6 +140,12 @@ for (int i = 0; i < ProdFields.size(); i++)
         SParent.FillAttr(Req, Attr, Val, false);
         }
     }
+if (Oper2.equalsIgnoreCase(ADD))
+    {
+    PDFolders Fold=new PDFolders(TmpFold.getDrv());
+    Fold.setPDId(Id);
+    recSum.getAttr("Internal").setValue( Fold.IsUnder(getDepartsRoot(TmpFold.getDrv())) );
+    }
 TmpFold.assignValues(recSum);
 switch (Oper2)
     {case ADD:
