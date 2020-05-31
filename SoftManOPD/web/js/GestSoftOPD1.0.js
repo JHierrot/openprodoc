@@ -552,7 +552,7 @@ WinAF=myWins.createWindow({
 id:"ListVerDoc",
 left:20,
 top:1,
-width:800,
+width:850,
 height:300,
 center:true,
 modal:true,
@@ -1054,7 +1054,7 @@ function RefreshDepGrid(Idvers)
 DepGrid.clearAll(true); 
 DepGrid.setHeader("Product,Version,Relation");   
 DepGrid.setColumnIds("Product,Version,Relation");         
-DepGrid.setInitWidths("100,100,*");   
+DepGrid.setInitWidths("150,150,*");   
 DepGrid.setColAlign("left,left,left");    
 DepGrid.setColTypes("ro,ro,ro");            
 DepGrid.setColSorting("str,str,str"); 

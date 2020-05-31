@@ -888,21 +888,21 @@ if (ProdocProperRef==null)
     {
     InputStream Is=null;    
     File f=new File("../conf/SoftManProdoc.properties");
-    System.out.println("OpenProdoc Properties 1=["+f.getAbsolutePath()+"]");    
+    System.out.println("SoftManProdoc Properties 1=["+f.getAbsolutePath()+"]");    
     if (f.exists())
         {
         ProdocProperRef=f.getAbsolutePath();    
         return(ProdocProperRef);
         }
     f=new File("conf/SoftManProdoc.properties");
-    System.out.println("OpenProdoc Properties 2=["+f.getAbsolutePath()+"]");    
+    System.out.println("SoftManProdoc Properties 2=["+f.getAbsolutePath()+"]");    
     if (f.exists())
         {
         ProdocProperRef=f.getAbsolutePath();    
         return(ProdocProperRef);
         }
     String Path=System.getProperty("user.home");    
-    System.out.println("OpenProdoc Properties 3=["+Path+"]");    
+    System.out.println("SoftManProdoc Properties 3=["+Path+"]");    
     try {
     Is  = new FileInputStream(Path+File.separator+"SoftManOPDWeb.properties");        
     } catch (Exception ex)
@@ -912,7 +912,7 @@ if (ProdocProperRef==null)
     if (Is==null)
         {
         Path=System.getenv("SoftManOPDWeb");
-        System.out.println("OpenProdoc Properties 4=["+Path+"]");    
+        System.out.println("SoftManProdoc Properties 4=["+Path+"]");    
         try {
         Is  = new FileInputStream(Path+File.separator+"SoftManOPDWeb.properties");
         } catch (Exception ex)
@@ -925,7 +925,7 @@ if (ProdocProperRef==null)
     Is.close();
     ProdocProperRef=p.getProperty("OPDConfig");
     }
-System.out.println("ProdocProperRef=["+ProdocProperRef+"]");
+System.out.println("SoftManProdoc Ref=["+ProdocProperRef+"]");
 return(ProdocProperRef);
 }
 //----------------------------------------------------------   
@@ -1387,7 +1387,7 @@ switch (Attr.getType())
                 }
 //            FormField.append("{type: \"block\", width: 550, offsetLeft:1, list:[");
             FormField.append("{type: \"block\", width: 550, list:[");
-            FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\", readonly: \"true\",value:\"").append(EscapeHtmlJson(SBNames.toString())).append("\", tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", labelWidth: 180, inputWidth: 250, userdata: {ThesId:").append(Attr.getLongStr()).append("}},");
+            FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append(Attr.isRequired()?" *":"").append("\", readonly: \"true\",value:\"").append(EscapeHtmlJson(SBNames.toString())).append("\", tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", labelWidth: 180, inputWidth: 250, userdata: {ThesId:").append(Attr.getLongStr()).append("}},");
             FormField.append("{type: \"newcolumn\", offset:2 },");
             FormField.append("{type: \"hidden\", name:\"TH_").append(Attr.getName()).append("\", value: \"").append(SBId).append("\"},");
             FormField.append("{type: \"button\",").append(ReadOnly?"disabled:1,":"").append(" name:  \"MT_").append(Attr.getName()).append("\", value: \"*T\", width: 20}]},");

@@ -122,9 +122,9 @@ while (NextProd!=null)
     ListProducts.append("<cell>").append(TmpFold.getTitle()).append("</cell>");
     TmpTerm.Load((String)NextProd.getAttr("Family").getValue());
     ListProducts.append("<cell>").append(TmpTerm.getName()).append("</cell>");       
-        if ((String)Rec.getAttr("License").getValue()!=null)
+    if ((String)NextProd.getAttr("License").getValue()!=null)
         {
-        TmpTerm.Load((String)Rec.getAttr("License").getValue());
+        TmpTerm.Load((String)NextProd.getAttr("License").getValue());
         LicTemp=TmpTerm.getName();
         }
     else
