@@ -869,9 +869,9 @@ if (NewAttr.isMultivalued())
 else
     {
     getDrv().AlterTableAdd(Name, NewAttr, false);
-    getDrv().AlterTableAdd(GenVerTabName(Name), NewAttr, true);
     if (Def.getClassType().equalsIgnoreCase(PDObjDefs.CT_DOC))
         {
+        getDrv().AlterTableAdd(GenVerTabName(Name), NewAttr, true);
         HashSet SubTypes=Def.getListSubClasesCreated(Name);
         for (Iterator it = SubTypes.iterator(); it.hasNext();)
             {
