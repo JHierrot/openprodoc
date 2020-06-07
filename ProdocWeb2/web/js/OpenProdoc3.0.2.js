@@ -523,7 +523,8 @@ FormImpElem.attachEvent("onUploadFile",function(realName,serverName){
     var nodes = xml.getElementsByTagName("status");
     alert(nodes[0].textContent);
     WinAF.close();
-    DocsGrid.clearAndLoad("DocList?FoldId="+CurrFold);
+//    DocsGrid.clearAndLoad("DocList?FoldId="+CurrFold);
+    DocsTree.refreshItem(CurrFold);
     });
     });
 FormImpElem.attachEvent("onUploadFail",function(realName){
