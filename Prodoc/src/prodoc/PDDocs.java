@@ -2720,15 +2720,22 @@ XML.append(toXML2());
 if (IncludeContent)
     {
     try {    
-    XML.append("<").append(XML_CONTENT).append(">\n");
-    ByteArrayOutputStream Bytes=new ByteArrayOutputStream();
-    this.getStreamB64(Bytes);
-    XML.append(Bytes.toString("UTF-8"));
-    XML.append("</").append(XML_CONTENT).append(">\n");
+    XML.append("<").append(XML_CONTENT).append(">");
+    if (IsUrl())
+        {
+        XML.append(getUrl());
+        }
+    else
+        {
+        ByteArrayOutputStream Bytes=new ByteArrayOutputStream();
+        this.getStreamB64(Bytes);
+        XML.append(Bytes.toString("UTF-8"));
+        }
     } catch (Exception Ex)
         {
         PDLog.Error(Ex.getLocalizedMessage());
         }
+    XML.append("</").append(XML_CONTENT).append(">\n");
     }
 XML.append("</").append(XML_OPDObject).append(">\n");
 return XML.toString();
