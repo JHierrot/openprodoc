@@ -1670,7 +1670,7 @@ protected static String EscapeTree(String Text)
 {
 if (Text==null)  
     return(Text);
-return(Text.replace("\"", "&quot;")); 
+return(Text.replace("\"", "&quot;").replace("&", "&amp;")); 
 // return(Text.replace("\"", "&quot;").replace("<", "&lt;")); 
 }
 //-----------------------------------------------------------------------------------------------

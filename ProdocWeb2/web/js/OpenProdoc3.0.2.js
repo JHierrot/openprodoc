@@ -165,12 +165,12 @@ menu.attachEvent("onClick", function(id, zoneId, cas)
     });
 RibbonEnable();
 DocsGrid = layout.cells("c").attachGrid();
-DocsGrid.setHeader(LocaleTrans("Document_Type")+","+LocaleTrans("Document_Title")+","+LocaleTrans("Document_Date")+","+LocaleTrans("Lock_user")+","+LocaleTrans("Date"));   //sets the headers of columns
-DocsGrid.setColumnIds("Type,Title,Date,Lock,RepDate");         
-DocsGrid.setInitWidths("120,460,120,80,*");   
-DocsGrid.setColAlign("left,left,left,left,left");    
-DocsGrid.setColTypes("ro,link,ro,ro,ro");            
-DocsGrid.setColSorting("str,str,str,str,str"); 
+DocsGrid.setHeader(LocaleTrans("Document_Type")+","+LocaleTrans("Document_Title")+","+LocaleTrans("Document_Date")+","+LocaleTrans("ACL")+","+LocaleTrans("Lock_user")+","+LocaleTrans("Date"));   //sets the headers of columns
+DocsGrid.setColumnIds("Type,Title,Date,ACL,Lock,RepDate");         
+DocsGrid.setInitWidths("120,460,120,120,80,*");   
+DocsGrid.setColAlign("left,left,left,left,left,left");    
+DocsGrid.setColTypes("ro,link,ro,ro,ro,ro");            
+DocsGrid.setColSorting("str,str,str,str,str,str"); 
 DocsGrid.load("DocList?FoldId="+ROOTFOLD);
 DocsGrid.init();
 DocsGrid.attachEvent("onRowSelect",function(rowId,cellIndex)
