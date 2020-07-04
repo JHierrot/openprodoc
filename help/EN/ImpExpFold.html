@@ -11,7 +11,7 @@
     <body>
 <H4>Import and Export Folders</H4>
 <hr>
-<p> When you want to import or export an entire structure of folders, use the Options Folders-> Import or Folders-> Export <b>(only in Swing version)</b></p>
+<p> When you want to import or export an entire structure of folders, use the Options Folders-> Import or Folders-> Export .</p>
 <p> The Option <b>Export</b> will export OPD <b>current</b> folder and creates a file system folder structure equivalent to that in OPD. Before starting the export, OPD will present a screen to define different characteristics of the export. The possible options and their effects are: </p>
 <ul>
 <li><b>One level</b>: If you select this option, only the selected folder will be exported, otherwise, OPD will continue recursively until all the structure go below the current folder. </li>
@@ -22,17 +22,22 @@
 <p style="text-align:center;"><img alt="Screenshot Export" src="img/Export.jpg"/></p>
 <p>Export only include the documents for which the user has access permissions, therefore should not be assumed that the entire tree has exported unless the user has access permissions to all branches and documents.</p>
 <p>After the export, OPD will present a summary containing the number of folders exported and the number of documents. If an error occurs, a message will be presented with the reason for the error.</p>
+<p> In <b> web version</b>, the metadata of the folder and all the documents of the <b>first level</b> with their metadata included are exported in opd format (an XML text file with utf-8 encoding) and each EMBEDDED document in XML in base64 format.
+The OPD file containing everything (metadata folder + metadata documents + documents) will be downloaded to the browser and can be saved for later import in the same or a different system. </p>
 <p>Should be noted that to avoid unwanted effects on import, OPD does not include definitions during export. Therefore, the definitions of elements such as document type (with metadata correspondence), ACL, mime type, etc.. must exist at the time of import (in the current system or at a different location). To export the definitions should be used explicitly maintenance functions of the administration screens.</p>
 <p>The Option <b>Import</b> imports a structure of the filesystem in the <b>current</b> OPD folder and creates a folder structure equivalent to that in the file system. Before starting the imortación, OPD will display a screen where to define different characteristics of the import. The possible options and their effects are:</p>
 <ul>
-<li><b>One level</b>: If you select this option, only the selected folder will be imported, otherwise, OPD will continue recursively to go all the structure below the current folder.</li>
-<li><b>Include documents</b>: If you select this option, import the documents included in each of the folders. In another case, only folders will be imported.</li>
-<li><b>Include Metadata</b>: If you select this option, the import will use, at the same level and with the same name as the element, an ". opd" file with the object's metadata (folder or document). Otherwise, will be used file name as a title and file date as the date of the document.</li>
+<li><b>One level:</b> If you select this option, only the selected folder will be imported, otherwise, OPD will continue recursively to go all the structure below the current folder.</li>
+<li><b>Include documents:</b> If you select this option, import the documents included in each of the folders. In another case, only folders will be imported.</li>
+<li><b>Include Metadata:</b> If you select this option, the import will use, at the same level and with the same name as the element, an ". opd" file with the object's metadata (folder or document). Otherwise, will be used file name as a title and file date as the date of the document.</li>
 <li><b>Folder Type:</b> If you do not import metadata (by choice or because it is a file system that does not contain them), this parameter indicates the type of folder to be assigned to folders imported. The type can not be include mandatory metadata, since the import will fail.</li>
 <li><b>Document Type:</b> If you do not import metadata (by choice or because it is a file system that does not contain them), this parameter indicates the document type  to be assigned to imported documents. The type can not be include mandatory metadata, since the import will fail.</li>
-<li><b>source folder:</b> indicates the file system folder from which you will start to import the structure of folders and documents. </li>
+<li><b>Source Folder:</b> Indicates the file system folder from which you will start to import the structure of folders and documents. </li>
+<li><b>Strict:</b> When this flag is turned on, Openprodoc will try to do the whole import in a transactional way. If something fails, the entire operation will be canceled. It is not convenient to activate it when the folder and document structure is very large (tens of thousands). </li>
+<li><b>Javadoc:</b> When this flag is turned on, Openprodoc will try to import the folder structure as Javadoc (or as a set of interrelated html pages). <b> The pages on disk will be modified before being imported </b> so that the references / url of all the pages or images would be not static but instead reference the documents within the Openprodoc server itself. </li>
 </ul>
-<p style="text-align:center;"><img alt="Screenshot Import" src="img/Import.jpg"/></p>
+<p style="text-align:center;"><img alt="Screenshot Import" src="img/ImportFold.png"/></p>
+<p>In <b>Web version</b>, OPD presents a dialog to choose (or drag) the file of type ".opd" where the metadata of the folder and documents are stored.</p>
 <p>When ends importing, OPD will present a summary the number of folders containing imported and the number of documents. If an error occurs, a message will be presented with the reason for the error. </p>
 <p>At the time of import, should exist the definitions of: </p>
 <ul>

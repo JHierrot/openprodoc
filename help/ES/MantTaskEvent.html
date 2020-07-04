@@ -14,7 +14,8 @@
 <p>Este formulario contiene la información:</p>
 <ul>
     <li><b>Nombre identificativo</b>: Identificador de la tarea cuyo valor no puede repetirse ni cambiar una vez asignado. . Puede tener una longitud máxima de 32 caracteres. (Ej. "CopiaExpAlumno")</li>
-    <li><b>Descripción de la tarea</b>: Descripción que permita interpretar el tipo de archivos incluidos. Puede tener una longitud máxima de 128 caracteres. (Ej.: "Copia Expediente Alumno Borrado")</li>
+    <li><b>Descripción de la tarea</b>: Descripción que permita interpretar el tipo de archivos incluidos. Puede tener una longitud máxima de 128 caracteres. (Ej.: "Copia Expediente Alumno Borrado").
+         Para tareas desarrolladas a medida (CUSTOM) debe contener el identificador PDId del archivo jar que contiene el desarrollo, separado por el caracter '|' y seguido por el nombre de la clase a invocar. Ej: "16f5bdc421e-3fc5fc1b23af2f54|eventexample.EventFoldExample" </li>
     <li><b>Categoría de la tarea</b>: Texto de hasta 32 caracteres que permite agrupar las tareas para su clasificación y ejecución separada.</li>
     <li><b>Tipo de Tarea</b>: El tipo de tarea asociada a evento a ejecutar. Puede ser:
         <ul>
@@ -23,8 +24,10 @@
         <li>"COPY_FOLD": Crea una copia de la carpeta.</li>
         <li>"COPY_DOC": Crea una copia del documento.</li>
         <li>"EXPORT_FOLD": Exporta una carpeta.</li>
-        <li>"EXPORT_DOC":  Exporta un documento.</li>
-        <li>"CONVERT_DOC":  Convierte un documento utilizando un conversor externo. Puede utilizarse programas como <a href="http://imagemagick.org/">ImageMagick</a> (Windows, Linux, Mac) o <a href="http://www.irfanview.com/">Irfanview</a>(Windows incluyendo visualización)  </li>
+        <li>"EXPORT_DOC": Exporta un documento.</li>
+        <li>"CONVERT_DOC": Convierte un documento utilizando un conversor externo. Puede utilizarse programas como <a href="http://imagemagick.org/">ImageMagick</a> (Windows, Linux, Mac) o <a href="http://www.irfanview.com/">Irfanview</a>(Windows incluyendo visualización)  </li>
+        <li>"CUSTOM_FOLD": Tarea desarrollada a medida asociada a un evento de una carpeta. NO PUEDE SER TRANSACCIONAL.</li>
+        <li>"CUSTOM_DOC": Tarea desarrollada a medida asociada a un evento de un documento. NO PUEDE SER TRANSACCIONAL.</li>
         </ul>
     </li>    
     <li><b>Tipo de objeto</b> (Carpetas o Documentos) sobre los que se aplicará la tarea. Dependiendo de otros parámetros, podrá aplicarse tambien a subtipos.</li>    
@@ -33,7 +36,14 @@
         <ul>
         <li>"UPDATE_FOLD": 
             <ul>
-                <li>Param1: Atributo1: Expresión para calcular el valor de un atributo. Consiste en un nombre de atributo+ "=" + una secuencia de nombres de atributos o literales (enmarcadas por '#'). Solo aplica a metadatos de tipo texto. (Ej: "Attr1=Attr1+#=#+Attr2", "Title=#Titulo:#+Title" )</li>
+                <li>Param1: Atributo1: Expresión para calcular el valor de un atributo. Consiste en un nombre de atributo+ "=" + una secuencia de nombres de atributos o literales (enmarcadas por '#'). Solo aplica a metadatos de tipo texto. (Ej: "Attr1=Attr1+#=#+Attr2", "Title=#Titulo:#+Title" ). Opciones válidas son:
+                    <ul>
+                    <li>NombreAtributo: Nombre interno de Atributo (incluyendo mayúsculas y minúsculas)  del documento (Ex. Title, ACL, MimeType, DocType,..)</li>
+                    <li>#Literal#: Expresión literal entre caracteres # (Ex. #Apellido:#, # en la dirección#,..)</li>                        
+                    <li>@NombreAtributo: Nombre interno de Atributo (incluyendo mayúsculas y minúsculas) Internal de la carpeta PADRE (Ex. @Title, @ACL, @NumeroExpediente,..)</li>
+                    <li>{NombreAtributo: Nombre interno de Atributo (incluyendo mayúsculas y minúsculas) de tipo tesauro (Ex. {Paises, {TipoProducto,..)</li>
+                    </ul>
+                </li>
                 <li>Param2: Atributo2: Expresión para calcular el valor de un atributo. Puede estar vacio. Se aplicará DESPUES de asignar valor al atributo anterior.</li>
                 <li>Param3: Atributo3: Expresión para calcular el valor de un atributo. Puede estar vacio. Se aplicará DESPUES de asignar valor al atributo anterior.</li>
                 <li>Param4: Carpeta raiz sobre la que se aplicará la regla. Aplicará a todas las carpetas contenidas en esta a cualquier nivel. No es necesario incluir "Rootfolder"(Ej."/Expedientes/Compras").</li>
@@ -41,7 +51,14 @@
         </li>
         <li>"UPDATE_DOC":             
             <ul>
-                <li>Param1: Atributo1: Expresión para calcular el valor de un atributo. Consiste en un nombre de atributo+ "=" + una secuencia de nombres de atributos o literales (enmarcadas por '#'). Solo aplica a metadatos de tipo texto. (Ej: "Attr1=Attr1+#=#+Attr2", "Title=#Titulo:#+Title" )</li>
+                <li>Param1: Atributo1: Expresión para calcular el valor de un atributo. Consiste en un nombre de atributo+ "=" + una secuencia de nombres de atributos, expresiones o literales (enmarcadas por '#'). Solo aplica a metadatos de tipo texto. (Ej: "Attr1=Attr1+#=#+Attr2", "Title=#Titulo:#+Title" ). Opciones válidas son:
+                    <ul>
+                    <li>NombreAtributo: Nombre interno de Atributo (incluyendo mayúsculas y minúsculas)  de la carpeta (Ex. Title, ACL, MimeType, DocType,..)</li>
+                    <li>#Literal#: Expresión literal entre caracteres # (Ex. #Apellido:#, # en la dirección#,..)</li>                        
+                    <li>@NombreAtributo: Nombre interno de Atributo (incluyendo mayúsculas y minúsculas) Internal de la carpeta PADRE (Ex. @Title, @ACL, @NumeroExpediente,..)</li>
+                    <li>{NombreAtributo: Nombre interno de Atributo (incluyendo mayúsculas y minúsculas)  de tipo tesauro (Ex. {Paises, {TipoProducto,..)</li>
+                    </ul>
+                </li>
                 <li>Param2: Atributo2: Expresión para calcular el valor de un atributo. Puede estar vacio. Se aplicará DESPUES de asignar valor al atributo anterior.</li>
                 <li>Param3: Atributo3: Expresión para calcular el valor de un atributo. Puede estar vacio. Se aplicará DESPUES de asignar valor al atributo anterior.</li>
                 <li>Param4: Carpeta raiz sobre la que se aplicará la regla. Aplicará a todas las carpetas contenidas en esta a cualquier nivel. No es necesario incluir "Rootfolder"(Ej."/Expedientes/Compras").</li>
@@ -80,6 +97,22 @@
                     El documento resultante de la conversión se insertará con los mismos metadatos en la carpeta destino en OPD (Param1)</li>
                 <li>Param4: Extensión del archivo destino tras la conversión. Se sumará al nombre destino @2 al invocar la orden.(Ej. "png")</li>
             </ul>
+        </li>
+        <li>"CUSTOM_FOLD":            
+            <ul>
+                <li>Param1: Parametro a interpretar por la tarea desarrollada.</li>
+                <li>Param2: Parametro a interpretar por la tarea desarrollada.</li>
+                <li>Param3: Parametro a interpretar por la tarea desarrollada.</li>
+                <li>Param4: Parametro a interpretar por la tarea desarrollada.</li>
+            </ul>
+        </li>
+        <li>"CUSTOM_DOC":            
+            <ul>
+                <li>Param1: Parametro a interpretar por la tarea desarrollada.</li>
+                <li>Param2: Parametro a interpretar por la tarea desarrollada.</li>
+                <li>Param3: Parametro a interpretar por la tarea desarrollada.</li>
+                <li>Param4: Parametro a interpretar por la tarea desarrollada.</li>
+             </ul>
         </li>
         </ul>
     </li>    

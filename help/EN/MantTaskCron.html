@@ -14,7 +14,8 @@
 <p>This form contains the information:</p>
 <ul>
     <li><b>Task Name</b>: Task system identifier whose value can not be repeated or changed once assigned. Itcan have a maximum length of 32 characters. (I.e. "Purge_HR_Exp")</li>
-    <li><b>Task Description</b>: Description for understanding the task. It can have a maximum length of 128 characters. (Eg "Purge Human Resources Files")</li>
+    <li><b>Task Description</b>: Description for understanding the task. It can have a maximum length of 128 characters. (Eg "Purge Human Resources Files").
+        For custom developed tasks (CUSTOM) it must contain the PDId identifier of the jar file that contains the development, separated by the character '|' and followed by the name of the class to invoke. Ex: "16f5bdc421e-3fc5fc1b23af2f54|cronexample.CronExample".</li>
     <li><b>Task Category</b>: Text for grouping and clasifying tasks. It can have a maximum length of 32 characters.</li>
     <li><b>Kind of Task</b>: Kind of Task. It can be:
         <ul>
@@ -26,6 +27,7 @@
         <li>"DOCSREPORT": Creates a report about documents of a document type (and subtypes) updated under a folder estructure and saves the report as document html in the home folder of each user of defined group.</li>
         <li>"FOLDSREPORT": Creates a report about folders of a folder type (and subtypes) updated under a folder estructure and saves the report as document html in the home folder of each user of defined group.</li>
         <li>"LOCALSYNC": "Synchronizes" the contents of two complete folder trees (one in OpenProdoc and one in the local computer) so that for each local file a record of the indicated document type is created and <b>referenced</b> (or <b>included</b> according to the type of repository of the Document type) the local file and for each folder on disk an OpenProdoc folder of the indicated type is created.</li>
+        <li>"CUSTOM": Custom developed task scheduled.</li>
         </ul>
     </li>    
     <li><b>Object type</b> (one of Folder or Document types) that apply the task.</li>    
@@ -91,6 +93,14 @@
                 <li>Param4: Source folder from which all the structure will be imported. (I.e."/ImporFolder"). It's recommended to use the notation '/' and not '\' even for Windows.</li>
             </ul>
         </li>
+        <li>"CUSTOM":            
+            <ul>
+                <li>Param1: Parameter to be interpreted by the developed task.</li>
+                <li>Param2: Parameter to be interpreted by the developed task.</li>
+                <li>Param3: Parameter to be interpreted by the developed task.</li>
+                <li>Param4: Parameter to be interpreted by the developed task.</li>
+             </ul>
+        </li>                
         </ul>
     </li>    
     <li><b>Date and time</b>: Date and time of next execution (generation) of the task.</li>    

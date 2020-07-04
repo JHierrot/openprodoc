@@ -13,8 +13,9 @@
 <p>When selected in the form <a href="ListTaskEvent.html">Events Tasks List</a> one of the options to add, delete, modify or copy the task, will appear this form with different fields on or off.</p>
 <p>This form contains the information:</p>
 <ul>
-    <li><b>Task Name</b>: Task system identifier whose value can not be repeated or changed once assigned. Itcan have a maximum length of 32 characters. (I.e. "StudentCaesCopy")</li>
-    <li><b>Task Description</b>: Description for understanding the task. It can have a maximum length of 128 characters. (Eg "Copy the complete case of the student")</li>
+    <li><b>Task Name</b>: Task system identifier whose value can not be repeated or changed once assigned. Itcan have a maximum length of 32 characters. (I.e. "StudentCaseCopy")</li>
+    <li><b>Task Description</b>: Description for understanding the task. It can have a maximum length of 128 characters. (Eg "Copy the complete case of the student").
+    For custom developed tasks (CUSTOM) it must contain the PDId identifier of the jar file that contains the development, separated by the character '|' and followed by the name of the class to invoke. Ex: "16f5bdc421e-3fc5fc1b23af2f54|eventexample.EventFoldExample"</li>
     <li><b>Task Category</b>: Text for grouping and clasifying tasks. It can have a maximum length of 32 characters.</li>
     <li><b>Kind of Task</b>: Kind of Task. It can be:
         <ul>
@@ -25,6 +26,8 @@
         <li>"EXPORT_FOLD": Exports the folder.</li>
         <li>"EXPORT_DOC": Exports the document.</li>
         <li>"CONVERT_DOC": Converts a document using an external conversor. You can use programs as <a href="http://imagemagick.org/">ImageMagick</a> (Windows, Linux, Mac) or <a href="http://www.irfanview.com/">Irfanview</a> (Windows including a viewer)  </li>
+        <li>"CUSTOM_FOLD": Custom developed task associated with an event in a folder. IT CANNOT BE TRANSACTIONAL.</li>
+        <li>"CUSTOM_DOC": Custom developed task associated with a document event. IT CANNOT BE TRANSACTIONAL.</li>
         </ul>
     </li>    
     <li><b>Object type</b> (one of Folder or Document types) that apply the task.</li>    
@@ -33,7 +36,14 @@
         <ul>
         <li>"UPDATE_FOLD": 
             <ul>
-                <li>Param1: Atributo1: Expression to calculate the value of an attribute. It consists of an attribute name + "=" + a sequence of attribute names or literals (framed by '#'). Only applies to text metadata type.(i.e.: "Attr1=Attr1+#=#+Attr2", "Title=#The title:#+Title" )</li>
+                <li>Param1: Atributo1: Expression to calculate the value of an attribute. It consists of an attribute name + "=" + a sequence of attribute names, expressions or literals (framed by '#'). Only applies to text metadata type.(i.e.: "Attr1=Attr1+#=#+Attr2", "Title=#The title:#+Title" ). Valid options are:
+                    <ul>
+                    <li>AtributeName: Exact (including lower, Uppercase) Internal name of an Attribute of the Folder (Ex. Title, ACL, MimeType, DocType,..)</li>
+                    <li>#Literal#: Literal Expression between characters # (Ex. #Surname:#, # in Address#,..)</li>                        
+                    <li>@AtributeName: Exact (including lower, Uppercase) Internal name of an Attribute of the PARENT Folder (Ex. @Title, @ACL, @CaseNumber,..)</li>
+                    <li>{AtributeName: Exact (including lower, Uppercase) Internal name of an Attribute of type Thesaurus (Ex. {Country, {TypeProduct,..)</li>
+                    </ul>
+                </li>
                 <li>Param2: Atributo2: Expression to calculate the value of an attribute. It can be empty. it will be calculate AFTER the previous expresion.</li>
                 <li>Param3: Atributo3: Expression to calculate the value of an attribute. It can be empty. it will be calculate AFTER the previous expresion.</li>
                 <li>Param4: Root folder for the task. All the folders of the specified type under this folder (in any level) will be processed. Don't include "Rootfolder"(I.e."/Administration/HR").</li>
@@ -41,7 +51,14 @@
         </li>
         <li>"UPDATE_DOC":             
             <ul>
-                <li>Param1: Atributo1: Expression to calculate the value of an attribute. It consists of an attribute name + "=" + a sequence of attribute names or literals (framed by '#'). Only applies to text metadata type.(i.e.: "Attr1=Attr1+#=#+Attr2", "Title=#The title:#+Title" )</li>
+                <li>Param1: Atributo1: Expression to calculate the value of an attribute. It consists of an attribute name + "=" + a sequence of attribute names, expressions or literals (framed by '#'). Only applies to text metadata type.(i.e.: "Attr1=Attr1+#=#+Attr2", "Title=#The title:#+Title" ). Valid options are:
+                    <ul>
+                    <li>AtributeName: Exact (including lower, Uppercase) Internal name of an Attribute of the Document (Ex. Title, ACL, MimeType, DocType,..)</li>
+                    <li>#Literal#: Literal Expression between characters # (Ex. #Surname:#, # in Address#,..)</li>                        
+                    <li>@AtributeName: Exact (including lower, Uppercase) Internal name of an Attribute of the PARENT Folder (Ex. @Title, @ACL, @CaseNumber,..)</li>
+                    <li>{AtributeName: Exact (including lower, Uppercase) Internal name of an Attribute of type Thesaurus (Ex. {Country, {TypeProduct,..)</li>
+                    </ul>
+                </li>
                 <li>Param2: Atributo2: Expression to calculate the value of an attribute. It can be empty. it will be calculate AFTER the previous expresion.</li>
                 <li>Param3: Atributo3: Expression to calculate the value of an attribute. It can be empty. it will be calculate AFTER the previous expresion.</li>
                 <li>Param4: Root folder for the task. All the documents of the specified type under this folder (in any level) will be processed. Don't include "Rootfolder"(I.e."/Administration/HR").</li>
@@ -81,7 +98,22 @@
                 <li>Param4: File Extension of destination after conversion. It will add the destination name @2 when invoking the command.(i.e.: "png")</li>
             </ul>
         </li>
-        
+        <li>"CUSTOM_FOLD":            
+            <ul>
+                <li>Param1: Parameter to be interpreted by the developed task.</li>
+                <li>Param2: Parameter to be interpreted by the developed task.</li>
+                <li>Param3: Parameter to be interpreted by the developed task.</li>
+                <li>Param4: Parameter to be interpreted by the developed task.</li>
+            </ul>
+        </li>
+        <li>"CUSTOM_DOC":            
+            <ul>
+                <li>Param1: Parameter to be interpreted by the developed task.</li>
+                <li>Param2: Parameter to be interpreted by the developed task.</li>
+                <li>Param3: Parameter to be interpreted by the developed task.</li>
+                <li>Param4: Parameter to be interpreted by the developed task.</li>
+             </ul>
+        </li>        
         </ul>
     </li>    
     <li><b>Kind of Event</b> to process (INSert, DELete, UPDate)</li>    
