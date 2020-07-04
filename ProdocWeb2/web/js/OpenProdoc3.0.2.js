@@ -1909,7 +1909,7 @@ window.dhx4.ajax.get("CheckOut?D="+Doc2CheckOut, function(r)
             Cell=GridResults.cellById(Doc2CheckOut, i);  
             }
         else
-            Cell=DocsGrid.cellById(Doc2CheckOut, 3);    
+            Cell=DocsGrid.cellById(Doc2CheckOut, 4);    
         Cell.setValue(nodes[0].textContent.substring(2)); 
         }
     });    
@@ -1941,7 +1941,7 @@ dhtmlx.confirm({text:LocaleTrans("Do_you_want_to_cancel_edition_and_lost_changes
                     Cell=GridResults.cellById(Doc2CancelCheck, i);  
                     }
                 else
-                    Cell=DocsGrid.cellById(Doc2CancelCheck, 3); 
+                    Cell=DocsGrid.cellById(Doc2CancelCheck, 4); 
                 Cell.setValue(""); 
                 }
             });   
