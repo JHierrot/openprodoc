@@ -1301,6 +1301,8 @@ switch (Attr.getType())
             FormField.append("{type: \"newcolumn\", offset:2 },");
             FormField.append("{type: \"button\",").append(ReadOnly?"disabled:1,":"").append(" name:  \"M_").append(Attr.getName()).append("\", value: \"*\", width: 20}]},");
         }
+        else if (Attr.getLongStr()>1000)
+            FormField.append("{type: \"editor\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"disabled:1,":"").append(" required: ").append(Attr.isRequired()?"true":"false").append(",").append(Attr.getValue()!=null?("value:\""+EscapeHtmlJson(Attr.Export())+"\","):"").append(" tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", position:'label-left', inputWidth:440, inputHeight:100, maxLength:").append(Attr.getLongStr()).append("},");
         else
             FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\",").append(ReadOnly?"readonly:1,":"").append(" required: ").append(Attr.isRequired()?"true":"false").append(",").append(Attr.getValue()!=null?("value:\""+EscapeHtmlJson(Attr.Export())+"\","):"").append(" tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", inputWidth: 300, maxLength:").append(Attr.getLongStr()).append("},");
         break;
@@ -1328,7 +1330,8 @@ switch (Attr.getType())
                     }
                 }
             FormField.append("{type: \"block\", width: 550, offsetLeft:1, list:[");
-            FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\", readonly: \"true\",value:\"").append(EscapeHtmlJson(SBNames.toString())).append("\", tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", labelWidth: 180, inputWidth: 250, userdata: {ThesId:").append(Attr.getLongStr()).append("}},");
+            FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\", readonly: \"true\",value:\"").append(EscapeHtmlJson(SBNames.toString())).append("\", tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", labelWidth: 180, userdata: {ThesId:").append(Attr.getLongStr()).append("}},");
+//            FormField.append("{type: \"input\", name: \"").append(Attr.getName()).append("\", label: \"").append(TT(Req, Attr.getUserName())).append("\", readonly: \"true\",value:\"").append(EscapeHtmlJson(SBNames.toString())).append("\", tooltip:\"").append(TT(Req, Attr.getDescription())).append("\", labelWidth: 180, inputWidth: 250, userdata: {ThesId:").append(Attr.getLongStr()).append("}},");
             FormField.append("{type: \"newcolumn\", offset:2 },");
             FormField.append("{type: \"hidden\", name:\"TH_").append(Attr.getName()).append("\", value: \"").append(SBId).append("\"},");
             FormField.append("{type: \"button\",").append(ReadOnly?"disabled:1,":"").append(" name:  \"MT_").append(Attr.getName()).append("\", value: \"*T\", width: 20}]},");

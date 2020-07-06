@@ -1049,8 +1049,8 @@ WinAF=myWins.createWindow({
 id:"AddFold",
 left:20,
 top:1,
-width:750,
-height:500,
+width:700,
+height:650,
 center:true,
 modal:true,
 resize:true}); 
@@ -1121,8 +1121,8 @@ WinAF=myWins.createWindow({
 id:"ModFold",
 left:20,
 top:1,
-width:600,
-height:420,
+width:700,
+height:650,
 center:true,
 modal:true,
 resize:true}); 
@@ -1813,8 +1813,8 @@ var WinMD=myWins.createWindow({
     id:"ModDoc",
     left:20,
     top:1,
-    width:600,
-    height:420,
+    width:700,
+    height:650,
     center:true,
     modal:true,
     resize:true
@@ -2005,8 +2005,8 @@ WinAF=myWins.createWindow({
 id:"AddExtDoc",
 left:20,
 top:1,
-width:750,
-height:500,
+width:700,
+height:650,
 center:true,
 modal:true,
 resize:true}); 

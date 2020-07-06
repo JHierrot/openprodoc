@@ -109,6 +109,8 @@ while (Attr!=null)
                     }
                 }
             }
+        else if (Attr.getType()==Attribute.tSTRING && Attr.getLongStr()>1000)
+            Html.append(Attr.Export());
         else
             Html.append(Attr.ExportXML());
         }
