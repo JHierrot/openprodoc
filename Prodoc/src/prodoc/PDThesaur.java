@@ -900,7 +900,14 @@ if (SubThesaurs)
     {
     if (!(IdActFold==null) )
         {
-        Condition C=new Condition(PDThesaur.fPDID, F.getListDescendList(IdActFold));
+        Condition CondParents=new Condition( fGRANTPARENTID, Condition.cEQUAL, IdActFold);
+        Conditions Conds=new Conditions();
+        Conds.addCondition(CondParents);
+        Record R=new Record();
+        R.addAttr(getRecordStructPDThesaurLev().getAttr(PDThesaur.fPDID));
+        Query QSubTerms=new Query(getTableNameThesLev(), R, Conds);
+        Condition C=new Condition(PDThesaur.fPDID, QSubTerms);
+//        Condition C=new Condition(PDThesaur.fPDID, F.getListDescendList(IdActFold));
         ComposedConds.addCondition(C);
         }
     }
