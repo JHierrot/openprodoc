@@ -71,7 +71,7 @@ try {
 PDFolders F=new PDFolders(PDSession);
 F.LoadFull(IdVersProdSec);
 DepTree.append("<item id=\"").append(F.getPDId()).append("\" text=\"").append(F.getTitle()).append("\" open=\"1\">");
-DepTree.append(SubImpactTree(PDSession, F.getPDId()));
+DepTree.append(SubImpactTree(Req, PDSession, F.getPDId()));
 DepTree.append("</item>");
 } catch (Exception Ex)
     {
@@ -82,7 +82,7 @@ return(DepTree.toString());
 }
 //-----------------------------------------------------------------------------------------------
 
-private StringBuilder SubImpactTree(DriverGeneric PDSession, String IdPrim) throws PDException
+private StringBuilder SubImpactTree(HttpServletRequest Req, DriverGeneric PDSession, String IdPrim) throws PDException
 {
 StringBuilder DepTree=new StringBuilder(5000);
 PDFolders F=new PDFolders(PDSession);
@@ -92,12 +92,12 @@ Condition C1=new Condition(DEPENDENCIES , Condition.cLET, IdPrim+REL_SEP+"}");
 Conditions Cond=new Conditions();
 Cond.addCondition(C);
 Cond.addCondition(C1);
-Vector<Record> ListImpProdVers = F.SearchV(getProductsVersType(), Cond, true, false, PDFolders.ROOTFOLDER, null);
+Vector<Record> ListImpProdVers = F.SearchV(getProductsVersType(Req), Cond, true, false, PDFolders.ROOTFOLDER, null);
 for (int i = 0; i < ListImpProdVers.size(); i++)
     {
     Record R = ListImpProdVers.elementAt(i);
     DepTree.append("<item id=\"").append(Math.random()).append("\" text=\"").append((String)R.getAttr(PDFolders.fTITLE).getValue()).append("\" open=\"1\">");
-    DepTree.append(SubImpactTree(PDSession, (String)R.getAttr(PDFolders.fPDID).getValue()));
+    DepTree.append(SubImpactTree(Req, PDSession, (String)R.getAttr(PDFolders.fPDID).getValue()));
     DepTree.append("</item>");    
     }
 

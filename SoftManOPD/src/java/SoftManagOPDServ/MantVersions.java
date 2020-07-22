@@ -43,7 +43,7 @@ public class MantVersions extends SParent
 @Override
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {   
-PDFolders TmpFold=new PDFolders(SParent.getSessOPD(Req), getProductsVersType());    
+PDFolders TmpFold=new PDFolders(SParent.getSessOPD(Req), getProductsVersType(Req));    
 String Oper=Req.getParameter("Oper");
 if (Oper!=null) // Second time)
     out.println(GenerateForm(Oper, TmpFold, Req));
@@ -94,7 +94,7 @@ Form.append("[ {type: \"settings\", position: \"label-left\", offsetLeft:10, lab
 if (Oper.equals(DEL))
     Form.append("{type: \"label\", labelWidth: 500,label: \"ALL INFORMATION OF THE VERSIONS, INCLUDING DOCUMENTS AND ISSUES WILL BE DELETED\"},");    
 Form.append("{type: \"label\", label: \"").append(Title).append("\"},");
-Vector<String> ProdFields = getProductsVersFields();
+Vector<String> ProdFields = getProductsVersFields(Req);
 for (int i = 0; i < ProdFields.size(); i++)
     {
     Form.append(GenInput(Req, TmpFold.getRecord().getAttr(ProdFields.elementAt(i)), ReadOnly, Modif));
@@ -125,7 +125,7 @@ String Prod=Req.getParameter("Prod");
 try {
 if (!Oper2.equals(ADD))
     TmpFold.LoadFull(Id);
-Vector<String> ProdVersFields = getProductsVersFields();
+Vector<String> ProdVersFields = getProductsVersFields(Req);
 Record recSum = TmpFold.getRecSum();
 for (int i = 0; i < ProdVersFields.size(); i++)
     {

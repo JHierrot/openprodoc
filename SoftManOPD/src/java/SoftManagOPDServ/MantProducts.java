@@ -43,7 +43,7 @@ public class MantProducts extends SParent
 @Override
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {   
-PDFolders TmpFold=new PDFolders(SParent.getSessOPD(Req), getProductType());    
+PDFolders TmpFold=new PDFolders(SParent.getSessOPD(Req), getProductType(Req));    
 String Oper=Req.getParameter("Oper");
 if (Oper!=null) // Second time)
     out.println(GenerateForm(Oper, TmpFold, Req));
@@ -88,7 +88,7 @@ Form.append("[ {type: \"settings\", position: \"label-left\", offsetLeft:10, lab
 if (Oper.equals(DEL))
     Form.append("{type: \"label\", labelWidth: 500,label: \"ALL INFORMATION OF THE PRODUCT, INCLUDING THE VERSIONS, DOCUMENTS AND ISSUES WILL BE DELETED\"},");    
 Form.append("{type: \"label\", label: \"").append(Title).append("\"},");
-Vector<String> ProdFields = getProductFields();
+Vector<String> ProdFields = getProductFields(Req);
 for (int i = 0; i < ProdFields.size(); i++)
     {
     Form.append(GenInput(Req, TmpFold.getRecord().getAttr(ProdFields.elementAt(i)), ReadOnly, Modif));
@@ -117,7 +117,7 @@ String Id=Req.getParameter("D");
 try {
 if (!Oper2.equals(ADD))
     TmpFold.LoadFull(Id);
-Vector<String> ProdFields = getProductFields();
+Vector<String> ProdFields = getProductFields(Req);
 Record recSum = TmpFold.getRecSum();
 for (int i = 0; i < ProdFields.size(); i++)
     {
@@ -144,7 +144,7 @@ if (Oper2.equalsIgnoreCase(ADD))
     {
     PDFolders Fold=new PDFolders(TmpFold.getDrv());
     Fold.setPDId(Id);
-    recSum.getAttr("Internal").setValue( Fold.IsUnder(getDepartsRoot(TmpFold.getDrv())) );
+    recSum.getAttr("Internal").setValue( Fold.IsUnder(getDepartsRoot(Req)) );
     }
 TmpFold.assignValues(recSum);
 switch (Oper2)

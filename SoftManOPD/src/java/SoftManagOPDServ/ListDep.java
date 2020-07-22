@@ -67,9 +67,9 @@ ListProducts.append("<rows>");
 DriverGeneric PDSession=getSessOPD(Req);
 Attribute AttrD;
 try {
-PDFolders Fold=new PDFolders(PDSession, getProductsVersType());
-PDFolders FoldRelProdVer=new PDFolders(PDSession, getProductsVersType());
-PDFolders FoldRelParent=new PDFolders(PDSession, getProductType());
+PDFolders Fold=new PDFolders(PDSession, getProductsVersType(Req));
+PDFolders FoldRelProdVer=new PDFolders(PDSession, getProductsVersType(Req));
+PDFolders FoldRelParent=new PDFolders(PDSession, getProductType(Req));
 PDThesaur TermTmp=new PDThesaur(PDSession);
 String IdVers=Req.getParameter("IdVers");
 Fold.LoadFull(IdVers);

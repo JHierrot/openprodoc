@@ -76,7 +76,7 @@ String IdProdPrim=null;
 try{
 Form.append("[ {type: \"settings\", position: \"label-left\", offsetLeft:10, labelWidth: 180, inputWidth: 250},");
 Form.append("{type: \"combo\", name: \"IdProd\", label: \"").append(TT(Req, "Product")).append("\",").append("filtering:1,required:true,").append(IdProdPrim!=null?("value:\""+IdProdPrim+"\","):"").append(IdProdPrim!=null?"readonly:1,":"").append(" options:[");
-Form.append(getComboProducts(TmpFold.getDrv(), IdProdPrim));
+Form.append(getComboProducts(Req, TmpFold.getDrv(), IdProdPrim));
 Form.append("]}");
 Form.append("];");
 } catch (Exception Ex)
@@ -89,12 +89,12 @@ Form.append("];");
 return(Form.toString());
 }
 //-----------------------------------------------------------------------------------------------
-private StringBuilder getComboProducts(DriverGeneric PDSession, String SelId) throws PDException
+private StringBuilder getComboProducts(HttpServletRequest Req,DriverGeneric PDSession, String SelId) throws PDException
 {
 StringBuilder ListVals=new StringBuilder(5000);
 Cursor CursorId=null;
 try {
-PDFolders Fold=new PDFolders(PDSession, getProductType());
+PDFolders Fold=new PDFolders(PDSession, getProductType(Req));
 String CurrentFold=PDFolders.ROOTFOLDER;
 boolean SubFolders=false;
 Condition C=new Condition(PDFolders.fPDID , Condition.cNE, "z");
@@ -102,7 +102,7 @@ Conditions Cond=new Conditions();
 Cond.addCondition(C);
 Vector<String> Ord=new Vector();
 Ord.add(PDFolders.fTITLE);
-CursorId=Fold.Search( getProductType(), Cond, true, SubFolders, CurrentFold, Ord);
+CursorId=Fold.Search( getProductType(Req), Cond, true, SubFolders, CurrentFold, Ord);
 Record Res=PDSession.NextRec(CursorId);
 while (Res!=null)
     {

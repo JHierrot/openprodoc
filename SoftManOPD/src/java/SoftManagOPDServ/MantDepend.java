@@ -102,10 +102,10 @@ switch (Oper)
 Form.append("[ {type: \"settings\", position: \"label-left\", offsetLeft:10, labelWidth: 180, inputWidth: 250},");
 Form.append("{type: \"label\", label: \"").append(Title).append("\"},");
 Form.append("{type: \"combo\", name: \"Relations\", label: \"").append(TT(Req, "Relations")).append("\",").append("filtering:1,required:true,")/*.append(RelationSecPrim!=null?("value:\""+RelationSecPrim+"\","):"")*/.append((Oper.equalsIgnoreCase(DEL))?"disabled:1,":"").append(" options:[");
-Form.append(getComboRelations(TmpFold.getDrv(), RelationSecPrim));
+Form.append(getComboRelations(Req, TmpFold.getDrv(), RelationSecPrim));
 Form.append("]},");
 Form.append("{type: \"combo\", name: \"ProdVers\", label: \"").append(TT(Req, "Product Versions")).append("\",").append("filtering:1,required:true,")/*.append(ProdVersPrim!=null?("value:\""+ProdVersPrim+"\","):"")*/.append((!Oper.equalsIgnoreCase(ADD))?"disabled:1,":"").append(" options:[");
-Form.append(getComboProductsVers(TmpFold.getDrv(), IdProdPrim, ProdVersPrim));
+Form.append(getComboProductsVers(Req, TmpFold.getDrv(), IdProdPrim, ProdVersPrim));
 Form.append("]},");
 Form.append("{type: \"block\", width: 250, list:[");
 Form.append("{type: \"button\", name: \"OK\", value: \"").append(TT(Req, "Ok")).append("\"},");
@@ -166,12 +166,12 @@ return("OK:"+Oper2);
 }
 //----------------------------------------------------------------
 
-private StringBuilder getComboProductsVers(DriverGeneric PDSession, String IdProd, String ProdVersPrim)  throws PDException
+private StringBuilder getComboProductsVers(HttpServletRequest Req, DriverGeneric PDSession, String IdProd, String ProdVersPrim)  throws PDException
 {
 StringBuilder ListVals=new StringBuilder(5000);
 Cursor CursorId=null;
 try {
-PDFolders Fold=new PDFolders(PDSession, getProductsVersType());
+PDFolders Fold=new PDFolders(PDSession, getProductsVersType(Req));
 String CurrentFold=PDFolders.ROOTFOLDER;
 boolean SubFolders=false;
 Condition C;
@@ -183,7 +183,7 @@ Conditions Cond=new Conditions();
 Cond.addCondition(C);
 Vector<String> Ord=new Vector();
 Ord.add(PDFolders.fTITLE);
-CursorId=Fold.Search( getProductsVersType(), Cond, true, SubFolders, CurrentFold, Ord);
+CursorId=Fold.Search( getProductsVersType(Req), Cond, true, SubFolders, CurrentFold, Ord);
 Record Res=PDSession.NextRec(CursorId);
 while (Res!=null)
     {
@@ -205,11 +205,11 @@ return(ListVals);
 }
 //----------------------------------------------------------------
 
-private StringBuilder getComboRelations(DriverGeneric PDSession, String IdRel)  throws PDException
+private StringBuilder getComboRelations(HttpServletRequest Req, DriverGeneric PDSession, String IdRel)  throws PDException
 {
 StringBuilder ListVals=new StringBuilder(5000);
 PDThesaur Thes=new PDThesaur(PDSession);
-HashSet<String> listDirectDescendList = Thes.getListDirectDescendList(getRelationsThes());
+HashSet<String> listDirectDescendList = Thes.getListDirectDescendList(getRelationsThes(Req));
 for (Iterator<String> iterator = listDirectDescendList.iterator(); iterator.hasNext();)
     {
     Thes.Load(iterator.next());

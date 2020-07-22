@@ -71,12 +71,12 @@ ListProducts.append("<rows>");
 DriverGeneric PDSession=getSessOPD(Req);
 Attribute AttrD;
 try {
-PDFolders Fold=new PDFolders(PDSession, getSoftProviderType());
+PDFolders Fold=new PDFolders(PDSession, getSoftProviderType(Req));
 String CurrentFold=PDFolders.ROOTFOLDER;
 boolean SubFolders=false;
 Record Rec=Fold.getRecSum();
 Conditions Cond=new Conditions();
-Vector<String> FiltSoftProvFields = getSoftProvFieldsFilter();
+Vector<String> FiltSoftProvFields = getSoftProvFieldsFilter(Req);
 for (int i = 0; i < FiltSoftProvFields.size(); i++)
     {
     String Filt = Req.getParameter(FiltSoftProvFields.elementAt(i));
@@ -96,7 +96,7 @@ if (Cond.NumCond()==0)
     Condition C=new Condition(PDFolders.fPDID , Condition.cNE, "z");
     Cond.addCondition(C);
     }
-Cursor ListDocs=Fold.Search( getSoftProviderType(), Cond, true, SubFolders, CurrentFold, null);
+Cursor ListDocs=Fold.Search( getSoftProviderType(Req), Cond, true, SubFolders, CurrentFold, null);
 Record NextProd=PDSession.NextRec(ListDocs);
 String ProdId;
 PDThesaur TmpTerm=new PDThesaur(PDSession);

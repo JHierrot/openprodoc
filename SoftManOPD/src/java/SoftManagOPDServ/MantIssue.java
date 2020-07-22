@@ -43,7 +43,7 @@ public class MantIssue extends SParent
 @Override
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {   
-PDFolders TmpFold=new PDFolders(SParent.getSessOPD(Req), getIssuesType());    
+PDFolders TmpFold=new PDFolders(SParent.getSessOPD(Req), getIssuesType(Req));    
 String Oper=Req.getParameter("Oper");
 if (Oper!=null) // Second time)
     out.println(GenerateForm(Oper, TmpFold, Req));
@@ -96,12 +96,12 @@ Form.append("{type: \"label\", label: \"").append(Title).append("\"},");
 if (IdVersProd==null || IdVersProd.length()==0 || IdVersProd.equalsIgnoreCase("null"))
     {
     Form.append("{type: \"combo\", name: \"IdVersProd\", label: \"").append(TT(Req, "Version product")).append("\",").append(" required: true, options:[");    
-    Form.append(getComboVersProd(TmpFold));    
+    Form.append(getComboVersProd(Req, TmpFold));    
     Form.append("]},");
     }
 else
     Form.append("{type: \"hidden\", name:\"IdVersProd\", value: \"").append(IdVersProd).append("\"},");
-Vector<String> IssueFields = getIssueFields();
+Vector<String> IssueFields = getIssueFields(Req);
 for (int i = 0; i < IssueFields.size(); i++)
     {
     Form.append(GenInput(Req, TmpFold.getRecord().getAttr(IssueFields.elementAt(i)), ReadOnly, Modif));
@@ -131,7 +131,7 @@ String IdVersProd=Req.getParameter("IdVersProd");
 try {
 if (!Oper2.equals(ADD))
     TmpFold.LoadFull(Id);
-Vector<String> ProdFields = getIssueFields();
+Vector<String> ProdFields = getIssueFields(Req);
 Record recSum = TmpFold.getRecSum();
 for (int i = 0; i < ProdFields.size(); i++)
     {
@@ -158,7 +158,7 @@ if (Oper2.equalsIgnoreCase(ADD))
     {
     PDFolders Fold=new PDFolders(TmpFold.getDrv());
     Fold.setPDId(IdVersProd);
-    recSum.getAttr("Internal").setValue( Fold.IsUnder(getDepartsRoot(TmpFold.getDrv())) );
+    recSum.getAttr("Internal").setValue( Fold.IsUnder(getDepartsRoot(Req)) );
     }
 TmpFold.assignValues(recSum);
 switch (Oper2)

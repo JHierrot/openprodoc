@@ -70,8 +70,8 @@ ListProducts.append("<rows>");
 DriverGeneric PDSession=getSessOPD(Req);
 Attribute AttrD;
 try {
-PDFolders Fold=new PDFolders(PDSession, getProductsVersType());
-PDFolders FoldTemp=new PDFolders(PDSession, getProductsVersType());
+PDFolders Fold=new PDFolders(PDSession, getProductsVersType(Req));
+PDFolders FoldTemp=new PDFolders(PDSession, getProductsVersType(Req));
 PDThesaur TmpTerm=new PDThesaur(PDSession);
 String LicTemp;
 String IdProd=Req.getParameter("IdProd");
@@ -82,7 +82,7 @@ Date Now=new Date();
 for (Iterator<String> iterator = ListVers.iterator(); iterator.hasNext();)
     { // Title,DateInit,DateSup,DateSupExt,Notes
     FoldTemp.LoadFull(iterator.next());
-    if (FoldTemp.getFolderType().equals(getProductsVersType()))
+    if (FoldTemp.getFolderType().equals(getProductsVersType(Req)))
         {
         String Icon="";
         Record Rec=FoldTemp.getRecSum();

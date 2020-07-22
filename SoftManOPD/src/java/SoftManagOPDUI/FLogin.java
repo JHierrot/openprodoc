@@ -57,7 +57,8 @@ private static final String Html="<!DOCTYPE html>" +
         "  <tr><td width=\"100\"><div class=\"dhxform_label dhxform_label_align_left\" >User:</div></td>" +
         "  <td><div class=\"dhxform_control\"><input class=\"dhxform_textarea\" type=\"text\" name=\"User\"></div></td></tr>" +
         "  <tr><td><div class=\"dhxform_label dhxform_label_align_left\">Password:</div></td>" +
-        "  <td><div class=\"dhxform_control\"><input class=\"dhxform_textarea\" type=\"password\" name=\"Password\"></div></td></tr>" +        
+        "  <td><div class=\"dhxform_control\"><input class=\"dhxform_textarea\" type=\"password\" name=\"Password\"></div></td></tr>" +    
+        "<input type=\"hidden\"name=\"IdConfig\" value=\"@IDCONFIG@\">"+
         "  <tr><td></td><td><input  class=\"dhxform_btn_filler\" type=\"submit\" value=\"  Ok  \"></td></tr>" +
         "  </table></fieldset>" +
 "        </td></tr>" +
@@ -68,12 +69,18 @@ private static final String Html="<!DOCTYPE html>" +
 "</html>\n";
 
 //-------------------------------------------------------------------
-public FLogin(HttpSession Sess, String Msg)
+public FLogin(HttpSession Sess, String Msg, String IdConfig)
 {
 if (Msg!=null && Msg.length()!=0)   
     Html2=Html.replace("@Msg@", Msg);
 else
     Html2=Html.replace("@Msg@", "");
+if (IdConfig!=null && IdConfig.length()!=0)   
+    Html2=Html2.replace("@IDCONFIG@", IdConfig);
+else
+    Html2=Html2.replace("@IDCONFIG@", "");
+
+
 }
 //-------------------------------------------------------------------
 public String toHtml()

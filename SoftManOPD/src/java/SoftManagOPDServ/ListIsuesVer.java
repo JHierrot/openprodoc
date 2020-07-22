@@ -71,7 +71,7 @@ DriverGeneric PDSession=getSessOPD(Req);
 Attribute AttrD;
 Cursor ListIssues=null;
 try {
-PDFolders Fold=new PDFolders(PDSession, getIssuesType());
+PDFolders Fold=new PDFolders(PDSession, getIssuesType(Req));
 String CurrentFold=PDFolders.ROOTFOLDER;
 boolean SubFolders=false;
 Condition C;
@@ -81,7 +81,7 @@ else
     C=new Condition(PDFolders.fPDID , Condition.cNE, "z");
 Conditions Cond=new Conditions();
 Cond.addCondition(C);
-ListIssues=Fold.Search( getIssuesType(), Cond, true, SubFolders, CurrentFold, null);
+ListIssues=Fold.Search( getIssuesType(Req), Cond, true, SubFolders, CurrentFold, null);
 Record NextIssue=PDSession.NextRec(ListIssues);
 String ProdId;
 PDFolders TmpFold=new PDFolders(PDSession);

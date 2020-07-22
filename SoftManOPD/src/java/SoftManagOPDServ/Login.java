@@ -50,12 +50,13 @@ protected void processRequest(HttpServletRequest Req, HttpServletResponse respon
 response.setContentType("text/html;charset=UTF-8");
 PrintWriter out = response.getWriter();
 HttpSession Sess=Req.getSession();
+String IdConfig=Req.getParameter("IdConfig");
 try {
 String User=Req.getParameter("User");
 String Password=Req.getParameter("Password");
 if (User==null || User.length()==0 ||Password==null || Password.length()==0)
     {
-    out.println(new FLogin(Sess, null).toHtml());
+    out.println(new FLogin(Sess, null, IdConfig).toHtml());
     return;
     }
 if (!OPDFWLoaded)
@@ -63,12 +64,15 @@ if (!OPDFWLoaded)
     ProdocFW.InitProdoc("PD", getProdocProperRef());
     OPDFWLoaded=true;
     }
+if (IdConfig==null || IdConfig.length()==0)
+    IdConfig="SoftManOpdConf";
+setIdConf(Req, IdConfig);
 DriverGeneric D=ProdocFW.getSession("PD", User, Password);
 setSessOPD(Req, D);
 out.println(new FMain(Sess).toHtml());
 } catch (Exception Ex)
     {
-    out.println(new FLogin(Sess, Ex.getLocalizedMessage()).toHtml());
+    out.println(new FLogin(Sess, Ex.getLocalizedMessage(), IdConfig).toHtml());
     }
 out.close();
 }

@@ -51,24 +51,24 @@ Vector<String> FiltProdFields = null;
 if (Filt.equalsIgnoreCase("Products"))
     {
     Form.append(GenInternalFilter());
-    FiltProdFields=getProductFieldsFilter();
-    TmpFold=new PDFolders(SParent.getSessOPD(Req), getProductType());
+    FiltProdFields=getProductFieldsFilter(Req);
+    TmpFold=new PDFolders(SParent.getSessOPD(Req), getProductType(Req));
     }
 else if (Filt.equalsIgnoreCase("Issues"))
     {
     Form.append(GenInternalFilter());
-    FiltProdFields=getIssuesFieldsFilter();
-    TmpFold=new PDFolders(SParent.getSessOPD(Req), getIssuesType());
+    FiltProdFields=getIssuesFieldsFilter(Req);
+    TmpFold=new PDFolders(SParent.getSessOPD(Req), getIssuesType(Req));
     }
 else if (Filt.equalsIgnoreCase("Depart"))
     {
-    FiltProdFields=getDepartFieldsFilter();
-    TmpFold=new PDFolders(SParent.getSessOPD(Req), getDepartmentType());
+    FiltProdFields=getDepartFieldsFilter(Req);
+    TmpFold=new PDFolders(SParent.getSessOPD(Req), getDepartmentType(Req));
     }
 else if (Filt.equalsIgnoreCase("SoftProv"))
     {
-    FiltProdFields=getSoftProvFieldsFilter();
-    TmpFold=new PDFolders(SParent.getSessOPD(Req), getSoftProviderType());
+    FiltProdFields=getSoftProvFieldsFilter(Req);
+    TmpFold=new PDFolders(SParent.getSessOPD(Req), getSoftProviderType(Req));
     }
 
 for (int i = 0; i < FiltProdFields.size(); i++)

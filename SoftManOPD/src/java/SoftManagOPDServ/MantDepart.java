@@ -43,7 +43,7 @@ public class MantDepart extends SParent
 @Override
 protected void ProcessPage(HttpServletRequest Req, PrintWriter out) throws Exception
 {   
-PDFolders TmpFold=new PDFolders(SParent.getSessOPD(Req), getDepartmentType());    
+PDFolders TmpFold=new PDFolders(SParent.getSessOPD(Req), getDepartmentType(Req));    
 String Oper=Req.getParameter("Oper");
 if (Oper!=null) // Second time)
     out.println(GenerateForm(Oper, TmpFold, Req));
@@ -91,7 +91,7 @@ Form.append("[ {type: \"settings\", position: \"label-left\", offsetLeft:10, lab
 if (Oper.equals(DEL))
     Form.append("{type: \"label\", labelWidth: 500, label: \"ALL INFORMATION OF THE DEPARTMENT, INCLUDING THE PRODUCTS, VERSIONS, DOCUMENTS AND ISsUES WILL BE DELETED\"},");    
 Form.append("{type: \"label\", label: \"").append(Title).append("\"},");
-Vector<String> departFields = getDepartFields();
+Vector<String> departFields = getDepartFields(Req);
 for (int i = 0; i < departFields.size(); i++)
     {
     Form.append(GenInput(Req, TmpFold.getRecord().getAttr(departFields.elementAt(i)), ReadOnly, Modif));
@@ -123,7 +123,7 @@ if (!Oper2.equals(ADD))
     Id=Req.getParameter("D");
     TmpFold.LoadFull(Id);
     }
-Vector<String> departFields = getDepartFields();
+Vector<String> departFields = getDepartFields(Req);
 Record recSum = TmpFold.getRecSum();
 for (int i = 0; i < departFields.size(); i++)
     {
@@ -147,7 +147,7 @@ for (int i = 0; i < departFields.size(); i++)
         }
     }
 TmpFold.assignValues(recSum);
-TmpFold.setParentId(getDepartsRoot(TmpFold.getDrv()));
+TmpFold.setParentId(getDepartsRoot(Req));
 switch (Oper2)
     {case ADD:
         TmpFold.insert();

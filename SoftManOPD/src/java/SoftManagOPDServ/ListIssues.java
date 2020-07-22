@@ -71,12 +71,12 @@ DriverGeneric PDSession=getSessOPD(Req);
 Attribute AttrD;
 Cursor ListIssues=null;
 try {
-PDFolders Fold=new PDFolders(PDSession, getIssuesType());
+PDFolders Fold=new PDFolders(PDSession, getIssuesType(Req));
 String CurrentFold=PDFolders.ROOTFOLDER;
 boolean SubFolders=false;
 Record Rec=Fold.getRecSum();
 Conditions Cond=new Conditions();
-Vector<String> FiltIssueFields = getIssuesFieldsFilter();
+Vector<String> FiltIssueFields = getIssuesFieldsFilter(Req);
 for (int i = 0; i < FiltIssueFields.size(); i++)
     {
     String Filt = Req.getParameter(FiltIssueFields.elementAt(i));
@@ -102,7 +102,7 @@ if (Cond.NumCond()==0)
     Condition C=new Condition(PDFolders.fPDID , Condition.cNE, "z");
     Cond.addCondition(C);
     }
-ListIssues=Fold.Search( getIssuesType(), Cond, true, SubFolders, CurrentFold, null);
+ListIssues=Fold.Search( getIssuesType(Req), Cond, true, SubFolders, CurrentFold, null);
 Record NextIssue=PDSession.NextRec(ListIssues);
 String ProdId;
 PDFolders TmpFold=new PDFolders(PDSession);

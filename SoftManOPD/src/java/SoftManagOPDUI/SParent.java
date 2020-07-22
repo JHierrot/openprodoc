@@ -19,6 +19,7 @@
 
 package SoftManagOPDUI;
 
+import Config.SoftManOPDConfig;
 import SoftManagOPDServ.CurrentSession;
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -108,17 +109,20 @@ protected static boolean OPDFWLoaded=false;
 
 private final static Hashtable<String, CurrentSession> ListOPSess=new Hashtable();
 
-private static Vector<String>ProductFields=null;
-private static Vector<String>FiltProdFields=null;
-private static Vector<String>IssueFields=null;
-private static Vector<String>FiltIssuesFields=null;
-private static Vector<String>DepartFields=null;
-private static Vector<String>FiltDepartFields=null;
+private final static Hashtable<String, SoftManOPDConfig> ListSoftManConfig=new Hashtable<String, SoftManOPDConfig>();
+
+//private static Vector<String>ProductFields=null;
+//private static Vector<String>FiltProdFields=null;
+//private static Vector<String>IssueFields=null;
+//private static Vector<String>FiltIssuesFields=null;
+//private static Vector<String>DepartFields=null;
+//private static Vector<String>FiltDepartFields=null;
 private static String DepartsRoot=null;
-private static Vector<String>SoftProvFields=null;
-private static Vector<String>FiltSoftProvFields=null;
+//private static Vector<String>SoftProvFields=null;
+//private static Vector<String>FiltSoftProvFields=null;
 private static String SoftProvRoot=null;
-private static Vector<String>ProdVersFields=null;
+//private static Vector<String>ProdVersFields=null;
+
 protected static final String ADD="Add";
 protected static final String COPY="Copy";
 protected static final String UPD="Upd";
@@ -127,6 +131,7 @@ protected static final String DEL="Del";
 //protected static final String LIST_SEP="\\|";
 protected static final String REL_SEP="@";
 public final static String DEPENDENCIES="Dependencies";
+public final static String SOFTMANATTR="SOFTMANATTR";
 
 /** Initializes the servlet.
  * @param config 
@@ -209,7 +214,8 @@ return(false);
 protected void AskLogin(HttpServletRequest Req, PrintWriter out) throws Exception
 {
 HttpSession Sess=Req.getSession();
-out.println(new FLogin(Sess, null).toHtml());
+String IdConfig=Req.getParameter("IdConfig");
+out.println(new FLogin(Sess,null,IdConfig).toHtml());
 }
 //-----------------------------------------------------------------------------------------------
 /**
@@ -1050,7 +1056,7 @@ Session.CloseCursor(CursorId);
 return(ListVals.toString());
 }
 //----------------------------------------------------------------
-static protected StringBuilder getComboVersProd(PDFolders TmpFold) throws PDException
+static protected StringBuilder getComboVersProd(HttpServletRequest Req, PDFolders TmpFold) throws PDException
 {
 StringBuilder ListVals=new StringBuilder(5000);
 String CurrentFold=PDFolders.ROOTFOLDER;
@@ -1061,7 +1067,7 @@ Cond.addCondition(C);
 DriverGeneric PDSession = TmpFold.getDrv();
 Vector Ord=new Vector();
 Ord.add(PDFolders.fTITLE);
-Cursor ListProdVers=TmpFold.Search( getProductsVersType(), Cond, true, SubFolders, CurrentFold, Ord);
+Cursor ListProdVers=TmpFold.Search( getProductsVersType(Req), Cond, true, SubFolders, CurrentFold, Ord);
 Record NextProdVers=PDSession.NextRec(ListProdVers);
 while (NextProdVers!=null)
     {
@@ -1863,187 +1869,200 @@ return ListOPSess;
 }
 // Configuration elements
 //-----------------------------------------------------------------------------------------------
-protected static String getIssuesType()
+protected static String getIssuesType(HttpServletRequest Req) throws PDException
 {
-return("Issues");    
+return(getSoftManConf(Req).getIssueType());
 }
 //-----------------------------------------------------------------------------------------------
-protected synchronized static Vector<String> getIssueFields()
+protected synchronized static Vector<String> getIssueFields(HttpServletRequest Req) throws PDException
 {
-if (IssueFields==null) 
-    {
-    IssueFields=new Vector();
-    IssueFields.add("Code");
-    IssueFields.add("ExtCode");
-    IssueFields.add(PDFolders.fTITLE);
-    IssueFields.add("Description");
-    IssueFields.add("Env");
-    IssueFields.add("IssueCrit");
-    IssueFields.add("IssueStatus");
-    IssueFields.add("Keywords");
-    IssueFields.add("IssueSolver");
-    IssueFields.add("DateOpen");
-    IssueFields.add("DateClosed");
-    IssueFields.add("Solution");
-    }
-return(IssueFields);    
-   
+//if (IssueFields==null) 
+//    {
+//    IssueFields=new Vector();
+//    IssueFields.add("Code");
+//    IssueFields.add("ExtCode");
+//    IssueFields.add(PDFolders.fTITLE);
+//    IssueFields.add("Description");
+//    IssueFields.add("Env");
+//    IssueFields.add("IssueCrit");
+//    IssueFields.add("IssueStatus");
+//    IssueFields.add("Keywords");
+//    IssueFields.add("IssueSolver");
+//    IssueFields.add("DateOpen");
+//    IssueFields.add("DateClosed");
+//    IssueFields.add("Solution");
+//    }
+//return(IssueFields);    
+return(getSoftManConf(Req).getIssueFields());   
 }
 //-----------------------------------------------------------------------------------------------
-protected synchronized static Vector<String> getIssuesFieldsFilter()
+protected synchronized static Vector<String> getIssuesFieldsFilter(HttpServletRequest Req) throws PDException
 {
-if (FiltIssuesFields==null) 
-    {
-    FiltIssuesFields=new Vector();
-    FiltIssuesFields.add("Code");
-    FiltIssuesFields.add("Env");
-    FiltIssuesFields.add("IssueCrit");
-    FiltIssuesFields.add("IssueStatus");
-    FiltIssuesFields.add("IssueSolver");
-    }
-return(FiltIssuesFields);    
+//if (FiltIssuesFields==null) 
+//    {
+//    FiltIssuesFields=new Vector();
+//    FiltIssuesFields.add("Code");
+//    FiltIssuesFields.add("Env");
+//    FiltIssuesFields.add("IssueCrit");
+//    FiltIssuesFields.add("IssueStatus");
+//    FiltIssuesFields.add("IssueSolver");
+//    }
+//return(FiltIssuesFields);   
+return(getSoftManConf(Req).getIssueFieldsFilter());       
 }
 
 //-----------------------------------------------------------------------------------------------
-protected static String getProductType()
+protected static String getProductType(HttpServletRequest Req) throws PDException
 {
-return("Products");    
+//return("Products");  
+return(getSoftManConf(Req).getProductType()); 
 }
 //-----------------------------------------------------------------------------------------------
-protected synchronized static Vector<String> getProductFields()
+protected synchronized static Vector<String> getProductFields(HttpServletRequest Req) throws PDException
 {
-if (ProductFields==null) 
-    {
-    ProductFields=new Vector();
-    ProductFields.add(PDFolders.fTITLE);
-    ProductFields.add("CurrentVersion");
-    ProductFields.add("Description");
-    ProductFields.add("Family");
-    ProductFields.add("Keywords");
-    ProductFields.add("License");
-    ProductFields.add("ProductCode");
-    ProductFields.add("Technology");
-    }
-return(ProductFields);    
+//if (ProductFields==null) 
+//    {
+//    ProductFields=new Vector();
+//    ProductFields.add(PDFolders.fTITLE);
+//    ProductFields.add("CurrentVersion");
+//    ProductFields.add("Description");
+//    ProductFields.add("Family");
+//    ProductFields.add("Keywords");
+//    ProductFields.add("License");
+//    ProductFields.add("ProductCode");
+//    ProductFields.add("Technology");
+//    }
+//return(ProductFields);  
+return(getSoftManConf(Req).getProdFields()); 
 }
 //-----------------------------------------------------------------------------------------------
-protected synchronized static Vector<String> getProductFieldsFilter()
+protected synchronized static Vector<String> getProductFieldsFilter(HttpServletRequest Req) throws PDException
 {
-if (FiltProdFields==null) 
-    {
-    FiltProdFields=new Vector();
-    FiltProdFields.add("Family");
-    FiltProdFields.add("License");
-    FiltProdFields.add("Technology");
-    }
-return(FiltProdFields);    
+//if (FiltProdFields==null) 
+//    {
+//    FiltProdFields=new Vector();
+//    FiltProdFields.add("Family");
+//    FiltProdFields.add("License");
+//    FiltProdFields.add("Technology");
+//    }
+//return(FiltProdFields);    
+return(getSoftManConf(Req).getProdFieldsFilter()); 
 }
 //-----------------------------------------------------------------------------------------------
-protected static String getDepartmentType()
+protected static String getDepartmentType(HttpServletRequest Req) throws PDException
 {
-return("Department");    
+//return("Department");  
+return(getSoftManConf(Req).getDepartmentType());     
 }
 //-----------------------------------------------------------------------------------------------
-protected static String getRelationsThes()
+protected static String getRelationsThes(HttpServletRequest Req) throws PDException
 {
-return("887843");    
+//return("887843");    
+return(getSoftManConf(Req).getRelationsThes());     
 }
 //-----------------------------------------------------------------------------------------------
-protected synchronized static Vector<String> getDepartFields()
+protected synchronized static Vector<String> getDepartFields(HttpServletRequest Req) throws PDException
 {
-if (DepartFields==null) 
-    {
-    DepartFields=new Vector();
-    DepartFields.add(PDFolders.fTITLE);
-    DepartFields.add("Description");
-    DepartFields.add("Responsible");
-    }
-return(DepartFields);    
+//if (DepartFields==null) 
+//    {
+//    DepartFields=new Vector();
+//    DepartFields.add(PDFolders.fTITLE);
+//    DepartFields.add("Description");
+//    DepartFields.add("Responsible");
+//    }
+//return(DepartFields);    
+return(getSoftManConf(Req).getDepartFields());     
 }
 //-----------------------------------------------------------------------------------------------
-protected synchronized static Vector<String> getDepartFieldsFilter()
+protected synchronized static Vector<String> getDepartFieldsFilter(HttpServletRequest Req) throws PDException
 {
-if (FiltDepartFields==null) 
-    {
-    FiltDepartFields=new Vector();
-    FiltDepartFields.add(PDFolders.fTITLE);
-    FiltDepartFields.add("Description");
-    FiltDepartFields.add("Responsible");
-    }
-return(FiltDepartFields);    
+//if (FiltDepartFields==null) 
+//    {
+//    FiltDepartFields=new Vector();
+//    FiltDepartFields.add(PDFolders.fTITLE);
+//    FiltDepartFields.add("Description");
+//    FiltDepartFields.add("Responsible");
+//    }
+//return(FiltDepartFields);    
+return(getSoftManConf(Req).getDepartFieldsFilter());     
 }
 //-----------------------------------------------------------------------------------------------
-protected synchronized static String getDepartsRoot(DriverGeneric LocalSess) throws PDException
+protected synchronized static String getDepartsRoot(HttpServletRequest Req) throws PDException
 {
 if (DepartsRoot==null)
     {
-    PDFolders TmpFold=new PDFolders(LocalSess);
-    DepartsRoot=TmpFold.getIdPath("/Company");
+    PDFolders TmpFold=new PDFolders(getSessOPD(Req));
+    DepartsRoot=TmpFold.getIdPath(getSoftManConf(Req).getDepartsRoot());
     }    
 return(DepartsRoot);    
 }
 //-----------------------------------------------------------------------------------------------
-protected static String getSoftProviderType()
+protected static String getSoftProviderType(HttpServletRequest Req) throws PDException
 {
-return("SoftProvider");    
+//return("SoftProvider");  
+return(getSoftManConf(Req).getSoftProviderType());         
 }
 //-----------------------------------------------------------------------------------------------
-protected synchronized static Vector<String> getSoftProvFields()
+protected synchronized static Vector<String> getSoftProvFields(HttpServletRequest Req) throws PDException
 {
-if (SoftProvFields==null) 
-    {
-    SoftProvFields=new Vector();
-    SoftProvFields.add(PDFolders.fTITLE);
-    SoftProvFields.add("Description");
-    SoftProvFields.add("Contact");
-    SoftProvFields.add("Mail");
-    SoftProvFields.add("Phone");
-    SoftProvFields.add("Url");
-    }
-return(SoftProvFields);    
+//if (SoftProvFields==null) 
+//    {
+//    SoftProvFields=new Vector();
+//    SoftProvFields.add(PDFolders.fTITLE);
+//    SoftProvFields.add("Description");
+//    SoftProvFields.add("Contact");
+//    SoftProvFields.add("Mail");
+//    SoftProvFields.add("Phone");
+//    SoftProvFields.add("Url");
+//    }
+//return(SoftProvFields);    
+return(getSoftManConf(Req).getSoftProvFields());         
 }
 //-----------------------------------------------------------------------------------------------
-protected synchronized static Vector<String> getSoftProvFieldsFilter()
+protected synchronized static Vector<String> getSoftProvFieldsFilter(HttpServletRequest Req) throws PDException
 {
-if (FiltSoftProvFields==null) 
-    {
-    FiltSoftProvFields=new Vector();
-    FiltSoftProvFields.add(PDFolders.fTITLE);
-    FiltSoftProvFields.add("Description");
-    FiltSoftProvFields.add("Contact");
-    FiltSoftProvFields.add("Url");
-    }
-return(FiltSoftProvFields);    
+//if (FiltSoftProvFields==null) 
+//    {
+//    FiltSoftProvFields=new Vector();
+//    FiltSoftProvFields.add(PDFolders.fTITLE);
+//    FiltSoftProvFields.add("Description");
+//    FiltSoftProvFields.add("Contact");
+//    FiltSoftProvFields.add("Url");
+//    }
+//return(FiltSoftProvFields);    
+return(getSoftManConf(Req).getSoftProvFieldsFilter());         
 }
 //-----------------------------------------------------------------------------------------------
-protected synchronized static String getSoftProvRoot(DriverGeneric LocalSess) throws PDException
+protected synchronized static String getSoftProvRoot(HttpServletRequest Req) throws PDException
 {
 if (SoftProvRoot==null)
     {
-    PDFolders TmpFold=new PDFolders(LocalSess);
-    SoftProvRoot=TmpFold.getIdPath("/Providers");
+    PDFolders TmpFold=new PDFolders(getSessOPD(Req));
+    SoftProvRoot=TmpFold.getIdPath(getSoftManConf(Req).getSoftProvRoot());
     }    
 return(SoftProvRoot);    
 }
 //-----------------------------------------------------------------------------------------------
-protected static String getProductsVersType()
+protected static String getProductsVersType(HttpServletRequest Req) throws PDException
 {
-return("ProductsVers");    
+//return("ProductsVers");    
+return(getSoftManConf(Req).getProductsVersType());         
 }
 //-----------------------------------------------------------------------------------------------
-protected synchronized static Vector<String> getProductsVersFields()
+protected synchronized static Vector<String> getProductsVersFields(HttpServletRequest Req) throws PDException
 {
-if (ProdVersFields==null) 
-    {
-    ProdVersFields=new Vector();
-    ProdVersFields.add(PDFolders.fTITLE);
-    ProdVersFields.add("License");
-    ProdVersFields.add("DateInit");
-    ProdVersFields.add("DateSup");
-    ProdVersFields.add("DateSupExt");
-    ProdVersFields.add("Notes");
-    }
-return(ProdVersFields);    
+//if (ProdVersFields==null) 
+//    {
+//    ProdVersFields=new Vector();
+//    ProdVersFields.add(PDFolders.fTITLE);
+//    ProdVersFields.add("License");
+//    ProdVersFields.add("DateInit");
+//    ProdVersFields.add("DateSup");
+//    ProdVersFields.add("DateSupExt");
+//    ProdVersFields.add("Notes");
+//    }
+//return(ProdVersFields);  
+return(getSoftManConf(Req).getProdVersFields());         
 }
 //----------------------------------------------------------------
 public static String GenRowGrid(HttpServletRequest Req, String Id, Record NextRec, boolean IsXML,boolean IsDel)
@@ -2115,5 +2134,33 @@ else
 return(Row.toString());
 }
 //-----------------------------------------------------------------------------------------------
-
+private static synchronized void LoadConf(HttpServletRequest Req,String IdConf) throws PDException
+{
+PDDocs D=new PDDocs(getSessOPD(Req));
+ByteArrayOutputStream OutBytes=new ByteArrayOutputStream();
+D.Load(IdConf);
+D.getStream(OutBytes);
+String Conf=OutBytes.toString();
+ListSoftManConfig.put(IdConf, SoftManOPDConfig.CreateConfig(OutBytes.toString()));
+}
+//-----------------------------------------------------------------------------------------------
+private static SoftManOPDConfig getSoftManConf(HttpServletRequest Req) throws PDException
+{
+String IdConf=getIdConf(Req);   
+SoftManOPDConfig SoftConf = ListSoftManConfig.get(IdConf);
+if (SoftConf==null)
+   LoadConf(Req,IdConf);
+return(ListSoftManConfig.get(IdConf));
+}
+//-----------------------------------------------------------------------------------------------
+private static String getIdConf(HttpServletRequest Req)
+{
+return((String)Req.getSession().getAttribute(SOFTMANATTR));
+}
+//-----------------------------------------------------------------------------------------------
+protected static void setIdConf(HttpServletRequest Req, String IdConfig)
+{
+Req.getSession().setAttribute(SOFTMANATTR, IdConfig);
+}
+//-----------------------------------------------------------------------------------------------
 }
