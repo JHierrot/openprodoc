@@ -20,6 +20,7 @@
 package SoftManagOPDServ;
 
 
+import Config.SoftManOPDConfig;
 import SoftManagOPDUI.SParent;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -32,7 +33,7 @@ import prodoc.DriverGeneric;
  *
  * @author jhierrot
  */
-public class LocaleTrans extends SParent
+public class getSoftManOPDConf extends SParent
 {
 @Override
 protected void processRequest(HttpServletRequest Req, HttpServletResponse response) throws ServletException, IOException
@@ -40,21 +41,12 @@ protected void processRequest(HttpServletRequest Req, HttpServletResponse respon
 response.setContentType("text/xml;charset=UTF-8");
 response.setStatus(HttpServletResponse.SC_OK);
 try (PrintWriter out = response.getWriter()) {
-String S=null;
 StringBuilder Resp=new StringBuilder(200);
-DriverGeneric PDSession=SParent.getSessOPD(Req);
-String Par=Req.getParameter("Par");
-if (Par.equals("_Help"))
-    S="help/"+PDSession.getHelpLang(PDSession.getUser().getCustomData().getLanguage())+"/MainWin.html";
-else if (Par.equals("_User"))
-    S="@"+PDSession.getUser().getName()+" ( "+PDSession.getUser().getDescription()+" )";
-else
-    S=TT(Req, Par);
-Resp.append("<tr>").append(S).append("</tr>");
+Resp.append("<Conf>").append(getSoftManConf(Req).getJSON()).append("</Conf>");
 out.println(Resp.toString());
 } catch (Exception Ex)
     {
-
+    Ex.printStackTrace();
     }
 }
 //-----------------------------------------------------------------------------------------------
@@ -65,7 +57,7 @@ out.println(Resp.toString());
 @Override
 public String getServletInfo()
 {
-return "LocaleTrans Servlet";
+return "getSoftManOPDConf Servlet";
 }
 //-----------------------------------------------------------------------------------------------
 }

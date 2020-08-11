@@ -19,6 +19,7 @@
 
 package SoftManagOPDServ;
 
+import Config.SoftManOPDConfig;
 import SoftManagOPDUI.SParent;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
@@ -86,34 +87,64 @@ Record NextIssue=PDSession.NextRec(ListIssues);
 String ProdId;
 PDFolders TmpFold=new PDFolders(PDSession);
 PDThesaur TmpTerm=new PDThesaur(PDSession);
+SoftManOPDConfig SoftManConf = getSoftManConf(Req);
+String[] ListFields = SoftManConf.getGridConfList().get("ListIsuesVer").getColumnIds().split(",");
 while (NextIssue!=null)
-    {  // Code,Title,Produc, Env, Status, Criticity, Solver, DateOpen, DateClosed
+    {
     AttrD=NextIssue.getAttr(PDFolders.fPDID);  
     ProdId=(String)AttrD.getValue();
-    TableIssues.append("<row id=\"").append(ProdId).append("\">");       
-    AttrD=NextIssue.getAttr("Code");
-    TableIssues.append("<cell>").append(AttrD.Export()).append("</cell>");       
-    AttrD=NextIssue.getAttr(PDFolders.fTITLE);
-    TableIssues.append("<cell>").append(AttrD.Export()).append("</cell>");       
-    TmpTerm.Load((String)NextIssue.getAttr("Env").getValue());
-    TableIssues.append("<cell>").append(TmpTerm.getName()).append("</cell>");       
-    TmpTerm.Load((String)NextIssue.getAttr("IssueStatus").getValue());
-    TableIssues.append("<cell>").append(TmpTerm.getName()).append("</cell>");
-    TmpTerm.Load((String)NextIssue.getAttr("IssueCrit").getValue());
-    TableIssues.append("<cell>").append(TmpTerm.getName()).append("</cell>");
-    AttrD=NextIssue.getAttr("DateOpen");
-    TableIssues.append("<cell>").append(AttrD.Export()).append("</cell>");       
-    AttrD=NextIssue.getAttr("DateClosed");
-    TableIssues.append("<cell>").append(AttrD.Export()).append("</cell>");       
-    String Solver=(String)NextIssue.getAttr("IssueSolver").getValue();
-    if (Solver!=null && Solver.length()>0)
+    TableIssues.append("<row id=\"").append(ProdId).append("\">"); 
+    for (String ListField : ListFields)
         {
-        TmpTerm.Load(Solver);
-        TableIssues.append("<cell>").append(TmpTerm.getName()).append("</cell></row>");
+        AttrD = NextIssue.getAttr(ListField);
+        if (AttrD.getType()==Attribute.tTHES)
+            {
+            String Tmp=(String)AttrD.getValue();
+            if (Tmp!=null && Tmp.length()>0)
+                {
+                TmpTerm.Load(Tmp);
+                TableIssues.append("<cell>").append(TmpTerm.getName()).append("</cell>");
+                }
+            else
+                TableIssues.append("<cell></cell>");
+            }
+        else if (AttrD.getName().equalsIgnoreCase(PDFolders.fPARENTID))
+            {
+            TmpFold.Load((String)AttrD.getValue());
+            TableIssues.append("<cell>").append(TmpFold.getTitle()).append("</cell>");
+            }
+        else    
+            TableIssues.append("<cell>").append(AttrD.Export()).append("</cell>");  
         }
-    else
-        TableIssues.append("<cell></cell></row>");
+    TableIssues.append("</row>");
     NextIssue=PDSession.NextRec(ListIssues);
+
+//    AttrD=NextIssue.getAttr(PDFolders.fPDID);  
+//    ProdId=(String)AttrD.getValue();
+//    TableIssues.append("<row id=\"").append(ProdId).append("\">");       
+//    AttrD=NextIssue.getAttr("Code");
+//    TableIssues.append("<cell>").append(AttrD.Export()).append("</cell>");       
+//    AttrD=NextIssue.getAttr(PDFolders.fTITLE);
+//    TableIssues.append("<cell>").append(AttrD.Export()).append("</cell>");       
+//    TmpTerm.Load((String)NextIssue.getAttr("Env").getValue());
+//    TableIssues.append("<cell>").append(TmpTerm.getName()).append("</cell>");       
+//    TmpTerm.Load((String)NextIssue.getAttr("IssueStatus").getValue());
+//    TableIssues.append("<cell>").append(TmpTerm.getName()).append("</cell>");
+//    TmpTerm.Load((String)NextIssue.getAttr("IssueCrit").getValue());
+//    TableIssues.append("<cell>").append(TmpTerm.getName()).append("</cell>");
+//    AttrD=NextIssue.getAttr("DateOpen");
+//    TableIssues.append("<cell>").append(AttrD.Export()).append("</cell>");       
+//    AttrD=NextIssue.getAttr("DateClosed");
+//    TableIssues.append("<cell>").append(AttrD.Export()).append("</cell>");       
+//    String Solver=(String)NextIssue.getAttr("IssueSolver").getValue();
+//    if (Solver!=null && Solver.length()>0)
+//        {
+//        TmpTerm.Load(Solver);
+//        TableIssues.append("<cell>").append(TmpTerm.getName()).append("</cell></row>");
+//        }
+//    else
+//        TableIssues.append("<cell></cell></row>");
+//    NextIssue=PDSession.NextRec(ListIssues);
     }
 } catch (Exception Ex)
     {

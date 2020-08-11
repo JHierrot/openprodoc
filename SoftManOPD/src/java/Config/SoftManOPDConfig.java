@@ -7,7 +7,10 @@ package Config;
 
 import com.google.gson.Gson;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Vector;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.log4j.NDC;
 
 /**
  *
@@ -15,7 +18,6 @@ import java.util.Vector;
  */
 public class SoftManOPDConfig
 {
-
 private String DepartsRoot;
 private String DepartmentType;
 private final ArrayList<FieldsDef> DepartmentFields=new ArrayList();
@@ -39,11 +41,20 @@ private final ArrayList<FieldsDef> IssuesFields=new ArrayList();
 private Vector<String> IssueFields=null;
 private Vector<String> IssueFieldsFilter=null;
 private String RelationsThes;
+private final ArrayList<GridConf> GridConfs=new ArrayList();
+private Hashtable<String, GridConf> GridConfList=null;
 //-----------------------------------------------------------
-public static SoftManOPDConfig CreateConfig(String json)
+public static synchronized SoftManOPDConfig CreateConfig(HttpServletRequest Req, String json)
 {
 Gson g = new Gson();
-return(g.fromJson(json, SoftManOPDConfig.class));    
+SoftManOPDConfig Tmp=g.fromJson(json, SoftManOPDConfig.class);
+return(Tmp);    
+}
+//-----------------------------------------------------------
+public String getJSON()
+{
+Gson g = new Gson();
+return(g.toJson(this));    
 }
 //-----------------------------------------------------------
 /**
@@ -295,8 +306,20 @@ public String getRelationsThes()
 return RelationsThes;
 }
 //-----------------------------------------------------------
-
-
+/**
+ * @return the GridConfList
+ */
+public synchronized Hashtable<String, GridConf> getGridConfList()
+{
+if (GridConfList==null)
+    {
+    GridConfList=new Hashtable<>();
+    for (int i = 0; i < GridConfs.size(); i++)
+        GridConfList.put(GridConfs.get(i).getGridId(),GridConfs.get(i));     
+    }
+return GridConfList;
+}
+//-----------------------------------------------------------
 //*************************************************************************
 private class FieldsDef
 {
@@ -320,5 +343,73 @@ return Filter;
 }
 //-----------------------------------------------------------
 }    
+//*************************************************************************
+public class GridConf
+{
+private String GridId;    
+private String Header;
+private String ColumnIds;
+private String InitWidths;
+private String ColAlign;
+private String ColTypes;
+private String ColSorting;
+//-----------------------------------------------------------
+/**
+ * @return the GridId
+ */
+public String getGridId()
+{
+return GridId;
+}
+//-----------------------------------------------------------
+/**
+ * @return the Header
+ */
+public String getHeader()
+{
+return Header;
+}
+//-----------------------------------------------------------
+/**
+ * @return the ColumnIds
+ */
+public String getColumnIds()
+{
+return ColumnIds;
+}
+//-----------------------------------------------------------
+/**
+ * @return the InitWidths
+ */
+public String getInitWidths()
+{
+return InitWidths;
+}
+//-----------------------------------------------------------
+/**
+ * @return the ColAlign
+ */
+public String getColAlign()
+{
+return ColAlign;
+}
+//-----------------------------------------------------------
+/**
+ * @return the ColTypes
+ */
+public String getColTypes()
+{
+return ColTypes;
+}
+//-----------------------------------------------------------
+/**
+ * @return the ColSorting
+ */
+public String getColSorting()
+{
+return ColSorting;
+}
+//-----------------------------------------------------------
+}
 //*************************************************************************
 }

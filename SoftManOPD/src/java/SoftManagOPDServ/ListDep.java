@@ -62,8 +62,8 @@ return "ListVers Servlet";
 //-----------------------------------------------------------------------------------------------
 private String GenListDoc(HttpServletRequest Req) 
 {
-StringBuilder ListProducts=new StringBuilder(5000);
-ListProducts.append("<rows>");
+StringBuilder ListDependencies=new StringBuilder(5000);
+ListDependencies.append("<rows>");
 DriverGeneric PDSession=getSessOPD(Req);
 Attribute AttrD;
 try {
@@ -84,17 +84,17 @@ for (String Dep : ListDep)
     FoldRelProdVer.Load(ProdVers);
     FoldRelParent.Load(FoldRelProdVer.getParentId());
     TermTmp.Load(Relation);
-    ListProducts.append("<row id=\"").append(Dep).append("\">");       
-    ListProducts.append("<cell>").append(FoldRelParent.getTitle()).append("</cell>");       
-    ListProducts.append("<cell>").append(FoldRelProdVer.getTitle()).append("</cell>");       
-    ListProducts.append("<cell>").append(TermTmp.getName()).append("</cell></row>");       
+    ListDependencies.append("<row id=\"").append(Dep).append("\">");       
+    ListDependencies.append("<cell>").append(FoldRelParent.getTitle()).append("</cell>");       
+    ListDependencies.append("<cell>").append(FoldRelProdVer.getTitle()).append("</cell>");       
+    ListDependencies.append("<cell>").append(TermTmp.getName()).append("</cell></row>");       
     }
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
     }
-ListProducts.append("</rows>");
-return(ListProducts.toString());
+ListDependencies.append("</rows>");
+return(ListDependencies.toString());
 }
 //-----------------------------------------------------------------------------------------------
 }

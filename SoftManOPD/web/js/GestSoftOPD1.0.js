@@ -79,6 +79,9 @@ var FiltFieldsIssue=null;
 var FiltFieldsDep=null;
 var FiltFieldsSoft=null;
 
+var ListGridConf=null;
+var SoftManOPDConf=null;
+
 //--------------------------------------------------------------
 function Init()
 {   
@@ -1052,12 +1055,13 @@ FormMantDepend.attachEvent("onButtonClick", function (name)
 function RefreshDepGrid(Idvers)
 {
 DepGrid.clearAll(true); 
-DepGrid.setHeader("Product,Version,Relation");   
-DepGrid.setColumnIds("Product,Version,Relation");         
-DepGrid.setInitWidths("150,150,*");   
-DepGrid.setColAlign("left,left,left");    
-DepGrid.setColTypes("ro,ro,ro");            
-DepGrid.setColSorting("str,str,str"); 
+var GridConf=getGridConf("ListDep");
+DepGrid.setHeader(GridConf.Header);   
+DepGrid.setColumnIds(GridConf.ColumnIds);         
+DepGrid.setInitWidths(GridConf.InitWidths);   
+DepGrid.setColAlign(GridConf.ColAlign);    
+DepGrid.setColTypes(GridConf.ColTypes);            
+DepGrid.setColSorting(GridConf.ColSorting); 
 DepGrid.load("ListDep?IdVers="+Idvers);
 DepGrid.init();  
 }
@@ -1115,12 +1119,13 @@ FormMantVers.attachEvent("onButtonClick", function (name)
 function RefreshIssuesGrid(IdVers)
 {
 IssuesGrid.clearAll(true); 
-IssuesGrid.setHeader("Code,Title,Env,Status,Criticity,DateOpen,DateClosed,Solver");   
-IssuesGrid.setColumnIds("Code,Title,Env,Status,Criticity,DateOpen,DateClosed,Solver");         
-IssuesGrid.setInitWidths("80,120,80,100,100,100,100,*");   
-IssuesGrid.setColAlign("left,left,left,left,left,left,left,left");    
-IssuesGrid.setColTypes("ro,ro,ro,ro,ro,ro,ro,ro");            
-IssuesGrid.setColSorting("str,str,str,str,str,str,str,str"); 
+var GridConf=getGridConf("ListIsuesVer");
+IssuesGrid.setHeader(GridConf.Header);   
+IssuesGrid.setColumnIds(GridConf.ColumnIds);         
+IssuesGrid.setInitWidths(GridConf.InitWidths);   
+IssuesGrid.setColAlign(GridConf.ColAlign);    
+IssuesGrid.setColTypes(GridConf.ColTypes);            
+IssuesGrid.setColSorting(GridConf.ColSorting); 
 IssuesGrid.load("ListIsuesVer?IdVers="+IdVers);
 IssuesGrid.init();
 IssuesGrid.attachEvent("onRowSelect",function(rowId,cellIndex)
@@ -1132,12 +1137,13 @@ IssuesGrid.attachEvent("onRowSelect",function(rowId,cellIndex)
 function RefreshVersGrid(IdProd)
 {
 VersGrid.clearAll(true); 
-VersGrid.setHeader("Title,DateInit,DateSup,DateSupExt,Status,License,Notes");   
-VersGrid.setColumnIds("Title,DateInit,DateSup,DateSupExt,Status,License,Notes");         
-VersGrid.setInitWidths("140,80,80,80,50,80,*");   
-VersGrid.setColAlign("left,left,left,left,center,left,left");    
-VersGrid.setColTypes("ro,ro,ro,ro,img,ro,ro");            
-VersGrid.setColSorting("str,str,str,str,str,str,str"); 
+var GridConf=getGridConf("ListVers");
+VersGrid.setHeader(GridConf.Header);   
+VersGrid.setColumnIds(GridConf.ColumnIds);         
+VersGrid.setInitWidths(GridConf.InitWidths);   
+VersGrid.setColAlign(GridConf.ColAlign);    
+VersGrid.setColTypes(GridConf.ColTypes);            
+VersGrid.setColSorting(GridConf.ColSorting); 
 VersGrid.load("ListVers?IdProd="+IdProd);
 VersGrid.init();
 }
@@ -1459,53 +1465,6 @@ STToolBar.attachEvent("onClick", function(id)
     WinSelThes.close();
     });
 }
-//-----------------------------------------------------------------------
-function RefreshGrid(TipeGrid) 
-{
-ListGrid.clearAll(true); 
-var Filt="";
-if (TipeGrid!="")
-    CurrentGrid=TipeGrid;
-if (CurrentGrid=="ListProducts")
-    {  
-    ListGrid.setHeader("Code,Title,Current Version,Department-Company,Family,License,Technology");   
-    ListGrid.setColumnIds("Code,Title,Version,Department,Family,License,Technology");         
-    ListGrid.setInitWidths("100,200,80,180,140,140,*");   
-    ListGrid.setColAlign("left,left,left,left,left,left,left");    
-    ListGrid.setColTypes("ro,ro,ro,ro,ro,ro,ro");            
-    ListGrid.setColSorting("str,str,str,str,str,str,str"); 
-    }
-else if (CurrentGrid=="ListDepartments")
-    {
-    ListGrid.setHeader("Title,Responsible,Description");   
-    ListGrid.setColumnIds("Title,Responsible,Description");         
-    ListGrid.setInitWidths("200,200,*");   
-    ListGrid.setColAlign("left,left,left");    
-    ListGrid.setColTypes("ro,ro,ro");            
-    ListGrid.setColSorting("str,str,str"); 
-    }    
-else if (CurrentGrid=="ListSoftCompanies")
-    {       
-    ListGrid.setHeader("Title,Contact,Mail,Phone,Url,Description");   
-    ListGrid.setColumnIds("Title,Contact,Mail,Phone,Url,Description");         
-    ListGrid.setInitWidths("100,120,120,120,140,*");   
-    ListGrid.setColAlign("left,left,left,left,left,left");    
-    ListGrid.setColTypes("ro,ro,ro,ro,ro,ro");            
-    ListGrid.setColSorting("str,str,str,str,str,str"); 
-    }    
-else if (CurrentGrid=="ListIssues")
-    {       
-    ListGrid.setHeader("Code,Title,Produc Version,Env,Status,Criticity,DateOpen,DateClosed,Solver");   
-    ListGrid.setColumnIds("Code,Title,ProducVer,Env,Status,Criticity,DateOpen,DateClosed,Solver");         
-    ListGrid.setInitWidths("100,160,120,120,140,140,100,100,*");   
-    ListGrid.setColAlign("left,left,left,left,left,left,left,left,left");    
-    ListGrid.setColTypes("ro,ro,ro,ro,ro,ro,ro,ro,ro");            
-    ListGrid.setColSorting("str,str,str,str,str,str,str,str,str"); 
-    }    
-FilterStr=getUpdFilter(CurrentGrid);
-ListGrid.load(CurrentGrid+FilterStr);
-ListGrid.init();
-}
 //----------------------------------
 function getFiltFields(Grid2Upd)
 {
@@ -1513,28 +1472,59 @@ function getFiltFields(Grid2Upd)
 if (Grid2Upd=="ListProducts")
     {
     if (FiltFieldsProd==null)
-        FiltFieldsProd=["TH_Family","TH_License","TH_Technology","Internal"];
+        {    
+        FiltFieldsProd=[];
+        for (var i = 0; i < SoftManOPDConf.ProductFields.length; i++) 
+            {
+            if (SoftManOPDConf.ProductFields[i].Filter)   
+               FiltFieldsProd.push(SoftManOPDConf.ProductFields[i].Name); 
+            }
+//        FiltFieldsProd=["Family","License","Technology","Internal"];
+        }
     return(FiltFieldsProd)    
     }
 if (Grid2Upd=="ListIssues")
     {
     if (FiltFieldsIssue==null)
-        FiltFieldsIssue=["Code","TH_Env","TH_IssueCrit","TH_IssueStatus","TH_IssueSolver","Internal"];
+        {
+        FiltFieldsIssue=[];    
+        for (var i = 0; i < SoftManOPDConf.IssuesFields.length; i++) 
+            {
+            if (SoftManOPDConf.IssuesFields[i].Filter)   
+               FiltFieldsIssue.push(SoftManOPDConf.IssuesFields[i].Name); 
+            }
+//        FiltFieldsIssue=["Code","TH_Env","TH_IssueCrit","TH_IssueStatus","TH_IssueSolver","Internal"];
+        }
     return(FiltFieldsIssue)    
     }
 if (Grid2Upd=="ListDepartments")  
     {
     if (FiltFieldsDep==null)
-        FiltFieldsDep=["Title","Description","TH_Responsible"];
+        {
+        FiltFieldsDep=[];    
+        for (var i = 0; i < SoftManOPDConf.DepartmentFields.length; i++) 
+            {
+            if (SoftManOPDConf.DepartmentFields[i].Filter)   
+               FiltFieldsDep.push(SoftManOPDConf.DepartmentFields[i].Name); 
+            }        
+//        FiltFieldsDep=["Title","Description","TH_Responsible"];
+        }
     return(FiltFieldsDep)    
     
     }
 if (Grid2Upd=="ListSoftCompanies")  
     {
     if (FiltFieldsSoft==null)
-        FiltFieldsSoft=["Title","Description","Contact","Url"];
+        {
+        FiltFieldsSoft=[];    
+        for (var i = 0; i < SoftManOPDConf.SoftProviderFields.length; i++) 
+            {
+            if (SoftManOPDConf.SoftProviderFields[i].Filter)   
+               FiltFieldsSoft.push(SoftManOPDConf.SoftProviderFields[i].Name); 
+            }        
+//        FiltFieldsSoft=["Title","Description","Contact","Url"];
+        }
     return(FiltFieldsSoft)    
-    
     }
 return(new Array());    
 }
@@ -1546,16 +1536,15 @@ var Filt="";
 var ListFields=getFiltFields(Grid2Upd);
 for (i = 0; i < ListFields.length; i++) 
     {
-    Filt=FilterForm.getItemValue(ListFields[i]); 
+    if (FilterForm.isItem("TH_"+ListFields[i]))    
+        Filt=FilterForm.getItemValue("TH_"+ListFields[i]); 
+    else    
+        Filt=FilterForm.getItemValue(ListFields[i]); 
     if (Filt!=null && Filt!="")
         {
         if (FiltStr.length!=0)
             FiltStr+="&";
-        if (ListFields[i].startsWith("TH_"))
-           FiltStr+=ListFields[i].slice(3)+"=";
-        else
-           FiltStr+=ListFields[i]+"=";       
-        FiltStr+=Filt;
+        FiltStr+=ListFields[i]+"="+Filt;       
         }
     }
 if (FiltStr!="")
@@ -1681,5 +1670,45 @@ MultiForm.attachEvent("onChange", function (name, value)
     });
 }
 //----------------------------------
-
+function getGridConf(IdGrid)
+{
+if (ListGridConf==null)    
+    {
+    if (SoftManOPDConf==null)
+        getSoftManOPDConf();
+    }
+return(ListGridConf[IdGrid]);    
+}
+//----------------------------------
+function getSoftManOPDConf()
+{
+var r=window.dhx4.ajax.getSync("getSoftManOPDConf");
+var xml = r.xmlDoc.responseXML;
+var nodes = xml.getElementsByTagName("Conf");
+SoftManOPDConf=JSON.parse(nodes[0].textContent);
+ListGridConf=[];
+for (var i = 0; i < SoftManOPDConf.GridConfs.length; i++) 
+    {
+    ListGridConf[SoftManOPDConf.GridConfs[i].GridId]=SoftManOPDConf.GridConfs[i];    
+    }
+}
+//-----------------------------------------------------------------------
+function RefreshGrid(TipeGrid) 
+{
+ListGrid.clearAll(true); 
+var Filt="";
+if (TipeGrid!="")
+    CurrentGrid=TipeGrid;
+var GridConf=getGridConf(CurrentGrid);
+ListGrid.setHeader(GridConf.Header);   
+ListGrid.setColumnIds(GridConf.ColumnIds);         
+ListGrid.setInitWidths(GridConf.InitWidths);   
+ListGrid.setColAlign(GridConf.ColAlign);    
+ListGrid.setColTypes(GridConf.ColTypes);            
+ListGrid.setColSorting(GridConf.ColSorting); 
+FilterStr=getUpdFilter(CurrentGrid);
+ListGrid.load(CurrentGrid+FilterStr);
+ListGrid.init();
+}
+//----------------------------------
 

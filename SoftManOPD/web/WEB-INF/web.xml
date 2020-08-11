@@ -164,6 +164,10 @@
         <servlet-name>SearchDoc</servlet-name>
         <servlet-class>SoftManagOPDServ.SearchDoc</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>getSoftManOPDConf</servlet-name>
+        <servlet-class>SoftManagOPDServ.getSoftManOPDConf</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/Login</url-pattern>
@@ -327,6 +331,10 @@
     <servlet-mapping>
         <servlet-name>SearchDoc</servlet-name>
         <url-pattern>/SearchDoc</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>getSoftManOPDConf</servlet-name>
+        <url-pattern>/getSoftManOPDConf</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

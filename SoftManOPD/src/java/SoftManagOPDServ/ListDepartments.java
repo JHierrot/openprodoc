@@ -19,6 +19,7 @@
 
 package SoftManagOPDServ;
 
+import Config.SoftManOPDConfig;
 import SoftManagOPDUI.SParent;
 import static SoftManagOPDUI.SParent.getSessOPD;
 import java.io.PrintWriter;
@@ -66,8 +67,8 @@ return "DocList Servlet";
 //-----------------------------------------------------------------------------------------------
 private String GenListDoc(HttpServletRequest Req) 
 {
-StringBuilder ListProducts=new StringBuilder(5000);
-ListProducts.append("<rows>");
+StringBuilder ListDeparts=new StringBuilder(5000);
+ListDeparts.append("<rows>");
 DriverGeneric PDSession=getSessOPD(Req);
 Attribute AttrD;
 try {
@@ -96,29 +97,49 @@ if (Cond.NumCond()==0)
     Condition C=new Condition(PDFolders.fPDID , Condition.cNE, "z");
     Cond.addCondition(C);
     }
-Cursor ListDocs=Fold.Search( getDepartmentType(Req), Cond, true, SubFolders, CurrentFold, null);
-Record NextProd=PDSession.NextRec(ListDocs);
+Cursor ListDep=Fold.Search( getDepartmentType(Req), Cond, true, SubFolders, CurrentFold, null);
 String ProdId;
+PDFolders TmpFold=new PDFolders(PDSession);
 PDThesaur TmpTerm=new PDThesaur(PDSession);
+SoftManOPDConfig SoftManConf = getSoftManConf(Req);
+String[] ListFields = SoftManConf.getGridConfList().get("ListDepartments").getColumnIds().split(",");
+Record NextProd=PDSession.NextRec(ListDep);
 while (NextProd!=null)
-    {  // 
+    {  
     AttrD=NextProd.getAttr(PDFolders.fPDID);  
     ProdId=(String)AttrD.getValue();
-    ListProducts.append("<row id=\"").append(ProdId).append("\">");       
-    AttrD=NextProd.getAttr(PDFolders.fTITLE);
-    ListProducts.append("<cell>").append(AttrD.Export()).append("</cell>");       
-    TmpTerm.Load((String)NextProd.getAttr("Responsible").getValue());
-    ListProducts.append("<cell>").append(TmpTerm.getName()).append("</cell>");
-    AttrD=NextProd.getAttr("Description");
-    ListProducts.append("<cell>").append(AttrD.Export()).append("</cell></row>");
-    NextProd=PDSession.NextRec(ListDocs);
+    ListDeparts.append("<row id=\"").append(ProdId).append("\">"); 
+    for (String ListField : ListFields)
+        {
+        AttrD = NextProd.getAttr(ListField);
+        if (AttrD.getType()==Attribute.tTHES)
+            {
+            String Tmp=(String)AttrD.getValue();
+            if (Tmp!=null && Tmp.length()>0)
+                {
+                TmpTerm.Load(Tmp);
+                ListDeparts.append("<cell>").append(TmpTerm.getName()).append("</cell>");
+                }
+            else
+                ListDeparts.append("<cell></cell>");
+            }
+        else if (AttrD.getName().equalsIgnoreCase(PDFolders.fPARENTID))
+            {
+            TmpFold.Load((String)AttrD.getValue());
+            ListDeparts.append("<cell>").append(TmpFold.getTitle()).append("</cell>");
+            }
+        else    
+            ListDeparts.append("<cell>").append(AttrD.Export()).append("</cell>");  
+        }
+    ListDeparts.append("</row>");
+    NextProd=PDSession.NextRec(ListDep);
     }
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
     }
-ListProducts.append("</rows>");
-return(ListProducts.toString());
+ListDeparts.append("</rows>");
+return(ListDeparts.toString());
 }
 //-----------------------------------------------------------------------------------------------
 

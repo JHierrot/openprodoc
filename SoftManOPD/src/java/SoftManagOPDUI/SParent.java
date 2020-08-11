@@ -2141,10 +2141,10 @@ ByteArrayOutputStream OutBytes=new ByteArrayOutputStream();
 D.Load(IdConf);
 D.getStream(OutBytes);
 String Conf=OutBytes.toString();
-ListSoftManConfig.put(IdConf, SoftManOPDConfig.CreateConfig(OutBytes.toString()));
+ListSoftManConfig.put(IdConf, SoftManOPDConfig.CreateConfig(Req, OutBytes.toString()));
 }
 //-----------------------------------------------------------------------------------------------
-private static SoftManOPDConfig getSoftManConf(HttpServletRequest Req) throws PDException
+protected static SoftManOPDConfig getSoftManConf(HttpServletRequest Req) throws PDException
 {
 String IdConf=getIdConf(Req);   
 SoftManOPDConfig SoftConf = ListSoftManConfig.get(IdConf);

@@ -19,6 +19,7 @@
 
 package SoftManagOPDServ;
 
+import Config.SoftManOPDConfig;
 import SoftManagOPDUI.SParent;
 import static SoftManagOPDUI.SParent.getSessOPD;
 import java.io.PrintWriter;
@@ -66,8 +67,8 @@ return "DocList Servlet";
 //-----------------------------------------------------------------------------------------------
 private String GenListDoc(HttpServletRequest Req) 
 {
-StringBuilder ListProducts=new StringBuilder(5000);
-ListProducts.append("<rows>");
+StringBuilder ListCompanies=new StringBuilder(5000);
+ListCompanies.append("<rows>");
 DriverGeneric PDSession=getSessOPD(Req);
 Attribute AttrD;
 try {
@@ -96,35 +97,66 @@ if (Cond.NumCond()==0)
     Condition C=new Condition(PDFolders.fPDID , Condition.cNE, "z");
     Cond.addCondition(C);
     }
-Cursor ListDocs=Fold.Search( getSoftProviderType(Req), Cond, true, SubFolders, CurrentFold, null);
-Record NextProd=PDSession.NextRec(ListDocs);
+Cursor ListSoftComp=Fold.Search( getSoftProviderType(Req), Cond, true, SubFolders, CurrentFold, null);
 String ProdId;
+PDFolders TmpFold=new PDFolders(PDSession);
 PDThesaur TmpTerm=new PDThesaur(PDSession);
+SoftManOPDConfig SoftManConf = getSoftManConf(Req);
+String[] ListFields = SoftManConf.getGridConfList().get("ListSoftCompanies").getColumnIds().split(",");
+Record NextProd=PDSession.NextRec(ListSoftComp);
 while (NextProd!=null)
-    {  // Title,Contact,Mail,Phone,Url,Description
+    {
     AttrD=NextProd.getAttr(PDFolders.fPDID);  
     ProdId=(String)AttrD.getValue();
-    ListProducts.append("<row id=\"").append(ProdId).append("\">");       
-    AttrD=NextProd.getAttr(PDFolders.fTITLE);
-    ListProducts.append("<cell>").append(AttrD.Export()).append("</cell>");       
-    AttrD=NextProd.getAttr("Contact");
-    ListProducts.append("<cell>").append(AttrD.Export()).append("</cell>");
-    AttrD=NextProd.getAttr("Mail");
-    ListProducts.append("<cell>").append(AttrD.Export()).append("</cell>");
-    AttrD=NextProd.getAttr("Phone");
-    ListProducts.append("<cell>").append(AttrD.Export()).append("</cell>");
-    AttrD=NextProd.getAttr("Url");
-    ListProducts.append("<cell>").append(AttrD.Export()).append("</cell>");
-    AttrD=NextProd.getAttr("Description");
-    ListProducts.append("<cell>").append(AttrD.Export()).append("</cell></row>");
-    NextProd=PDSession.NextRec(ListDocs);
+    ListCompanies.append("<row id=\"").append(ProdId).append("\">"); 
+    for (String ListField : ListFields)
+        {
+        AttrD = NextProd.getAttr(ListField);
+        if (AttrD.getType()==Attribute.tTHES)
+            {
+            String Tmp=(String)AttrD.getValue();
+            if (Tmp!=null && Tmp.length()>0)
+                {
+                TmpTerm.Load(Tmp);
+                ListCompanies.append("<cell>").append(TmpTerm.getName()).append("</cell>");
+                }
+            else
+                ListCompanies.append("<cell></cell>");
+            }
+        else if (AttrD.getName().equalsIgnoreCase(PDFolders.fPARENTID))
+            {
+            TmpFold.Load((String)AttrD.getValue());
+            ListCompanies.append("<cell>").append(TmpFold.getTitle()).append("</cell>");
+            }
+        else    
+            ListCompanies.append("<cell>").append(AttrD.Export()).append("</cell>");  
+        }
+    ListCompanies.append("</row>");
+    NextProd=PDSession.NextRec(ListSoftComp);
+
+//    AttrD=NextProd.getAttr(PDFolders.fPDID);  
+//    ProdId=(String)AttrD.getValue();
+//    ListProducts.append("<row id=\"").append(ProdId).append("\">");       
+//    AttrD=NextProd.getAttr(PDFolders.fTITLE);
+//    ListProducts.append("<cell>").append(AttrD.Export()).append("</cell>");       
+//    AttrD=NextProd.getAttr("Contact");
+//    ListProducts.append("<cell>").append(AttrD.Export()).append("</cell>");
+//    AttrD=NextProd.getAttr("Mail");
+//    ListProducts.append("<cell>").append(AttrD.Export()).append("</cell>");
+//    AttrD=NextProd.getAttr("Phone");
+//    ListProducts.append("<cell>").append(AttrD.Export()).append("</cell>");
+//    AttrD=NextProd.getAttr("Url");
+//    ListProducts.append("<cell>").append(AttrD.Export()).append("</cell>");
+//    AttrD=NextProd.getAttr("Description");
+//    ListProducts.append("<cell>").append(AttrD.Export()).append("</cell></row>");
+//    NextProd=PDSession.NextRec(ListDocs);
     }
 } catch (Exception Ex)
     {
     Ex.printStackTrace();
     }
-ListProducts.append("</rows>");
-return(ListProducts.toString());
+ListCompanies.append("</rows>");
+return(ListCompanies.toString());
 }
 //-----------------------------------------------------------------------------------------------
 }

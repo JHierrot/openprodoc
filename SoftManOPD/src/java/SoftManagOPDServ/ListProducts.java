@@ -19,6 +19,7 @@
 
 package SoftManagOPDServ;
 
+import Config.SoftManOPDConfig;
 import SoftManagOPDUI.SParent;
 import java.io.PrintWriter;
 import java.util.Vector;
@@ -101,38 +102,42 @@ if (Cond.NumCond()==0)
     Condition C=new Condition(PDFolders.fPDID , Condition.cNE, "z");
     Cond.addCondition(C);
     }
-Cursor ListDocs=Fold.Search( getProductType(Req), Cond, true, SubFolders, CurrentFold, null);
-Record NextProd=PDSession.NextRec(ListDocs);
+Cursor ListProd=Fold.Search( getProductType(Req), Cond, true, SubFolders, CurrentFold, null);
 String ProdId;
-String LicTemp;
 PDFolders TmpFold=new PDFolders(PDSession);
 PDThesaur TmpTerm=new PDThesaur(PDSession);
+SoftManOPDConfig SoftManConf = getSoftManConf(Req);
+String[] ListFields = SoftManConf.getGridConfList().get("ListProducts").getColumnIds().split(",");
+Record NextProd=PDSession.NextRec(ListProd);
 while (NextProd!=null)
-    {  // Code,Title,Version,Family,License,Technology
+    {
     AttrD=NextProd.getAttr(PDFolders.fPDID);  
     ProdId=(String)AttrD.getValue();
-    ListProducts.append("<row id=\"").append(ProdId).append("\">");       
-    AttrD=NextProd.getAttr("ProductCode");
-    ListProducts.append("<cell>").append(AttrD.Export()).append("</cell>");       
-    AttrD=NextProd.getAttr(PDFolders.fTITLE);
-    ListProducts.append("<cell>").append(AttrD.Export()).append("</cell>");       
-    AttrD=NextProd.getAttr("CurrentVersion");
-    ListProducts.append("<cell>").append(AttrD.Export()).append("</cell>");
-    TmpFold.Load((String)NextProd.getAttr(PDFolders.fPARENTID).getValue());
-    ListProducts.append("<cell>").append(TmpFold.getTitle()).append("</cell>");
-    TmpTerm.Load((String)NextProd.getAttr("Family").getValue());
-    ListProducts.append("<cell>").append(TmpTerm.getName()).append("</cell>");       
-    if ((String)NextProd.getAttr("License").getValue()!=null)
+    ListProducts.append("<row id=\"").append(ProdId).append("\">"); 
+    for (String ListField : ListFields)
         {
-        TmpTerm.Load((String)NextProd.getAttr("License").getValue());
-        LicTemp=TmpTerm.getName();
+        AttrD = NextProd.getAttr(ListField);
+        if (AttrD.getType()==Attribute.tTHES)
+            {
+            String Tmp=(String)AttrD.getValue();
+            if (Tmp!=null && Tmp.length()>0)
+                {
+                TmpTerm.Load(Tmp);
+                ListProducts.append("<cell>").append(TmpTerm.getName()).append("</cell>");
+                }
+            else
+                ListProducts.append("<cell></cell>");
+            }
+        else if (AttrD.getName().equalsIgnoreCase(PDFolders.fPARENTID))
+            {
+            TmpFold.Load((String)AttrD.getValue());
+            ListProducts.append("<cell>").append(TmpFold.getTitle()).append("</cell>");
+            }
+        else    
+            ListProducts.append("<cell>").append(AttrD.Export()).append("</cell>");  
         }
-    else
-        LicTemp="";
-    ListProducts.append("<cell>").append(LicTemp).append("</cell>");
-    TmpTerm.Load((String)NextProd.getAttr("Technology").getValue());
-    ListProducts.append("<cell>").append(TmpTerm.getName()).append("</cell></row>");
-    NextProd=PDSession.NextRec(ListDocs);
+    ListProducts.append("</row>");
+    NextProd=PDSession.NextRec(ListProd);
     }
 } catch (Exception Ex)
     {
