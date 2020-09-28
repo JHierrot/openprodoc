@@ -1490,9 +1490,10 @@ abstract public void CloseCursor(Cursor CursorIdent) throws PDException;
 //-----------------------------------------------------------------------------------
 /**
  * Logged user acording his authenticator
- * @param userName
- * @param Password
- * @throws PDException
+ * if userName==Password and longer than 32, a JWT token is assumed as parameter received
+ * @param userName OpenProdoc User name (for Ldap will try also User Description/"long name")
+ * @param Password Password for authenticator
+ * @throws PDException in ant error
  */
 void Assign(String userName, String Password) throws PDException
 {
@@ -1513,7 +1514,18 @@ if (!userName.equalsIgnoreCase("Install"))
         if (!getUser().isActive())
             PDExceptionFunc.GenPDException("Inactive_User", userName);
         AuthGeneric Auth=getAuthentic(getUser().getValidation());
+        try{
         Auth.Authenticate(userName, Password);
+        } catch (Exception Ex)
+            {
+            PDAuthenticators AuthDef=new PDAuthenticators(this);
+            AuthDef.Load(getUser().getValidation());
+            if (!AuthDef.getAuthType().equalsIgnoreCase(PDAuthenticators.tLDAP))
+                throw Ex;
+            if (PDLog.isDebug())
+                PDLog.Debug("DriverGeneric.Assign with Desc:"+getUser().getDescription());
+            Auth.Authenticate(getUser().getDescription(), Password);
+            }
         Token=genJWT(userName);
         }
     getUser().LoadAll(userName);
