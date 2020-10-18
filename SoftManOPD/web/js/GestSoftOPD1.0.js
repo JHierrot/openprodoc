@@ -337,7 +337,7 @@ id:"ListDocs",
 left:20,
 top:1,
 width:900,
-height:400,
+height:600,
 center:true,
 modal:true,
 resize:true});  
@@ -356,7 +356,7 @@ TBDocs.addButton(LISTVER, 9, LocaleTrans("List_Versions"), "img/ListVers.png", "
 TBDocs.addButton(DEL, 10, LocaleTrans("Delete"), "img/DocDel.png", "img/DocDel.png");
 var DocsLay=WinListDoc.attachLayout("2U");
 DocsLay.cells("a").setText("Folders")
-DocsLay.cells("a").setWidth(200);
+DocsLay.cells("a").setWidth(300);
 DocsLay.cells("b").setText("Documents")
 FoldsTree=DocsLay.cells("a").attachTree();
 DocsGrid=DocsLay.cells("b").attachGrid();

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>List of Documents</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management, Software Management Project"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="shortcut icon" href="img/OpenProdoc.ico" type="image/x-icon"/> 
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+        <H4>List of Documents</H4><hr>
+        <p>The List of documents form display a form similar to the main form of OpenProdoc, with a tree of folders on the left and a list of contained documents on the rigth. 
+            The main difference is the lack of automatic display of folder metadata, being needed to open an update form for reviewing the information. The folders displayed will be folders <b>under</b> the element (Department, Product, version,..) selected when open this form.</p>
+        <p>There are two groups of functions: functions related to folders and functions related to documents. Except the for <b>Add Folder</b> and <b>Add Document</b>, it's necesary to select a document or a folder for activating those operation.</p>
+        <ul>
+            <li>Folders
+            <ul>
+            <li><a href="FoldAdd.html"><b>Add Folder:</b></a> Displays a form for adding a folder under the current selected folder. Although the folder can be of any type, it's better to use it for creating a folder type different from the SMO folder types (Producst, Versions, Issues, Departments and Software Companies), avoiding errors in structure of information.</li>
+            <li><a href="FoldUpd.html"><b>Update Folder:</b></a> Displays a form for updating the selected folder.</li>
+            <li><a href="FoldDel.html"><b>Delete Folder:</b></a> Displays a form for confirmation before deleting the selected folder and <b>ALL</b> its contained folders and documents.</li>
+            </ul>
+            </li>
+            <li>Documents
+            <ul>                
+            <li><a href="DocAdd.html"><b>Add Document:</b></a> Displays a form for adding a document of any type under the current selected folder.</li>
+            <li><a href="DocCheckOut.html"><b>CheckOut Document:</b></a> Locks the selected document for exclusive edition.</li>
+            <li><a href="DocUpd.html"><b>Update Document:</b></a> Displays a form for updating the selected document(previously checked out by the current user).</li>
+            <li><a href="DocCheckin.html"><b>CheckIn Document:</b></a> Creates a new version of the selected document (previously checked out by the current user).</li>
+            <li><a href="DocCancelCheckOut.html"><b>Cancel CheckOut Document:</b></a> Cancels the locking and the updates made after the last locking.</li>
+            <li><a href="DocListversion.html"><b>ListVersions of a Document:</b></a> Displays a list of the versions of the selected document.</li>
+            <li><a href="DocDel.html"><b>Delete Document:</b></a> Displays a form for confirmation before deleting the selected document and <b>ALL</b> its versions.</li>
+            </ul>            
+            </li>
+        </ul>
+        <p>In <a href="SMOTree.html">SMO Tree</a> there is a complete view of operations and forms.</p>
+        <hr>
+    </body>
+</html>

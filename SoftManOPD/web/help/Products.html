@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Help SMO Products</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management, Software Management Project"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="shortcut icon" href="img/OpenProdoc.ico" type="image/x-icon"/> 
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+        <H4>Help SMO Products</H4><hr>
+        <p>The main objective of SMO is to facilitate the handling and management of products, so this is the entry point of the application. From this form it's possible to update products, create version or add documentation.
+        There is only a function that can't be made from this point, to add/create a product. It's not a mistake. if a company start to use a product, probably needs to do a selection, sign a contract and/or an NDA, buy licenses, etc, so it's not an "automatic step".
+        Similarly, if a company decides to develop a new product, it's an important and not a "daily" decision. So in order to add an external product, it must be added from the software companies section, and for an internal product, it must be added from the department section.
+        After created, it is possible to manage and modify the information of the product (if the ACL assigned during the creation allows the user to modify it, otherwise the user will not be able to modify, or even see, the product)</p>
+        <p>With the default configuration, the filter area of the products will show four filters:</p>
+        <ul>
+            <li><b>Internal</b>:Filter by internal or external products.</li>
+            <li><b>Family</b>:Filter by the family or kind of product (Database, O.S., Communications Library, Machine Learning Library, ...)</li>
+            <li><b>License</b>:Filter by the type of License (Comercial, Open Source, GPL, Affero, BSD,..)</li>
+            <li><b>Technology</b>:Filter by the technology of the product (Java, Javascript, .Net,binary,...)</li>
+        </ul>
+        <p>With the default configuration, the list area display the columns:</p>
+        <ul>
+            <li><b>Code</b>:Internal or external code of the product.</li>
+            <li><b>Tille-Name</b>:name of the product</li>
+            <li><b>Current Version</b>:Current version published, installed or used</li>
+            <li><b>Department/Company</b>:Department or company author-responsible of the product</li>
+            <li><b>Family</b>:Family or kind of product (Database, O.S., Communications Library, Machine Learning Library, ...)</li>
+            <li><b>License</b>:Type of License (Comercial, Open Source, GPL, Affero, BSD,..)</li>
+            <li><b>Technology</b>:Technology of the product (Java, Javascript, .Net,binary,...)</li>
+        </ul>
+        <p>Selecting a products, and always if the secutiry permissions asigned allow it, it is possible to use the options:</p>
+        <ul>
+            <li><a href="ProductsUpdate.html"><b>Update:</b></a> Displays a form for updating the selected product.</li>
+            <li><a href="ProductsVersions.html"><b>Versions:</b></a> Displays the list of versions of the selected product.
+            <li><a href="ProductsDelete.html"><b>Delete:</b></a> Displays a form for confirmation before deleting the selected product and <b>ALL</b> its versions, folders and documents.</li>
+            <li><a href="ListDocs.html"><b>List Documents:</b></a> Displays a form for maintenance of all the documents and folders structure under the selected product.</li>
+        </ul>
+        <p style="text-align:center;"><img alt="Screenshot Products" src="img/Products.png"/></p>
+        <p>In <a href="SMOTree.html">SMO Tree</a> there is a complete view of operations and forms.</p>
+        <hr>
+    </body>
+</html>

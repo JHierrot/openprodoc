@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Main Help Software Management OpenProdoc</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management, Software Management Project"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="shortcut icon" href="img/OpenProdoc.ico" type="image/x-icon"/> 
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+        <H4>Main Help Software Management OpenProdoc</H4><hr>
+        <p>Software Management OpenProdoc (SMO) is an extension for OpenProdoc that facilitates the management of documentation related to development projects for the entire life cycle of a product, including development, management, deployment, obsolescence and incidents.</p>
+        <p>SMO stores all the documents and folders in OpenProdoc, as well as document types, folder types, users, list of terms and any other elements and the <a href="configuration.html">configuration</a>, providing just an optimized interface for managing all the information needed for developing and using software products.
+        Being an additional interface, most (not all) the operations can be made from the OpenProdoc interface, both systems being complementary. 
+        SMO can be <a href="configuration.html">configured</a> in most of its elements, so this help and the screenshotts are based in the <b>default configuration</b>.</p>
+        <p>As a company using or development software, you will develop, or use for developing or deploying, some <a href="Products.html">Products</a>, whose reponsability will reside in different <a href="Departments.html">Departments</a> of the company, or will be provided by external <a href="SoftCompanies.html">Software Companies</a>.
+        During the life of the <a href="Products.html">Products</a>, there will be developed and installed different <a href="Versions.html">Versions</a> of them. Those <a href="Versions.html">Versions</a> will have problems, carencies or errors that can be managed as <a href="Issues.html">Issues</a>.</p>
+        <p>SMO interface has 3 main areas:</p>
+        <ul>
+            <li>The menu on the left.</li>
+            <li>The filter area on upper right.</li>
+            <li>The list of filtered elements on lower right.</li>
+        </ul>
+        <p>The menu is fixed and always displays the same buttons:</p>
+        <ul>
+            <li><a href="Products.html"><b>Products:</b></a> Shows the list of products managed, both internal or external (according to the filters selected and the permissions of the current user).</li>
+            <li><a href="Departments.html"><b>Departments:</b></a> Shows the list of departments of the company (according to the filters selected and the permissions of the current user).</li>
+            <li><a href="Issues.html"><b>Issues:</b></a> Shows the list of issues/problems of the products (according to the filters selected and the permissions of the current user).</li>
+            <li><a href="SoftCompanies.html"><b>Soft Companies:</b></a> Shows the list of software companies or providers of products (according to the filters selected and the permissions of the current user).</li>
+            <li><a href="Search.html"><b>Search:</b></a> Shows a form for searching documents of any kind and in any level of the structure of SMO (according to the permissions of the current user).</li>
+            <li><b>Help:</b> Shows the help pages.</li>
+            <li><b>About:</b> Shows a form with information of the versions of SMO and OpenProdoc.</li>
+            <li><b>Exit:</b> Closes the session in SMO.</li>
+        </ul>
+        <p style="text-align:center;"><img alt="Screenshot MainWin" src="img/MainWinSMO.png"/></p>
+        <p>In <a href="SMOTree.html">SMO Forms Tree</a> there is a complete view of operations and forms.</p>
+        <p>OpenProdoc stores the information of Departments, Companies, Products, Versions and Issues as OpenProdoc folders with descriptive fields that can contain other folders or documents. 
+        The structure will be something like:</p>
+        <ul>
+            <li><i>Folder base of departments</i> (will contain a folder for each department responsible of internal products/developments)
+                <ul>
+                    <li><i>Department 1</i> (will contains documents of the department, and one folder for each product as well as any other folder of any kind needed for structuring the information)  
+                        <ul>
+                            <li><i>Product 1</i> (details and documents of the developed/internal Product as a whole, as well as one folder for each version of the product)                               
+                                <ul>
+                                    <li><i>Version 1.1</i> (details and documentation of the version, as manuals, installation recomendations, etc and one folder for each issue)                            
+                                        <ul>
+                                             <li><i>Issue 1.1.1</i> (details and documentation of the isssue, as logs, screenshots, etc.)</li> 
+                                             <li><i>Issue 1.1.2</i></li>
+                                             <li>...</li>
+                                         </ul>
+                                    </li>
+                                    <li><i>Version 1.2</i></li>
+                                    <li>...</li>
+                                </ul>
+                            </li>
+                            <li><i>Product 2</i></li>
+                            <li>...</li>
+                        </ul>
+                    </li>
+                    <li><i>Department 2</i></li>
+                    <li>...</li>
+                </ul>
+            </li>
+            <li><i>Folder base of companies</i> (will contain a folder for each providers of software)
+                <ul>
+                    <li><i>Company 1</i> (will contains the details and documents of the Company, and one folder for each product as well as any other folder of any kind needed for structuring the information, as contracts, NDS, ..) 
+                        <ul>
+                            <li><i>Product A</i> (details and documents of the EXTERNAL Product as a whole, as well as one folder for each version of the product used)                                  
+                                <ul>
+                                    <li><i>Version A.1</i> (details and documentation of the version, as manuals, installation recomendations, etc and one folder for each issue opened to the provider or software company)                               
+                                        <ul>
+                                             <li><i>Issue A.1.1 </i>(details and documentation of the isssue opened to the provider, as logs, screenshots, etc.)</li>
+                                             <li><i>Issue A.1.2</i></li>
+                                             <li>...</li>
+                                         </ul>
+                                    </li>
+                                    <li><i>Version A.2</i></li>
+                                    <li>...</li>
+                                </ul>
+                            </li>
+                            <li><i>Product B</i></li>
+                            <li>...</li>
+                        </ul>
+                    </li>
+                    <li><i>Company 2</i></li>
+                    <li>...</li>
+                </ul>
+            </li>
+        </ul>
+        <p style="text-align:center;"><img alt="Screenshot OPD Tree" src="img/OPDTree.png"/></p>
+        <p>Each "folder" will have a set of fields that allow to define the element, and will contains folders and documents that help to manage all the information in a centralized way.</p>
+        <p>When a user logs in SMO, the <a href="Products.html">Products</a> list is displayed, and selecting other buttons, the list of all the elements of that type are displayed. 
+            It's important to note that the elements displayed could be in any level of the structure, they are filtered by their type, not by his path in the structure, being the only limit the ACl-authorization asigned. 
+            That way, SMO shows a functional-type view while OpenProdoc shows an structure view.</p>
+        <p>The contents and structure of each list and filter will be different, and can be changed over the default values depending on the <a href="configuration.html">configuration</a> made, however the behaviour is the same in all the lists.
+        When entering in a section (Products, Departments, Issues or Software Companies), all the elements are displayed. Filling the filter form, it's possible to filter the list and display a sub set of the elements that meet the filter criteria.
+        Over the list of elements there are different buttons that allow the principal operations of maintenance displaying specific forms. Those form will contain additional buttons and operations.</p>
+        <p>Depending on the <a href="configuration.html">Configuration</a>, the list of fields for filter or the fields to show or manage can be diferent, so additional documentation MUST be writen ir order to describe the configured functionality. 
+        In <a href="DefaultConf.html">Default ConfigurationValues</a> page there is a description of the default definition for each element or form if there is no modification.</p>
+        <p>All the requirements for the product can be found in <a href="BeforeInstall.html">Before Install</a> page and the installation process in the <a href="Install.html">Install</a> page.</p>
+        <p>In <a href="SMOTree.html">SMO Form Tree</a> there is a complete view of operations and forms.</p>
+        <hr>
+    </body>
+</html>

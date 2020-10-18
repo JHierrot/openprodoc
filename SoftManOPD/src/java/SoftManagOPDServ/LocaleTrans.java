@@ -45,7 +45,7 @@ StringBuilder Resp=new StringBuilder(200);
 DriverGeneric PDSession=SParent.getSessOPD(Req);
 String Par=Req.getParameter("Par");
 if (Par.equals("_Help"))
-    S="help/"+PDSession.getHelpLang(PDSession.getUser().getCustomData().getLanguage())+"/MainWin.html";
+    S="help/MainWin.html";
 else if (Par.equals("_User"))
     S="@"+PDSession.getUser().getName()+" ( "+PDSession.getUser().getDescription()+" )";
 else

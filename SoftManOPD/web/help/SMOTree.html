@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>SMO Forms Tree</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management, Software Management Project"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="shortcut icon" href="img/OpenProdoc.ico" type="image/x-icon"/> 
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+        <H4>SMO Forms Tree</H4><hr>
+        <p>Software Management OpenProdoc (SMO) tree of operations and forms.</p>
+        <ul>
+            <li><a href="Products.html"><b>Products:</b></a> Displays the list of products internal and external (according to the filters selected and the permissions of the current user).
+                <ul>
+                    <li><a href="ProductsUpdate.html"><b>Update:</b></a> Displays a form for updating the selected product.</li>
+                    <li><a href="ProductsVersions.html"><b>Versions:</b></a> Displays the list of versions of the selected product.
+                        <ul>
+                            <li><a href="ProductsVersionsAdd.html"><b>Add:</b></a> Displays a form for adding a new version of the current product.</li>
+                            <li><a href="ProductsVersionsCopy.html"><b>CopyUpdate:</b></a> Copies the current version and displays a form with the fields so they can be modified before saving.</li>
+                            <li><a href="ProductsVersionsUpdate.html"><b>Update:</b></a> Displays a form for updating the selected version of the product.</li>
+                            <li><a href="ProductsVersionsDelete.html"><b>Delete:</b></a> Displays a form for confirmation before deleting the selected product version and <b>ALL</b> its issues, folders and documents.</li>
+                            <li><a href="ListDocs.html"><b>List Documents:</b></a> Displays a form for maintenance of all the documents and folders structure under the selected product version.</li>
+                            <li><a href="ProductsVersionsIssues.html"><b>List Issues:</b></a> Displays a form for maintenance of issues of the current product version.
+                                <ul>
+                                    <li><a href="IssuesAdd.html"><b>Add:</b></a> Displays a form for adding a new issue of the current product version.</li>
+                                    <li><a href="IssuesUpdate.html"><b>Update:</b></a> Displays a form for updating the selected issue.</li>
+                                    <li><a href="IssuesDelete.html"><b>Delete:</b></a> Displays a form for confirmation before deleting the selected issue and <b>ALL</b> its folders and documents.</li>
+                                    <li><a href="ListDocs.html"><b>List Documents:</b></a> Displays a form for maintenance of all the documents and folders structure under the selected issue.</li>
+                                </ul>
+                            </li>
+                            <li><a href="ProductsVersionsManDependencies.html"><b>Manage Dependencies:</b></a> Displays a form for maintenance of dependencies of the selected version.
+                                <ul>
+                                    <li><a href="DependAdd.html"><b>Add:</b></a> Displays a form for adding a new dependencie of the current product version.</li>
+                                    <li><a href="DependUpdate.html"><b>Update:</b></a> Displays a form for updating the selected dependencie.</li>
+                                    <li><a href="DependDelete.html"><b>Delete:</b></a> Displays a form for confirmation before deleting the selected dependencie.</li>
+                                </ul>
+                            </li>
+                            <li><a href="ProductsVersionsDependTree.html"><b>Dependencies Tree:</b></a> Displays a tree of ALL the products this version depends on and the dependencies of them.</li>
+                            <li><a href="ProductsVersionsimpTree.html"><b>Impact Tree:</b></a> Display a tree of all the products in which this product version is used.</li>
+                        </ul>
+                    </li>
+                    <li><a href="ProductsDelete.html"><b>Delete:</b></a> Displays a form for confirmation before deleting the selected product and <b>ALL</b> its versions, folders and documents.</li>
+                    <li><a href="ListDocs.html"><b>List Documents:</b></a> Displays a form for maintenance of all the documents and folders structure under the selected product.</li>
+                </ul>
+            </li>
+            <li><a href="Departments.html"><b>Departments:</b></a> Shows the list of departments of the company (according to the filters selected and the permissions of the current user).
+                <ul>
+                    <li><a href="DepartmentAdd.html"><b>Add:</b></a> Displays a form for adding a department.</li>
+                    <li><a href="DepartmentUpdate.html"><b>Update:</b></a> Displays a form for updating the selected department.</li>
+                    <li><a href="DepartmentDelete.html"><b>Delete:</b></a> Displays a form for confirmation before deleting the selected department and <b>ALL</b> its products, versions, folders and documents.</li>
+                    <li><a href="ProductsAdd.html"><b>Add Product:</b></a> Displays a form for adding a product to the selected department.</li>
+                    <li><a href="ListDocs.html"><b>List Documents:</b></a> Displays a form for maintenance of all the documents and folders structure under the selected department.</li>
+                </ul>
+            </li>
+            <li><a href="Issues.html"><b>Issues:</b></a> Shows the list of issues/problems of the internal and external products (according to the filters selected and the permissions of the current user).
+                <ul>
+                    <li><a href="IssuesAdd.html"><b>Add:</b></a> Displays a form for adding a new issue to a product.</li>
+                    <li><a href="IssuesUpdate.html"><b>Update:</b></a> Displays a form for updating the selected issue.</li>
+                    <li><a href="IssuesDelete.html"><b>Delete:</b></a> Displays a form for confirmation before deleting the selected issue and <b>ALL</b> its folders and documents.</li>
+                    <li><a href="ListDocs.html"><b>List Documents:</b></a> Displays a form for maintenance of all the documents and folders structure under the selected department.</li>
+                </ul>
+            </li>
+            <li><a href="Soft Companies.html"><b>Soft Companies:</b></a> Shows the list of software companies or providers of products (according to the filters selected and the permissions of the current user).
+                <ul>
+                    <li><a href="SoftCompAdd.html"><b>Add:</b></a> Displays a form for adding a Software Company.</li>
+                    <li><a href="SoftCompUpdate.html"><b>Update:</b></a> Displays a form for updating the selected Software Company.</li>
+                    <li><a href="SoftCompDelete.html"><b>Delete:</b></a> Displays a form for confirmation before deleting the selected Software Company and <b>ALL</b> its products, versions, folders and documents.</li>
+                    <li><a href="ProductsAdd.html"><b>Add Product:</b></a> Displays a form for adding a product to the selected Software Company.</li>
+                    <li><a href="ListDocs.html"><b>List Documents:</b></a> Displays a form for maintenance of all the documents and folders structure under the selected Software Company.</li>
+                </ul>
+            </li>
+            <li><a href="Search.html"><b>Search:</b></a> Shows a form for searching documents of any kind and in any level of the structure of SMO (according to the permissions of the current user).</li>
+            <li><b>Help:</b> Shows the help pages.</li>
+            <li><b>About:</b> Shows a form with information of the versions of SMO and OpenProdoc.</li>
+            <li><b>Exit:</b> Closes the session in SMO.</li>
+        </ul>
+    </body>
+</html>
