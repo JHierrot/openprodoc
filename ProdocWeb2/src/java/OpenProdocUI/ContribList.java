@@ -108,7 +108,10 @@ if (F==null) // direct from login
             for (int i = 0; i < FToRead.size(); i++)
                 {
                 String Field = FToRead.elementAt(i);
-                F.getRecSum().getAttr(Field).Import(Req.getParameter(Field));
+                String S=Req.getParameter(Field);
+                if (S==null)
+                    S="";
+                F.getRecSum().getAttr(Field).Import(S);
                 }
             PDFolders Ftmp=new PDFolders(LocalSess);
             F.setParentId(Ftmp.getIdPath(ConfContr.getBaseFolder()));
