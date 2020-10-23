@@ -666,7 +666,7 @@ else if (getType()==Attribute.tINTEGER)
     return(Integer.parseInt(Val));
 else if (getType()==Attribute.tBOOLEAN)
     {
-    if (Val.equals("1")||Val.substring(0,1).equalsIgnoreCase("S")||Val.substring(0,1).equalsIgnoreCase("Y")||Val.equalsIgnoreCase("ON"))
+    if (Val.equals("1")||Val.length()>0 && Val.substring(0,1).equalsIgnoreCase("S")||Val.length()>0 && Val.substring(0,1).equalsIgnoreCase("Y")||Val.equalsIgnoreCase("ON"))
         return(true);
     else
         return(false);
