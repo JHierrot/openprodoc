@@ -19,10 +19,11 @@
 
 package OpenProdocUI;
 
-import static OpenProdocUI.SParent.ShowMessage;
-import static OpenProdocUI.SParent.TT;
-import static OpenProdocUI.SParent.getActFolderId;
+import static OpenProdocUI.SParent.getConnector;
 import static OpenProdocUI.SParent.getSessOPD;
+import static OpenProdocUI.SParent.setOPACConf;
+import static OpenProdocUI.SParent.setSessOPD;
+import Sessions.CurrentSession;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -41,8 +42,10 @@ import prodoc.ExtConf;
 import prodoc.PDException;
 import prodoc.PDDocs;
 import prodoc.PDFolders;
+import prodoc.PDLog;
 import prodoc.PDMimeType;
 import prodoc.PDReport;
+import prodoc.ProdocFW;
 import prodoc.Record;
 
 /**
@@ -73,13 +76,52 @@ try {
  */
 protected void ProcessPage(HttpServletRequest Req, HttpServletResponse response) throws Exception
 {   
+String IdOPAC=Req.getParameter("OPAC_Id"); 
 DriverGeneric PDSession=getSessOPD(Req);
+if (PDSession==null) // http sessions timed out
+    {
+    if (IdOPAC!=null && IdOPAC.length()!=0) // we can create session from Id
+        {
+    ExtConf ConfOPAC=Confs.get(IdOPAC);
+    if (ConfOPAC==null)
+        {
+        ConfOPAC=new ExtConf();
+        ConfOPAC.AssignConf(getOPACProperties(IdOPAC));
+        Confs.put(IdOPAC, ConfOPAC);
+        }
+    setOPACConf(Req, ConfOPAC);
+    DriverGeneric LocalSess=getSessOPD(Req);
+    if (LocalSess==null)
+        {
+        if (ConfOPAC.getUser()==null || ConfOPAC.getUser().length()==0)
+            {
+            try (ServletOutputStream out = response.getOutputStream()) {
+            out.println("ERROR NO OPAC Configured User");;
+                } 
+            }
+        else if(PDLog.isDebug())
+            PDLog.Debug("OPACUser: "+ConfOPAC.getUser());        
+        LocalSess=ProdocFW.getSession(getConnector(), ConfOPAC.getUser(), ConfOPAC.getPass()); // just for translation   
+        setSessOPD(Req, LocalSess, CurrentSession.Mode.OPAC);
+        }
+    }
+    else // no session nor IdOPAC -> Ask for Refresh Page
+        {
+        try (ServletOutputStream out = response.getOutputStream()) {
+        out.println("Session Expired...");
+        out.println("Load OPAC again...");
+        } catch (IOException ex)
+            {
+            ex.printStackTrace();
+            }
+        }
+    }
 PDDocs TmpDoc;
 Req.setCharacterEncoding("UTF-8");
 Cursor Cur=null;    
 try {      
 PDFolders F=new PDFolders(PDSession);
-ExtConf ConfOPAC=SParent.getOPACConf(Req);
+ExtConf ConfOPAC=getOPACConf(Req);
 String CurrFoldId=F.getIdPath(ConfOPAC.getBaseFolder());
 String CurrType=Req.getParameter("DT"); 
 String FullTextSearch=Req.getParameter("FT"); 

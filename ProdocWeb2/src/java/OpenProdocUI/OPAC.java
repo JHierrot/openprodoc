@@ -23,12 +23,10 @@ import Sessions.CurrentSession;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringReader;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Properties;
 import java.util.Vector;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -52,7 +50,6 @@ import prodoc.Record;
 public class OPAC extends SParent
 {
 private static final HashMap<String,String> OPACs=new HashMap(); 
-private static final HashMap<String,ExtConf> Confs=new HashMap(); 
 private static Date LastCacheUpdate=null;
 private static final long CacheCaducity=1*1*1000;
 private static final String HtmlBase="<!DOCTYPE html>\n" +
@@ -90,7 +87,7 @@ private static final String HtmlBase="<!DOCTYPE html>\n" +
           "<tr><td><div class=\"OPACFTLAB\" >@FTLABEL@</div></td><td class=\"TD_OPACFTINP\"><input class=\"OPACFTINP\" type=\"text\" name=\"FT\"><span class=\"tooltiptext\">@HelpForFullText@</span></td></tr>\n" +
           "@OPACFIELDS@"+
           "<tr><td><div class=\"OPACFORMATLAB\" >@FormatLabel@</div></td><td class=\"TD_PACFORMATCOMB\"><select class=\"OPACFORMATCOMB\" name=\"FORMAT_REP\">@FORMATVALS@</select><span class=\"tooltiptext\">@HelpForFormatType@</span></td></tr>\n" +
-          "<tr><td><a class=\"OPACHELP\" href=\"@URLHELP@\" target=\"_blank\">?</a></td><td><input  class=\"OPACBUT\" type=\"submit\" value=\"  Ok  \"></td></tr>" +
+          "<tr><td><a class=\"OPACHELP\" href=\"@URLHELP@\" target=\"_blank\">?</a><input type=\"hidden\" name=\"OPAC_Id\" value=\"@OPAC_Id@\"> </td><td><input  class=\"OPACBUT\" type=\"submit\" value=\"  Ok  \"></td></tr>" +
           "</table>\n" +
          "</fieldset>" +
         "</td></tr>" +
@@ -298,6 +295,7 @@ FieldsArray.append("];");
 HtmlFinal=HtmlFinal.replace("@DTVALS@", DTVals);
 HtmlFinal=HtmlFinal.replace("@OPACFIELDS@", Fields);
 HtmlFinal=HtmlFinal.replace("@LISTFIELDS@", FieldsArray);
+HtmlFinal=HtmlFinal.replace("@OPAC_Id@", IdOPAC);
 //OPACs.put(IdOPAC, HtmlFinal);
 LastCacheUpdate=new Date();
 return(HtmlFinal);
@@ -325,19 +323,6 @@ private static void CleanCache()
 {
 OPACs.clear();
 Confs.clear();
-}
-//-----------------------------------------------------------------------------------------------
-private static Properties getOPACProperties(String IdOPAC) throws Exception
-{
-DriverGeneric sessOPD=ProdocFW.getSession("PD", ExtConf.getDefUser(), ExtConf.getDefPass());    
-Properties P=new Properties();
-PDDocs DocCSS=new PDDocs(sessOPD);
-DocCSS.setPDId(IdOPAC);
-ByteArrayOutputStream OutBytes = new ByteArrayOutputStream();
-DocCSS.getStream(OutBytes);
-P.load(new StringReader(OutBytes.toString()));
-ProdocFW.freeSesion(getConnector(), sessOPD);
-return P;
 }
 //-----------------------------------------------------------------------------------------------
 private static StringBuilder GenBoolVals(HttpServletRequest Req, String DT, Attribute Attr)

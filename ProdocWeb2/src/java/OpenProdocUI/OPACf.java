@@ -304,18 +304,18 @@ OPACs.clear();
 Confs.clear();
 }
 //-----------------------------------------------------------------------------------------------
-private static Properties getOPACProperties(String IdOPAC) throws Exception
-{
-DriverGeneric sessOPD=ProdocFW.getSession("PD", ExtConf.getDefUser(), ExtConf.getDefPass());    
-Properties P=new Properties();
-PDDocs DocCSS=new PDDocs(sessOPD);
-DocCSS.setPDId(IdOPAC);
-ByteArrayOutputStream OutBytes = new ByteArrayOutputStream();
-DocCSS.getStream(OutBytes);
-P.load(new StringReader(OutBytes.toString()));
-ProdocFW.freeSesion(getConnector(), sessOPD);
-return P;
-}
+//private static Properties getOPACProperties(String IdOPAC) throws Exception
+//{
+//DriverGeneric sessOPD=ProdocFW.getSession("PD", ExtConf.getDefUser(), ExtConf.getDefPass());    
+//Properties P=new Properties();
+//PDDocs DocCSS=new PDDocs(sessOPD);
+//DocCSS.setPDId(IdOPAC);
+//ByteArrayOutputStream OutBytes = new ByteArrayOutputStream();
+//DocCSS.getStream(OutBytes);
+//P.load(new StringReader(OutBytes.toString()));
+//ProdocFW.freeSesion(getConnector(), sessOPD);
+//return P;
+//}
 //-----------------------------------------------------------------------------------------------
 private static StringBuilder GenBoolVals(HttpServletRequest Req, String DT, Attribute Attr)
 {

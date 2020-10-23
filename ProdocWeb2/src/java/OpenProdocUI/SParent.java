@@ -54,6 +54,7 @@ import prodoc.PDRepository;
 import prodoc.PDRoles;
 import prodoc.PDThesaur;
 import prodoc.PDUser;
+import prodoc.ProdocFW;
 import prodoc.Record;
 
 
@@ -104,6 +105,7 @@ public final static String PRODOC_SESSID="PRODOC_SESSID";
 
 protected static boolean OPDFWLoaded=false;
 
+protected static final HashMap<String,ExtConf> Confs=new HashMap(); 
 //-----------------------------------------------------------------------------------------------
 
 /** Destroys the servlet.
@@ -1797,6 +1799,25 @@ for (Iterator iterator = listDirectDescendList.iterator(); iterator.hasNext();)
     CalcOps(Ops,(String)iterator.next(), LocalSess, Level+1 );    
     }
 return(Ops);
+}
+//-----------------------------------------------------------------------------------------------
+protected static Properties getOPACProperties(String IdOPAC) throws Exception
+{
+DriverGeneric sessOPD=null;    
+try {
+sessOPD=ProdocFW.getSession("PD", ExtConf.getDefUser(), ExtConf.getDefPass());  
+Properties P=new Properties();
+PDDocs DocCSS=new PDDocs(sessOPD);
+DocCSS.Load(IdOPAC);
+ByteArrayOutputStream OutBytes = new ByteArrayOutputStream();
+DocCSS.getStream(OutBytes);
+P.load(new StringReader(OutBytes.toString()));
+return P;
+} finally
+    {
+    if (sessOPD!=null)    
+        ProdocFW.freeSesion(getConnector(), sessOPD);
+    }
 }
 //-----------------------------------------------------------------------------------------------
 }
