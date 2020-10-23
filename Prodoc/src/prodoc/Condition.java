@@ -110,11 +110,11 @@ private boolean Invert=false;
 /**
  * Formatter for searching (an storing) timestamp
  */
-final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyyMMddHHmmss");
+//final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyyMMddHHmmss");
 /**
  * Formatter for searching (an storing) Date
  */
-final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyyMMdd");
+//final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyyMMdd");
 /**
  * Kind of Object value
  */
@@ -349,9 +349,15 @@ switch (cType)
         if (TypeVal==Attribute.tSTRING)
             XML.append(DriverGeneric.Codif((String)Value)); // to avoid false XML tags
         else if (TypeVal==Attribute.tTIMESTAMP)
+            {
+            SimpleDateFormat formatterTS = new SimpleDateFormat("yyyyMMddHHmmss");    
             XML.append(formatterTS.format((Date)Value));
+            }
         else if (TypeVal==Attribute.tDATE)
+            {
+            SimpleDateFormat formatterDate = new SimpleDateFormat("yyyyMMdd");    
             XML.append(formatterDate.format((Date)Value));
+            }
         else if (TypeVal==Attribute.tBOOLEAN)
             XML.append(((Boolean)Value)?"1":"0");
         else if (TypeVal==Attribute.tFLOAT)
@@ -369,7 +375,10 @@ switch (cType)
             if (object instanceof String)
                 XML.append(DriverGeneric.Codif((String)object)).append(StringListSeparator); // to avoid false XML tags
             else if (object instanceof Date)
+                {
+                SimpleDateFormat formatterDate = new SimpleDateFormat("yyyyMMdd");    
                 XML.append(formatterDate.format((Date)object)).append(StringListSeparator);
+                }
             else if (object instanceof Boolean)
                 XML.append(((Boolean)object)?"1|":"0|");
             else
@@ -436,6 +445,7 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
                 else if (TypeVal==Attribute.tTIMESTAMP && ValS.length()!=0)
                     {
                     try {
+                        SimpleDateFormat formatterTS = new SimpleDateFormat("yyyyMMddHHmmss");
                         List.add(formatterTS.parse(ValS));
                     } catch (ParseException ex)
                         {
@@ -445,6 +455,7 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
                 else if (TypeVal==Attribute.tDATE&& ValS.length()!=0)
                     {
                     try {
+                        SimpleDateFormat formatterDate = new SimpleDateFormat("yyyyMMdd");
                         List.add(formatterDate.parse(ValS));
                     } catch (ParseException ex)
                         {
@@ -472,6 +483,7 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
             else if (TypeVal==Attribute.tTIMESTAMP && Cont.length()!=0)
                 {
                 try {
+                    SimpleDateFormat formatterTS = new SimpleDateFormat("yyyyMMddHHmmss");
                     Value=formatterTS.parse(Cont);
                 } catch (ParseException ex)
                     {
@@ -481,6 +493,7 @@ for (int i=0; i<OPDObjectList.getLength(); i++)
             else if (TypeVal==Attribute.tDATE&& Cont.length()!=0)
                 {
                 try {
+                    SimpleDateFormat formatterDate = new SimpleDateFormat("yyyyMMdd");
                     Value=formatterDate.parse(Cont);
                 } catch (ParseException ex)
                     {

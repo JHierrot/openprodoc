@@ -136,11 +136,11 @@ private TreeSet ValuesList=null;
 /**
  * Default formater, used to store in DDBB, export, etc
  */
-final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//final SimpleDateFormat formatterTS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 /**
  * Default formater, used to store in DDBB, export, etc
  */
-final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
+//final SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
 /**
  * Formatters for reading, importing, exporting and storing BigDecimal
  */
@@ -622,9 +622,15 @@ else if (getType()==Attribute.tINTEGER)
 else if (getType()==Attribute.tBOOLEAN)
     return(toBooleanString((Boolean)Val));
 else if (getType()==Attribute.tDATE)
+    {
+    SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");    
     return(formatterDate.format((Date)Val));
+    }
 else if (getType()==Attribute.tTIMESTAMP)
+    {
+    SimpleDateFormat formatterTS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");    
     return(formatterTS.format((Date)Val));
+    }
 else if (getType()==Attribute.tFLOAT)
     return(BD2String((BigDecimal)Val));
 else
@@ -669,7 +675,10 @@ else if (getType()==Attribute.tDATE)
     {
     try {
     if (Val!=null && Val.length()!=0)
+        {
+        SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");    
         return(formatterDate.parse(Val));
+        }
     } catch (ParseException ex)
         {
         PDException.GenPDException(ex.getLocalizedMessage(), Val);
@@ -679,7 +688,10 @@ else if (getType()==Attribute.tTIMESTAMP)
     {
     try {
     if (Val!=null && Val.length()!=0)
+        {
+        SimpleDateFormat formatterTS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");    
         return(formatterTS.parse(Val));
+        }
     } catch (ParseException ex)
         {
         PDException.GenPDException(ex.getLocalizedMessage(), Val);
