@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Help SMO Product Version Dependencies Tree</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management, Software Management Project"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="shortcut icon" href="img/OpenProdoc.ico" type="image/x-icon"/> 
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+        <H4>Help SMO Product Version Dependencies Tree</H4><hr>
+        <p>This form display a tree with all the products versions this product version depends on. The analysis is recursive so it will display the dependencies up to the last level.</p>
+        <p>This complete view allows to review in one point the risks of having a problem with your product, as the tree shows if a product can become out of support in next months, or if you are building your software with libraries or products whose license has some colision with your license.</p>
+        <p>Each product will only appear once in each level, but it can appear several times at different points, since different products may have the same dependency (libraries, databases to be installed, Java, .Net, etc.)</p>
+        <p>The tree, for each product, displays:</p>
+        <ul>
+           <li><b>Relation</b>: Kind of relationship between the current version of product and the related version of product (from the defined thesaurus of relation). The relation text can have colour <b style="color:orange;">orange</b> (if the EOS date have been exceeded but not the Extended EOS) or <b style="color:red;">red</b> (if both the EOS and the extended EOS have been exceeded).</li>
+           <li><b>Version</b>: Version of product the current product depends on.</li>
+           <li><b>End of Support Date</b>: Date in which the product will have without support (altough some producst can have an extended support with additional cost or restrictions).</li>
+           <li><b>License</b>: License of the product your product depends on.</li>
+         </ul>
+        <p style="text-align:center;"><img alt="Screenshot Dependencies Tree" src="img/DependenciesTree.png"/></p>
+        <p>In <a href="SMOTree.html">SMO Tree</a> there is a complete view of operations and forms.</p>
+        <hr>
+    </body>
+</html>
