@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Help SMO Product Version Issues</title>
+        <title>Help SMO Issues</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management, Software Management Project"/>
         <meta name="author" content="Joaquin Hierro" />
@@ -9,8 +9,18 @@
         <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
     </head>
     <body>
-        <H4>Help SMO Product Version Issues</H4><hr>
-        .<p>This form display tthe list of versions of a product</p>
+        <H4>Help SMO Issues</H4><hr>
+        <p>This option displays ALL the issues (whatever their product and version) limited by the permissions of the current user. From this form it's possible to create, update or delete Issues.
+        Altough it is possible to manage the issues from the product version form, this list allows to manage them gfrom one point alone.</p>
+        <p>With the default configuration, the filter area of the issues will show six filters:</p>
+        <ul>
+            <li><b>Internal</b>: Filter by issues of internal or external products.</li>
+            <li><b>Internal Code</b>: Filter by internal code of Issue.</li>
+            <li><b>Environment</b>: Filter by Environment in which the error ocurred</li>
+            <li><b>Status</b>: Filter by one of the possible status defined (pending, solved, assigned, waiting,..)</li>
+            <li><b>Criticity</b>: Filter by one of the possible levels of criticity defined (Critical, non blocking,..</li>
+            <li><b>Technical Assigned</b>: Filter by Technical who is analizing and solving the issue</li>
+        </ul>
         <p>With the default configuration, the list area display the columns:</p>
         <ul>
             <li><b>Internal Issue Code</b>: Internal unique Code/Identifier of the Issue</li>
@@ -22,13 +32,14 @@
             <li><b>Date Closed</b>: Date in which the Issue was vlosed</li>
             <li><b>Technical Assigned</b>: Technical who is analizing and solving the issue</li>
         </ul>
-        <p>Selecting a product, and always if the security permissions asigned allow it, it is possible to use the options:</p>
+        <p>Selecting an Issue, and always if the security permissions asigned allow it, it is possible to use the options:</p>
         <ul>
-            <li><a href="IssuesAdd.html"><b>Add:</b></a> Displays a form for adding a new issue of the current product version.</li>
+            <li><a href="IssuesAdd.html"><b>Add:</b></a> Displays a form for adding a new issue to a product.</li>
             <li><a href="IssuesUpdate.html"><b>Update:</b></a> Displays a form for updating the selected issue.</li>
             <li><a href="IssuesDelete.html"><b>Delete:</b></a> Displays a form for confirmation before deleting the selected issue and <b>ALL</b> its folders and documents.</li>
+            <li><a href="ListDocs.html"><b>List Documents:</b></a> Displays a form for maintenance of all the documents and folders structure under the selected department.</li>
         </ul>
-        <p style="text-align:center;"><img alt="Screenshot List Issues" src="img/ListIssues.png"/></p>
+        <p style="text-align:center;"><img alt="Screenshot Issues" src="img/Issues.png"/></p>
         <p>In <a href="SMOTree.html">SMO Tree</a> there is a complete view of operations and forms.</p>
         <hr>
     </body>
