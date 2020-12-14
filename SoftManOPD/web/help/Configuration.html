@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Help SMO Configuration</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management, Software Management Project"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="shortcut icon" href="img/OpenProdoc.ico" type="image/x-icon"/> 
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+        <style>
+        .Notes 
+            {
+            color:Green;
+            background-color: lightgrey;
+            font-style: italic;
+            }
+        </style>
+    </head>
+    <body>
+        <H4>Help SMO Configuration</H4><hr>
+        <p>SMO has a default configuration of the types of folders and fields/metadata used for elements as Deparments, Products or Issues, but it's possible to change completely the default configuration. 
+            It's possible also to change the fields displayed in forms and list. This allows to have "hidden" or internal fields than can be changed in OpenProdoc but not in SMO. 
+            Even it's possible to have two or more configurations simultaneously in the same OpenProdoc installation, referencing them in the url.</p> 
+        <p>The elements can be shared between different configurations, that is in example the same department type could be used in different in different configurations, always avoidding collisions, in example using different Departyments root.</p>
+        <p>The configuration is centralized in just one file with JSON structure. The default configuration is:</p>        
+        <table style="font-family:Courier">
+            <tr><td>{<br>"DepartsRoot":"/Company",</td><td class="Notes">// Root folder that will contain the  Department folders created from SMO</td></tr>
+            <tr><td>"DepartmentType":"Department",</td><td class="Notes">// OpenProdoc type to be used for managing and storing the information of Departments in SMO</td></tr>
+            <tr><td>"DepartmentFields":<br>
+&nbsp;&nbsp;[{"Name":"Title",&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Filter":true},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"Description",&nbsp;"Filter":true},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"Responsible",&nbsp;"Filter":true}],<br></td>
+                <td class="Notes">// SubSet of fields of the specified <b>DepartmentType</b> to be used in the maintenance form. The type can have more additional fields (not required) that could  be modified using the OpenProdoc interface or API. If "Filter" is true, they will be used for filtering in the <a href="Departments.html"><b>Departments</b></a> list form also.</td></tr>
+            <tr><td>"SoftProvRoot":"/Providers",</td><td class="Notes">// Root folder that will contain the Providers folders created from SMO </td></tr>
+            <tr><td>"SoftProviderType":"SoftProvider",</td><td class="Notes">// OpenProdoc type to be used for managing and storing the information of Software providers in SMO </td></tr>
+            <tr><td>"SoftProviderFields":<br>
+&nbsp;&nbsp;[{"Name":"Title",&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Filter":true},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"Description",&nbsp;"Filter":true},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"Contact",&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Filter":true},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"Mail",&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Filter":false},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"Phone",&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Filter":false},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"Url",&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Filter":true}],</td>
+                <td class="Notes">// SubSet of fields of the specified <b>SoftProviderType</b> to be used in the maintenance form. The type can have more additional fields (not required) that could  be modified using the OpenProdoc interface or API. If "Filter" is true, they will be used for filtering in the <a href="SoftCompanies.html"><b>Soft Companies</b></a> list form also. </td></tr>
+            <tr><td>"ProductType":"Products",</td><td class="Notes">// OpenProdoc type to be used for managing and storing the information of Products in SMO </td></tr>
+            <tr><td>"ProductFields":<br>
+&nbsp;&nbsp;[{"Name":"Title",&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Filter":false},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"CurrentVersion",&nbsp;"Filter":false},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"Description",&nbsp;&nbsp;&nbsp;&nbsp;"Filter":false},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"Family",&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Filter":true},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"Keywords",&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Filter":false},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"License",&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Filter":true},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"ProductCode",&nbsp;&nbsp;&nbsp;&nbsp;"Filter":false},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"Technology",&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Filter":true}],</td>
+                <td class="Notes">// SubSet of fields of the specified <b>ProductType</b> to be used in the maintenance form. The type can have more additional fields (not required) that could  be modified using the OpenProdoc interface or API. If "Filter" is true, they will be used for filtering in the <a href="Products.html"><b>Products</b></a> list form also. </td></tr>
+            <tr><td>"ProductsVersType":"ProductsVers",</td><td class="Notes">// OpenProdoc type to be used for managing and storing the information of versions of Products in SMO </td></tr>
+            <tr><td>"ProductsVersFields":<br>
+&nbsp;&nbsp;[{"Name":"Title",&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Filter":false},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"License",&nbsp;&nbsp;&nbsp;"Filter":false},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"DateInit",&nbsp;&nbsp;"Filter":false},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"DateSup",&nbsp;&nbsp;&nbsp;"Filter":false},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"DateSupExt","Filter":false},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"Notes",&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Filter":false}],</td>
+<td class="Notes">// SubSet of fields of the specified <b>ProductsVersType</b> to be used in the maintenance form. The type can have more additional fields (not required) that could  be modified using the OpenProdoc interface or API. The "Filter" parameter has no use in this element. </td></tr>
+            <tr><td>"IssueType":"Issues",</td><td class="Notes">// OpenProdoc type to be used for managing and storing the information of Issues of Products in SMO </td></tr>
+            <tr><td>"IssuesFields":<br>
+&nbsp;&nbsp;[{"Name":"Code",&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Filter":true},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"ExtCode",&nbsp;&nbsp;&nbsp;&nbsp;"Filter":false},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"Title",&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Filter":false},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"Description","Filter":false},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"Env",&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Filter":true},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"IssueCrit",&nbsp;&nbsp;"Filter":true},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"IssueStatus","Filter":true},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"Keywords",&nbsp;&nbsp;&nbsp;"Filter":false},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"DateOpen",&nbsp;&nbsp;&nbsp;"Filter":false},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"DateClosed",&nbsp;"Filter":false},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"IssueSolver","Filter":true},<br>
+&nbsp;&nbsp;&nbsp;{"Name":"Solution",&nbsp;&nbsp;&nbsp;"Filter":false}],<br></td><td class="Notes">// SubSet of fields of the specified <b>IssueType</b> to be used in the maintenance form. The type can have more additional fields (not required) that could  be modified using the OpenProdoc interface or API. The "Filter" parameter has no use in this element.  If "Filter" is true, they will be used for filtering in the <a href="Issues.html"><b>Issues</b></a> list form also. </td></tr>
+            <tr><td>"RelationsThes":"887843",</td><td  class="Notes"> // Code/identifier of thesaurus to be used for defining the relationships between products</td></tr>
+            <tr><td>"GridConfs":[</td><td  class="Notes">// Set of configurations of each table/list of elements</td></tr>
+            <tr><td>&nbsp;&nbsp;{"GridId":"ListProducts",<br>
+&nbsp;&nbsp;&nbsp;"Header":"Code,Title,Current&nbsp;Version,DepartmentCompany,Family,License,Technology",<br>
+&nbsp;&nbsp;&nbsp;"ColumnIds":"ProductCode,Title,CurrentVersion,ParentId,Family,License,Technology",<br>
+&nbsp;&nbsp;&nbsp;"InitWidths":"100,200,80,180,140,140,*",<br>
+&nbsp;&nbsp;&nbsp;"ColAlign":"left,left,left,left,left,left,left",<br>
+&nbsp;&nbsp;&nbsp;"ColTypes":"ro,ro,ro,ro,ro,ro,ro",<br>
+&nbsp;&nbsp;&nbsp;"ColSorting":"str,str,str,str,str,str,str"},</td><td  class="Notes"></td></tr>
+            <tr><td>&nbsp;&nbsp;{"GridId":"ListDepartments",<br>
+&nbsp;&nbsp;&nbsp;"Header":"Title,Responsible,Description",<br>
+&nbsp;&nbsp;&nbsp;"ColumnIds":"Title,Responsible,Description",<br>
+&nbsp;&nbsp;&nbsp;"InitWidths":"200,200,*",<br>
+&nbsp;&nbsp;&nbsp;"ColAlign":"left,left,left",<br>
+&nbsp;&nbsp;&nbsp;"ColTypes":"ro,ro,ro",<br>
+&nbsp;&nbsp;&nbsp;"ColSorting":"str,str,str"},</td><td  class="Notes"></td></tr>
+            <tr><td>&nbsp;&nbsp;{"GridId":"ListSoftCompanies",<br>
+&nbsp;&nbsp;&nbsp;"Header":"Title,Contact,Mail,Phone,Url,Description",<br>
+&nbsp;&nbsp;&nbsp;"ColumnIds":"Title,Contact,Mail,Phone,Url,Description",<br>
+&nbsp;&nbsp;&nbsp;"InitWidths":"100,120,120,120,140,*",<br>
+&nbsp;&nbsp;&nbsp;"ColAlign":"left,left,left,left,left,left",<br>
+&nbsp;&nbsp;&nbsp;"ColTypes":"ro,ro,ro,ro,ro,ro",<br>
+&nbsp;&nbsp;&nbsp;"ColSorting":"str,str,str,str,str,str"},</td><td  class="Notes"></td></tr>
+            <tr><td>&nbsp;&nbsp;{"GridId":"ListIssues",<br>
+&nbsp;&nbsp;&nbsp;"Header":"Code,Title,Produc&nbsp;Version,Env,Status,Criticity,DateOpen,DateClosed,Solver",<br>
+&nbsp;&nbsp;&nbsp;"ColumnIds":"Code,Title,ParentId,Env,IssueStatus,IssueCrit,DateOpen,DateClosed,IssueSolver",<br>
+&nbsp;&nbsp;&nbsp;"InitWidths":"100,160,120,120,140,140,100,100,*",<br>
+&nbsp;&nbsp;&nbsp;"ColAlign":"left,left,left,left,left,left,left,left,left",<br>
+&nbsp;&nbsp;&nbsp;"ColTypes":"ro,ro,ro,ro,ro,ro,ro,ro,ro",<br>
+&nbsp;&nbsp;&nbsp;"ColSorting":"str,str,str,str,str,str,str,str,str"},</td><td  class="Notes"></td></tr>
+            <tr><td>&nbsp;&nbsp;{"GridId":"ListVers",<br>
+&nbsp;&nbsp;&nbsp;"Header":"Title,DateInit,DateSup,DateSupExt,Status,License,Notes",<br>
+&nbsp;&nbsp;&nbsp;"ColumnIds":"Title,DateInit,DateSup,DateSupExt,Status,License,Notes",<br>
+&nbsp;&nbsp;&nbsp;"InitWidths":"140,80,80,80,50,80,*",<br>
+&nbsp;&nbsp;&nbsp;"ColAlign":"left,left,left,left,center,left,left",<br>
+&nbsp;&nbsp;&nbsp;"ColTypes":"ro,ro,ro,ro,img,ro,ro",<br>
+&nbsp;&nbsp;&nbsp;"ColSorting":"str,str,str,str,str,str,str"},</td><td  class="Notes"></td></tr>
+            <tr><td>&nbsp;&nbsp;{"GridId":"ListIsuesVer",<br>
+&nbsp;&nbsp;&nbsp;"Header":"Code,Title,Env,Status,Criticity,DateOpen,DateClosed,Solver",<br>
+&nbsp;&nbsp;&nbsp;"ColumnIds":"Code,Title,Env,IssueStatus,IssueCrit,DateOpen,DateClosed,IssueSolver",<br>
+&nbsp;&nbsp;&nbsp;"InitWidths":"80,120,80,100,100,100,100,*",<br>
+&nbsp;&nbsp;&nbsp;"ColAlign":"left,left,left,left,left,left,left,left",<br>
+&nbsp;&nbsp;&nbsp;"ColTypes":"ro,ro,ro,ro,ro,ro,ro,ro",<br>
+&nbsp;&nbsp;&nbsp;"ColSorting":"str,str,str,str,str,str,str,str"},</td><td  class="Notes"></td></tr>
+            <tr><td>&nbsp;&nbsp;{"GridId":"ListDep",<br>
+&nbsp;&nbsp;&nbsp;"Header":"Product,Version,Relation",<br>
+&nbsp;&nbsp;&nbsp;"ColumnIds":"Product,Version,Relation",<br>
+&nbsp;&nbsp;&nbsp;"InitWidths":"150,150,*",<br>
+&nbsp;&nbsp;&nbsp;"ColAlign":"left,left,left",<br>
+&nbsp;&nbsp;&nbsp;"ColTypes":"ro,ro,ro",<br>
+&nbsp;&nbsp;&nbsp;"ColSorting":"str,str,str"}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;]<br>
+}</td><td  class="Notes"></td></tr>
+        </table>            
+        <p>In <a href="SMOTree.html">SMO Tree</a> there is a complete view of operations and forms.</p>
+        <hr>
+    </body>
+</html>
