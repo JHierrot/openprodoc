@@ -1417,6 +1417,14 @@ abstract public void AnularTrans() throws PDException;
  * @throws PDException In any error
  */
 abstract protected Cursor OpenCursor(Query Search) throws PDException;
+/**
+ * Opens a cursor with the information included in Query
+ * @param Search Query information
+ * @param MaxResults maximum results to return
+ * @return a CursorCode, stored by the drivers
+ * @throws PDException In any error
+ */
+abstract protected Cursor OpenCursor(Query Search, int MaxResults) throws PDException;
 //-----------------------------------------------------------------------------------
 /**
  * Generates a cursor identifier
@@ -1447,6 +1455,20 @@ return OpenCur;
 protected Cursor StoreCursor(Object rs, Record Fields)
 {
 Cursor Cur=new Cursor(genCursorName(), Fields, rs);
+getOpenCur().put(Cur.getCursorId(), Cur);
+return(Cur);
+}
+//-----------------------------------------------------------------------------------
+/**
+ * Creates a cursor and stores in the collection
+ * @param rs Object representing a collection of results (JDBC Resulset, Vector,..)
+ * @param Fields Record of attributes returned by the cursor
+ * @param MaxResults maximum results to return
+ * @return Created Cursor
+ */
+protected Cursor StoreCursor(Object rs, Record Fields, int MaxResults)
+{
+Cursor Cur=new Cursor(genCursorName(), Fields, rs, MaxResults);
 getOpenCur().put(Cur.getCursorId(), Cur);
 return(Cur);
 }
@@ -1973,7 +1995,7 @@ if (PDLog.isDebug())
  */
 static public String getVersion()
 {
-return("3.0.2");
+return("3.0.3");
 }
 /**
  * constant used for bin <-> hexadecimal conversión

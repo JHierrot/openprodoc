@@ -35,9 +35,32 @@ private String CursorId;
  */
 private Record FieldsCur;
 /**
- * ResulSet conatinign the results (Vectod, JDBC resulSet,...)
+ * ResulSet containing the results (Vectod, JDBC resulSet,...)
  */
 private Object ResultSet;
+/**
+ * Max size of cursor (temporal solution due non standard sql
+ */
+private int MaxResults=1000000;
+/**
+ * Returned results
+ */
+private int ReturnedResults=0;
+
+//--------------------------------------------------------------------
+/**
+ * Default constructor
+ * @param pCursorId  Cursor Identifier
+ * @param pFieldsCur Record of Atributes returned by Cursor
+ * @param pResultSet ResultSet Object
+ */
+public Cursor (String pCursorId, Record pFieldsCur, Object pResultSet, int pMaxResults)
+{
+setCursorId(pCursorId);
+setFieldsCur(pFieldsCur);
+setResultSet(pResultSet);
+MaxResults=pMaxResults;
+}
 //--------------------------------------------------------------------
 /**
  * Default constructor
@@ -128,4 +151,29 @@ if (getResultSet()!=null&& getResultSet() instanceof Vector)
     }
 }
 //-----------------------------------------------------------
+/**
+ * @return the MaxResults
+ */
+public int getMaxResults()
+{
+return MaxResults;
+}
+//-----------------------------------------------------------
+/**
+ * Increments the returned Results
+ */
+public int IncResults()
+{
+return (++ReturnedResults);
+}
+//-----------------------------------------------------------
+/**
+ * @return the ReturnedResults
+ */
+public int getReturnedResults()
+{
+return ReturnedResults;
+}
+//-----------------------------------------------------------
+
 }

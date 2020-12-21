@@ -33,8 +33,8 @@ private static final String Html="<!DOCTYPE html>\n" +
 "<html>\n" +
 "    <head>\n" +
 "        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n" +
-"        <title>OpenProdoc2 3.0.2</title>\n" +
-"        <script src=\"js/OpenProdoc3.0.2.js\" type=\"text/javascript\"></script>\n" +
+"        <title>OpenProdoc2 3.0.3</title>\n" +
+"        <script src=\"js/OpenProdoc3.0.3.js\" type=\"text/javascript\"></script>\n" +
 "        <script src=\"js/dhtmlx.js\" type=\"text/javascript\"></script>\n" +
 "        <link rel=\"shortcut icon\" href=\"img/OpenProdoc.ico\" type=\"image/x-icon\">" +       
 "        <link rel=\"STYLESHEET\" type=\"text/css\" href=\"js/dhtmlx.css\">\n" +

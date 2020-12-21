@@ -369,6 +369,19 @@ setInTransaction(false);
     PDException.GenPDException("Error_canceling_transaction",ex.getLocalizedMessage());
     }
 }
+/**
+ * Opens a cursor with the information included in Query. Not needed because
+ * remote JDBC driver will do all the work limiting
+ * @param Search Query information
+ * @param MaxResults maximum results to return. Not used, limited in server
+ * @return a CursorCode, stored by the drivers
+ * @throws PDException In any error
+ */
+@Override
+protected Cursor OpenCursor(Query Search, int MaxResults) throws PDException
+{
+return(OpenCursor(Search));
+}
 //-----------------------------------------------------------------------------------
 /**
  * Opens a cursor

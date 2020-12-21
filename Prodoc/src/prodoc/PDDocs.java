@@ -206,6 +206,8 @@ static private ObjectsCache DocsObjectsCache = null;
  */
 static public final String XML_CONTENT="OPD_CONTENT";
 
+private boolean LimitedResults=true;
+
 //-------------------------------------------------------------------------
 /**
  * Default constructor that creates a document of the default doctype
@@ -2562,12 +2564,6 @@ if (SubFolders)
     if (!(IdActFold==null || IdActFold.equalsIgnoreCase(PDFolders.ROOTFOLDER)))
         { // add list to conditions
         PDFolders F=new PDFolders(getDrv());
-//        HashSet listDescendList = Fold.getListDescendList(IdActFold);
-//        if (listDescendList==null)
-//            listDescendList=new HashSet();
-//        listDescendList.add(IdActFold);
-//        Condition C=new Condition(PDDocs.fPARENTID, listDescendList);
-//        Condition C=new Condition(PDFolders.fPARENTID, F.getQueryListDescendList(IdActFold));
         ComposedConds.addCondition(Condition.genInTreeCond(IdActFold, getDrv()));
         }
     }
@@ -2590,9 +2586,15 @@ else
     RecSearch.addAttr(Atr);
     }
 Query DocSearch=new Query(TypList, RecSearch, ComposedConds, Ord);
+Cursor NewCur=getDrv().OpenCursor(DocSearch);
+if (isLimitedResults())
+    NewCur=getDrv().OpenCursor(DocSearch, Conector.getMaxResults());
+else
+    NewCur=getDrv().OpenCursor(DocSearch);
+setLimitedResults(true); // for next time
 if (PDLog.isDebug())
     PDLog.Debug("PDDocs.Search <");
-return(getDrv().OpenCursor(DocSearch));
+return(NewCur);
 }
 //-------------------------------------------------------------------------
 /**
@@ -3862,6 +3864,22 @@ if (r==null)
     PDExceptionFunc.GenPDException("Do_not_exist_document_under_folder", ParentId+"/"+DocTitle);
 Attribute A=r.getAttr(fPDID);
 return((String)A.getValue());
+}
+//-----------------------------------------------------------------
+/**
+ * @return the LimitedResults
+ */
+public boolean isLimitedResults()
+{
+return LimitedResults;
+}
+//-----------------------------------------------------------------
+/**
+ * @param LimitedResults the LimitedResults to set
+ */
+public void setLimitedResults(boolean LimitedResults)
+{
+this.LimitedResults = LimitedResults;
 }
 //-----------------------------------------------------------------
 }

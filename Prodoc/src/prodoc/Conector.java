@@ -97,6 +97,8 @@ private boolean EndShutdown=false;
 
 static private boolean APIREST=true;
 static private boolean APIRem=true;
+
+static private int MaxResults=1000000;
 //--------------------------------------------------------------------------
 /**
  * Reads, interpret and store the requiered elements of the configuration
@@ -131,10 +133,13 @@ if (TaskCategory!=null)
     TaskCategory=TaskCategory.trim();
 String Temp=ProdocProperties.getProperty(ConectorName+".TaskSearchFreq");
 if (Temp!=null)
-    TaskSearchFreq=new Integer(Temp);
+    TaskSearchFreq=Integer.parseInt(Temp);
 Temp=ProdocProperties.getProperty(ConectorName+".TaskExecFreq");
 if (Temp!=null)
-    TaskExecFreq=new Integer(Temp);
+    TaskExecFreq=Integer.parseInt(Temp);
+Temp=ProdocProperties.getProperty("MaxResults");
+if (Temp!=null)
+    MaxResults=Integer.parseInt(Temp);
 ListSesion=new Vector();
 for (int i = 0; i < MinPoolSize; i++)
     {
@@ -383,6 +388,14 @@ return APIREST;
 public static boolean isAPIRem()
 {
 return APIRem;
+}
+//--------------------------------------------------------------------------
+/**
+ * @return the MaxResults
+ */
+public static int getMaxResults()
+{
+return MaxResults;
 }
 //--------------------------------------------------------------------------
 

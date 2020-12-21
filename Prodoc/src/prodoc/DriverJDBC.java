@@ -732,6 +732,23 @@ return(StoreCursor(rs, Search.getRetrieveFields()));
 }
 //-----------------------------------------------------------------------------------
 /**
+ * Opens a cursor with the information included in Query
+ * @param Search Query information
+ * @param MaxResults maximum results to return
+ * @return a CursorCode, stored by the drivers
+ * @throws PDException In any error
+ */
+@Override
+protected Cursor OpenCursor(Query Search, int MaxResults) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("DriverJDBC.OpenCursor:"+Search);
+String SQL=EvalQuery(Search);
+ResultSet rs=RsExecuteSql(SQL);
+return(StoreCursor(rs, Search.getRetrieveFields(), MaxResults));
+}
+//-----------------------------------------------------------------------------------
+/**
  * Close a Cursor
  * @param CursorIdent Identifieer of cursor
  * @throws PDException In any error
@@ -763,6 +780,8 @@ public Record NextRec(Cursor CursorIdent) throws PDException
 if (PDLog.isDebug())
     PDLog.Debug("DriverJDBC.NextRec:"+CursorIdent);
 ResultSet rs=(ResultSet)CursorIdent.getResultSet();
+if (CursorIdent.getReturnedResults()>=CursorIdent.getMaxResults())
+   return(null);
 boolean hashNext=false;
 try {
 hashNext=rs.next();
@@ -837,6 +856,7 @@ for (int i = 0; i < Fields.NumAttr(); i++)
         PDException.GenPDException("Error_retrieving_attributes", Attr.getName()+"/"+ex.getLocalizedMessage());
         }
     }
+CursorIdent.IncResults();
 return(Fields.Copy());
 }
 //-----------------------------------------------------------------------------------

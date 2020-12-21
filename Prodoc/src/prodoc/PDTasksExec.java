@@ -840,6 +840,7 @@ Conditions Conds=new Conditions();
 Conds.addCondition(c);
 PDFolders F=new PDFolders(getDrv());
 String IdAct=F.getIdPath(getParam3());
+Doc.setLimitedResults(false);
 return(Doc.Search(DocType, Conds, SubTypes, true, false, IdAct, null))  ;
 }
 //-------------------------------------------------------------------------
@@ -886,6 +887,7 @@ Condition c2=new Condition(Attr2, Condition.cLET);
 Conds.addCondition(c2);
 PDFolders F=new PDFolders(getDrv());
 String IdAct=F.getIdPath(getParam4());
+Doc.setLimitedResults(false);
 return(Doc.Search(DocType, Conds, SubTypes, true, false, IdAct, null))  ;
 }
 //-------------------------------------------------------------------------

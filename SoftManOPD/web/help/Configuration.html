@@ -76,49 +76,59 @@
 &nbsp;&nbsp;&nbsp;{"Name":"IssueSolver","Filter":true},<br>
 &nbsp;&nbsp;&nbsp;{"Name":"Solution",&nbsp;&nbsp;&nbsp;"Filter":false}],<br></td><td class="Notes">// SubSet of fields of the specified <b>IssueType</b> to be used in the maintenance form. The type can have more additional fields (not required) that could  be modified using the OpenProdoc interface or API. The "Filter" parameter has no use in this element.  If "Filter" is true, they will be used for filtering in the <a href="Issues.html"><b>Issues</b></a> list form also. </td></tr>
             <tr><td>"RelationsThes":"887843",</td><td  class="Notes"> // Code/identifier of thesaurus to be used for defining the relationships between products</td></tr>
-            <tr><td>"GridConfs":[</td><td  class="Notes">// Set of configurations of each table/list of elements</td></tr>
+            <tr><td>"GridConfs":[</td><td  class="Notes">// Set of configurations for each table/list of elements<br>
+                Each table will display a subset of the fields of a document/folder type using a set of definitions separated by ";":
+            <ul>
+                <li>A header for each field (free text)</li> 
+                <li>The internal name of each field in the OpenProdoc definition</li> 
+                <li>The size in pixels of each field, being the last one always "*"</li> 
+                <li>The alignement of each field</li> 
+                <li>The type of field (always "ro")</li> 
+                <li>The type of sorting (always "str")</li> 
+            </ul>
+            </td></tr>
             <tr><td>&nbsp;&nbsp;{"GridId":"ListProducts",<br>
 &nbsp;&nbsp;&nbsp;"Header":"Code,Title,Current&nbsp;Version,DepartmentCompany,Family,License,Technology",<br>
 &nbsp;&nbsp;&nbsp;"ColumnIds":"ProductCode,Title,CurrentVersion,ParentId,Family,License,Technology",<br>
 &nbsp;&nbsp;&nbsp;"InitWidths":"100,200,80,180,140,140,*",<br>
 &nbsp;&nbsp;&nbsp;"ColAlign":"left,left,left,left,left,left,left",<br>
 &nbsp;&nbsp;&nbsp;"ColTypes":"ro,ro,ro,ro,ro,ro,ro",<br>
-&nbsp;&nbsp;&nbsp;"ColSorting":"str,str,str,str,str,str,str"},</td><td  class="Notes"></td></tr>
+&nbsp;&nbsp;&nbsp;"ColSorting":"str,str,str,str,str,str,str"},</td><td  class="Notes">// List of Products (displayed in the main page)</td></tr>
             <tr><td>&nbsp;&nbsp;{"GridId":"ListDepartments",<br>
 &nbsp;&nbsp;&nbsp;"Header":"Title,Responsible,Description",<br>
 &nbsp;&nbsp;&nbsp;"ColumnIds":"Title,Responsible,Description",<br>
 &nbsp;&nbsp;&nbsp;"InitWidths":"200,200,*",<br>
 &nbsp;&nbsp;&nbsp;"ColAlign":"left,left,left",<br>
 &nbsp;&nbsp;&nbsp;"ColTypes":"ro,ro,ro",<br>
-&nbsp;&nbsp;&nbsp;"ColSorting":"str,str,str"},</td><td  class="Notes"></td></tr>
+&nbsp;&nbsp;&nbsp;"ColSorting":"str,str,str"},</td><td  class="Notes">// List of Departments (displayed in the main page)</td></tr>
             <tr><td>&nbsp;&nbsp;{"GridId":"ListSoftCompanies",<br>
 &nbsp;&nbsp;&nbsp;"Header":"Title,Contact,Mail,Phone,Url,Description",<br>
 &nbsp;&nbsp;&nbsp;"ColumnIds":"Title,Contact,Mail,Phone,Url,Description",<br>
 &nbsp;&nbsp;&nbsp;"InitWidths":"100,120,120,120,140,*",<br>
 &nbsp;&nbsp;&nbsp;"ColAlign":"left,left,left,left,left,left",<br>
 &nbsp;&nbsp;&nbsp;"ColTypes":"ro,ro,ro,ro,ro,ro",<br>
-&nbsp;&nbsp;&nbsp;"ColSorting":"str,str,str,str,str,str"},</td><td  class="Notes"></td></tr>
+&nbsp;&nbsp;&nbsp;"ColSorting":"str,str,str,str,str,str"},</td><td  class="Notes">// List of Software Companies (displayed in the main page)</td></tr>
             <tr><td>&nbsp;&nbsp;{"GridId":"ListIssues",<br>
 &nbsp;&nbsp;&nbsp;"Header":"Code,Title,Produc&nbsp;Version,Env,Status,Criticity,DateOpen,DateClosed,Solver",<br>
 &nbsp;&nbsp;&nbsp;"ColumnIds":"Code,Title,ParentId,Env,IssueStatus,IssueCrit,DateOpen,DateClosed,IssueSolver",<br>
 &nbsp;&nbsp;&nbsp;"InitWidths":"100,160,120,120,140,140,100,100,*",<br>
 &nbsp;&nbsp;&nbsp;"ColAlign":"left,left,left,left,left,left,left,left,left",<br>
 &nbsp;&nbsp;&nbsp;"ColTypes":"ro,ro,ro,ro,ro,ro,ro,ro,ro",<br>
-&nbsp;&nbsp;&nbsp;"ColSorting":"str,str,str,str,str,str,str,str,str"},</td><td  class="Notes"></td></tr>
+&nbsp;&nbsp;&nbsp;"ColSorting":"str,str,str,str,str,str,str,str,str"},</td><td  class="Notes">// List of issues (displayed in the main page)</td></tr>
             <tr><td>&nbsp;&nbsp;{"GridId":"ListVers",<br>
 &nbsp;&nbsp;&nbsp;"Header":"Title,DateInit,DateSup,DateSupExt,Status,License,Notes",<br>
 &nbsp;&nbsp;&nbsp;"ColumnIds":"Title,DateInit,DateSup,DateSupExt,Status,License,Notes",<br>
 &nbsp;&nbsp;&nbsp;"InitWidths":"140,80,80,80,50,80,*",<br>
 &nbsp;&nbsp;&nbsp;"ColAlign":"left,left,left,left,center,left,left",<br>
 &nbsp;&nbsp;&nbsp;"ColTypes":"ro,ro,ro,ro,img,ro,ro",<br>
-&nbsp;&nbsp;&nbsp;"ColSorting":"str,str,str,str,str,str,str"},</td><td  class="Notes"></td></tr>
+&nbsp;&nbsp;&nbsp;"ColSorting":"str,str,str,str,str,str,str"},</td><td  class="Notes">// List of Departments (displayed when selected from a Product window)</td></tr>
             <tr><td>&nbsp;&nbsp;{"GridId":"ListIsuesVer",<br>
 &nbsp;&nbsp;&nbsp;"Header":"Code,Title,Env,Status,Criticity,DateOpen,DateClosed,Solver",<br>
 &nbsp;&nbsp;&nbsp;"ColumnIds":"Code,Title,Env,IssueStatus,IssueCrit,DateOpen,DateClosed,IssueSolver",<br>
 &nbsp;&nbsp;&nbsp;"InitWidths":"80,120,80,100,100,100,100,*",<br>
 &nbsp;&nbsp;&nbsp;"ColAlign":"left,left,left,left,left,left,left,left",<br>
 &nbsp;&nbsp;&nbsp;"ColTypes":"ro,ro,ro,ro,ro,ro,ro,ro",<br>
-&nbsp;&nbsp;&nbsp;"ColSorting":"str,str,str,str,str,str,str,str"},</td><td  class="Notes"></td></tr>
+&nbsp;&nbsp;&nbsp;"ColSorting":"str,str,str,str,str,str,str,str"},</td><td  class="Notes">// List of Issues of a Version (displayed when selected from a Product Version window)</td></tr>
             <tr><td>&nbsp;&nbsp;{"GridId":"ListDep",<br>
 &nbsp;&nbsp;&nbsp;"Header":"Product,Version,Relation",<br>
 &nbsp;&nbsp;&nbsp;"ColumnIds":"Product,Version,Relation",<br>
@@ -127,8 +137,17 @@
 &nbsp;&nbsp;&nbsp;"ColTypes":"ro,ro,ro",<br>
 &nbsp;&nbsp;&nbsp;"ColSorting":"str,str,str"}<br>
 &nbsp;&nbsp;&nbsp;&nbsp;]<br>
-}</td><td  class="Notes"></td></tr>
-        </table>            
+}</td><td  class="Notes">// List of Dependencies (displayed when selected from a Product Version window)<br><br><b>Currently FIXED. It's no allowed to change</b></td></tr>
+        </table>     
+        <p>If needed, new fields can be added to the definitions of the types in OpenProdoc and then added in the SMO definition of fields to maintain or to display. 
+            The fields to be displayed in the lists can be changed in order or dimensions, always maintaining coherence, that is checking that the name of the fields exists in Openprodoc.</p>
+        <p>When a user try to log in SMO, if the Url includes an OpenProdoc identifier (PDId) of the configuration document (i.e: http://localhost:8080/SoftManagementOPD/?IdConfig=a2134b344fd3 ) 
+            the application will load the specified configuration document referenced with that document PDId, 
+            otherwise (i.e.: http://localhost:8080/SoftManagementOPD/ ) SMO will load the default SMO configuration document, that has the PDId "<b>SoftManOpdConf</b>" and will be stored by default in OpenProdoc folder <b>/system</b>.</p>
+        <p><b>Configuration documents should be managed exactly as any other document in OpenProdoc, including versioning, security, etc.. and could be accesible or not using the OpenProdoc ACLs security</b>. 
+            SMO will always use the last version of the document. 
+            It must be noted that SMO maintains a cache of definitions, so if you create a new version of the configuration document, you must stop and start each of the J2EE servers so the new version could be loaded.</p>
+        <p>Using different configuration documents, different folder type definitions of each elements and the OpenProdoc security, it's possible to have several virtual SMO systems in the same OpenProdoc installation.</p>
         <p>In <a href="SMOTree.html">SMO Tree</a> there is a complete view of operations and forms.</p>
         <hr>
     </body>
