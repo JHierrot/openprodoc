@@ -72,6 +72,8 @@ var T_EDIT="Update";
 var T_DEL="Delete";
 var CSVFORMAT="CSV";
 var GridResults;
+var FormAddFold;
+var WinAF;
 
 
 var FiltFieldsProd=null;
@@ -373,9 +375,181 @@ TBDocs.attachEvent("onClick", function(id)
 //-----------------------------------------------------------------------
 function MantFold(Oper)
 {
-if (Oper!=ADD && CurrFold==null)
+if (CurrFold==null)
     return;    
-    
+if (Oper==ADDFOLD)
+    AddFoldExt();
+else if (Oper==UPDFOLD)
+    ModFoldExt(CurrFold);
+else if (Oper==DELFOLD)
+    DelFold(CurrFold);
+}
+//------------------------------------------------------------
+function AddFoldExt()
+{
+var Url="AddFoldExt";
+WinAF=myWins.createWindow({
+id:"AddFold",
+left:20,
+top:1,
+width:700,
+height:650,
+center:true,
+modal:true,
+resize:true}); 
+WinAF.setText("Folds Add");
+var LayoutFold=WinAF.attachLayout('2E');
+var a = LayoutFold.cells('a');
+a.hideHeader();
+a.setHeight(50);
+var formCombo = a.attachForm();
+formCombo.loadStruct('formCombo?A=1');
+var b = LayoutFold.cells('b');
+b.hideHeader();
+FormAddFold = b.attachForm();  
+formCombo.attachEvent("onChange", function(name, value, is_checked){
+    FormAddFold.unload();
+    FormAddFold = b.attachForm();
+    CreaFoldMain(Url, value);
+    });
+CreaFoldMain(Url, "PD_FOLDERS");   
+}
+//----------------------------------
+function CreaFoldMain(Url, Type)
+{
+FormAddFold.loadStruct(Url+"?F="+CurrFold+"&Ty="+Type, function(){
+    FormAddFold.setFocusOnFirstActive();
+    });    
+FormAddFold.enableLiveValidation(true);     
+FormAddFold.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {   
+        NewFoldName=FormAddFold.getItemValue("Title");
+        FormAddFold.send(Url, function(loader, response)
+                        { // Asynchronous 
+                        if (response.substring(0,2)!=OK)    
+                            alert(response); 
+                        else
+                            {
+                            NewFoldId=response.substring(2,30);
+                            if (FoldsTree.getOpenState(CurrFold))
+                                FoldsTree.insertNewChild(CurrFold, NewFoldId, NewFoldName);
+                            else 
+                                FoldsTree.refreshItem(CurrFold);
+                            FormAddFold.unload();
+                            WinAF.close();    
+                            }
+                        } );
+        }
+     else if (name==CANCEL) 
+        {   
+        FormAddFold.unload();
+        WinAF.close();
+        }
+    else if (name.substring(0,2)=="M_") 
+        ShowMulti(FormAddFold, name.substring(2));    
+    else if (name.substring(0,2)=="T_") 
+        ShowThes(FormAddFold, name.substring(2));  
+    else if (name.substring(0,3)=="MT_") 
+        ShowMultiThes(FormAddFold, name.substring(3));  
+    else if (name.substring(0,3)=="TD_") 
+        DelTerm(FormAddFold, name.substring(3)); 
+    });   
+}
+//------------------------------------------------------------
+function ModFoldExt(EditFold)
+{
+var Url="ModFoldExt";
+WinAF=myWins.createWindow({
+id:"ModFold",
+left:20,
+top:1,
+width:700,
+height:650,
+center:true,
+modal:true,
+resize:true}); 
+WinAF.setText("Folds Modify");
+FormAddFold=WinAF.attachForm();
+ModFoldMain(EditFold, Url, "");   
+}
+//----------------------------------
+function ModFoldMain(EditFold, Url, Type)
+{
+FormAddFold.loadStruct(Url+"?F="+EditFold+"&Ty="+Type, function(){
+    FormAddFold.setFocusOnFirstActive();
+    });   
+FormAddFold.enableLiveValidation(true); 
+FormAddFold.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {   
+        NewFoldName=FormAddFold.getItemValue("Title");
+        FormAddFold.send(Url, function(loader, response)
+                        { // Asynchronous 
+                        if (response.substring(0,2)!=OK)    
+                            alert(response); 
+                        else
+                            {
+                            FoldsTree.setItemText(EditFold, NewFoldName);
+                            FormAddFold.unload();
+                            WinAF.close();  
+                            }
+                        } );
+        }
+     else if (name==CANCEL) 
+        {   
+        FormAddFold.unload();
+        WinAF.close();
+        }
+    else if (name.substring(0,2)=="T_") 
+        ShowThes(FormAddFold, name.substring(2));  
+    else if (name.substring(0,3)=="MT_") 
+        ShowMultiThes(FormAddFold, name.substring(3));  
+    else if (name.substring(0,3)=="TD_") 
+        DelTerm(FormAddFold, name.substring(3)); 
+    else 
+        ShowMulti(FormAddFold, name.substring(2));    
+    });   
+}
+//----------------------------------
+function DelFold(DelFold)
+{
+var WinDF=myWins.createWindow({
+    id:"DelFold",
+    left:20,
+    top:1,
+    width:750,
+    height:420,
+    center:true,
+    modal:true,
+    resize:false
+});  
+WinDF.setText("Folds Delete");
+var FormDelFold=WinDF.attachForm();
+FormDelFold.loadStruct("DelFold?F="+DelFold);
+FormDelFold.attachEvent("onButtonClick", function (name)
+    {if (name==OK)
+        {    
+        FormDelFold.send("DelFold", function(loader, response)
+                        { // Asynchronous 
+                        if (response.substring(0,2)!=OK)    
+                            alert(response); 
+                        else
+                            {
+                            FoldsTree.deleteItem(DelFold,true);
+                            if (CurrFold=DelFold)
+                                CurrFold=FoldsTree.getSelectedItemId();
+                            FormDelFold.unload();
+                            WinDF.close();   
+                            }
+                        });
+        }
+     else 
+        {   
+        FormDelFold.unload();
+        WinDF.close();
+        }
+    });
 }
 //-----------------------------------------------------------------------
 function MantDoc(Oper, IdDoc)

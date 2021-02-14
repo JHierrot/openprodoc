@@ -168,6 +168,38 @@
         <servlet-name>getSoftManOPDConf</servlet-name>
         <servlet-class>SoftManagOPDServ.getSoftManOPDConf</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>formCombo</servlet-name>
+        <servlet-class>SoftManagOPDServ.formCombo</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddFoldExt</servlet-name>
+        <servlet-class>SoftManagOPDServ.AddFoldExt</servlet-class>
+    </servlet>    
+    <servlet>
+        <servlet-name>DelFold</servlet-name>
+        <servlet-class>SoftManagOPDServ.DelFold</servlet-class>
+    </servlet>    
+    <servlet>
+        <servlet-name>ModFoldExt</servlet-name>
+        <servlet-class>SoftManagOPDServ.ModFoldExt</servlet-class>
+    </servlet>    
+    <servlet-mapping>
+        <servlet-name>formCombo</servlet-name>
+        <url-pattern>/formCombo</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddFoldExt</servlet-name>
+        <url-pattern>/AddFoldExt</url-pattern>
+    </servlet-mapping>    
+    <servlet-mapping>
+        <servlet-name>DelFold</servlet-name>
+        <url-pattern>/DelFold</url-pattern>
+    </servlet-mapping>       
+    <servlet-mapping>
+        <servlet-name>ModFoldExt</servlet-name>
+        <url-pattern>/ModFoldExt</url-pattern>
+    </servlet-mapping>     
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/Login</url-pattern>
