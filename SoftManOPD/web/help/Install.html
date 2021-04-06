@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Help SMO Install</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="keywords" content="OpenProdoc, ECM, OpenSource, Document Management, Software Management Project"/>
+        <meta name="author" content="Joaquin Hierro" />
+        <link rel="shortcut icon" href="img/OpenProdoc.ico" type="image/x-icon"/> 
+        <link rel="stylesheet"  type="text/css" href="HelpProdoc.css" />
+    </head>
+    <body>
+        <H4>Help SMO Install Process</H4><hr>
+        <p>Before starting the installation of Software Management fo OpenProdoc (SMO), please review the <a href="BeforeInstall.html">Before Install</a> requirements. 
+            Remember that SMO is an extension of OpenProdoc, so it requires an installation of OpenProdoc running.</p>
+        <p>If you plan to use SMO in a portable environment, there is a SMO + OpenProdoc portable version available in the OpenProdoc site, ready for downloading, unziping and start, without any additional operation.</p>
+        <p>If you plan to install SMO in a preinstalled/running environment of OpenProdoc, you must download and unzip the package and then there are three steps:</p>
+        <ol>
+            <li>Review the documentation regarding the current configuration.</li>
+            <li>Import the SMO Package using OpenProdoc Swing Client.</li>
+            <li>Deploy SMO application (war) in the aplication server.</li>
+        </ol>
+        <H5>1- Review the documentation regarding the current configuration</H5>
+        <p>SMO uses a set of document definitions, thesaurus and some mimetypes that will be imported to your current system. 
+            Altough it's difficult, some definitions of folder types or names/codes of thesaurus can exist in your environments, but with different values.
+            If the elements already exists in your environment, the installation could fail or change the expected behaviour.</p>
+        <p>Besides the definitions and thesarurus, SMO installation includes some predefined providers and product versions, as well as some examples based in OpenProdoc. After the installation, you can delete or update any of them.</p>
+        <p>The objects included in the standard SMO definition are:</p>
+        <ul>
+            <li><b>Thesaurus:</b>
+            <ul>
+                <li>Issues Criticality   ( Id = 434434 )</li>
+                <li>Environments   ( Id = 545454 )</li>
+                <li>Technology of the Product   ( Id = 77777777 )</li>
+                <li>Issues Status   ( Id = 87878 )</li>
+                <li>RelationShip   ( Id = 887843 )</li>
+                <li>Kind of Product   ( Id = 88888888 )</li>
+                <li>Issues Solvers   ( Id = 9637454 )</li>
+                <li>Licenses   ( Id = 96868856 )</li>
+                <li>Deparment Heads   ( Id = 9999999 )</li>
+            </ul>
+            </li>
+            <li><b>Folder Types:</b>
+            <ul>
+                <li>Department</li>
+                <li>Issues</li>
+                <li>MimeType_json</li>
+                <li>Products</li>
+                <li>ProductsVers</li>
+                <li>SoftProvider</li>
+            </ul>
+            </li>
+            <li><b>Document Types:</b>
+            <ul>
+                <li>JavaDoc</li>
+            </ul>
+            </li>
+            <li><b>Folders tree:</b> 
+            <ul>
+                <li>SoftManOpd <i>( Contains the Configuration of SMO )</i></li>
+                <li>Company <i>( Contains some examples of departments )</i>
+                <ul>
+                    <li>SMOPD Department</li>
+                    <li>OpenProdoc Department</li>
+                </ul>
+                </li>
+                <li>Providers <i>( Contains some sofware developers and some of their products and versión )</i>
+                    <ul>
+                        <li>Oracle (...)</li>
+                        <li>Microsoft (...)</li>
+                        <li>IBM (...)</li>
+                        <li>Hsqldb.org (...)</li>
+                        <li>Google (...)</li>
+                        <li>Eclipse (...)</li>
+                        <li>DHTMLX (...)</li>
+                        <li>Apache (...)</li>
+                    </ul>
+                </li>    
+            </ul>
+            </li>
+            <li><b>MimeTypes:</b>
+            <ul>
+                <li>MimeType_json</li>
+            </ul>
+            </li>
+        </ul>
+        <p>Before starting the installation, review the existing definitions in your environment, and <b>if any of them exist</b>, the recommended operation is:</p>
+        <ol>
+            <li>Download the portable version of SMO.</li>
+            <li>Create a copy of colliding object definitions and/or thesaurus in the portable version. If you want to use your own definition, you don't need to modify or create a new one.</li>
+            <li>Modify the JSON configuration of SMO (check <a href="Configuration.html">Configuration</a> definition) to link/reference the new elements (or your own ones).</li>
+            <li>Export ALL the modified elements and replace the old ones by the new elements in the SMO Package definition. If you want to use your own definition, just delete the default SMO object definition from the package.</li>            
+            <li>Import the updated package in your environment.</li>
+        </ol>
+        <H5>2- Import the SMO Package using OpenProdoc Swing Client</H5>
+        <p>For importing the SMO Package you should select the target folder in OpenProdoc and then select the menu "Administration -> Import Package"</p>
+        <p style="text-align:center;"><img alt="Screenshot Import Package" src="img/ImportPackage.png"/></p>
+        <p>Then you must select the computer folder where you unzip the SMO package.</p>
+        <p style="text-align:center;"><img alt="Screenshot Import Package 2" src="img/ImportPackage2.png"/></p>
+        
+        <H5>3- Deploy SMO application (war) in the aplication server</H5>        
+        <p>Using the options or tools available in the selected J2EE application server, deploy SMO application (war). After deploying the application, 
+            you must verify the existence of a file named <i>SoftManProdoc.properties</i> that should be in the home folder of the user running the J2EE server, 
+            in a folder <i>conf</i> parent of the running forlder for the J2EE server or referencec by the environment variable SoftManOPDWeb ( <i>Ej.:  SoftManOPDWeb=/OPD/SMO/SoftManProdoc.properties</i> )</p>  
+        <p>The content of the file should be just one line referencing the OpenProdoc running configuration, or a copy of it. ( <i>Ej:OPDConfig=c:/OPD/SMO/Prodoc.properties</i> )</p>
+        <p>Finally, you must copy the jar of the jdbc driver for the database used in the aplication folder <i>WEB-INF/lib</i> and you can start the application and connect using the same users defined in OpenProdoc installation.</p>
+        <p><a href="MainWin.html">Main Win Help</a> contains a global description of this extension for OpenProdoc.</p>
+        <p>In <a href="SMOTree.html">SMO Tree</a> there is a complete view of operations and forms.</p>
+        <hr>
+    </body>
+</html>
