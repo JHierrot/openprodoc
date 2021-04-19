@@ -2418,6 +2418,7 @@ finally
     }
 return(ListRes);   
 }
+//-------------------------------------------------------------------------
 /**
  * Search for Documents returning a cursor with the results of Documents with the
  * indicated values of fields. Only returns the folders allowed for the user, as defined by ACL.
@@ -2434,8 +2435,33 @@ return(ListRes);
  */
 public Cursor Search(String FTQuery, String DocType, Conditions AttrConds, boolean SubTypes, boolean SubFolders, boolean IncludeVers, String IdActFold, Vector Ord) throws PDException
 {
+return(Search( FTQuery,  DocType,  AttrConds,  SubTypes,  SubFolders,  IncludeVers,  IdActFold,  Ord, null));    
+}
+//-------------------------------------------------------------------------
+/**
+ * Search for Documents returning a cursor with the results of Documents with the
+ * indicated values of fields. Only returns the folders allowed for the user, as defined by ACL.
+ * @param FTQuery Fultext search criteria
+ * @param DocType Type of Document to search. Can return Documents of subtypes.
+ * @param AttrConds Conditions over the fields of the Document Type
+ * @param SubTypes if true, returns results of the indicated type AND susbtipes
+ * @param SubFolders if true seach in actual folder AND subfolders, if false, search in ALL the structure
+ * @param IncludeVers if true, includes in the searching ALL versions of documents. Not posible with subtypes
+ * @param IdActFold Folder to start the search. if null, start in the root level
+ * @param Ord Vector of Strings with the ASCENDING order
+ * @param OrdAsc Vector of booleans with the Order ASC for each field
+ * @return a Cursor with the results of the query to use o send to {@link #NextDoc(prodoc.Cursor)}
+ * @throws PDException when occurs any problem
+ */
+public Cursor Search(String FTQuery, String DocType, Conditions AttrConds, boolean SubTypes, boolean SubFolders, boolean IncludeVers, String IdActFold, Vector<String> Ord, Vector<Boolean>  OrdAsc) throws PDException
+{
 if (FTQuery==null || FTQuery.length()==0)
-    return(Search(DocType, AttrConds, SubTypes, SubFolders, IncludeVers, IdActFold, Ord));
+    {
+    if (OrdAsc==null)
+        return(Search(DocType, AttrConds, SubTypes, SubFolders, IncludeVers, IdActFold, Ord));
+    else
+        return(Search(DocType, AttrConds, SubTypes, SubFolders, IncludeVers, IdActFold, Ord, OrdAsc));
+    }
 ArrayList FTRes=SearchFT(DocType, SubTypes, FTQuery);
 Condition Cond;
 if (!FTRes.isEmpty())
@@ -2451,7 +2477,10 @@ Conditions WithFT=new Conditions();
 WithFT.addCondition(Cond);
 if (AttrConds.NumCond()>0)
     WithFT.addCondition(AttrConds);
-return(Search(DocType, WithFT, SubTypes, SubFolders, IncludeVers, IdActFold, Ord));
+if (OrdAsc==null)
+    return(Search(DocType, WithFT, SubTypes, SubFolders, IncludeVers, IdActFold, Ord));
+else
+    return(Search(DocType, WithFT, SubTypes, SubFolders, IncludeVers, IdActFold, Ord, OrdAsc));
 }
 //-------------------------------------------------------------------------
 /**
@@ -2468,6 +2497,25 @@ return(Search(DocType, WithFT, SubTypes, SubFolders, IncludeVers, IdActFold, Ord
  * @throws PDException when occurs any problem
  */
 public Cursor Search(String DocType, Conditions AttrConds, boolean SubTypes, boolean SubFolders, boolean IncludeVers, String IdActFold, Vector Ord) throws PDException
+{
+return (Search(DocType, AttrConds, SubTypes, SubFolders, IncludeVers, IdActFold, Ord, null));
+}
+//-------------------------------------------------------------------------
+/**
+ * Search for Documents returning a cursor with the results of Documents with the
+ * indicated values of fields. Only return the folders allowed for the user, as defined by ACL.
+ * @param DocType Type of Documents to search. Can return Documents of subtype.
+ * @param AttrConds Conditions over the fields of the Document Type
+ * @param SubTypes if true, returns results of the indicated type AND susbtipes
+ * @param SubFolders if true seach in actual folder AND subfolders, if false, serach in ALL the structure
+ * @param IncludeVers if true, includes in the searching ALL versions of documents. Not posible with subtypes
+ * @param IdActFold Folder to start the search. if null, start in the root level
+ * @param Ord Vector of Strings with the OrdAsc order
+ * @param OrdAsc Vector of booleans with the Order ASC for each field
+ * @return a Cursor with the results of the query to use o send to {@link #NextDoc(prodoc.Cursor)}
+ * @throws PDException when occurs any problem
+ */
+public Cursor Search(String DocType, Conditions AttrConds, boolean SubTypes, boolean SubFolders, boolean IncludeVers, String IdActFold, Vector<String> Ord, Vector<Boolean>  OrdAsc) throws PDException
 {
 if (PDLog.isDebug())
     PDLog.Debug("PDDocs.Search >:"+DocType+" {"+AttrConds+"} SubTypes:"+SubTypes+" SubFolders:"+SubFolders+" IdActFold:"+IdActFold+" Ord:"+Ord);
@@ -2585,7 +2633,11 @@ else
     Atr.setName((String)TypList.get(0)+"."+fPDID);
     RecSearch.addAttr(Atr);
     }
-Query DocSearch=new Query(TypList, RecSearch, ComposedConds, Ord);
+Query DocSearch;
+if (OrdAsc==null)
+    DocSearch=new Query(TypList, RecSearch, ComposedConds, Ord);
+else
+    DocSearch=new Query(TypList, RecSearch, ComposedConds, Ord, OrdAsc);
 Cursor NewCur=getDrv().OpenCursor(DocSearch);
 if (isLimitedResults())
     NewCur=getDrv().OpenCursor(DocSearch, Conector.getMaxResults());

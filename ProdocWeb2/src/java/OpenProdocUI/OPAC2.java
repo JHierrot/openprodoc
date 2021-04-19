@@ -159,7 +159,10 @@ while (Attr!=null)
         }
     Attr=Rec.nextAttr();
     }
-Cur=TmpDoc.Search(FullTextSearch, CurrType, Cond, ConfOPAC.isInheritance(), true,false, CurrFoldId, null);
+if (ConfOPAC.getOrdFields()==null)
+    Cur=TmpDoc.Search(FullTextSearch, CurrType, Cond, ConfOPAC.isInheritance(), true,false, CurrFoldId, null);
+else
+    Cur=TmpDoc.Search(FullTextSearch, CurrType, Cond, ConfOPAC.isInheritance(), true,false, CurrFoldId, ConfOPAC.getOrdFields(), ConfOPAC.getOrdOrd());
 Vector<Record> ListRes=new Vector();
 Record Res=PDSession.NextRec(Cur);
 while (Res!=null)

@@ -28,12 +28,12 @@ import java.util.Vector;
  */
 public class ExtConf
 {
-private final Vector<String> DocTipesList=new Vector();
-private final Vector<String> FieldsToInclude=new Vector();
-private final Vector<String> FieldsComp=new Vector();
+private final Vector<String> DocTipesList=new Vector<>();
+private final Vector<String> FieldsToInclude=new Vector<>();
+private final Vector<String> FieldsComp=new Vector<>();
 private String BaseFolder=null;
 private boolean Inheritance=false;
-private final Vector<String> ResultForm=new Vector();
+private final Vector<String> ResultForm=new Vector<>();
 private int MaxResults;
 private String FormSearchCSS=null;
 private String FormSearchLogo=null;
@@ -52,6 +52,8 @@ private int NumHtmlOpac=0;
 private Vector<String[]> ListAgent=null;
 private Vector<String> HtmlAgent=null;
 private Vector<Boolean> OnColAgent=null;
+private Vector<String> OrdFields=null;
+private Vector<Boolean> OrdOrd=null;
 
 //----------------------------------------------------------------------------    
 static void AssignDefConf(Properties ProdocProperties)
@@ -183,6 +185,18 @@ String ConfUrlHelp=ProdocProperties.getProperty("UrlHelp");
 if (ConfUrlHelp!=null && ConfUrlHelp.trim().length()!=0)
     {
     UrlHelp=ConfUrlHelp.trim();
+    }    
+String ConfOrderOPAC=ProdocProperties.getProperty("OrderOPAC");
+if (ConfOrderOPAC!=null && ConfOrderOPAC.trim().length()!=0)
+    {
+    String[] ListOrd = ConfOrderOPAC.split(",");
+    OrdFields=new Vector();
+    OrdOrd=new Vector();
+    for (int i = 0; i < ListOrd.length; i+=2)
+        {
+        OrdFields.add(ListOrd[i].trim());
+        OrdOrd.add(ListOrd[i+1].trim().startsWith("A") || ListOrd[i+1].trim().startsWith("a"));
+        }
     }    
 String ConfNumHtmlOpac=ProdocProperties.getProperty("NumHtmlOpac");
 if (ConfNumHtmlOpac!=null && ConfNumHtmlOpac.trim().length()!=0)
@@ -384,6 +398,22 @@ return UrlHelp;
 public int getNumHtmlOpac()
 {
 return NumHtmlOpac;
+}
+//---------------------------------------------------------
+/**
+ * @return the OrdFields
+ */
+public Vector<String> getOrdFields()
+{
+return OrdFields;
+}
+//---------------------------------------------------------
+/**
+ * @return the OrdOrd
+ */
+public Vector<Boolean> getOrdOrd()
+{
+return OrdOrd;
 }
 //---------------------------------------------------------
 }
