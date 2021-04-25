@@ -155,6 +155,8 @@ if (!TasksStarted && !IsInstallMode())
 private void LoadAuth() throws PDException
 {
 DriverGeneric Session=CreateSesion();
+if (Session.IsRemote())
+    return;
 Session.Lock();
 Session.AssignTaskUser();   
 PDAuthenticators Auth=new PDAuthenticators(Session);
@@ -196,7 +198,7 @@ return(NewSesion);
 public synchronized DriverGeneric getSession(String user, String Password) throws PDException
 {
 if(PDLog.isDebug())
-    PDLog.Debug("Obtaining_Sessio");
+    PDLog.Debug("Obtaining_Session");
 DriverGeneric Session;
 for (int i = 0; i < ListSesion.size(); i++)
     {
@@ -205,6 +207,7 @@ for (int i = 0; i < ListSesion.size(); i++)
        {
        Session.Lock();
        Session.Assign(user, Password);
+       PDLog.Debug("returning_Session:"+Session);
        return(Session);
        }
     }
@@ -365,6 +368,8 @@ TaskExecList.remove(ConectorName);
 private boolean IsInstallMode() throws PDException
 {
 DriverGeneric Session=CreateSesion();
+if (Session.IsRemote())
+    return(false);
 Session.Lock();
 boolean IsInstallMode=!Session.IsConnected();
 Session.UnLock();

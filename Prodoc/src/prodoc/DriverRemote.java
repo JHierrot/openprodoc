@@ -35,6 +35,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.config.ConnectionConfig;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
@@ -56,6 +57,7 @@ public class DriverRemote  extends DriverGeneric
 //HttpURLConnection URLCon=null;
 
 static private PoolingHttpClientConnectionManager cm=null;
+static private HttpClientBuilder clientbuilder =null;
 private CloseableHttpClient httpclient;
 private HttpContext context;
 private HttpPost UrlPost;
@@ -64,15 +66,15 @@ static final String charset="UTF-8";
 OutputStreamWriter output;
 //private static final String NEWLINE = "\r\n";
 
-    /**
-     *
-     */
+/**
+ *
+ */
 public static final String ORDER="Order";
 
-    /**
-     *
-     */
-    public static final String PARAM="Param";
+/**
+ *
+ */
+public static final String PARAM="Param";
 boolean Conected=false;
 StringBuilder Answer=new StringBuilder(3000);
 //private List<String> cookies =null;
@@ -105,6 +107,8 @@ if (pURL==null || pURL.length()<4)
 httpclient=GetHttpClient();
 UrlPost = new HttpPost(pURL);
 context = new BasicHttpContext();
+if (PDLog.isDebug())
+    PDLog.Debug("DriverRemote.httpclient:"+httpclient+" UrlPost="+UrlPost+" context="+context);
 // DB =  DocumentBuilderFactory.newInstance().newDocumentBuilder();
 } catch (Exception ex)
     {
@@ -479,7 +483,7 @@ DocumentBuilder DB=null;
 CloseableHttpResponse response2 = null;
 if (PDLog.isDebug())
     {
-    PDLog.Debug("DriverRemote. ReadWrite: Order:"+pOrder);
+    PDLog.Debug("DriverRemote. ReadWrite: Order:"+pOrder+ " httpclient:"+httpclient+ " context:"+context);
     if (!pOrder.equals(S_LOGIN))
        PDLog.Debug("Param:"+pParam);
     else
@@ -511,6 +515,7 @@ OPDObjectList = XMLObjects.getElementsByTagName("Data");
 OPDObject = OPDObjectList.item(0);
 } catch (Exception ex)
     {
+    ex.printStackTrace();
     PDException.GenPDException(ex.getLocalizedMessage(), "");
     }
 finally
@@ -596,10 +601,10 @@ super.UnLock();
 
 private CloseableHttpClient GetHttpClient()
 {
-//CloseableHttpClient httpclient = HttpClients.custom()
-//                .setConnectionManager(GenPool())
-//                .build();    
-CloseableHttpClient httpclient = HttpClients.createDefault();
+// CloseableHttpClient httpclient =GenPool2().build();    
+//--CloseableHttpClient httpclient = HttpClients.createDefault();
+//CloseableHttpClient httpclient= HttpClients.custom().setConnectionManager(GenPool()).build();
+CloseableHttpClient httpclient =HttpClients.createDefault();
 return(httpclient);
 }
 //-----------------------------------------------------------------------------------
@@ -609,10 +614,24 @@ if (cm==null)
     {
     cm = new PoolingHttpClientConnectionManager();
     cm.setMaxTotal(100);
+    cm.setDefaultMaxPerRoute(100);
     ConnectionConfig connectionConfig = ConnectionConfig.custom().setCharset(Consts.UTF_8).build();
     cm.setDefaultConnectionConfig(connectionConfig);
     }
 return(cm);
+}   
+//-----------------------------------------------------------------------------------
+static synchronized private HttpClientBuilder GenPool2()
+{
+if (clientbuilder==null)
+    {
+    cm = new PoolingHttpClientConnectionManager();
+    cm.setMaxTotal(100);
+    ConnectionConfig connectionConfig = ConnectionConfig.custom().setCharset(Consts.UTF_8).build();
+    cm.setDefaultConnectionConfig(connectionConfig);
+    clientbuilder =HttpClients.custom().setConnectionManager(cm);
+    }
+return(clientbuilder);
 }   
 //-----------------------------------------------------------------------------------
 /**
@@ -649,5 +668,4 @@ if (PDLog.isDebug())
 return(FTConn);
 }
 //-----------------------------------------------------------------------------------
-
 }

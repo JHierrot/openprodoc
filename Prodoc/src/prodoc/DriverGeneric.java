@@ -1579,7 +1579,7 @@ S.Load("Prodoc");
 Key key = new SecretKeySpec(S.getKey().getBytes(),"AES");
 Date Issued=new Date();
 Date Valid=new Date(Issued.getTime()+ONEDAY);
-return(Jwts.builder().setSubject(UserName).setIssuedAt(Issued).setExpiration(Valid).setIssuer("OpenProdoc").signWith(SignatureAlgorithm.HS512, key).compact());
+return(Jwts.builder().setSubject(UserName).claim("MultiSesion",Math.random()).setIssuedAt(Issued).setExpiration(Valid).setIssuer("OpenProdoc").signWith(SignatureAlgorithm.HS512, key).compact());
 }
 //---------------------------------------------------------------------------
 static private String CheckUserJWT(String KeyBase, String Token)
