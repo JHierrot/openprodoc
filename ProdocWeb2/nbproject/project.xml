@@ -38,11 +38,11 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.tika-app-1.18.jar}</file>
+                    <file>${file.reference.commons-net-3.6.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.commons-net-3.6.jar}</file>
+                    <file>${file.reference.tika-app-1.26.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">

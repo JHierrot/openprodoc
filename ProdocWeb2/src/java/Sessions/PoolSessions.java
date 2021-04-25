@@ -125,11 +125,13 @@ public void run()
 while (true)
     {    
     Hashtable<String, CurrentSession> listOPSess = getListOPSess();
+    try { // just for concurrency risk
     for (Map.Entry<String, CurrentSession> entry : listOPSess.entrySet())
         {
         if (HasExpired(entry.getValue()))  
             DelSession(entry.getKey());
         }
+    } catch (Exception Ex) {}
     try {
     Thread.sleep(getTIMEOUT());
     } catch (InterruptedException e) 
