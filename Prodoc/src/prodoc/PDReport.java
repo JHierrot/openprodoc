@@ -62,6 +62,7 @@ private static final String R_REF_ATTR="@OPD_REF_ATTR";
 private static final String R_RECCOUNT="@OPD_RECCOUNT";
 private static final String R_TOTALREC="@OPD_TOTALREC";
 private static final String R_PAGCOUNT="@OPD_PAGCOUNT";
+private static final String R_URLOPACREPORT="@OPD_URLOPACREPORT";
 private String IdParent=null;
 private Cursor ListDocs=null;
 private final ArrayList<String> RepLines=new ArrayList();
@@ -101,6 +102,7 @@ private TreeSet AttrValuesList=null;
 private Object CurVal=null;
 private Vector<Record> VectRec=null;
 static final private char COMMENT='#';
+private String URLOPACReport=null;
 /**
  * Default constructor
  * @param pDrv Generic sesion to be used
@@ -140,6 +142,22 @@ return(GenerateRep(pIdParent, pListDocs, pVectRec, pRecsPag, pPagsDoc, OSFolder,
  */
 public ArrayList<String> GenerateRep(String pIdParent, Cursor pCurElems, Vector pVectRec, int pRecsPag, int pPagsDoc, String OSFolder, int MaxResults) throws PDException
 {
+return(GenerateRep( pIdParent,  pCurElems,  pVectRec,  pRecsPag,  pPagsDoc,  OSFolder,  MaxResults, null));    
+}    
+/**
+ * generates a report with the current PDId
+ * @param pIdParent Parent of the "cursor". Can be null
+ * @param pCurElems Cursor with the list of docs (Alternative to  pVectRec)
+ * @param pVectRec Vectos of Record with list of documents (Alternative to  pCurElems)
+ * @param pRecsPag Number oc record by page
+ * @param pPagsDoc Number of pages by Archive
+ * @param OSFolder Folder for saving reports
+ * @param MaxResults Más number of results to obtain
+ * @return path to the generated Report.
+ * @throws PDException in any error
+ */
+public ArrayList<String> GenerateRep(String pIdParent, Cursor pCurElems, Vector pVectRec, int pRecsPag, int pPagsDoc, String OSFolder, int MaxResults, String pURLOPACReport) throws PDException
+{
 if (pCurElems!=null)    
     ListDocs=pCurElems;
 else if (pVectRec!=null)
@@ -149,6 +167,7 @@ else if (pVectRec!=null)
     }
 else
     PDException.GenPDException("Cursor_or_Vector_of_Records_needed", null);
+URLOPACReport=pURLOPACReport;
 int CountVect=0;
 ArrayList<String> ListFiles=new ArrayList();
 Load(getPDId());  
@@ -341,9 +360,9 @@ if (Line.startsWith("@OPD"))
     else if (Line.startsWith(R_REF_ATTR))
         FRepDoc.print(RefAttr(Line));
     else if (Line.startsWith(R_PARENT))
-        {
         FRepDoc.print(ParentAttr());
-        }
+    else if (Line.startsWith(R_URLOPACREPORT) && URLOPACReport!=null)
+        FRepDoc.print(URLOPACReport);
     else if (Line.startsWith(R_RECCOUNT))
         FRepDoc.print(TotalRecsCount);
     else if (Line.startsWith(R_PAGCOUNT))

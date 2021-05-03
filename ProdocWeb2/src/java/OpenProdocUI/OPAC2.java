@@ -76,7 +76,10 @@ try {
  */
 protected void ProcessPage(HttpServletRequest Req, HttpServletResponse response) throws Exception
 {   
+Req.setCharacterEncoding("UTF-8");
+StringBuffer OPACUrl=Req.getRequestURL();
 String IdOPAC=Req.getParameter("OPAC_Id"); 
+OPACUrl.append("?OPAC_Id=").append(IdOPAC);
 DriverGeneric PDSession=getSessOPD(Req);
 if (PDSession==null) // http sessions timed out
     {
@@ -103,6 +106,7 @@ if (PDSession==null) // http sessions timed out
             PDLog.Debug("OPACUser: "+ConfOPAC.getUser());        
         LocalSess=ProdocFW.getSession(getConnector(), ConfOPAC.getUser(), ConfOPAC.getPass()); // just for translation   
         setSessOPD(Req, LocalSess, CurrentSession.Mode.OPAC);
+        PDSession=LocalSess;
         }
     }
     else // no session nor IdOPAC -> Ask for Refresh Page
@@ -117,15 +121,17 @@ if (PDSession==null) // http sessions timed out
         }
     }
 PDDocs TmpDoc;
-Req.setCharacterEncoding("UTF-8");
 Cursor Cur=null;    
 try {      
 PDFolders F=new PDFolders(PDSession);
 ExtConf ConfOPAC=getOPACConf(Req);
 String CurrFoldId=F.getIdPath(ConfOPAC.getBaseFolder());
 String CurrType=Req.getParameter("DT"); 
+OPACUrl.append("&DT=").append(CurrType);
 String FullTextSearch=Req.getParameter("FT"); 
+OPACUrl.append("&FT=").append(FullTextSearch.replace(" ", "%20"));
 String ReportId=Req.getParameter("FORMAT_REP");
+OPACUrl.append("&FORMAT_REP=").append(ReportId);
 TmpDoc=new PDDocs(PDSession, CurrType);
 Record Rec=TmpDoc.getRecSum();
 Conditions Cond=new Conditions();
@@ -144,6 +150,7 @@ while (Attr!=null)
         Attr=Rec.nextAttr();
         continue;
         }
+    OPACUrl.append("&").append(CurrType).append("_").append(Attr.getName()).append("=").append(Val.replace(" ", "%20"));
     String Comp="EQ";
     int PosField=ConfOPAC.getFieldsToInclude().indexOf(Attr.getName());
     if (PosField!=-1 && PosField<ConfOPAC.getFieldsComp().size())
@@ -174,7 +181,7 @@ PDSession.CloseCursor(Cur);
 Cur=null;
 PDReport Rep=new PDReport(PDSession);
 Rep.LoadFull(ReportId);
-ArrayList<String> GeneratedRep= Rep.GenerateRep(getActFolderId(Req), null, ListRes, 0, 0, SParent.getIO_OSFolder(),ConfOPAC.getMaxResults());
+ArrayList<String> GeneratedRep= Rep.GenerateRep(getActFolderId(Req), null, ListRes, 0, 0, SParent.getIO_OSFolder(),ConfOPAC.getMaxResults(), OPACUrl.toString());
 String File2Send=GeneratedRep.get(0);
 PDMimeType mt=new PDMimeType(PDSession);
 mt.Load(Rep.getMimeType());
