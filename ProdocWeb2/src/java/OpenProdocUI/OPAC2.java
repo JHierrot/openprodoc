@@ -85,30 +85,30 @@ if (PDSession==null) // http sessions timed out
     {
     if (IdOPAC!=null && IdOPAC.length()!=0) // we can create session from Id
         {
-    ExtConf ConfOPAC=Confs.get(IdOPAC);
-    if (ConfOPAC==null)
-        {
-        ConfOPAC=new ExtConf();
-        ConfOPAC.AssignConf(getOPACProperties(IdOPAC));
-        Confs.put(IdOPAC, ConfOPAC);
-        }
-    setOPACConf(Req, ConfOPAC);
-    DriverGeneric LocalSess=getSessOPD(Req);
-    if (LocalSess==null)
-        {
-        if (ConfOPAC.getUser()==null || ConfOPAC.getUser().length()==0)
+        ExtConf ConfOPAC=Confs.get(IdOPAC);
+        if (ConfOPAC==null)
             {
-            try (ServletOutputStream out = response.getOutputStream()) {
-            out.println("ERROR NO OPAC Configured User");;
-                } 
+            ConfOPAC=new ExtConf();
+            ConfOPAC.AssignConf(getOPACProperties(IdOPAC));
+            Confs.put(IdOPAC, ConfOPAC);
             }
-        else if(PDLog.isDebug())
-            PDLog.Debug("OPACUser: "+ConfOPAC.getUser());        
-        LocalSess=ProdocFW.getSession(getConnector(), ConfOPAC.getUser(), ConfOPAC.getPass()); // just for translation   
-        setSessOPD(Req, LocalSess, CurrentSession.Mode.OPAC);
-        PDSession=LocalSess;
+        setOPACConf(Req, ConfOPAC);
+        DriverGeneric LocalSess=getSessOPD(Req);
+        if (LocalSess==null)
+            {
+            if (ConfOPAC.getUser()==null || ConfOPAC.getUser().length()==0)
+                {
+                try (ServletOutputStream out = response.getOutputStream()) {
+                out.println("ERROR NO OPAC Configured User");;
+                    } 
+                }
+            else if(PDLog.isDebug())
+                PDLog.Debug("OPACUser: "+ConfOPAC.getUser());        
+            LocalSess=ProdocFW.getSession(getConnector(), ConfOPAC.getUser(), ConfOPAC.getPass()); // just for translation   
+            setSessOPD(Req, LocalSess, CurrentSession.Mode.OPAC);
+            PDSession=LocalSess;
+            }
         }
-    }
     else // no session nor IdOPAC -> Ask for Refresh Page
         {
         try (ServletOutputStream out = response.getOutputStream()) {
@@ -124,9 +124,22 @@ PDDocs TmpDoc;
 Cursor Cur=null;    
 try {      
 PDFolders F=new PDFolders(PDSession);
-ExtConf ConfOPAC=getOPACConf(Req);
+ExtConf ConfOPAC=Confs.get(IdOPAC);
 String CurrFoldId=F.getIdPath(ConfOPAC.getBaseFolder());
 String CurrType=Req.getParameter("DT"); 
+if (!ConfOPAC.getDocTipesList().contains(CurrType))
+    PDException.GenPDException("Incorrect_type", CurrType);
+String PDId=Req.getParameter("PDId");
+if (PDId!=null && PDId.length()>0)
+    {
+    PDDocs Doc=new PDDocs(PDSession, CurrType);
+    Doc.Load(PDId);
+    PDFolders F2=new PDFolders(PDSession);
+    F2.Load(Doc.getParentId());
+    if (!F2.IsUnder(CurrFoldId) || !Doc.getDocType().equals(CurrType))
+        PDException.GenPDException("Incorrect_Document", CurrType);
+    DownloadDoc(response, Doc);
+    }
 OPACUrl.append("&DT=").append(CurrType);
 String FullTextSearch=Req.getParameter("FT"); 
 OPACUrl.append("&FT=").append(FullTextSearch.replace(" ", "%20"));
@@ -277,6 +290,26 @@ Form.append("{type: \"hidden\", name:\"CurrFold\", value: \"").append(CurrFold).
 Form.append("]}");
 Form.append("];");
 return(Form.toString());
+}
+//----------------------------------------------------------------------------
+private void DownloadDoc(HttpServletResponse response, PDDocs Doc) throws PDException, IOException
+{
+ServletOutputStream out=response.getOutputStream();
+PDMimeType mt=new PDMimeType(Doc.getDrv());
+mt.Load(Doc.getMimeType());
+response.setContentType(mt.getMimeCode());
+response.setHeader("Content-disposition", "inline; filename=\"" + Doc.getName()+"\"");
+response.setCharacterEncoding("UTF-8"); // just for text family docs
+try {
+Doc.getStream(out);
+} catch (Exception e)
+    {
+    throw e;
+    }
+finally
+    {
+    out.close();        
+    }
 }
 //----------------------------------------------------------------------------
 }

@@ -89,7 +89,7 @@ private static final String HtmlBase="<!DOCTYPE html>\n" +
           "<tr><td><div class=\"OPACDT\" >@DTLABEL@</div></td><td  class=\"TD_OPACCOMB\"><select class=\"OPACCOMB\" name=\"DT\" onChange=\"ExecMenu(this.options[this.selectedIndex].value)\">@DTVALS@</select><span class=\"tooltiptext\">@HelpForDocType@</span></td></tr>\n" +
           "@OPACFIELDS@"+
           "<tr><td><div class=\"OPACFORMATLAB\" >@FormatLabel@</div></td><td class=\"TD_PACFORMATCOMB\"><select class=\"OPACFORMATCOMB\" name=\"FORMAT_REP\">@FORMATVALS@</select><span class=\"tooltiptext\">@HelpForFormatType@</span></td></tr>\n" +
-          "<tr><td><a class=\"OPACHELP\" href=\"@URLHELP@\" target=\"_blank\">?</a></td><td><input  class=\"OPACBUT\" type=\"submit\" value=\"  Ok  \"></td></tr>" +
+          "<tr><td><a class=\"OPACHELP\" href=\"@URLHELP@\" target=\"_blank\">?</a><input type=\"hidden\" name=\"OPAC_Id\" value=\"@OPAC_Id@\"></a></td><td><input  class=\"OPACBUT\" type=\"submit\" value=\"  Ok  \"></td></tr>" +
           "</table>\n" +
          "</fieldset>" +
         "</td></tr>" +
@@ -276,6 +276,7 @@ FieldsArray.append("];");
 HtmlFinal=HtmlFinal.replace("@DTVALS@", DTVals);
 HtmlFinal=HtmlFinal.replace("@OPACFIELDS@", Fields);
 HtmlFinal=HtmlFinal.replace("@LISTFIELDS@", FieldsArray);
+HtmlFinal=HtmlFinal.replace("@OPAC_Id@", IdOPAC);
 //OPACs.put(IdOPAC, HtmlFinal);
 LastCacheUpdate=new Date();
 return(HtmlFinal);

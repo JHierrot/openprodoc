@@ -10,6 +10,7 @@
     </head>
     <body>
 <H4>Public Access Catalog</H4><hr>
+<h5>Use</h5>
 <p>The OpenProdoc Public Access Catalog (sometimes refered in this documentation with the traditional term <a href="https://en.wikipedia.org/wiki/Online_public_access_catalog" target="_blank">OPAC</a> ), 
     allows people external to the company institution to look for in an easy way the documents (or folders) stored in OpenProdoc without the need of an user. 
    Public Access Catalog allows to select the document (or folder) type to search for, to key in the search criteria and select the format to list the results.</p>
@@ -21,6 +22,7 @@
 <p style="text-align:center;"><img alt="OPAC Example3" src="img/demo-opac-results.png"/></p>
 <p style="text-align:center;"><a href="https://github.com/lucycons3/openprodoc-athena">Athena design created by Lucycons3 and Nosturi</a></p>
 <p style="text-align:center;"><img alt="OPAC Example2" src="img/OPACExample.png"/></p>
+<h5>Syntax</h5>
 <p>This file follows the standard format of the properties files (label/element+"="+Value), with comments ( the lines starting wiith the character '#'). The meaning of each entry (that can't be repeated) is:</p>
 <ul>
     <li><b>DocTipesList : </b> Names of the Document types by which the user is allowed to search. 
@@ -60,7 +62,6 @@
 <p>Where <I>User1</i> y <I>PassUsr1</I> would be the data of a user with access to the configuration documents (OPAC y OPAC_CS) described in the next point.
 It's recommended that the user used had a limited rol and a mimimum of permissions, becaue it's only needed read access to the configuration files.
 <b>As any other change in the configuration file (Prodoc.properties), dthe server MUST be restarted so it can read the new configuration.</b></p>
-
 <p>Next, you must create (or modify the included example) the CSS to adapt it to the style of the corresponding institution or company. Then add the CSS to the OpenProdoc repository and note the generated PdId.
      That PdId is the one that should be referenced as parameter <b> FormSearchCSS </b> in the OPAC configuration file. You should then upload that query configuration file.</p>
 <p>With the generated ID, the OpenProdoc url (eg <i>http://localhost:8080/ProdocWeb2/OPAC?Id=</i> + the new document ID uploaded, for example <i>http://localhost:8080/ProdocWeb2/OPAC?Id=566b6464a654-9696e68d686</i>)</p>
@@ -85,8 +86,8 @@ Providing each group of users with the appropriate url (which will only differ i
         The numbers must be start in 0, that is: HtmlAgent0, HtmlAgent1, HtmlAgent2,...</li>
 </ul>
 <p>If the User-Agent of the browser do nt contains any of the texts of the entries, then OpenProdoc will use the internal html template.</p>
-
-<p><b>OPAC Configuration File Example:</b></p>
+<h5>Example</h5>
+<p>OPAC Configuration File Example:</p>
 <em>
 #############################################<br>
 ####&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -142,6 +143,21 @@ HtmlAgent0=1632c1c280b-3fa2b6496a3c3250<br>
 ListAgent1=Firefox<br>
 HtmlAgent1=1632c1dd6a2-3fe55f2e09ab3605<br>
 </em>
+<h5>Share Reports and Documents</h5>
+<p> It is possible to share dynamically generated reports from the OPAC. To do this, within the <a href="Reports.html">Reports</a> there is a variable <b>@OPD_URLOPACREPORT</b> that stores data from the OPAC used to generate a report, the type of report and the Search parameters.
+That variable, which contains a dynamically generated url (Ex .: <i>http://localhost:8080/ProdocWeb2/OPAC2?OPAC_Id=OPAC_DocEx&DT=Picture&FORMAT_REP=15dc854acbf-3fedc1977572a008&Picture_Author=Joaquin%20Hierro</i>) that can be included in the report and be shared with other users.
+If these users have access to that url, they will be able to see the report, which will be calculated in real time.
+As it is calculated in real time, it should be taken into account that it can return more or fewer documents (depending on whether they are added or removed from OpenProdoc after a while).</p>
+<p> Additionally, there is the possibility to share a retrieved document in a report. For this, a url with the structure can be built in the report:
+    <i>http://localhost:8080/ProdocWeb2/OPAC2?OPAC_Id=<b>OPACId</b>&DT=<b>TipoDocument</b>&PDId=<b>PDIdDocumento</b> </i>, where:</p>
+<ul>
+    <li><b>OPACId</b>: Identifier of the OPAC used. </li>
+    <li><b>TypeDocument</b>: Recovered document type. It can be dynamically generated in the report using <b>@OPD_VAL_DocType</b>.</li>
+    <li><b>PDIdDocumento</b>: PDId identifier of the document. It can be dynamically generated in the report using <b>@OPD_VAL_PDId</b>.</li>
+</ul>
+<p> Example: <i>http://localhost:8080/ProdocWeb2/OPAC2?OPAC_Id=OPAC_DocEx&DT=Picture&PDId=172ad6d6fc2-3fef4815f4e4d451</i> </p>
+<p> In both cases, the Urls are checked by the OPAC function (although it is not being used in its usual way), so the security and access control are the same as with the OPAC. Information that cannot be retrieved from the OPAC cannot still be retrieved through these urls.
+    If its content is manipulated to gain access to non-public information, it will be rejected, and may return errors or nothing at all.</p> 
 <hr>
 <a href="HelpIndex.html">OpenProdoc Help Index</a>
     </body>
