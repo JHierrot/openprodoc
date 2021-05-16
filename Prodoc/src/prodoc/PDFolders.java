@@ -1581,6 +1581,96 @@ return(getDrv().OpenCursor(FoldSearch));
 }
 //-------------------------------------------------------------------------
 /**
+ * Search for Folders returning a cursor with the results of folders with the
+ * indicated values of fields. Only return the folders alowed for the user, as defined by ACL.
+ * @param FolderType Type of folder to search. Can return folders of subtype.
+ * @param AttrConds Conditions over the fields ofthe FolderType
+ * @param SubTypes if true, returns results of the indicated type AND susbtipes
+ * @param SubFolders if true seach in actual folder AND subfolders, if false, serach in ALL the structure
+ * @param IdActFold Folder to start the search. if null, start in the root level
+ * @param FieldOrd Vector of String with the ascending order
+ * @return a Cursor with the results of the query to use o send to NextFold()
+ * @throws PDException when occurs any problem
+ */
+public Cursor Search(String FolderType, Conditions AttrConds, boolean SubTypes, boolean SubFolders, String IdActFold, Vector FieldOrd, Vector AscOrd) throws PDException
+{
+if (PDLog.isDebug())
+    PDLog.Debug("PDFolders.Search >:"+FolderType+" {"+AttrConds+"} SubTypes:"+SubTypes+" SubFolders:"+SubFolders+" IdActFold:"+IdActFold+" Ord:"+FieldOrd);
+PDFolders F=new PDFolders(getDrv(), FolderType);
+Conditions ComposedConds=new Conditions();
+ComposedConds.addCondition(AttrConds);
+Vector TypList=new Vector();
+TypList.add(FolderType);
+if (!SubTypes)
+    {
+    Condition C=new Condition(PDFolders.fFOLDTYPE, Condition.cEQUAL, FolderType);
+    ComposedConds.addCondition(C);
+    }
+if (!FolderType.equalsIgnoreCase(getTableName()))
+    { // we add other "parts" of the folder in the "join"
+    Conditions CondTyps=new Conditions();
+    ArrayList ListTip=F.getTypeDefs();
+    ArrayList ListAttr=F.getTypeRecs();
+    for (int NumTabsDef = 0; NumTabsDef < ListTip.size(); NumTabsDef++)
+            {
+            Record R= (Record)ListTip.get(NumTabsDef);
+            Attribute AttrNomTab=R.getAttr(PDObjDefs.fNAME);
+            String Typ =(String) AttrNomTab.getValue();
+            if (!Typ.equalsIgnoreCase(getTableName()))
+                {
+                Condition Con=new Condition(getTableName()+"."+fPDID, Typ+"."+fPDID);
+                CondTyps.addCondition(Con);
+                }
+            if (!Typ.equalsIgnoreCase(FolderType))
+                TypList.add(Typ);
+            Record AttrsTab= ((Record)ListAttr.get(NumTabsDef)).Copy();
+            AttrsTab.initList();
+            Attribute Attr;
+            for (int i = 0; i < AttrsTab.NumAttr(); i++)
+                {
+                Attr=AttrsTab.nextAttr();
+                if (Attr.isMultivalued())
+                    {
+                    if (ComposedConds.UsedAttr(Attr.getName()))
+                        {
+                        String MultiName=PDObjDefs.genMultValNam(Typ, Attr.getName());
+                        Condition Con=new Condition(getTableName()+"."+fPDID, MultiName+"."+fPDID);
+                        CondTyps.addCondition(Con);
+                        TypList.add(MultiName);
+                        }                            
+                    }                    
+                }
+            }
+    ComposedConds.addCondition(CondTyps);
+    }
+if (SubFolders)
+    {
+    if (!(IdActFold==null || IdActFold.equalsIgnoreCase(PDFolders.ROOTFOLDER)))
+        { // add list to conditions
+//        Condition C=new Condition(PDFolders.fPDID, F.getQueryListDescendList(IdActFold));
+        ComposedConds.addCondition(Condition.genInTreeCond(IdActFold, getDrv()));
+        }
+    }
+Record RecSearch=F.getRecSum().CopyMono();
+if (RecSearch.ContainsAttr(fPDID))
+    {
+    RecSearch.getAttr(fPDID).setName((String)TypList.get(0)+"."+fPDID);
+    }
+else
+    {
+    Attribute Atr=getRecord().getAttr(fPDID).Copy();
+    Atr.setName((String)TypList.get(0)+"."+fPDID);
+    RecSearch.addAttr(Atr);
+    }
+Condition CondAcl=new Condition(PDFolders.fACL, new HashSet(getDrv().getUser().getAclList().keySet()));
+ComposedConds.addCondition(CondAcl);
+Query FoldSearch=new Query(TypList, RecSearch, ComposedConds, FieldOrd, AscOrd);
+if (PDLog.isDebug())
+    PDLog.Debug("PDFolders.Search <");
+return(getDrv().OpenCursor(FoldSearch));
+}
+//-------------------------------------------------------------------------
+/**
  * Receives a cursor created with method Search and returns the next folder or null if
  * there are no more.
  * @param Res Cursor created with method Search and serevral parameters

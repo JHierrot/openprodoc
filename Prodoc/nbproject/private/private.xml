@@ -5,10 +5,14 @@
         <group>
             <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/ProdocFW.java</file>
             <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/DriverGeneric.java</file>
+            <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/PDDocs.java</file>
             <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/DriverRemote.java</file>
+            <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/PDFolders.java</file>
             <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/PDACL.java</file>
             <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/Conector.java</file>
             <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/PDUser.java</file>
+            <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/Attribute.java</file>
+            <file>file:/C:/OPD/OPDgit/openprodoc/Prodoc/src/prodoc/PDReport.java</file>
         </group>
     </open-files>
 </project-private>
