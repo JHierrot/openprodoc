@@ -52,7 +52,6 @@ import prodoc.Record;
 public class OPACf extends SParent
 {
 private static final HashMap<String,String> OPACs=new HashMap(); 
-private static final HashMap<String,ExtConf> Confs=new HashMap(); 
 private static Date LastCacheUpdate=null;
 private static final long CacheCaducity=1*1*1000;
 private static final String HtmlBase="<!DOCTYPE html>\n" +
