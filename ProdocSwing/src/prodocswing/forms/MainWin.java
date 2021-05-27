@@ -2155,7 +2155,7 @@ String OS=System.getProperty("os.name");
 if (OS.contains("Win"))
     {
     Orders[0]="explorer";
-    Orders[1]="\""+Doc+"\"";
+    Orders[1]="\""+new File(Doc).getCanonicalPath()+"\"";
     }
 else if (OS.contains("OS X") || OS.contains("Mac"))
     Orders[0]="open";
