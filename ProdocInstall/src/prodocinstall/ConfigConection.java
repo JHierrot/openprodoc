@@ -403,9 +403,9 @@ else
     Name+="sh";
 PrintWriter FScript = new PrintWriter(Name, "UTF-8");
 if (OS.contains("Win"))
-    FScript.println("start javaw -Dfile.encoding=UTF-8 -classpath .;.\\lib;.\\lib\\Prodoc.jar;.\\lib\\log4j-1.2.16.jar;ProdocSwing.jar;.\\lib\\jaxb-api-2.3.1.jar;"+CP+"  prodocswing.forms.MainWin %1");
+    FScript.println("java -Dfile.encoding=UTF-8 -classpath .;.\\lib;.\\lib\\Prodoc.jar;.\\lib\\tika-app-1.18.jar;ProdocSwing.jar;.\\lib\\jaxb-api-2.3.1.jar;"+CP+"  prodocswing.forms.MainWin %1");
 else
-    FScript.println("java -Dfile.encoding=UTF-8 -classpath .:./lib:./lib/Prodoc.jar:ProdocSwing.jar:./lib/log4j-1.2.16.jar:./lib/jaxb-api-2.3.1.jar:"+CP+"  prodocswing.forms.MainWin $1");
+    FScript.println("java -Dfile.encoding=UTF-8 -classpath .:./lib:./lib/Prodoc.jar:ProdocSwing.jar:./lib/tika-app-1.18.jar:./lib/jaxb-api-2.3.1.jar:"+CP+"  prodocswing.forms.MainWin $1");
 FScript.flush();
 FScript.close();
 File f=new File(Name);
@@ -418,9 +418,9 @@ else
     Name+="sh";
 FScript = new PrintWriter(Name, "UTF-8");
 if (OS.contains("Win"))
-    FScript.println("java -Dfile.encoding=UTF-8 -classpath .;.\\lib;.\\lib\\Prodoc.jar;ProdocSetup.jar;.\\lib\\log4j-1.2.16.jar;"+CP+"  prodocsetup.CreateMetadata %1 %2");
+    FScript.println("java -Dfile.encoding=UTF-8 -classpath .;.\\lib;.\\lib\\Prodoc.jar;ProdocSetup.jar;.\\lib\\tika-app-1.18.jar;"+CP+"  prodocsetup.CreateMetadata %1 %2");
 else
-    FScript.println("java -Dfile.encoding=UTF-8 -classpath .:./lib:./lib/Prodoc.jar:ProdocSetup.jar:./lib/log4j-1.2.16.jar:"+CP+"  prodocsetup.CreateMetadata $1 $2");
+    FScript.println("java -Dfile.encoding=UTF-8 -classpath .:./lib:./lib/Prodoc.jar:ProdocSetup.jar:./lib/tika-app-1.18.jar:"+CP+"  prodocsetup.CreateMetadata $1 $2");
 FScript.flush();
 FScript.close();
 f=new File(Name);
