@@ -10,6 +10,7 @@
     </head>
     <body>
 <H4>Punto de Consulta</H4><hr>
+<h5>Función</h5>
 <p>El Punto de Consulta OpenProdoc (en ocasiones denominado en esta documentación con el término tradicional <a href="https://es.wikipedia.org/wiki/Cat%C3%A1logo_en_l%C3%ADnea" target="_blank">OPAC</a> por analogía), 
    permite a personas externas al sistema consultar de forma sencilla los documentos (o carpetas) del mismo sin necesidad de disponer de usuario o autenticarse. 
    Básicamente el Punto de Consulta permitirá elegir el tipo de documento (o carpeta) a buscar, introducir los criterios de consulta y elegir el formato de presentacion de los resultados.</p>
@@ -21,6 +22,7 @@
 <p style="text-align:center;"><img alt="OPAC Example3" src="img/demo-opac-results.png"/></p>
 <p style="text-align:center;"><a href="https://github.com/lucycons3/openprodoc-athena">Diseño Athena creado por Lucycons3 y Nosturi</a></p>
 <p style="text-align:center;"><img alt="OPAC Example4" src="img/OPACExample.png"/></p>
+<h5>Sintaxis</h5>
 <p>Este fichero sigue el estandar habitual de los ficheros de propiedades (etiqueta+"="+Valor), admitiendo comentarios (líneas que empiezan con el caracter '#'). El significado de cada etiqueta (que no puede repetirse) es el siguiente:</p>
 <ul>
     <li><b>DocTipesList : </b> Nombres de los Tipos de documentos por lo que podrá buscar un usuario. 
@@ -80,8 +82,8 @@ Suministrando a cada colectivo de usuarios la url adecuada (que solo se diferenc
         Los números deben empezar en 0, es decir: HtmlAgent0, HtmlAgent1, HtmlAgent2,...</li>
 </ul>
 <p>Si el User-Agent del navegador no contiene ninguna de las entradas indicadas, entonces se utilizará la plantilla interna incluida en OpenProdoc.</p>
-
-<p><b>Ejemplo de Archivo de configuración de punto de consulta:</b></p>
+<h5>Ejemplo</h5>
+<p>Ejemplo de Archivo de configuración de punto de consulta:</p>
 <em>
 #############################################<br>
 ####&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -137,7 +139,22 @@ HtmlAgent0=1632c1c280b-3fa2b6496a3c3250<br>
 ListAgent1=Firefox<br>
 HtmlAgent1=1632c1dd6a2-3fe55f2e09ab3605<br>
 </em>
+<h5>Compartir informes y documentos</h5>
+<p>Es posible compartir informes generados dinámicamente desde el OPAC. Para ello, dentro de los <a href="Reports.html">Informes</a> existe una variable <b>@OPD_URLOPACREPORT</b> que almacena datos del OPAC usado para generar un informe, el tipo de informe y los parámetros de búsqueda.
+Esa variable, que contiene una url generada dinámicamente (Ej.: <i>http://localhost:8080/ProdocWeb2/OPAC2?OPAC_Id=OPAC_DocEx&DT=Picture&FORMAT_REP=15dc854acbf-3fedc1977572a008&Picture_Author=Joaquin%20Hierro</i>), puede incluirse en el informe y compartirse con otros usuarios. 
+Si estos usuarios tiene acceso a esa url, podrán ver el informe, que se calculará en tiempo real.
+Al ser calculado en tiempo real, debe tenerse en cuenta que puede devolver más o menos documentos (según se añadan o eliminen de OpenProdoc pasado un tiempo).</p>
+<p>Adicionalmente, existe la posibilidad de compartir un documento recuperado en un informe. Para ello puede construirse en el informe una url con la estructura:
+    <i>http://localhost:8080/ProdocWeb2/OPAC2?OPAC_Id=<b>OPACId</b>&DT=<b>TipoDocument</b>&PDId=<b>PDIdDocumento</b></i>, donde:</p>
+<ul>
+    <li><b>OPACId</b>: Identificador del punto de consulta utilizado.</li>
+    <li><b>TipoDocumento</b>: Tipo documental recuperado. Puede generarse dinámicamente en el informe utilizando <b>@OPD_VAL_DocType</b></li>
+    <li><b>PDIdDocumento</b>: Identificador PDId del documento. Puede generarse dinámicamente en el informe utilizando <b>@OPD_VAL_PDId</b></li>
+</ul>
+<p>Ejemplo: <i>http://localhost:8080/ProdocWeb2/OPAC2?OPAC_Id=OPAC_DocEx&DT=Picture&PDId=172ad6d6fc2-3fef4815f4e4d451</i></p>
+<p>En ambos casos, las Urls son comprobadas por la función OPAC (aunque no se esté utilizando en su forma habitual), por lo que la seguridad y control de acceso son los mismos que con el OPAC. La información que no pueda recuperarse desde el OPAC no puede recuperarse igualmente a tarvés de estas url. 
+    Si se manipula su contenido para obtener acceso a información no pública, será rechazado, pudiendo devolver errores o nada en absoluto.</p>
 <hr>
-<a href="HelpIndex.html">Índice Ayuda OpenProdoc</a>
+<a href="HelpIndex.html">Índice Ayuda OpenProdoc</a><br>
     </body>
 </html>
