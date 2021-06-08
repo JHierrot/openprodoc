@@ -1012,7 +1012,7 @@ WinVers=myWins.createWindow({
 id:"MantVer",
 left:20,
 top:1,
-width:840,
+width:900,
 height:320,
 center:true,
 modal:true,
@@ -1653,7 +1653,7 @@ if (Grid2Upd=="ListProducts")
             if (SoftManOPDConf.ProductFields[i].Filter)   
                FiltFieldsProd.push(SoftManOPDConf.ProductFields[i].Name); 
             }
-//        FiltFieldsProd=["Family","License","Technology","Internal"];
+        FiltFieldsProd.push("Internal");     
         }
     return(FiltFieldsProd)    
     }
