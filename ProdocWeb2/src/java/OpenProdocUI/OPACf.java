@@ -23,12 +23,10 @@ import Sessions.CurrentSession;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringReader;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Properties;
 import java.util.Vector;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -64,10 +62,10 @@ private static final String HtmlBase="<!DOCTYPE html>\n" +
         "@LISTFIELDS@\n"+
         "function ExecMenu(IdType)\n" +
         "{\n" +
-"var L=IdType.length;\n"+        
+"var L=IdType.length+1;\n"+        
 "for (i = 0; i < ListF.length; i++)\n"+ 
     "{\n"+
-    "if ((ListF[i].substring(0,L)+\"_\")!=(IdType+\"_\"))\n"+
+    "if ((ListF[i].substring(0,L))!=(IdType+\"_\"))\n"+
         "document.getElementById(ListF[i]).style.visibility=\"collapse\";\n"+
     "else\n"+    
         "document.getElementById(ListF[i]).style.visibility=\"visible\";\n"+

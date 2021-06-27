@@ -62,10 +62,10 @@ private static final String HtmlBase="<!DOCTYPE html>\n" +
         "@LISTFIELDS@\n"+
         "function ExecMenu(IdType)\n" +
         "{\n" +
-"var L=IdType.length;\n"+        
+"var L=IdType.length+1;\n"+        
 "for (i = 0; i < ListF.length; i++)\n"+ 
     "{\n"+
-    "if ((ListF[i].substring(0,L)+\"_\")!=(IdType+\"_\"))\n"+
+    "if ((ListF[i].substring(0,L))!=(IdType+\"_\"))\n"+
         "document.getElementById(ListF[i]).style.visibility=\"collapse\";\n"+
     "else\n"+    
         "document.getElementById(ListF[i]).style.visibility=\"visible\";\n"+
