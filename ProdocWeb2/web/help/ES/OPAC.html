@@ -148,8 +148,8 @@ Al ser calculado en tiempo real, debe tenerse en cuenta que puede devolver más 
     <i>http://localhost:8080/ProdocWeb2/OPAC2?OPAC_Id=<b>OPACId</b>&DT=<b>TipoDocument</b>&PDId=<b>PDIdDocumento</b></i>, donde:</p>
 <ul>
     <li><b>OPACId</b>: Identificador del punto de consulta utilizado.</li>
-    <li><b>TipoDocumento</b>: Tipo documental recuperado. Puede generarse dinámicamente en el informe utilizando <b>@OPD_VAL_DocType</b></li>
-    <li><b>PDIdDocumento</b>: Identificador PDId del documento. Puede generarse dinámicamente en el informe utilizando <b>@OPD_VAL_PDId</b></li>
+    <li><b>TipoDocumento</b>: Tipo documental recuperado. Puede generarse dinámicamente en el informe utilizando <b>@OPD_VAL_ATTR_DocType</b></li>
+    <li><b>PDIdDocumento</b>: Identificador PDId del documento. Puede generarse dinámicamente en el informe utilizando <b>@OPD_VAL_ATTR_PDId</b></li>
 </ul>
 <p>Ejemplo: <i>http://localhost:8080/ProdocWeb2/OPAC2?OPAC_Id=OPAC_DocEx&DT=Picture&PDId=172ad6d6fc2-3fef4815f4e4d451</i></p>
 <p>En ambos casos, las Urls son comprobadas por la función OPAC (aunque no se esté utilizando en su forma habitual), por lo que la seguridad y control de acceso son los mismos que con el OPAC. La información que no pueda recuperarse desde el OPAC no puede recuperarse igualmente a tarvés de estas url. 

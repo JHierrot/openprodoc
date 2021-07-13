@@ -152,8 +152,8 @@ As it is calculated in real time, it should be taken into account that it can re
     <i>http://localhost:8080/ProdocWeb2/OPAC2?OPAC_Id=<b>OPACId</b>&DT=<b>TipoDocument</b>&PDId=<b>PDIdDocumento</b> </i>, where:</p>
 <ul>
     <li><b>OPACId</b>: Identifier of the OPAC used. </li>
-    <li><b>TypeDocument</b>: Recovered document type. It can be dynamically generated in the report using <b>@OPD_VAL_DocType</b>.</li>
-    <li><b>PDIdDocumento</b>: PDId identifier of the document. It can be dynamically generated in the report using <b>@OPD_VAL_PDId</b>.</li>
+    <li><b>TypeDocument</b>: Recovered document type. It can be dynamically generated in the report using <b>@OPD_VAL_ATTR_DocType</b>.</li>
+    <li><b>PDIdDocumento</b>: PDId identifier of the document. It can be dynamically generated in the report using <b>@OPD_VAL_ATTR_PDId</b>.</li>
 </ul>
 <p> Example: <i>http://localhost:8080/ProdocWeb2/OPAC2?OPAC_Id=OPAC_DocEx&DT=Picture&PDId=172ad6d6fc2-3fef4815f4e4d451</i> </p>
 <p> In both cases, the Urls are checked by the OPAC function (although it is not being used in its usual way), so the security and access control are the same as with the OPAC. Information that cannot be retrieved from the OPAC cannot still be retrieved through these urls.
