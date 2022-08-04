@@ -434,7 +434,7 @@ if (Type==tSTRING)
         PDExceptionFunc.GenPDException(Incorrect_attribute_length,getName());
         }
     if (pValue!=null)
-        this.Value = pValue.toString().trim();
+        this.Value = pValue.toString().trim().replace("\"", "&quot;").replace("\n", "").replace("\r", "");
     else
         Value=null;
     }

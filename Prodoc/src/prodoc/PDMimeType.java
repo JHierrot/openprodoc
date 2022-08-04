@@ -331,7 +331,7 @@ return(M.getMimeCode());
 public String Mime2Ext(String pMime)  throws PDException
 {
 PDMimeType M=new PDMimeType(getDrv());
-Cursor SearchSelect = M.SearchSelect("select "+fNAME+" from "+getTableName()+"where "+fMIMECODE+"='"+pMime+"'");
+Cursor SearchSelect = M.SearchSelect("select "+fNAME+" from "+getTableName()+" where "+fMIMECODE+"='"+pMime+"'");
 Record NextFold=getDrv().NextRec(SearchSelect);
 if (NextFold!=null)
     {

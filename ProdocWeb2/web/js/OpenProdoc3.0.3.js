@@ -2047,6 +2047,7 @@ FormAddFold.attachEvent("onButtonClick", function (name)
                                 {
                                 FormAddFold.unload();
                                 WinAF.close();
+                                DocsGrid.clearAndLoad("DocList?FoldId="+CurrFold);                                
                                 }
                             else    
                                 FormAddFold.enableItem("UpFile"); 

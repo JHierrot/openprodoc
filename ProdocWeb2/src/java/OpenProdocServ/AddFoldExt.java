@@ -60,8 +60,9 @@ if (CurrFold!=null)
         TmpFold=new PDFolders(PDSession);
         NewType=TmpFold.getFolderType();
         }
-//    TmpFold.Load(CurrFold);
-    out.println( GenerateCompleteFoldForm("Add_Folder", Req, PDSession, CurrFold, NewType, TmpFold.getRecSum(), false, false, TmpFold.getACL()) );    
+    PDFolders F=new PDFolders(PDSession);
+    F.Load(CurrFold);
+    out.println( GenerateCompleteFoldForm("Add_Folder", Req, PDSession, CurrFold, NewType, TmpFold.getRecSum(), false, false, F.getACL()) );    
     }
 else
     {

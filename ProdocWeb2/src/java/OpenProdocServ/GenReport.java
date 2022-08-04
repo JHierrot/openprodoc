@@ -133,7 +133,7 @@ if (GeneratedRep.size()==1)
     File2Send=GeneratedRep.get(0);
     PDMimeType mt=new PDMimeType(PDSession);
     mt.Load(Rep.getMimeType());
-    response.setHeader("Content-disposition", "attachment; filename=" + Rep.getName());    
+    response.setHeader("Content-disposition", "inline; filename=" + Rep.getName());    
     response.setContentType(mt.getMimeCode()+";charset=UTF-8");
     response.setCharacterEncoding("UTF-8");
     }

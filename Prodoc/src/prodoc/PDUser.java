@@ -708,7 +708,7 @@ setName("TaskUser");
 setDescription("TaskUser");
 setActive(true);
 if (PDLog.isDebug())
-    PDLog.Debug("PDUser.CreateTaskUser>");    
+    PDLog.Debug("PDUser.CreateTaskUser<");    
 }
 //-------------------------------------------------------------------------
 /**
