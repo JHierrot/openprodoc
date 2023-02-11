@@ -39,10 +39,10 @@ import prodoc.PDDocsRIS;
  */
 public class ImportDocRIS extends SParent
 {
-final static private String List=PDDocs.fPARENTID+"/"+PDDocs.fPDID
-                    +"/"+PDDocs.fPDAUTOR+"/"+PDDocs.fPDDATE
-                    +"/"+PDDocs.fLOCKEDBY+"/"+PDDocs.fVERSION+"/"+PDDocs.fPURGEDATE
-                    +"/"+PDDocs.fREPOSIT+"/"+PDDocs.fSTATUS;
+//final static private String ListInternalFields="/"+PDDocs.fPARENTID+"/"+PDDocs.fPDID
+//                    +"/"+PDDocs.fPDAUTOR+"/"+PDDocs.fPDDATE
+//                    +"/"+PDDocs.fLOCKEDBY+"/"+PDDocs.fVERSION+"/"+PDDocs.fPURGEDATE
+//                    +"/"+PDDocs.fREPOSIT+"/"+PDDocs.fSTATUS+"/";
 //-----------------------------------------------------------------------------------------------
 /**
  *

@@ -37,7 +37,7 @@ import prodoc.Record;
 public class SFoldRec extends SParent
 {
 
-private static final String List=PDFolders.fACL+"/"+PDFolders.fFOLDTYPE+"/"+PDFolders.fPARENTID+"/"+PDFolders.fPDID+"/"+PDFolders.fTITLE+"/"+PDFolders.fPDAUTOR+"/"+PDFolders.fPDDATE;
+private static final String ListInternalFields="/"+PDFolders.fACL+"/"+PDFolders.fFOLDTYPE+"/"+PDFolders.fPARENTID+"/"+PDFolders.fPDID+"/"+PDFolders.fTITLE+"/"+PDFolders.fPDAUTOR+"/"+PDFolders.fPDDATE+"/";
 
 //-----------------------------------------------------------------------------------------------
 /**
@@ -76,7 +76,7 @@ Rec.initList();
 Attribute Attr=Rec.nextAttr();
 while (Attr!=null)
     {
-    if (!List.contains(Attr.getName()))
+    if (!ListInternalFields.contains("/"+Attr.getName()+"/"))
         {
         Html.append("<br><b>").append(TT(Req, Attr.getUserName())).append("= </b>");
         if (Attr.getType()==Attribute.tTHES)

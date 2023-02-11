@@ -35,10 +35,10 @@ import prodoc.Record;
 public class ModACLDoc extends SParent
 {
 
-final static private String List=PDDocs.fPARENTID
-                    +"/"+PDDocs.fPDAUTOR+"/"+PDDocs.fPDDATE
-                    +"/"+PDDocs.fLOCKEDBY+"/"+PDDocs.fVERSION+"/"+PDDocs.fPURGEDATE
-                    +"/"+PDDocs.fREPOSIT+"/"+PDDocs.fSTATUS;
+//final static private String List=PDDocs.fPARENTID
+//                    +"/"+PDDocs.fPDAUTOR+"/"+PDDocs.fPDDATE
+//                    +"/"+PDDocs.fLOCKEDBY+"/"+PDDocs.fVERSION+"/"+PDDocs.fPURGEDATE
+//                    +"/"+PDDocs.fREPOSIT+"/"+PDDocs.fSTATUS;
 //-----------------------------------------------------------------------------------------------
 /**
  *

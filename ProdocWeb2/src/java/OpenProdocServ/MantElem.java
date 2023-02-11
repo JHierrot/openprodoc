@@ -71,7 +71,7 @@ public static final String OPERDELETE="Delete";
  */
 public static final String OPERCOPY="Copy";
 
-private static final String List2=ObjPD.fPDAUTOR+"/"+ObjPD.fPDDATE;
+private static final String ListInternalFields="/"+ObjPD.fPDAUTOR+"/"+ObjPD.fPDDATE+"/";
 
 
 
@@ -111,7 +111,7 @@ else
     Attribute Attr=Rec.nextAttr();
     while (Attr!=null)
         {
-        if (!List2.contains(Attr.getName()))
+        if (!ListInternalFields.contains("/"+Attr.getName()+"/"))
             {
             String Val=Req.getParameter(Attr.getName());
             if (Attr.getType()==Attribute.tBOOLEAN)

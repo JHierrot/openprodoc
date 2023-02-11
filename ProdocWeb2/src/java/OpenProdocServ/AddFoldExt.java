@@ -35,7 +35,7 @@ import prodoc.Record;
 public class AddFoldExt extends SParent
 {
 
-private static final String List2=PDFolders.fPARENTID+"/"+PDFolders.fPDID+"/"+PDFolders.fPDAUTOR+"/"+PDFolders.fPDDATE;
+private static final String ListInternalFields="/"+PDFolders.fPARENTID+"/"+PDFolders.fPDID+"/"+PDFolders.fPDAUTOR+"/"+PDFolders.fPDDATE+"/";
 
 //-----------------------------------------------------------------------------------------------
 /**
@@ -75,7 +75,7 @@ else
     Attribute Attr=Rec.nextAttr();
     while (Attr!=null)
         {
-        if (!List2.contains(Attr.getName()))
+        if (!ListInternalFields.contains("/"+Attr.getName()+"/"))
             {
             String Val=Req.getParameter(Attr.getName());
             if (Attr.getType()==Attribute.tBOOLEAN)

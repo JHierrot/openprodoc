@@ -44,10 +44,10 @@ import prodoc.Record;
  */
 public class ModDocF extends SParent
 {
-final static private String List=PDDocs.fPARENTID
+final static private String ListInternalFields="/"+PDDocs.fPARENTID+"/"+PDDocs.fPDID
                     +"/"+PDDocs.fPDAUTOR+"/"+PDDocs.fPDDATE
                     +"/"+PDDocs.fLOCKEDBY+"/"+PDDocs.fVERSION+"/"+PDDocs.fPURGEDATE
-                    +"/"+PDDocs.fREPOSIT+"/"+PDDocs.fSTATUS;
+                    +"/"+PDDocs.fREPOSIT+"/"+PDDocs.fSTATUS+"/";
 //-----------------------------------------------------------------------------------------------
 /**
  *
@@ -98,7 +98,7 @@ else
     Attribute Attr=Rec.nextAttr();
     while (Attr!=null)
         {
-        if (!List.contains(Attr.getName()))
+        if (!ListInternalFields.contains("/"+Attr.getName()+"/"))
             {
             String Val=(String) ListFields.get(Attr.getName());
             if (Attr.getType()==Attribute.tBOOLEAN)
